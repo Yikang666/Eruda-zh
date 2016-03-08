@@ -57,9 +57,11 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	__webpack_require__(32);
+
 	var $container;
 
-	var isDebugMode = /debug=true/.test(window.location.search);
+	var isDebugMode = /eruda=true/.test(window.location.search);
 
 	if (isDebugMode) {
 	    appendContainer();
@@ -91,31 +93,43 @@ var eruda =
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	__webpack_require__(3);
+	var Draggabilly = __webpack_require__(3);
+
+	__webpack_require__(8);
 
 	var HomeBtn = function () {
 	    function HomeBtn($parent) {
 	        _classCallCheck(this, HomeBtn);
 
-	        this.$parent = $parent;
+	        this._$parent = $parent;
 
-	        this.appendTpl();
-	        this.bindEvent();
+	        this._appendTpl();
+	        this._bindEvent();
+	        this._makeDraggable();
 	    }
 
 	    _createClass(HomeBtn, [{
-	        key: 'appendTpl',
-	        value: function appendTpl() {
-	            var $parent = this.$parent;
+	        key: '_appendTpl',
+	        value: function _appendTpl() {
+	            var $parent = this._$parent;
 
-	            $parent.append(__webpack_require__(7)());
+	            $parent.append(__webpack_require__(12)());
 
-	            this.$el = $parent.find('.home-btn');
+	            this._$el = $parent.find('.home-btn');
 	        }
 	    }, {
-	        key: 'bindEvent',
-	        value: function bindEvent() {
-	            this.$el.on('click', function () {});
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            this._$el.on('click', function () {
+	                alert('I am clicked!');
+	            });
+	        }
+	    }, {
+	        key: '_makeDraggable',
+	        value: function _makeDraggable() {
+	            new Draggabilly(this._$el.get(0), {
+	                containment: true
+	            });
 	        }
 	    }]);
 
@@ -1581,6 +1595,10 @@ var eruda =
 	            last: function () {
 	                return $(last(this));
 	            },
+	            get: function (idx)
+	            {
+	                return this[idx];
+	            },
 	            eq: function (idx)
 	            {
 	                return $(idx);
@@ -1720,13 +1738,1415 @@ var eruda =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * Draggabilly v2.1.0
+	 * Make that shiz draggable
+	 * http://draggabilly.desandro.com
+	 * MIT license
+	 */
+
+	/*jshint browser: true, strict: true, undef: true, unused: true */
+
+	( function( window, factory ) {
+	  // universal module definition
+	  /* jshint strict: false */ /*globals define, module, require */
+	  if ( true ) {
+	    // AMD
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	        __webpack_require__(4),
+	        __webpack_require__(5)
+	      ], __WEBPACK_AMD_DEFINE_RESULT__ = function( getSize, Unidragger ) {
+	        return factory( window, getSize, Unidragger );
+	      }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      require('get-size'),
+	      require('unidragger')
+	    );
+	  } else {
+	    // browser global
+	    window.Draggabilly = factory(
+	      window,
+	      window.getSize,
+	      window.Unidragger
+	    );
+	  }
+
+	}( window, function factory( window, getSize, Unidragger ) {
+
+	'use strict';
+
+	// vars
+	var document = window.document;
+
+	function noop() {}
+
+	// -------------------------- helpers -------------------------- //
+
+	// extend objects
+	function extend( a, b ) {
+	  for ( var prop in b ) {
+	    a[ prop ] = b[ prop ];
+	  }
+	  return a;
+	}
+
+	function isElement( obj ) {
+	  return obj instanceof HTMLElement;
+	}
+
+	// -------------------------- requestAnimationFrame -------------------------- //
+
+	// get rAF, prefixed, if present
+	var requestAnimationFrame = window.requestAnimationFrame ||
+	  window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+
+	// fallback to setTimeout
+	var lastTime = 0;
+	if ( !requestAnimationFrame )  {
+	  requestAnimationFrame = function( callback ) {
+	    var currTime = new Date().getTime();
+	    var timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
+	    var id = setTimeout( callback, timeToCall );
+	    lastTime = currTime + timeToCall;
+	    return id;
+	  };
+	}
+
+	// -------------------------- support -------------------------- //
+
+	var docElem = document.documentElement;
+	var transformProperty = typeof docElem.style.transform == 'string' ?
+	  'transform' : 'WebkitTransform';
+
+	var jQuery = window.jQuery;
+
+	// --------------------------  -------------------------- //
+
+	function Draggabilly( element, options ) {
+	  // querySelector if string
+	  this.element = typeof element == 'string' ?
+	    document.querySelector( element ) : element;
+
+	  if ( jQuery ) {
+	    this.$element = jQuery( this.element );
+	  }
+
+	  // options
+	  this.options = extend( {}, this.constructor.defaults );
+	  this.option( options );
+
+	  this._create();
+	}
+
+	// inherit Unidragger methods
+	var proto = Draggabilly.prototype = Object.create( Unidragger.prototype );
+
+	Draggabilly.defaults = {
+	};
+
+	/**
+	 * set options
+	 * @param {Object} opts
+	 */
+	proto.option = function( opts ) {
+	  extend( this.options, opts );
+	};
+
+	proto._create = function() {
+
+	  // properties
+	  this.position = {};
+	  this._getPosition();
+
+	  this.startPoint = { x: 0, y: 0 };
+	  this.dragPoint = { x: 0, y: 0 };
+
+	  this.startPosition = extend( {}, this.position );
+
+	  // set relative positioning
+	  var style = getComputedStyle( this.element );
+	  if ( style.position != 'relative' && style.position != 'absolute' ) {
+	    this.element.style.position = 'relative';
+	  }
+
+	  this.enable();
+	  this.setHandles();
+
+	};
+
+	/**
+	 * set this.handles and bind start events to 'em
+	 */
+	proto.setHandles = function() {
+	  this.handles = this.options.handle ?
+	    this.element.querySelectorAll( this.options.handle ) : [ this.element ];
+
+	  this.bindHandles();
+	};
+
+	/**
+	 * emits events via EvEmitter and jQuery events
+	 * @param {String} type - name of event
+	 * @param {Event} event - original event
+	 * @param {Array} args - extra arguments
+	 */
+	proto.dispatchEvent = function( type, event, args ) {
+	  var emitArgs = [ event ].concat( args );
+	  this.emitEvent( type, emitArgs );
+	  var jQuery = window.jQuery;
+	  // trigger jQuery event
+	  if ( jQuery && this.$element ) {
+	    if ( event ) {
+	      // create jQuery event
+	      var $event = jQuery.Event( event );
+	      $event.type = type;
+	      this.$element.trigger( $event, args );
+	    } else {
+	      // just trigger with type if no event available
+	      this.$element.trigger( type, args );
+	    }
+	  }
+	};
+
+	// -------------------------- position -------------------------- //
+
+	// get x/y position from style
+	Draggabilly.prototype._getPosition = function() {
+	  var style = getComputedStyle( this.element );
+	  var x = this._getPositionCoord( style.left, 'width' );
+	  var y = this._getPositionCoord( style.top, 'height' );
+	  // clean up 'auto' or other non-integer values
+	  this.position.x = isNaN( x ) ? 0 : x;
+	  this.position.y = isNaN( y ) ? 0 : y;
+
+	  this._addTransformPosition( style );
+	};
+
+	Draggabilly.prototype._getPositionCoord = function( styleSide, measure ) {
+	  if ( styleSide.indexOf('%') != -1 ) {
+	    // convert percent into pixel for Safari, #75
+	    var parentSize = getSize( this.element.parentNode );
+	    return ( parseFloat( styleSide ) / 100 ) * parentSize[ measure ];
+	  }
+
+	  return parseInt( styleSide, 10 );
+	};
+
+	// add transform: translate( x, y ) to position
+	proto._addTransformPosition = function( style ) {
+	  var transform = style[ transformProperty ];
+	  // bail out if value is 'none'
+	  if ( transform.indexOf('matrix') !== 0 ) {
+	    return;
+	  }
+	  // split matrix(1, 0, 0, 1, x, y)
+	  var matrixValues = transform.split(',');
+	  // translate X value is in 12th or 4th position
+	  var xIndex = transform.indexOf('matrix3d') === 0 ? 12 : 4;
+	  var translateX = parseInt( matrixValues[ xIndex ], 10 );
+	  // translate Y value is in 13th or 5th position
+	  var translateY = parseInt( matrixValues[ xIndex + 1 ], 10 );
+	  this.position.x += translateX;
+	  this.position.y += translateY;
+	};
+
+	// -------------------------- events -------------------------- //
+
+	/**
+	 * pointer start
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerDown = function( event, pointer ) {
+	  this._dragPointerDown( event, pointer );
+	  // kludge to blur focused inputs in dragger
+	  var focused = document.activeElement;
+	  // do not blur body for IE10, metafizzy/flickity#117
+	  if ( focused && focused.blur && focused != document.body ) {
+	    focused.blur();
+	  }
+	  // bind move and end events
+	  this._bindPostStartEvents( event );
+	  this.element.classList.add('is-pointer-down');
+	  this.dispatchEvent( 'pointerDown', event, [ pointer ] );
+	};
+
+	/**
+	 * drag move
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerMove = function( event, pointer ) {
+	  var moveVector = this._dragPointerMove( event, pointer );
+	  this.dispatchEvent( 'pointerMove', event, [ pointer, moveVector ] );
+	  this._dragMove( event, pointer, moveVector );
+	};
+
+	/**
+	 * drag start
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.dragStart = function( event, pointer ) {
+	  if ( !this.isEnabled ) {
+	    return;
+	  }
+	  this._getPosition();
+	  this.measureContainment();
+	  // position _when_ drag began
+	  this.startPosition.x = this.position.x;
+	  this.startPosition.y = this.position.y;
+	  // reset left/top style
+	  this.setLeftTop();
+
+	  this.dragPoint.x = 0;
+	  this.dragPoint.y = 0;
+
+	  this.element.classList.add('is-dragging');
+	  this.dispatchEvent( 'dragStart', event, [ pointer ] );
+	  // start animation
+	  this.animate();
+	};
+
+	proto.measureContainment = function() {
+	  var containment = this.options.containment;
+	  if ( !containment ) {
+	    return;
+	  }
+
+	  // use element if element
+	  var container = isElement( containment ) ? containment :
+	    // fallback to querySelector if string
+	    typeof containment == 'string' ? document.querySelector( containment ) :
+	    // otherwise just `true`, use the parent
+	    this.element.parentNode;
+
+	  var elemSize = getSize( this.element );
+	  var containerSize = getSize( container );
+	  var elemRect = this.element.getBoundingClientRect();
+	  var containerRect = container.getBoundingClientRect();
+
+	  var borderSizeX = containerSize.borderLeftWidth + containerSize.borderRightWidth;
+	  var borderSizeY = containerSize.borderTopWidth + containerSize.borderBottomWidth;
+
+	  var position = this.relativeStartPosition = {
+	    x: elemRect.left - ( containerRect.left + containerSize.borderLeftWidth ),
+	    y: elemRect.top - ( containerRect.top + containerSize.borderTopWidth )
+	  };
+
+	  this.containSize = {
+	    width: ( containerSize.width - borderSizeX ) - position.x - elemSize.width,
+	    height: ( containerSize.height - borderSizeY ) - position.y - elemSize.height
+	  };
+	};
+
+	// ----- move event ----- //
+
+	/**
+	 * drag move
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.dragMove = function( event, pointer, moveVector ) {
+	  if ( !this.isEnabled ) {
+	    return;
+	  }
+	  var dragX = moveVector.x;
+	  var dragY = moveVector.y;
+
+	  var grid = this.options.grid;
+	  var gridX = grid && grid[0];
+	  var gridY = grid && grid[1];
+
+	  dragX = applyGrid( dragX, gridX );
+	  dragY = applyGrid( dragY, gridY );
+
+	  dragX = this.containDrag( 'x', dragX, gridX );
+	  dragY = this.containDrag( 'y', dragY, gridY );
+
+	  // constrain to axis
+	  dragX = this.options.axis == 'y' ? 0 : dragX;
+	  dragY = this.options.axis == 'x' ? 0 : dragY;
+
+	  this.position.x = this.startPosition.x + dragX;
+	  this.position.y = this.startPosition.y + dragY;
+	  // set dragPoint properties
+	  this.dragPoint.x = dragX;
+	  this.dragPoint.y = dragY;
+
+	  this.dispatchEvent( 'dragMove', event, [ pointer, moveVector ] );
+	};
+
+	function applyGrid( value, grid, method ) {
+	  method = method || 'round';
+	  return grid ? Math[ method ]( value / grid ) * grid : value;
+	}
+
+	proto.containDrag = function( axis, drag, grid ) {
+	  if ( !this.options.containment ) {
+	    return drag;
+	  }
+	  var measure = axis == 'x' ? 'width' : 'height';
+
+	  var rel = this.relativeStartPosition[ axis ];
+	  var min = applyGrid( -rel, grid, 'ceil' );
+	  var max = this.containSize[ measure ];
+	  max = applyGrid( max, grid, 'floor' );
+	  return  Math.min( max, Math.max( min, drag ) );
+	};
+
+	// ----- end event ----- //
+
+	/**
+	 * pointer up
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerUp = function( event, pointer ) {
+	  this.element.classList.remove('is-pointer-down');
+	  this.dispatchEvent( 'pointerUp', event, [ pointer ] );
+	  this._dragPointerUp( event, pointer );
+	};
+
+	/**
+	 * drag end
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.dragEnd = function( event, pointer ) {
+	  if ( !this.isEnabled ) {
+	    return;
+	  }
+	  // use top left position when complete
+	  if ( transformProperty ) {
+	    this.element.style[ transformProperty ] = '';
+	    this.setLeftTop();
+	  }
+	  this.element.classList.remove('is-dragging');
+	  this.dispatchEvent( 'dragEnd', event, [ pointer ] );
+	};
+
+	// -------------------------- animation -------------------------- //
+
+	proto.animate = function() {
+	  // only render and animate if dragging
+	  if ( !this.isDragging ) {
+	    return;
+	  }
+
+	  this.positionDrag();
+
+	  var _this = this;
+	  requestAnimationFrame( function animateFrame() {
+	    _this.animate();
+	  });
+
+	};
+
+	// left/top positioning
+	proto.setLeftTop = function() {
+	  this.element.style.left = this.position.x + 'px';
+	  this.element.style.top  = this.position.y + 'px';
+	};
+
+	proto.positionDrag = function() {
+	  this.element.style[ transformProperty ] = 'translate3d( ' + this.dragPoint.x +
+	    'px, ' + this.dragPoint.y + 'px, 0)';
+	};
+
+	// ----- staticClick ----- //
+
+	proto.staticClick = function( event, pointer ) {
+	  this.dispatchEvent( 'staticClick', event, [ pointer ] );
+	};
+
+	// ----- methods ----- //
+
+	proto.enable = function() {
+	  this.isEnabled = true;
+	};
+
+	proto.disable = function() {
+	  this.isEnabled = false;
+	  if ( this.isDragging ) {
+	    this.dragEnd();
+	  }
+	};
+
+	proto.destroy = function() {
+	  this.disable();
+	  // reset styles
+	  this.element.style[ transformProperty ] = '';
+	  this.element.style.left = '';
+	  this.element.style.top = '';
+	  this.element.style.position = '';
+	  // unbind handles
+	  this.unbindHandles();
+	  // remove jQuery data
+	  if ( this.$element ) {
+	    this.$element.removeData('draggabilly');
+	  }
+	};
+
+	// ----- jQuery bridget ----- //
+
+	// required for jQuery bridget
+	proto._init = noop;
+
+	if ( jQuery && jQuery.bridget ) {
+	  jQuery.bridget( 'draggabilly', Draggabilly );
+	}
+
+	// -----  ----- //
+
+	return Draggabilly;
+
+	}));
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * getSize v2.0.2
+	 * measure size of elements
+	 * MIT license
+	 */
+
+	/*jshint browser: true, strict: true, undef: true, unused: true */
+	/*global define: false, module: false, console: false */
+
+	( function( window, factory ) {
+	  'use strict';
+
+	  if ( true ) {
+	    // AMD
+	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	      return factory();
+	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS
+	    module.exports = factory();
+	  } else {
+	    // browser global
+	    window.getSize = factory();
+	  }
+
+	})( window, function factory() {
+	'use strict';
+
+	// -------------------------- helpers -------------------------- //
+
+	// get a number from a string, not a percentage
+	function getStyleSize( value ) {
+	  var num = parseFloat( value );
+	  // not a percent like '100%', and a number
+	  var isValid = value.indexOf('%') == -1 && !isNaN( num );
+	  return isValid && num;
+	}
+
+	function noop() {}
+
+	var logError = typeof console == 'undefined' ? noop :
+	  function( message ) {
+	    console.error( message );
+	  };
+
+	// -------------------------- measurements -------------------------- //
+
+	var measurements = [
+	  'paddingLeft',
+	  'paddingRight',
+	  'paddingTop',
+	  'paddingBottom',
+	  'marginLeft',
+	  'marginRight',
+	  'marginTop',
+	  'marginBottom',
+	  'borderLeftWidth',
+	  'borderRightWidth',
+	  'borderTopWidth',
+	  'borderBottomWidth'
+	];
+
+	var measurementsLength = measurements.length;
+
+	function getZeroSize() {
+	  var size = {
+	    width: 0,
+	    height: 0,
+	    innerWidth: 0,
+	    innerHeight: 0,
+	    outerWidth: 0,
+	    outerHeight: 0
+	  };
+	  for ( var i=0; i < measurementsLength; i++ ) {
+	    var measurement = measurements[i];
+	    size[ measurement ] = 0;
+	  }
+	  return size;
+	}
+
+	// -------------------------- getStyle -------------------------- //
+
+	/**
+	 * getStyle, get style of element, check for Firefox bug
+	 * https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+	 */
+	function getStyle( elem ) {
+	  var style = getComputedStyle( elem );
+	  if ( !style ) {
+	    logError( 'Style returned ' + style +
+	      '. Are you running this code in a hidden iframe on Firefox? ' +
+	      'See http://bit.ly/getsizebug1' );
+	  }
+	  return style;
+	}
+
+	// -------------------------- setup -------------------------- //
+
+	var isSetup = false;
+
+	var isBoxSizeOuter;
+
+	/**
+	 * setup
+	 * check isBoxSizerOuter
+	 * do on first getSize() rather than on page load for Firefox bug
+	 */
+	function setup() {
+	  // setup once
+	  if ( isSetup ) {
+	    return;
+	  }
+	  isSetup = true;
+
+	  // -------------------------- box sizing -------------------------- //
+
+	  /**
+	   * WebKit measures the outer-width on style.width on border-box elems
+	   * IE & Firefox<29 measures the inner-width
+	   */
+	  var div = document.createElement('div');
+	  div.style.width = '200px';
+	  div.style.padding = '1px 2px 3px 4px';
+	  div.style.borderStyle = 'solid';
+	  div.style.borderWidth = '1px 2px 3px 4px';
+	  div.style.boxSizing = 'border-box';
+
+	  var body = document.body || document.documentElement;
+	  body.appendChild( div );
+	  var style = getStyle( div );
+
+	  getSize.isBoxSizeOuter = isBoxSizeOuter = getStyleSize( style.width ) == 200;
+	  body.removeChild( div );
+
+	}
+
+	// -------------------------- getSize -------------------------- //
+
+	function getSize( elem ) {
+	  setup();
+
+	  // use querySeletor if elem is string
+	  if ( typeof elem == 'string' ) {
+	    elem = document.querySelector( elem );
+	  }
+
+	  // do not proceed on non-objects
+	  if ( !elem || typeof elem != 'object' || !elem.nodeType ) {
+	    return;
+	  }
+
+	  var style = getStyle( elem );
+
+	  // if hidden, everything is 0
+	  if ( style.display == 'none' ) {
+	    return getZeroSize();
+	  }
+
+	  var size = {};
+	  size.width = elem.offsetWidth;
+	  size.height = elem.offsetHeight;
+
+	  var isBorderBox = size.isBorderBox = style.boxSizing == 'border-box';
+
+	  // get all measurements
+	  for ( var i=0; i < measurementsLength; i++ ) {
+	    var measurement = measurements[i];
+	    var value = style[ measurement ];
+	    var num = parseFloat( value );
+	    // any 'auto', 'medium' value will be 0
+	    size[ measurement ] = !isNaN( num ) ? num : 0;
+	  }
+
+	  var paddingWidth = size.paddingLeft + size.paddingRight;
+	  var paddingHeight = size.paddingTop + size.paddingBottom;
+	  var marginWidth = size.marginLeft + size.marginRight;
+	  var marginHeight = size.marginTop + size.marginBottom;
+	  var borderWidth = size.borderLeftWidth + size.borderRightWidth;
+	  var borderHeight = size.borderTopWidth + size.borderBottomWidth;
+
+	  var isBorderBoxSizeOuter = isBorderBox && isBoxSizeOuter;
+
+	  // overwrite width and height if we can get it from style
+	  var styleWidth = getStyleSize( style.width );
+	  if ( styleWidth !== false ) {
+	    size.width = styleWidth +
+	      // add padding and border unless it's already including it
+	      ( isBorderBoxSizeOuter ? 0 : paddingWidth + borderWidth );
+	  }
+
+	  var styleHeight = getStyleSize( style.height );
+	  if ( styleHeight !== false ) {
+	    size.height = styleHeight +
+	      // add padding and border unless it's already including it
+	      ( isBorderBoxSizeOuter ? 0 : paddingHeight + borderHeight );
+	  }
+
+	  size.innerWidth = size.width - ( paddingWidth + borderWidth );
+	  size.innerHeight = size.height - ( paddingHeight + borderHeight );
+
+	  size.outerWidth = size.width + marginWidth;
+	  size.outerHeight = size.height + marginHeight;
+
+	  return size;
+	}
+
+	return getSize;
+
+	});
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * Unidragger v2.1.0
+	 * Draggable base class
+	 * MIT license
+	 */
+
+	/*jshint browser: true, unused: true, undef: true, strict: true */
+
+	( function( window, factory ) {
+	  // universal module definition
+	  /*jshint strict: false */ /*globals define, module, require */
+
+	  if ( true ) {
+	    // AMD
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	      __webpack_require__(6)
+	    ], __WEBPACK_AMD_DEFINE_RESULT__ = function( Unipointer ) {
+	      return factory( window, Unipointer );
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      require('unipointer')
+	    );
+	  } else {
+	    // browser global
+	    window.Unidragger = factory(
+	      window,
+	      window.Unipointer
+	    );
+	  }
+
+	}( window, function factory( window, Unipointer ) {
+
+	'use strict';
+
+	// -----  ----- //
+
+	function noop() {}
+
+	// -------------------------- Unidragger -------------------------- //
+
+	function Unidragger() {}
+
+	// inherit Unipointer & EvEmitter
+	var proto = Unidragger.prototype = Object.create( Unipointer.prototype );
+
+	// ----- bind start ----- //
+
+	proto.bindHandles = function() {
+	  this._bindHandles( true );
+	};
+
+	proto.unbindHandles = function() {
+	  this._bindHandles( false );
+	};
+
+	var navigator = window.navigator;
+	/**
+	 * works as unbinder, as you can .bindHandles( false ) to unbind
+	 * @param {Boolean} isBind - will unbind if falsey
+	 */
+	proto._bindHandles = function( isBind ) {
+	  // munge isBind, default to true
+	  isBind = isBind === undefined ? true : !!isBind;
+	  // extra bind logic
+	  var binderExtra;
+	  if ( navigator.pointerEnabled ) {
+	    binderExtra = function( handle ) {
+	      // disable scrolling on the element
+	      handle.style.touchAction = isBind ? 'none' : '';
+	    };
+	  } else if ( navigator.msPointerEnabled ) {
+	    binderExtra = function( handle ) {
+	      // disable scrolling on the element
+	      handle.style.msTouchAction = isBind ? 'none' : '';
+	    };
+	  } else {
+	    binderExtra = noop;
+	  }
+	  // bind each handle
+	  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+	  for ( var i=0; i < this.handles.length; i++ ) {
+	    var handle = this.handles[i];
+	    this._bindStartEvent( handle, isBind );
+	    binderExtra( handle );
+	    handle[ bindMethod ]( 'click', this );
+	  }
+	};
+
+	// ----- start event ----- //
+
+	/**
+	 * pointer start
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerDown = function( event, pointer ) {
+	  // dismiss range sliders
+	  if ( event.target.nodeName == 'INPUT' && event.target.type == 'range' ) {
+	    // reset pointerDown logic
+	    this.isPointerDown = false;
+	    delete this.pointerIdentifier;
+	    return;
+	  }
+
+	  this._dragPointerDown( event, pointer );
+	  // kludge to blur focused inputs in dragger
+	  var focused = document.activeElement;
+	  if ( focused && focused.blur ) {
+	    focused.blur();
+	  }
+	  // bind move and end events
+	  this._bindPostStartEvents( event );
+	  this.emitEvent( 'pointerDown', [ event, pointer ] );
+	};
+
+	// base pointer down logic
+	proto._dragPointerDown = function( event, pointer ) {
+	  // track to see when dragging starts
+	  this.pointerDownPoint = Unipointer.getPointerPoint( pointer );
+
+	  var canPreventDefault = this.canPreventDefaultOnPointerDown( event, pointer );
+	  if ( canPreventDefault ) {
+	    event.preventDefault();
+	  }
+	};
+
+	// overwriteable method so Flickity can prevent for scrolling
+	proto.canPreventDefaultOnPointerDown = function( event ) {
+	  // prevent default, unless touchstart or <select>
+	  return event.target.nodeName != 'SELECT';
+	};
+
+	// ----- move event ----- //
+
+	/**
+	 * drag move
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerMove = function( event, pointer ) {
+	  var moveVector = this._dragPointerMove( event, pointer );
+	  this.emitEvent( 'pointerMove', [ event, pointer, moveVector ] );
+	  this._dragMove( event, pointer, moveVector );
+	};
+
+	// base pointer move logic
+	proto._dragPointerMove = function( event, pointer ) {
+	  var movePoint = Unipointer.getPointerPoint( pointer );
+	  var moveVector = {
+	    x: movePoint.x - this.pointerDownPoint.x,
+	    y: movePoint.y - this.pointerDownPoint.y
+	  };
+	  // start drag if pointer has moved far enough to start drag
+	  if ( !this.isDragging && this.hasDragStarted( moveVector ) ) {
+	    this._dragStart( event, pointer );
+	  }
+	  return moveVector;
+	};
+
+	// condition if pointer has moved far enough to start drag
+	proto.hasDragStarted = function( moveVector ) {
+	  return Math.abs( moveVector.x ) > 3 || Math.abs( moveVector.y ) > 3;
+	};
+
+
+	// ----- end event ----- //
+
+	/**
+	 * pointer up
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto.pointerUp = function( event, pointer ) {
+	  this.emitEvent( 'pointerUp', [ event, pointer ] );
+	  this._dragPointerUp( event, pointer );
+	};
+
+	proto._dragPointerUp = function( event, pointer ) {
+	  if ( this.isDragging ) {
+	    this._dragEnd( event, pointer );
+	  } else {
+	    // pointer didn't move enough for drag to start
+	    this._staticClick( event, pointer );
+	  }
+	};
+
+	// -------------------------- drag -------------------------- //
+
+	// dragStart
+	proto._dragStart = function( event, pointer ) {
+	  this.isDragging = true;
+	  this.dragStartPoint = Unipointer.getPointerPoint( pointer );
+	  // prevent clicks
+	  this.isPreventingClicks = true;
+
+	  this.dragStart( event, pointer );
+	};
+
+	proto.dragStart = function( event, pointer ) {
+	  this.emitEvent( 'dragStart', [ event, pointer ] );
+	};
+
+	// dragMove
+	proto._dragMove = function( event, pointer, moveVector ) {
+	  // do not drag if not dragging yet
+	  if ( !this.isDragging ) {
+	    return;
+	  }
+
+	  this.dragMove( event, pointer, moveVector );
+	};
+
+	proto.dragMove = function( event, pointer, moveVector ) {
+	  event.preventDefault();
+	  this.emitEvent( 'dragMove', [ event, pointer, moveVector ] );
+	};
+
+	// dragEnd
+	proto._dragEnd = function( event, pointer ) {
+	  // set flags
+	  this.isDragging = false;
+	  // re-enable clicking async
+	  setTimeout( function() {
+	    delete this.isPreventingClicks;
+	  }.bind( this ) );
+
+	  this.dragEnd( event, pointer );
+	};
+
+	proto.dragEnd = function( event, pointer ) {
+	  this.emitEvent( 'dragEnd', [ event, pointer ] );
+	};
+
+	// ----- onclick ----- //
+
+	// handle all clicks and prevent clicks when dragging
+	proto.onclick = function( event ) {
+	  if ( this.isPreventingClicks ) {
+	    event.preventDefault();
+	  }
+	};
+
+	// ----- staticClick ----- //
+
+	// triggered after pointer down & up with no/tiny movement
+	proto._staticClick = function( event, pointer ) {
+	  // ignore emulated mouse up clicks
+	  if ( this.isIgnoringMouseUp && event.type == 'mouseup' ) {
+	    return;
+	  }
+
+	  // allow click in <input>s and <textarea>s
+	  var nodeName = event.target.nodeName;
+	  if ( nodeName == 'INPUT' || nodeName == 'TEXTAREA' ) {
+	    event.target.focus();
+	  }
+	  this.staticClick( event, pointer );
+
+	  // set flag for emulated clicks 300ms after touchend
+	  if ( event.type != 'mouseup' ) {
+	    this.isIgnoringMouseUp = true;
+	    // reset flag after 300ms
+	    setTimeout( function() {
+	      delete this.isIgnoringMouseUp;
+	    }.bind( this ), 400 );
+	  }
+	};
+
+	proto.staticClick = function( event, pointer ) {
+	  this.emitEvent( 'staticClick', [ event, pointer ] );
+	};
+
+	// ----- utils ----- //
+
+	Unidragger.getPointerPoint = Unipointer.getPointerPoint;
+
+	// -----  ----- //
+
+	return Unidragger;
+
+	}));
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * Unipointer v2.1.0
+	 * base class for doing one thing with pointer event
+	 * MIT license
+	 */
+
+	/*jshint browser: true, undef: true, unused: true, strict: true */
+
+	( function( window, factory ) {
+	  // universal module definition
+	  /* jshint strict: false */ /*global define, module, require */
+	  if ( true ) {
+	    // AMD
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	      __webpack_require__(7)
+	    ], __WEBPACK_AMD_DEFINE_RESULT__ = function( EvEmitter ) {
+	      return factory( window, EvEmitter );
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      require('ev-emitter')
+	    );
+	  } else {
+	    // browser global
+	    window.Unipointer = factory(
+	      window,
+	      window.EvEmitter
+	    );
+	  }
+
+	}( window, function factory( window, EvEmitter ) {
+
+	'use strict';
+
+	function noop() {}
+
+	function Unipointer() {}
+
+	// inherit EvEmitter
+	var proto = Unipointer.prototype = Object.create( EvEmitter.prototype );
+
+	proto.bindStartEvent = function( elem ) {
+	  this._bindStartEvent( elem, true );
+	};
+
+	proto.unbindStartEvent = function( elem ) {
+	  this._bindStartEvent( elem, false );
+	};
+
+	/**
+	 * works as unbinder, as you can ._bindStart( false ) to unbind
+	 * @param {Boolean} isBind - will unbind if falsey
+	 */
+	proto._bindStartEvent = function( elem, isBind ) {
+	  // munge isBind, default to true
+	  isBind = isBind === undefined ? true : !!isBind;
+	  var bindMethod = isBind ? 'addEventListener' : 'removeEventListener';
+
+	  if ( window.navigator.pointerEnabled ) {
+	    // W3C Pointer Events, IE11. See https://coderwall.com/p/mfreca
+	    elem[ bindMethod ]( 'pointerdown', this );
+	  } else if ( window.navigator.msPointerEnabled ) {
+	    // IE10 Pointer Events
+	    elem[ bindMethod ]( 'MSPointerDown', this );
+	  } else {
+	    // listen for both, for devices like Chrome Pixel
+	    elem[ bindMethod ]( 'mousedown', this );
+	    elem[ bindMethod ]( 'touchstart', this );
+	  }
+	};
+
+	// trigger handler methods for events
+	proto.handleEvent = function( event ) {
+	  var method = 'on' + event.type;
+	  if ( this[ method ] ) {
+	    this[ method ]( event );
+	  }
+	};
+
+	// returns the touch that we're keeping track of
+	proto.getTouch = function( touches ) {
+	  for ( var i=0; i < touches.length; i++ ) {
+	    var touch = touches[i];
+	    if ( touch.identifier == this.pointerIdentifier ) {
+	      return touch;
+	    }
+	  }
+	};
+
+	// ----- start event ----- //
+
+	proto.onmousedown = function( event ) {
+	  // dismiss clicks from right or middle buttons
+	  var button = event.button;
+	  if ( button && ( button !== 0 && button !== 1 ) ) {
+	    return;
+	  }
+	  this._pointerDown( event, event );
+	};
+
+	proto.ontouchstart = function( event ) {
+	  this._pointerDown( event, event.changedTouches[0] );
+	};
+
+	proto.onMSPointerDown =
+	proto.onpointerdown = function( event ) {
+	  this._pointerDown( event, event );
+	};
+
+	/**
+	 * pointer start
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 */
+	proto._pointerDown = function( event, pointer ) {
+	  // dismiss other pointers
+	  if ( this.isPointerDown ) {
+	    return;
+	  }
+
+	  this.isPointerDown = true;
+	  // save pointer identifier to match up touch events
+	  this.pointerIdentifier = pointer.pointerId !== undefined ?
+	    // pointerId for pointer events, touch.indentifier for touch events
+	    pointer.pointerId : pointer.identifier;
+
+	  this.pointerDown( event, pointer );
+	};
+
+	proto.pointerDown = function( event, pointer ) {
+	  this._bindPostStartEvents( event );
+	  this.emitEvent( 'pointerDown', [ event, pointer ] );
+	};
+
+	// hash of events to be bound after start event
+	var postStartEvents = {
+	  mousedown: [ 'mousemove', 'mouseup' ],
+	  touchstart: [ 'touchmove', 'touchend', 'touchcancel' ],
+	  pointerdown: [ 'pointermove', 'pointerup', 'pointercancel' ],
+	  MSPointerDown: [ 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel' ]
+	};
+
+	proto._bindPostStartEvents = function( event ) {
+	  if ( !event ) {
+	    return;
+	  }
+	  // get proper events to match start event
+	  var events = postStartEvents[ event.type ];
+	  // bind events to node
+	  events.forEach( function( eventName ) {
+	    window.addEventListener( eventName, this );
+	  }, this );
+	  // save these arguments
+	  this._boundPointerEvents = events;
+	};
+
+	proto._unbindPostStartEvents = function() {
+	  // check for _boundEvents, in case dragEnd triggered twice (old IE8 bug)
+	  if ( !this._boundPointerEvents ) {
+	    return;
+	  }
+	  this._boundPointerEvents.forEach( function( eventName ) {
+	    window.removeEventListener( eventName, this );
+	  }, this );
+
+	  delete this._boundPointerEvents;
+	};
+
+	// ----- move event ----- //
+
+	proto.onmousemove = function( event ) {
+	  this._pointerMove( event, event );
+	};
+
+	proto.onMSPointerMove =
+	proto.onpointermove = function( event ) {
+	  if ( event.pointerId == this.pointerIdentifier ) {
+	    this._pointerMove( event, event );
+	  }
+	};
+
+	proto.ontouchmove = function( event ) {
+	  var touch = this.getTouch( event.changedTouches );
+	  if ( touch ) {
+	    this._pointerMove( event, touch );
+	  }
+	};
+
+	/**
+	 * pointer move
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 * @private
+	 */
+	proto._pointerMove = function( event, pointer ) {
+	  this.pointerMove( event, pointer );
+	};
+
+	// public
+	proto.pointerMove = function( event, pointer ) {
+	  this.emitEvent( 'pointerMove', [ event, pointer ] );
+	};
+
+	// ----- end event ----- //
+
+
+	proto.onmouseup = function( event ) {
+	  this._pointerUp( event, event );
+	};
+
+	proto.onMSPointerUp =
+	proto.onpointerup = function( event ) {
+	  if ( event.pointerId == this.pointerIdentifier ) {
+	    this._pointerUp( event, event );
+	  }
+	};
+
+	proto.ontouchend = function( event ) {
+	  var touch = this.getTouch( event.changedTouches );
+	  if ( touch ) {
+	    this._pointerUp( event, touch );
+	  }
+	};
+
+	/**
+	 * pointer up
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 * @private
+	 */
+	proto._pointerUp = function( event, pointer ) {
+	  this._pointerDone();
+	  this.pointerUp( event, pointer );
+	};
+
+	// public
+	proto.pointerUp = function( event, pointer ) {
+	  this.emitEvent( 'pointerUp', [ event, pointer ] );
+	};
+
+	// ----- pointer done ----- //
+
+	// triggered on pointer up & pointer cancel
+	proto._pointerDone = function() {
+	  // reset properties
+	  this.isPointerDown = false;
+	  delete this.pointerIdentifier;
+	  // remove events
+	  this._unbindPostStartEvents();
+	  this.pointerDone();
+	};
+
+	proto.pointerDone = noop;
+
+	// ----- pointer cancel ----- //
+
+	proto.onMSPointerCancel =
+	proto.onpointercancel = function( event ) {
+	  if ( event.pointerId == this.pointerIdentifier ) {
+	    this._pointerCancel( event, event );
+	  }
+	};
+
+	proto.ontouchcancel = function( event ) {
+	  var touch = this.getTouch( event.changedTouches );
+	  if ( touch ) {
+	    this._pointerCancel( event, touch );
+	  }
+	};
+
+	/**
+	 * pointer cancel
+	 * @param {Event} event
+	 * @param {Event or Touch} pointer
+	 * @private
+	 */
+	proto._pointerCancel = function( event, pointer ) {
+	  this._pointerDone();
+	  this.pointerCancel( event, pointer );
+	};
+
+	// public
+	proto.pointerCancel = function( event, pointer ) {
+	  this.emitEvent( 'pointerCancel', [ event, pointer ] );
+	};
+
+	// -----  ----- //
+
+	// utility function for getting x/y coords from event
+	Unipointer.getPointerPoint = function( pointer ) {
+	  return {
+	    x: pointer.pageX,
+	    y: pointer.pageY
+	  };
+	};
+
+	// -----  ----- //
+
+	return Unipointer;
+
+	}));
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * EvEmitter v1.0.2
+	 * Lil' event emitter
+	 * MIT License
+	 */
+
+	/* jshint unused: true, undef: true, strict: true */
+
+	( function( global, factory ) {
+	  // universal module definition
+	  /* jshint strict: false */ /* globals define, module */
+	  if ( true ) {
+	    // AMD - RequireJS
+	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS - Browserify, Webpack
+	    module.exports = factory();
+	  } else {
+	    // Browser globals
+	    global.EvEmitter = factory();
+	  }
+
+	}( this, function() {
+
+	"use strict";
+
+	function EvEmitter() {}
+
+	var proto = EvEmitter.prototype;
+
+	proto.on = function( eventName, listener ) {
+	  if ( !eventName || !listener ) {
+	    return;
+	  }
+	  // set events hash
+	  var events = this._events = this._events || {};
+	  // set listeners array
+	  var listeners = events[ eventName ] = events[ eventName ] || [];
+	  // only add once
+	  if ( listeners.indexOf( listener ) == -1 ) {
+	    listeners.push( listener );
+	  }
+
+	  return this;
+	};
+
+	proto.once = function( eventName, listener ) {
+	  if ( !eventName || !listener ) {
+	    return;
+	  }
+	  // add event
+	  this.on( eventName, listener );
+	  // set once flag
+	  // set onceEvents hash
+	  var onceEvents = this._onceEvents = this._onceEvents || {};
+	  // set onceListeners object
+	  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || {};
+	  // set flag
+	  onceListeners[ listener ] = true;
+
+	  return this;
+	};
+
+	proto.off = function( eventName, listener ) {
+	  var listeners = this._events && this._events[ eventName ];
+	  if ( !listeners || !listeners.length ) {
+	    return;
+	  }
+	  var index = listeners.indexOf( listener );
+	  if ( index != -1 ) {
+	    listeners.splice( index, 1 );
+	  }
+
+	  return this;
+	};
+
+	proto.emitEvent = function( eventName, args ) {
+	  var listeners = this._events && this._events[ eventName ];
+	  if ( !listeners || !listeners.length ) {
+	    return;
+	  }
+	  var i = 0;
+	  var listener = listeners[i];
+	  args = args || [];
+	  // once stuff
+	  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+
+	  while ( listener ) {
+	    var isOnce = onceListeners && onceListeners[ listener ];
+	    if ( isOnce ) {
+	      // remove listener
+	      // remove before trigger to prevent recursion
+	      this.off( eventName, listener );
+	      // unset once flag
+	      delete onceListeners[ listener ];
+	    }
+	    // trigger listener
+	    listener.apply( this, args );
+	    // get next listener
+	    i += isOnce ? 0 : 1;
+	    listener = listeners[i];
+	  }
+
+	  return this;
+	};
+
+	return EvEmitter;
+
+	}));
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(4);
+	var content = __webpack_require__(9);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(6)(content, {});
+	var update = __webpack_require__(11)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1743,21 +3163,21 @@ var eruda =
 	}
 
 /***/ },
-/* 4 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(5)();
+	exports = module.exports = __webpack_require__(10)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "#eruda .home-btn {\n  width: 50px;\n  height: 50px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.5;\n  border-radius: 10px;\n  box-sizing: border-box;\n  padding-top: 6px; }\n  #eruda .home-btn .circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 30px;\n    height: 30px;\n    border: 4px solid #ccc; }\n  #eruda .home-btn:hover {\n    opacity: 0.8; }\n", ""]);
+	exports.push([module.id, "#eruda .home-btn {\n  width: 40px;\n  height: 40px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.5;\n  border-radius: 10px;\n  padding-top: 10px;\n  position: relative;\n  top: 5px;\n  left: 5px;\n  z-index: 1000;\n  transition: opacity .3s; }\n  #eruda .home-btn .circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 20px;\n    height: 20px; }\n  #eruda .home-btn:hover {\n    opacity: 0.8; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 5 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/*
@@ -1813,7 +3233,7 @@ var eruda =
 
 
 /***/ },
-/* 6 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2067,25 +3487,25 @@ var eruda =
 
 
 /***/ },
-/* 7 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(8);
+	var Handlebars = __webpack_require__(13);
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    return "<div class=\"home-btn\">\r\n    <div class=\"circle\"></div>\r\n</div>";
 	},"useData":true});
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Create a simple path alias to allow browserify to resolve
 	// the runtime on a supported path.
-	module.exports = __webpack_require__(9)['default'];
+	module.exports = __webpack_require__(14)['default'];
 
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2099,30 +3519,30 @@ var eruda =
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-	var _handlebarsBase = __webpack_require__(10);
+	var _handlebarsBase = __webpack_require__(15);
 
 	var base = _interopRequireWildcard(_handlebarsBase);
 
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 
-	var _handlebarsSafeString = __webpack_require__(24);
+	var _handlebarsSafeString = __webpack_require__(29);
 
 	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
-	var _handlebarsException = __webpack_require__(12);
+	var _handlebarsException = __webpack_require__(17);
 
 	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 
-	var _handlebarsUtils = __webpack_require__(11);
+	var _handlebarsUtils = __webpack_require__(16);
 
 	var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-	var _handlebarsRuntime = __webpack_require__(25);
+	var _handlebarsRuntime = __webpack_require__(30);
 
 	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-	var _handlebarsNoConflict = __webpack_require__(26);
+	var _handlebarsNoConflict = __webpack_require__(31);
 
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -2157,7 +3577,7 @@ var eruda =
 
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2168,17 +3588,17 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
-	var _exception = __webpack_require__(12);
+	var _exception = __webpack_require__(17);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _helpers = __webpack_require__(13);
+	var _helpers = __webpack_require__(18);
 
-	var _decorators = __webpack_require__(21);
+	var _decorators = __webpack_require__(26);
 
-	var _logger = __webpack_require__(23);
+	var _logger = __webpack_require__(28);
 
 	var _logger2 = _interopRequireDefault(_logger);
 
@@ -2267,7 +3687,7 @@ var eruda =
 
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2397,7 +3817,7 @@ var eruda =
 
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2443,7 +3863,7 @@ var eruda =
 
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2454,31 +3874,31 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _helpersBlockHelperMissing = __webpack_require__(14);
+	var _helpersBlockHelperMissing = __webpack_require__(19);
 
 	var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 
-	var _helpersEach = __webpack_require__(15);
+	var _helpersEach = __webpack_require__(20);
 
 	var _helpersEach2 = _interopRequireDefault(_helpersEach);
 
-	var _helpersHelperMissing = __webpack_require__(16);
+	var _helpersHelperMissing = __webpack_require__(21);
 
 	var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 
-	var _helpersIf = __webpack_require__(17);
+	var _helpersIf = __webpack_require__(22);
 
 	var _helpersIf2 = _interopRequireDefault(_helpersIf);
 
-	var _helpersLog = __webpack_require__(18);
+	var _helpersLog = __webpack_require__(23);
 
 	var _helpersLog2 = _interopRequireDefault(_helpersLog);
 
-	var _helpersLookup = __webpack_require__(19);
+	var _helpersLookup = __webpack_require__(24);
 
 	var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 
-	var _helpersWith = __webpack_require__(20);
+	var _helpersWith = __webpack_require__(25);
 
 	var _helpersWith2 = _interopRequireDefault(_helpersWith);
 
@@ -2495,14 +3915,14 @@ var eruda =
 
 
 /***/ },
-/* 14 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	exports['default'] = function (instance) {
 	  instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -2540,7 +3960,7 @@ var eruda =
 
 
 /***/ },
-/* 15 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2550,9 +3970,9 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
-	var _exception = __webpack_require__(12);
+	var _exception = __webpack_require__(17);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -2640,7 +4060,7 @@ var eruda =
 
 
 /***/ },
-/* 16 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2650,7 +4070,7 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _exception = __webpack_require__(12);
+	var _exception = __webpack_require__(17);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
@@ -2671,14 +4091,14 @@ var eruda =
 
 
 /***/ },
-/* 17 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	exports['default'] = function (instance) {
 	  instance.registerHelper('if', function (conditional, options) {
@@ -2706,7 +4126,7 @@ var eruda =
 
 
 /***/ },
-/* 18 */
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2738,7 +4158,7 @@ var eruda =
 
 
 /***/ },
-/* 19 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2756,14 +4176,14 @@ var eruda =
 
 
 /***/ },
-/* 20 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	exports['default'] = function (instance) {
 	  instance.registerHelper('with', function (context, options) {
@@ -2795,7 +4215,7 @@ var eruda =
 
 
 /***/ },
-/* 21 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2806,7 +4226,7 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _decoratorsInline = __webpack_require__(22);
+	var _decoratorsInline = __webpack_require__(27);
 
 	var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
@@ -2817,14 +4237,14 @@ var eruda =
 
 
 /***/ },
-/* 22 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	exports['default'] = function (instance) {
 	  instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -2852,14 +4272,14 @@ var eruda =
 
 
 /***/ },
-/* 23 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	var logger = {
 	  methodMap: ['debug', 'info', 'warn', 'error'],
@@ -2905,7 +4325,7 @@ var eruda =
 
 
 /***/ },
-/* 24 */
+/* 29 */
 /***/ function(module, exports) {
 
 	// Build out our basic SafeString type
@@ -2926,7 +4346,7 @@ var eruda =
 
 
 /***/ },
-/* 25 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2946,15 +4366,15 @@ var eruda =
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-	var _utils = __webpack_require__(11);
+	var _utils = __webpack_require__(16);
 
 	var Utils = _interopRequireWildcard(_utils);
 
-	var _exception = __webpack_require__(12);
+	var _exception = __webpack_require__(17);
 
 	var _exception2 = _interopRequireDefault(_exception);
 
-	var _base = __webpack_require__(10);
+	var _base = __webpack_require__(15);
 
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -3224,7 +4644,7 @@ var eruda =
 
 
 /***/ },
-/* 26 */
+/* 31 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
@@ -3249,6 +4669,46 @@ var eruda =
 	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL25vLWNvbmZsaWN0LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7O3FCQUNlLFVBQVMsVUFBVSxFQUFFOztBQUVsQyxNQUFJLElBQUksR0FBRyxPQUFPLE1BQU0sS0FBSyxXQUFXLEdBQUcsTUFBTSxHQUFHLE1BQU07TUFDdEQsV0FBVyxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUM7O0FBRWxDLFlBQVUsQ0FBQyxVQUFVLEdBQUcsWUFBVztBQUNqQyxRQUFJLElBQUksQ0FBQyxVQUFVLEtBQUssVUFBVSxFQUFFO0FBQ2xDLFVBQUksQ0FBQyxVQUFVLEdBQUcsV0FBVyxDQUFDO0tBQy9CO0FBQ0QsV0FBTyxVQUFVLENBQUM7R0FDbkIsQ0FBQztDQUNIIiwiZmlsZSI6Im5vLWNvbmZsaWN0LmpzIiwic291cmNlc0NvbnRlbnQiOlsiLyogZ2xvYmFsIHdpbmRvdyAqL1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24oSGFuZGxlYmFycykge1xuICAvKiBpc3RhbmJ1bCBpZ25vcmUgbmV4dCAqL1xuICBsZXQgcm9vdCA9IHR5cGVvZiBnbG9iYWwgIT09ICd1bmRlZmluZWQnID8gZ2xvYmFsIDogd2luZG93LFxuICAgICAgJEhhbmRsZWJhcnMgPSByb290LkhhbmRsZWJhcnM7XG4gIC8qIGlzdGFuYnVsIGlnbm9yZSBuZXh0ICovXG4gIEhhbmRsZWJhcnMubm9Db25mbGljdCA9IGZ1bmN0aW9uKCkge1xuICAgIGlmIChyb290LkhhbmRsZWJhcnMgPT09IEhhbmRsZWJhcnMpIHtcbiAgICAgIHJvb3QuSGFuZGxlYmFycyA9ICRIYW5kbGViYXJzO1xuICAgIH1cbiAgICByZXR1cm4gSGFuZGxlYmFycztcbiAgfTtcbn1cbiJdfQ==
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(33);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all; }\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);
