@@ -47,9 +47,17 @@ var eruda =
 
 	'use strict';
 
-	var _index = __webpack_require__(1);
+	var _HomeBtn = __webpack_require__(1);
 
-	var _index2 = _interopRequireDefault(_index);
+	var _HomeBtn2 = _interopRequireDefault(_HomeBtn);
+
+	var _DevTools = __webpack_require__(32);
+
+	var _DevTools2 = _interopRequireDefault(_DevTools);
+
+	var _Console = __webpack_require__(40);
+
+	var _Console2 = _interopRequireDefault(_Console);
 
 	var _util = __webpack_require__(2);
 
@@ -57,7 +65,7 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(32);
+	__webpack_require__(45);
 
 	var $container;
 
@@ -65,7 +73,18 @@ var eruda =
 
 	if (isDebugMode) {
 	    appendContainer();
-	    var homeBtn = new _index2.default($container);
+
+	    var devTools = new _DevTools2.default($container);
+
+	    var homeBtn = new _HomeBtn2.default($container);
+
+	    homeBtn.on('click', function () {
+	        return devTools.toggle();
+	    });
+
+	    devTools.add(new _Console2.default());
+
+	    devTools.show();
 	}
 
 	function appendContainer() {
@@ -104,8 +123,10 @@ var eruda =
 	        this._$parent = $parent;
 
 	        this._appendTpl();
-	        this._bindEvent();
 	        this._makeDraggable();
+	        this._bindEvent();
+
+	        _util2.default.Emitter.mixin(this);
 	    }
 
 	    _createClass(HomeBtn, [{
@@ -120,14 +141,16 @@ var eruda =
 	    }, {
 	        key: '_bindEvent',
 	        value: function _bindEvent() {
-	            this._$el.on('click', function () {
-	                alert('I am clicked!');
+	            var _this = this;
+
+	            this._draggabilly.on('staticClick', function () {
+	                return _this.emit('click');
 	            });
 	        }
 	    }, {
 	        key: '_makeDraggable',
 	        value: function _makeDraggable() {
-	            new Draggabilly(this._$el.get(0), {
+	            this._draggabilly = new Draggabilly(this._$el.get(0), {
 	                containment: true
 	            });
 	        }
@@ -318,6 +341,24 @@ var eruda =
 	        };
 
 	        return has;
+	    })();
+
+	    /* ------------------------------ slice ------------------------------ */
+
+	    var slice;
+
+	    _.slice = (function ()
+	    {
+	        // TODO
+
+	        var arrProto = Array.prototype;
+
+	        slice = function (arr, start, end)
+	        {
+	            return arrProto.slice.call(arr, start, end);
+	        };
+
+	        return slice;
 	    })();
 
 	    /* ------------------------------ _createAssigner ------------------------------ */
@@ -636,6 +677,25 @@ var eruda =
 	        return isStr;
 	    })();
 
+	    /* ------------------------------ isErr ------------------------------ */
+
+	    var isErr;
+
+	    _.isErr = (function ()
+	    {
+	        // TODO
+
+	        /* function
+	         * isErr: Checks if value is an Error.
+	         * value(*): The value to check.
+	         * return(boolean): Returns true if value is an error object, else false.
+	         */
+
+	        isErr = function (val) { return objToStr(val) === '[object Error]' };
+
+	        return isErr;
+	    })();
+
 	    /* ------------------------------ isFn ------------------------------ */
 
 	    var isFn;
@@ -683,6 +743,49 @@ var eruda =
 	        };
 
 	        return isMatch;
+	    })();
+
+	    /* ------------------------------ ltrim ------------------------------ */
+
+	    var ltrim;
+
+	    _.ltrim = (function ()
+	    {
+	        // TODO
+
+	        var regSpace = /^\s+/;
+
+	        ltrim = function (str, chars)
+	        {
+	            if (chars == null) return str.replace(regSpace, '');
+
+	            var start   = 0,
+	                len     = str.length,
+	                charLen = chars.length,
+	                found   = true,
+	                i, c;
+
+	            while (found && start < len)
+	            {
+	                found = false;
+	                i = -1;
+	                c = str.charAt(start);
+
+	                while (++i < charLen)
+	                {
+	                    if (c === chars[i])
+	                    {
+	                        found = true;
+	                        start++;
+	                        break;
+	                    }
+	                }
+	            }
+
+	            return (start >= len) ? '' : str.substr(start, len);
+	        };
+
+	        return ltrim;
 	    })();
 
 	    /* ------------------------------ matcher ------------------------------ */
@@ -891,6 +994,79 @@ var eruda =
 	        });
 
 	        return Class;
+	    })();
+
+	    /* ------------------------------ Emitter ------------------------------ */
+
+	    var Emitter;
+
+	    _.Emitter = (function ()
+	    {
+
+	        Emitter = Class({
+	            initialize: function ()
+	            {
+	                this._events = this._events || {};
+	            },
+	            on: function (event, listener)
+	            {
+	                this._events[event] = this._events[event] || [];
+	                this._events[event].push(listener);
+
+	                return this;
+	            },
+	            off: function (event, listener)
+	            {
+	                if (!has(this._events, event)) return;
+
+	                this._events[event].splice(this._events[event].indexOf(listener), 1);
+
+	                return this;
+	            },
+	            once: function (event, listener)
+	            {
+	                var fired = false;
+
+	                function g()
+	                {
+	                    this.off(event, g);
+	                    if (!fired)
+	                    {
+	                        fired = true;
+	                        listener.apply(this, arguments);
+	                    }
+	                }
+
+	                this.on(event, g);
+
+	                return this;
+	            },
+	            emit: function (event)
+	            {
+	                if (!has(this._events, event)) return;
+
+	                var args = slice(arguments, 1);
+
+	                each(this._events[event], function (val)
+	                {
+	                    val.apply(this, args);
+	                }, this);
+
+	                return this;
+	            }
+	        }, {
+	            mixin: function (obj)
+	            {
+	                each(['on', 'off', 'once', 'emit'], function (val)
+	                {
+	                    obj[val] = Emitter.prototype[val];
+	                });
+
+	                obj._events = obj._events || {};
+	            }
+	        });
+
+	        return Emitter;
 	    })();
 
 	    /* ------------------------------ delegate ------------------------------ */
@@ -1729,6 +1905,68 @@ var eruda =
 	        }
 
 	        return $;
+	    })();
+
+	    /* ------------------------------ rtrim ------------------------------ */
+
+	    var rtrim;
+
+	    _.rtrim = (function ()
+	    {
+	        // TODO
+
+	        var regSpace = /\s+$/;
+
+	        rtrim = function (str, chars)
+	        {
+	            if (chars == null) return str.replace(regSpace, '');
+
+	            var end     = str.length - 1,
+	                charLen = chars.length,
+	                found   = true,
+	                i, c;
+
+	            while (found && end >= 0)
+	            {
+	                found = false;
+	                i = -1;
+	                c = str.charAt(end);
+
+	                while (++i < charLen)
+	                {
+	                    if (c === chars[i])
+	                    {
+	                        found = true;
+	                        end--;
+	                        break;
+	                    }
+	                }
+	            }
+
+	            return (end >= 0) ? str.substring(0, end + 1) : '';
+	        };
+
+	        return rtrim;
+	    })();
+
+	    /* ------------------------------ trim ------------------------------ */
+
+	    var trim;
+
+	    _.trim = (function ()
+	    {
+	        // TODO
+
+	        var regSpace = /^\s+|\s+$/g;
+
+	        trim = function (str, chars)
+	        {
+	            if (chars == null) return str.replace(regSpace, '');
+
+	            return ltrim(rtrim(str, chars), chars);
+	        };
+
+	        return trim;
 	    })();
 
 	    return _;
@@ -3152,8 +3390,8 @@ var eruda =
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./style.scss");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./HomeBtn.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./HomeBtn.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3171,7 +3409,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .home-btn {\n  width: 40px;\n  height: 40px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.5;\n  border-radius: 10px;\n  padding-top: 10px;\n  position: relative;\n  top: 5px;\n  left: 5px;\n  z-index: 1000;\n  transition: opacity .3s; }\n  #eruda .home-btn .circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 20px;\n    height: 20px; }\n  #eruda .home-btn:hover {\n    opacity: 0.8; }\n", ""]);
+	exports.push([module.id, "#eruda .home-btn {\n  width: 40px;\n  height: 40px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.3;\n  border-radius: 10px;\n  padding-top: 10px;\n  position: relative;\n  top: 4px;\n  left: 4px;\n  z-index: 1000;\n  transition: opacity .3s; }\n  #eruda .home-btn .circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 20px;\n    height: 20px; }\n  #eruda .home-btn:hover {\n    opacity: 0.8; }\n", ""]);
 
 	// exports
 
@@ -4674,10 +4912,531 @@ var eruda =
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _NavBar = __webpack_require__(33);
+
+	var _NavBar2 = _interopRequireDefault(_NavBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	__webpack_require__(37);
+
+	var DevTools = function () {
+	    function DevTools($parent) {
+	        _classCallCheck(this, DevTools);
+
+	        this._$parent = $parent;
+	        this._isShow = false;
+	        this._tools = {};
+
+	        this._appendTpl();
+	        this._initNavBar();
+	    }
+
+	    _createClass(DevTools, [{
+	        key: '_appendTpl',
+	        value: function _appendTpl() {
+	            var $parent = this._$parent;
+
+	            $parent.append(__webpack_require__(39)());
+
+	            this._$el = $parent.find('.dev-tools');
+	            this._$tools = this._$el.find('.tools');
+	        }
+	    }, {
+	        key: '_initNavBar',
+	        value: function _initNavBar() {
+	            this._navBar = new _NavBar2.default(this._$el.find('.nav-bar'));
+	        }
+	    }, {
+	        key: 'show',
+	        value: function show() {
+	            this._isShow = true;
+
+	            this._$el.addClass('show').rmClass('hide');
+	        }
+	    }, {
+	        key: 'hide',
+	        value: function hide() {
+	            var _this = this;
+
+	            this._isShow = false;
+
+	            this._$el.addClass('hide').rmClass('show');
+	            setTimeout(function () {
+	                return _this._$el.rmClass('hide');
+	            }, 3000);
+	        }
+	    }, {
+	        key: 'toggle',
+	        value: function toggle() {
+	            this._isShow ? this.hide() : this.show();
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(tool) {
+	            var name = tool.name;
+
+	            this._$tools.append('<div class="' + name + ' tool"></div>');
+	            tool.init(this._$tools.find('.' + name));
+	            this._tools[name] = tool;
+	        }
+	    }]);
+
+	    return DevTools;
+	}();
+
+	exports.default = DevTools;
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	__webpack_require__(34);
+
+	var NavBar = function () {
+	    function NavBar($el) {
+	        _classCallCheck(this, NavBar);
+
+	        this._$el = $el;
+
+	        this.render();
+	    }
+
+	    _createClass(NavBar, [{
+	        key: 'render',
+	        value: function render() {
+	            this._$el.append(__webpack_require__(36)());
+	        }
+	    }]);
+
+	    return NavBar;
+	}();
+
+	exports.default = NavBar;
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(33);
+	var content = __webpack_require__(35);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./NavBar.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./NavBar.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda .dev-tools .nav-bar {\n  height: 50px;\n  overflow: hidden;\n  box-shadow: 0 1px 0 0 #ccc; }\n  #eruda .dev-tools .nav-bar ul {\n    display: flex; }\n    #eruda .dev-tools .nav-bar ul li {\n      float: left;\n      height: 50px;\n      line-height: 50px;\n      text-align: center;\n      flex-grow: 1; }\n      #eruda .dev-tools .nav-bar ul li.active {\n        color: #76a2ee;\n        border-bottom: 3px solid #76a2ee; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    return "<ul>\r\n    <li class=\"active\">Console</li>\r\n</ul>\r\n";
+	},"useData":true});
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(38);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./DevTools.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./DevTools.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda .dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  #eruda .dev-tools.show {\n    display: block;\n    animation: show-menu .3s linear both; }\n  #eruda .dev-tools.hide {\n    display: block;\n    animation: hide-menu .3s linear both; }\n  #eruda .dev-tools .tools {\n    height: calc(100% - 50px);\n    width: 100%;\n    position: relative;\n    overflow: scroll; }\n    #eruda .dev-tools .tools .tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      width: 100%;\n      height: 100%; }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    return "<div class=\"dev-tools\">\r\n    <div class=\"nav-bar\"></div>\r\n    <div class=\"tools\"></div>\r\n</div>";
+	},"useData":true});
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Log = __webpack_require__(41);
+
+	var _Log2 = _interopRequireDefault(_Log);
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	__webpack_require__(42);
+
+	var Console = function () {
+	    function Console() {
+	        _classCallCheck(this, Console);
+
+	        this.name = 'console';
+	    }
+
+	    _createClass(Console, [{
+	        key: 'init',
+	        value: function init($el) {
+	            this._$el = $el;
+
+	            this._appendTpl();
+	            this._initLog();
+	            this._bindEvent();
+	        }
+	    }, {
+	        key: '_appendTpl',
+	        value: function _appendTpl() {
+	            var $el = this._$el;
+
+	            $el.append(__webpack_require__(44)());
+	            this._$logs = $el.find('.logs');
+	            this._$jsInput = $el.find('.js-input');
+	        }
+	    }, {
+	        key: '_initLog',
+	        value: function _initLog() {
+	            this._log = new _Log2.default(this._$logs);
+	            this._log.overrideConsole().catchGlobalErr();
+	        }
+	    }, {
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            var _this = this;
+
+	            var $jsInput = this._$jsInput,
+	                log = this._log;
+
+	            $jsInput.on('keyup', function (e) {
+	                e = e.origEvent;
+
+	                if (e.keyCode === 13) {
+	                    var jsInput = $jsInput.val();
+
+	                    if (_util2.default.trim(jsInput) === '') return;
+
+	                    log.input(jsInput);
+	                    try {
+	                        log.output(_this._evalJs(jsInput));
+	                    } catch (e) {
+	                        log.error(e);
+	                    }
+
+	                    $jsInput.val('');
+	                }
+	            });
+	        }
+	    }, {
+	        key: '_evalJs',
+	        value: function _evalJs(jsInput) {
+	            var log = this._log;
+
+	            function clear() {
+	                log.clear();
+	            }
+
+	            return eval(jsInput);
+	        }
+	    }]);
+
+	    return Console;
+	}();
+
+	exports.default = Console;
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	__webpack_require__(48);
+
+	function errToStr(err) {
+	    var lines = err.stack.split('\n');
+
+	    var msg = lines[0] + '<br/>',
+	        stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+
+	    return msg + stack;
+	}
+
+	var Log = function () {
+	    function Log($el) {
+	        _classCallCheck(this, Log);
+
+	        this._$el = $el;
+	        this._logs = [];
+	        this._tpl = __webpack_require__(47);
+	    }
+
+	    _createClass(Log, [{
+	        key: 'overrideConsole',
+	        value: function overrideConsole() {
+	            var self = this;
+
+	            window.console.log = function (msg) {
+	                self.log(msg);
+	            };
+
+	            return this;
+	        }
+	    }, {
+	        key: 'catchGlobalErr',
+	        value: function catchGlobalErr() {
+	            var self = this;
+
+	            window.onerror = function (errMsg, url, lineNum, column, errObj) {
+	                self.error(errObj);
+	            };
+
+	            return this;
+	        }
+	    }, {
+	        key: 'clear',
+	        value: function clear() {
+	            this._logs = [];
+
+	            this._render();
+	        }
+	    }, {
+	        key: 'input',
+	        value: function input(msg) {
+	            this._logs.push({
+	                type: 'input',
+	                val: msg
+	            });
+
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'output',
+	        value: function output(msg) {
+	            if (_util2.default.isUndef(msg)) msg = 'undefined';
+
+	            this._logs.push({
+	                type: 'output',
+	                val: msg
+	            });
+
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'log',
+	        value: function log(msg) {
+	            this._logs.push({
+	                type: 'log',
+	                val: msg
+	            });
+
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'error',
+	        value: function error(msg) {
+	            if (_util2.default.isErr(msg)) {
+	                msg = errToStr(msg);
+	            } else {}
+
+	            this._logs.push({
+	                type: 'error',
+	                val: msg
+	            });
+
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: '_render',
+	        value: function _render() {
+	            this._$el.html(this._tpl({
+	                logs: this._logs
+	            }));
+
+	            this._scrollToBottom();
+	        }
+	    }, {
+	        key: '_scrollToBottom',
+	        value: function _scrollToBottom() {
+	            var el = this._$el.get(0);
+
+	            el.scrollTop = el.scrollHeight;
+	        }
+	    }]);
+
+	    return Log;
+	}();
+
+	exports.default = Log;
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(43);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./Console.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./Console.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda .dev-tools .tools .console .js-input {\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  height: 30px;\n  box-shadow: 0 -1px 0 0 #ccc;\n  line-height: 30px;\n  border: none;\n  outline: none;\n  padding: 0 4px; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    return "<div class=\"logs\"></div>\r\n<input class=\"js-input\" type=\"text\"></input>\r\n";
+	},"useData":true});
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(46);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -4697,7 +5456,7 @@ var eruda =
 	}
 
 /***/ },
-/* 33 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -4705,7 +5464,68 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all; }\n", ""]);
+	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  font-family: Lora, Times, serif; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all;\n    padding: 0;\n    margin: 0; }\n  #eruda ul {\n    list-style: none; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function";
+
+	  return "        <li class=\""
+	    + container.escapeExpression(((helper = (helper = helpers.type || (depth0 != null ? depth0.type : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"type","hash":{},"data":data}) : helper)))
+	    + "\">"
+	    + ((stack1 = ((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+	    + "</li>\r\n";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return "<ul>\r\n"
+	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.logs : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "</ul>";
+	},"useData":true});
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(49);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./Log.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./Log.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda .dev-tools .tools .console .logs {\n  height: calc(100% - 30px);\n  overflow: scroll; }\n  #eruda .dev-tools .tools .console .logs li {\n    padding: 4px; }\n    #eruda .dev-tools .tools .console .logs li.log, #eruda .dev-tools .tools .console .logs li.output {\n      border-bottom: 1px solid #ccc; }\n    #eruda .dev-tools .tools .console .logs li.error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      #eruda .dev-tools .tools .console .logs li.error .stack {\n        color: #000;\n        padding-left: 1.2em; }\n", ""]);
 
 	// exports
 

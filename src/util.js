@@ -175,6 +175,24 @@ module.exports = (function ()
         return has;
     })();
 
+    /* ------------------------------ slice ------------------------------ */
+
+    var slice;
+
+    _.slice = (function ()
+    {
+        // TODO
+
+        var arrProto = Array.prototype;
+
+        slice = function (arr, start, end)
+        {
+            return arrProto.slice.call(arr, start, end);
+        };
+
+        return slice;
+    })();
+
     /* ------------------------------ _createAssigner ------------------------------ */
 
     var _createAssigner;
@@ -491,6 +509,25 @@ module.exports = (function ()
         return isStr;
     })();
 
+    /* ------------------------------ isErr ------------------------------ */
+
+    var isErr;
+
+    _.isErr = (function ()
+    {
+        // TODO
+
+        /* function
+         * isErr: Checks if value is an Error.
+         * value(*): The value to check.
+         * return(boolean): Returns true if value is an error object, else false.
+         */
+
+        isErr = function (val) { return objToStr(val) === '[object Error]' };
+
+        return isErr;
+    })();
+
     /* ------------------------------ isFn ------------------------------ */
 
     var isFn;
@@ -538,6 +575,49 @@ module.exports = (function ()
         };
 
         return isMatch;
+    })();
+
+    /* ------------------------------ ltrim ------------------------------ */
+
+    var ltrim;
+
+    _.ltrim = (function ()
+    {
+        // TODO
+
+        var regSpace = /^\s+/;
+
+        ltrim = function (str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            var start   = 0,
+                len     = str.length,
+                charLen = chars.length,
+                found   = true,
+                i, c;
+
+            while (found && start < len)
+            {
+                found = false;
+                i = -1;
+                c = str.charAt(start);
+
+                while (++i < charLen)
+                {
+                    if (c === chars[i])
+                    {
+                        found = true;
+                        start++;
+                        break;
+                    }
+                }
+            }
+
+            return (start >= len) ? '' : str.substr(start, len);
+        };
+
+        return ltrim;
     })();
 
     /* ------------------------------ matcher ------------------------------ */
@@ -746,6 +826,79 @@ module.exports = (function ()
         });
 
         return Class;
+    })();
+
+    /* ------------------------------ Emitter ------------------------------ */
+
+    var Emitter;
+
+    _.Emitter = (function ()
+    {
+
+        Emitter = Class({
+            initialize: function ()
+            {
+                this._events = this._events || {};
+            },
+            on: function (event, listener)
+            {
+                this._events[event] = this._events[event] || [];
+                this._events[event].push(listener);
+
+                return this;
+            },
+            off: function (event, listener)
+            {
+                if (!has(this._events, event)) return;
+
+                this._events[event].splice(this._events[event].indexOf(listener), 1);
+
+                return this;
+            },
+            once: function (event, listener)
+            {
+                var fired = false;
+
+                function g()
+                {
+                    this.off(event, g);
+                    if (!fired)
+                    {
+                        fired = true;
+                        listener.apply(this, arguments);
+                    }
+                }
+
+                this.on(event, g);
+
+                return this;
+            },
+            emit: function (event)
+            {
+                if (!has(this._events, event)) return;
+
+                var args = slice(arguments, 1);
+
+                each(this._events[event], function (val)
+                {
+                    val.apply(this, args);
+                }, this);
+
+                return this;
+            }
+        }, {
+            mixin: function (obj)
+            {
+                each(['on', 'off', 'once', 'emit'], function (val)
+                {
+                    obj[val] = Emitter.prototype[val];
+                });
+
+                obj._events = obj._events || {};
+            }
+        });
+
+        return Emitter;
     })();
 
     /* ------------------------------ delegate ------------------------------ */
@@ -1584,6 +1737,68 @@ module.exports = (function ()
         }
 
         return $;
+    })();
+
+    /* ------------------------------ rtrim ------------------------------ */
+
+    var rtrim;
+
+    _.rtrim = (function ()
+    {
+        // TODO
+
+        var regSpace = /\s+$/;
+
+        rtrim = function (str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            var end     = str.length - 1,
+                charLen = chars.length,
+                found   = true,
+                i, c;
+
+            while (found && end >= 0)
+            {
+                found = false;
+                i = -1;
+                c = str.charAt(end);
+
+                while (++i < charLen)
+                {
+                    if (c === chars[i])
+                    {
+                        found = true;
+                        end--;
+                        break;
+                    }
+                }
+            }
+
+            return (end >= 0) ? str.substring(0, end + 1) : '';
+        };
+
+        return rtrim;
+    })();
+
+    /* ------------------------------ trim ------------------------------ */
+
+    var trim;
+
+    _.trim = (function ()
+    {
+        // TODO
+
+        var regSpace = /^\s+|\s+$/g;
+
+        trim = function (str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            return ltrim(rtrim(str, chars), chars);
+        };
+
+        return trim;
     })();
 
     return _;

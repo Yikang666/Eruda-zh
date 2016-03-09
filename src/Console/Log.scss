@@ -1,0 +1,22 @@
+#eruda { .dev-tools { .tools { .console {
+    .logs {
+        height: calc(100% - 30px);
+        overflow: scroll;
+        li {
+            padding: 4px;
+            &.log, &.output {
+                border-bottom: 1px solid #ccc;
+            }
+            &.error {
+                background: #fff0f0;
+                color: #ff0000;
+                border-top: 1px solid #ffd7d7;
+                border-bottom: 1px solid #ffd7d7;
+                .stack {
+                    color: #000;
+                    padding-left: 1.2em;
+                }
+            }
+        }
+    }
+} } } }

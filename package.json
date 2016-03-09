@@ -4,7 +4,8 @@
   "description": "Console for mobile JavaScript",
   "main": "index.js",
   "scripts": {
-    "build": ""
+    "build": "webpack",
+    "server": "nws -p 3000"
   },
   "repository": {
     "type": "git",
