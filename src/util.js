@@ -577,6 +577,22 @@ module.exports = (function ()
         return isMatch;
     })();
 
+    /* ------------------------------ isRegExp ------------------------------ */
+
+    var isRegExp;
+
+    _.isRegExp = (function ()
+    {
+        // TODO
+
+        isRegExp = function (value)
+        {
+            return objToStr(value) === '[object RegExp]';
+        };
+
+        return isRegExp;
+    })();
+
     /* ------------------------------ ltrim ------------------------------ */
 
     var ltrim;
@@ -705,6 +721,31 @@ module.exports = (function ()
         };
 
         return safeCb;
+    })();
+
+    /* ------------------------------ filter ------------------------------ */
+
+    var filter;
+
+    _.filter = (function ()
+    {
+        // TODO
+
+        filter = function (obj, predicate, ctx)
+        {
+            var ret = [];
+
+            predicate = safeCb(predicate, ctx);
+
+            each(obj, function (val, idx, list)
+            {
+                if (predicate(val, idx, list)) ret.push(val);
+            });
+
+            return ret;
+        };
+
+        return filter;
     })();
 
     /* ------------------------------ map ------------------------------ */
@@ -1779,6 +1820,26 @@ module.exports = (function ()
         };
 
         return rtrim;
+    })();
+
+    /* ------------------------------ startWith ------------------------------ */
+
+    var startWith;
+
+    _.startWith = (function ()
+    {
+        // TODO
+
+        /* function
+         * startWith: Checks if string starts with the given target string.
+         * string(string): The string to search.
+         * prefix(string): String prefix.
+         * return(boolean): Returns true if string starts with prefix, else false.
+         */
+
+        startWith = function (str, prefix) { return str.indexOf(prefix) === 0 };
+
+        return startWith;
     })();
 
     /* ------------------------------ trim ------------------------------ */

@@ -1,6 +1,5 @@
 import util from '../util'
-
-var Draggabilly = require('draggabilly');
+import Draggabilly from 'draggabilly'
 
 require('./HomeBtn.scss');
 
@@ -12,6 +11,7 @@ export default class HomeBtn
 
         this._appendTpl();
         this._makeDraggable();
+        this._setPos();
         this._bindEvent();
 
         util.Emitter.mixin(this);
@@ -24,9 +24,27 @@ export default class HomeBtn
 
         this._$el = $parent.find('.home-btn');
     }
+    _setPos()
+    {
+        var wh = window.innerHeight,
+            ww = window.innerWidth;
+
+        this._$el.css({
+            left: ww - 50,
+            top: wh - 50
+        });
+    }
     _bindEvent()
     {
         this._draggabilly.on('staticClick', () => this.emit('click') );
+
+        window.addEventListener('orientationchange', () =>
+        {
+            setTimeout(() =>
+            {
+                this._setPos();
+            }, 150);
+        }, false);
     }
     _makeDraggable()
     {

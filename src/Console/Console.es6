@@ -43,32 +43,15 @@ export default class Console extends Tool
 
             if (e.keyCode === 13)
             {
-                var jsInput = $jsInput.text();
+                var jsInput = $jsInput.val();
 
                 if (util.trim(jsInput) === '') return;
 
                 log.input(jsInput);
-                try {
-                    log.output(this._evalJs(jsInput));
-                } catch (e)
-                {
-                    log.error(e);
-                }
 
-                $jsInput.html('');
+                $jsInput.val('');
             }
         });
-    }
-    _evalJs(jsInput)
-    {
-        var log = this._log;
-
-        function clear()
-        {
-            log.clear();
-        }
-
-        return eval(jsInput);
     }
 }
 

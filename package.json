@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --watch",
     "release": "webpack & uglifyjs dist/eruda.js -o dist/eruda.min.js",
-    "server": "nws -p 3000"
+    "serve": "nws -p 3000"
   },
   "repository": {
     "type": "git",

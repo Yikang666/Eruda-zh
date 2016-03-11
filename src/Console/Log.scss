@@ -1,12 +1,28 @@
+@import "../color";
+
 #eruda { .dev-tools { .tools { .console {
     .logs {
         height: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
+        font-size: 14px;
         li {
             padding: 10px;
+            overflow-x: scroll;
             &.log, &.output {
                 border-bottom: 1px solid #b4b4b4;
+            }
+            &.log table {
+                width: 100%;
+                background: #fff;
+                border-collapse: collapse;
+                th {
+                    background: $blue;
+                    color: #fff;
+                }
+                th, td {
+                    padding: 10px;
+                }
             }
             &.error {
                 background: #fff0f0;
@@ -17,6 +33,11 @@
                     color: #000;
                     padding-left: 1.2em;
                 }
+            }
+            &.warn {
+                background: #fffbe6;
+                border-top: 1px solid #fff5c2;
+                border-bottom: 1px solid #fff5c2;
             }
         }
     }

@@ -2,14 +2,43 @@ import util from '../util'
 
 require('./Log.scss');
 
-function errToStr(err)
+var cmdList = require('./cmdList.json'),
+    helpMsg = require('./help.hbs')({
+        commands: cmdList
+    });
+
+function evalJs(jsInput)
+{
+    return eval(jsInput);
+}
+
+function errToStr(err, msg)
 {
     var lines = err.stack.split('\n');
 
-    var msg = lines[0] + '<br/>',
-        stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+    if (util.isUndef(msg)) msg = lines[0] + '<br/>';
+    var stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
 
     return msg + stack;
+}
+
+function transMsg(msg)
+{
+    if (util.isUndef(msg))
+    {
+        msg = 'undefined';
+    } else if (util.isFn(msg))
+    {
+        msg = msg.toString();
+    } else if (util.isArr(msg))
+    {
+        msg = JSON.stringify(msg);
+    } else if (util.isObj(msg))
+    {
+        msg = 'Object ' + JSON.stringify(msg);
+    }
+
+    return msg;
 }
 
 export default class Log
@@ -19,6 +48,7 @@ export default class Log
         this._$el = $el;
         this._logs = [];
         this._tpl = require('./Log.hbs');
+        this._filter = 'all';
     }
     overrideConsole()
     {
@@ -27,6 +57,14 @@ export default class Log
         window.console.log = (msg) =>
         {
             self.log(msg);
+        };
+        window.console.error = (msg) =>
+        {
+            self.error(msg);
+        };
+        window.console.warn = (msg) =>
+        {
+            self.warn(msg);
         };
 
         return this;
@@ -48,12 +86,33 @@ export default class Log
 
         this._render();
     }
-    input(msg)
+    input(jsCode)
     {
+        jsCode = util.trim(jsCode);
+
+        if (util.startWith(jsCode, ':'))
+        {
+            var cmd = jsCode.slice(1);
+            this._runCmd(cmd);
+
+            return this;
+        } else if (util.startWith(jsCode, '/'))
+        {
+            var regexp = util.trim(jsCode.slice(1));
+            return this.filter(new RegExp(regexp));
+        }
+
         this._logs.push({
             type: 'input',
-            val: msg
+            val: jsCode
         });
+
+        try {
+            this.output(evalJs(jsCode));
+        } catch (e)
+        {
+            this.error(e);
+        }
 
         this._render();
 
@@ -61,7 +120,7 @@ export default class Log
     }
     output(msg)
     {
-        if (util.isUndef(msg)) msg = 'undefined';
+        msg = transMsg(msg);
 
         this._logs.push({
             type: 'output',
@@ -74,6 +133,8 @@ export default class Log
     }
     log(msg)
     {
+        msg = transMsg(msg);
+
         this._logs.push({
             type: 'log',
             val: msg
@@ -90,7 +151,7 @@ export default class Log
             msg = errToStr(msg);
         } else
         {
-
+            msg = errToStr(new Error(), transMsg(msg));
         }
 
         this._logs.push({
@@ -102,13 +163,69 @@ export default class Log
 
         return this;
     }
+    warn(msg)
+    {
+        msg = transMsg(msg);
+
+        this._logs.push({
+            type: 'warn',
+            val: msg
+        });
+
+        this._render();
+
+        return this;
+    }
+    filter(type)
+    {
+        this._filter = type;
+
+        this._render();
+    }
+    help()
+    {
+        return this.log(helpMsg);
+    }
+    _runCmd(cmd)
+    {
+        cmd = util.trim(cmd);
+
+        switch (cmd)
+        {
+            case 'c': return this.clear();
+            case 'a': return this.filter('all');
+            case 'e': return this.filter('error');
+            case 'w': return this.filter('warn');
+            case 'l': return this.filter('log');
+            case 'h': return this.help();
+            default:
+                this.warn('Unknown command').help();
+        }
+    }
     _render()
     {
+        var logs = this._filterLogs(this._logs);
+
         this._$el.html(this._tpl({
-            logs: this._logs
+            logs: logs
         }));
 
         this._scrollToBottom();
+    }
+    _filterLogs(logs)
+    {
+        var filter = this._filter;
+
+        if (filter === 'all') return logs;
+
+        var isRegexp = util.isRegExp(filter);
+
+        return util.filter(logs, (val) =>
+        {
+            if (isRegexp) return filter.test(val.val);
+
+            return val.type === filter;
+        });
     }
     _scrollToBottom()
     {

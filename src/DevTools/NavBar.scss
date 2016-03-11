@@ -1,26 +1,31 @@
+@import "../color";
+
 #eruda { .dev-tools {
     .nav-bar {
-        height: 51px;
+        height: 50px;
         overflow-y: scroll;
         position: absolute;
         width: 100%;
         left: 0;
         top: 0;
-        border-bottom: 1px solid #ccc;
         z-index: 100;
+        background: $blue;
         ul {
             font-size: 0;
             li {
                 display: inline-block;
                 height: 50px;
                 line-height: 50px;
-                width: 80px;
-                font-size: 15px;
+                width: 69px;
+                color: $gray-light;
+                font-size: 12px;
                 text-align: center;
+                opacity: 0.5;
                 text-transform: capitalize;
                 &.active {
-                    color: #76a2ee;
-                    border-bottom: 3px solid #76a2ee;
+                    color: #fff;
+                    opacity: 1;
+                    border-bottom: 3px solid #fff;
                 }
             }
         }

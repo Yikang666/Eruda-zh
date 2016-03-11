@@ -34,7 +34,7 @@ if (isDebugMode)
             .add(new Info())
             .add(new Features())
             .add(new Settings())
-            .showTool('resources')
+            .showTool('console')
             .show();
 }
 
@@ -49,6 +49,5 @@ export default {
     {
         return devTools.get(name);
     }
-}
-;
+};
 

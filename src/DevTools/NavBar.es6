@@ -18,7 +18,7 @@ export default class NavBar
         this._len++;
         this._$el.append('<li>' + name + '</li>')
                  .css({
-                     width: this._len * 80
+                     width: this._len * 69
                  });
     }
     activeTool(name)
