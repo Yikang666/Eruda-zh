@@ -1,3 +1,6 @@
+var autoprefixer = require('autoprefixer'),
+    precss = require('precss');
+
 module.exports = {
     entry: './src/index.es6',
     output: {
@@ -13,12 +16,20 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css', 'sass']
+                loaders: ['style', 'css', 'postcss', 'sass']
             },
             {
                 test: /\.hbs$/,
                 loader: 'handlebars-loader'
+            },
+            {
+                test: /\.json$/,
+                loader: 'json-loader'
             }
         ]
+    },
+    postcss: function ()
+    {
+        return [autoprefixer, precss];
     }
 };

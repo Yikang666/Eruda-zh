@@ -1,11 +1,12 @@
 #eruda { .dev-tools { .tools { .console {
     .logs {
-        height: calc(100% - 30px);
-        overflow: scroll;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
         li {
-            padding: 4px;
+            padding: 10px;
             &.log, &.output {
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid #b4b4b4;
             }
             &.error {
                 background: #fff0f0;

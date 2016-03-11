@@ -2,7 +2,7 @@ import util from '../util'
 
 var Draggabilly = require('draggabilly');
 
-require('!style!css!sass!./HomeBtn.scss');
+require('./HomeBtn.scss');
 
 export default class HomeBtn
 {

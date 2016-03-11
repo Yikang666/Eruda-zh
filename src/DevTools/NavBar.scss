@@ -1,16 +1,23 @@
 #eruda { .dev-tools {
     .nav-bar {
-        height: 50px;
-        overflow: hidden;
-        box-shadow: 0 1px 0 0 #ccc;
+        height: 51px;
+        overflow-y: scroll;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 0;
+        border-bottom: 1px solid #ccc;
+        z-index: 100;
         ul {
-            display: flex;
+            font-size: 0;
             li {
-                float: left;
+                display: inline-block;
                 height: 50px;
                 line-height: 50px;
+                width: 80px;
+                font-size: 15px;
                 text-align: center;
-                flex-grow: 1;
+                text-transform: capitalize;
                 &.active {
                     color: #76a2ee;
                     border-bottom: 3px solid #76a2ee;

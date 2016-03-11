@@ -1,17 +1,19 @@
 import Log from './Log.es6'
+import Tool from '../DevTools/Tool.es6'
 import util from '../util'
 
-require('!style!css!sass!./Console.scss');
+require('./Console.scss');
 
-export default class Console
+export default class Console extends Tool
 {
     constructor()
     {
+        super();
         this.name = 'console';
     }
     init($el)
     {
-        this._$el = $el;
+        super.init($el);
 
         this._appendTpl();
         this._initLog();
@@ -41,7 +43,7 @@ export default class Console
 
             if (e.keyCode === 13)
             {
-                var jsInput = $jsInput.val();
+                var jsInput = $jsInput.text();
 
                 if (util.trim(jsInput) === '') return;
 
@@ -53,7 +55,7 @@ export default class Console
                     log.error(e);
                 }
 
-                $jsInput.val('');
+                $jsInput.html('');
             }
         });
     }

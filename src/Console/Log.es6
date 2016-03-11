@@ -1,6 +1,6 @@
 import util from '../util'
 
-require('!style!css!sass!./Log.scss');
+require('./Log.scss');
 
 function errToStr(err)
 {

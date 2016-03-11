@@ -1,0 +1,38 @@
+<div>
+    <h2 class="title">LocalStorage</h2>
+    <table>
+        <tbody>
+            {{#if localStoreData}}
+                {{#each localStoreData}}
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{val}}</td>
+                    </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td>Empty</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2 class="title">Cookie</h2>
+    <table>
+        <tbody>
+            {{#if cookieData}}
+                {{#each cookieData}}
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{val}}</td>
+                    </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td>Empty</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>

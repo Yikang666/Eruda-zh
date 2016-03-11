@@ -1,0 +1,16 @@
+#eruda { .dev-tools { .tools {
+    .features {
+        li {
+            width: 50%;
+            float: left;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            background: #eda29b;
+            border: 1px solid #fff;
+            &.ok {
+                background: #8de191;
+            }
+        }
+    }
+} } }

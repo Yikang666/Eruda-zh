@@ -1,11 +1,11 @@
 import Tool from '../DevTools/Tool.es6'
 
-export default class Network extends Tool
+export default class Snippets extends Tool
 {
     constructor()
     {
         super();
-        this.name = 'network';
+        this.name = 'Snippets';
     }
     init($el)
     {

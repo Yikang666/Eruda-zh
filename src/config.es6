@@ -1,10 +1,22 @@
-export default {
-    get: function ()
+var config = {
+    init()
     {
 
     },
-    set: function ()
+    get(name)
+    {
+
+    },
+    set(name, val)
+    {
+
+    },
+    save()
     {
 
     }
 };
+
+config.init();
+
+export default config;
