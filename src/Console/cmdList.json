@@ -5,5 +5,6 @@
     ":w": "Show warn logs only",
     ":l": "Show normal logs only",
     ":h": "Show help",
+    ":$": "Load jQuery",
     "/regexp": "Show logs that match given regexp"
 }

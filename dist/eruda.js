@@ -817,6 +817,22 @@ var eruda =
 	        return isRegExp;
 	    })();
 
+	    /* ------------------------------ loadJs ------------------------------ */
+
+	    var loadJs;
+
+	    _.loadJs = (function ()
+	    {
+	        loadJs = function (url)
+	        {
+	            var script = document.createElement('script');
+	            script.src = url;
+	            document.body.appendChild(script);
+	        };
+
+	        return loadJs;
+	    })();
+
 	    /* ------------------------------ ltrim ------------------------------ */
 
 	    var ltrim;
@@ -5445,6 +5461,10 @@ var eruda =
 	    commands: cmdList
 	});
 
+	var libraries = __webpack_require__(71);
+
+	var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Za-z0-9/]*\.js/g;
+
 	function evalJs(jsInput) {
 	    return eval(jsInput);
 	}
@@ -5454,6 +5474,10 @@ var eruda =
 
 	    if (_util2.default.isUndef(msg)) msg = lines[0] + '<br/>';
 	    var stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+
+	    stack = stack.replace(regJsUrl, function (match) {
+	        return '<a href="' + match + '" target="_blank">' + match + '</a>';
+	    });
 
 	    return msg + stack;
 	}
@@ -5637,6 +5661,8 @@ var eruda =
 	                    return this.filter('log');
 	                case 'h':
 	                    return this.help();
+	                case '$':
+	                    return _util2.default.loadJs(libraries['jQuery']);
 	                default:
 	                    this.warn('Unknown command').help();
 	            }
@@ -5732,6 +5758,7 @@ var eruda =
 		":w": "Show warn logs only",
 		":l": "Show normal logs only",
 		":h": "Show help",
+		":$": "Load jQuery",
 		"/regexp": "Show logs that match given regexp"
 	};
 
@@ -9530,6 +9557,14 @@ var eruda =
 
 	// exports
 
+
+/***/ },
+/* 71 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"jQuery": "//code.jquery.com/jquery-1.12.0.min.js"
+	};
 
 /***/ }
 /******/ ]);

@@ -593,6 +593,22 @@ module.exports = (function ()
         return isRegExp;
     })();
 
+    /* ------------------------------ loadJs ------------------------------ */
+
+    var loadJs;
+
+    _.loadJs = (function ()
+    {
+        loadJs = function (url)
+        {
+            var script = document.createElement('script');
+            script.src = url;
+            document.body.appendChild(script);
+        };
+
+        return loadJs;
+    })();
+
     /* ------------------------------ ltrim ------------------------------ */
 
     var ltrim;

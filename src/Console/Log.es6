@@ -7,6 +7,10 @@ var cmdList = require('./cmdList.json'),
         commands: cmdList
     });
 
+var libraries = require('./libraries.json');
+
+var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Za-z0-9/]*\.js/g;
+
 function evalJs(jsInput)
 {
     return eval(jsInput);
@@ -18,6 +22,11 @@ function errToStr(err, msg)
 
     if (util.isUndef(msg)) msg = lines[0] + '<br/>';
     var stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+
+    stack = stack.replace(regJsUrl, function (match)
+    {
+        return '<a href="' + match + '" target="_blank">' + match + '</a>';
+    });
 
     return msg + stack;
 }
@@ -198,6 +207,7 @@ export default class Log
             case 'w': return this.filter('warn');
             case 'l': return this.filter('log');
             case 'h': return this.help();
+            case '$': return util.loadJs(libraries['jQuery']);
             default:
                 this.warn('Unknown command').help();
         }
