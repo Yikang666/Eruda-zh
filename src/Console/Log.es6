@@ -207,10 +207,20 @@ export default class Log
             case 'w': return this.filter('warn');
             case 'l': return this.filter('log');
             case 'h': return this.help();
-            case '$': return util.loadJs(libraries['jQuery']);
+            case '$': return this._loadJs('jQuery');
+            case '_': return this._loadJs('underscore');
             default:
                 this.warn('Unknown command').help();
         }
+    }
+    _loadJs(name)
+    {
+        util.loadJs(libraries[name], (result) =>
+        {
+            if (result) return this.log(name + ' is loaded');
+
+            this.warn('Failed to load ' + name);
+        });
     }
     _render()
     {

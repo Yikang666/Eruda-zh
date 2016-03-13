@@ -34,7 +34,7 @@ if (isDebugMode)
             .add(new Info())
             .add(new Features())
             .add(new Settings())
-            .showTool('console')
+            .showTool('resources')
             .show();
 }
 

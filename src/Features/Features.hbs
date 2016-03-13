@@ -1,5 +1,10 @@
 <ul>
     {{#each features}}
-        <li class="{{#if this}}ok{{/if}}">{{@key}}</li>
+        <li>
+            <a href="http://caniuse.com/#search={{@key}}" target="_blank" class="inner-wrapper {{#if this}}ok{{/if}}">
+                {{@key}}
+            </a>
+        </li>
     {{/each}}
 </ul>
+<a class="html5test" target="_blank" href="http://html5test.com">Go to HTML5 Test</a>

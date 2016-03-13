@@ -392,6 +392,96 @@ module.exports = (function ()
         return isNum;
     })();
 
+    /* ------------------------------ cookie ------------------------------ */
+
+    var cookie;
+
+    _.cookie = (function ()
+    {
+        // TODO
+
+        /* module
+         * cookie: Simple api for handling browser cookies.
+         */
+
+        var defOpts = { path: '/' };
+
+        function setCookie(key, val, options)
+        {
+            if (arguments.length > 1)
+            {
+                options = extend(defOpts, options);
+
+                if (isNum(options.expires))
+                {
+                    var expires = new Date();
+                    expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
+                    options.expires = expires;
+                }
+
+                val = encodeURIComponent(String(val));
+                key = encodeURIComponent(key);
+
+                document.cookie = [
+                    key, '=', val,
+                    options.expires && '; expires=' + options.expires.toUTCString(),
+                    options.path    && '; path=' + options.path,
+                    options.domain  && '; domain=' + options.domain,
+                    options.secure ? '; secure' : ''
+                ].join('');
+
+                return cookie;
+            }
+
+            var cookies = document.cookie ? document.cookie.split('; ') : [],
+                result  = key ? undefined : {};
+
+            for (var i = 0, len = cookies.length; i < len; i++)
+            {
+                var c = cookies[i],
+                    parts = c.split('='),
+                    name = decodeURIComponent(parts.shift());
+
+                c = parts.join('=');
+                c = decodeURIComponent(c);
+
+                if (key === name)
+                {
+                    result = c;
+                    break;
+                }
+
+                if (!key) result[name] = c;
+            }
+
+            return result;
+        }
+
+        cookie = {
+            /* member
+             * cookie.get: Read cookie.
+             * key(string): The cookie name.
+             * return(string): Returns cookie value if exists, eles undefined.
+             */
+            get: setCookie,
+            /* member
+             * cookie.set: Set cookie.
+             * key(string): The cookie name.
+             * val(string): The cookie value.
+             * options(Object): Options.
+             */
+            set: setCookie,
+            remove: function (key, options)
+            {
+                options = options || {};
+                options.expires = -1;
+                return setCookie(key, '', options);
+            }
+        };
+
+        return cookie;
+    })();
+
     /* ------------------------------ isArrLike ------------------------------ */
 
     var isArrLike;
@@ -599,10 +689,18 @@ module.exports = (function ()
 
     _.loadJs = (function ()
     {
-        loadJs = function (url)
+        loadJs = function (url, cb)
         {
             var script = document.createElement('script');
             script.src = url;
+            script.onload = function ()
+            {
+                var isNotLoaded = script.readyState &&
+                    script.readyState != "complete" &&
+                    script.readyState != "loaded";
+
+                cb && cb(!isNotLoaded);
+            };
             document.body.appendChild(script);
         };
 
@@ -1796,6 +1894,28 @@ module.exports = (function ()
         return $;
     })();
 
+    /* ------------------------------ orientation ------------------------------ */
+
+    var orientation;
+
+    _.orientation = (function ()
+    {
+
+        orientation = {};
+
+        Emitter.mixin(orientation);
+
+        window.addEventListener('orientationchange', function ()
+        {
+            setTimeout(function ()
+            {
+                orientation.emit('change');
+            }, 150);
+        }, false);
+
+        return orientation;
+    })();
+
     /* ------------------------------ rtrim ------------------------------ */
 
     var rtrim;
@@ -1876,6 +1996,35 @@ module.exports = (function ()
         };
 
         return trim;
+    })();
+
+    /* ------------------------------ unique ------------------------------ */
+
+    var unique;
+
+    _.unique = (function ()
+    {
+
+        function isEqual(a, b) { return a === b }
+
+        unique = function (arr, compare)
+        {
+            compare = compare || isEqual;
+
+            return filter(arr, function (item, idx, arr)
+            {
+                var len = arr.length;
+
+                while (++idx < len)
+                {
+                    if (compare(item, arr[idx])) return false;
+                }
+
+                return true;
+            });
+        };
+
+        return unique;
     })();
 
     return _;

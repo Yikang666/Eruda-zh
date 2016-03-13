@@ -1,12 +1,18 @@
-<div>
-    <h2 class="title">LocalStorage</h2>
+<div class="section">
+    <h2 class="title">
+        LocalStorage
+        <span class="btn refresh-local-storage">Refresh</span>
+    </h2>
     <table>
         <tbody>
             {{#if localStoreData}}
                 {{#each localStoreData}}
                     <tr>
-                        <td>{{key}}</td>
+                        <td class="key">{{key}}</td>
                         <td>{{val}}</td>
+                        <td class="control">
+                            <span class="delete delete-local-storage" data-key="{{key}}">‒</span>
+                        </td>
                     </tr>
                 {{/each}}
             {{else}}
@@ -17,8 +23,11 @@
         </tbody>
     </table>
 </div>
-<div>
-    <h2 class="title">Cookie</h2>
+<div class="section">
+    <h2 class="title">
+        Cookie
+        <span class="btn refresh-cookie">Refresh</span>
+    </h2>
     <table>
         <tbody>
             {{#if cookieData}}
@@ -26,6 +35,9 @@
                     <tr>
                         <td>{{key}}</td>
                         <td>{{val}}</td>
+                        <td class="control">
+                            <span class="delete delete-cookie" data-key="{{key}}">‒</span>
+                        </td>
                     </tr>
                 {{/each}}
             {{else}}
@@ -35,4 +47,57 @@
             {{/if}}
         </tbody>
     </table>
+</div>
+<div class="section">
+    <h2 class="title">
+        Script
+        <span class="btn refresh-script">Refresh</span>
+    </h2>
+    <ul class="link-list">
+        {{#if scriptData}}
+            {{#each scriptData}}
+                <li>
+                    <a href="{{this}}" target="_blank">{{this}}</a>
+                </li>
+            {{/each}}
+        {{else}}
+            <li>Empty</li>
+        {{/if}}
+    </ul>
+</div>
+<div class="section">
+    <h2 class="title">
+        Stylesheet
+        <span class="btn refresh-stylesheet">Refresh</span>
+    </h2>
+    <ul class="link-list">
+        {{#if stylesheetData}}
+            {{#each stylesheetData}}
+                <li>
+                    <a href="{{this}}" target="_blank">{{this}}</a>
+                </li>
+            {{/each}}
+        {{else}}
+            <li>Empty</li>
+        {{/if}}
+    </ul>
+</div>
+<div class="section">
+    <h2 class="title">
+        Image
+        <span class="btn refresh-image">Refresh</span>
+    </h2>
+    <ul class="image-list">
+        {{#if imageData}}
+            {{#each imageData}}
+                <li>
+                    <a href="{{this}}" target="_blank">
+                        <img src="{{this}}" data-exclude="true"/>
+                    </a>
+                </li>
+            {{/each}}
+        {{else}}
+            <li class="empty">Empty</li>
+        {{/if}}
+    </ul>
 </div>

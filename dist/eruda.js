@@ -63,31 +63,31 @@ var eruda =
 
 	var _Console2 = _interopRequireDefault(_Console);
 
-	var _Network = __webpack_require__(50);
+	var _Network = __webpack_require__(51);
 
 	var _Network2 = _interopRequireDefault(_Network);
 
-	var _Elements = __webpack_require__(51);
+	var _Elements = __webpack_require__(52);
 
 	var _Elements2 = _interopRequireDefault(_Elements);
 
-	var _Sinppets = __webpack_require__(52);
+	var _Sinppets = __webpack_require__(53);
 
 	var _Sinppets2 = _interopRequireDefault(_Sinppets);
 
-	var _Resources = __webpack_require__(53);
+	var _Resources = __webpack_require__(54);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _Info = __webpack_require__(57);
+	var _Info = __webpack_require__(58);
 
 	var _Info2 = _interopRequireDefault(_Info);
 
-	var _Features = __webpack_require__(62);
+	var _Features = __webpack_require__(63);
 
 	var _Features2 = _interopRequireDefault(_Features);
 
-	var _Settings = __webpack_require__(68);
+	var _Settings = __webpack_require__(69);
 
 	var _Settings2 = _interopRequireDefault(_Settings);
 
@@ -97,7 +97,7 @@ var eruda =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(69);
+	__webpack_require__(70);
 
 	var $container;
 
@@ -114,7 +114,7 @@ var eruda =
 	        return devTools.toggle();
 	    });
 
-	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Sinppets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('console').show();
+	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Sinppets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('resources').show();
 	}
 
 	function appendContainer() {
@@ -197,11 +197,9 @@ var eruda =
 	                return _this.emit('click');
 	            });
 
-	            window.addEventListener('orientationchange', function () {
-	                setTimeout(function () {
-	                    _this._setPos();
-	                }, 150);
-	            }, false);
+	            _util2.default.orientation.on('change', function () {
+	                return _this._setPos();
+	            });
 	        }
 	    }, {
 	        key: '_makeDraggable',
@@ -616,6 +614,96 @@ var eruda =
 	        return isNum;
 	    })();
 
+	    /* ------------------------------ cookie ------------------------------ */
+
+	    var cookie;
+
+	    _.cookie = (function ()
+	    {
+	        // TODO
+
+	        /* module
+	         * cookie: Simple api for handling browser cookies.
+	         */
+
+	        var defOpts = { path: '/' };
+
+	        function setCookie(key, val, options)
+	        {
+	            if (arguments.length > 1)
+	            {
+	                options = extend(defOpts, options);
+
+	                if (isNum(options.expires))
+	                {
+	                    var expires = new Date();
+	                    expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
+	                    options.expires = expires;
+	                }
+
+	                val = encodeURIComponent(String(val));
+	                key = encodeURIComponent(key);
+
+	                document.cookie = [
+	                    key, '=', val,
+	                    options.expires && '; expires=' + options.expires.toUTCString(),
+	                    options.path    && '; path=' + options.path,
+	                    options.domain  && '; domain=' + options.domain,
+	                    options.secure ? '; secure' : ''
+	                ].join('');
+
+	                return cookie;
+	            }
+
+	            var cookies = document.cookie ? document.cookie.split('; ') : [],
+	                result  = key ? undefined : {};
+
+	            for (var i = 0, len = cookies.length; i < len; i++)
+	            {
+	                var c = cookies[i],
+	                    parts = c.split('='),
+	                    name = decodeURIComponent(parts.shift());
+
+	                c = parts.join('=');
+	                c = decodeURIComponent(c);
+
+	                if (key === name)
+	                {
+	                    result = c;
+	                    break;
+	                }
+
+	                if (!key) result[name] = c;
+	            }
+
+	            return result;
+	        }
+
+	        cookie = {
+	            /* member
+	             * cookie.get: Read cookie.
+	             * key(string): The cookie name.
+	             * return(string): Returns cookie value if exists, eles undefined.
+	             */
+	            get: setCookie,
+	            /* member
+	             * cookie.set: Set cookie.
+	             * key(string): The cookie name.
+	             * val(string): The cookie value.
+	             * options(Object): Options.
+	             */
+	            set: setCookie,
+	            remove: function (key, options)
+	            {
+	                options = options || {};
+	                options.expires = -1;
+	                return setCookie(key, '', options);
+	            }
+	        };
+
+	        return cookie;
+	    })();
+
 	    /* ------------------------------ isArrLike ------------------------------ */
 
 	    var isArrLike;
@@ -823,10 +911,18 @@ var eruda =
 
 	    _.loadJs = (function ()
 	    {
-	        loadJs = function (url)
+	        loadJs = function (url, cb)
 	        {
 	            var script = document.createElement('script');
 	            script.src = url;
+	            script.onload = function ()
+	            {
+	                var isNotLoaded = script.readyState &&
+	                    script.readyState != "complete" &&
+	                    script.readyState != "loaded";
+
+	                cb && cb(!isNotLoaded);
+	            };
 	            document.body.appendChild(script);
 	        };
 
@@ -2020,6 +2116,28 @@ var eruda =
 	        return $;
 	    })();
 
+	    /* ------------------------------ orientation ------------------------------ */
+
+	    var orientation;
+
+	    _.orientation = (function ()
+	    {
+
+	        orientation = {};
+
+	        Emitter.mixin(orientation);
+
+	        window.addEventListener('orientationchange', function ()
+	        {
+	            setTimeout(function ()
+	            {
+	                orientation.emit('change');
+	            }, 150);
+	        }, false);
+
+	        return orientation;
+	    })();
+
 	    /* ------------------------------ rtrim ------------------------------ */
 
 	    var rtrim;
@@ -2100,6 +2218,35 @@ var eruda =
 	        };
 
 	        return trim;
+	    })();
+
+	    /* ------------------------------ unique ------------------------------ */
+
+	    var unique;
+
+	    _.unique = (function ()
+	    {
+
+	        function isEqual(a, b) { return a === b }
+
+	        unique = function (arr, compare)
+	        {
+	            compare = compare || isEqual;
+
+	            return filter(arr, function (item, idx, arr)
+	            {
+	                var len = arr.length;
+
+	                while (++idx < len)
+	                {
+	                    if (compare(item, arr[idx])) return false;
+	                }
+
+	                return true;
+	            });
+	        };
+
+	        return unique;
 	    })();
 
 	    return _;
@@ -5281,7 +5428,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .nav-bar {\n  height: 50px;\n  overflow-y: scroll;\n  position: absolute;\n  width: 100%;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  #eruda .dev-tools .nav-bar ul {\n    font-size: 0; }\n    #eruda .dev-tools .nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      #eruda .dev-tools .nav-bar ul li.active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools .nav-bar {\n  height: 50px;\n  overflow-y: auto;\n  position: absolute;\n  width: 100%;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  #eruda .dev-tools .nav-bar ul {\n    font-size: 0; }\n    #eruda .dev-tools .nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      #eruda .dev-tools .nav-bar ul li.active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
 
 	// exports
 
@@ -5321,7 +5468,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  #eruda .dev-tools.show {\n    display: block;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  #eruda .dev-tools.hide {\n    display: block;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  #eruda .dev-tools .tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: scroll; }\n    #eruda .dev-tools .tools .tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  #eruda .dev-tools.show {\n    display: block;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  #eruda .dev-tools.hide {\n    display: block;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  #eruda .dev-tools .tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto; }\n    #eruda .dev-tools .tools .tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
 
 	// exports
 
@@ -5353,7 +5500,7 @@ var eruda =
 
 	var _Log2 = _interopRequireDefault(_Log);
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -5369,7 +5516,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(47);
+	__webpack_require__(48);
 
 	var Console = function (_Tool) {
 	    _inherits(Console, _Tool);
@@ -5397,7 +5544,7 @@ var eruda =
 	        value: function _appendTpl() {
 	            var $el = this._$el;
 
-	            $el.append(__webpack_require__(49)());
+	            $el.append(__webpack_require__(50)());
 	            this._$logs = $el.find('.logs');
 	            this._$jsInput = $el.find('.js-input');
 	        }
@@ -5461,7 +5608,7 @@ var eruda =
 	    commands: cmdList
 	});
 
-	var libraries = __webpack_require__(71);
+	var libraries = __webpack_require__(45);
 
 	var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Za-z0-9/]*\.js/g;
 
@@ -5502,7 +5649,7 @@ var eruda =
 
 	        this._$el = $el;
 	        this._logs = [];
-	        this._tpl = __webpack_require__(45);
+	        this._tpl = __webpack_require__(46);
 	        this._filter = 'all';
 	    }
 
@@ -5662,10 +5809,23 @@ var eruda =
 	                case 'h':
 	                    return this.help();
 	                case '$':
-	                    return _util2.default.loadJs(libraries['jQuery']);
+	                    return this._loadJs('jQuery');
+	                case '_':
+	                    return this._loadJs('underscore');
 	                default:
 	                    this.warn('Unknown command').help();
 	            }
+	        }
+	    }, {
+	        key: '_loadJs',
+	        value: function _loadJs(name) {
+	            var _this = this;
+
+	            _util2.default.loadJs(libraries[name], function (result) {
+	                if (result) return _this.log(name + ' is loaded');
+
+	                _this.warn('Failed to load ' + name);
+	            });
 	        }
 	    }, {
 	        key: '_render',
@@ -5742,7 +5902,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .console .logs {\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  font-size: 14px; }\n  #eruda .dev-tools .tools .console .logs li {\n    padding: 10px;\n    overflow-x: scroll; }\n    #eruda .dev-tools .tools .console .logs li.log, #eruda .dev-tools .tools .console .logs li.output {\n      border-bottom: 1px solid #b4b4b4; }\n    #eruda .dev-tools .tools .console .logs li.log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      #eruda .dev-tools .tools .console .logs li.log table th {\n        background: #76a2ee;\n        color: #fff; }\n      #eruda .dev-tools .tools .console .logs li.log table th, #eruda .dev-tools .tools .console .logs li.log table td {\n        padding: 10px; }\n    #eruda .dev-tools .tools .console .logs li.error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      #eruda .dev-tools .tools .console .logs li.error .stack {\n        color: #000;\n        padding-left: 1.2em; }\n    #eruda .dev-tools .tools .console .logs li.warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools .tools .console .logs {\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: auto;\n  font-size: 14px; }\n  #eruda .dev-tools .tools .console .logs li {\n    padding: 10px;\n    overflow-x: auto; }\n    #eruda .dev-tools .tools .console .logs li.log, #eruda .dev-tools .tools .console .logs li.output {\n      border-bottom: 1px solid #b4b4b4; }\n    #eruda .dev-tools .tools .console .logs li.log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      #eruda .dev-tools .tools .console .logs li.log table th {\n        background: #76a2ee;\n        color: #fff; }\n      #eruda .dev-tools .tools .console .logs li.log table th, #eruda .dev-tools .tools .console .logs li.log table td {\n        padding: 10px; }\n    #eruda .dev-tools .tools .console .logs li.error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      #eruda .dev-tools .tools .console .logs li.error .stack {\n        color: #000;\n        padding-left: 1.2em; }\n    #eruda .dev-tools .tools .console .logs li.warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
 
 	// exports
 
@@ -5759,6 +5919,7 @@ var eruda =
 		":l": "Show normal logs only",
 		":h": "Show help",
 		":$": "Load jQuery",
+		":_": "Load underscore",
 		"/regexp": "Show logs that match given regexp"
 	};
 
@@ -5785,6 +5946,15 @@ var eruda =
 
 /***/ },
 /* 45 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"jQuery": "//cdn.bootcss.com/jquery/2.2.1/jquery.js",
+		"underscore": "//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"
+	};
+
+/***/ },
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -5805,7 +5975,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5846,13 +6016,13 @@ var eruda =
 	exports.default = Tool;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(48);
+	var content = __webpack_require__(49);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -5872,7 +6042,7 @@ var eruda =
 	}
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -5886,7 +6056,7 @@ var eruda =
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -5895,7 +6065,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5908,7 +6078,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -5945,7 +6115,7 @@ var eruda =
 	exports.default = Network;
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5958,7 +6128,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -5995,7 +6165,7 @@ var eruda =
 	exports.default = Elements;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6008,7 +6178,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -6045,7 +6215,7 @@ var eruda =
 	exports.default = Snippets;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6058,7 +6228,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -6074,7 +6244,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(54);
+	__webpack_require__(55);
 
 	var Resources = function (_Tool) {
 	    _inherits(Resources, _Tool);
@@ -6085,7 +6255,12 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Resources).call(this));
 
 	        _this.name = 'resources';
-	        _this._tpl = __webpack_require__(56);
+	        _this._localStoreData = [];
+	        _this._cookieData = [];
+	        _this._scriptData = [];
+	        _this._stylesheetData = [];
+	        _this._imageData = [];
+	        _this._tpl = __webpack_require__(57);
 	        return _this;
 	    }
 
@@ -6094,13 +6269,50 @@ var eruda =
 	        value: function init($el) {
 	            _get(Object.getPrototypeOf(Resources.prototype), 'init', this).call(this, $el);
 
-	            this.refresh();
+	            this.refreshLocalStorage().refreshCookie().refreshScript().refreshStylesheet().refreshImage();
+
+	            this._bindEvent();
 	        }
 	    }, {
-	        key: 'refresh',
-	        value: function refresh() {
-	            var localStoreData = [],
-	                cookieData = [];
+	        key: 'refreshScript',
+	        value: function refreshScript() {
+	            var scriptData = [];
+
+	            _util2.default.$('script').each(function () {
+	                var src = this.src;
+
+	                if (src !== '') scriptData.push(src);
+	            });
+
+	            scriptData = _util2.default.unique(scriptData);
+
+	            this._scriptData = scriptData;
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'refreshStylesheet',
+	        value: function refreshStylesheet() {
+	            var stylesheetData = [];
+
+	            _util2.default.$('link').each(function () {
+	                if (this.rel !== 'stylesheet') return;
+
+	                stylesheetData.push(this.href);
+	            });
+
+	            stylesheetData = _util2.default.unique(stylesheetData);
+
+	            this._stylesheetData = stylesheetData;
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'refreshLocalStorage',
+	        value: function refreshLocalStorage() {
+	            var localStoreData = [];
 
 	            _util2.default.each(localStorage, function (val, key) {
 	                localStoreData.push({
@@ -6109,18 +6321,104 @@ var eruda =
 	                });
 	            });
 
-	            _util2.default.each(document.cookie.split(';'), function (val) {
-	                val = val.split('=');
-	                cookieData.push({
-	                    key: val[0],
-	                    val: decodeURIComponent(val[1])
+	            this._localStoreData = localStoreData;
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'refreshCookie',
+	        value: function refreshCookie() {
+	            var cookieData = [];
+
+	            var cookie = document.cookie;
+	            if (_util2.default.trim(cookie) !== '') {
+	                _util2.default.each(document.cookie.split(';'), function (val) {
+	                    val = val.split('=');
+	                    cookieData.push({
+	                        key: _util2.default.trim(val[0]),
+	                        val: decodeURIComponent(val[1])
+	                    });
 	                });
+	            }
+
+	            this._cookieData = cookieData;
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'refreshImage',
+	        value: function refreshImage() {
+	            var imageData = [];
+
+	            _util2.default.$('img').each(function () {
+	                var $this = _util2.default.$(this),
+	                    src = $this.attr('src');
+
+	                if ($this.data('exclude') === 'true') return;
+
+	                imageData.push(src);
 	            });
 
+	            imageData = _util2.default.unique(imageData);
+
+	            this._imageData = imageData;
+	            this._render();
+
+	            return this;
+	        }
+	    }, {
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            var _this2 = this;
+
+	            var self = this;
+
+	            this._$el.on('click', '.refresh-local-storage', function () {
+	                _this2.refreshLocalStorage();
+	            }).on('click', '.refresh-cookie', function () {
+	                _this2.refreshCookie();
+	            }).on('click', '.refresh-script', function () {
+	                _this2.refreshScript();
+	            }).on('click', '.refresh-image', function () {
+	                _this2.refreshImage();
+	            }).on('click', '.delete-local-storage', function () {
+	                var key = _util2.default.$(this).data('key');
+
+	                localStorage.removeItem(key);
+	                self.refreshLocalStorage();
+	            }).on('click', '.delete-cookie', function () {
+	                var key = _util2.default.$(this).data('key');
+
+	                _util2.default.cookie.remove(key);
+	                self.refreshCookie();
+	            });
+
+	            _util2.default.orientation.on('change', function () {
+	                return _this2._render();
+	            });
+	        }
+	    }, {
+	        key: '_render',
+	        value: function _render() {
+	            var _this3 = this;
+
 	            this._$el.html(this._tpl({
-	                localStoreData: localStoreData,
-	                cookieData: cookieData
+	                localStoreData: this._localStoreData,
+	                cookieData: this._cookieData,
+	                scriptData: this._scriptData,
+	                stylesheetData: this._stylesheetData,
+	                imageData: this._imageData
 	            }));
+
+	            if (this._imageData.length === 0) return;
+
+	            setTimeout(function () {
+	                var $li = _this3._$el.find('.image-list li');
+
+	                $li.css({ height: $li.get(0).offsetWidth });
+	            }, 150);
 	        }
 	    }]);
 
@@ -6130,13 +6428,13 @@ var eruda =
 	exports.default = Resources;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(55);
+	var content = __webpack_require__(56);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6156,7 +6454,7 @@ var eruda =
 	}
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6164,13 +6462,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .resources .title {\n  padding: 10px;\n  color: #fff;\n  background: #b4b4b4;\n  font-size: 20px; }\n\n#eruda .dev-tools .tools .resources table {\n  border-collapse: collapse;\n  width: 100%; }\n  #eruda .dev-tools .tools .resources table td {\n    padding: 10px;\n    border: 1px solid #b4b4b4; }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools .tools .resources {\n  padding: 10px;\n  font-size: 12px;\n  overflow-y: auto; }\n  #eruda .dev-tools .tools .resources .section {\n    margin-bottom: 10px; }\n  #eruda .dev-tools .tools .resources .title {\n    padding: 10px;\n    color: #fff;\n    background: #8de191;\n    font-size: 12px; }\n    #eruda .dev-tools .tools .resources .title .btn {\n      float: right;\n      background: #fff;\n      color: #b4b4b4;\n      padding: 5px;\n      position: relative;\n      top: -5px;\n      border-radius: 4px; }\n  #eruda .dev-tools .tools .resources .link-list li {\n    padding: 10px;\n    background: #fff; }\n  #eruda .dev-tools .tools .resources .image-list {\n    background: #fff; }\n    #eruda .dev-tools .tools .resources .image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      #eruda .dev-tools .tools .resources .image-list li img {\n        width: 100%; }\n      #eruda .dev-tools .tools .resources .image-list li.empty {\n        padding: 10px;\n        width: 100%; }\n    #eruda .dev-tools .tools .resources .image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  #eruda .dev-tools .tools .resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    #eruda .dev-tools .tools .resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      #eruda .dev-tools .tools .resources table td .delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      #eruda .dev-tools .tools .resources table td.key {\n        white-space: nowrap; }\n      #eruda .dev-tools .tools .resources table td.control {\n        width: 40px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6181,29 +6479,79 @@ var eruda =
 	},"2":function(container,depth0,helpers,partials,data) {
 	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "                    <tr>\r\n                        <td>"
+	  return "                    <tr>\r\n                        <td class=\"key\">"
 	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "</td>\r\n                        <td>"
 	    + alias4(((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper)))
-	    + "</td>\r\n                    </tr>\r\n";
+	    + "</td>\r\n                        <td class=\"control\">\r\n                            <span class=\"delete delete-local-storage\" data-key=\""
+	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
+	    + "\">‒</span>\r\n                        </td>\r\n                    </tr>\r\n";
 	},"4":function(container,depth0,helpers,partials,data) {
 	    return "                <tr>\r\n                    <td>Empty</td>\r\n                </tr>\r\n";
 	},"6":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 
-	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.cookieData : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.cookieData : depth0),{"name":"each","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"7":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+	  return "                    <tr>\r\n                        <td>"
+	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                        <td>"
+	    + alias4(((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                        <td class=\"control\">\r\n                            <span class=\"delete delete-cookie\" data-key=\""
+	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
+	    + "\">‒</span>\r\n                        </td>\r\n                    </tr>\r\n";
+	},"9":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.scriptData : depth0),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"10":function(container,depth0,helpers,partials,data) {
+	    var alias1=container.lambda, alias2=container.escapeExpression;
+
+	  return "                <li>\r\n                    <a href=\""
+	    + alias2(alias1(depth0, depth0))
+	    + "\" target=\"_blank\">"
+	    + alias2(alias1(depth0, depth0))
+	    + "</a>\r\n                </li>\r\n";
+	},"12":function(container,depth0,helpers,partials,data) {
+	    return "            <li>Empty</li>\r\n";
+	},"14":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.stylesheetData : depth0),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"16":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.imageData : depth0),{"name":"each","hash":{},"fn":container.program(17, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"17":function(container,depth0,helpers,partials,data) {
+	    var alias1=container.lambda, alias2=container.escapeExpression;
+
+	  return "                <li>\r\n                    <a href=\""
+	    + alias2(alias1(depth0, depth0))
+	    + "\" target=\"_blank\">\r\n                        <img src=\""
+	    + alias2(alias1(depth0, depth0))
+	    + "\" data-exclude=\"true\"/>\r\n                    </a>\r\n                </li>\r\n";
+	},"19":function(container,depth0,helpers,partials,data) {
+	    return "            <li class=\"empty\">Empty</li>\r\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=depth0 != null ? depth0 : {};
 
-	  return "<div>\r\n    <h2 class=\"title\">LocalStorage</h2>\r\n    <table>\r\n        <tbody>\r\n"
+	  return "<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        LocalStorage\r\n        <span class=\"btn refresh-local-storage\">Refresh</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.localStoreData : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
-	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div>\r\n    <h2 class=\"title\">Cookie</h2>\r\n    <table>\r\n        <tbody>\r\n"
+	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Cookie\r\n        <span class=\"btn refresh-cookie\">Refresh</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.cookieData : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
-	    + "        </tbody>\r\n    </table>\r\n</div>";
+	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Script\r\n        <span class=\"btn refresh-script\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"link-list\">\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.scriptData : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
+	    + "    </ul>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Stylesheet\r\n        <span class=\"btn refresh-stylesheet\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"link-list\">\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.stylesheetData : depth0),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
+	    + "    </ul>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Image\r\n        <span class=\"btn refresh-image\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"image-list\">\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.imageData : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(19, data, 0),"data":data})) != null ? stack1 : "")
+	    + "    </ul>\r\n</div>";
 	},"useData":true});
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6216,7 +6564,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -6224,7 +6572,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _defInfo = __webpack_require__(58);
+	var _defInfo = __webpack_require__(59);
 
 	var _defInfo2 = _interopRequireDefault(_defInfo);
 
@@ -6236,7 +6584,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(59);
+	__webpack_require__(60);
 
 	var Info = function (_Tool) {
 	    _inherits(Info, _Tool);
@@ -6247,7 +6595,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Info).call(this));
 
 	        _this.name = 'info';
-	        _this._tpl = __webpack_require__(61);
+	        _this._tpl = __webpack_require__(62);
 	        _this._msgs = [];
 	        return _this;
 	    }
@@ -6295,7 +6643,7 @@ var eruda =
 	exports.default = Info;
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6315,13 +6663,13 @@ var eruda =
 	}];
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(60);
+	var content = __webpack_require__(61);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6341,7 +6689,7 @@ var eruda =
 	}
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6349,13 +6697,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .info li .title, #eruda .dev-tools .tools .info li .content {\n  padding: 10px; }\n\n#eruda .dev-tools .tools .info li .title {\n  color: #fff;\n  background: #b4b4b4;\n  font-size: 20px; }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools .tools .info {\n  overflow-y: auto;\n  font-size: 12px; }\n  #eruda .dev-tools .tools .info li {\n    overflow-x: auto;\n    border-bottom: 1px solid #b4b4b4; }\n    #eruda .dev-tools .tools .info li .title, #eruda .dev-tools .tools .info li .content {\n      padding: 10px; }\n    #eruda .dev-tools .tools .info li .title {\n      padding-bottom: 0;\n      font-size: 15px;\n      color: #76a2ee; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6376,7 +6724,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6389,7 +6737,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -6397,7 +6745,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _modernizr = __webpack_require__(63);
+	var _modernizr = __webpack_require__(64);
 
 	var _modernizr2 = _interopRequireDefault(_modernizr);
 
@@ -6409,9 +6757,9 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(64);
+	__webpack_require__(65);
 
-	var featureList = __webpack_require__(66);
+	var featureList = __webpack_require__(67);
 
 	var featureNames = featureList['feature-detects'],
 	    specialNames = featureList['special-names'];
@@ -6425,7 +6773,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Features).call(this));
 
 	        _this.name = 'features';
-	        _this._tpl = __webpack_require__(67);
+	        _this._tpl = __webpack_require__(68);
 	        _this._features = {};
 	        return _this;
 	    }
@@ -6473,7 +6821,7 @@ var eruda =
 	exports.default = Features;
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports) {
 
 	/*!
@@ -9331,13 +9679,13 @@ var eruda =
 	module.exports = Modernizr;
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(65);
+	var content = __webpack_require__(66);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -9357,7 +9705,7 @@ var eruda =
 	}
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -9365,13 +9713,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .features li {\n  width: 50%;\n  float: left;\n  padding: 10px;\n  text-align: center;\n  color: #fff;\n  background: #eda29b;\n  border: 1px solid #fff; }\n  #eruda .dev-tools .tools .features li.ok {\n    background: #8de191; }\n", ""]);
+	exports.push([module.id, "#eruda .dev-tools .tools .features {\n  overflow-y: auto; }\n  #eruda .dev-tools .tools .features ul li {\n    width: 50%;\n    float: left;\n    padding: 10px; }\n    #eruda .dev-tools .tools .features ul li .inner-wrapper {\n      color: #fff;\n      display: block;\n      padding: 10px;\n      border-radius: 4px;\n      text-align: center;\n      background: #eda29b; }\n      #eruda .dev-tools .tools .features ul li .inner-wrapper.ok {\n        background: #fff;\n        color: #b4b4b4; }\n  #eruda .dev-tools .tools .features ul::after {\n    display: block;\n    content: '';\n    clear: both; }\n  #eruda .dev-tools .tools .features .html5test {\n    color: #fff;\n    background: #76a2ee;\n    display: block;\n    padding: 10px;\n    text-decoration: none;\n    text-align: center;\n    margin-top: 10px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9446,18 +9794,20 @@ var eruda =
 	};
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
 	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
-	    var stack1, helper, alias1=depth0 != null ? depth0 : {};
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "        <li class=\""
+	  return "        <li>\r\n            <a href=\"http://caniuse.com/#search="
+	    + alias4(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
+	    + "\" target=\"_blank\" class=\"inner-wrapper "
 	    + ((stack1 = helpers["if"].call(alias1,depth0,{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "\">"
-	    + container.escapeExpression(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
-	    + "</li>\r\n";
+	    + "\">\r\n                "
+	    + alias4(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
+	    + "\r\n            </a>\r\n        </li>\r\n";
 	},"2":function(container,depth0,helpers,partials,data) {
 	    return "ok";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -9465,11 +9815,11 @@ var eruda =
 
 	  return "<ul>\r\n"
 	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.features : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "</ul>";
+	    + "</ul>\r\n<a class=\"html5test\" target=\"_blank\" href=\"http://html5test.com\">Go to HTML5 Test</a>";
 	},"useData":true});
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9482,7 +9832,7 @@ var eruda =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Tool2 = __webpack_require__(46);
+	var _Tool2 = __webpack_require__(47);
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
@@ -9519,13 +9869,13 @@ var eruda =
 	exports.default = Settings;
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(70);
+	var content = __webpack_require__(71);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -9545,7 +9895,7 @@ var eruda =
 	}
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -9557,14 +9907,6 @@ var eruda =
 
 	// exports
 
-
-/***/ },
-/* 71 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"jQuery": "//code.jquery.com/jquery-1.12.0.min.js"
-	};
 
 /***/ }
 /******/ ]);

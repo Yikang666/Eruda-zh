@@ -1,18 +1,78 @@
+@import "../color";
+
 #eruda { .dev-tools { .tools {
     .resources {
+        padding: 10px;
+        font-size: 12px;
+        overflow-y: auto;
+        .section {
+            margin-bottom: 10px;
+        }
         .title {
             padding: 10px;
             color: #fff;
-            background: #b4b4b4;
-            font-size: 20px;
+            background: $green;
+            font-size: 12px;
+            .btn {
+                float: right;
+                background: #fff;
+                color: $gray;
+                padding: 5px;
+                position: relative;
+                top: -5px;
+                border-radius: 4px;
+            }
+        }
+        .link-list {
+            li {
+                padding: 10px;
+                background: #fff;
+            }
+        }
+        .image-list {
+            background: #fff;
+            li {
+                width: 25%;
+                float: left;
+                overflow-y: hidden;
+                img {
+                    width: 100%;
+                }
+                &.empty {
+                    padding: 10px;
+                    width: 100%;
+                }
+            }
+            &::after {
+                display: block;
+                content: '';
+                clear: both;
+            }
         }
         table {
             border-collapse: collapse;
             width: 100%;
             td {
                 padding: 10px;
-                border: 1px solid #b4b4b4;
+                word-break: break-all;
+                .delete {
+                    color: #fff;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    text-align: center;
+                    border-radius: 50%;
+                    background: $red-dark;
+                    line-height: 20px;
+                }
+                &.key {
+                    white-space: nowrap;
+                }
+                &.control {
+                    width: 40px;
+                }
             }
+            background: #fff;
         }
     }
 } } }

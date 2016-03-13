@@ -6,5 +6,6 @@
     ":l": "Show normal logs only",
     ":h": "Show help",
     ":$": "Load jQuery",
+    ":_": "Load underscore",
     "/regexp": "Show logs that match given regexp"
 }

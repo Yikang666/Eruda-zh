@@ -36,15 +36,9 @@ export default class HomeBtn
     }
     _bindEvent()
     {
-        this._draggabilly.on('staticClick', () => this.emit('click') );
+        this._draggabilly.on('staticClick', () => this.emit('click'));
 
-        window.addEventListener('orientationchange', () =>
-        {
-            setTimeout(() =>
-            {
-                this._setPos();
-            }, 150);
-        }, false);
+        util.orientation.on('change', () => this._setPos());
     }
     _makeDraggable()
     {

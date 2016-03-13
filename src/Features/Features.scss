@@ -1,16 +1,40 @@
+@import "../color";
+
 #eruda { .dev-tools { .tools {
     .features {
-        li {
-            width: 50%;
-            float: left;
-            padding: 10px;
-            text-align: center;
-            color: #fff;
-            background: #eda29b;
-            border: 1px solid #fff;
-            &.ok {
-                background: #8de191;
+        overflow-y: auto;
+        ul {
+            li {
+                width: 50%;
+                float: left;
+                padding: 10px;
+                .inner-wrapper {
+                    color: #fff;
+                    display: block;
+                    padding: 10px;
+                    border-radius: 4px;
+                    text-align: center;
+                    background: $red;
+                    &.ok {
+                        background: #fff;
+                        color: $gray;
+                    }
+                }
             }
+            &::after {
+                display: block;
+                content: '';
+                clear: both;
+            }
+        }
+        .html5test {
+            color: #fff;
+            background: $blue;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 10px;
         }
     }
 } } }

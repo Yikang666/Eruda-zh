@@ -4,11 +4,11 @@
     .logs {
         height: 100%;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         font-size: 14px;
         li {
             padding: 10px;
-            overflow-x: scroll;
+            overflow-x: auto;
             &.log, &.output {
                 border-bottom: 1px solid #b4b4b4;
             }
