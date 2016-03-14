@@ -7,6 +7,8 @@
         overflow-y: auto;
         .section {
             margin-bottom: 10px;
+            border-radius: 4px;
+            overflow: hidden;
         }
         .title {
             padding: 10px;
@@ -46,6 +48,7 @@
         }
         .image-list {
             background: #fff;
+            padding: 10px !important;
             li {
                 width: 25%;
                 float: left;

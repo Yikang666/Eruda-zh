@@ -1,0 +1,28 @@
+<div class="eruda-performance-timing">
+    <div class="eruda-inner-wrapper">
+        {{#each data}}
+            <div class="eruda-bar {{#if @last}}eruda-last{{/if}}">
+                <span style="position:relative;left:{{start}}%;width:{{len}}%">{{name}}({{duration}}ms)</span>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+<div class="eruda-performance-timing-data">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Time(ms)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each timing}}
+                <tr>
+                    <td>{{@key}}</td>
+                    <td>{{this}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

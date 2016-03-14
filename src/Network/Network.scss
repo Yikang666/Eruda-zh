@@ -1,0 +1,46 @@
+@import "../color";
+
+.dev-tools { .tools {
+    .network {
+        overflow-y: auto;
+        .performance-timing {
+            padding: 10px;
+            .inner-wrapper {
+                background: $blue;
+                .bar {
+                    border-bottom: 1px solid #fff;
+                    overflow-x: auto;
+                    span {
+                        font-size: 14px;
+                        white-space: nowrap;
+                        color: #fff;
+                        padding: 5px 0;
+                        background: $red-dark;
+                        display: inline-block;
+                    }
+                    &.last {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+        .performance-timing-data {
+            padding: 0 10px 10px;
+
+            table {
+                width: 100%;
+                background: #fff;
+                border-collapse: collapse;
+                th {
+                    background: $gray;
+                    text-align: left;
+                    color: #fff;
+                }
+                th, td {
+                    padding: 10px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+} }

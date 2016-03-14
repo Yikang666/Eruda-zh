@@ -3,7 +3,7 @@ import DevTools from './DevTools/DevTools.es6'
 import Console from './Console/Console.es6'
 import Network from './Network/Network.es6'
 import Elements from './Elements/Elements.es6'
-import Snippets from './Snippets/Sinppets.es6'
+import Snippets from './Snippets/Snippets.es6'
 import Resources from './Resources/Resources.es6'
 import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
@@ -34,7 +34,7 @@ if (isDebugMode)
             .add(new Info())
             .add(new Features())
             .add(new Settings())
-            .showTool('console')
+            .showTool('elements')
             .show();
 }
 
