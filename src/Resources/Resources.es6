@@ -3,6 +3,26 @@ import util from '../util'
 
 require('./Resources.scss');
 
+function getState(type, len)
+{
+    if (type === 'localStore' || len === 0) return '';
+
+    var warn = 0, danger = 0;
+
+    switch (type)
+    {
+        case 'cookie': warn = 30; danger = 60; break;
+        case 'script': warn = 5; danger = 10; break;
+        case 'stylesheet': warn = 4; danger = 8; break;
+        case 'image': warn = 50; danger = 100; break;
+    }
+
+    if (len >= danger) return 'eruda-danger';
+    if (len >= warn) return 'eruda-warn';
+
+    return 'eruda-ok';
+}
+
 export default class Resources extends Tool
 {
     constructor()
@@ -20,13 +40,16 @@ export default class Resources extends Tool
     {
         super.init($el);
 
-        this.refreshLocalStorage()
-            .refreshCookie()
-            .refreshScript()
-            .refreshStylesheet()
-            .refreshImage();
-
+        this.refresh();
         this._bindEvent();
+    }
+    refresh()
+    {
+        return this.refreshLocalStorage()
+                   .refreshCookie()
+                   .refreshScript()
+                   .refreshStylesheet()
+                   .refreshImage();
     }
     refreshScript()
     {
@@ -124,6 +147,12 @@ export default class Resources extends Tool
 
         return this;
     }
+    show()
+    {
+        super.show();
+
+        return this.refresh();
+    }
     _bindEvent()
     {
         var self = this;
@@ -158,19 +187,30 @@ export default class Resources extends Tool
     }
     _render()
     {
+        var localStoreData = this._localStoreData,
+            cookieData = this._cookieData,
+            scriptData = this._scriptData,
+            stylesheetData = this._stylesheetData,
+            imageData = this._imageData;
+
         this._$el.html(this._tpl({
-            localStoreData: this._localStoreData,
-            cookieData: this._cookieData,
-            scriptData: this._scriptData,
-            stylesheetData: this._stylesheetData,
-            imageData: this._imageData
+            localStoreData: localStoreData,
+            localStoreState: getState('localStore', localStoreData.length),
+            cookieData: cookieData,
+            cookieState: getState('cookie', cookieData.length),
+            scriptData: scriptData,
+            scriptState: getState('script', scriptData.length),
+            stylesheetData: stylesheetData,
+            stylesheetState: getState('stylesheet', stylesheetData.length),
+            imageData: imageData,
+            imageState: getState('image', imageData.length)
         }));
 
         if (this._imageData.length === 0) return;
 
         setTimeout(() =>
         {
-            var $li = this._$el.find('.image-list li');
+            var $li = this._$el.find('.eruda-image-list li');
 
             $li.css({height: $li.get(0).offsetWidth});
         }, 150);

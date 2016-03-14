@@ -1,9 +1,9 @@
 @import "../color";
 
-#eruda { .dev-tools { .tools {
+.dev-tools { .tools {
     .resources {
         padding: 10px;
-        font-size: 12px;
+        font-size: 14px;
         overflow-y: auto;
         .section {
             margin-bottom: 10px;
@@ -11,22 +11,37 @@
         .title {
             padding: 10px;
             color: #fff;
-            background: $green;
-            font-size: 12px;
+            background: $blue;
+            font-size: 14px;
+            &.ok {
+                background: $green;
+            }
+            &.warn {
+                background: $yellow;
+            }
+            &.danger {
+                background: $red;
+            }
             .btn {
                 float: right;
+                display: inline-block;
                 background: #fff;
                 color: $gray;
-                padding: 5px;
-                position: relative;
-                top: -5px;
-                border-radius: 4px;
+                text-align: center;
+                width: 18px;
+                height: 18px;
+                line-height: 18px;
+                border-radius: 50%;
             }
         }
         .link-list {
             li {
                 padding: 10px;
                 background: #fff;
+                word-break: break-all;
+                a {
+                    color: $blue !important;
+                }
             }
         }
         .image-list {
@@ -75,4 +90,4 @@
             background: #fff;
         }
     }
-} } }
+} }

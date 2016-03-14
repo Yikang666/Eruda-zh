@@ -22,7 +22,7 @@ export default class HomeBtn
 
         $parent.append(require('./HomeBtn.hbs')());
 
-        this._$el = $parent.find('.home-btn');
+        this._$el = $parent.find('.eruda-home-btn');
     }
     _setPos()
     {

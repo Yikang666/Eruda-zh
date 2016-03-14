@@ -1,17 +1,17 @@
-<div class="section">
-    <h2 class="title">
+<div class="eruda-section">
+    <h2 class="eruda-title {{localStoreState}}">
         LocalStorage
-        <span class="btn refresh-local-storage">Refresh</span>
+        <span class="eruda-btn refresh-local-storage">R</span>
     </h2>
     <table>
         <tbody>
             {{#if localStoreData}}
                 {{#each localStoreData}}
                     <tr>
-                        <td class="key">{{key}}</td>
+                        <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
-                        <td class="control">
-                            <span class="delete delete-local-storage" data-key="{{key}}">‒</span>
+                        <td class="eruda-control">
+                            <span class="eruda-delete delete-local-storage" data-key="{{key}}">‒</span>
                         </td>
                     </tr>
                 {{/each}}
@@ -23,20 +23,20 @@
         </tbody>
     </table>
 </div>
-<div class="section">
-    <h2 class="title">
+<div class="eruda-section">
+    <h2 class="eruda-title {{cookieState}}">
         Cookie
-        <span class="btn refresh-cookie">Refresh</span>
+        <span class="eruda-btn refresh-cookie">R</span>
     </h2>
     <table>
         <tbody>
             {{#if cookieData}}
                 {{#each cookieData}}
                     <tr>
-                        <td>{{key}}</td>
+                        <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
-                        <td class="control">
-                            <span class="delete delete-cookie" data-key="{{key}}">‒</span>
+                        <td class="eruda-control">
+                            <span class="eruda-delete delete-cookie" data-key="{{key}}">‒</span>
                         </td>
                     </tr>
                 {{/each}}
@@ -48,12 +48,12 @@
         </tbody>
     </table>
 </div>
-<div class="section">
-    <h2 class="title">
+<div class="eruda-section">
+    <h2 class="eruda-title {{scriptState}}">
         Script
-        <span class="btn refresh-script">Refresh</span>
+        <span class="eruda-btn refresh-script">R</span>
     </h2>
-    <ul class="link-list">
+    <ul class="eruda-link-list">
         {{#if scriptData}}
             {{#each scriptData}}
                 <li>
@@ -65,12 +65,12 @@
         {{/if}}
     </ul>
 </div>
-<div class="section">
-    <h2 class="title">
+<div class="eruda-section">
+    <h2 class="eruda-title {{stylesheetState}}">
         Stylesheet
-        <span class="btn refresh-stylesheet">Refresh</span>
+        <span class="eruda-btn refresh-stylesheet">R</span>
     </h2>
-    <ul class="link-list">
+    <ul class="eruda-link-list">
         {{#if stylesheetData}}
             {{#each stylesheetData}}
                 <li>
@@ -82,12 +82,12 @@
         {{/if}}
     </ul>
 </div>
-<div class="section">
-    <h2 class="title">
+<div class="eruda-section">
+    <h2 class="eruda-title {{imageState}}">
         Image
-        <span class="btn refresh-image">Refresh</span>
+        <span class="eruda-btn refresh-image">R</span>
     </h2>
-    <ul class="image-list">
+    <ul class="eruda-image-list">
         {{#if imageData}}
             {{#each imageData}}
                 <li>
@@ -97,7 +97,7 @@
                 </li>
             {{/each}}
         {{else}}
-            <li class="empty">Empty</li>
+            <li class="eruda-empty">Empty</li>
         {{/if}}
     </ul>
 </div>

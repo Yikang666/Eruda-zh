@@ -1,6 +1,6 @@
 @import "../color";
 
-#eruda { .dev-tools { .tools {
+.dev-tools { .tools {
     .features {
         overflow-y: auto;
         ul {
@@ -9,6 +9,10 @@
                 float: left;
                 padding: 10px;
                 .inner-wrapper {
+                    font-size: 14px;
+                    a {
+                        text-decoration: underline;
+                    }
                     color: #fff;
                     display: block;
                     padding: 10px;
@@ -37,4 +41,4 @@
             margin-top: 10px;
         }
     }
-} } }
+} }

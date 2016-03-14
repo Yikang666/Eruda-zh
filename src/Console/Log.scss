@@ -1,6 +1,6 @@
 @import "../color";
 
-#eruda { .dev-tools { .tools { .console {
+.dev-tools { .tools { .console {
     .logs {
         height: 100%;
         overflow-x: hidden;
@@ -9,6 +9,9 @@
         li {
             padding: 10px;
             overflow-x: auto;
+            a {
+                color: $blue !important;
+            }
             &.log, &.output {
                 border-bottom: 1px solid #b4b4b4;
             }
@@ -41,4 +44,4 @@
             }
         }
     }
-} } } }
+} } }

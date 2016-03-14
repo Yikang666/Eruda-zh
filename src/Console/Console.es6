@@ -24,8 +24,8 @@ export default class Console extends Tool
         var $el = this._$el;
 
         $el.append(require('./Console.hbs')());
-        this._$logs = $el.find('.logs');
-        this._$jsInput = $el.find('.js-input');
+        this._$logs = $el.find('.eruda-logs');
+        this._$jsInput = $el.find('.eruda-js-input');
     }
     _initLog()
     {

@@ -114,7 +114,7 @@ var eruda =
 	        return devTools.toggle();
 	    });
 
-	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Sinppets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('resources').show();
+	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Sinppets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('console').show();
 	}
 
 	function appendContainer() {
@@ -175,7 +175,7 @@ var eruda =
 
 	            $parent.append(__webpack_require__(12)());
 
-	            this._$el = $parent.find('.home-btn');
+	            this._$el = $parent.find('.eruda-home-btn');
 	        }
 	    }, {
 	        key: '_setPos',
@@ -3689,7 +3689,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .home-btn {\n  width: 40px;\n  height: 40px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.3;\n  border-radius: 10px;\n  padding-top: 10px;\n  position: relative;\n  z-index: 1000;\n  -webkit-transition: opacity .3s;\n  transition: opacity .3s; }\n  #eruda .home-btn .circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 20px;\n    height: 20px; }\n  #eruda .home-btn:hover {\n    opacity: 0.8; }\n", ""]);
+	exports.push([module.id, ".eruda-home-btn {\n  width: 40px;\n  height: 40px;\n  background: rgba(0, 0, 0, 0.8);\n  opacity: 0.3;\n  border-radius: 10px;\n  padding-top: 10px;\n  position: relative;\n  z-index: 1000;\n  -webkit-transition: opacity .3s;\n  transition: opacity .3s; }\n  .eruda-home-btn .eruda-circle {\n    background: #fff;\n    border-radius: 50%;\n    margin: 0 auto;\n    width: 20px;\n    height: 20px; }\n  .eruda-home-btn:hover {\n    opacity: 0.8; }\n", ""]);
 
 	// exports
 
@@ -4010,7 +4010,7 @@ var eruda =
 
 	var Handlebars = __webpack_require__(13);
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    return "<div class=\"home-btn\">\r\n    <div class=\"circle\"></div>\r\n</div>";
+	    return "<div class=\"eruda-home-btn\">\r\n    <div class=\"eruda-circle\"></div>\r\n</div>";
 	},"useData":true});
 
 /***/ },
@@ -5231,7 +5231,7 @@ var eruda =
 	                value: function show() {
 	                        this._isShow = true;
 
-	                        this._$el.addClass('show').rmClass('hide');
+	                        this._$el.addClass('eruda-show').rmClass('eruda-hide');
 
 	                        return this;
 	                }
@@ -5242,9 +5242,9 @@ var eruda =
 
 	                        this._isShow = false;
 
-	                        this._$el.addClass('hide').rmClass('show');
+	                        this._$el.addClass('eruda-hide').rmClass('eruda-show');
 	                        setTimeout(function () {
-	                                return _this._$el.rmClass('hide');
+	                                return _this._$el.rmClass('eruda-hide');
 	                        }, 300);
 
 	                        return this;
@@ -5259,8 +5259,8 @@ var eruda =
 	                value: function add(tool) {
 	                        var name = tool.name;
 
-	                        this._$tools.append('<div class="' + name + ' tool"></div>');
-	                        tool.init(this._$tools.find('.' + name));
+	                        this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
+	                        tool.init(this._$tools.find('.eruda-' + name));
 	                        tool.active = false;
 	                        this._tools[name] = tool;
 
@@ -5302,15 +5302,15 @@ var eruda =
 
 	                        $parent.append(__webpack_require__(38)());
 
-	                        this._$el = $parent.find('.dev-tools');
-	                        this._$tools = this._$el.find('.tools');
+	                        this._$el = $parent.find('.eruda-dev-tools');
+	                        this._$tools = this._$el.find('.eruda-tools');
 	                }
 	        }, {
 	                key: '_initNavBar',
 	                value: function _initNavBar() {
 	                        var _this2 = this;
 
-	                        this._navBar = new _NavBar2.default(this._$el.find('.nav-bar ul'));
+	                        this._navBar = new _NavBar2.default(this._$el.find('.eruda-nav-bar ul'));
 	                        this._navBar.on('showTool', function (name) {
 	                                _this2.showTool(name);
 	                        });
@@ -5372,7 +5372,7 @@ var eruda =
 	            $el.find('li').each(function () {
 	                var $this = _util2.default.$(this);
 
-	                $this.text() === name ? $this.addClass('active') : $this.rmClass('active');
+	                $this.text() === name ? $this.addClass('eruda-active') : $this.rmClass('eruda-active');
 	            });
 	        }
 	    }, {
@@ -5428,7 +5428,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .nav-bar {\n  height: 50px;\n  overflow-y: auto;\n  position: absolute;\n  width: 100%;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  #eruda .dev-tools .nav-bar ul {\n    font-size: 0; }\n    #eruda .dev-tools .nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      #eruda .dev-tools .nav-bar ul li.active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-nav-bar {\n  height: 50px;\n  overflow-y: auto;\n  position: absolute;\n  width: 100%;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  .eruda-dev-tools .eruda-nav-bar ul {\n    font-size: 0; }\n    .eruda-dev-tools .eruda-nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      .eruda-dev-tools .eruda-nav-bar ul li.eruda-active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
 
 	// exports
 
@@ -5468,7 +5468,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  #eruda .dev-tools.show {\n    display: block;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  #eruda .dev-tools.hide {\n    display: block;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  #eruda .dev-tools .tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto; }\n    #eruda .dev-tools .tools .tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px !important;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  .eruda-dev-tools.eruda-show {\n    display: block !important;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  .eruda-dev-tools.eruda-hide {\n    display: block !important;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  .eruda-dev-tools .eruda-tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto; }\n    .eruda-dev-tools .eruda-tools .eruda-tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
 
 	// exports
 
@@ -5479,7 +5479,7 @@ var eruda =
 
 	var Handlebars = __webpack_require__(13);
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    return "<div class=\"dev-tools\">\r\n    <div class=\"nav-bar\"><ul></ul></div>\r\n    <div class=\"tools\"></div>\r\n</div>";
+	    return "<div class=\"eruda-dev-tools\">\r\n    <div class=\"eruda-nav-bar\"><ul></ul></div>\r\n    <div class=\"eruda-tools\"></div>\r\n</div>";
 	},"useData":true});
 
 /***/ },
@@ -5545,8 +5545,8 @@ var eruda =
 	            var $el = this._$el;
 
 	            $el.append(__webpack_require__(50)());
-	            this._$logs = $el.find('.logs');
-	            this._$jsInput = $el.find('.js-input');
+	            this._$logs = $el.find('.eruda-logs');
+	            this._$jsInput = $el.find('.eruda-js-input');
 	        }
 	    }, {
 	        key: '_initLog',
@@ -5620,7 +5620,7 @@ var eruda =
 	    var lines = err.stack.split('\n');
 
 	    if (_util2.default.isUndef(msg)) msg = lines[0] + '<br/>';
-	    var stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+	    var stack = '<div class="eruda-stack">' + lines.slice(1).join('<br/>') + '</div>';
 
 	    stack = stack.replace(regJsUrl, function (match) {
 	        return '<a href="' + match + '" target="_blank">' + match + '</a>';
@@ -5902,7 +5902,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .console .logs {\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: auto;\n  font-size: 14px; }\n  #eruda .dev-tools .tools .console .logs li {\n    padding: 10px;\n    overflow-x: auto; }\n    #eruda .dev-tools .tools .console .logs li.log, #eruda .dev-tools .tools .console .logs li.output {\n      border-bottom: 1px solid #b4b4b4; }\n    #eruda .dev-tools .tools .console .logs li.log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      #eruda .dev-tools .tools .console .logs li.log table th {\n        background: #76a2ee;\n        color: #fff; }\n      #eruda .dev-tools .tools .console .logs li.log table th, #eruda .dev-tools .tools .console .logs li.log table td {\n        padding: 10px; }\n    #eruda .dev-tools .tools .console .logs li.error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      #eruda .dev-tools .tools .console .logs li.error .stack {\n        color: #000;\n        padding-left: 1.2em; }\n    #eruda .dev-tools .tools .console .logs li.warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console .eruda-logs {\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: auto;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li {\n    padding: 10px;\n    overflow-x: auto; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li a {\n      color: #76a2ee !important; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-output {\n      border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th {\n        background: #76a2ee;\n        color: #fff; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table td {\n        padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error .eruda-stack {\n        color: #000;\n        padding-left: 1.2em; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
 
 	// exports
 
@@ -5961,7 +5961,7 @@ var eruda =
 	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
 	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function";
 
-	  return "        <li class=\""
+	  return "        <li class=\"eruda-"
 	    + container.escapeExpression(((helper = (helper = helpers.type || (depth0 != null ? depth0.type : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"type","hash":{},"data":data}) : helper)))
 	    + "\">"
 	    + ((stack1 = ((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper))) != null ? stack1 : "")
@@ -6002,11 +6002,15 @@ var eruda =
 	        key: "show",
 	        value: function show() {
 	            this._$el.show();
+
+	            return this;
 	        }
 	    }, {
 	        key: "hide",
 	        value: function hide() {
 	            this._$el.hide();
+
+	            return this;
 	        }
 	    }]);
 
@@ -6050,7 +6054,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .console {\n  padding-bottom: 40px; }\n  #eruda .dev-tools .tools .console .js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    background: #fff;\n    outline: none;\n    overflow: hidden; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    background: #fff;\n    outline: none;\n    overflow: hidden; }\n", ""]);
 
 	// exports
 
@@ -6061,7 +6065,7 @@ var eruda =
 
 	var Handlebars = __webpack_require__(13);
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    return "<div class=\"logs\"></div>\r\n<input class=\"js-input\" type=\"text\" placeholder=\"Type JavaScript here\"/>\r\n";
+	    return "<div class=\"eruda-logs\"></div>\r\n<input class=\"eruda-js-input\" type=\"text\" placeholder=\"Type JavaScript here\"/>\r\n";
 	},"useData":true});
 
 /***/ },
@@ -6246,6 +6250,29 @@ var eruda =
 
 	__webpack_require__(55);
 
+	function getState(type, len) {
+	    if (type === 'localStore' || len === 0) return '';
+
+	    var warn = 0,
+	        danger = 0;
+
+	    switch (type) {
+	        case 'cookie':
+	            warn = 30;danger = 60;break;
+	        case 'script':
+	            warn = 5;danger = 10;break;
+	        case 'stylesheet':
+	            warn = 4;danger = 8;break;
+	        case 'image':
+	            warn = 50;danger = 100;break;
+	    }
+
+	    if (len >= danger) return 'eruda-danger';
+	    if (len >= warn) return 'eruda-warn';
+
+	    return 'eruda-ok';
+	}
+
 	var Resources = function (_Tool) {
 	    _inherits(Resources, _Tool);
 
@@ -6269,9 +6296,13 @@ var eruda =
 	        value: function init($el) {
 	            _get(Object.getPrototypeOf(Resources.prototype), 'init', this).call(this, $el);
 
-	            this.refreshLocalStorage().refreshCookie().refreshScript().refreshStylesheet().refreshImage();
-
+	            this.refresh();
 	            this._bindEvent();
+	        }
+	    }, {
+	        key: 'refresh',
+	        value: function refresh() {
+	            return this.refreshLocalStorage().refreshCookie().refreshScript().refreshStylesheet().refreshImage();
 	        }
 	    }, {
 	        key: 'refreshScript',
@@ -6369,6 +6400,13 @@ var eruda =
 	            return this;
 	        }
 	    }, {
+	        key: 'show',
+	        value: function show() {
+	            _get(Object.getPrototypeOf(Resources.prototype), 'show', this).call(this);
+
+	            return this.refresh();
+	        }
+	    }, {
 	        key: '_bindEvent',
 	        value: function _bindEvent() {
 	            var _this2 = this;
@@ -6404,18 +6442,29 @@ var eruda =
 	        value: function _render() {
 	            var _this3 = this;
 
+	            var localStoreData = this._localStoreData,
+	                cookieData = this._cookieData,
+	                scriptData = this._scriptData,
+	                stylesheetData = this._stylesheetData,
+	                imageData = this._imageData;
+
 	            this._$el.html(this._tpl({
-	                localStoreData: this._localStoreData,
-	                cookieData: this._cookieData,
-	                scriptData: this._scriptData,
-	                stylesheetData: this._stylesheetData,
-	                imageData: this._imageData
+	                localStoreData: localStoreData,
+	                localStoreState: getState('localStore', localStoreData.length),
+	                cookieData: cookieData,
+	                cookieState: getState('cookie', cookieData.length),
+	                scriptData: scriptData,
+	                scriptState: getState('script', scriptData.length),
+	                stylesheetData: stylesheetData,
+	                stylesheetState: getState('stylesheet', stylesheetData.length),
+	                imageData: imageData,
+	                imageState: getState('image', imageData.length)
 	            }));
 
 	            if (this._imageData.length === 0) return;
 
 	            setTimeout(function () {
-	                var $li = _this3._$el.find('.image-list li');
+	                var $li = _this3._$el.find('.eruda-image-list li');
 
 	                $li.css({ height: $li.get(0).offsetWidth });
 	            }, 150);
@@ -6462,7 +6511,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .resources {\n  padding: 10px;\n  font-size: 12px;\n  overflow-y: auto; }\n  #eruda .dev-tools .tools .resources .section {\n    margin-bottom: 10px; }\n  #eruda .dev-tools .tools .resources .title {\n    padding: 10px;\n    color: #fff;\n    background: #8de191;\n    font-size: 12px; }\n    #eruda .dev-tools .tools .resources .title .btn {\n      float: right;\n      background: #fff;\n      color: #b4b4b4;\n      padding: 5px;\n      position: relative;\n      top: -5px;\n      border-radius: 4px; }\n  #eruda .dev-tools .tools .resources .link-list li {\n    padding: 10px;\n    background: #fff; }\n  #eruda .dev-tools .tools .resources .image-list {\n    background: #fff; }\n    #eruda .dev-tools .tools .resources .image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      #eruda .dev-tools .tools .resources .image-list li img {\n        width: 100%; }\n      #eruda .dev-tools .tools .resources .image-list li.empty {\n        padding: 10px;\n        width: 100%; }\n    #eruda .dev-tools .tools .resources .image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  #eruda .dev-tools .tools .resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    #eruda .dev-tools .tools .resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      #eruda .dev-tools .tools .resources table td .delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      #eruda .dev-tools .tools .resources table td.key {\n        white-space: nowrap; }\n      #eruda .dev-tools .tools .resources table td.control {\n        width: 40px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-resources {\n  padding: 10px;\n  font-size: 14px;\n  overflow-y: auto; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-section {\n    margin-bottom: 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title {\n    padding: 10px;\n    color: #fff;\n    background: #76a2ee;\n    font-size: 14px; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-ok {\n      background: #8de191; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-warn {\n      background: #fff5c2; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-danger {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title .eruda-btn {\n      float: right;\n      display: inline-block;\n      background: #fff;\n      color: #b4b4b4;\n      text-align: center;\n      width: 18px;\n      height: 18px;\n      line-height: 18px;\n      border-radius: 50%; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li {\n    padding: 10px;\n    background: #fff;\n    word-break: break-all; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li a {\n      color: #76a2ee !important; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list {\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li img {\n        width: 100%; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li.eruda-empty {\n        padding: 10px;\n        width: 100%; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td .eruda-delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-key {\n        white-space: nowrap; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-control {\n        width: 40px; }\n", ""]);
 
 	// exports
 
@@ -6479,11 +6528,11 @@ var eruda =
 	},"2":function(container,depth0,helpers,partials,data) {
 	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "                    <tr>\r\n                        <td class=\"key\">"
+	  return "                    <tr>\r\n                        <td class=\"eruda-key\">"
 	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "</td>\r\n                        <td>"
 	    + alias4(((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper)))
-	    + "</td>\r\n                        <td class=\"control\">\r\n                            <span class=\"delete delete-local-storage\" data-key=\""
+	    + "</td>\r\n                        <td class=\"eruda-control\">\r\n                            <span class=\"eruda-delete delete-local-storage\" data-key=\""
 	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "\">‒</span>\r\n                        </td>\r\n                    </tr>\r\n";
 	},"4":function(container,depth0,helpers,partials,data) {
@@ -6495,11 +6544,11 @@ var eruda =
 	},"7":function(container,depth0,helpers,partials,data) {
 	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "                    <tr>\r\n                        <td>"
+	  return "                    <tr>\r\n                        <td class=\"eruda-key\">"
 	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "</td>\r\n                        <td>"
 	    + alias4(((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper)))
-	    + "</td>\r\n                        <td class=\"control\">\r\n                            <span class=\"delete delete-cookie\" data-key=\""
+	    + "</td>\r\n                        <td class=\"eruda-control\">\r\n                            <span class=\"eruda-delete delete-cookie\" data-key=\""
 	    + alias4(((helper = (helper = helpers.key || (depth0 != null ? depth0.key : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "\">‒</span>\r\n                        </td>\r\n                    </tr>\r\n";
 	},"9":function(container,depth0,helpers,partials,data) {
@@ -6533,19 +6582,29 @@ var eruda =
 	    + alias2(alias1(depth0, depth0))
 	    + "\" data-exclude=\"true\"/>\r\n                    </a>\r\n                </li>\r\n";
 	},"19":function(container,depth0,helpers,partials,data) {
-	    return "            <li class=\"empty\">Empty</li>\r\n";
+	    return "            <li class=\"eruda-empty\">Empty</li>\r\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    var stack1, alias1=depth0 != null ? depth0 : {};
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        LocalStorage\r\n        <span class=\"btn refresh-local-storage\">Refresh</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
+	  return "<div class=\"eruda-section\">\r\n    <h2 class=\"eruda-title "
+	    + alias4(((helper = (helper = helpers.localStoreState || (depth0 != null ? depth0.localStoreState : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"localStoreState","hash":{},"data":data}) : helper)))
+	    + "\">\r\n        LocalStorage\r\n        <span class=\"eruda-btn refresh-local-storage\">R</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.localStoreData : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
-	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Cookie\r\n        <span class=\"btn refresh-cookie\">Refresh</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
+	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"eruda-section\">\r\n    <h2 class=\"eruda-title "
+	    + alias4(((helper = (helper = helpers.cookieState || (depth0 != null ? depth0.cookieState : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cookieState","hash":{},"data":data}) : helper)))
+	    + "\">\r\n        Cookie\r\n        <span class=\"eruda-btn refresh-cookie\">R</span>\r\n    </h2>\r\n    <table>\r\n        <tbody>\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.cookieData : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
-	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Script\r\n        <span class=\"btn refresh-script\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"link-list\">\r\n"
+	    + "        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"eruda-section\">\r\n    <h2 class=\"eruda-title "
+	    + alias4(((helper = (helper = helpers.scriptState || (depth0 != null ? depth0.scriptState : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"scriptState","hash":{},"data":data}) : helper)))
+	    + "\">\r\n        Script\r\n        <span class=\"eruda-btn refresh-script\">R</span>\r\n    </h2>\r\n    <ul class=\"eruda-link-list\">\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.scriptData : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
-	    + "    </ul>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Stylesheet\r\n        <span class=\"btn refresh-stylesheet\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"link-list\">\r\n"
+	    + "    </ul>\r\n</div>\r\n<div class=\"eruda-section\">\r\n    <h2 class=\"eruda-title "
+	    + alias4(((helper = (helper = helpers.stylesheetState || (depth0 != null ? depth0.stylesheetState : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"stylesheetState","hash":{},"data":data}) : helper)))
+	    + "\">\r\n        Stylesheet\r\n        <span class=\"eruda-btn refresh-stylesheet\">R</span>\r\n    </h2>\r\n    <ul class=\"eruda-link-list\">\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.stylesheetData : depth0),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
-	    + "    </ul>\r\n</div>\r\n<div class=\"section\">\r\n    <h2 class=\"title\">\r\n        Image\r\n        <span class=\"btn refresh-image\">Refresh</span>\r\n    </h2>\r\n    <ul class=\"image-list\">\r\n"
+	    + "    </ul>\r\n</div>\r\n<div class=\"eruda-section\">\r\n    <h2 class=\"eruda-title "
+	    + alias4(((helper = (helper = helpers.imageState || (depth0 != null ? depth0.imageState : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"imageState","hash":{},"data":data}) : helper)))
+	    + "\">\r\n        Image\r\n        <span class=\"eruda-btn refresh-image\">R</span>\r\n    </h2>\r\n    <ul class=\"eruda-image-list\">\r\n"
 	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.imageData : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.program(19, data, 0),"data":data})) != null ? stack1 : "")
 	    + "    </ul>\r\n</div>";
 	},"useData":true});
@@ -6697,7 +6756,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .info {\n  overflow-y: auto;\n  font-size: 12px; }\n  #eruda .dev-tools .tools .info li {\n    overflow-x: auto;\n    border-bottom: 1px solid #b4b4b4; }\n    #eruda .dev-tools .tools .info li .title, #eruda .dev-tools .tools .info li .content {\n      padding: 10px; }\n    #eruda .dev-tools .tools .info li .title {\n      padding-bottom: 0;\n      font-size: 15px;\n      color: #76a2ee; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-info {\n  overflow-y: auto;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-info li {\n    overflow-x: auto;\n    border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title, .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      margin: 0; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title {\n      padding-bottom: 0;\n      font-size: 16px;\n      color: #76a2ee; }\n", ""]);
 
 	// exports
 
@@ -6710,9 +6769,9 @@ var eruda =
 	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
 	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-	  return "        <li>\r\n            <h2 class=\"title\">"
+	  return "        <li>\r\n            <h2 class=\"eruda-title\">"
 	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-	    + "</h2>\r\n            <p class=\"content\">"
+	    + "</h2>\r\n            <p class=\"eruda-content\">"
 	    + alias4(((helper = (helper = helpers.val || (depth0 != null ? depth0.val : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"val","hash":{},"data":data}) : helper)))
 	    + "</p>\r\n        </li>\r\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -9713,7 +9772,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda .dev-tools .tools .features {\n  overflow-y: auto; }\n  #eruda .dev-tools .tools .features ul li {\n    width: 50%;\n    float: left;\n    padding: 10px; }\n    #eruda .dev-tools .tools .features ul li .inner-wrapper {\n      color: #fff;\n      display: block;\n      padding: 10px;\n      border-radius: 4px;\n      text-align: center;\n      background: #eda29b; }\n      #eruda .dev-tools .tools .features ul li .inner-wrapper.ok {\n        background: #fff;\n        color: #b4b4b4; }\n  #eruda .dev-tools .tools .features ul::after {\n    display: block;\n    content: '';\n    clear: both; }\n  #eruda .dev-tools .tools .features .html5test {\n    color: #fff;\n    background: #76a2ee;\n    display: block;\n    padding: 10px;\n    text-decoration: none;\n    text-align: center;\n    margin-top: 10px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-features {\n  overflow-y: auto; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul li {\n    width: 50%;\n    float: left;\n    padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper {\n      font-size: 14px;\n      color: #fff;\n      display: block;\n      padding: 10px;\n      border-radius: 4px;\n      text-align: center;\n      background: #eda29b; }\n      .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper a {\n        text-decoration: underline; }\n      .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper.eruda-ok {\n        background: #fff;\n        color: #b4b4b4; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul::after {\n    display: block;\n    content: '';\n    clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-features .eruda-html5test {\n    color: #fff;\n    background: #76a2ee;\n    display: block;\n    padding: 10px;\n    text-decoration: none;\n    text-align: center;\n    margin-top: 10px; }\n", ""]);
 
 	// exports
 
@@ -9803,19 +9862,19 @@ var eruda =
 
 	  return "        <li>\r\n            <a href=\"http://caniuse.com/#search="
 	    + alias4(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
-	    + "\" target=\"_blank\" class=\"inner-wrapper "
+	    + "\" target=\"_blank\" class=\"eruda-inner-wrapper "
 	    + ((stack1 = helpers["if"].call(alias1,depth0,{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
 	    + "\">\r\n                "
 	    + alias4(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"key","hash":{},"data":data}) : helper)))
 	    + "\r\n            </a>\r\n        </li>\r\n";
 	},"2":function(container,depth0,helpers,partials,data) {
-	    return "ok";
+	    return "eruda-ok";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 
 	  return "<ul>\r\n"
 	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.features : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "</ul>\r\n<a class=\"html5test\" target=\"_blank\" href=\"http://html5test.com\">Go to HTML5 Test</a>";
+	    + "</ul>\r\n<a class=\"eruda-html5test\" target=\"_blank\" href=\"http://html5test.com\">Go to HTML5 Test</a>";
 	},"useData":true});
 
 /***/ },
@@ -9903,7 +9962,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100000;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all;\n    padding: 0;\n    margin: 0; }\n  #eruda ul {\n    list-style: none; }\n", ""]);
+	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100000;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all; }\n  #eruda ul {\n    list-style: none;\n    padding: 0;\n    margin: 0; }\n  #eruda h1, #eruda h2, #eruda h3, #eruda h4 {\n    margin: 0; }\n", ""]);
 
 	// exports
 

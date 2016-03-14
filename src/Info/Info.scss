@@ -1,20 +1,23 @@
 @import "../color";
 
-#eruda { .dev-tools { .tools {
+.dev-tools { .tools {
     .info {
         overflow-y: auto;
-        font-size: 12px;
+        font-size: 14px;
         li {
             overflow-x: auto;
             border-bottom: 1px solid $gray;
             .title, .content {
                 padding: 10px;
             }
+            .content {
+                margin: 0;
+            }
             .title {
                 padding-bottom: 0;
-                font-size: 15px;
+                font-size: 16px;
                 color: $blue;
             }
         }
     }
-} } }
+} }

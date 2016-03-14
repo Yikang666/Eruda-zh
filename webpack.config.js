@@ -1,5 +1,5 @@
 var autoprefixer = require('autoprefixer'),
-    precss = require('precss');
+    classPrefix = require('postcss-class-prefix');
 
 module.exports = {
     entry: './src/index.es6',
@@ -30,6 +30,6 @@ module.exports = {
     },
     postcss: function ()
     {
-        return [autoprefixer, precss];
+        return [classPrefix('eruda-'), autoprefixer];
     }
 };

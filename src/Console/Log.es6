@@ -21,7 +21,7 @@ function errToStr(err, msg)
     var lines = err.stack.split('\n');
 
     if (util.isUndef(msg)) msg = lines[0] + '<br/>';
-    var stack = '<div class="stack">' + lines.slice(1).join('<br/>') + '</div>';
+    var stack = '<div class="eruda-stack">' + lines.slice(1).join('<br/>') + '</div>';
 
     stack = stack.replace(regJsUrl, function (match)
     {

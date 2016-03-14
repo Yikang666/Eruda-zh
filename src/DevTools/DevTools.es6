@@ -18,7 +18,7 @@ export default class DevTools
     {
         this._isShow = true;
 
-        this._$el.addClass('show').rmClass('hide');
+        this._$el.addClass('eruda-show').rmClass('eruda-hide');
 
         return this;
     }
@@ -26,8 +26,8 @@ export default class DevTools
     {
         this._isShow = false;
 
-        this._$el.addClass('hide').rmClass('show');
-        setTimeout(() => this._$el.rmClass('hide'), 300);
+        this._$el.addClass('eruda-hide').rmClass('eruda-show');
+        setTimeout(() => this._$el.rmClass('eruda-hide'), 300);
 
         return this;
     }
@@ -39,8 +39,8 @@ export default class DevTools
     {
         var name = tool.name;
 
-        this._$tools.append('<div class="' + name + ' tool"></div>');
-        tool.init(this._$tools.find('.' + name));
+        this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
+        tool.init(this._$tools.find('.eruda-' + name));
         tool.active = false;
         this._tools[name] = tool;
 
@@ -80,12 +80,12 @@ export default class DevTools
 
         $parent.append(require('./DevTools.hbs')());
 
-        this._$el = $parent.find('.dev-tools');
-        this._$tools = this._$el.find('.tools');
+        this._$el = $parent.find('.eruda-dev-tools');
+        this._$tools = this._$el.find('.eruda-tools');
     }
     _initNavBar()
     {
-        this._navBar = new NavBar(this._$el.find('.nav-bar ul'));
+        this._navBar = new NavBar(this._$el.find('.eruda-nav-bar ul'));
         this._navBar.on('showTool', (name) =>
         {
             this.showTool(name);

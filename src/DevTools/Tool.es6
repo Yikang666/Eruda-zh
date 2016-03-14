@@ -7,9 +7,13 @@ export default class Tool
     show()
     {
         this._$el.show();
+
+        return this;
     }
     hide()
     {
         this._$el.hide();
+
+        return this;
     }
 }

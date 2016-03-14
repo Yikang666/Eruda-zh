@@ -29,7 +29,7 @@ export default class NavBar
         {
             var $this = util.$(this);
 
-            $this.text() === name ? $this.addClass('active') : $this.rmClass('active');
+            $this.text() === name ? $this.addClass('eruda-active') : $this.rmClass('eruda-active');
         });
     }
     _bindEvent()

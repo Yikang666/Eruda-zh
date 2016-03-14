@@ -1,38 +1,38 @@
 @import "../color";
 
-#eruda {
-    .dev-tools {
-        position: absolute;
-        width: 100%;
+
+.dev-tools {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-top: 50px !important;
+    background: #fff;
+    z-index: 500;
+    display: none;
+    &.show {
+        display: block !important;
+        animation: show-menu .3s linear both;
+    }
+    &.hide {
+        display: block !important;
+        animation: hide-menu .3s linear both;
+    }
+    .tools {
         height: 100%;
-        padding-top: 50px;
-        background: #fff;
-        z-index: 500;
-        display: none;
-        &.show {
-            display: block;
-            animation: show-menu .3s linear both;
-        }
-        &.hide {
-            display: block;
-            animation: hide-menu .3s linear both;
-        }
-        .tools {
-            height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: auto;
+        .tool {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: $gray-light;
             width: 100%;
-            position: relative;
-            overflow: auto;
-            .tool {
-                position: absolute;
-                left: 0;
-                top: 0;
-                background: $gray-light;
-                width: 100%;
-                height: 100%;
-            }
+            height: 100%;
         }
     }
 }
+
 
 @keyframes show-menu {
     0% {
