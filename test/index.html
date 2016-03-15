@@ -11,6 +11,12 @@
         <div class="child-one">One</div>
         <div class="child-two">Two</div>
     </div>
-    <script src="../dist/eruda.js"></script>
+    <script>
+        (function () {
+            var src = '../dist/eruda.js';
+            if (!/eruda=true/.test(window.location) && localStorage.getItem('keep-eruda') != 'true') return;
+            document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+        })();
+    </script>
 </body>
 </html>

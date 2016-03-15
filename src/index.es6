@@ -15,7 +15,7 @@ require('./style.scss');
 
 var $container;
 
-var isDebugMode = /eruda=true/.test(window.location.search);
+var isDebugMode = /eruda=true/.test(window.location);
 
 if (isDebugMode)
 {
@@ -36,8 +36,7 @@ if (isDebugMode)
             .add(new Info())
             .add(new Features())
             .add(new Settings())
-            .showTool('settings')
-            .show();
+            .showTool('console');
 }
 
 function appendContainer()

@@ -119,12 +119,6 @@ export default class Elements extends Tool
         this._htmlEl = document.getElementsByTagName('html')[0];
         this._setEl(this._htmlEl, 0);
     }
-    show()
-    {
-        super.show();
-
-        this._render();
-    }
     _back()
     {
         if (this._curEl === this._htmlEl) return;

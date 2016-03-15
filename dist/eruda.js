@@ -105,7 +105,7 @@ var eruda =
 
 	var $container;
 
-	var isDebugMode = /eruda=true/.test(window.location.search);
+	var isDebugMode = /eruda=true/.test(window.location);
 
 	if (isDebugMode) {
 	    initFaskClick();
@@ -119,7 +119,7 @@ var eruda =
 	        return devTools.toggle();
 	    });
 
-	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Snippets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('settings').show();
+	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Snippets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('console');
 	}
 
 	function appendContainer() {
@@ -6080,7 +6080,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    background: #fff;\n    outline: none;\n    overflow: hidden; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    font-size: 13px;\n    background: #fff;\n    outline: none;\n    overflow: hidden; }\n", ""]);
 
 	// exports
 
@@ -6458,13 +6458,6 @@ var eruda =
 	            this._bindEvent();
 	            this._htmlEl = document.getElementsByTagName('html')[0];
 	            this._setEl(this._htmlEl, 0);
-	        }
-	    }, {
-	        key: 'show',
-	        value: function show() {
-	            _get(Object.getPrototypeOf(Elements.prototype), 'show', this).call(this);
-
-	            this._render();
 	        }
 	    }, {
 	        key: '_back',
@@ -10698,6 +10691,22 @@ var eruda =
 	    return ret;
 	}
 
+	var elProto = Element.prototype;
+
+	var matchesSel = function matchesSel(el, selText) {
+	    return false;
+	};
+
+	if (elProto.webkitMatchesSelector) {
+	    matchesSel = function matchesSel(el, selText) {
+	        return el.webkitMatchesSelector(selText);
+	    };
+	} else if (elProto.mozMatchesSelector) {
+	    matchesSel = function matchesSel(el, selText) {
+	        return el.mozMatchesSelector(selText);
+	    };
+	}
+
 	var CssStore = function () {
 	    function CssStore(el) {
 	        _classCallCheck(this, CssStore);
@@ -10721,7 +10730,13 @@ var eruda =
 
 	            _util2.default.each(document.styleSheets, function (styleSheet) {
 	                _util2.default.each(styleSheet.cssRules, function (cssRule) {
-	                    if (!_this._elMatchesSel(cssRule.selectorText)) return;
+	                    var matchesEl = false;
+
+	                    try {
+	                        matchesEl = _this._elMatchesSel(cssRule.selectorText);
+	                    } catch (e) {}
+
+	                    if (!matchesEl) return;
 
 	                    ret.push({
 	                        selectorText: cssRule.selectorText,
@@ -10735,7 +10750,7 @@ var eruda =
 	    }, {
 	        key: '_elMatchesSel',
 	        value: function _elMatchesSel(selText) {
-	            return this._el.webkitMatchesSelector(selText);
+	            return matchesSel(this._el, selText);
 	        }
 	    }]);
 

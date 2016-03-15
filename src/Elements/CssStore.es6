@@ -16,6 +16,18 @@ function formatStyle(style)
     return ret;
 }
 
+var elProto = Element.prototype;
+
+var matchesSel = function (el, selText) { return false };
+
+if (elProto.webkitMatchesSelector)
+{
+    matchesSel = (el, selText) => el.webkitMatchesSelector(selText);
+} else if (elProto.mozMatchesSelector)
+{
+    matchesSel = (el, selText) => el.mozMatchesSelector(selText);
+}
+
 export default class CssStore
 {
     constructor(el)
@@ -36,7 +48,13 @@ export default class CssStore
         {
             util.each(styleSheet.cssRules, (cssRule) =>
             {
-                if (!this._elMatchesSel(cssRule.selectorText)) return;
+                var matchesEl = false;
+
+                try {
+                    matchesEl = this._elMatchesSel(cssRule.selectorText);
+                } catch (e) {}
+
+                if (!matchesEl) return;
 
                 ret.push({
                     selectorText: cssRule.selectorText,
@@ -49,6 +67,6 @@ export default class CssStore
     }
     _elMatchesSel(selText)
     {
-        return this._el.webkitMatchesSelector(selText);
+        return matchesSel(this._el, selText);
     }
 };
