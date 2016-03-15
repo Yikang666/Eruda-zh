@@ -3,6 +3,7 @@
 .dev-tools { .tools {
     .network {
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         .performance-timing {
             padding: 10px;
             .inner-wrapper {
@@ -10,6 +11,7 @@
                 .bar {
                     border-bottom: 1px solid #fff;
                     overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
                     span {
                         font-size: 14px;
                         white-space: nowrap;
@@ -18,7 +20,7 @@
                         background: $red-dark;
                         display: inline-block;
                     }
-                    &.last {
+                    &:last-child {
                         border-bottom: none;
                     }
                 }

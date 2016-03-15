@@ -1,0 +1,126 @@
+@import "../variable";
+@import "../color";
+
+.dev-tools { .tools {
+    .elements {
+        padding-bottom: 40px;
+        .show-area {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            height: 100%;
+        }
+        .breadcrumb {
+            background: #fff;
+            padding: $common-padding;
+            margin-bottom: 10px;
+        }
+        .section {
+            h2 {
+                background: $blue;
+                padding: $common-padding;
+                color: #fff;
+                font-size: 14px;
+            }
+            margin-bottom: 10px;
+        }
+        .children {
+            background: #fff;
+            margin-bottom: 10px !important;
+            li {
+                padding: $common-padding;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-top: 1px solid $gray;
+                &:last-child {
+                    border-bottom: 1px solid $gray;
+                }
+            }
+        }
+        .attributes {
+            background: #fff;
+            font-size: 12px;
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            table {
+                td {
+                    padding: 5px 10px;
+                }
+            }
+        }
+        .text-content {
+            background: #fff;
+            .content {
+                padding: $common-padding;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        .computed-style {
+            background: #fff;
+            font-size: 12px;
+            .table-wrapper {
+                max-height: 200px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            table {
+                td {
+                    padding: 5px 10px;
+                    &.key {
+                        color: $red-dark;
+                    }
+                }
+            }
+        }
+        .styles {
+            background: #fff;
+            font-size: 12px;
+            .style-wrapper {
+                padding: 10px;
+                .style-rules {
+                    box-shadow: $box-shadow;
+                    border: 1px solid $gray;
+                    padding: $common-padding;
+                    background: #fff;
+                    margin-bottom: 10px;
+                    .rule {
+                        padding-left: 2em;
+                        span {
+                            color: $red-dark;
+                        }
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+        .bottom-bar {
+            height: 40px;
+            background: #fff;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            .btn {
+                text-align: center;
+                color: $gray;
+                font-size: 14px;
+                line-height: 40px;
+                flex-grow: 1;
+                &:active {
+                    background: $blue;
+                    color: #fff;
+                }
+            }
+        }
+    }
+} }
+
+.highlight {
+    background: $blue !important;
+    border: 4px solid $green !important;
+}

@@ -2,9 +2,10 @@
 
 .dev-tools { .tools { .console {
     .logs {
+        transform: translateZ(0);
         height: 100%;
-        overflow-x: hidden;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         font-size: 14px;
         li {
             padding: 10px;

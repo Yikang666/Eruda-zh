@@ -1,14 +1,17 @@
 @import "../color";
+@import "../variable";
 
 .dev-tools { .tools {
     .features {
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         ul {
             li {
                 width: 50%;
                 float: left;
                 padding: 10px;
                 .inner-wrapper {
+                    box-shadow: $box-shadow;
                     font-size: 14px;
                     text-decoration: underline;
                     color: #fff;

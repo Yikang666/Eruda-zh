@@ -23,7 +23,7 @@ export default class Network extends Tool
             setTimeout(() =>
             {
                 this._getPerformanceTimingData()
-            }, 3000);
+            }, 1000);
         }, false);
     }
     _getPerformanceTimingData()

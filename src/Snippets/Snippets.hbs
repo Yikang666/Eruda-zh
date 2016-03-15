@@ -1,0 +1,9 @@
+{{#each snippets}}
+    <div class="eruda-section">
+        <h2 class="eruda-name">{{name}}</h2>
+        <div class="eruda-description">
+            {{desc}}
+        </div>
+        <div class="eruda-btn run" data-idx="{{@index}}" ontouchstart>Run</div>
+    </div>
+{{/each}}

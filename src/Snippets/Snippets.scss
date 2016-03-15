@@ -1,0 +1,32 @@
+@import "../color";
+@import "../variable";
+
+.dev-tools { .tools {
+    .snippets {
+        padding: 10px;
+        .section {
+            margin-bottom: 10px;
+            overflow: hidden;
+            border-radius: 4px;
+            box-shadow: $box-shadow;
+            .btn, .name {
+                padding: 10px;
+                color: #fff;
+                background: $gray;
+                font-size: 14px;
+                text-align: center;
+            }
+            .btn {
+                background: $red;
+            }
+            .btn:active {
+                background: $red-dark;
+            }
+            .description {
+                background: #fff;
+                padding: 10px;
+            }
+        }
+    }
+} }
+

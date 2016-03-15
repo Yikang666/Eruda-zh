@@ -9,6 +9,7 @@ import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
 import Settings from './Settings/Settings.es6'
 import util from './util'
+import fastClick from 'fastclick'
 
 require('./style.scss');
 
@@ -18,6 +19,7 @@ var isDebugMode = /eruda=true/.test(window.location.search);
 
 if (isDebugMode)
 {
+    initFaskClick();
     appendContainer();
 
     var devTools = new DevTools($container);
@@ -34,7 +36,7 @@ if (isDebugMode)
             .add(new Info())
             .add(new Features())
             .add(new Settings())
-            .showTool('elements')
+            .showTool('settings')
             .show();
 }
 
@@ -42,6 +44,11 @@ function appendContainer()
 {
     util.$('body').append('<div id="eruda"></div>');
     $container = util.$('#eruda');
+}
+
+function initFaskClick()
+{
+    fastClick.attach(document.body, {});
 }
 
 export default {

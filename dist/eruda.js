@@ -67,27 +67,27 @@ var eruda =
 
 	var _Network2 = _interopRequireDefault(_Network);
 
-	var _Elements = __webpack_require__(52);
+	var _Elements = __webpack_require__(55);
 
 	var _Elements2 = _interopRequireDefault(_Elements);
 
-	var _Snippets = __webpack_require__(76);
+	var _Snippets = __webpack_require__(59);
 
 	var _Snippets2 = _interopRequireDefault(_Snippets);
 
-	var _Resources = __webpack_require__(54);
+	var _Resources = __webpack_require__(63);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _Info = __webpack_require__(58);
+	var _Info = __webpack_require__(67);
 
 	var _Info2 = _interopRequireDefault(_Info);
 
-	var _Features = __webpack_require__(63);
+	var _Features = __webpack_require__(72);
 
 	var _Features2 = _interopRequireDefault(_Features);
 
-	var _Settings = __webpack_require__(69);
+	var _Settings = __webpack_require__(78);
 
 	var _Settings2 = _interopRequireDefault(_Settings);
 
@@ -95,15 +95,20 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
+	var _fastclick = __webpack_require__(87);
+
+	var _fastclick2 = _interopRequireDefault(_fastclick);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(70);
+	__webpack_require__(82);
 
 	var $container;
 
 	var isDebugMode = /eruda=true/.test(window.location.search);
 
 	if (isDebugMode) {
+	    initFaskClick();
 	    appendContainer();
 
 	    var devTools = new _DevTools2.default($container);
@@ -114,12 +119,16 @@ var eruda =
 	        return devTools.toggle();
 	    });
 
-	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Snippets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('elements').show();
+	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Snippets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('settings').show();
 	}
 
 	function appendContainer() {
 	    _util2.default.$('body').append('<div id="eruda"></div>');
 	    $container = _util2.default.$('#eruda');
+	}
+
+	function initFaskClick() {
+	    _fastclick2.default.attach(document.body, {});
 	}
 
 	exports.default = {
@@ -538,6 +547,23 @@ var eruda =
 	        };
 
 	        return keys;
+	    })();
+
+	    /* ------------------------------ evalCss ------------------------------ */
+
+	    var evalCss;
+
+	    _.evalCss = (function ()
+	    {
+	        evalCss = function (css)
+	        {
+	            var style = document.createElement('style');
+	            style.textContent = css;
+	            style.type = 'text/css';
+	            document.body.appendChild(style);
+	        };
+
+	        return evalCss;
 	    })();
 
 	    /* ------------------------------ extendOwn ------------------------------ */
@@ -5428,7 +5454,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-nav-bar {\n  height: 50px;\n  overflow-y: auto;\n  position: absolute;\n  width: 100%;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  .eruda-dev-tools .eruda-nav-bar ul {\n    font-size: 0; }\n    .eruda-dev-tools .eruda-nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      .eruda-dev-tools .eruda-nav-bar ul li.eruda-active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-nav-bar {\n  height: 50px;\n  overflow-y: auto;\n  position: absolute;\n  width: 100%;\n  -webkit-overflow-scrolling: touch;\n  left: 0;\n  top: 0;\n  z-index: 100;\n  background: #76a2ee; }\n  .eruda-dev-tools .eruda-nav-bar ul {\n    font-size: 0; }\n    .eruda-dev-tools .eruda-nav-bar ul li {\n      display: inline-block;\n      height: 50px;\n      line-height: 50px;\n      width: 69px;\n      color: #f2f2f2;\n      font-size: 12px;\n      text-align: center;\n      opacity: 0.5;\n      text-transform: capitalize; }\n      .eruda-dev-tools .eruda-nav-bar ul li.eruda-active {\n        color: #fff;\n        opacity: 1;\n        border-bottom: 3px solid #fff; }\n", ""]);
 
 	// exports
 
@@ -5468,7 +5494,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px !important;\n  background: #fff;\n  z-index: 500;\n  display: none; }\n  .eruda-dev-tools.eruda-show {\n    display: block !important;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  .eruda-dev-tools.eruda-hide {\n    display: block !important;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  .eruda-dev-tools .eruda-tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto; }\n    .eruda-dev-tools .eruda-tools .eruda-tool {\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px !important;\n  background: #fff;\n  z-index: 500;\n  display: none;\n  -webkit-transform: translateZ(0);\n          transform: translateZ(0); }\n  .eruda-dev-tools.eruda-show {\n    display: block !important;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  .eruda-dev-tools.eruda-hide {\n    display: block !important;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  .eruda-dev-tools .eruda-tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch; }\n    .eruda-dev-tools .eruda-tools .eruda-tool {\n      -webkit-transform: translateZ(0);\n              transform: translateZ(0);\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
 
 	// exports
 
@@ -5902,7 +5928,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console .eruda-logs {\n  height: 100%;\n  overflow-x: hidden;\n  overflow-y: auto;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li {\n    padding: 10px;\n    overflow-x: auto; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li a {\n      color: #76a2ee !important; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-output {\n      border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th {\n        background: #76a2ee;\n        color: #fff; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table td {\n        padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error .eruda-stack {\n        color: #000;\n        padding-left: 1.2em; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console .eruda-logs {\n  -webkit-transform: translateZ(0);\n          transform: translateZ(0);\n  height: 100%;\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li {\n    padding: 10px;\n    overflow-x: auto; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li a {\n      color: #76a2ee !important; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-output {\n      border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th {\n        background: #76a2ee;\n        color: #fff; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table th, .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-log table td {\n        padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error {\n      background: #fff0f0;\n      color: #ff0000;\n      border-top: 1px solid #ffd7d7;\n      border-bottom: 1px solid #ffd7d7; }\n      .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-error .eruda-stack {\n        color: #000;\n        padding-left: 1.2em; }\n    .eruda-dev-tools .eruda-tools .eruda-console .eruda-logs li.eruda-warn {\n      background: #fffbe6;\n      border-top: 1px solid #fff5c2;\n      border-bottom: 1px solid #fff5c2; }\n", ""]);
 
 	// exports
 
@@ -6098,7 +6124,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(72);
+	__webpack_require__(52);
 
 	var Network = function (_Tool) {
 	    _inherits(Network, _Tool);
@@ -6111,7 +6137,7 @@ var eruda =
 	        _this.name = 'network';
 	        _this._performanceTimingData = [];
 
-	        _this._tpl = __webpack_require__(74);
+	        _this._tpl = __webpack_require__(54);
 	        return _this;
 	    }
 
@@ -6126,7 +6152,7 @@ var eruda =
 	                // SetTimeout is required to make sure timing data is initialized.
 	                setTimeout(function () {
 	                    _this2._getPerformanceTimingData();
-	                }, 3000);
+	                }, 1000);
 	            }, false);
 	        }
 	    }, {
@@ -6217,6 +6243,81 @@ var eruda =
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(53);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Network.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Network.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-network {\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing {\n    padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper {\n      background: #76a2ee; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar {\n        border-bottom: 1px solid #fff;\n        overflow-x: auto;\n        -webkit-overflow-scrolling: touch; }\n        .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar span {\n          font-size: 14px;\n          white-space: nowrap;\n          color: #fff;\n          padding: 5px 0;\n          background: #f73c37;\n          display: inline-block; }\n        .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar:last-child {\n          border-bottom: none; }\n  .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data {\n    padding: 0 10px 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table th {\n        background: #b4b4b4;\n        text-align: left;\n        color: #fff; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table th, .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table td {\n        padding: 10px;\n        font-size: 14px; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+	  return "            <div class=\"eruda-bar\">\r\n                <span style=\"position:relative;left:"
+	    + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
+	    + "%;width:"
+	    + alias4(((helper = (helper = helpers.len || (depth0 != null ? depth0.len : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"len","hash":{},"data":data}) : helper)))
+	    + "%\">"
+	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+	    + "("
+	    + alias4(((helper = (helper = helpers.duration || (depth0 != null ? depth0.duration : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"duration","hash":{},"data":data}) : helper)))
+	    + "ms)</span>\r\n            </div>\r\n";
+	},"3":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=container.escapeExpression;
+
+	  return "                <tr>\r\n                    <td>"
+	    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"key","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                    <td>"
+	    + alias1(container.lambda(depth0, depth0))
+	    + "</td>\r\n                </tr>\r\n";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, alias1=depth0 != null ? depth0 : {};
+
+	  return "<div class=\"eruda-performance-timing\">\r\n    <div class=\"eruda-inner-wrapper\">\r\n"
+	    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.data : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "    </div>\r\n</div>\r\n\r\n<div class=\"eruda-performance-timing-data\">\r\n    <table>\r\n        <thead>\r\n            <tr>\r\n                <th>Name</th>\r\n                <th>Time(ms)</th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n"
+	    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.timing : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "        </tbody>\r\n    </table>\r\n</div>";
+	},"useData":true});
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -6231,6 +6332,10 @@ var eruda =
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
+	var _CssStore = __webpack_require__(84);
+
+	var _CssStore2 = _interopRequireDefault(_CssStore);
+
 	var _util = __webpack_require__(2);
 
 	var _util2 = _interopRequireDefault(_util);
@@ -6243,7 +6348,90 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(80);
+	__webpack_require__(56);
+
+	function formatElName(tagName, id, className, attributes) {
+	    var ret = tagName.toLowerCase();
+
+	    if (id !== '') ret += '#' + id;
+
+	    _util2.default.each(className.split(/\s+/g), function (val) {
+	        if (_util2.default.trim(val) === '') return;
+
+	        ret += '.' + val;
+	    });
+
+	    _util2.default.each(attributes, function (attr) {
+	        var name = attr.name;
+
+	        if (name === 'id' || name === 'class' || name === 'style') return;
+
+	        ret += ' ' + name + '="' + attr.value + '"';
+	    });
+
+	    return ret;
+	}
+
+	function formatAttr(attributes) {
+	    var ret = [];
+
+	    for (var i = 0, len = attributes.length; i < len; i++) {
+	        var attr = attributes[i];
+	        ret.push({
+	            name: attr.name,
+	            value: attr.value
+	        });
+	    }
+
+	    return ret;
+	}
+
+	function formatChildren(children) {
+	    var ret = [];
+
+	    for (var i = 0, len = children.length; i < len; i++) {
+	        var child = children[i];
+	        if (child.id === 'eruda') break;
+	        ret.push(formatElName(child.tagName, child.id, child.className, child.attributes));
+	    }
+
+	    return ret;
+	}
+
+	function getAttrStyle(attribute) {
+	    var ret = {
+	        selectorText: 'element.style',
+	        style: {}
+	    };
+
+	    for (var i = 0, len = attribute.length; i < len; i++) {
+	        var attr = attribute[i];
+
+	        if (attr.name === 'style') {
+	            var elStyle = {},
+	                rules = attr.value.split(';');
+
+	            _util2.default.each(rules, function (rule) {
+	                rule = rule.split(':');
+	                elStyle[rule[0]] = rule[1];
+	            });
+
+	            ret.style = elStyle;
+
+	            break;
+	        }
+	    }
+
+	    return ret;
+	}
+
+	var noStyleTag = ['script', 'style', 'meta', 'title', 'link', 'head'];
+
+	function needNoStyle(tagName) {
+	    tagName = tagName.toLowerCase();
+
+	    return noStyleTag.indexOf(tagName) > -1;
+	}
 
 	var Elements = function (_Tool) {
 	    _inherits(Elements, _Tool);
@@ -6254,7 +6442,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Elements).call(this));
 
 	        _this.name = 'elements';
-	        _this._tpl = __webpack_require__(82);
+	        _this._tpl = __webpack_require__(58);
 	        return _this;
 	    }
 
@@ -6263,25 +6451,112 @@ var eruda =
 	        value: function init($el) {
 	            _get(Object.getPrototypeOf(Elements.prototype), 'init', this).call(this, $el);
 
-	            this._curEl = document.getElementsByTagName('html')[0];
+	            $el.html('<div class="eruda-show-area"></div>');
+	            this._$showArea = $el.find('.eruda-show-area');
+	            $el.append(__webpack_require__(85)());
+
+	            this._bindEvent();
+	            this._htmlEl = document.getElementsByTagName('html')[0];
+	            this._setEl(this._htmlEl, 0);
+	        }
+	    }, {
+	        key: 'show',
+	        value: function show() {
+	            _get(Object.getPrototypeOf(Elements.prototype), 'show', this).call(this);
+
+	            this._render();
+	        }
+	    }, {
+	        key: '_back',
+	        value: function _back() {
+	            if (this._curEl === this._htmlEl) return;
+
+	            var parent = this._curEl.parentNode;
+
+	            this._setEl(parent, this._curLevel - 1);
+	        }
+	    }, {
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            var _this2 = this;
+
+	            var self = this;
+
+	            this._$el.on('click', '.eruda-child', function () {
+	                var idx = _util2.default.$(this).data('idx');
+
+	                var el = self._curEl.children[idx],
+	                    level = self._curLevel + 1;
+
+	                self._setEl(el, level);
+	            });
+
+	            var $bottomBar = this._$el.find('.eruda-bottom-bar');
+
+	            $bottomBar.on('click', '.back', function () {
+	                return _this2._back();
+	            }).on('click', '.refresh', function () {
+	                return _this2._render();
+	            }).on('click', '.highlight', function () {
+	                return _this2._highlight();
+	            }).on('click', '.reset', function () {
+	                return _this2._setEl(_this2._htmlEl, 0);
+	            });
+	        }
+	    }, {
+	        key: '_highlight',
+	        value: function _highlight() {
+	            this._$curEl.toggleClass('eruda-highlight');
+
+	            this._render();
+	        }
+	    }, {
+	        key: '_setEl',
+	        value: function _setEl(el, level) {
+	            if (this._$curEl) this._$curEl.rmClass('eruda-highlight');
+
+	            this._curEl = el;
+	            this._$curEl = _util2.default.$(el);
+	            this._curLevel = level;
+	            this._curCssStore = new _CssStore2.default(el);
 
 	            this._render();
 	        }
 	    }, {
 	        key: '_getData',
 	        value: function _getData() {
-	            var el = this._curEl;
+	            var ret = {};
 
-	            console.dir(el);
+	            var el = this._curEl,
+	                cssStore = this._curCssStore;
 
-	            return {
-	                classList: el.classList
-	            };
+	            var className = el.className;
+	            var id = el.id;
+	            var children = el.children;
+	            var attributes = el.attributes;
+	            var textContent = el.textContent;
+	            var tagName = el.tagName;
+
+
+	            ret.children = formatChildren(children);
+	            ret.attributes = formatAttr(attributes);
+	            if (children.length === 0) ret.textContent = textContent;
+	            ret.name = formatElName(tagName, id, className, attributes) + '(' + this._curLevel + ')';
+
+	            if (needNoStyle(tagName)) return ret;
+
+	            ret.computedStyle = cssStore.getComputedStyle();
+
+	            var styles = cssStore.getMatchedCSSRules();
+	            styles.unshift(getAttrStyle(attributes));
+	            ret.styles = styles;
+
+	            return ret;
 	        }
 	    }, {
 	        key: '_render',
 	        value: function _render() {
-	            this._$el.html(this._tpl(this._getData()));
+	            this._$showArea.html(this._tpl(this._getData()));
 	        }
 	    }]);
 
@@ -6291,8 +6566,307 @@ var eruda =
 	exports.default = Elements;
 
 /***/ },
-/* 53 */,
-/* 54 */
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(57);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Elements.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Elements.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-elements {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-show-area {\n    overflow-y: auto;\n    -webkit-overflow-scrolling: touch;\n    height: 100%; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-breadcrumb {\n    background: #fff;\n    padding: 10px;\n    margin-bottom: 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-section {\n    margin-bottom: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-section h2 {\n      background: #76a2ee;\n      padding: 10px;\n      color: #fff;\n      font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-children {\n    background: #fff;\n    margin-bottom: 10px !important; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-children li {\n      padding: 10px;\n      overflow-x: auto;\n      -webkit-overflow-scrolling: touch;\n      border-top: 1px solid #b4b4b4; }\n      .eruda-dev-tools .eruda-tools .eruda-elements .eruda-children li:last-child {\n        border-bottom: 1px solid #b4b4b4; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-attributes {\n    background: #fff;\n    font-size: 12px; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-attributes .eruda-table-wrapper {\n      overflow-x: auto;\n      -webkit-overflow-scrolling: touch; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-attributes table td {\n      padding: 5px 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-text-content {\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-text-content .eruda-content {\n      padding: 10px;\n      overflow-x: auto;\n      -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-computed-style {\n    background: #fff;\n    font-size: 12px; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-computed-style .eruda-table-wrapper {\n      max-height: 200px;\n      overflow-y: auto;\n      -webkit-overflow-scrolling: touch; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-computed-style table td {\n      padding: 5px 10px; }\n      .eruda-dev-tools .eruda-tools .eruda-elements .eruda-computed-style table td.eruda-key {\n        color: #f73c37; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles {\n    background: #fff;\n    font-size: 12px; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles .eruda-style-wrapper {\n      padding: 10px; }\n      .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles .eruda-style-wrapper .eruda-style-rules {\n        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2);\n        border: 1px solid #b4b4b4;\n        padding: 10px;\n        background: #fff;\n        margin-bottom: 10px; }\n        .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles .eruda-style-wrapper .eruda-style-rules .eruda-rule {\n          padding-left: 2em; }\n          .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles .eruda-style-wrapper .eruda-style-rules .eruda-rule span {\n            color: #f73c37; }\n        .eruda-dev-tools .eruda-tools .eruda-elements .eruda-styles .eruda-style-wrapper .eruda-style-rules:last-child {\n          margin-bottom: 0; }\n  .eruda-dev-tools .eruda-tools .eruda-elements .eruda-bottom-bar {\n    height: 40px;\n    background: #fff;\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex; }\n    .eruda-dev-tools .eruda-tools .eruda-elements .eruda-bottom-bar .eruda-btn {\n      text-align: center;\n      color: #b4b4b4;\n      font-size: 14px;\n      line-height: 40px;\n      -webkit-box-flex: 1;\n      -webkit-flex-grow: 1;\n          -ms-flex-positive: 1;\n              flex-grow: 1; }\n      .eruda-dev-tools .eruda-tools .eruda-elements .eruda-bottom-bar .eruda-btn:active {\n        background: #76a2ee;\n        color: #fff; }\n\n.eruda-highlight {\n  background: #76a2ee !important;\n  border: 4px solid #8de191 !important; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return "    <ul class=\"eruda-children\">\r\n"
+	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.children : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "    </ul>\r\n";
+	},"2":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=container.escapeExpression;
+
+	  return "            <li class=\"eruda-child\" data-idx=\""
+	    + alias1(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"index","hash":{},"data":data}) : helper)))
+	    + "\">"
+	    + alias1(container.lambda(depth0, depth0))
+	    + "</li>\r\n";
+	},"4":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.attributes : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"5":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+	  return "                    <tr>\r\n                        <td>"
+	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                        <td>"
+	    + alias4(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                    </tr>\r\n";
+	},"7":function(container,depth0,helpers,partials,data) {
+	    return "                <tr>\r\n                    <td>Empty</td>\r\n                </tr>\r\n";
+	},"9":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return "    <div class=\"eruda-computed-style eruda-section\">\r\n        <h2>Computed Style</h2>\r\n        <div class=\"eruda-table-wrapper\">\r\n            <table>\r\n                <tbody>\r\n"
+	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.computedStyle : depth0),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n";
+	},"10":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=container.escapeExpression;
+
+	  return "                    <tr>\r\n                        <td class=\"eruda-key\">"
+	    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"key","hash":{},"data":data}) : helper)))
+	    + "</td>\r\n                        <td>"
+	    + alias1(container.lambda(depth0, depth0))
+	    + "</td>\r\n                    </tr>\r\n";
+	},"12":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return "    <div class=\"eruda-styles eruda-section\">\r\n        <h2>Styles</h2>\r\n        <div class=\"eruda-style-wrapper\">\r\n"
+	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.styles : depth0),{"name":"each","hash":{},"fn":container.program(13, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "        </div>\r\n    </div>\r\n";
+	},"13":function(container,depth0,helpers,partials,data) {
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {};
+
+	  return "                <div class=\"eruda-style-rules\">\r\n                    <div>"
+	    + container.escapeExpression(((helper = (helper = helpers.selectorText || (depth0 != null ? depth0.selectorText : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"selectorText","hash":{},"data":data}) : helper)))
+	    + " {</div>\r\n"
+	    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.style : depth0),{"name":"each","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "                    <div>}</div>\r\n                </div>\r\n";
+	},"14":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=container.escapeExpression;
+
+	  return "                        <div class=\"eruda-rule\">\r\n                            <span>"
+	    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"key","hash":{},"data":data}) : helper)))
+	    + "</span>: "
+	    + alias1(container.lambda(depth0, depth0))
+	    + ";\r\n                        </div>\r\n";
+	},"16":function(container,depth0,helpers,partials,data) {
+	    var helper;
+
+	  return "    <div class=\"eruda-text-content eruda-section\">\r\n        <h2>Text</h2>\r\n        <div class=\"eruda-content\">\r\n            "
+	    + container.escapeExpression(((helper = (helper = helpers.textContent || (depth0 != null ? depth0.textContent : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"textContent","hash":{},"data":data}) : helper)))
+	    + "\r\n        </div>\r\n    </div>\r\n";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {};
+
+	  return "<div class=\"eruda-breadcrumb\">\r\n    "
+	    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+	    + "\r\n</div>\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.children : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "<div class=\"eruda-attributes eruda-section\">\r\n    <h2>Attributes</h2>\r\n    <div class=\"eruda-table-wrapper\">\r\n        <table>\r\n            <tbody>\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.attributes : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(7, data, 0),"data":data})) != null ? stack1 : "")
+	    + "            </tbody>\r\n        </table>\r\n    </div>\r\n</div>\r\n"
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.computedStyle : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.styles : depth0),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.textContent : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"useData":true});
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _Tool2 = __webpack_require__(47);
+
+	var _Tool3 = _interopRequireDefault(_Tool2);
+
+	var _defSnippets = __webpack_require__(86);
+
+	var _defSnippets2 = _interopRequireDefault(_defSnippets);
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(60);
+
+	var Snippets = function (_Tool) {
+	    _inherits(Snippets, _Tool);
+
+	    function Snippets() {
+	        _classCallCheck(this, Snippets);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Snippets).call(this));
+
+	        _this.name = 'snippets';
+
+	        _this._snippets = [];
+	        _this._tpl = __webpack_require__(62);
+	        return _this;
+	    }
+
+	    _createClass(Snippets, [{
+	        key: 'init',
+	        value: function init($el) {
+	            _get(Object.getPrototypeOf(Snippets.prototype), 'init', this).call(this, $el);
+
+	            this._bindEvent();
+	            this._addDefSnippets();
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(name, fn, desc) {
+	            this._snippets.push({
+	                name: name,
+	                fn: fn,
+	                desc: desc
+	            });
+
+	            this._render();
+	        }
+	    }, {
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            var self = this;
+
+	            this._$el.on('click', '.run', function I() {
+	                var idx = _util2.default.$(this).data('idx');
+
+	                self._run(idx);
+	            });
+	        }
+	    }, {
+	        key: '_run',
+	        value: function _run(idx) {
+	            this._snippets[idx].fn.call(null);
+	        }
+	    }, {
+	        key: '_addDefSnippets',
+	        value: function _addDefSnippets() {
+	            var _this2 = this;
+
+	            _util2.default.each(_defSnippets2.default, function (snippet) {
+	                _this2.add(snippet.name, snippet.fn, snippet.desc);
+	            });
+	        }
+	    }, {
+	        key: '_render',
+	        value: function _render() {
+	            this._$el.html(this._tpl({
+	                snippets: this._snippets
+	            }));
+	        }
+	    }]);
+
+	    return Snippets;
+	}(_Tool3.default);
+
+	exports.default = Snippets;
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(61);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Snippets.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Snippets.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-snippets {\n  padding: 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section {\n    margin-bottom: 10px;\n    overflow: hidden;\n    border-radius: 4px;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2); }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn, .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-name {\n      padding: 10px;\n      color: #fff;\n      background: #b4b4b4;\n      font-size: 14px;\n      text-align: center; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn:active {\n      background: #f73c37; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-description {\n      background: #fff;\n      padding: 10px; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+	  return "    <div class=\"eruda-section\">\r\n        <h2 class=\"eruda-name\">"
+	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+	    + "</h2>\r\n        <div class=\"eruda-description\">\r\n            "
+	    + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
+	    + "\r\n        </div>\r\n        <div class=\"eruda-btn run\" data-idx=\""
+	    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+	    + "\" ontouchstart>Run</div>\r\n    </div>\r\n";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+
+	  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.snippets : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+	},"useData":true});
+
+/***/ },
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6321,7 +6895,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(55);
+	__webpack_require__(64);
 
 	function getState(type, len) {
 	    if (type === 'localStore' || len === 0) return '';
@@ -6360,7 +6934,7 @@ var eruda =
 	        _this._scriptData = [];
 	        _this._stylesheetData = [];
 	        _this._imageData = [];
-	        _this._tpl = __webpack_require__(57);
+	        _this._tpl = __webpack_require__(66);
 	        return _this;
 	    }
 
@@ -6550,13 +7124,13 @@ var eruda =
 	exports.default = Resources;
 
 /***/ },
-/* 55 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(56);
+	var content = __webpack_require__(65);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6576,7 +7150,7 @@ var eruda =
 	}
 
 /***/ },
-/* 56 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6584,13 +7158,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-resources {\n  padding: 10px;\n  font-size: 14px;\n  overflow-y: auto; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-section {\n    margin-bottom: 10px;\n    border-radius: 4px;\n    overflow: hidden; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title {\n    padding: 10px;\n    color: #fff;\n    background: #76a2ee;\n    font-size: 14px; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-ok {\n      background: #8de191; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-warn {\n      background: #fff5c2; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-danger {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title .eruda-btn {\n      float: right;\n      display: inline-block;\n      background: #fff;\n      color: #b4b4b4;\n      text-align: center;\n      width: 18px;\n      height: 18px;\n      line-height: 18px;\n      border-radius: 50%; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li {\n    padding: 10px;\n    background: #fff;\n    word-break: break-all; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li a {\n      color: #76a2ee !important; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list {\n    background: #fff;\n    padding: 10px !important; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li img {\n        width: 100%; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li.eruda-empty {\n        padding: 10px;\n        width: 100%; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td .eruda-delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-key {\n        white-space: nowrap; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-control {\n        width: 40px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-resources {\n  padding: 10px;\n  font-size: 14px;\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-section {\n    margin-bottom: 10px;\n    border-radius: 4px;\n    overflow: hidden;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2); }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title {\n    padding: 10px;\n    color: #fff;\n    background: #76a2ee;\n    font-size: 14px; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-ok {\n      background: #8de191; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-warn {\n      background: #fff5c2; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-danger {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title .eruda-btn {\n      float: right;\n      display: inline-block;\n      background: #fff;\n      color: #b4b4b4;\n      text-align: center;\n      width: 18px;\n      height: 18px;\n      line-height: 18px;\n      border-radius: 50%; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li {\n    padding: 10px;\n    background: #fff;\n    word-break: break-all; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li a {\n      color: #76a2ee !important; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list {\n    background: #fff;\n    padding: 10px !important; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li img {\n        width: 100%; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li.eruda-empty {\n        padding: 10px;\n        width: 100%; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td .eruda-delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-key {\n        white-space: nowrap; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-control {\n        width: 40px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 57 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6683,7 +7257,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 58 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6704,7 +7278,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _defInfo = __webpack_require__(59);
+	var _defInfo = __webpack_require__(68);
 
 	var _defInfo2 = _interopRequireDefault(_defInfo);
 
@@ -6716,7 +7290,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(60);
+	__webpack_require__(69);
 
 	var Info = function (_Tool) {
 	    _inherits(Info, _Tool);
@@ -6727,7 +7301,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Info).call(this));
 
 	        _this.name = 'info';
-	        _this._tpl = __webpack_require__(62);
+	        _this._tpl = __webpack_require__(71);
 	        _this._msgs = [];
 	        return _this;
 	    }
@@ -6775,7 +7349,7 @@ var eruda =
 	exports.default = Info;
 
 /***/ },
-/* 59 */
+/* 68 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6795,13 +7369,13 @@ var eruda =
 	}];
 
 /***/ },
-/* 60 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(61);
+	var content = __webpack_require__(70);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6821,7 +7395,7 @@ var eruda =
 	}
 
 /***/ },
-/* 61 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6829,13 +7403,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-info {\n  overflow-y: auto;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-info li {\n    overflow-x: auto;\n    border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title, .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      margin: 0; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title {\n      padding-bottom: 0;\n      font-size: 16px;\n      color: #76a2ee; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-info {\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch;\n  font-size: 14px; }\n  .eruda-dev-tools .eruda-tools .eruda-info li {\n    overflow-x: auto;\n    border-bottom: 1px solid #b4b4b4; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title, .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-content {\n      margin: 0; }\n    .eruda-dev-tools .eruda-tools .eruda-info li .eruda-title {\n      padding-bottom: 0;\n      font-size: 16px;\n      color: #76a2ee; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 62 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6856,7 +7430,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 63 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6877,7 +7451,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _modernizr = __webpack_require__(64);
+	var _modernizr = __webpack_require__(73);
 
 	var _modernizr2 = _interopRequireDefault(_modernizr);
 
@@ -6889,9 +7463,9 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(65);
+	__webpack_require__(74);
 
-	var featureList = __webpack_require__(67);
+	var featureList = __webpack_require__(76);
 
 	var featureNames = featureList['feature-detects'],
 	    specialNames = featureList['special-names'];
@@ -6905,7 +7479,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Features).call(this));
 
 	        _this.name = 'features';
-	        _this._tpl = __webpack_require__(68);
+	        _this._tpl = __webpack_require__(77);
 	        _this._features = {};
 	        return _this;
 	    }
@@ -6953,7 +7527,7 @@ var eruda =
 	exports.default = Features;
 
 /***/ },
-/* 64 */
+/* 73 */
 /***/ function(module, exports) {
 
 	/*!
@@ -9811,13 +10385,13 @@ var eruda =
 	module.exports = Modernizr;
 
 /***/ },
-/* 65 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(66);
+	var content = __webpack_require__(75);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -9837,7 +10411,7 @@ var eruda =
 	}
 
 /***/ },
-/* 66 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -9845,13 +10419,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-features {\n  overflow-y: auto; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul li {\n    width: 50%;\n    float: left;\n    padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper {\n      font-size: 14px;\n      text-decoration: underline;\n      color: #fff;\n      display: block;\n      padding: 10px;\n      border-radius: 4px;\n      text-align: center;\n      background: #eda29b; }\n      .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper.eruda-ok {\n        background: #fff;\n        color: #b4b4b4; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul::after {\n    display: block;\n    content: '';\n    clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-features .eruda-html5test {\n    color: #fff;\n    background: #76a2ee;\n    display: block;\n    padding: 10px;\n    text-decoration: none;\n    text-align: center;\n    margin-top: 10px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-features {\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul li {\n    width: 50%;\n    float: left;\n    padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper {\n      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2);\n      font-size: 14px;\n      text-decoration: underline;\n      color: #fff;\n      display: block;\n      padding: 10px;\n      border-radius: 4px;\n      text-align: center;\n      background: #eda29b; }\n      .eruda-dev-tools .eruda-tools .eruda-features ul li .eruda-inner-wrapper.eruda-ok {\n        background: #fff;\n        color: #b4b4b4; }\n  .eruda-dev-tools .eruda-tools .eruda-features ul::after {\n    display: block;\n    content: '';\n    clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-features .eruda-html5test {\n    color: #fff;\n    background: #76a2ee;\n    display: block;\n    padding: 10px;\n    text-decoration: none;\n    text-align: center;\n    margin-top: 10px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 67 */
+/* 76 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9926,7 +10500,7 @@ var eruda =
 	};
 
 /***/ },
-/* 68 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -9951,7 +10525,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 69 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9976,7 +10550,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(83);
+	__webpack_require__(79);
 
 	var Settings = function (_Tool) {
 	    _inherits(Settings, _Tool);
@@ -9988,7 +10562,7 @@ var eruda =
 
 	        _this.name = 'settings';
 
-	        _this._tpl = __webpack_require__(85);
+	        _this._tpl = __webpack_require__(81);
 	        return _this;
 	    }
 
@@ -10005,301 +10579,13 @@ var eruda =
 	exports.default = Settings;
 
 /***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(71);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(11)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(10)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100000;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all; }\n  #eruda ul {\n    list-style: none;\n    padding: 0;\n    margin: 0; }\n  #eruda h1, #eruda h2, #eruda h3, #eruda h4 {\n    margin: 0; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 72 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(73);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(11)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Network.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Network.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 73 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(10)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-network {\n  overflow-y: auto; }\n  .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing {\n    padding: 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper {\n      background: #76a2ee; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar {\n        border-bottom: 1px solid #fff;\n        overflow-x: auto; }\n        .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar span {\n          font-size: 14px;\n          white-space: nowrap;\n          color: #fff;\n          padding: 5px 0;\n          background: #f73c37;\n          display: inline-block; }\n        .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing .eruda-inner-wrapper .eruda-bar.eruda-last {\n          border-bottom: none; }\n  .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data {\n    padding: 0 10px 10px; }\n    .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table {\n      width: 100%;\n      background: #fff;\n      border-collapse: collapse; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table th {\n        background: #b4b4b4;\n        text-align: left;\n        color: #fff; }\n      .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table th, .eruda-dev-tools .eruda-tools .eruda-network .eruda-performance-timing-data table td {\n        padding: 10px;\n        font-size: 14px; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 74 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Handlebars = __webpack_require__(13);
-	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
-	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-	  return "            <div class=\"eruda-bar "
-	    + ((stack1 = helpers["if"].call(alias1,(data && data.last),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "\">\r\n                <span style=\"position:relative;left:"
-	    + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
-	    + "%;width:"
-	    + alias4(((helper = (helper = helpers.len || (depth0 != null ? depth0.len : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"len","hash":{},"data":data}) : helper)))
-	    + "%\">"
-	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-	    + "("
-	    + alias4(((helper = (helper = helpers.duration || (depth0 != null ? depth0.duration : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"duration","hash":{},"data":data}) : helper)))
-	    + "ms)</span>\r\n            </div>\r\n";
-	},"2":function(container,depth0,helpers,partials,data) {
-	    return "eruda-last";
-	},"4":function(container,depth0,helpers,partials,data) {
-	    var helper, alias1=container.escapeExpression;
-
-	  return "                <tr>\r\n                    <td>"
-	    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"key","hash":{},"data":data}) : helper)))
-	    + "</td>\r\n                    <td>"
-	    + alias1(container.lambda(depth0, depth0))
-	    + "</td>\r\n                </tr>\r\n";
-	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    var stack1, alias1=depth0 != null ? depth0 : {};
-
-	  return "<div class=\"eruda-performance-timing\">\r\n    <div class=\"eruda-inner-wrapper\">\r\n"
-	    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.data : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "    </div>\r\n</div>\r\n\r\n<div class=\"eruda-performance-timing-data\">\r\n    <table>\r\n        <thead>\r\n            <tr>\r\n                <th>Name</th>\r\n                <th>Time(ms)</th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n"
-	    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.timing : depth0),{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "        </tbody>\r\n    </table>\r\n</div>";
-	},"useData":true});
-
-/***/ },
-/* 75 */,
-/* 76 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-	var _Tool2 = __webpack_require__(47);
-
-	var _Tool3 = _interopRequireDefault(_Tool2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	__webpack_require__(77);
-
-	var Snippets = function (_Tool) {
-	    _inherits(Snippets, _Tool);
-
-	    function Snippets() {
-	        _classCallCheck(this, Snippets);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Snippets).call(this));
-
-	        _this.name = 'Snippets';
-
-	        _this._snippets = [];
-	        _this._tpl = __webpack_require__(79);
-	        return _this;
-	    }
-
-	    _createClass(Snippets, [{
-	        key: 'init',
-	        value: function init($el) {
-	            _get(Object.getPrototypeOf(Snippets.prototype), 'init', this).call(this, $el);
-
-	            this._render();
-	        }
-	    }, {
-	        key: 'add',
-	        value: function add(name, fn) {
-	            this._snippets.push({
-	                name: name,
-	                fn: fn,
-	                result: ''
-	            });
-
-	            this._render();
-	        }
-	    }, {
-	        key: '_render',
-	        value: function _render() {
-	            this._$el.html(this._tpl());
-	        }
-	    }]);
-
-	    return Snippets;
-	}(_Tool3.default);
-
-	exports.default = Snippets;
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(78);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(11)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Snippets.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Snippets.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(10)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "", ""]);
-
-	// exports
-
-
-/***/ },
 /* 79 */
-/***/ function(module, exports) {
-
-	module.exports = function(){return "";};
-
-/***/ },
-/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(81);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(11)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Elements.scss", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./../../node_modules/sass-loader/index.js!./Elements.scss");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(10)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "", ""]);
-
-	// exports
-
-
-/***/ },
-/* 82 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Handlebars = __webpack_require__(13);
-	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    return "<div>Test</div>";
-	},"useData":true});
-
-/***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(84);
+	var content = __webpack_require__(80);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -10319,7 +10605,7 @@ var eruda =
 	}
 
 /***/ },
-/* 84 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -10333,10 +10619,1013 @@ var eruda =
 
 
 /***/ },
-/* 85 */
+/* 81 */
 /***/ function(module, exports) {
 
 	module.exports = function(){return "";};
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(83);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(11)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./style.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 83 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(10)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "#eruda {\n  pointer-events: none;\n  position: fixed;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 100000;\n  -webkit-transform: translateZ(0);\n          transform: translateZ(0);\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }\n  #eruda * {\n    box-sizing: border-box;\n    pointer-events: all; }\n  #eruda ul {\n    list-style: none;\n    padding: 0;\n    margin: 0; }\n  #eruda h1, #eruda h2, #eruda h3, #eruda h4 {\n    margin: 0; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function formatStyle(style) {
+	    var ret = {};
+
+	    for (var i = 0, len = style.length; i < len; i++) {
+	        var name = style[i];
+
+	        if (style[name] === 'initial') continue;
+
+	        ret[name] = style[name];
+	    }
+
+	    return ret;
+	}
+
+	var CssStore = function () {
+	    function CssStore(el) {
+	        _classCallCheck(this, CssStore);
+
+	        this._el = el;
+	    }
+
+	    _createClass(CssStore, [{
+	        key: 'getComputedStyle',
+	        value: function getComputedStyle() {
+	            var computedStyle = window.getComputedStyle(this._el);
+
+	            return formatStyle(computedStyle);
+	        }
+	    }, {
+	        key: 'getMatchedCSSRules',
+	        value: function getMatchedCSSRules() {
+	            var _this = this;
+
+	            var ret = [];
+
+	            _util2.default.each(document.styleSheets, function (styleSheet) {
+	                _util2.default.each(styleSheet.cssRules, function (cssRule) {
+	                    if (!_this._elMatchesSel(cssRule.selectorText)) return;
+
+	                    ret.push({
+	                        selectorText: cssRule.selectorText,
+	                        style: formatStyle(cssRule.style)
+	                    });
+	                });
+	            });
+
+	            return ret;
+	        }
+	    }, {
+	        key: '_elMatchesSel',
+	        value: function _elMatchesSel(selText) {
+	            return this._el.webkitMatchesSelector(selText);
+	        }
+	    }]);
+
+	    return CssStore;
+	}();
+
+	exports.default = CssStore;
+	;
+
+/***/ },
+/* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    return "<div class=\"eruda-bottom-bar\">\r\n    <div class=\"eruda-btn back\" ontouchstart>Back</div>\r\n    <div class=\"eruda-btn refresh\" ontouchstart>Refresh</div>\r\n    <div class=\"eruda-btn highlight\" ontouchstart>Highlight</div>\r\n    <div class=\"eruda-btn reset\" ontouchstart>Reset</div>\r\n</div>";
+	},"useData":true});
+
+/***/ },
+/* 86 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var borderCss = 'html>* {border: 2px solid #f5f5f5 !important}' + 'html>*>* {border: 2px solid #dabb3a !important}' + 'html>*>*>* {border: 2px solid #abc1c7 !important}' + 'html>*>*>*>* {border: 2px solid #472936 !important}' + 'html>*>*>*>*>* {border: 2px solid #c84941 !important}' + 'html>*>*>*>*>*>* {border: 2px solid #296dd1 !important}' + 'html>*>*>*>*>*>*>* {border: 2px solid #67adb4 !important}' + 'html>*>*>*>*>*>*>*>* {border: 2px solid #1ea061 !important}';
+
+	exports.default = [{
+	    name: 'Border All',
+	    fn: function fn() {
+	        _util2.default.evalCss(borderCss);
+	    },
+	    desc: 'Add color borders to all elements'
+	}];
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
+		'use strict';
+
+		/**
+		 * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
+		 *
+		 * @codingstandard ftlabs-jsv2
+		 * @copyright The Financial Times Limited [All Rights Reserved]
+		 * @license MIT License (see LICENSE.txt)
+		 */
+
+		/*jslint browser:true, node:true*/
+		/*global define, Event, Node*/
+
+
+		/**
+		 * Instantiate fast-clicking listeners on the specified layer.
+		 *
+		 * @constructor
+		 * @param {Element} layer The layer to listen on
+		 * @param {Object} [options={}] The options to override the defaults
+		 */
+		function FastClick(layer, options) {
+			var oldOnClick;
+
+			options = options || {};
+
+			/**
+			 * Whether a click is currently being tracked.
+			 *
+			 * @type boolean
+			 */
+			this.trackingClick = false;
+
+
+			/**
+			 * Timestamp for when click tracking started.
+			 *
+			 * @type number
+			 */
+			this.trackingClickStart = 0;
+
+
+			/**
+			 * The element being tracked for a click.
+			 *
+			 * @type EventTarget
+			 */
+			this.targetElement = null;
+
+
+			/**
+			 * X-coordinate of touch start event.
+			 *
+			 * @type number
+			 */
+			this.touchStartX = 0;
+
+
+			/**
+			 * Y-coordinate of touch start event.
+			 *
+			 * @type number
+			 */
+			this.touchStartY = 0;
+
+
+			/**
+			 * ID of the last touch, retrieved from Touch.identifier.
+			 *
+			 * @type number
+			 */
+			this.lastTouchIdentifier = 0;
+
+
+			/**
+			 * Touchmove boundary, beyond which a click will be cancelled.
+			 *
+			 * @type number
+			 */
+			this.touchBoundary = options.touchBoundary || 10;
+
+
+			/**
+			 * The FastClick layer.
+			 *
+			 * @type Element
+			 */
+			this.layer = layer;
+
+			/**
+			 * The minimum time between tap(touchstart and touchend) events
+			 *
+			 * @type number
+			 */
+			this.tapDelay = options.tapDelay || 200;
+
+			/**
+			 * The maximum time for a tap
+			 *
+			 * @type number
+			 */
+			this.tapTimeout = options.tapTimeout || 700;
+
+			if (FastClick.notNeeded(layer)) {
+				return;
+			}
+
+			// Some old versions of Android don't have Function.prototype.bind
+			function bind(method, context) {
+				return function() { return method.apply(context, arguments); };
+			}
+
+
+			var methods = ['onMouse', 'onClick', 'onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel'];
+			var context = this;
+			for (var i = 0, l = methods.length; i < l; i++) {
+				context[methods[i]] = bind(context[methods[i]], context);
+			}
+
+			// Set up event handlers as required
+			if (deviceIsAndroid) {
+				layer.addEventListener('mouseover', this.onMouse, true);
+				layer.addEventListener('mousedown', this.onMouse, true);
+				layer.addEventListener('mouseup', this.onMouse, true);
+			}
+
+			layer.addEventListener('click', this.onClick, true);
+			layer.addEventListener('touchstart', this.onTouchStart, false);
+			layer.addEventListener('touchmove', this.onTouchMove, false);
+			layer.addEventListener('touchend', this.onTouchEnd, false);
+			layer.addEventListener('touchcancel', this.onTouchCancel, false);
+
+			// Hack is required for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
+			// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
+			// layer when they are cancelled.
+			if (!Event.prototype.stopImmediatePropagation) {
+				layer.removeEventListener = function(type, callback, capture) {
+					var rmv = Node.prototype.removeEventListener;
+					if (type === 'click') {
+						rmv.call(layer, type, callback.hijacked || callback, capture);
+					} else {
+						rmv.call(layer, type, callback, capture);
+					}
+				};
+
+				layer.addEventListener = function(type, callback, capture) {
+					var adv = Node.prototype.addEventListener;
+					if (type === 'click') {
+						adv.call(layer, type, callback.hijacked || (callback.hijacked = function(event) {
+							if (!event.propagationStopped) {
+								callback(event);
+							}
+						}), capture);
+					} else {
+						adv.call(layer, type, callback, capture);
+					}
+				};
+			}
+
+			// If a handler is already declared in the element's onclick attribute, it will be fired before
+			// FastClick's onClick handler. Fix this by pulling out the user-defined handler function and
+			// adding it as listener.
+			if (typeof layer.onclick === 'function') {
+
+				// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
+				// - the old one won't work if passed to addEventListener directly.
+				oldOnClick = layer.onclick;
+				layer.addEventListener('click', function(event) {
+					oldOnClick(event);
+				}, false);
+				layer.onclick = null;
+			}
+		}
+
+		/**
+		* Windows Phone 8.1 fakes user agent string to look like Android and iPhone.
+		*
+		* @type boolean
+		*/
+		var deviceIsWindowsPhone = navigator.userAgent.indexOf("Windows Phone") >= 0;
+
+		/**
+		 * Android requires exceptions.
+		 *
+		 * @type boolean
+		 */
+		var deviceIsAndroid = navigator.userAgent.indexOf('Android') > 0 && !deviceIsWindowsPhone;
+
+
+		/**
+		 * iOS requires exceptions.
+		 *
+		 * @type boolean
+		 */
+		var deviceIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !deviceIsWindowsPhone;
+
+
+		/**
+		 * iOS 4 requires an exception for select elements.
+		 *
+		 * @type boolean
+		 */
+		var deviceIsIOS4 = deviceIsIOS && (/OS 4_\d(_\d)?/).test(navigator.userAgent);
+
+
+		/**
+		 * iOS 6.0-7.* requires the target element to be manually derived
+		 *
+		 * @type boolean
+		 */
+		var deviceIsIOSWithBadTarget = deviceIsIOS && (/OS [6-7]_\d/).test(navigator.userAgent);
+
+		/**
+		 * BlackBerry requires exceptions.
+		 *
+		 * @type boolean
+		 */
+		var deviceIsBlackBerry10 = navigator.userAgent.indexOf('BB10') > 0;
+
+		/**
+		 * Determine whether a given element requires a native click.
+		 *
+		 * @param {EventTarget|Element} target Target DOM element
+		 * @returns {boolean} Returns true if the element needs a native click
+		 */
+		FastClick.prototype.needsClick = function(target) {
+			switch (target.nodeName.toLowerCase()) {
+
+			// Don't send a synthetic click to disabled inputs (issue #62)
+			case 'button':
+			case 'select':
+			case 'textarea':
+				if (target.disabled) {
+					return true;
+				}
+
+				break;
+			case 'input':
+
+				// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
+				if ((deviceIsIOS && target.type === 'file') || target.disabled) {
+					return true;
+				}
+
+				break;
+			case 'label':
+			case 'iframe': // iOS8 homescreen apps can prevent events bubbling into frames
+			case 'video':
+				return true;
+			}
+
+			return (/\bneedsclick\b/).test(target.className);
+		};
+
+
+		/**
+		 * Determine whether a given element requires a call to focus to simulate click into element.
+		 *
+		 * @param {EventTarget|Element} target Target DOM element
+		 * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
+		 */
+		FastClick.prototype.needsFocus = function(target) {
+			switch (target.nodeName.toLowerCase()) {
+			case 'textarea':
+				return true;
+			case 'select':
+				return !deviceIsAndroid;
+			case 'input':
+				switch (target.type) {
+				case 'button':
+				case 'checkbox':
+				case 'file':
+				case 'image':
+				case 'radio':
+				case 'submit':
+					return false;
+				}
+
+				// No point in attempting to focus disabled inputs
+				return !target.disabled && !target.readOnly;
+			default:
+				return (/\bneedsfocus\b/).test(target.className);
+			}
+		};
+
+
+		/**
+		 * Send a click event to the specified element.
+		 *
+		 * @param {EventTarget|Element} targetElement
+		 * @param {Event} event
+		 */
+		FastClick.prototype.sendClick = function(targetElement, event) {
+			var clickEvent, touch;
+
+			// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
+			if (document.activeElement && document.activeElement !== targetElement) {
+				document.activeElement.blur();
+			}
+
+			touch = event.changedTouches[0];
+
+			// Synthesise a click event, with an extra attribute so it can be tracked
+			clickEvent = document.createEvent('MouseEvents');
+			clickEvent.initMouseEvent(this.determineEventType(targetElement), true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
+			clickEvent.forwardedTouchEvent = true;
+			targetElement.dispatchEvent(clickEvent);
+		};
+
+		FastClick.prototype.determineEventType = function(targetElement) {
+
+			//Issue #159: Android Chrome Select Box does not open with a synthetic click event
+			if (deviceIsAndroid && targetElement.tagName.toLowerCase() === 'select') {
+				return 'mousedown';
+			}
+
+			return 'click';
+		};
+
+
+		/**
+		 * @param {EventTarget|Element} targetElement
+		 */
+		FastClick.prototype.focus = function(targetElement) {
+			var length;
+
+			// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
+			if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
+				length = targetElement.value.length;
+				targetElement.setSelectionRange(length, length);
+			} else {
+				targetElement.focus();
+			}
+		};
+
+
+		/**
+		 * Check whether the given target element is a child of a scrollable layer and if so, set a flag on it.
+		 *
+		 * @param {EventTarget|Element} targetElement
+		 */
+		FastClick.prototype.updateScrollParent = function(targetElement) {
+			var scrollParent, parentElement;
+
+			scrollParent = targetElement.fastClickScrollParent;
+
+			// Attempt to discover whether the target element is contained within a scrollable layer. Re-check if the
+			// target element was moved to another parent.
+			if (!scrollParent || !scrollParent.contains(targetElement)) {
+				parentElement = targetElement;
+				do {
+					if (parentElement.scrollHeight > parentElement.offsetHeight) {
+						scrollParent = parentElement;
+						targetElement.fastClickScrollParent = parentElement;
+						break;
+					}
+
+					parentElement = parentElement.parentElement;
+				} while (parentElement);
+			}
+
+			// Always update the scroll top tracker if possible.
+			if (scrollParent) {
+				scrollParent.fastClickLastScrollTop = scrollParent.scrollTop;
+			}
+		};
+
+
+		/**
+		 * @param {EventTarget} targetElement
+		 * @returns {Element|EventTarget}
+		 */
+		FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
+
+			// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
+			if (eventTarget.nodeType === Node.TEXT_NODE) {
+				return eventTarget.parentNode;
+			}
+
+			return eventTarget;
+		};
+
+
+		/**
+		 * On touch start, record the position and scroll offset.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.onTouchStart = function(event) {
+			var targetElement, touch, selection;
+
+			// Ignore multiple touches, otherwise pinch-to-zoom is prevented if both fingers are on the FastClick element (issue #111).
+			if (event.targetTouches.length > 1) {
+				return true;
+			}
+
+			targetElement = this.getTargetElementFromEventTarget(event.target);
+			touch = event.targetTouches[0];
+
+			if (deviceIsIOS) {
+
+				// Only trusted events will deselect text on iOS (issue #49)
+				selection = window.getSelection();
+				if (selection.rangeCount && !selection.isCollapsed) {
+					return true;
+				}
+
+				if (!deviceIsIOS4) {
+
+					// Weird things happen on iOS when an alert or confirm dialog is opened from a click event callback (issue #23):
+					// when the user next taps anywhere else on the page, new touchstart and touchend events are dispatched
+					// with the same identifier as the touch event that previously triggered the click that triggered the alert.
+					// Sadly, there is an issue on iOS 4 that causes some normal touch events to have the same identifier as an
+					// immediately preceeding touch event (issue #52), so this fix is unavailable on that platform.
+					// Issue 120: touch.identifier is 0 when Chrome dev tools 'Emulate touch events' is set with an iOS device UA string,
+					// which causes all touch events to be ignored. As this block only applies to iOS, and iOS identifiers are always long,
+					// random integers, it's safe to to continue if the identifier is 0 here.
+					if (touch.identifier && touch.identifier === this.lastTouchIdentifier) {
+						event.preventDefault();
+						return false;
+					}
+
+					this.lastTouchIdentifier = touch.identifier;
+
+					// If the target element is a child of a scrollable layer (using -webkit-overflow-scrolling: touch) and:
+					// 1) the user does a fling scroll on the scrollable layer
+					// 2) the user stops the fling scroll with another tap
+					// then the event.target of the last 'touchend' event will be the element that was under the user's finger
+					// when the fling scroll was started, causing FastClick to send a click event to that layer - unless a check
+					// is made to ensure that a parent layer was not scrolled before sending a synthetic click (issue #42).
+					this.updateScrollParent(targetElement);
+				}
+			}
+
+			this.trackingClick = true;
+			this.trackingClickStart = event.timeStamp;
+			this.targetElement = targetElement;
+
+			this.touchStartX = touch.pageX;
+			this.touchStartY = touch.pageY;
+
+			// Prevent phantom clicks on fast double-tap (issue #36)
+			if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
+				event.preventDefault();
+			}
+
+			return true;
+		};
+
+
+		/**
+		 * Based on a touchmove event object, check whether the touch has moved past a boundary since it started.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.touchHasMoved = function(event) {
+			var touch = event.changedTouches[0], boundary = this.touchBoundary;
+
+			if (Math.abs(touch.pageX - this.touchStartX) > boundary || Math.abs(touch.pageY - this.touchStartY) > boundary) {
+				return true;
+			}
+
+			return false;
+		};
+
+
+		/**
+		 * Update the last position.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.onTouchMove = function(event) {
+			if (!this.trackingClick) {
+				return true;
+			}
+
+			// If the touch has moved, cancel the click tracking
+			if (this.targetElement !== this.getTargetElementFromEventTarget(event.target) || this.touchHasMoved(event)) {
+				this.trackingClick = false;
+				this.targetElement = null;
+			}
+
+			return true;
+		};
+
+
+		/**
+		 * Attempt to find the labelled control for the given label element.
+		 *
+		 * @param {EventTarget|HTMLLabelElement} labelElement
+		 * @returns {Element|null}
+		 */
+		FastClick.prototype.findControl = function(labelElement) {
+
+			// Fast path for newer browsers supporting the HTML5 control attribute
+			if (labelElement.control !== undefined) {
+				return labelElement.control;
+			}
+
+			// All browsers under test that support touch events also support the HTML5 htmlFor attribute
+			if (labelElement.htmlFor) {
+				return document.getElementById(labelElement.htmlFor);
+			}
+
+			// If no for attribute exists, attempt to retrieve the first labellable descendant element
+			// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
+			return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
+		};
+
+
+		/**
+		 * On touch end, determine whether to send a click event at once.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.onTouchEnd = function(event) {
+			var forElement, trackingClickStart, targetTagName, scrollParent, touch, targetElement = this.targetElement;
+
+			if (!this.trackingClick) {
+				return true;
+			}
+
+			// Prevent phantom clicks on fast double-tap (issue #36)
+			if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
+				this.cancelNextClick = true;
+				return true;
+			}
+
+			if ((event.timeStamp - this.trackingClickStart) > this.tapTimeout) {
+				return true;
+			}
+
+			// Reset to prevent wrong click cancel on input (issue #156).
+			this.cancelNextClick = false;
+
+			this.lastClickTime = event.timeStamp;
+
+			trackingClickStart = this.trackingClickStart;
+			this.trackingClick = false;
+			this.trackingClickStart = 0;
+
+			// On some iOS devices, the targetElement supplied with the event is invalid if the layer
+			// is performing a transition or scroll, and has to be re-detected manually. Note that
+			// for this to function correctly, it must be called *after* the event target is checked!
+			// See issue #57; also filed as rdar://13048589 .
+			if (deviceIsIOSWithBadTarget) {
+				touch = event.changedTouches[0];
+
+				// In certain cases arguments of elementFromPoint can be negative, so prevent setting targetElement to null
+				targetElement = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset) || targetElement;
+				targetElement.fastClickScrollParent = this.targetElement.fastClickScrollParent;
+			}
+
+			targetTagName = targetElement.tagName.toLowerCase();
+			if (targetTagName === 'label') {
+				forElement = this.findControl(targetElement);
+				if (forElement) {
+					this.focus(targetElement);
+					if (deviceIsAndroid) {
+						return false;
+					}
+
+					targetElement = forElement;
+				}
+			} else if (this.needsFocus(targetElement)) {
+
+				// Case 1: If the touch started a while ago (best guess is 100ms based on tests for issue #36) then focus will be triggered anyway. Return early and unset the target element reference so that the subsequent click will be allowed through.
+				// Case 2: Without this exception for input elements tapped when the document is contained in an iframe, then any inputted text won't be visible even though the value attribute is updated as the user types (issue #37).
+				if ((event.timeStamp - trackingClickStart) > 100 || (deviceIsIOS && window.top !== window && targetTagName === 'input')) {
+					this.targetElement = null;
+					return false;
+				}
+
+				this.focus(targetElement);
+				this.sendClick(targetElement, event);
+
+				// Select elements need the event to go through on iOS 4, otherwise the selector menu won't open.
+				// Also this breaks opening selects when VoiceOver is active on iOS6, iOS7 (and possibly others)
+				if (!deviceIsIOS || targetTagName !== 'select') {
+					this.targetElement = null;
+					event.preventDefault();
+				}
+
+				return false;
+			}
+
+			if (deviceIsIOS && !deviceIsIOS4) {
+
+				// Don't send a synthetic click event if the target element is contained within a parent layer that was scrolled
+				// and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
+				scrollParent = targetElement.fastClickScrollParent;
+				if (scrollParent && scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
+					return true;
+				}
+			}
+
+			// Prevent the actual click from going though - unless the target node is marked as requiring
+			// real clicks or if it is in the whitelist in which case only non-programmatic clicks are permitted.
+			if (!this.needsClick(targetElement)) {
+				event.preventDefault();
+				this.sendClick(targetElement, event);
+			}
+
+			return false;
+		};
+
+
+		/**
+		 * On touch cancel, stop tracking the click.
+		 *
+		 * @returns {void}
+		 */
+		FastClick.prototype.onTouchCancel = function() {
+			this.trackingClick = false;
+			this.targetElement = null;
+		};
+
+
+		/**
+		 * Determine mouse events which should be permitted.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.onMouse = function(event) {
+
+			// If a target element was never set (because a touch event was never fired) allow the event
+			if (!this.targetElement) {
+				return true;
+			}
+
+			if (event.forwardedTouchEvent) {
+				return true;
+			}
+
+			// Programmatically generated events targeting a specific element should be permitted
+			if (!event.cancelable) {
+				return true;
+			}
+
+			// Derive and check the target element to see whether the mouse event needs to be permitted;
+			// unless explicitly enabled, prevent non-touch click events from triggering actions,
+			// to prevent ghost/doubleclicks.
+			if (!this.needsClick(this.targetElement) || this.cancelNextClick) {
+
+				// Prevent any user-added listeners declared on FastClick element from being fired.
+				if (event.stopImmediatePropagation) {
+					event.stopImmediatePropagation();
+				} else {
+
+					// Part of the hack for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
+					event.propagationStopped = true;
+				}
+
+				// Cancel the event
+				event.stopPropagation();
+				event.preventDefault();
+
+				return false;
+			}
+
+			// If the mouse event is permitted, return true for the action to go through.
+			return true;
+		};
+
+
+		/**
+		 * On actual clicks, determine whether this is a touch-generated click, a click action occurring
+		 * naturally after a delay after a touch (which needs to be cancelled to avoid duplication), or
+		 * an actual click which should be permitted.
+		 *
+		 * @param {Event} event
+		 * @returns {boolean}
+		 */
+		FastClick.prototype.onClick = function(event) {
+			var permitted;
+
+			// It's possible for another FastClick-like library delivered with third-party code to fire a click event before FastClick does (issue #44). In that case, set the click-tracking flag back to false and return early. This will cause onTouchEnd to return early.
+			if (this.trackingClick) {
+				this.targetElement = null;
+				this.trackingClick = false;
+				return true;
+			}
+
+			// Very odd behaviour on iOS (issue #18): if a submit element is present inside a form and the user hits enter in the iOS simulator or clicks the Go button on the pop-up OS keyboard the a kind of 'fake' click event will be triggered with the submit-type input element as the target.
+			if (event.target.type === 'submit' && event.detail === 0) {
+				return true;
+			}
+
+			permitted = this.onMouse(event);
+
+			// Only unset targetElement if the click is not permitted. This will ensure that the check for !targetElement in onMouse fails and the browser's click doesn't go through.
+			if (!permitted) {
+				this.targetElement = null;
+			}
+
+			// If clicks are permitted, return true for the action to go through.
+			return permitted;
+		};
+
+
+		/**
+		 * Remove all FastClick's event listeners.
+		 *
+		 * @returns {void}
+		 */
+		FastClick.prototype.destroy = function() {
+			var layer = this.layer;
+
+			if (deviceIsAndroid) {
+				layer.removeEventListener('mouseover', this.onMouse, true);
+				layer.removeEventListener('mousedown', this.onMouse, true);
+				layer.removeEventListener('mouseup', this.onMouse, true);
+			}
+
+			layer.removeEventListener('click', this.onClick, true);
+			layer.removeEventListener('touchstart', this.onTouchStart, false);
+			layer.removeEventListener('touchmove', this.onTouchMove, false);
+			layer.removeEventListener('touchend', this.onTouchEnd, false);
+			layer.removeEventListener('touchcancel', this.onTouchCancel, false);
+		};
+
+
+		/**
+		 * Check whether FastClick is needed.
+		 *
+		 * @param {Element} layer The layer to listen on
+		 */
+		FastClick.notNeeded = function(layer) {
+			var metaViewport;
+			var chromeVersion;
+			var blackberryVersion;
+			var firefoxVersion;
+
+			// Devices that don't support touch don't need FastClick
+			if (typeof window.ontouchstart === 'undefined') {
+				return true;
+			}
+
+			// Chrome version - zero for other browsers
+			chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
+
+			if (chromeVersion) {
+
+				if (deviceIsAndroid) {
+					metaViewport = document.querySelector('meta[name=viewport]');
+
+					if (metaViewport) {
+						// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
+						if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
+							return true;
+						}
+						// Chrome 32 and above with width=device-width or less don't need FastClick
+						if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
+							return true;
+						}
+					}
+
+				// Chrome desktop doesn't need FastClick (issue #15)
+				} else {
+					return true;
+				}
+			}
+
+			if (deviceIsBlackBerry10) {
+				blackberryVersion = navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);
+
+				// BlackBerry 10.3+ does not require Fastclick library.
+				// https://github.com/ftlabs/fastclick/issues/251
+				if (blackberryVersion[1] >= 10 && blackberryVersion[2] >= 3) {
+					metaViewport = document.querySelector('meta[name=viewport]');
+
+					if (metaViewport) {
+						// user-scalable=no eliminates click delay.
+						if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
+							return true;
+						}
+						// width=device-width (or less than device-width) eliminates click delay.
+						if (document.documentElement.scrollWidth <= window.outerWidth) {
+							return true;
+						}
+					}
+				}
+			}
+
+			// IE10 with -ms-touch-action: none or manipulation, which disables double-tap-to-zoom (issue #97)
+			if (layer.style.msTouchAction === 'none' || layer.style.touchAction === 'manipulation') {
+				return true;
+			}
+
+			// Firefox version - zero for other browsers
+			firefoxVersion = +(/Firefox\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
+
+			if (firefoxVersion >= 27) {
+				// Firefox 27+ does not have tap delay if the content is not zoomable - https://bugzilla.mozilla.org/show_bug.cgi?id=922896
+
+				metaViewport = document.querySelector('meta[name=viewport]');
+				if (metaViewport && (metaViewport.content.indexOf('user-scalable=no') !== -1 || document.documentElement.scrollWidth <= window.outerWidth)) {
+					return true;
+				}
+			}
+
+			// IE11: prefixed -ms-touch-action is no longer supported and it's recomended to use non-prefixed version
+			// http://msdn.microsoft.com/en-us/library/windows/apps/Hh767313.aspx
+			if (layer.style.touchAction === 'none' || layer.style.touchAction === 'manipulation') {
+				return true;
+			}
+
+			return false;
+		};
+
+
+		/**
+		 * Factory method for creating a FastClick object
+		 *
+		 * @param {Element} layer The layer to listen on
+		 * @param {Object} [options={}] The options to override the defaults
+		 */
+		FastClick.attach = function(layer, options) {
+			return new FastClick(layer, options);
+		};
+
+
+		if (true) {
+
+			// AMD. Register as an anonymous module.
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+				return FastClick;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = FastClick.attach;
+			module.exports.FastClick = FastClick;
+		} else {
+			window.FastClick = FastClick;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

@@ -318,6 +318,23 @@ module.exports = (function ()
         return keys;
     })();
 
+    /* ------------------------------ evalCss ------------------------------ */
+
+    var evalCss;
+
+    _.evalCss = (function ()
+    {
+        evalCss = function (css)
+        {
+            var style = document.createElement('style');
+            style.textContent = css;
+            style.type = 'text/css';
+            document.body.appendChild(style);
+        };
+
+        return evalCss;
+    })();
+
     /* ------------------------------ extendOwn ------------------------------ */
 
     var extendOwn;

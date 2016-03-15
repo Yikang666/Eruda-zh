@@ -9,6 +9,7 @@
     background: #fff;
     z-index: 500;
     display: none;
+    transform: translateZ(0);
     &.show {
         display: block !important;
         animation: show-menu .3s linear both;
@@ -22,7 +23,9 @@
         width: 100%;
         position: relative;
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
         .tool {
+            transform: translateZ(0);
             position: absolute;
             left: 0;
             top: 0;
