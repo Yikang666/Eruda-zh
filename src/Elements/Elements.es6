@@ -90,6 +90,22 @@ function getAttrStyle(attribute)
     return ret;
 }
 
+var defComputedStyle = require('./defComputedStyle.json');
+
+function rmDefComputedStyle(computedStyle)
+{
+    var ret = {};
+
+    util.each(computedStyle, (val, key) =>
+    {
+        if (val === defComputedStyle[key]) return;
+
+        ret[key] = val;
+    });
+
+    return ret;
+}
+
 var noStyleTag = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 function needNoStyle(tagName)
@@ -106,6 +122,7 @@ export default class Elements extends Tool
         super();
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');
+        this._rmDefComputedStyle = true;
     }
     init($el)
     {
@@ -118,6 +135,12 @@ export default class Elements extends Tool
         this._bindEvent();
         this._htmlEl = document.getElementsByTagName('html')[0];
         this._setEl(this._htmlEl, 0);
+    }
+    show()
+    {
+        super.show();
+
+        this._render();
     }
     _back()
     {
@@ -139,6 +162,9 @@ export default class Elements extends Tool
                 level = self._curLevel + 1;
 
             self._setEl(el, level);
+        }).on('click', '.toggle-all-computed-style', () =>
+        {
+            this._toggleAllComputedStyle();
         });
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
@@ -147,6 +173,12 @@ export default class Elements extends Tool
                   .on('click', '.refresh', () => this._render())
                   .on('click', '.highlight', () => this._highlight())
                   .on('click', '.reset', () => this._setEl(this._htmlEl, 0));
+    }
+    _toggleAllComputedStyle()
+    {
+        this._rmDefComputedStyle = !this._rmDefComputedStyle;
+
+        this._render();
     }
     _highlight()
     {
@@ -162,6 +194,7 @@ export default class Elements extends Tool
         this._$curEl = util.$(el);
         this._curLevel = level;
         this._curCssStore = new CssStore(el);
+        this._rmDefComputedStyle = true;
 
         this._render();
     }
@@ -188,7 +221,9 @@ export default class Elements extends Tool
 
         if (needNoStyle(tagName)) return ret;
 
-        ret.computedStyle = cssStore.getComputedStyle();
+        var computedStyle = cssStore.getComputedStyle();
+        if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+        ret.computedStyle = computedStyle;
 
         var styles = cssStore.getMatchedCSSRules();
         styles.unshift(getAttrStyle(attributes));

@@ -71,23 +71,23 @@ var eruda =
 
 	var _Elements2 = _interopRequireDefault(_Elements);
 
-	var _Snippets = __webpack_require__(59);
+	var _Snippets = __webpack_require__(62);
 
 	var _Snippets2 = _interopRequireDefault(_Snippets);
 
-	var _Resources = __webpack_require__(63);
+	var _Resources = __webpack_require__(67);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _Info = __webpack_require__(67);
+	var _Info = __webpack_require__(71);
 
 	var _Info2 = _interopRequireDefault(_Info);
 
-	var _Features = __webpack_require__(72);
+	var _Features = __webpack_require__(76);
 
 	var _Features2 = _interopRequireDefault(_Features);
 
-	var _Settings = __webpack_require__(78);
+	var _Settings = __webpack_require__(82);
 
 	var _Settings2 = _interopRequireDefault(_Settings);
 
@@ -95,20 +95,15 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _fastclick = __webpack_require__(87);
-
-	var _fastclick2 = _interopRequireDefault(_fastclick);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(82);
+	__webpack_require__(87);
 
 	var $container;
 
 	var isDebugMode = /eruda=true/.test(window.location);
 
 	if (isDebugMode) {
-	    initFaskClick();
 	    appendContainer();
 
 	    var devTools = new _DevTools2.default($container);
@@ -119,16 +114,23 @@ var eruda =
 	        return devTools.toggle();
 	    });
 
-	    devTools.add(new _Console2.default()).add(new _Network2.default()).add(new _Elements2.default()).add(new _Snippets2.default()).add(new _Resources2.default()).add(new _Info2.default()).add(new _Features2.default()).add(new _Settings2.default()).showTool('console');
+	    var consoleTool = new _Console2.default(),
+	        network = new _Network2.default(),
+	        elements = new _Elements2.default(),
+	        snippets = new _Snippets2.default(),
+	        resources = new _Resources2.default(),
+	        info = new _Info2.default(),
+	        features = new _Features2.default(),
+	        settings = new _Settings2.default();
+
+	    devTools.add(consoleTool).add(network).add(elements).add(snippets).add(resources).add(info).add(features).add(settings).showTool('console');
+
+	    settings.separator().add(devTools.config, 'transparent', 'Transparent').add(devTools.config, 'halfScreen', 'Half Screen Size');
 	}
 
 	function appendContainer() {
 	    _util2.default.$('body').append('<div id="eruda"></div>');
 	    $container = _util2.default.$('#eruda');
-	}
-
-	function initFaskClick() {
-	    _fastclick2.default.attach(document.body, {});
 	}
 
 	exports.default = {
@@ -161,20 +163,27 @@ var eruda =
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	__webpack_require__(8);
 
-	var HomeBtn = function () {
+	var HomeBtn = function (_util$Emitter) {
+	    _inherits(HomeBtn, _util$Emitter);
+
 	    function HomeBtn($parent) {
 	        _classCallCheck(this, HomeBtn);
 
-	        this._$parent = $parent;
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HomeBtn).call(this));
 
-	        this._appendTpl();
-	        this._makeDraggable();
-	        this._setPos();
-	        this._bindEvent();
+	        _this._$parent = $parent;
 
-	        _util2.default.Emitter.mixin(this);
+	        _this._appendTpl();
+	        _this._makeDraggable();
+	        _this._setPos();
+	        _this._bindEvent();
+	        return _this;
 	    }
 
 	    _createClass(HomeBtn, [{
@@ -200,14 +209,14 @@ var eruda =
 	    }, {
 	        key: '_bindEvent',
 	        value: function _bindEvent() {
-	            var _this = this;
+	            var _this2 = this;
 
 	            this._draggabilly.on('staticClick', function () {
-	                return _this.emit('click');
+	                return _this2.emit('click');
 	            });
 
 	            _util2.default.orientation.on('change', function () {
-	                return _this._setPos();
+	                return _this2._setPos();
 	            });
 	        }
 	    }, {
@@ -220,7 +229,7 @@ var eruda =
 	    }]);
 
 	    return HomeBtn;
-	}();
+	}(_util2.default.Emitter);
 
 	exports.default = HomeBtn;
 	;
@@ -348,7 +357,7 @@ var eruda =
 
 	        dasherize = function (str)
 	        {
-	            return str.replace(/([a-z])([A-Z])/, '$1-$2').toLowerCase();
+	            return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 	        };
 
 	        return dasherize;
@@ -520,6 +529,19 @@ var eruda =
 	        };
 
 	        return indexOf;
+	    })();
+
+	    /* ------------------------------ defaults ------------------------------ */
+
+	    var defaults;
+
+	    _.defaults = (function ()
+	    {
+	        // TODO
+
+	        defaults = _createAssigner(allKeys, true);
+
+	        return defaults;
 	    })();
 
 	    /* ------------------------------ keys ------------------------------ */
@@ -5221,7 +5243,7 @@ var eruda =
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	        value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -5234,6 +5256,10 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
+	var _config = __webpack_require__(89);
+
+	var _config2 = _interopRequireDefault(_config);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5241,109 +5267,154 @@ var eruda =
 	__webpack_require__(36);
 
 	var DevTools = function () {
-	        function DevTools($parent) {
-	                _classCallCheck(this, DevTools);
+	    function DevTools($parent) {
+	        _classCallCheck(this, DevTools);
 
-	                this._$parent = $parent;
-	                this._isShow = false;
-	                this._tools = {};
+	        this._$parent = $parent;
+	        this._isShow = false;
+	        this._opacity = 1;
+	        this._tools = {};
 
-	                this._appendTpl();
-	                this._initNavBar();
+	        this._appendTpl();
+	        this._initNavBar();
+	        this._initConfig();
+	    }
+
+	    _createClass(DevTools, [{
+	        key: 'show',
+	        value: function show() {
+	            var _this = this;
+
+	            this._isShow = true;
+
+	            this._$el.show();
+	            // Need a delay after show to enable transition effect.
+	            setTimeout(function () {
+	                return _this._$el.css('opacity', _this._opacity);
+	            }, 50);
+
+	            return this;
 	        }
+	    }, {
+	        key: 'hide',
+	        value: function hide() {
+	            var _this2 = this;
 
-	        _createClass(DevTools, [{
-	                key: 'show',
-	                value: function show() {
-	                        this._isShow = true;
+	            this._isShow = false;
 
-	                        this._$el.addClass('eruda-show').rmClass('eruda-hide');
+	            this._$el.css({ opacity: 0 });
+	            setTimeout(function () {
+	                return _this2._$el.hide();
+	            }, 300);
 
-	                        return this;
+	            return this;
+	        }
+	    }, {
+	        key: 'toggle',
+	        value: function toggle() {
+	            return this._isShow ? this.hide() : this.show();
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(tool) {
+	            var name = tool.name;
+
+	            this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
+	            tool.init(this._$tools.find('.eruda-' + name));
+	            tool.active = false;
+	            this._tools[name] = tool;
+
+	            this._navBar.add(name);
+
+	            return this;
+	        }
+	    }, {
+	        key: 'get',
+	        value: function get(name) {
+	            var tool = this._tools[name];
+
+	            if (tool) return tool;
+	        }
+	    }, {
+	        key: 'showTool',
+	        value: function showTool(name) {
+	            var tools = this._tools;
+
+	            var tool = tools[name];
+	            if (!tool) return;
+
+	            _util2.default.each(tools, function (tool) {
+	                tool.active = false;
+	                tool.hide();
+	            });
+
+	            tool.active = true;
+	            tool.show();
+
+	            this._navBar.activeTool(name);
+
+	            return this;
+	        }
+	    }, {
+	        key: '_initConfig',
+	        value: function _initConfig() {
+	            var _this3 = this;
+
+	            var cfg = this.config = _config2.default.create('eruda-dev-tools');
+
+	            cfg.set(_util2.default.defaults(cfg.get(), {
+	                transparent: false,
+	                halfScreen: false
+	            }));
+
+	            if (cfg.get('transparent')) this._setTransparency(true);
+	            if (cfg.get('halfScreen')) this._setHalfScreen(true);
+
+	            cfg.on('change', function (key, val) {
+	                switch (key) {
+	                    case 'transparent':
+	                        return _this3._setTransparency(val);
+	                    case 'halfScreen':
+	                        return _this3._setHalfScreen(val);
 	                }
-	        }, {
-	                key: 'hide',
-	                value: function hide() {
-	                        var _this = this;
+	            });
+	        }
+	    }, {
+	        key: '_setTransparency',
+	        value: function _setTransparency(flag) {
+	            this._opacity = flag ? 0.9 : 1;
+	            if (this._isShow) this._$el.css({ opacity: this._opacity });
+	        }
+	    }, {
+	        key: '_setHalfScreen',
+	        value: function _setHalfScreen(flag) {
+	            this._$el.css({
+	                height: flag ? '50%' : '100%'
+	            });
+	        }
+	    }, {
+	        key: '_appendTpl',
+	        value: function _appendTpl() {
+	            var $parent = this._$parent;
 
-	                        this._isShow = false;
+	            $parent.append(__webpack_require__(38)());
 
-	                        this._$el.addClass('eruda-hide').rmClass('eruda-show');
-	                        setTimeout(function () {
-	                                return _this._$el.rmClass('eruda-hide');
-	                        }, 300);
+	            this._$el = $parent.find('.eruda-dev-tools');
+	            this._$tools = this._$el.find('.eruda-tools');
+	        }
+	    }, {
+	        key: '_initNavBar',
+	        value: function _initNavBar() {
+	            var _this4 = this;
 
-	                        return this;
-	                }
-	        }, {
-	                key: 'toggle',
-	                value: function toggle() {
-	                        return this._isShow ? this.hide() : this.show();
-	                }
-	        }, {
-	                key: 'add',
-	                value: function add(tool) {
-	                        var name = tool.name;
+	            this._navBar = new _NavBar2.default(this._$el.find('.eruda-nav-bar ul'));
+	            this._navBar.on('showTool', function (name) {
+	                _this4.showTool(name);
+	            });
+	        }
+	    }]);
 
-	                        this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
-	                        tool.init(this._$tools.find('.eruda-' + name));
-	                        tool.active = false;
-	                        this._tools[name] = tool;
-
-	                        this._navBar.add(name);
-
-	                        return this;
-	                }
-	        }, {
-	                key: 'get',
-	                value: function get(name) {
-	                        var tool = this._tools[name];
-
-	                        if (tool) return tool;
-	                }
-	        }, {
-	                key: 'showTool',
-	                value: function showTool(name) {
-	                        var tools = this._tools;
-
-	                        var tool = tools[name];
-	                        if (!tool) return;
-
-	                        _util2.default.each(tools, function (tool) {
-	                                tool.active = false;
-	                                tool.hide();
-	                        });
-
-	                        tool.active = true;
-	                        tool.show();
-
-	                        this._navBar.activeTool(name);
-
-	                        return this;
-	                }
-	        }, {
-	                key: '_appendTpl',
-	                value: function _appendTpl() {
-	                        var $parent = this._$parent;
-
-	                        $parent.append(__webpack_require__(38)());
-
-	                        this._$el = $parent.find('.eruda-dev-tools');
-	                        this._$tools = this._$el.find('.eruda-tools');
-	                }
-	        }, {
-	                key: '_initNavBar',
-	                value: function _initNavBar() {
-	                        var _this2 = this;
-
-	                        this._navBar = new _NavBar2.default(this._$el.find('.eruda-nav-bar ul'));
-	                        this._navBar.on('showTool', function (name) {
-	                                _this2.showTool(name);
-	                        });
-	                }
-	        }]);
-
-	        return DevTools;
+	    return DevTools;
 	}();
 
 	exports.default = DevTools;
@@ -5368,18 +5439,25 @@ var eruda =
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	__webpack_require__(34);
 
-	var NavBar = function () {
+	var NavBar = function (_util$Emitter) {
+	    _inherits(NavBar, _util$Emitter);
+
 	    function NavBar($el) {
 	        _classCallCheck(this, NavBar);
 
-	        this._$el = $el;
-	        this._len = 0;
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NavBar).call(this));
 
-	        this._bindEvent();
+	        _this._$el = $el;
+	        _this._len = 0;
 
-	        _util2.default.Emitter.mixin(this);
+	        _this._bindEvent();
+	        return _this;
 	    }
 
 	    _createClass(NavBar, [{
@@ -5415,7 +5493,7 @@ var eruda =
 	    }]);
 
 	    return NavBar;
-	}();
+	}(_util2.default.Emitter);
 
 	exports.default = NavBar;
 
@@ -5494,7 +5572,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  padding-top: 50px !important;\n  background: #fff;\n  z-index: 500;\n  display: none;\n  -webkit-transform: translateZ(0);\n          transform: translateZ(0); }\n  .eruda-dev-tools.eruda-show {\n    display: block !important;\n    -webkit-animation: show-menu .3s linear both;\n            animation: show-menu .3s linear both; }\n  .eruda-dev-tools.eruda-hide {\n    display: block !important;\n    -webkit-animation: hide-menu .3s linear both;\n            animation: hide-menu .3s linear both; }\n  .eruda-dev-tools .eruda-tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch; }\n    .eruda-dev-tools .eruda-tools .eruda-tool {\n      -webkit-transform: translateZ(0);\n              transform: translateZ(0);\n      position: absolute;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n\n@-webkit-keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@keyframes show-menu {\n  0% {\n    opacity: 0; }\n  100% {\n    opacity: 1; } }\n\n@-webkit-keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n\n@keyframes hide-menu {\n  0% {\n    opacity: 1; }\n  100% {\n    opacity: 0; } }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  bottom: 0;\n  left: 0;\n  padding-top: 50px !important;\n  background: #fff;\n  z-index: 500;\n  display: none;\n  opacity: 0;\n  -webkit-transition: opacity .3s;\n  transition: opacity .3s;\n  -webkit-transform: translateZ(0);\n          transform: translateZ(0); }\n  .eruda-dev-tools .eruda-tools {\n    height: 100%;\n    width: 100%;\n    position: relative;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch; }\n    .eruda-dev-tools .eruda-tools .eruda-tool {\n      -webkit-transform: translateZ(0);\n              transform: translateZ(0);\n      position: absolute;\n      overflow: hidden;\n      left: 0;\n      top: 0;\n      background: #f2f2f2;\n      width: 100%;\n      height: 100%; }\n", ""]);
 
 	// exports
 
@@ -6038,6 +6116,11 @@ var eruda =
 
 	            return this;
 	        }
+	    }, {
+	        key: "getConfig",
+	        value: function getConfig() {
+	            return this._config;
+	        }
 	    }]);
 
 	    return Tool;
@@ -6080,7 +6163,7 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    font-size: 13px;\n    background: #fff;\n    outline: none;\n    overflow: hidden; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-console {\n  padding-bottom: 40px; }\n  .eruda-dev-tools .eruda-tools .eruda-console .eruda-js-input {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    width: 100%;\n    height: 40px;\n    padding: 10px;\n    border: none;\n    font-size: 13px;\n    background: #fff;\n    outline: none; }\n", ""]);
 
 	// exports
 
@@ -6332,7 +6415,7 @@ var eruda =
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
-	var _CssStore = __webpack_require__(84);
+	var _CssStore = __webpack_require__(56);
 
 	var _CssStore2 = _interopRequireDefault(_CssStore);
 
@@ -6348,7 +6431,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(56);
+	__webpack_require__(57);
 
 	function formatElName(tagName, id, className, attributes) {
 	    var ret = tagName.toLowerCase();
@@ -6425,6 +6508,20 @@ var eruda =
 	    return ret;
 	}
 
+	var defComputedStyle = __webpack_require__(59);
+
+	function rmDefComputedStyle(computedStyle) {
+	    var ret = {};
+
+	    _util2.default.each(computedStyle, function (val, key) {
+	        if (val === defComputedStyle[key]) return;
+
+	        ret[key] = val;
+	    });
+
+	    return ret;
+	}
+
 	var noStyleTag = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 	function needNoStyle(tagName) {
@@ -6442,7 +6539,8 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Elements).call(this));
 
 	        _this.name = 'elements';
-	        _this._tpl = __webpack_require__(58);
+	        _this._tpl = __webpack_require__(60);
+	        _this._rmDefComputedStyle = true;
 	        return _this;
 	    }
 
@@ -6453,11 +6551,18 @@ var eruda =
 
 	            $el.html('<div class="eruda-show-area"></div>');
 	            this._$showArea = $el.find('.eruda-show-area');
-	            $el.append(__webpack_require__(85)());
+	            $el.append(__webpack_require__(61)());
 
 	            this._bindEvent();
 	            this._htmlEl = document.getElementsByTagName('html')[0];
 	            this._setEl(this._htmlEl, 0);
+	        }
+	    }, {
+	        key: 'show',
+	        value: function show() {
+	            _get(Object.getPrototypeOf(Elements.prototype), 'show', this).call(this);
+
+	            this._render();
 	        }
 	    }, {
 	        key: '_back',
@@ -6482,6 +6587,8 @@ var eruda =
 	                    level = self._curLevel + 1;
 
 	                self._setEl(el, level);
+	            }).on('click', '.toggle-all-computed-style', function () {
+	                _this2._toggleAllComputedStyle();
 	            });
 
 	            var $bottomBar = this._$el.find('.eruda-bottom-bar');
@@ -6495,6 +6602,13 @@ var eruda =
 	            }).on('click', '.reset', function () {
 	                return _this2._setEl(_this2._htmlEl, 0);
 	            });
+	        }
+	    }, {
+	        key: '_toggleAllComputedStyle',
+	        value: function _toggleAllComputedStyle() {
+	            this._rmDefComputedStyle = !this._rmDefComputedStyle;
+
+	            this._render();
 	        }
 	    }, {
 	        key: '_highlight',
@@ -6512,6 +6626,7 @@ var eruda =
 	            this._$curEl = _util2.default.$(el);
 	            this._curLevel = level;
 	            this._curCssStore = new _CssStore2.default(el);
+	            this._rmDefComputedStyle = true;
 
 	            this._render();
 	        }
@@ -6538,7 +6653,9 @@ var eruda =
 
 	            if (needNoStyle(tagName)) return ret;
 
-	            ret.computedStyle = cssStore.getComputedStyle();
+	            var computedStyle = cssStore.getComputedStyle();
+	            if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+	            ret.computedStyle = computedStyle;
 
 	            var styles = cssStore.getMatchedCSSRules();
 	            styles.unshift(getAttrStyle(attributes));
@@ -6562,10 +6679,114 @@ var eruda =
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function formatStyle(style) {
+	    var ret = {};
+
+	    for (var i = 0, len = style.length; i < len; i++) {
+	        var name = style[i];
+
+	        if (style[name] === 'initial') continue;
+
+	        ret[name] = style[name];
+	    }
+
+	    return ret;
+	}
+
+	var elProto = Element.prototype;
+
+	var matchesSel = function matchesSel(el, selText) {
+	    return false;
+	};
+
+	if (elProto.webkitMatchesSelector) {
+	    matchesSel = function matchesSel(el, selText) {
+	        return el.webkitMatchesSelector(selText);
+	    };
+	} else if (elProto.mozMatchesSelector) {
+	    matchesSel = function matchesSel(el, selText) {
+	        return el.mozMatchesSelector(selText);
+	    };
+	}
+
+	var CssStore = function () {
+	    function CssStore(el) {
+	        _classCallCheck(this, CssStore);
+
+	        this._el = el;
+	    }
+
+	    _createClass(CssStore, [{
+	        key: 'getComputedStyle',
+	        value: function getComputedStyle() {
+	            var computedStyle = window.getComputedStyle(this._el);
+
+	            return formatStyle(computedStyle);
+	        }
+	    }, {
+	        key: 'getMatchedCSSRules',
+	        value: function getMatchedCSSRules() {
+	            var _this = this;
+
+	            var ret = [];
+
+	            _util2.default.each(document.styleSheets, function (styleSheet) {
+	                _util2.default.each(styleSheet.cssRules, function (cssRule) {
+	                    var matchesEl = false;
+
+	                    // Mobile safari will throw DOM Exception 12 error, need to try catch it.
+	                    try {
+	                        matchesEl = _this._elMatchesSel(cssRule.selectorText);
+	                    } catch (e) {}
+
+	                    if (!matchesEl) return;
+
+	                    ret.push({
+	                        selectorText: cssRule.selectorText,
+	                        style: formatStyle(cssRule.style)
+	                    });
+	                });
+	            });
+
+	            return ret;
+	        }
+	    }, {
+	        key: '_elMatchesSel',
+	        value: function _elMatchesSel(selText) {
+	            return matchesSel(this._el, selText);
+	        }
+	    }]);
+
+	    return CssStore;
+	}();
+
+	exports.default = CssStore;
+	;
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(57);
+	var content = __webpack_require__(58);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6585,7 +6806,7 @@ var eruda =
 	}
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6599,7 +6820,364 @@ var eruda =
 
 
 /***/ },
-/* 58 */
+/* 59 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"align-content": "stretch",
+		"align-items": "stretch",
+		"align-self": "start",
+		"alignment-baseline": "auto",
+		"all": "",
+		"animation": "none 0s ease 0s 1 normal none running",
+		"animation-delay": "0s",
+		"animation-direction": "normal",
+		"animation-duration": "0s",
+		"animation-fill-mode": "none",
+		"animation-iteration-count": "1",
+		"animation-name": "none",
+		"animation-play-state": "running",
+		"animation-timing-function": "ease",
+		"backface-visibility": "visible",
+		"background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+		"background-attachment": "scroll",
+		"background-blend-mode": "normal",
+		"background-clip": "border-box",
+		"background-color": "rgba(0, 0, 0, 0)",
+		"background-image": "none",
+		"background-origin": "padding-box",
+		"background-position": "0% 0%",
+		"background-position-x": "0%",
+		"background-position-y": "0%",
+		"background-repeat": "repeat",
+		"background-repeat-x": "",
+		"background-repeat-y": "",
+		"background-size": "auto",
+		"baseline-shift": "0px",
+		"border": "0px none rgb(0, 0, 0)",
+		"border-bottom": "0px none rgb(0, 0, 0)",
+		"border-bottom-color": "rgb(0, 0, 0)",
+		"border-bottom-left-radius": "0px",
+		"border-bottom-right-radius": "0px",
+		"border-bottom-style": "none",
+		"border-bottom-width": "0px",
+		"border-collapse": "separate",
+		"border-color": "rgb(0, 0, 0)",
+		"border-image": "none",
+		"border-image-outset": "0px",
+		"border-image-repeat": "stretch",
+		"border-image-slice": "100%",
+		"border-image-source": "none",
+		"border-image-width": "1",
+		"border-left": "0px none rgb(0, 0, 0)",
+		"border-left-color": "rgb(0, 0, 0)",
+		"border-left-style": "none",
+		"border-left-width": "0px",
+		"border-radius": "0px",
+		"border-right": "0px none rgb(0, 0, 0)",
+		"border-right-color": "rgb(0, 0, 0)",
+		"border-right-style": "none",
+		"border-right-width": "0px",
+		"border-spacing": "0px 0px",
+		"border-style": "none",
+		"border-top": "0px none rgb(0, 0, 0)",
+		"border-top-color": "rgb(0, 0, 0)",
+		"border-top-left-radius": "0px",
+		"border-top-right-radius": "0px",
+		"border-top-style": "none",
+		"border-top-width": "0px",
+		"border-width": "0px",
+		"bottom": "auto",
+		"box-shadow": "none",
+		"box-sizing": "content-box",
+		"buffered-rendering": "auto",
+		"caption-side": "top",
+		"clear": "none",
+		"clip": "auto",
+		"clip-path": "none",
+		"clip-rule": "nonzero",
+		"color": "rgb(0, 0, 0)",
+		"color-interpolation": "sRGB",
+		"color-interpolation-filters": "linearRGB",
+		"color-rendering": "auto",
+		"content": "",
+		"counter-increment": "none",
+		"counter-reset": "none",
+		"cursor": "auto",
+		"cx": "0px",
+		"cy": "0px",
+		"direction": "ltr",
+		"display": "block",
+		"dominant-baseline": "auto",
+		"empty-cells": "show",
+		"fill": "rgb(0, 0, 0)",
+		"fill-opacity": "1",
+		"fill-rule": "nonzero",
+		"filter": "none",
+		"flex": "0 1 auto",
+		"flex-basis": "auto",
+		"flex-direction": "row",
+		"flex-flow": "row nowrap",
+		"flex-grow": "0",
+		"flex-shrink": "1",
+		"flex-wrap": "nowrap",
+		"float": "none",
+		"flood-color": "rgb(0, 0, 0)",
+		"flood-opacity": "1",
+		"font": "normal normal normal normal 16px / normal simsun",
+		"font-family": "Simsun",
+		"font-feature-settings": "normal",
+		"font-kerning": "auto",
+		"font-size": "16px",
+		"font-stretch": "normal",
+		"font-style": "normal",
+		"font-variant": "normal",
+		"font-variant-ligatures": "normal",
+		"font-weight": "normal",
+		"image-rendering": "auto",
+		"isolation": "auto",
+		"justify-content": "flex-start",
+		"left": "auto",
+		"letter-spacing": "normal",
+		"lighting-color": "rgb(255, 255, 255)",
+		"line-height": "normal",
+		"list-style": "disc outside none",
+		"list-style-image": "none",
+		"list-style-position": "outside",
+		"list-style-type": "disc",
+		"margin": "0px",
+		"margin-bottom": "0px",
+		"margin-left": "0px",
+		"margin-right": "0px",
+		"margin-top": "0px",
+		"marker": "",
+		"marker-end": "none",
+		"marker-mid": "none",
+		"marker-start": "none",
+		"mask": "none",
+		"mask-type": "luminance",
+		"max-height": "none",
+		"max-width": "none",
+		"max-zoom": "",
+		"min-height": "0px",
+		"min-width": "0px",
+		"min-zoom": "",
+		"mix-blend-mode": "normal",
+		"motion": "none 0px auto 0deg",
+		"motion-offset": "0px",
+		"motion-path": "none",
+		"motion-rotation": "auto 0deg",
+		"object-fit": "fill",
+		"object-position": "50% 50%",
+		"opacity": "1",
+		"order": "0",
+		"orientation": "",
+		"orphans": "auto",
+		"outline": "rgb(0, 0, 0) none 0px",
+		"outline-color": "rgb(0, 0, 0)",
+		"outline-offset": "0px",
+		"outline-style": "none",
+		"outline-width": "0px",
+		"overflow": "visible",
+		"overflow-wrap": "normal",
+		"overflow-x": "visible",
+		"overflow-y": "visible",
+		"padding": "0px",
+		"padding-bottom": "0px",
+		"padding-left": "0px",
+		"padding-right": "0px",
+		"padding-top": "0px",
+		"page": "",
+		"page-break-after": "auto",
+		"page-break-before": "auto",
+		"page-break-inside": "auto",
+		"paint-order": "fill stroke markers",
+		"perspective": "none",
+		"pointer-events": "auto",
+		"position": "static",
+		"quotes": "",
+		"r": "0px",
+		"resize": "none",
+		"right": "auto",
+		"rx": "0px",
+		"ry": "0px",
+		"shape-image-threshold": "0",
+		"shape-margin": "0px",
+		"shape-outside": "none",
+		"shape-rendering": "auto",
+		"size": "",
+		"speak": "normal",
+		"src": "",
+		"stop-color": "rgb(0, 0, 0)",
+		"stop-opacity": "1",
+		"stroke": "none",
+		"stroke-dasharray": "none",
+		"stroke-dashoffset": "0px",
+		"stroke-linecap": "butt",
+		"stroke-linejoin": "miter",
+		"stroke-miterlimit": "4",
+		"stroke-opacity": "1",
+		"stroke-width": "1px",
+		"tab-size": "8",
+		"table-layout": "auto",
+		"text-align": "start",
+		"text-align-last": "auto",
+		"text-anchor": "start",
+		"text-combine-upright": "none",
+		"text-decoration": "none",
+		"text-indent": "0px",
+		"text-orientation": "mixed",
+		"text-overflow": "clip",
+		"text-rendering": "auto",
+		"text-shadow": "none",
+		"text-transform": "none",
+		"top": "auto",
+		"touch-action": "auto",
+		"transform": "none",
+		"transform-style": "flat",
+		"transition": "all 0s ease 0s",
+		"transition-delay": "0s",
+		"transition-duration": "0s",
+		"transition-property": "all",
+		"transition-timing-function": "ease",
+		"unicode-bidi": "normal",
+		"unicode-range": "",
+		"user-zoom": "",
+		"vector-effect": "none",
+		"vertical-align": "baseline",
+		"visibility": "visible",
+		"-webkit-app-region": "no-drag",
+		"-webkit-appearance": "none",
+		"-webkit-background-clip": "border-box",
+		"-webkit-background-composite": "source-over",
+		"-webkit-background-origin": "padding-box",
+		"-webkit-border-after": "0px none rgb(0, 0, 0)",
+		"-webkit-border-after-color": "rgb(0, 0, 0)",
+		"-webkit-border-after-style": "none",
+		"-webkit-border-after-width": "0px",
+		"-webkit-border-before": "0px none rgb(0, 0, 0)",
+		"-webkit-border-before-color": "rgb(0, 0, 0)",
+		"-webkit-border-before-style": "none",
+		"-webkit-border-before-width": "0px",
+		"-webkit-border-end": "0px none rgb(0, 0, 0)",
+		"-webkit-border-end-color": "rgb(0, 0, 0)",
+		"-webkit-border-end-style": "none",
+		"-webkit-border-end-width": "0px",
+		"-webkit-border-horizontal-spacing": "0px",
+		"-webkit-border-image": "none",
+		"-webkit-border-start": "0px none rgb(0, 0, 0)",
+		"-webkit-border-start-color": "rgb(0, 0, 0)",
+		"-webkit-border-start-style": "none",
+		"-webkit-border-start-width": "0px",
+		"-webkit-border-vertical-spacing": "0px",
+		"-webkit-box-align": "stretch",
+		"-webkit-box-decoration-break": "slice",
+		"-webkit-box-direction": "normal",
+		"-webkit-box-flex": "0",
+		"-webkit-box-flex-group": "1",
+		"-webkit-box-lines": "single",
+		"-webkit-box-ordinal-group": "1",
+		"-webkit-box-orient": "horizontal",
+		"-webkit-box-pack": "start",
+		"-webkit-box-reflect": "none",
+		"-webkit-clip-path": "none",
+		"-webkit-column-break-after": "auto",
+		"-webkit-column-break-before": "auto",
+		"-webkit-column-break-inside": "auto",
+		"-webkit-column-count": "auto",
+		"-webkit-column-gap": "normal",
+		"-webkit-column-rule": "0px none rgb(0, 0, 0)",
+		"-webkit-column-rule-color": "rgb(0, 0, 0)",
+		"-webkit-column-rule-style": "none",
+		"-webkit-column-rule-width": "0px",
+		"-webkit-column-span": "none",
+		"-webkit-column-width": "auto",
+		"-webkit-columns": "auto auto",
+		"-webkit-filter": "none",
+		"-webkit-font-size-delta": "",
+		"-webkit-font-smoothing": "auto",
+		"-webkit-highlight": "none",
+		"-webkit-hyphenate-character": "auto",
+		"-webkit-line-break": "auto",
+		"-webkit-line-clamp": "none",
+		"-webkit-locale": "auto",
+		"-webkit-logical-height": "8px",
+		"-webkit-logical-width": "980px",
+		"-webkit-margin-after": "0px",
+		"-webkit-margin-after-collapse": "collapse",
+		"-webkit-margin-before": "0px",
+		"-webkit-margin-before-collapse": "collapse",
+		"-webkit-margin-bottom-collapse": "collapse",
+		"-webkit-margin-collapse": "",
+		"-webkit-margin-end": "0px",
+		"-webkit-margin-start": "0px",
+		"-webkit-margin-top-collapse": "collapse",
+		"-webkit-mask": "",
+		"-webkit-mask-box-image": "none",
+		"-webkit-mask-box-image-outset": "0px",
+		"-webkit-mask-box-image-repeat": "stretch",
+		"-webkit-mask-box-image-slice": "0 fill",
+		"-webkit-mask-box-image-source": "none",
+		"-webkit-mask-box-image-width": "auto",
+		"-webkit-mask-clip": "border-box",
+		"-webkit-mask-composite": "source-over",
+		"-webkit-mask-image": "none",
+		"-webkit-mask-origin": "border-box",
+		"-webkit-mask-position": "0% 0%",
+		"-webkit-mask-position-x": "0%",
+		"-webkit-mask-position-y": "0%",
+		"-webkit-mask-repeat": "repeat",
+		"-webkit-mask-repeat-x": "",
+		"-webkit-mask-repeat-y": "",
+		"-webkit-mask-size": "auto",
+		"-webkit-max-logical-height": "none",
+		"-webkit-max-logical-width": "none",
+		"-webkit-min-logical-height": "0px",
+		"-webkit-min-logical-width": "0px",
+		"-webkit-padding-after": "0px",
+		"-webkit-padding-before": "0px",
+		"-webkit-padding-end": "0px",
+		"-webkit-padding-start": "0px",
+		"-webkit-perspective-origin-x": "",
+		"-webkit-perspective-origin-y": "",
+		"-webkit-print-color-adjust": "economy",
+		"-webkit-rtl-ordering": "logical",
+		"-webkit-ruby-position": "before",
+		"-webkit-tap-highlight-color": "rgba(0, 0, 0, 0.180392)",
+		"-webkit-text-combine": "none",
+		"-webkit-text-decorations-in-effect": "none",
+		"-webkit-text-emphasis": "",
+		"-webkit-text-emphasis-color": "rgb(0, 0, 0)",
+		"-webkit-text-emphasis-position": "over",
+		"-webkit-text-emphasis-style": "none",
+		"-webkit-text-fill-color": "rgb(0, 0, 0)",
+		"-webkit-text-orientation": "vertical-right",
+		"-webkit-text-security": "none",
+		"-webkit-text-stroke": "",
+		"-webkit-text-stroke-color": "rgb(0, 0, 0)",
+		"-webkit-text-stroke-width": "0px",
+		"-webkit-transform-origin-x": "",
+		"-webkit-transform-origin-y": "",
+		"-webkit-transform-origin-z": "",
+		"-webkit-user-drag": "auto",
+		"-webkit-user-modify": "read-only",
+		"-webkit-user-select": "text",
+		"-webkit-writing-mode": "horizontal-tb",
+		"white-space": "normal",
+		"widows": "1",
+		"will-change": "auto",
+		"word-break": "normal",
+		"word-spacing": "0px",
+		"word-wrap": "normal",
+		"writing-mode": "horizontal-tb",
+		"x": "0px",
+		"y": "0px",
+		"z-index": "0",
+		"zoom": "1"
+	};
+
+/***/ },
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6634,7 +7212,7 @@ var eruda =
 	},"9":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 
-	  return "    <div class=\"eruda-computed-style eruda-section\">\r\n        <h2>Computed Style</h2>\r\n        <div class=\"eruda-table-wrapper\">\r\n            <table>\r\n                <tbody>\r\n"
+	  return "    <div class=\"eruda-computed-style eruda-section\">\r\n        <h2 class=\"toggle-all-computed-style\">Computed Style</h2>\r\n        <div class=\"eruda-table-wrapper\">\r\n            <table>\r\n                <tbody>\r\n"
 	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.computedStyle : depth0),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
 	    + "                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n";
 	},"10":function(container,depth0,helpers,partials,data) {
@@ -6689,7 +7267,16 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 59 */
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(13);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    return "<div class=\"eruda-bottom-bar\">\r\n    <div class=\"eruda-btn back\" ontouchstart>Back</div>\r\n    <div class=\"eruda-btn refresh\" ontouchstart>Refresh</div>\r\n    <div class=\"eruda-btn highlight\" ontouchstart>Highlight</div>\r\n    <div class=\"eruda-btn reset\" ontouchstart>Reset</div>\r\n</div>";
+	},"useData":true});
+
+/***/ },
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6706,7 +7293,7 @@ var eruda =
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
-	var _defSnippets = __webpack_require__(86);
+	var _defSnippets = __webpack_require__(63);
 
 	var _defSnippets2 = _interopRequireDefault(_defSnippets);
 
@@ -6722,7 +7309,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(60);
+	__webpack_require__(64);
 
 	var Snippets = function (_Tool) {
 	    _inherits(Snippets, _Tool);
@@ -6735,7 +7322,7 @@ var eruda =
 	        _this.name = 'snippets';
 
 	        _this._snippets = [];
-	        _this._tpl = __webpack_require__(62);
+	        _this._tpl = __webpack_require__(66);
 	        return _this;
 	    }
 
@@ -6798,13 +7385,39 @@ var eruda =
 	exports.default = Snippets;
 
 /***/ },
-/* 60 */
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var borderCss = 'html>* {border: 2px solid #f5f5f5 !important}' + 'html>*>* {border: 2px solid #dabb3a !important}' + 'html>*>*>* {border: 2px solid #abc1c7 !important}' + 'html>*>*>*>* {border: 2px solid #472936 !important}' + 'html>*>*>*>*>* {border: 2px solid #c84941 !important}' + 'html>*>*>*>*>*>* {border: 2px solid #296dd1 !important}' + 'html>*>*>*>*>*>*>* {border: 2px solid #67adb4 !important}' + 'html>*>*>*>*>*>*>*>* {border: 2px solid #1ea061 !important}';
+
+	exports.default = [{
+	    name: 'Border All',
+	    fn: function fn() {
+	        _util2.default.evalCss(borderCss);
+	    },
+	    desc: 'Add color borders to all elements'
+	}];
+
+/***/ },
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(61);
+	var content = __webpack_require__(65);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -6824,7 +7437,7 @@ var eruda =
 	}
 
 /***/ },
-/* 61 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -6832,13 +7445,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-snippets {\n  padding: 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section {\n    margin-bottom: 10px;\n    overflow: hidden;\n    border-radius: 4px;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2); }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn, .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-name {\n      padding: 10px;\n      color: #fff;\n      background: #b4b4b4;\n      font-size: 14px;\n      text-align: center; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn:active {\n      background: #f73c37; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-description {\n      background: #fff;\n      padding: 10px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-snippets {\n  padding: 10px; }\n  .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section {\n    margin-bottom: 10px;\n    border-radius: 4px;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2);\n    overflow: hidden; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn, .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-name {\n      padding: 10px;\n      color: #fff;\n      background: #b4b4b4;\n      font-size: 14px;\n      text-align: center; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-btn:active {\n      background: #f73c37; }\n    .eruda-dev-tools .eruda-tools .eruda-snippets .eruda-section .eruda-description {\n      background: #fff;\n      padding: 10px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 62 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -6859,7 +7472,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 63 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6888,7 +7501,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(64);
+	__webpack_require__(68);
 
 	function getState(type, len) {
 	    if (type === 'localStore' || len === 0) return '';
@@ -6927,7 +7540,7 @@ var eruda =
 	        _this._scriptData = [];
 	        _this._stylesheetData = [];
 	        _this._imageData = [];
-	        _this._tpl = __webpack_require__(66);
+	        _this._tpl = __webpack_require__(70);
 	        return _this;
 	    }
 
@@ -6942,7 +7555,7 @@ var eruda =
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
-	            return this.refreshLocalStorage().refreshCookie().refreshScript().refreshStylesheet().refreshImage();
+	            return this.refreshLocalStorage().refreshCookie().refreshScript().refreshStylesheet().refreshImage()._render();
 	        }
 	    }, {
 	        key: 'refreshScript',
@@ -6958,7 +7571,6 @@ var eruda =
 	            scriptData = _util2.default.unique(scriptData);
 
 	            this._scriptData = scriptData;
-	            this._render();
 
 	            return this;
 	        }
@@ -6976,7 +7588,6 @@ var eruda =
 	            stylesheetData = _util2.default.unique(stylesheetData);
 
 	            this._stylesheetData = stylesheetData;
-	            this._render();
 
 	            return this;
 	        }
@@ -6985,7 +7596,10 @@ var eruda =
 	        value: function refreshLocalStorage() {
 	            var localStoreData = [];
 
-	            _util2.default.each(localStorage, function (val, key) {
+	            // Mobile safari is not able to loop through localStorage directly.
+	            var localStore = JSON.parse(JSON.stringify(window.localStorage));
+
+	            _util2.default.each(localStore, function (val, key) {
 	                localStoreData.push({
 	                    key: key,
 	                    val: val
@@ -6993,7 +7607,6 @@ var eruda =
 	            });
 
 	            this._localStoreData = localStoreData;
-	            this._render();
 
 	            return this;
 	        }
@@ -7014,7 +7627,6 @@ var eruda =
 	            }
 
 	            this._cookieData = cookieData;
-	            this._render();
 
 	            return this;
 	        }
@@ -7035,7 +7647,6 @@ var eruda =
 	            imageData = _util2.default.unique(imageData);
 
 	            this._imageData = imageData;
-	            this._render();
 
 	            return this;
 	        }
@@ -7054,23 +7665,23 @@ var eruda =
 	            var self = this;
 
 	            this._$el.on('click', '.refresh-local-storage', function () {
-	                _this2.refreshLocalStorage();
+	                _this2.refreshLocalStorage()._render();
 	            }).on('click', '.refresh-cookie', function () {
-	                _this2.refreshCookie();
+	                _this2.refreshCookie()._render();
 	            }).on('click', '.refresh-script', function () {
-	                _this2.refreshScript();
+	                _this2.refreshScript()._render();
 	            }).on('click', '.refresh-image', function () {
-	                _this2.refreshImage();
+	                _this2.refreshImage()._render();
 	            }).on('click', '.delete-local-storage', function () {
 	                var key = _util2.default.$(this).data('key');
 
 	                localStorage.removeItem(key);
-	                self.refreshLocalStorage();
+	                self.refreshLocalStorage()._render();
 	            }).on('click', '.delete-cookie', function () {
 	                var key = _util2.default.$(this).data('key');
 
 	                _util2.default.cookie.remove(key);
-	                self.refreshCookie();
+	                self.refreshCookie()._render();
 	            });
 
 	            _util2.default.orientation.on('change', function () {
@@ -7117,13 +7728,13 @@ var eruda =
 	exports.default = Resources;
 
 /***/ },
-/* 64 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(65);
+	var content = __webpack_require__(69);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -7143,7 +7754,7 @@ var eruda =
 	}
 
 /***/ },
-/* 65 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -7151,13 +7762,13 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-resources {\n  padding: 10px;\n  font-size: 14px;\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-section {\n    margin-bottom: 10px;\n    border-radius: 4px;\n    overflow: hidden;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2); }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title {\n    padding: 10px;\n    color: #fff;\n    background: #76a2ee;\n    font-size: 14px; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-ok {\n      background: #8de191; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-warn {\n      background: #fff5c2; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-danger {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title .eruda-btn {\n      float: right;\n      display: inline-block;\n      background: #fff;\n      color: #b4b4b4;\n      text-align: center;\n      width: 18px;\n      height: 18px;\n      line-height: 18px;\n      border-radius: 50%; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li {\n    padding: 10px;\n    background: #fff;\n    word-break: break-all; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li a {\n      color: #76a2ee !important; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list {\n    background: #fff;\n    padding: 10px !important; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li img {\n        width: 100%; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li.eruda-empty {\n        padding: 10px;\n        width: 100%; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td .eruda-delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-key {\n        white-space: nowrap; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-control {\n        width: 40px; }\n", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-resources {\n  padding: 10px;\n  font-size: 14px;\n  overflow-y: auto;\n  -webkit-overflow-scrolling: touch; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-section {\n    margin-bottom: 10px;\n    border-radius: 4px;\n    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 3px 1px -2px rgba(0, 0, 0, 0.2);\n    overflow: hidden; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title {\n    padding: 10px;\n    color: #fff;\n    background: #76a2ee;\n    font-size: 14px; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-ok {\n      background: #8de191; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-warn {\n      background: #fff5c2; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title.eruda-danger {\n      background: #eda29b; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-title .eruda-btn {\n      float: right;\n      display: inline-block;\n      background: #fff;\n      color: #b4b4b4;\n      text-align: center;\n      width: 18px;\n      height: 18px;\n      line-height: 18px;\n      border-radius: 50%; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li {\n    padding: 10px;\n    background: #fff;\n    word-break: break-all; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-link-list li a {\n      color: #76a2ee !important; }\n  .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list {\n    background: #fff;\n    padding: 10px !important; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li {\n      width: 25%;\n      float: left;\n      overflow-y: hidden; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li img {\n        width: 100%; }\n      .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list li.eruda-empty {\n        padding: 10px;\n        width: 100%; }\n    .eruda-dev-tools .eruda-tools .eruda-resources .eruda-image-list::after {\n      display: block;\n      content: '';\n      clear: both; }\n  .eruda-dev-tools .eruda-tools .eruda-resources table {\n    border-collapse: collapse;\n    width: 100%;\n    background: #fff; }\n    .eruda-dev-tools .eruda-tools .eruda-resources table td {\n      padding: 10px;\n      word-break: break-all; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td .eruda-delete {\n        color: #fff;\n        width: 20px;\n        height: 20px;\n        display: inline-block;\n        text-align: center;\n        border-radius: 50%;\n        background: #f73c37;\n        line-height: 20px; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-key {\n        white-space: nowrap; }\n      .eruda-dev-tools .eruda-tools .eruda-resources table td.eruda-control {\n        width: 40px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 66 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -7250,7 +7861,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 67 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7271,7 +7882,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _defInfo = __webpack_require__(68);
+	var _defInfo = __webpack_require__(72);
 
 	var _defInfo2 = _interopRequireDefault(_defInfo);
 
@@ -7283,7 +7894,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(69);
+	__webpack_require__(73);
 
 	var Info = function (_Tool) {
 	    _inherits(Info, _Tool);
@@ -7294,7 +7905,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Info).call(this));
 
 	        _this.name = 'info';
-	        _this._tpl = __webpack_require__(71);
+	        _this._tpl = __webpack_require__(75);
 	        _this._msgs = [];
 	        return _this;
 	    }
@@ -7342,7 +7953,7 @@ var eruda =
 	exports.default = Info;
 
 /***/ },
-/* 68 */
+/* 72 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7362,13 +7973,13 @@ var eruda =
 	}];
 
 /***/ },
-/* 69 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(70);
+	var content = __webpack_require__(74);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -7388,7 +7999,7 @@ var eruda =
 	}
 
 /***/ },
-/* 70 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -7402,7 +8013,7 @@ var eruda =
 
 
 /***/ },
-/* 71 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -7423,7 +8034,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 72 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7444,7 +8055,7 @@ var eruda =
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _modernizr = __webpack_require__(73);
+	var _modernizr = __webpack_require__(77);
 
 	var _modernizr2 = _interopRequireDefault(_modernizr);
 
@@ -7456,9 +8067,9 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(74);
+	__webpack_require__(78);
 
-	var featureList = __webpack_require__(76);
+	var featureList = __webpack_require__(80);
 
 	var featureNames = featureList['feature-detects'],
 	    specialNames = featureList['special-names'];
@@ -7472,7 +8083,7 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Features).call(this));
 
 	        _this.name = 'features';
-	        _this._tpl = __webpack_require__(77);
+	        _this._tpl = __webpack_require__(81);
 	        _this._features = {};
 	        return _this;
 	    }
@@ -7520,7 +8131,7 @@ var eruda =
 	exports.default = Features;
 
 /***/ },
-/* 73 */
+/* 77 */
 /***/ function(module, exports) {
 
 	/*!
@@ -10378,13 +10989,13 @@ var eruda =
 	module.exports = Modernizr;
 
 /***/ },
-/* 74 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(75);
+	var content = __webpack_require__(79);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -10404,7 +11015,7 @@ var eruda =
 	}
 
 /***/ },
-/* 75 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -10418,7 +11029,7 @@ var eruda =
 
 
 /***/ },
-/* 76 */
+/* 80 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10493,7 +11104,7 @@ var eruda =
 	};
 
 /***/ },
-/* 77 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
@@ -10518,7 +11129,7 @@ var eruda =
 	},"useData":true});
 
 /***/ },
-/* 78 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10535,6 +11146,10 @@ var eruda =
 
 	var _Tool3 = _interopRequireDefault(_Tool2);
 
+	var _util = __webpack_require__(2);
+
+	var _util2 = _interopRequireDefault(_util);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10543,7 +11158,7 @@ var eruda =
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(79);
+	__webpack_require__(83);
 
 	var Settings = function (_Tool) {
 	    _inherits(Settings, _Tool);
@@ -10554,8 +11169,8 @@ var eruda =
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Settings).call(this));
 
 	        _this.name = 'settings';
-
-	        _this._tpl = __webpack_require__(81);
+	        _this._switchTpl = __webpack_require__(91);
+	        _this._settings = [];
 	        return _this;
 	    }
 
@@ -10563,6 +11178,46 @@ var eruda =
 	        key: 'init',
 	        value: function init($el) {
 	            _get(Object.getPrototypeOf(Settings.prototype), 'init', this).call(this, $el);
+
+	            this._bindEvent();
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(config, key, desc) {
+	            this._settings.push({
+	                config: config,
+	                key: key
+	            });
+
+	            this._$el.append(this._switchTpl({
+	                desc: desc,
+	                key: key,
+	                idx: this._settings.length - 1,
+	                val: config.get(key)
+	            }));
+
+	            return this;
+	        }
+	    }, {
+	        key: 'separator',
+	        value: function separator() {
+	            this._$el.append('<div class="eruda-separator"></div>');
+
+	            return this;
+	        }
+	    }, {
+	        key: '_bindEvent',
+	        value: function _bindEvent() {
+	            var self = this;
+
+	            this._$el.on('click', '.eruda-checkbox', function () {
+	                var $input = _util2.default.$(this).find('input'),
+	                    idx = $input.data('idx'),
+	                    val = $input.get(0).checked;
+
+	                var setting = self._settings[idx];
+	                setting.config.set(setting.key, val);
+	            });
 	        }
 	    }]);
 
@@ -10570,15 +11225,16 @@ var eruda =
 	}(_Tool3.default);
 
 	exports.default = Settings;
+	;
 
 /***/ },
-/* 79 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(80);
+	var content = __webpack_require__(84);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -10598,7 +11254,7 @@ var eruda =
 	}
 
 /***/ },
-/* 80 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -10606,25 +11262,21 @@ var eruda =
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".eruda-dev-tools .eruda-tools .eruda-settings .eruda-separator {\n  height: 10px; }\n\n.eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch {\n  padding: 10px;\n  background: #fff;\n  font-size: 14px;\n  border-bottom: 1px solid #f2f2f2; }\n  .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox {\n    float: right;\n    position: relative;\n    vertical-align: top;\n    width: 46px;\n    height: 20px;\n    padding: 3px;\n    border-radius: 18px;\n    box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);\n    cursor: pointer;\n    background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);\n    background-image: linear-gradient(to bottom, #eeeeee, white 25px); }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-input {\n      position: absolute;\n      top: 0;\n      left: 0;\n      opacity: 0; }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-label {\n      position: relative;\n      display: block;\n      height: 14px;\n      font-size: 10px;\n      text-transform: uppercase;\n      background: #eceeef;\n      border-radius: inherit;\n      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);\n      -webkit-transition: 0.15s ease-out;\n      transition: 0.15s ease-out;\n      -webkit-transition-property: opacity background;\n      transition-property: opacity background; }\n      .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-label:before, .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-label:after {\n        position: absolute;\n        top: 50%;\n        margin-top: -.5em;\n        line-height: 1;\n        -webkit-transition: inherit;\n        transition: inherit; }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-input:checked ~ .eruda-label {\n      background: #47a8d8;\n      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2); }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-input:checked ~ .eruda-label:before {\n      opacity: 0; }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-input:checked ~ .eruda-label:after {\n      opacity: 1; }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-handle {\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 18px;\n      height: 18px;\n      border-radius: 10px;\n      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);\n      background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);\n      background-image: linear-gradient(to bottom, white 40%, #f0f0f0);\n      -webkit-transition: left 0.15s ease-out;\n      transition: left 0.15s ease-out; }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-handle:before {\n      content: '';\n      position: absolute;\n      top: 50%;\n      left: 50%;\n      margin: -6px 0 0 -6px;\n      width: 12px;\n      height: 12px;\n      border-radius: 6px;\n      box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);\n      background-image: -webkit-linear-gradient(top, #eeeeee, white);\n      background-image: linear-gradient(to bottom, #eeeeee, white); }\n    .eruda-dev-tools .eruda-tools .eruda-settings .eruda-switch .eruda-checkbox .eruda-input:checked ~ .eruda-handle {\n      left: 30px;\n      box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2); }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 81 */
-/***/ function(module, exports) {
-
-	module.exports = function(){return "";};
-
-/***/ },
-/* 82 */
+/* 85 */,
+/* 86 */,
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(83);
+	var content = __webpack_require__(88);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(11)(content, {});
@@ -10644,7 +11296,7 @@ var eruda =
 	}
 
 /***/ },
-/* 83 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(10)();
@@ -10658,7 +11310,35 @@ var eruda =
 
 
 /***/ },
-/* 84 */
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _Storage = __webpack_require__(90);
+
+	var _Storage2 = _interopRequireDefault(_Storage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var configs = {};
+
+	var config = {
+	    create: function create(name) {
+	        if (!configs[name]) configs[name] = new _Storage2.default(name);
+
+	        return configs[name];
+	    }
+	};
+
+	exports.default = config;
+
+/***/ },
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10677,970 +11357,111 @@ var eruda =
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function formatStyle(style) {
-	    var ret = {};
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	    for (var i = 0, len = style.length; i < len; i++) {
-	        var name = style[i];
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	        if (style[name] === 'initial') continue;
+	var localStore = {
+	    _storage: window.localStorage,
+	    get: function get(key) {
+	        var val = this._storage.getItem(key);
 
-	        ret[name] = style[name];
+	        try {
+	            val = JSON.parse(val);
+	        } catch (e) {}
+
+	        return val;
+	    },
+	    set: function set(key, val) {
+	        if (_util2.default.isObj(val)) val = JSON.stringify(val);
+
+	        this._storage.setItem(key, val);
+
+	        return this;
+	    },
+	    remove: function remove(key) {
+	        this._storage.removeItem(key);
+
+	        return this;
 	    }
-
-	    return ret;
-	}
-
-	var elProto = Element.prototype;
-
-	var matchesSel = function matchesSel(el, selText) {
-	    return false;
 	};
 
-	if (elProto.webkitMatchesSelector) {
-	    matchesSel = function matchesSel(el, selText) {
-	        return el.webkitMatchesSelector(selText);
-	    };
-	} else if (elProto.mozMatchesSelector) {
-	    matchesSel = function matchesSel(el, selText) {
-	        return el.mozMatchesSelector(selText);
-	    };
-	}
+	var Storage = function (_util$Emitter) {
+	    _inherits(Storage, _util$Emitter);
 
-	var CssStore = function () {
-	    function CssStore(el) {
-	        _classCallCheck(this, CssStore);
+	    function Storage(name) {
+	        _classCallCheck(this, Storage);
 
-	        this._el = el;
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Storage).call(this));
+
+	        _this._name = name;
+	        _this._val = localStore.get(name);
+	        if (!_this._val || !_util2.default.isObj(_this._val)) _this._val = {};
+	        return _this;
 	    }
 
-	    _createClass(CssStore, [{
-	        key: 'getComputedStyle',
-	        value: function getComputedStyle() {
-	            var computedStyle = window.getComputedStyle(this._el);
+	    _createClass(Storage, [{
+	        key: 'save',
+	        value: function save() {
+	            localStore.set(this._name, this._val);
 
-	            return formatStyle(computedStyle);
+	            return this;
 	        }
 	    }, {
-	        key: 'getMatchedCSSRules',
-	        value: function getMatchedCSSRules() {
-	            var _this = this;
+	        key: 'get',
+	        value: function get(key) {
+	            if (_util2.default.isUndef(key)) return this._val;
 
-	            var ret = [];
+	            return this._val[key];
+	        }
+	    }, {
+	        key: 'set',
+	        value: function set(key, val) {
+	            var _this2 = this;
 
-	            _util2.default.each(document.styleSheets, function (styleSheet) {
-	                _util2.default.each(styleSheet.cssRules, function (cssRule) {
-	                    var matchesEl = false;
+	            var kv;
 
-	                    try {
-	                        matchesEl = _this._elMatchesSel(cssRule.selectorText);
-	                    } catch (e) {}
+	            if (_util2.default.isObj(key)) {
+	                kv = key;
+	            } else {
+	                kv = {};
+	                kv[key] = val;
+	            }
 
-	                    if (!matchesEl) return;
-
-	                    ret.push({
-	                        selectorText: cssRule.selectorText,
-	                        style: formatStyle(cssRule.style)
-	                    });
-	                });
+	            _util2.default.each(kv, function (val, key) {
+	                var preVal = _this2._val[key];
+	                _this2._val[key] = val;
+	                if (preVal !== val) _this2.emit('change', key, val);
 	            });
 
-	            return ret;
-	        }
-	    }, {
-	        key: '_elMatchesSel',
-	        value: function _elMatchesSel(selText) {
-	            return matchesSel(this._el, selText);
+	            return this.save();
 	        }
 	    }]);
 
-	    return CssStore;
-	}();
+	    return Storage;
+	}(_util2.default.Emitter);
 
-	exports.default = CssStore;
+	exports.default = Storage;
 	;
 
 /***/ },
-/* 85 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Handlebars = __webpack_require__(13);
-	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    return "<div class=\"eruda-bottom-bar\">\r\n    <div class=\"eruda-btn back\" ontouchstart>Back</div>\r\n    <div class=\"eruda-btn refresh\" ontouchstart>Refresh</div>\r\n    <div class=\"eruda-btn highlight\" ontouchstart>Highlight</div>\r\n    <div class=\"eruda-btn reset\" ontouchstart>Reset</div>\r\n</div>";
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    return "checked";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+	  return "<div class=\"eruda-switch\">\r\n    "
+	    + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
+	    + "\r\n    <label class=\"eruda-checkbox\">\r\n        <input type=\"checkbox\" class=\"eruda-input\" data-idx=\""
+	    + alias4(((helper = (helper = helpers.idx || (depth0 != null ? depth0.idx : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"idx","hash":{},"data":data}) : helper)))
+	    + "\" "
+	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.val : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + ">\r\n        <span class=\"eruda-label\"></span>\r\n        <span class=\"eruda-handle\"></span>\r\n    </label>\r\n</div>";
 	},"useData":true});
-
-/***/ },
-/* 86 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _util = __webpack_require__(2);
-
-	var _util2 = _interopRequireDefault(_util);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var borderCss = 'html>* {border: 2px solid #f5f5f5 !important}' + 'html>*>* {border: 2px solid #dabb3a !important}' + 'html>*>*>* {border: 2px solid #abc1c7 !important}' + 'html>*>*>*>* {border: 2px solid #472936 !important}' + 'html>*>*>*>*>* {border: 2px solid #c84941 !important}' + 'html>*>*>*>*>*>* {border: 2px solid #296dd1 !important}' + 'html>*>*>*>*>*>*>* {border: 2px solid #67adb4 !important}' + 'html>*>*>*>*>*>*>*>* {border: 2px solid #1ea061 !important}';
-
-	exports.default = [{
-	    name: 'Border All',
-	    fn: function fn() {
-	        _util2.default.evalCss(borderCss);
-	    },
-	    desc: 'Add color borders to all elements'
-	}];
-
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
-		'use strict';
-
-		/**
-		 * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
-		 *
-		 * @codingstandard ftlabs-jsv2
-		 * @copyright The Financial Times Limited [All Rights Reserved]
-		 * @license MIT License (see LICENSE.txt)
-		 */
-
-		/*jslint browser:true, node:true*/
-		/*global define, Event, Node*/
-
-
-		/**
-		 * Instantiate fast-clicking listeners on the specified layer.
-		 *
-		 * @constructor
-		 * @param {Element} layer The layer to listen on
-		 * @param {Object} [options={}] The options to override the defaults
-		 */
-		function FastClick(layer, options) {
-			var oldOnClick;
-
-			options = options || {};
-
-			/**
-			 * Whether a click is currently being tracked.
-			 *
-			 * @type boolean
-			 */
-			this.trackingClick = false;
-
-
-			/**
-			 * Timestamp for when click tracking started.
-			 *
-			 * @type number
-			 */
-			this.trackingClickStart = 0;
-
-
-			/**
-			 * The element being tracked for a click.
-			 *
-			 * @type EventTarget
-			 */
-			this.targetElement = null;
-
-
-			/**
-			 * X-coordinate of touch start event.
-			 *
-			 * @type number
-			 */
-			this.touchStartX = 0;
-
-
-			/**
-			 * Y-coordinate of touch start event.
-			 *
-			 * @type number
-			 */
-			this.touchStartY = 0;
-
-
-			/**
-			 * ID of the last touch, retrieved from Touch.identifier.
-			 *
-			 * @type number
-			 */
-			this.lastTouchIdentifier = 0;
-
-
-			/**
-			 * Touchmove boundary, beyond which a click will be cancelled.
-			 *
-			 * @type number
-			 */
-			this.touchBoundary = options.touchBoundary || 10;
-
-
-			/**
-			 * The FastClick layer.
-			 *
-			 * @type Element
-			 */
-			this.layer = layer;
-
-			/**
-			 * The minimum time between tap(touchstart and touchend) events
-			 *
-			 * @type number
-			 */
-			this.tapDelay = options.tapDelay || 200;
-
-			/**
-			 * The maximum time for a tap
-			 *
-			 * @type number
-			 */
-			this.tapTimeout = options.tapTimeout || 700;
-
-			if (FastClick.notNeeded(layer)) {
-				return;
-			}
-
-			// Some old versions of Android don't have Function.prototype.bind
-			function bind(method, context) {
-				return function() { return method.apply(context, arguments); };
-			}
-
-
-			var methods = ['onMouse', 'onClick', 'onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel'];
-			var context = this;
-			for (var i = 0, l = methods.length; i < l; i++) {
-				context[methods[i]] = bind(context[methods[i]], context);
-			}
-
-			// Set up event handlers as required
-			if (deviceIsAndroid) {
-				layer.addEventListener('mouseover', this.onMouse, true);
-				layer.addEventListener('mousedown', this.onMouse, true);
-				layer.addEventListener('mouseup', this.onMouse, true);
-			}
-
-			layer.addEventListener('click', this.onClick, true);
-			layer.addEventListener('touchstart', this.onTouchStart, false);
-			layer.addEventListener('touchmove', this.onTouchMove, false);
-			layer.addEventListener('touchend', this.onTouchEnd, false);
-			layer.addEventListener('touchcancel', this.onTouchCancel, false);
-
-			// Hack is required for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-			// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
-			// layer when they are cancelled.
-			if (!Event.prototype.stopImmediatePropagation) {
-				layer.removeEventListener = function(type, callback, capture) {
-					var rmv = Node.prototype.removeEventListener;
-					if (type === 'click') {
-						rmv.call(layer, type, callback.hijacked || callback, capture);
-					} else {
-						rmv.call(layer, type, callback, capture);
-					}
-				};
-
-				layer.addEventListener = function(type, callback, capture) {
-					var adv = Node.prototype.addEventListener;
-					if (type === 'click') {
-						adv.call(layer, type, callback.hijacked || (callback.hijacked = function(event) {
-							if (!event.propagationStopped) {
-								callback(event);
-							}
-						}), capture);
-					} else {
-						adv.call(layer, type, callback, capture);
-					}
-				};
-			}
-
-			// If a handler is already declared in the element's onclick attribute, it will be fired before
-			// FastClick's onClick handler. Fix this by pulling out the user-defined handler function and
-			// adding it as listener.
-			if (typeof layer.onclick === 'function') {
-
-				// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
-				// - the old one won't work if passed to addEventListener directly.
-				oldOnClick = layer.onclick;
-				layer.addEventListener('click', function(event) {
-					oldOnClick(event);
-				}, false);
-				layer.onclick = null;
-			}
-		}
-
-		/**
-		* Windows Phone 8.1 fakes user agent string to look like Android and iPhone.
-		*
-		* @type boolean
-		*/
-		var deviceIsWindowsPhone = navigator.userAgent.indexOf("Windows Phone") >= 0;
-
-		/**
-		 * Android requires exceptions.
-		 *
-		 * @type boolean
-		 */
-		var deviceIsAndroid = navigator.userAgent.indexOf('Android') > 0 && !deviceIsWindowsPhone;
-
-
-		/**
-		 * iOS requires exceptions.
-		 *
-		 * @type boolean
-		 */
-		var deviceIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !deviceIsWindowsPhone;
-
-
-		/**
-		 * iOS 4 requires an exception for select elements.
-		 *
-		 * @type boolean
-		 */
-		var deviceIsIOS4 = deviceIsIOS && (/OS 4_\d(_\d)?/).test(navigator.userAgent);
-
-
-		/**
-		 * iOS 6.0-7.* requires the target element to be manually derived
-		 *
-		 * @type boolean
-		 */
-		var deviceIsIOSWithBadTarget = deviceIsIOS && (/OS [6-7]_\d/).test(navigator.userAgent);
-
-		/**
-		 * BlackBerry requires exceptions.
-		 *
-		 * @type boolean
-		 */
-		var deviceIsBlackBerry10 = navigator.userAgent.indexOf('BB10') > 0;
-
-		/**
-		 * Determine whether a given element requires a native click.
-		 *
-		 * @param {EventTarget|Element} target Target DOM element
-		 * @returns {boolean} Returns true if the element needs a native click
-		 */
-		FastClick.prototype.needsClick = function(target) {
-			switch (target.nodeName.toLowerCase()) {
-
-			// Don't send a synthetic click to disabled inputs (issue #62)
-			case 'button':
-			case 'select':
-			case 'textarea':
-				if (target.disabled) {
-					return true;
-				}
-
-				break;
-			case 'input':
-
-				// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
-				if ((deviceIsIOS && target.type === 'file') || target.disabled) {
-					return true;
-				}
-
-				break;
-			case 'label':
-			case 'iframe': // iOS8 homescreen apps can prevent events bubbling into frames
-			case 'video':
-				return true;
-			}
-
-			return (/\bneedsclick\b/).test(target.className);
-		};
-
-
-		/**
-		 * Determine whether a given element requires a call to focus to simulate click into element.
-		 *
-		 * @param {EventTarget|Element} target Target DOM element
-		 * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
-		 */
-		FastClick.prototype.needsFocus = function(target) {
-			switch (target.nodeName.toLowerCase()) {
-			case 'textarea':
-				return true;
-			case 'select':
-				return !deviceIsAndroid;
-			case 'input':
-				switch (target.type) {
-				case 'button':
-				case 'checkbox':
-				case 'file':
-				case 'image':
-				case 'radio':
-				case 'submit':
-					return false;
-				}
-
-				// No point in attempting to focus disabled inputs
-				return !target.disabled && !target.readOnly;
-			default:
-				return (/\bneedsfocus\b/).test(target.className);
-			}
-		};
-
-
-		/**
-		 * Send a click event to the specified element.
-		 *
-		 * @param {EventTarget|Element} targetElement
-		 * @param {Event} event
-		 */
-		FastClick.prototype.sendClick = function(targetElement, event) {
-			var clickEvent, touch;
-
-			// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
-			if (document.activeElement && document.activeElement !== targetElement) {
-				document.activeElement.blur();
-			}
-
-			touch = event.changedTouches[0];
-
-			// Synthesise a click event, with an extra attribute so it can be tracked
-			clickEvent = document.createEvent('MouseEvents');
-			clickEvent.initMouseEvent(this.determineEventType(targetElement), true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
-			clickEvent.forwardedTouchEvent = true;
-			targetElement.dispatchEvent(clickEvent);
-		};
-
-		FastClick.prototype.determineEventType = function(targetElement) {
-
-			//Issue #159: Android Chrome Select Box does not open with a synthetic click event
-			if (deviceIsAndroid && targetElement.tagName.toLowerCase() === 'select') {
-				return 'mousedown';
-			}
-
-			return 'click';
-		};
-
-
-		/**
-		 * @param {EventTarget|Element} targetElement
-		 */
-		FastClick.prototype.focus = function(targetElement) {
-			var length;
-
-			// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
-			if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
-				length = targetElement.value.length;
-				targetElement.setSelectionRange(length, length);
-			} else {
-				targetElement.focus();
-			}
-		};
-
-
-		/**
-		 * Check whether the given target element is a child of a scrollable layer and if so, set a flag on it.
-		 *
-		 * @param {EventTarget|Element} targetElement
-		 */
-		FastClick.prototype.updateScrollParent = function(targetElement) {
-			var scrollParent, parentElement;
-
-			scrollParent = targetElement.fastClickScrollParent;
-
-			// Attempt to discover whether the target element is contained within a scrollable layer. Re-check if the
-			// target element was moved to another parent.
-			if (!scrollParent || !scrollParent.contains(targetElement)) {
-				parentElement = targetElement;
-				do {
-					if (parentElement.scrollHeight > parentElement.offsetHeight) {
-						scrollParent = parentElement;
-						targetElement.fastClickScrollParent = parentElement;
-						break;
-					}
-
-					parentElement = parentElement.parentElement;
-				} while (parentElement);
-			}
-
-			// Always update the scroll top tracker if possible.
-			if (scrollParent) {
-				scrollParent.fastClickLastScrollTop = scrollParent.scrollTop;
-			}
-		};
-
-
-		/**
-		 * @param {EventTarget} targetElement
-		 * @returns {Element|EventTarget}
-		 */
-		FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
-
-			// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
-			if (eventTarget.nodeType === Node.TEXT_NODE) {
-				return eventTarget.parentNode;
-			}
-
-			return eventTarget;
-		};
-
-
-		/**
-		 * On touch start, record the position and scroll offset.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.onTouchStart = function(event) {
-			var targetElement, touch, selection;
-
-			// Ignore multiple touches, otherwise pinch-to-zoom is prevented if both fingers are on the FastClick element (issue #111).
-			if (event.targetTouches.length > 1) {
-				return true;
-			}
-
-			targetElement = this.getTargetElementFromEventTarget(event.target);
-			touch = event.targetTouches[0];
-
-			if (deviceIsIOS) {
-
-				// Only trusted events will deselect text on iOS (issue #49)
-				selection = window.getSelection();
-				if (selection.rangeCount && !selection.isCollapsed) {
-					return true;
-				}
-
-				if (!deviceIsIOS4) {
-
-					// Weird things happen on iOS when an alert or confirm dialog is opened from a click event callback (issue #23):
-					// when the user next taps anywhere else on the page, new touchstart and touchend events are dispatched
-					// with the same identifier as the touch event that previously triggered the click that triggered the alert.
-					// Sadly, there is an issue on iOS 4 that causes some normal touch events to have the same identifier as an
-					// immediately preceeding touch event (issue #52), so this fix is unavailable on that platform.
-					// Issue 120: touch.identifier is 0 when Chrome dev tools 'Emulate touch events' is set with an iOS device UA string,
-					// which causes all touch events to be ignored. As this block only applies to iOS, and iOS identifiers are always long,
-					// random integers, it's safe to to continue if the identifier is 0 here.
-					if (touch.identifier && touch.identifier === this.lastTouchIdentifier) {
-						event.preventDefault();
-						return false;
-					}
-
-					this.lastTouchIdentifier = touch.identifier;
-
-					// If the target element is a child of a scrollable layer (using -webkit-overflow-scrolling: touch) and:
-					// 1) the user does a fling scroll on the scrollable layer
-					// 2) the user stops the fling scroll with another tap
-					// then the event.target of the last 'touchend' event will be the element that was under the user's finger
-					// when the fling scroll was started, causing FastClick to send a click event to that layer - unless a check
-					// is made to ensure that a parent layer was not scrolled before sending a synthetic click (issue #42).
-					this.updateScrollParent(targetElement);
-				}
-			}
-
-			this.trackingClick = true;
-			this.trackingClickStart = event.timeStamp;
-			this.targetElement = targetElement;
-
-			this.touchStartX = touch.pageX;
-			this.touchStartY = touch.pageY;
-
-			// Prevent phantom clicks on fast double-tap (issue #36)
-			if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-				event.preventDefault();
-			}
-
-			return true;
-		};
-
-
-		/**
-		 * Based on a touchmove event object, check whether the touch has moved past a boundary since it started.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.touchHasMoved = function(event) {
-			var touch = event.changedTouches[0], boundary = this.touchBoundary;
-
-			if (Math.abs(touch.pageX - this.touchStartX) > boundary || Math.abs(touch.pageY - this.touchStartY) > boundary) {
-				return true;
-			}
-
-			return false;
-		};
-
-
-		/**
-		 * Update the last position.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.onTouchMove = function(event) {
-			if (!this.trackingClick) {
-				return true;
-			}
-
-			// If the touch has moved, cancel the click tracking
-			if (this.targetElement !== this.getTargetElementFromEventTarget(event.target) || this.touchHasMoved(event)) {
-				this.trackingClick = false;
-				this.targetElement = null;
-			}
-
-			return true;
-		};
-
-
-		/**
-		 * Attempt to find the labelled control for the given label element.
-		 *
-		 * @param {EventTarget|HTMLLabelElement} labelElement
-		 * @returns {Element|null}
-		 */
-		FastClick.prototype.findControl = function(labelElement) {
-
-			// Fast path for newer browsers supporting the HTML5 control attribute
-			if (labelElement.control !== undefined) {
-				return labelElement.control;
-			}
-
-			// All browsers under test that support touch events also support the HTML5 htmlFor attribute
-			if (labelElement.htmlFor) {
-				return document.getElementById(labelElement.htmlFor);
-			}
-
-			// If no for attribute exists, attempt to retrieve the first labellable descendant element
-			// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
-			return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
-		};
-
-
-		/**
-		 * On touch end, determine whether to send a click event at once.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.onTouchEnd = function(event) {
-			var forElement, trackingClickStart, targetTagName, scrollParent, touch, targetElement = this.targetElement;
-
-			if (!this.trackingClick) {
-				return true;
-			}
-
-			// Prevent phantom clicks on fast double-tap (issue #36)
-			if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-				this.cancelNextClick = true;
-				return true;
-			}
-
-			if ((event.timeStamp - this.trackingClickStart) > this.tapTimeout) {
-				return true;
-			}
-
-			// Reset to prevent wrong click cancel on input (issue #156).
-			this.cancelNextClick = false;
-
-			this.lastClickTime = event.timeStamp;
-
-			trackingClickStart = this.trackingClickStart;
-			this.trackingClick = false;
-			this.trackingClickStart = 0;
-
-			// On some iOS devices, the targetElement supplied with the event is invalid if the layer
-			// is performing a transition or scroll, and has to be re-detected manually. Note that
-			// for this to function correctly, it must be called *after* the event target is checked!
-			// See issue #57; also filed as rdar://13048589 .
-			if (deviceIsIOSWithBadTarget) {
-				touch = event.changedTouches[0];
-
-				// In certain cases arguments of elementFromPoint can be negative, so prevent setting targetElement to null
-				targetElement = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset) || targetElement;
-				targetElement.fastClickScrollParent = this.targetElement.fastClickScrollParent;
-			}
-
-			targetTagName = targetElement.tagName.toLowerCase();
-			if (targetTagName === 'label') {
-				forElement = this.findControl(targetElement);
-				if (forElement) {
-					this.focus(targetElement);
-					if (deviceIsAndroid) {
-						return false;
-					}
-
-					targetElement = forElement;
-				}
-			} else if (this.needsFocus(targetElement)) {
-
-				// Case 1: If the touch started a while ago (best guess is 100ms based on tests for issue #36) then focus will be triggered anyway. Return early and unset the target element reference so that the subsequent click will be allowed through.
-				// Case 2: Without this exception for input elements tapped when the document is contained in an iframe, then any inputted text won't be visible even though the value attribute is updated as the user types (issue #37).
-				if ((event.timeStamp - trackingClickStart) > 100 || (deviceIsIOS && window.top !== window && targetTagName === 'input')) {
-					this.targetElement = null;
-					return false;
-				}
-
-				this.focus(targetElement);
-				this.sendClick(targetElement, event);
-
-				// Select elements need the event to go through on iOS 4, otherwise the selector menu won't open.
-				// Also this breaks opening selects when VoiceOver is active on iOS6, iOS7 (and possibly others)
-				if (!deviceIsIOS || targetTagName !== 'select') {
-					this.targetElement = null;
-					event.preventDefault();
-				}
-
-				return false;
-			}
-
-			if (deviceIsIOS && !deviceIsIOS4) {
-
-				// Don't send a synthetic click event if the target element is contained within a parent layer that was scrolled
-				// and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
-				scrollParent = targetElement.fastClickScrollParent;
-				if (scrollParent && scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
-					return true;
-				}
-			}
-
-			// Prevent the actual click from going though - unless the target node is marked as requiring
-			// real clicks or if it is in the whitelist in which case only non-programmatic clicks are permitted.
-			if (!this.needsClick(targetElement)) {
-				event.preventDefault();
-				this.sendClick(targetElement, event);
-			}
-
-			return false;
-		};
-
-
-		/**
-		 * On touch cancel, stop tracking the click.
-		 *
-		 * @returns {void}
-		 */
-		FastClick.prototype.onTouchCancel = function() {
-			this.trackingClick = false;
-			this.targetElement = null;
-		};
-
-
-		/**
-		 * Determine mouse events which should be permitted.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.onMouse = function(event) {
-
-			// If a target element was never set (because a touch event was never fired) allow the event
-			if (!this.targetElement) {
-				return true;
-			}
-
-			if (event.forwardedTouchEvent) {
-				return true;
-			}
-
-			// Programmatically generated events targeting a specific element should be permitted
-			if (!event.cancelable) {
-				return true;
-			}
-
-			// Derive and check the target element to see whether the mouse event needs to be permitted;
-			// unless explicitly enabled, prevent non-touch click events from triggering actions,
-			// to prevent ghost/doubleclicks.
-			if (!this.needsClick(this.targetElement) || this.cancelNextClick) {
-
-				// Prevent any user-added listeners declared on FastClick element from being fired.
-				if (event.stopImmediatePropagation) {
-					event.stopImmediatePropagation();
-				} else {
-
-					// Part of the hack for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-					event.propagationStopped = true;
-				}
-
-				// Cancel the event
-				event.stopPropagation();
-				event.preventDefault();
-
-				return false;
-			}
-
-			// If the mouse event is permitted, return true for the action to go through.
-			return true;
-		};
-
-
-		/**
-		 * On actual clicks, determine whether this is a touch-generated click, a click action occurring
-		 * naturally after a delay after a touch (which needs to be cancelled to avoid duplication), or
-		 * an actual click which should be permitted.
-		 *
-		 * @param {Event} event
-		 * @returns {boolean}
-		 */
-		FastClick.prototype.onClick = function(event) {
-			var permitted;
-
-			// It's possible for another FastClick-like library delivered with third-party code to fire a click event before FastClick does (issue #44). In that case, set the click-tracking flag back to false and return early. This will cause onTouchEnd to return early.
-			if (this.trackingClick) {
-				this.targetElement = null;
-				this.trackingClick = false;
-				return true;
-			}
-
-			// Very odd behaviour on iOS (issue #18): if a submit element is present inside a form and the user hits enter in the iOS simulator or clicks the Go button on the pop-up OS keyboard the a kind of 'fake' click event will be triggered with the submit-type input element as the target.
-			if (event.target.type === 'submit' && event.detail === 0) {
-				return true;
-			}
-
-			permitted = this.onMouse(event);
-
-			// Only unset targetElement if the click is not permitted. This will ensure that the check for !targetElement in onMouse fails and the browser's click doesn't go through.
-			if (!permitted) {
-				this.targetElement = null;
-			}
-
-			// If clicks are permitted, return true for the action to go through.
-			return permitted;
-		};
-
-
-		/**
-		 * Remove all FastClick's event listeners.
-		 *
-		 * @returns {void}
-		 */
-		FastClick.prototype.destroy = function() {
-			var layer = this.layer;
-
-			if (deviceIsAndroid) {
-				layer.removeEventListener('mouseover', this.onMouse, true);
-				layer.removeEventListener('mousedown', this.onMouse, true);
-				layer.removeEventListener('mouseup', this.onMouse, true);
-			}
-
-			layer.removeEventListener('click', this.onClick, true);
-			layer.removeEventListener('touchstart', this.onTouchStart, false);
-			layer.removeEventListener('touchmove', this.onTouchMove, false);
-			layer.removeEventListener('touchend', this.onTouchEnd, false);
-			layer.removeEventListener('touchcancel', this.onTouchCancel, false);
-		};
-
-
-		/**
-		 * Check whether FastClick is needed.
-		 *
-		 * @param {Element} layer The layer to listen on
-		 */
-		FastClick.notNeeded = function(layer) {
-			var metaViewport;
-			var chromeVersion;
-			var blackberryVersion;
-			var firefoxVersion;
-
-			// Devices that don't support touch don't need FastClick
-			if (typeof window.ontouchstart === 'undefined') {
-				return true;
-			}
-
-			// Chrome version - zero for other browsers
-			chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-			if (chromeVersion) {
-
-				if (deviceIsAndroid) {
-					metaViewport = document.querySelector('meta[name=viewport]');
-
-					if (metaViewport) {
-						// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
-						if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-							return true;
-						}
-						// Chrome 32 and above with width=device-width or less don't need FastClick
-						if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
-							return true;
-						}
-					}
-
-				// Chrome desktop doesn't need FastClick (issue #15)
-				} else {
-					return true;
-				}
-			}
-
-			if (deviceIsBlackBerry10) {
-				blackberryVersion = navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);
-
-				// BlackBerry 10.3+ does not require Fastclick library.
-				// https://github.com/ftlabs/fastclick/issues/251
-				if (blackberryVersion[1] >= 10 && blackberryVersion[2] >= 3) {
-					metaViewport = document.querySelector('meta[name=viewport]');
-
-					if (metaViewport) {
-						// user-scalable=no eliminates click delay.
-						if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-							return true;
-						}
-						// width=device-width (or less than device-width) eliminates click delay.
-						if (document.documentElement.scrollWidth <= window.outerWidth) {
-							return true;
-						}
-					}
-				}
-			}
-
-			// IE10 with -ms-touch-action: none or manipulation, which disables double-tap-to-zoom (issue #97)
-			if (layer.style.msTouchAction === 'none' || layer.style.touchAction === 'manipulation') {
-				return true;
-			}
-
-			// Firefox version - zero for other browsers
-			firefoxVersion = +(/Firefox\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-			if (firefoxVersion >= 27) {
-				// Firefox 27+ does not have tap delay if the content is not zoomable - https://bugzilla.mozilla.org/show_bug.cgi?id=922896
-
-				metaViewport = document.querySelector('meta[name=viewport]');
-				if (metaViewport && (metaViewport.content.indexOf('user-scalable=no') !== -1 || document.documentElement.scrollWidth <= window.outerWidth)) {
-					return true;
-				}
-			}
-
-			// IE11: prefixed -ms-touch-action is no longer supported and it's recomended to use non-prefixed version
-			// http://msdn.microsoft.com/en-us/library/windows/apps/Hh767313.aspx
-			if (layer.style.touchAction === 'none' || layer.style.touchAction === 'manipulation') {
-				return true;
-			}
-
-			return false;
-		};
-
-
-		/**
-		 * Factory method for creating a FastClick object
-		 *
-		 * @param {Element} layer The layer to listen on
-		 * @param {Object} [options={}] The options to override the defaults
-		 */
-		FastClick.attach = function(layer, options) {
-			return new FastClick(layer, options);
-		};
-
-
-		if (true) {
-
-			// AMD. Register as an anonymous module.
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-				return FastClick;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else if (typeof module !== 'undefined' && module.exports) {
-			module.exports = FastClick.attach;
-			module.exports.FastClick = FastClick;
-		} else {
-			window.FastClick = FastClick;
-		}
-	}());
-
 
 /***/ }
 /******/ ]);

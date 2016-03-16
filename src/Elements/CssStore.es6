@@ -50,6 +50,7 @@ export default class CssStore
             {
                 var matchesEl = false;
 
+                // Mobile safari will throw DOM Exception 12 error, need to try catch it.
                 try {
                     matchesEl = this._elMatchesSel(cssRule.selectorText);
                 } catch (e) {}

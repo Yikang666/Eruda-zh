@@ -2,16 +2,15 @@ import util from '../util'
 
 require('./NavBar.scss');
 
-export default class NavBar
+export default class NavBar extends util.Emitter
 {
     constructor($el)
     {
+        super();
         this._$el = $el;
         this._len = 0;
 
         this._bindEvent();
-
-        util.Emitter.mixin(this);
     }
     add(name)
     {

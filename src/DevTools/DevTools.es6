@@ -1,5 +1,6 @@
 import NavBar from './NavBar.es6'
 import util from '../util'
+import config from '../config/config.es6'
 
 require('./DevTools.scss');
 
@@ -9,16 +10,20 @@ export default class DevTools
     {
         this._$parent = $parent;
         this._isShow = false;
+        this._opacity = 1;
         this._tools = {};
 
         this._appendTpl();
         this._initNavBar();
+        this._initConfig();
     }
     show()
     {
         this._isShow = true;
 
-        this._$el.addClass('eruda-show').rmClass('eruda-hide');
+        this._$el.show();
+        // Need a delay after show to enable transition effect.
+        setTimeout(() => this._$el.css('opacity', this._opacity), 50);
 
         return this;
     }
@@ -26,8 +31,8 @@ export default class DevTools
     {
         this._isShow = false;
 
-        this._$el.addClass('eruda-hide').rmClass('eruda-show');
-        setTimeout(() => this._$el.rmClass('eruda-hide'), 300);
+        this._$el.css({opacity: 0});
+        setTimeout(() => this._$el.hide(), 300);
 
         return this;
     }
@@ -73,6 +78,38 @@ export default class DevTools
         this._navBar.activeTool(name);
 
         return this;
+    }
+    _initConfig()
+    {
+        var cfg = this.config = config.create('eruda-dev-tools');
+
+        cfg.set(util.defaults(cfg.get(), {
+            transparent: false,
+            halfScreen: false
+        }));
+
+        if (cfg.get('transparent')) this._setTransparency(true);
+        if (cfg.get('halfScreen')) this._setHalfScreen(true);
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'transparent': return this._setTransparency(val);
+                case 'halfScreen': return this._setHalfScreen(val);
+            }
+        });
+    }
+    _setTransparency(flag)
+    {
+        this._opacity = flag ? 0.9 : 1;
+        if (this._isShow) this._$el.css({opacity: this._opacity});
+    }
+    _setHalfScreen(flag)
+    {
+        this._$el.css({
+            height: flag ? '50%': '100%'
+        });
     }
     _appendTpl()
     {

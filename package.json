@@ -41,7 +41,6 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
-    "draggabilly": "^2.1.0",
-    "fastclick": "^1.0.6"
+    "draggabilly": "^2.1.0"
   }
 }

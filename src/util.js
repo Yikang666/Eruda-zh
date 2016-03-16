@@ -117,7 +117,7 @@ module.exports = (function ()
 
         dasherize = function (str)
         {
-            return str.replace(/([a-z])([A-Z])/, '$1-$2').toLowerCase();
+            return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
         };
 
         return dasherize;
@@ -289,6 +289,19 @@ module.exports = (function ()
         };
 
         return indexOf;
+    })();
+
+    /* ------------------------------ defaults ------------------------------ */
+
+    var defaults;
+
+    _.defaults = (function ()
+    {
+        // TODO
+
+        defaults = _createAssigner(allKeys, true);
+
+        return defaults;
     })();
 
     /* ------------------------------ keys ------------------------------ */

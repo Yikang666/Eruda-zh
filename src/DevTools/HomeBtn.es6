@@ -3,18 +3,17 @@ import Draggabilly from 'draggabilly'
 
 require('./HomeBtn.scss');
 
-export default class HomeBtn
+export default class HomeBtn extends util.Emitter
 {
     constructor($parent)
     {
+        super();
         this._$parent = $parent;
 
         this._appendTpl();
         this._makeDraggable();
         this._setPos();
         this._bindEvent();
-
-        util.Emitter.mixin(this);
     }
     _appendTpl()
     {

@@ -9,7 +9,6 @@ import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
 import Settings from './Settings/Settings.es6'
 import util from './util'
-import fastClick from 'fastclick'
 
 require('./style.scss');
 
@@ -19,7 +18,6 @@ var isDebugMode = /eruda=true/.test(window.location);
 
 if (isDebugMode)
 {
-    initFaskClick();
     appendContainer();
 
     var devTools = new DevTools($container);
@@ -28,26 +26,34 @@ if (isDebugMode)
 
     homeBtn.on('click', () => devTools.toggle());
 
-    devTools.add(new Console())
-            .add(new Network())
-            .add(new Elements())
-            .add(new Snippets())
-            .add(new Resources())
-            .add(new Info())
-            .add(new Features())
-            .add(new Settings())
+    var consoleTool = new Console(),
+        network = new Network(),
+        elements = new Elements(),
+        snippets = new Snippets(),
+        resources = new Resources(),
+        info = new Info(),
+        features = new Features(),
+        settings = new Settings();
+
+    devTools.add(consoleTool)
+            .add(network)
+            .add(elements)
+            .add(snippets)
+            .add(resources)
+            .add(info)
+            .add(features)
+            .add(settings)
             .showTool('console');
+
+    settings.separator()
+            .add(devTools.config, 'transparent', 'Transparent')
+            .add(devTools.config, 'halfScreen', 'Half Screen Size');
 }
 
 function appendContainer()
 {
     util.$('body').append('<div id="eruda"></div>');
     $container = util.$('#eruda');
-}
-
-function initFaskClick()
-{
-    fastClick.attach(document.body, {});
 }
 
 export default {

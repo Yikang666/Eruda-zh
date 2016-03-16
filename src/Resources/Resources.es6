@@ -49,7 +49,7 @@ export default class Resources extends Tool
                    .refreshCookie()
                    .refreshScript()
                    .refreshStylesheet()
-                   .refreshImage();
+                   .refreshImage()._render();
     }
     refreshScript()
     {
@@ -65,7 +65,6 @@ export default class Resources extends Tool
         scriptData = util.unique(scriptData);
 
         this._scriptData = scriptData;
-        this._render();
 
         return this;
     }
@@ -83,7 +82,6 @@ export default class Resources extends Tool
         stylesheetData = util.unique(stylesheetData);
 
         this._stylesheetData = stylesheetData;
-        this._render();
 
         return this;
     }
@@ -91,7 +89,10 @@ export default class Resources extends Tool
     {
         var localStoreData = [];
 
-        util.each(localStorage, function (val, key)
+        // Mobile safari is not able to loop through localStorage directly.
+        var localStore = JSON.parse(JSON.stringify(window.localStorage));
+
+        util.each(localStore, function (val, key)
         {
             localStoreData.push({
                 key: key,
@@ -100,7 +101,6 @@ export default class Resources extends Tool
         });
 
         this._localStoreData = localStoreData;
-        this._render();
 
         return this;
     }
@@ -122,7 +122,6 @@ export default class Resources extends Tool
         }
 
         this._cookieData = cookieData;
-        this._render();
 
         return this;
     }
@@ -143,7 +142,6 @@ export default class Resources extends Tool
         imageData = util.unique(imageData);
 
         this._imageData = imageData;
-        this._render();
 
         return this;
     }
@@ -159,28 +157,28 @@ export default class Resources extends Tool
 
         this._$el.on('click', '.refresh-local-storage', () =>
         {
-            this.refreshLocalStorage();
+            this.refreshLocalStorage()._render();
         }).on('click', '.refresh-cookie', () =>
         {
-            this.refreshCookie();
+            this.refreshCookie()._render();
         }).on('click', '.refresh-script', () =>
         {
-            this.refreshScript();
+            this.refreshScript()._render();
         }).on('click', '.refresh-image', () =>
         {
-            this.refreshImage();
+            this.refreshImage()._render();
         }).on('click', '.delete-local-storage', function ()
         {
             var key = util.$(this).data('key');
 
             localStorage.removeItem(key);
-            self.refreshLocalStorage();
+            self.refreshLocalStorage()._render();
         }).on('click', '.delete-cookie', function ()
         {
             var key = util.$(this).data('key');
 
             util.cookie.remove(key);
-            self.refreshCookie();
+            self.refreshCookie()._render();
         });
 
         util.orientation.on('change', () => this._render());
