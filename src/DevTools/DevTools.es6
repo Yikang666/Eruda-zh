@@ -4,6 +4,11 @@ import config from '../config/config.es6'
 
 require('./DevTools.scss');
 
+function activeEruda(flag)
+{
+    window.localStorage.setItem('active-eruda', flag);
+}
+
 export default class DevTools
 {
     constructor($parent)
@@ -85,7 +90,8 @@ export default class DevTools
 
         cfg.set(util.defaults(cfg.get(), {
             transparent: false,
-            halfScreen: false
+            halfScreen: false,
+            activeEruda: false
         }));
 
         if (cfg.get('transparent')) this._setTransparency(true);
@@ -97,6 +103,7 @@ export default class DevTools
             {
                 case 'transparent': return this._setTransparency(val);
                 case 'halfScreen': return this._setHalfScreen(val);
+                case 'activeEruda': return activeEruda(val);
             }
         });
     }

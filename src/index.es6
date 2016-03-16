@@ -14,7 +14,7 @@ require('./style.scss');
 
 var $container;
 
-var isDebugMode = /eruda=true/.test(window.location);
+var isDebugMode = /eruda=true/.test(window.location) || localStorage.getItem('active-eruda') == 'true';
 
 if (isDebugMode)
 {
@@ -46,6 +46,8 @@ if (isDebugMode)
             .showTool('console');
 
     settings.separator()
+            .add(devTools.config, 'activeEruda', 'Always Activated')
+            .separator()
             .add(devTools.config, 'transparent', 'Transparent')
             .add(devTools.config, 'halfScreen', 'Half Screen Size');
 }
