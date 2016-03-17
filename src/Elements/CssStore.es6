@@ -46,6 +46,8 @@ export default class CssStore
 
         util.each(document.styleSheets, (styleSheet) =>
         {
+            if (!styleSheet.cssRules) return;
+
             util.each(styleSheet.cssRules, (cssRule) =>
             {
                 var matchesEl = false;
