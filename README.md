@@ -8,6 +8,10 @@ Console for Mobile Browsers.
 
 Logging things out on mobile browser is never an easy stuff. I used to include `window onerror alert` script inside pages to find out JavaScript errors, kind of stupid and inefficient. Desktop browser DevTools is great, and I wish there is a similar one on mobile side, which leads to the creation of Eruda.
 
+## Demo
+
+Browse it on your phone: [http://liriliri.github.io/eruda/index.html?eruda=true](http://liriliri.github.io/eruda/index.html?eruda=true)
+
 ## Features
 
 * Console: Display JavaScript logs.
