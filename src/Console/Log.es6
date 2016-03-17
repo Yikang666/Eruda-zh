@@ -9,11 +9,11 @@ var cmdList = require('./cmdList.json'),
 
 var libraries = require('./libraries.json');
 
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Za-z0-9/]*\.js/g;
+var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
 
 function evalJs(jsInput)
 {
-    return eval(jsInput);
+    return eval.call(window, jsInput);
 }
 
 function errToStr(err, msg)
