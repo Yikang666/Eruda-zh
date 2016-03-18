@@ -84,7 +84,8 @@ export default class Log
 
         window.onerror = (errMsg, url, lineNum, column, errObj) =>
         {
-            self.error(errObj);
+            if (errObj) return self.error(errObj);
+            self.error(errMsg);
         };
 
         return this;
