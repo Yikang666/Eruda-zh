@@ -16,16 +16,21 @@
             &.log, &.output {
                 border-bottom: 1px solid #b4b4b4;
             }
-            &.log table {
-                width: 100%;
-                background: #fff;
-                border-collapse: collapse;
-                th {
-                    background: $blue;
-                    color: #fff;
+            &.log {
+                table {
+                    width: 100%;
+                    background: #fff;
+                    border-collapse: collapse;
+                    th {
+                        background: $blue;
+                        color: #fff;
+                    }
+                    th, td {
+                        padding: 10px;
+                    }
                 }
-                th, td {
-                    padding: 10px;
+                .blue {
+                    color: $blue;
                 }
             }
             &.error {

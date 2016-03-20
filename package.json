@@ -38,9 +38,7 @@
     "postcss-loader": "^0.8.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.14"
-  },
-  "dependencies": {
+    "webpack": "^1.12.14",
     "draggabilly": "^2.1.0"
   }
 }

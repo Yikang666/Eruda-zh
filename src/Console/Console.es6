@@ -19,6 +19,45 @@ export default class Console extends Tool
         this._initLog();
         this._bindEvent();
     }
+    overrideConsole()
+    {
+        var log = this._log;
+
+        window.console.log = (msg) =>
+        {
+            log.log(msg);
+        };
+        window.console.error = (msg) =>
+        {
+            log.error(msg);
+        };
+        window.console.warn = (msg) =>
+        {
+            log.warn(msg);
+        };
+        window.console.time = (name) =>
+        {
+            log.time(name);
+        };
+        window.console.timeEnd = (name) =>
+        {
+            log.timeEnd(name);
+        };
+
+        return this;
+    }
+    catchGlobalErr()
+    {
+        var log = this._log;
+
+        window.onerror = (errMsg, url, lineNum, column, errObj) =>
+        {
+            if (errObj) return log.error(errObj);
+            log.error(errMsg);
+        };
+
+        return this;
+    }
     _appendTpl()
     {
         var $el = this._$el;
@@ -30,7 +69,7 @@ export default class Console extends Tool
     _initLog()
     {
         this._log = new Log(this._$logs);
-        this._log.overrideConsole().catchGlobalErr();
+        this.overrideConsole().catchGlobalErr();
     }
     _bindEvent()
     {

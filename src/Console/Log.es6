@@ -58,37 +58,7 @@ export default class Log
         this._logs = [];
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
-    }
-    overrideConsole()
-    {
-        var self = this;
-
-        window.console.log = (msg) =>
-        {
-            self.log(msg);
-        };
-        window.console.error = (msg) =>
-        {
-            self.error(msg);
-        };
-        window.console.warn = (msg) =>
-        {
-            self.warn(msg);
-        };
-
-        return this;
-    }
-    catchGlobalErr()
-    {
-        var self = this;
-
-        window.onerror = (errMsg, url, lineNum, column, errObj) =>
-        {
-            if (errObj) return self.error(errObj);
-            self.error(errMsg);
-        };
-
-        return this;
+        this._timer = {};
     }
     clear()
     {
@@ -195,6 +165,24 @@ export default class Log
     help()
     {
         return this.log(helpMsg);
+    }
+    time(name)
+    {
+        this._timer[name] = util.now();
+
+        return this;
+    }
+    timeEnd(name)
+    {
+        var startTime = this._timer[name];
+
+        if (!startTime) return;
+
+        var duration = util.now() - startTime;
+        this.log('<div class="eruda-blue">' + name + ':' + duration + 'ms</div>');
+        delete  this._timer[name];
+
+        return this;
     }
     _runCmd(cmd)
     {
