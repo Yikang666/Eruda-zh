@@ -14,43 +14,38 @@ require('./style.scss');
 
 var $container;
 
-var isDebugMode = /eruda=true/.test(window.location) || localStorage.getItem('active-eruda') == 'true';
+appendContainer();
 
-if (isDebugMode)
-{
-    appendContainer();
+var devTools = new DevTools($container);
 
-    var devTools = new DevTools($container);
+var homeBtn = new HomeBtn($container);
 
-    var homeBtn = new HomeBtn($container);
+homeBtn.on('click', () => devTools.toggle());
 
-    homeBtn.on('click', () => devTools.toggle());
+var consoleTool = new Console(),
+    network = new Network(),
+    elements = new Elements(),
+    snippets = new Snippets(),
+    resources = new Resources(),
+    info = new Info(),
+    features = new Features(),
+    settings = new Settings();
 
-    var consoleTool = new Console(),
-        network = new Network(),
-        elements = new Elements(),
-        snippets = new Snippets(),
-        resources = new Resources(),
-        info = new Info(),
-        features = new Features(),
-        settings = new Settings();
+devTools.add(consoleTool)
+        .add(network)
+        .add(elements)
+        .add(snippets)
+        .add(resources)
+        .add(info)
+        .add(features)
+        .add(settings)
+        .showTool('console');
 
-    devTools.add(consoleTool)
-            .add(network)
-            .add(elements)
-            .add(snippets)
-            .add(resources)
-            .add(info)
-            .add(features)
-            .add(settings)
-            .showTool('console');
-
-    settings.separator()
-            .add(devTools.config, 'activeEruda', 'Always Activated')
-            .separator()
-            .add(devTools.config, 'transparent', 'Transparent')
-            .add(devTools.config, 'halfScreen', 'Half Screen Size');
-}
+settings.separator()
+        .add(devTools.config, 'activeEruda', 'Always Activated')
+        .separator()
+        .add(devTools.config, 'transparent', 'Transparent')
+        .add(devTools.config, 'halfScreen', 'Half Screen Size');
 
 function appendContainer()
 {
@@ -59,9 +54,17 @@ function appendContainer()
 }
 
 export default {
-    get: function (name)
+    get(name)
     {
-        return devTools.get(name);
+        devTools.get(name);
+
+        return this;
+    },
+    add(tool)
+    {
+        devTools.add(tool);
+
+        return this;
     }
 };
 
