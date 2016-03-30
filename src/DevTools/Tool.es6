@@ -16,8 +16,4 @@ export default class Tool
 
         return this;
     }
-    getConfig()
-    {
-        return this._config;
-    }
 }

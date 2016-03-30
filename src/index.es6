@@ -53,7 +53,7 @@ function appendContainer()
     $container = util.$('#eruda');
 }
 
-export default {
+module.exports = {
     get(name)
     {
         devTools.get(name);
@@ -65,6 +65,7 @@ export default {
         devTools.add(tool);
 
         return this;
-    }
+    },
+    util
 };
 
