@@ -1,6 +1,5 @@
 @import "../color";
 
-
 .dev-tools {
     position: absolute;
     width: 100%;
@@ -24,6 +23,7 @@
             transform: translateZ(0);
             position: absolute;
             overflow: hidden;
+            display: none;
             left: 0;
             top: 0;
             background: $gray-light;
