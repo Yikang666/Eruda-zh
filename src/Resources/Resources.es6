@@ -96,7 +96,7 @@ export default class Resources extends Tool
         {
             localStoreData.push({
                 key: key,
-                val: val
+                val: val.slice(0, 500)
             });
         });
 
