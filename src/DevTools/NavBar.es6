@@ -15,10 +15,14 @@ export default class NavBar extends util.Emitter
     add(name)
     {
         this._len++;
-        this._$el.append('<li>' + name + '</li>')
-                 .css({
-                     width: this._len * 69
-                 });
+        this._$el.append('<li class="' + name + '">' + name + '</li>')
+                 .css({width: this._len * 69});
+    }
+    remove(name)
+    {
+        this._len--;
+        this._$el.find('li.' + name).remove();
+        this._$el.css({width: this._len * 69});
     }
     activeTool(name)
     {

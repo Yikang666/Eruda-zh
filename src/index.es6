@@ -66,6 +66,12 @@ module.exports = {
 
         return this;
     },
+    remove(name)
+    {
+        devTools.remove(name);
+
+        return this;
+    },
     show(name)
     {
         devTools.showTool(name);

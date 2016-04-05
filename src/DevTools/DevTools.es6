@@ -58,6 +58,22 @@ export default class DevTools
 
         return this;
     }
+    remove(name)
+    {
+        var tool = this._tools[name];
+        delete this._tools[name];
+        this._$tools.find('.eruda-' + name);
+
+        this._navBar.remove(name);
+
+        if (tool.active)
+        {
+            var keys = util.keys(this._tools);
+            if (keys.length > 0) this.showTool(keys[0]);
+        }
+
+        return this;
+    }
     get(name)
     {
         var tool = this._tools[name];
