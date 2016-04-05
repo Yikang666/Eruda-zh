@@ -37,6 +37,7 @@
                 height: 18px;
                 line-height: 18px;
                 border-radius: 50%;
+                cursor: pointer;
             }
         }
         .link-list {
@@ -85,6 +86,7 @@
                     border-radius: 50%;
                     background: $red-dark;
                     line-height: 20px;
+                    cursor: pointer;
                 }
                 &.key {
                     white-space: nowrap;

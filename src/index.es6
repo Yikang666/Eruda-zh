@@ -49,6 +49,7 @@ settings.separator()
 
 function appendContainer()
 {
+    util.$('#eruda').remove();
     util.$('body').append('<div id="eruda"></div>');
     $container = util.$('#eruda');
 }
