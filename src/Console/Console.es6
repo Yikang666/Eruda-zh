@@ -50,6 +50,7 @@ export default class Console extends Tool
     {
         var log = this._log;
 
+        this._origOnerror = window.onerror;
         window.onerror = (errMsg, url, lineNum, column, errObj) =>
         {
             if (errObj) return log.error(errObj);
@@ -57,6 +58,12 @@ export default class Console extends Tool
         };
 
         return this;
+    }
+    destroy()
+    {
+        super.destroy();
+
+        window.onerror = this._origOnerror;
     }
     _appendTpl()
     {
@@ -89,8 +96,10 @@ export default class Console extends Tool
                 log.input(jsInput);
 
                 $jsInput.val('');
+                $jsInput.get(0).blur();
             }
-        });
+        }).on('focusin', () => $jsInput.css({height: '100%'}))
+          .on('focusout', () => $jsInput.css({height: '40px'}))
     }
 }
 

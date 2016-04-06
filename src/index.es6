@@ -49,7 +49,7 @@ settings.separator()
 
 function appendContainer()
 {
-    util.$('#eruda').remove();
+    if (eruda) eruda.destroy();
     util.$('body').append('<div id="eruda"></div>');
     $container = util.$('#eruda');
 }
@@ -78,6 +78,12 @@ module.exports = {
         devTools.showTool(name);
 
         return this;
+    },
+    destroy()
+    {
+        devTools.destroy();
+        $container.remove();
+        window.eruda = undefined;
     },
     util
 };

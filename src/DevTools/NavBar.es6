@@ -24,6 +24,10 @@ export default class NavBar extends util.Emitter
         this._$el.find('li.' + name).remove();
         this._$el.css({width: this._len * 69});
     }
+    destroy()
+    {
+        this._$el.remove();    
+    }
     activeTool(name)
     {
         var $el = this._$el;
