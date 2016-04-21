@@ -57,9 +57,7 @@ function appendContainer()
 module.exports = {
     get(name)
     {
-        devTools.get(name);
-
-        return this;
+        return devTools.get(name);
     },
     add(tool)
     {
