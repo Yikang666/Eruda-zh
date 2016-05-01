@@ -1,14 +1,12 @@
 _('Emitter');
 
-orientation = {};
-
-Emitter.mixin(orientation);
+Emitter.mixin(exports);
 
 window.addEventListener('orientationchange', function ()
 {
     setTimeout(function ()
     {
-        orientation.emit('change');
+        exports.emit('change');
     }, 150);
 }, false);
 

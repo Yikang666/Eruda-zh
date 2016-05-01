@@ -2,6 +2,5 @@ module.exports = {
     files: 'src/**/*.es6',
     ignore: '**/Info/defInfo.es6',
     output: 'src/util.js',
-    format: 'commonjs',
-    namespace: 'eruda'
+    format: 'commonjs'
 };
