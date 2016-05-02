@@ -1,5 +1,5 @@
 import Tool from '../DevTools/Tool.es6'
-import util from '../util'
+import util from '../lib/util'
 import defInfo from './defInfo.es6'
 
 require('./Info.scss');

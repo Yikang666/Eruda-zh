@@ -3,6 +3,7 @@
 /.idea/
 /src/
 /test/
+/script/
 .gitignore
 .eustia
 .npmignore

@@ -391,15 +391,39 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ identity ------------------------------ */
+
+    var identity = _.identity = (function (exports)
+    {
+        /* Return the first argument given.
+         *
+         * |Name  |Type|Desc       |
+         * |-----------------------|
+         * |val   |*   |Any value  |
+         * |return|*   |Given value|
+         *
+         * ```javascript
+         * identity('a'); // -> 'a'
+         * ```
+         */
+
+        exports = function (val)
+        {
+            return val;
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ objToStr ------------------------------ */
 
     var objToStr = _.objToStr = (function (exports)
     {
         /* Alias of Object.prototype.toString.
          *
-         * |Name|Type|Desc|
-         * |--------------|
-         * |value|*|The source value|
+         * |Name  |Type  |Desc                                    |
+         * |------------------------------------------------------|
+         * |value |*     |Source value                            |
          * |return|string|String representation of the given value|
          */
 
@@ -482,7 +506,18 @@ module.exports = (function ()
 
     var each = _.each = (function (exports)
     {
-        // TODO
+        /* Iterates over elements of collection and invokes iteratee for each element.
+         *
+         * |Name    |Type         |Desc                          |
+         * |-----------------------------------------------------|
+         * |obj     |object\|array|Collection to iterate over    |
+         * |iteratee|function     |Function invoked per iteration|
+         * |[ctx]   |*            |Function context              |
+         *
+         * ```javascript
+         * each({'a': 1, 'b': 2}, function (val, key) {});
+         * ```
+         */
 
         exports = function (obj, iteratee, ctx)
         {
@@ -675,11 +710,11 @@ module.exports = (function ()
     {
         /* Copy all of the properties in the source objects over to the destination object.
          *
-         * |Name  |Type  |Desc                  |
-         * |------------------------------------|
-         * |obj   |object|The destination object|
-         * |*src  |object|The sources objects   |
-         * |return|object|The destination object|
+         * |Name  |Type  |Desc              |
+         * |--------------------------------|
+         * |obj   |object|Destination object|
+         * |*src  |object|Sources objects   |
+         * |return|object|Destination object|
          *
          * ```javascript
          * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
@@ -695,7 +730,18 @@ module.exports = (function ()
 
     var extendOwn = _.extendOwn = (function (exports)
     {
-        // TODO
+        /* Like extend, but only copies own properties over to the destination object.
+         *
+         * |Name  |Type  |Desc              |
+         * |--------------------------------|
+         * |obj   |object|Destination object|
+         * |*src  |object|Sources objects   |
+         * |return|object|Destination object|
+         *
+         * ```javascript
+         * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+         * ```
+         */
 
         exports = createAssigner(keys);
 
@@ -827,12 +873,23 @@ module.exports = (function ()
 
     var isMatch = _.isMatch = (function (exports)
     {
-        // TODO
+        /* Check if keys and values in src are contained in obj.
+         *
+         * |Name  |Type  |Desc                               |
+         * |-------------------------------------------------|
+         * |obj   |object |Object to inspect                 |
+         * |src   |object |Object of property values to match|
+         * |return|boolean|True if object is match           |
+         *
+         * ```javascript
+         * isMatch({a: 1, b: 2}, {a: 1}); // -> true
+         * ```
+         */
 
-        exports = function (obj, attrs)
+        exports = function (obj, src)
         {
-            var _keys = keys(attrs),
-                len   = _keys.length;
+            var _keys = keys(src),
+                len = _keys.length;
 
             if (obj == null) return !len;
 
@@ -840,8 +897,8 @@ module.exports = (function ()
 
             for (var i = 0; i < len; i++)
             {
-                var key = keys[i];
-                if (attrs[key] !== obj[key] || !(key in obj)) return false;
+                var key = _keys[i];
+                if (src[key] !== obj[key] || !(key in obj)) return false;
             }
 
             return true;
@@ -903,7 +960,20 @@ module.exports = (function ()
 
     var ltrim = _.ltrim = (function (exports)
     {
-        // TODO
+        /* Remove chars or white-spaces from beginning of string.
+         *
+         * |Name  |Type         |Desc                  |
+         * |-------------------------------------------|
+         * |str   |string       |The string to trim    |
+         * |chars |string\|array|The characters to trim|
+         * |return|string       |The trimmed string    |
+         *
+         * ```javascript
+         * ltrim(' abc  '); // -> 'abc  '
+         * ltrim('_abc_', '_'); // -> 'abc_'
+         * ltrim('_abc_', ['a', '_']); // -> 'bc_'
+         * ```
+         */
 
         var regSpace = /^\s+/;
 
@@ -1016,7 +1086,7 @@ module.exports = (function ()
 
         exports = function (val, ctx, argCount)
         {
-            if (val == null) return function (val) { return val };
+            if (val == null) return identity;
 
             if (isFn(val)) return optimizeCb(val, ctx, argCount);
 
@@ -1076,14 +1146,26 @@ module.exports = (function ()
 
     var map = _.map = (function (exports)
     {
-        // TODO
+        /* Create an array of values by running each element in collection through iteratee.
+         *
+         * |Name    |Type         |Desc                          |
+         * |-----------------------------------------------------|
+         * |obj     |array\|object|Collection to iterate over    |
+         * |iteratee|function     |Function invoked per iteration|
+         * |[ctx]   |*            |Function context              |
+         * |return  |array        |New mapped array              |
+         *
+         * ```javascript
+         * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
+         * ```
+         */
 
         exports = function (obj, iteratee, ctx)
         {
             iteratee = safeCb(iteratee, ctx);
 
-            var _keys   = !isArrLike(obj) && keys(obj),
-                len     = (_keys || obj).length,
+            var _keys = !isArrLike(obj) && keys(obj),
+                len = (_keys || obj).length,
                 results = Array(len);
 
             for (var i = 0; i < len; i++)
@@ -1831,7 +1913,22 @@ module.exports = (function ()
 
     var some = _.some = (function (exports)
     {
-        // TODO
+        /* Check if predicate return truthy for any element.
+         *
+         * |Name     |Type         |Desc                                          |
+         * |----------------------------------------------------------------------|
+         * |obj      |array\|object|Collection to iterate over                    |
+         * |predicate|function     |Function to invoked per iteration             |
+         * |ctx      |*            |Predicate context                             |
+         * |return   |boolean      |True if any element passes the predicate check|
+         *
+         * ```javascript
+         * some([2, 5], function (val)
+         * {
+         *     return val % 2 === 0;
+         * }); // -> true
+         * ```
+         */
 
         exports = function (obj, predicate, ctx)
         {
@@ -2109,7 +2206,20 @@ module.exports = (function ()
 
     var rtrim = _.rtrim = (function (exports)
     {
-        // TODO
+        /* Remove chars or white-spaces from end of string.
+         *
+         * |Name  |Type         |Desc                  |
+         * |-------------------------------------------|
+         * |str   |string       |The string to trim    |
+         * |chars |string\|array|The characters to trim|
+         * |return|string       |The trimmed string    |
+         *
+         * ```javascript
+         * rtrim(' abc  '); // -> ' abc'
+         * rtrim('_abc_', '_'); // -> '_abc'
+         * rtrim('_abc_', ['c', '_']); // -> '_ab'
+         * ```
+         */
 
         var regSpace = /\s+$/;
 
@@ -2117,9 +2227,9 @@ module.exports = (function ()
         {
             if (chars == null) return str.replace(regSpace, '');
 
-            var end     = str.length - 1,
+            var end = str.length - 1,
                 charLen = chars.length,
-                found   = true,
+                found = true,
                 i, c;
 
             while (found && end >= 0)
@@ -2174,7 +2284,20 @@ module.exports = (function ()
 
     var trim = _.trim = (function (exports)
     {
-        // TODO
+        /* Remove chars or white-spaces from beginning end of string.
+         *
+         * |Name  |Type         |Desc                  |
+         * |-------------------------------------------|
+         * |str   |string       |The string to trim    |
+         * |chars |string\|array|The characters to trim|
+         * |return|string       |The trimmed string    |
+         *
+         * ```javascript
+         * trim(' abc  '); // -> 'abc'
+         * trim('_abc_', '_'); // -> 'abc'
+         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
+         * ```
+         */
 
         var regSpace = /^\s+|\s+$/g;
 

@@ -8,9 +8,10 @@ import Resources from './Resources/Resources.es6'
 import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
 import Settings from './Settings/Settings.es6'
-import util from './util'
+import util from './lib/util'
 
 require('./style.scss');
+require('./icon.css');
 
 var $container;
 

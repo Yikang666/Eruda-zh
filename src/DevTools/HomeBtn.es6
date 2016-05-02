@@ -1,4 +1,4 @@
-import util from '../util'
+import util from '../lib/util'
 import Draggabilly from 'draggabilly'
 
 require('./HomeBtn.scss');

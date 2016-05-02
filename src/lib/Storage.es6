@@ -1,4 +1,4 @@
-import util from '../util';
+import util from './util';
 
 var localStore = {
     _storage: window.localStorage,

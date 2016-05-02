@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool.es6'
 import defSnippets from './defSnippets.es6'
-import util from '../util'
+import util from '../lib/util'
 
 require('./Snippets.scss');
 

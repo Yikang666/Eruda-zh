@@ -1,4 +1,4 @@
-import util from '../util'
+import util from '../lib/util'
 
 var borderCss = 'html>* {border: 2px solid #f5f5f5 !important}' +
                 'html>*>* {border: 2px solid #dabb3a !important}' +

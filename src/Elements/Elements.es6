@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool.es6'
 import CssStore from './CssStore.es6'
-import util from '../util'
+import util from '../lib/util'
 
 require('./Elements.scss');
 

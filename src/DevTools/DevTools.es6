@@ -1,6 +1,6 @@
 import NavBar from './NavBar.es6'
-import util from '../util'
-import config from '../config/config.es6'
+import util from '../lib/util'
+import config from '../lib/config.es6'
 
 require('./DevTools.scss');
 

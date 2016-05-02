@@ -1,4 +1,4 @@
-import util from '../util'
+import util from '../lib/util'
 
 require('./NavBar.scss');
 
