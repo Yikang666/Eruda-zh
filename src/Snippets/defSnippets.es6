@@ -19,5 +19,13 @@ export default [
             util.evalCss(borderCss);
         },
         desc: 'Add color borders to all elements'
+    },
+    {
+        name: 'Refresh Page',
+        fn: function ()
+        {
+            window.location.reload();
+        },
+        desc: 'Refresh current page'
     }
 ];

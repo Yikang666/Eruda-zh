@@ -26,10 +26,10 @@ export default class Console extends Tool
         var log = this._log,
             winConsole = window.console;
 
-        winConsole.log = function (msg) { log.log(msg) };
+        winConsole.log = function () { log.log.apply(log, arguments) };
         winConsole.error = function (msg) { log.error(msg) };
-        winConsole.info = function (msg) { log.info(msg) };
-        winConsole.warn = function (msg) { log.warn(msg) };
+        winConsole.info = function () { log.info.apply(log, arguments) };
+        winConsole.warn = function () { log.warn.apply(log, arguments) };
         winConsole.dir = function (obj) { log.dir(obj) };
         winConsole.time = function (name) { log.time(name) };
         winConsole.timeEnd = function (name) { log.timeEnd(name) };

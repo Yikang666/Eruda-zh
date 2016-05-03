@@ -50,6 +50,18 @@ function transMsg(msg)
     return util.escape(msg);
 }
 
+function transMultipleMsg(args)
+{
+    var ret = [];
+
+    util.each(args, function (val)
+    {
+        ret.push(transMsg(val));
+    });
+
+    return ret.join(' ');
+}
+
 function transCode(code)
 {
     return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
@@ -135,9 +147,9 @@ export default class Log extends util.Emitter
 
         return this;
     }
-    log(msg)
+    log()
     {
-        msg = transMsg(msg);
+        var msg = transMultipleMsg(arguments);
 
         this._logs.push({
             type: 'log',
@@ -183,9 +195,9 @@ export default class Log extends util.Emitter
 
         return this;
     }
-    info(msg)
+    info()
     {
-        msg = transMsg(msg);
+        var msg = transMultipleMsg(arguments);
 
         this._logs.push({
             type: 'info',
@@ -196,9 +208,9 @@ export default class Log extends util.Emitter
 
         return this;
     }
-    warn(msg)
+    warn()
     {
-        msg = transMsg(msg);
+        var msg = transMultipleMsg(arguments);
 
         this._logs.push({
             type: 'warn',
