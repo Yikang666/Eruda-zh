@@ -2,7 +2,7 @@ import util from '../lib/util'
 import Draggabilly from 'draggabilly'
 import config from '../lib/config.es6'
 
-require('./HomeBtn.scss');
+require('./EntryBtn.scss');
 
 export default class HomeBtn extends util.Emitter
 {
@@ -21,7 +21,7 @@ export default class HomeBtn extends util.Emitter
     {
         var $parent = this._$parent;
 
-        $parent.append(require('./HomeBtn.hbs')());
+        $parent.append(require('./EntryBtn.hbs')());
 
         this._$el = $parent.find('.eruda-home-btn');
     }
