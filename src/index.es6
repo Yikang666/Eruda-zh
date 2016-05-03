@@ -1,4 +1,4 @@
-import HomeBtn from './Entry/HomeBtn.es6'
+import HomeBtn from './HomeBtn/HomeBtn.es6'
 import DevTools from './DevTools/DevTools.es6'
 import Console from './Console/Console.es6'
 import Network from './Network/Network.es6'
@@ -48,7 +48,10 @@ settings.separator()
         .add(homeBtn.config, 'rememberPos', 'Remember Home Button Position')
         .separator()
         .add(devTools.config, 'transparent', 'Transparent')
-        .add(devTools.config, 'halfScreen', 'Half Screen Size');
+        .add(devTools.config, 'halfScreen', 'Half Screen Size')
+        .separator()
+        .add(consoleTool.config, 'catchGlobalErr', 'Catch Global Errors')
+        .add(consoleTool.config, 'overrideConsole', 'Override Console');
 
 function appendContainer()
 {

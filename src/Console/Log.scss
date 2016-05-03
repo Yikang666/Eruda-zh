@@ -13,10 +13,10 @@
             a {
                 color: $blue !important;
             }
-            &.log, &.output {
+            &.log, &.output, &.info, &.dir {
                 border-bottom: 1px solid #b4b4b4;
             }
-            &.log {
+            &.html {
                 table {
                     width: 100%;
                     background: #fff;
@@ -47,6 +47,9 @@
                 background: #fffbe6;
                 border-top: 1px solid #fff5c2;
                 border-bottom: 1px solid #fff5c2;
+            }
+            &.info {
+                color: $blue;
             }
         }
     }

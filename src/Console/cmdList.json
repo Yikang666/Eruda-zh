@@ -3,6 +3,7 @@
     ":a": "Show all logs",
     ":e": "Show error logs only",
     ":w": "Show warn logs only",
+    ":i": "Show info logs only",
     ":l": "Show normal logs only",
     ":h": "Show help",
     ":$": "Load jQuery",

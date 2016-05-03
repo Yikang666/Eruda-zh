@@ -1,13 +1,15 @@
 import util from '../lib/util'
 
-var borderCss = 'html>* {border: 2px solid #f5f5f5 !important}' +
-                'html>*>* {border: 2px solid #dabb3a !important}' +
-                'html>*>*>* {border: 2px solid #abc1c7 !important}' +
-                'html>*>*>*>* {border: 2px solid #472936 !important}' +
-                'html>*>*>*>*>* {border: 2px solid #c84941 !important}' +
-                'html>*>*>*>*>*>* {border: 2px solid #296dd1 !important}' +
-                'html>*>*>*>*>*>*>* {border: 2px solid #67adb4 !important}' +
-                'html>*>*>*>*>*>*>*>* {border: 2px solid #1ea061 !important}';
+var borderCss = '',
+    selector = 'html',
+    colors = ['f5f5f5', 'dabb3a', 'abc1c7', '472936', 'c84941', '296dd1', '67adb4', '1ea061'];
+
+util.each(colors, function (color)
+{
+    selector += '>*';
+
+    borderCss += selector + '{border: 2px solid #' + color + ' !important}';
+});
 
 export default [
     {

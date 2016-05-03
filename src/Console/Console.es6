@@ -1,6 +1,7 @@
 import Log from './Log.es6'
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
+import config from '../lib/config.es6'
 
 require('./Console.scss');
 
@@ -18,31 +19,20 @@ export default class Console extends Tool
         this._appendTpl();
         this._initLog();
         this._bindEvent();
+        this._initConfig();
     }
     overrideConsole()
     {
-        var log = this._log;
+        var log = this._log,
+            winConsole = window.console;
 
-        window.console.log = (msg) =>
-        {
-            log.log(msg);
-        };
-        window.console.error = (msg) =>
-        {
-            log.error(msg);
-        };
-        window.console.warn = (msg) =>
-        {
-            log.warn(msg);
-        };
-        window.console.time = (name) =>
-        {
-            log.time(name);
-        };
-        window.console.timeEnd = (name) =>
-        {
-            log.timeEnd(name);
-        };
+        winConsole.log = function (msg) { log.log(msg) };
+        winConsole.error = function (msg) { log.error(msg) };
+        winConsole.info = function (msg) { log.info(msg) };
+        winConsole.warn = function (msg) { log.warn(msg) };
+        winConsole.dir = function (obj) { log.dir(obj) };
+        winConsole.time = function (name) { log.time(name) };
+        winConsole.timeEnd = function (name) { log.timeEnd(name) };
 
         return this;
     }
@@ -70,36 +60,85 @@ export default class Console extends Tool
         var $el = this._$el;
 
         $el.append(require('./Console.hbs')());
+        this._$control = $el.find('.eruda-control');
         this._$logs = $el.find('.eruda-logs');
-        this._$jsInput = $el.find('.eruda-js-input');
+        this._$inputContainer = $el.find('.eruda-js-input');
+        this._$input = this._$inputContainer.find('textarea');
+        this._$inputBtns = this._$inputContainer.find('.eruda-buttons');
     }
     _initLog()
     {
         this._log = new Log(this._$logs);
-        this.overrideConsole().catchGlobalErr();
+
+        this._log.on('filter', (filter) =>
+        {
+            this._$control.find('.filter').each(function ()
+            {
+                var $this = util.$(this),
+                    isMatch = $this.data('filter') === filter;
+
+                $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
+            });
+        });
     }
     _bindEvent()
     {
-        var $jsInput = this._$jsInput,
+        var $input = this._$input,
+            $inputBtns = this._$inputBtns,
+            $control = this._$control,
             log = this._log;
 
-        $jsInput.on('keyup', (e) =>
+        $control.on('click', '.clear-console', () => log.clear());
+        $control.on('click', '.filter', function ()
         {
-            e = e.origEvent;
+            log.filter(util.$(this).data('filter'));
+        }).on('click', '.help', () => log.help());
 
-            if (e.keyCode === 13)
-            {
-                var jsInput = $jsInput.val();
+        $inputBtns.on('click', '.cancel', () => this._hideInput());
+        $inputBtns.on('click', '.execute', () =>
+        {
+            var jsInput = $input.val();
 
-                if (util.trim(jsInput) === '') return;
+            if (util.trim(jsInput) === '') return;
 
-                log.input(jsInput);
+            log.input(jsInput);
 
-                $jsInput.val('');
-                $jsInput.get(0).blur();
-            }
-        }).on('focusin', () => $jsInput.css({height: '100%'}))
-          .on('focusout', () => $jsInput.css({height: '40px'}))
+            $input.val('').get(0).blur();
+
+            this._hideInput();
+        });
+
+        $input.on('focusin', () => this._showInput());
+    }
+    _hideInput()
+    {
+        this._$inputContainer.css({
+            paddingTop: 0,
+            height: 40
+        });
+
+        this._$inputBtns.hide();
+    }
+    _showInput()
+    {
+        this._$inputContainer.css({
+            paddingTop: 40,
+            height: '100%'
+        });
+
+        this._$inputBtns.show();
+    }
+    _initConfig()
+    {
+        var cfg = this.config = config.create('eruda-console');
+
+        cfg.set(util.defaults(cfg.get(), {
+            catchGlobalErr: true,
+            overrideConsole: true
+        }));
+
+        if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
+        if (cfg.get('overrideConsole')) this.overrideConsole();
     }
 }
 

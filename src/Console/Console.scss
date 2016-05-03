@@ -2,18 +2,81 @@
 
 .dev-tools { .tools {
     .console {
+        .control {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 10px;
+            background: #fff;
+            height: 40px;
+            line-height: 20px;
+            width: 100%;
+            .icon-blocked, .icon-info {
+                color: $gray;
+                position: relative;
+                top: 2px;
+                &:active {
+                    color: $gray-light;
+                }
+            }
+            .icon-blocked {
+                margin-right: 10px;
+            }
+            .icon-info {
+                float: right;
+            }
+            .filter {
+                color: $gray;
+                margin: 0 1px;
+                font-size: 12px;
+                padding: 4px;
+                border-radius: 4px;
+                &.active {
+                    background: $gray;
+                    color: #fff;
+                }
+            }
+        }
+        padding-top: 40px;
         padding-bottom: 40px;
         .js-input {
             position: absolute;
             left: 0;
             bottom: 0;
             width: 100%;
-            height: 40px;
-            padding: 10px;
-            border: none;
-            font-size: 13px;
             background: #fff;
-            outline: none;
+            height: 40px;
+            .buttons {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 40px;
+                color: $gray;
+                font-size: 12px;
+                border-bottom: 1px solid $gray-light;
+                .button {
+                    width: 50%;
+                    display: inline-block;
+                    text-align: center;
+                    height: 40px;
+                    line-height: 40px;
+                    float: left;
+                    &:active {
+                        background: $blue;
+                        color: #fff;
+                    }
+                }
+            }
+            textarea {
+                padding: 10px;
+                outline: none;
+                border: none;
+                font-size: 14px;
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 } }

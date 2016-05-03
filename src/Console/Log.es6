@@ -47,13 +47,20 @@ function transMsg(msg)
         msg = 'Object ' + JSON.stringify(msg);
     }
 
-    return msg;
+    return util.escape(msg);
 }
 
-export default class Log
+function transCode(code)
+{
+    return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
+}
+
+export default class Log extends util.Emitter
 {
     constructor($el)
     {
+        super();
+
         this._$el = $el;
         this._logs = [];
         this._tpl = require('./Log.hbs');
@@ -79,18 +86,20 @@ export default class Log
         } else if (util.startWith(jsCode, '/'))
         {
             var regexp = util.trim(jsCode.slice(1));
-            return this.filter(new RegExp(regexp));
+            return this.filter(new RegExp(util.escapeRegExp(regexp)));
         }
 
         this._logs.push({
             type: 'input',
-            val: jsCode
+            ignoreFilter: true,
+            val: transCode(jsCode)
         });
 
         try {
             this.output(evalJs(jsCode));
         } catch (e)
         {
+            e.ignoreFilter = true;
             this.error(e);
         }
 
@@ -104,6 +113,21 @@ export default class Log
 
         this._logs.push({
             type: 'output',
+            ignoreFilter: true,
+            val: msg
+        });
+
+        this._render();
+
+        return this;
+    }
+    dir(obj)
+    {
+        var msg = util.isObj(obj) ? JSON.stringify(obj, null, 4) : transMsg(obj);
+
+        this._logs.push({
+            type: 'dir',
+            isCode: true,
             val: msg
         });
 
@@ -124,10 +148,25 @@ export default class Log
 
         return this;
     }
+    html(msg)
+    {
+        this._logs.push({
+            type: 'html',
+            ignoreFilter: true,
+            val: msg
+        });
+
+        this._render();
+
+        return this;
+    }
     error(msg)
     {
+        var ignoreFilter = false;
+
         if (util.isErr(msg))
         {
+            ignoreFilter = msg.ignoreFilter;
             msg = errToStr(msg);
         } else
         {
@@ -136,6 +175,20 @@ export default class Log
 
         this._logs.push({
             type: 'error',
+            ignoreFilter: ignoreFilter,
+            val: msg
+        });
+
+        this._render();
+
+        return this;
+    }
+    info(msg)
+    {
+        msg = transMsg(msg);
+
+        this._logs.push({
+            type: 'info',
             val: msg
         });
 
@@ -160,11 +213,13 @@ export default class Log
     {
         this._filter = type;
 
+        this.emit('filter', type);
+
         this._render();
     }
     help()
     {
-        return this.log(helpMsg);
+        return this.html(helpMsg);
     }
     time(name)
     {
@@ -193,6 +248,7 @@ export default class Log
             case 'c': return this.clear();
             case 'a': return this.filter('all');
             case 'e': return this.filter('error');
+            case 'i': return this.filter('info');
             case 'w': return this.filter('warn');
             case 'l': return this.filter('log');
             case 'h': return this.help();
@@ -233,7 +289,7 @@ export default class Log
         {
             if (isRegexp) return filter.test(val.val);
 
-            return val.type === filter;
+            return val.ignoreFilter || val.type === filter;
         });
     }
     _scrollToBottom()
