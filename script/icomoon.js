@@ -1,4 +1,4 @@
-// Icons: ['cog']
+// Icons: ['cogs', 'bin', 'loop']
 
 var fs = require('fs'),
     path = require('path');

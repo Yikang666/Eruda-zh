@@ -29,6 +29,7 @@
             }
             .btn {
                 float: right;
+                margin-right: 2px;
                 display: inline-block;
                 background: #fff;
                 color: $gray;
@@ -37,7 +38,12 @@
                 height: 18px;
                 line-height: 18px;
                 border-radius: 50%;
+                font-size: 12px;
                 cursor: pointer;
+                .icon-loop {
+                    position: relative;
+                    top: 1px;
+                }
             }
         }
         .link-list {
@@ -77,22 +83,15 @@
             td {
                 padding: 10px;
                 word-break: break-all;
-                .delete {
-                    color: #fff;
-                    width: 20px;
-                    height: 20px;
-                    display: inline-block;
-                    text-align: center;
-                    border-radius: 50%;
-                    background: $red-dark;
-                    line-height: 20px;
-                    cursor: pointer;
+                .icon-bin {
+                    color: $red-dark;
                 }
                 &.key {
                     white-space: nowrap;
                 }
                 &.control {
                     width: 40px;
+                    text-align: center;
                 }
             }
             background: #fff;

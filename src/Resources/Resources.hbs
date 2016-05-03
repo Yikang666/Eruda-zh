@@ -1,7 +1,9 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{localStoreState}}">
         LocalStorage
-        <span class="eruda-btn refresh-local-storage">R</span>
+        <div class="eruda-btn refresh-local-storage">
+            <span class="eruda-icon-loop"></span>
+        </div>
     </h2>
     <table>
         <tbody>
@@ -11,7 +13,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-delete delete-local-storage" data-key="{{key}}">‒</span>
+                            <span class="eruda-icon-bin delete-local-storage" data-key="{{key}}"></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -26,7 +28,9 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{cookieState}}">
         Cookie
-        <span class="eruda-btn refresh-cookie">R</span>
+        <div class="eruda-btn refresh-cookie">
+            <span class="eruda-icon-loop"></span>
+        </div>
     </h2>
     <table>
         <tbody>
@@ -36,7 +40,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-delete delete-cookie" data-key="{{key}}">‒</span>
+                            <span class="eruda-icon-bin delete-cookie" data-key="{{key}}"></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -51,7 +55,9 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{scriptState}}">
         Script
-        <span class="eruda-btn refresh-script">R</span>
+        <div class="eruda-btn refresh-script">
+            <span class="eruda-icon-loop"></span>
+        </div>
     </h2>
     <ul class="eruda-link-list">
         {{#if scriptData}}
@@ -68,7 +74,9 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{stylesheetState}}">
         Stylesheet
-        <span class="eruda-btn refresh-stylesheet">R</span>
+        <div class="eruda-btn refresh-stylesheet">
+            <span class="eruda-icon-loop"></span>
+        </div>
     </h2>
     <ul class="eruda-link-list">
         {{#if stylesheetData}}
@@ -85,7 +93,9 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{imageState}}">
         Image
-        <span class="eruda-btn refresh-image">R</span>
+        <div class="eruda-btn refresh-image">
+            <span class="eruda-icon-loop"></span>
+        </div>
     </h2>
     <ul class="eruda-image-list">
         {{#if imageData}}

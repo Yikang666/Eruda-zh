@@ -1,4 +1,4 @@
-import HomeBtn from './HomeBtn/HomeBtn.es6'
+import HomeBtn from './Entry/HomeBtn.es6'
 import DevTools from './DevTools/DevTools.es6'
 import Console from './Console/Console.es6'
 import Network from './Network/Network.es6'
@@ -33,11 +33,11 @@ var consoleTool = new Console(),
     settings = new Settings();
 
 devTools.add(consoleTool)
-        .add(network)
         .add(elements)
-        .add(snippets)
+        .add(network)
         .add(resources)
         .add(info)
+        .add(snippets)
         .add(features)
         .add(settings)
         .showTool('console');

@@ -31,8 +31,9 @@ export default class HomeBtn extends util.Emitter
             pos = cfg.get('pos'),
             defPost = getDefPos();
 
-        if (pos.x > defPost.x + 10 ||
-            pos.y > defPost.y + 10 ||
+        var outOfRange = pos.x > defPost.x + 10 || pos.y > defPost.y + 10;
+
+        if (outOfRange ||
             !cfg.get('rememberPos') ||
             orientationChanged)
         {
@@ -44,7 +45,7 @@ export default class HomeBtn extends util.Emitter
             top: pos.y
         });
 
-        cfg.set(pos, pos);
+        cfg.set('pos', pos);
     }
     _bindEvent()
     {
