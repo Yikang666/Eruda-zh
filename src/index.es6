@@ -1,4 +1,4 @@
-import HomeBtn from './DevTools/HomeBtn.es6'
+import HomeBtn from './HomeBtn/HomeBtn.es6'
 import DevTools from './DevTools/DevTools.es6'
 import Console from './Console/Console.es6'
 import Network from './Network/Network.es6'
@@ -44,6 +44,8 @@ devTools.add(consoleTool)
 
 settings.separator()
         .add(devTools.config, 'activeEruda', 'Always Activated')
+        .separator()
+        .add(homeBtn.config, 'rememberPos', 'Remember Home Button Position')
         .separator()
         .add(devTools.config, 'transparent', 'Transparent')
         .add(devTools.config, 'halfScreen', 'Half Screen Size');
