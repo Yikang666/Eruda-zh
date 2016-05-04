@@ -1,5 +1,6 @@
 import NavBar from './NavBar.es6'
 import util from '../lib/util'
+import Tool from './Tool.es6'
 import config from '../lib/config.es6'
 
 require('./DevTools.scss');
@@ -47,6 +48,8 @@ export default class DevTools
     }
     add(tool)
     {
+        util.defaults(tool, new Tool());
+
         var name = tool.name;
 
         this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');

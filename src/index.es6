@@ -9,6 +9,7 @@ import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
 import Settings from './Settings/Settings.es6'
 import util from './lib/util'
+import config from './lib/config.es6'
 
 require('./style.scss');
 require('./icon.css');
@@ -63,7 +64,7 @@ function appendContainer()
 module.exports = {
     get(name)
     {
-        return devTools.get(name);
+        return util.isUndef(name) ? devTools : devTools.get(name);
     },
     add(tool)
     {
@@ -79,7 +80,7 @@ module.exports = {
     },
     show(name)
     {
-        devTools.showTool(name);
+        util.isUndef(name) ? devTools.show() : devTools.showTool(name);
 
         return this;
     },
@@ -89,6 +90,7 @@ module.exports = {
         $container.remove();
         window.eruda = undefined;
     },
+    config,
     util
 };
 

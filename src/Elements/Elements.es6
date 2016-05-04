@@ -61,8 +61,6 @@ export default class Elements extends Tool
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
 
-        var self = this;
-
         $bottomBar.on('click', '.back', () => this._back())
                   .on('click', '.refresh', () => this._render())
                   .on('click', '.highlight', function ()
