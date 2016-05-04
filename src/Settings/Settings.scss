@@ -3,6 +3,8 @@
 
 .dev-tools { .tools {
     .settings {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         .separator {
             height: 10px;
         }

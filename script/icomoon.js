@@ -1,4 +1,4 @@
-// Icons: ['cogs', 'bin', 'loop']
+// Icons: info, blocked, terminal, bin, loop
 
 var fs = require('fs'),
     path = require('path');

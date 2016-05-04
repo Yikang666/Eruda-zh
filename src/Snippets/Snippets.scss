@@ -3,6 +3,8 @@
 
 .dev-tools { .tools {
     .snippets {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         padding: 10px;
         .section {
             margin-bottom: 10px;
