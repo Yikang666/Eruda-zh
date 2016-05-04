@@ -1,8 +1,143 @@
 import Tool from '../DevTools/Tool.es6'
 import CssStore from './CssStore.es6'
+import Highlight from './Highlight.es6'
 import util from '../lib/util'
 
 require('./Elements.scss');
+
+export default class Elements extends Tool
+{
+    constructor()
+    {
+        super();
+        this.name = 'elements';
+        this._tpl = require('./Elements.hbs');
+        this._rmDefComputedStyle = true;
+        this._highlightElement = false;
+    }
+    init($el)
+    {
+        super.init($el);
+
+        $el.html('<div class="eruda-show-area"></div>');
+        this._$showArea = $el.find('.eruda-show-area');
+        $el.append(require('./BottomBar.hbs')());
+
+        this._bindEvent();
+        this._htmlEl = document.getElementsByTagName('html')[0];
+        this._initHighlight();
+        this._setEl(this._htmlEl, 0);
+    }
+    show()
+    {
+        super.show();
+
+        this._render();
+    }
+    _back()
+    {
+        if (this._curEl === this._htmlEl) return;
+
+        var parent = this._curEl.parentNode;
+
+        this._setEl(parent, this._curLevel - 1);
+    }
+    _bindEvent()
+    {
+        var self = this;
+
+        this._$el.on('click', '.eruda-child', function ()
+        {
+            var idx = util.$(this).data('idx');
+
+            var el = self._curEl.children[idx],
+                level = self._curLevel + 1;
+
+            self._setEl(el, level);
+        }).on('click', '.toggle-all-computed-style', () =>
+        {
+            this._toggleAllComputedStyle();
+        });
+
+        var $bottomBar = this._$el.find('.eruda-bottom-bar');
+
+        var self = this;
+
+        $bottomBar.on('click', '.back', () => this._back())
+                  .on('click', '.refresh', () => this._render())
+                  .on('click', '.highlight', function ()
+                  {
+                      util.$(this).toggleClass('eruda-active');
+                      self._toggleHighlight()
+                  })
+                  .on('click', '.reset', () => this._setEl(this._htmlEl, 0));
+    }
+    _toggleAllComputedStyle()
+    {
+        this._rmDefComputedStyle = !this._rmDefComputedStyle;
+
+        this._render();
+    }
+    _initHighlight()
+    {
+        this._highlight = new Highlight();
+    }
+    _toggleHighlight()
+    {
+        this._highlightElement = !this._highlightElement;
+
+        this._render();
+    }
+    _setEl(el, level)
+    {
+        this._curEl = el;
+        this._$curEl = util.$(el);
+        this._curLevel = level;
+        this._curCssStore = new CssStore(el);
+        this._highlight.setEl(el);
+        this._rmDefComputedStyle = true;
+
+        this._render();
+    }
+    _getData()
+    {
+        var ret = {};
+
+        var el = this._curEl,
+            cssStore = this._curCssStore;
+
+        var {
+                className,
+                id,
+                children,
+                attributes,
+                textContent,
+                tagName
+            } = el;
+
+        ret.children = formatChildren(children);
+        ret.attributes = formatAttr(attributes);
+        if (children.length === 0) ret.textContent = textContent;
+        ret.name = formatElName(tagName, id, className, attributes) + '(' + this._curLevel + ')';
+
+        if (needNoStyle(tagName)) return ret;
+
+        var computedStyle = cssStore.getComputedStyle();
+        if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+        ret.computedStyle = computedStyle;
+
+        var styles = cssStore.getMatchedCSSRules();
+        styles.unshift(getAttrStyle(attributes));
+        ret.styles = styles;
+
+        return ret;
+    }
+    _render()
+    {
+        this._highlight[this._highlightElement ? 'show' : 'hide']();
+        this._$showArea.html(this._tpl(this._getData()));
+    }
+}
 
 function formatElName(tagName, id, className, attributes)
 {
@@ -113,126 +248,4 @@ function needNoStyle(tagName)
     tagName = tagName.toLowerCase();
 
     return noStyleTag.indexOf(tagName) > -1;
-}
-
-export default class Elements extends Tool
-{
-    constructor()
-    {
-        super();
-        this.name = 'elements';
-        this._tpl = require('./Elements.hbs');
-        this._rmDefComputedStyle = true;
-    }
-    init($el)
-    {
-        super.init($el);
-
-        $el.html('<div class="eruda-show-area"></div>');
-        this._$showArea = $el.find('.eruda-show-area');
-        $el.append(require('./BottomBar.hbs')());
-
-        this._bindEvent();
-        this._htmlEl = document.getElementsByTagName('html')[0];
-        this._setEl(this._htmlEl, 0);
-    }
-    show()
-    {
-        super.show();
-
-        this._render();
-    }
-    _back()
-    {
-        if (this._curEl === this._htmlEl) return;
-
-        var parent = this._curEl.parentNode;
-
-        this._setEl(parent, this._curLevel - 1);
-    }
-    _bindEvent()
-    {
-        var self = this;
-
-        this._$el.on('click', '.eruda-child', function ()
-        {
-            var idx = util.$(this).data('idx');
-
-            var el = self._curEl.children[idx],
-                level = self._curLevel + 1;
-
-            self._setEl(el, level);
-        }).on('click', '.toggle-all-computed-style', () =>
-        {
-            this._toggleAllComputedStyle();
-        });
-
-        var $bottomBar = this._$el.find('.eruda-bottom-bar');
-
-        $bottomBar.on('click', '.back', () => this._back())
-                  .on('click', '.refresh', () => this._render())
-                  .on('click', '.highlight', () => this._highlight())
-                  .on('click', '.reset', () => this._setEl(this._htmlEl, 0));
-    }
-    _toggleAllComputedStyle()
-    {
-        this._rmDefComputedStyle = !this._rmDefComputedStyle;
-
-        this._render();
-    }
-    _highlight()
-    {
-        this._$curEl.toggleClass('eruda-highlight');
-
-        this._render();
-    }
-    _setEl(el, level)
-    {
-        if (this._$curEl) this._$curEl.rmClass('eruda-highlight');
-
-        this._curEl = el;
-        this._$curEl = util.$(el);
-        this._curLevel = level;
-        this._curCssStore = new CssStore(el);
-        this._rmDefComputedStyle = true;
-
-        this._render();
-    }
-    _getData()
-    {
-        var ret = {};
-
-        var el = this._curEl,
-            cssStore = this._curCssStore;
-
-        var {
-                className,
-                id,
-                children,
-                attributes,
-                textContent,
-                tagName
-            } = el;
-
-        ret.children = formatChildren(children);
-        ret.attributes = formatAttr(attributes);
-        if (children.length === 0) ret.textContent = textContent;
-        ret.name = formatElName(tagName, id, className, attributes) + '(' + this._curLevel + ')';
-
-        if (needNoStyle(tagName)) return ret;
-
-        var computedStyle = cssStore.getComputedStyle();
-        if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
-        ret.computedStyle = computedStyle;
-
-        var styles = cssStore.getMatchedCSSRules();
-        styles.unshift(getAttrStyle(attributes));
-        ret.styles = styles;
-
-        return ret;
-    }
-    _render()
-    {
-        this._$showArea.html(this._tpl(this._getData()));
-    }
 }

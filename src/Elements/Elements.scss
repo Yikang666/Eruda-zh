@@ -111,7 +111,7 @@
                 font-size: 14px;
                 line-height: 40px;
                 flex-grow: 1;
-                &:active {
+                &:active, &.active {
                     background: $blue;
                     color: #fff;
                 }
@@ -120,7 +120,3 @@
     }
 } }
 
-.highlight {
-    background: $blue !important;
-    border: 4px solid $green !important;
-}

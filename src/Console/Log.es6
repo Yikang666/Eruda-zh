@@ -2,71 +2,6 @@ import util from '../lib/util'
 
 require('./Log.scss');
 
-var cmdList = require('./cmdList.json'),
-    helpMsg = require('./help.hbs')({
-        commands: cmdList
-    });
-
-var libraries = require('./libraries.json');
-
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
-
-function evalJs(jsInput)
-{
-    return eval.call(window, jsInput);
-}
-
-function errToStr(err, msg)
-{
-    var lines = err.stack.split('\n');
-
-    if (util.isUndef(msg)) msg = lines[0] + '<br/>';
-    var stack = '<div class="eruda-stack">' + lines.slice(1).join('<br/>') + '</div>';
-
-    stack = stack.replace(regJsUrl, function (match)
-    {
-        return '<a href="' + match + '" target="_blank">' + match + '</a>';
-    });
-
-    return msg + stack;
-}
-
-function transMsg(msg)
-{
-    if (util.isUndef(msg))
-    {
-        msg = 'undefined';
-    } else if (util.isFn(msg))
-    {
-        msg = msg.toString();
-    } else if (util.isArr(msg))
-    {
-        msg = JSON.stringify(msg);
-    } else if (util.isObj(msg))
-    {
-        msg = 'Object ' + JSON.stringify(msg);
-    }
-
-    return util.escape(msg);
-}
-
-function transMultipleMsg(args)
-{
-    var ret = [];
-
-    util.each(args, function (val)
-    {
-        ret.push(transMsg(val));
-    });
-
-    return ret.join(' ');
-}
-
-function transCode(code)
-{
-    return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
-}
-
 export default class Log extends util.Emitter
 {
     constructor($el)
@@ -310,4 +245,69 @@ export default class Log extends util.Emitter
 
         el.scrollTop = el.scrollHeight;
     }
+}
+
+var cmdList = require('./cmdList.json'),
+    helpMsg = require('./help.hbs')({
+        commands: cmdList
+    });
+
+var libraries = require('./libraries.json');
+
+var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
+
+function evalJs(jsInput)
+{
+    return eval.call(window, jsInput);
+}
+
+function errToStr(err, msg)
+{
+    var lines = err.stack.split('\n');
+
+    if (util.isUndef(msg)) msg = lines[0] + '<br/>';
+    var stack = '<div class="eruda-stack">' + lines.slice(1).join('<br/>') + '</div>';
+
+    stack = stack.replace(regJsUrl, function (match)
+    {
+        return '<a href="' + match + '" target="_blank">' + match + '</a>';
+    });
+
+    return msg + stack;
+}
+
+function transMsg(msg)
+{
+    if (util.isUndef(msg))
+    {
+        msg = 'undefined';
+    } else if (util.isFn(msg))
+    {
+        msg = msg.toString();
+    } else if (util.isArr(msg))
+    {
+        msg = JSON.stringify(msg);
+    } else if (util.isObj(msg))
+    {
+        msg = 'Object ' + JSON.stringify(msg);
+    }
+
+    return util.escape(msg);
+}
+
+function transMultipleMsg(args)
+{
+    var ret = [];
+
+    util.each(args, function (val)
+    {
+        ret.push(transMsg(val));
+    });
+
+    return ret.join(' ');
+}
+
+function transCode(code)
+{
+    return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
 }

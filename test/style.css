@@ -1,9 +1,7 @@
-body {
-    background: #b4bad2;
-}
 #test-element {
-    margin: 0 auto;
+    margin: 15px auto;
+    padding: 10px;
 }
 .border {
-    border: 1px solid #ccc;
+    border: 15px solid #fff;
 }
