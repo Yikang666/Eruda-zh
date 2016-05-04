@@ -33,6 +33,7 @@ export default class Console extends Tool
         winConsole.dir = function (obj) { log.dir(obj) };
         winConsole.time = function (name) { log.time(name) };
         winConsole.timeEnd = function (name) { log.timeEnd(name) };
+        winConsole.clear = function () { log.clear() };
 
         return this;
     }
