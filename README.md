@@ -2,7 +2,7 @@
 
 Console for Mobile Browsers.
 
-![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda.jpg)
+![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot.jpg)
 
 ## Why
 
@@ -10,21 +10,25 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 ## Demo
 
+![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode.png)
+
 Browse it on your phone: [http://liriliri.github.io/eruda/index.html?eruda=true](http://liriliri.github.io/eruda/index.html?eruda=true)
 
 ## Features
 
 * Console: Display JavaScript logs.
-* Network: Show performance timing.
 * Elements: Check dom state.
-* Snippets: Include snippets you used most often.
+* Network: Show performance timing.
 * Resource: Show localStorage, cookie information.
+* Info: Show url, user agent info.
+* Snippets: Include snippets you used most often.
+* Features: Browser feature detections.
 
 ## Install
 
 You can get it on npm.
 
-```
+```bash
 npm install eruda --save
 ```
 
@@ -38,13 +42,16 @@ Add this script to your page.
 })();
 ```
 
-> The JavaScript file size is quite huge and therefore not suitable to include in mobile pages. We add this script to make sure eruda is loaded only when eruda is set to true on url(http://example.com/?eruda=true).
+> The JavaScript file size is quite huge and therefore not suitable to include
+in mobile pages. We add this script to make sure eruda is loaded only when eruda
+is set to true on url(http://example.com/?eruda=true).
+
+## Plugins
+
+It is possible to enhance Eruda with more features by writing plugins. Please check [eruda-fps](https://github.com/liriliri/eruda-fps), a plugin for displaying page
+fps info, as a start example to write your own custom tool panels.
 
 ## License
 
-Eruda is released under the MIT license. Please see [LICENSE](https://opensource.org/licenses/MIT) for full details.
-
-
-
-
-
+Eruda is released under the MIT license. Please see
+[LICENSE](https://opensource.org/licenses/MIT) for full details.
