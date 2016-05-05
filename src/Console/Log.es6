@@ -12,6 +12,7 @@ export default class Log extends util.Emitter
         this._logs = [];
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
+        this._lastLog = {};
         this._timer = {};
     }
     clear()
@@ -36,7 +37,7 @@ export default class Log extends util.Emitter
             return this.filter(new RegExp(util.escapeRegExp(regexp)));
         }
 
-        this._logs.push({
+        this._insert({
             type: 'input',
             ignoreFilter: true,
             val: transCode(jsCode)
@@ -50,21 +51,17 @@ export default class Log extends util.Emitter
             this.error(e);
         }
 
-        this._render();
-
         return this;
     }
     output(msg)
     {
         msg = transMsg(msg);
 
-        this._logs.push({
+        this._insert({
             type: 'output',
             ignoreFilter: true,
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -72,13 +69,11 @@ export default class Log extends util.Emitter
     {
         var msg = util.isObj(obj) ? JSON.stringify(obj, null, 4) : transMsg(obj);
 
-        this._logs.push({
+        this._insert({
             type: 'dir',
             isCode: true,
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -86,24 +81,20 @@ export default class Log extends util.Emitter
     {
         var msg = transMultipleMsg(arguments);
 
-        this._logs.push({
+        this._insert({
             type: 'log',
             val: msg
         });
-
-        this._render();
 
         return this;
     }
     html(msg)
     {
-        this._logs.push({
+        this._insert({
             type: 'html',
             ignoreFilter: true,
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -120,13 +111,11 @@ export default class Log extends util.Emitter
             msg = errToStr(new Error(), transMsg(msg));
         }
 
-        this._logs.push({
+        this._insert({
             type: 'error',
             ignoreFilter: ignoreFilter,
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -134,12 +123,10 @@ export default class Log extends util.Emitter
     {
         var msg = transMultipleMsg(arguments);
 
-        this._logs.push({
+        this._insert({
             type: 'info',
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -147,12 +134,10 @@ export default class Log extends util.Emitter
     {
         var msg = transMultipleMsg(arguments);
 
-        this._logs.push({
+        this._insert({
             type: 'warn',
             val: msg
         });
-
-        this._render();
 
         return this;
     }
@@ -185,6 +170,32 @@ export default class Log extends util.Emitter
         delete  this._timer[name];
 
         return this;
+    }
+    _insert(log)
+    {
+        util.defaults(log, {
+            type: 'log',
+            isCode: false,
+            ignoreFilter: false,
+            val: '',
+            showTimes: false,
+            times: 1
+        });
+
+        var lastLog = this._lastLog;
+
+        if (lastLog.type === log.type && lastLog.val === log.val)
+        {
+            lastLog.times++;
+            lastLog.showTimes = true;
+        } else
+        {
+            this._logs.push(log);
+
+            this._lastLog = log;
+        }
+
+        this._render();
     }
     _runCmd(cmd)
     {
