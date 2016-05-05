@@ -26,14 +26,21 @@ export default class Console extends Tool
         var log = this._log,
             winConsole = window.console;
 
-        winConsole.log = function () { log.log.apply(log, arguments) };
-        winConsole.error = function (msg) { log.error(msg) };
-        winConsole.info = function () { log.info.apply(log, arguments) };
-        winConsole.warn = function () { log.warn.apply(log, arguments) };
-        winConsole.dir = function (obj) { log.dir(obj) };
-        winConsole.time = function (name) { log.time(name) };
-        winConsole.timeEnd = function (name) { log.timeEnd(name) };
-        winConsole.clear = function () { log.clear() };
+        function override(name)
+        {
+            var origin = winConsole[name];
+
+            winConsole[name] = function ()
+            {
+                log[name].apply(log, arguments);
+
+                origin.apply(winConsole, arguments);
+            };
+        }
+
+        var methods = ['log', 'error', 'info', 'warn', 'dir', 'time', 'timeEnd', 'clear'];
+
+        methods.forEach((name) => override(name));
 
         return this;
     }
