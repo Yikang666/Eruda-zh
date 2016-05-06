@@ -12,6 +12,7 @@ import util from './lib/util'
 import config from './lib/config.es6'
 
 require('./style.scss');
+require('./reset.scss');
 require('./icon.css');
 
 var $container;
@@ -57,7 +58,7 @@ settings.separator()
 function appendContainer()
 {
     if (eruda) eruda.destroy();
-    util.$('body').append('<div id="eruda"></div>');
+    util.$('body').append('<div id="eruda" class="eruda-container"></div>');
     $container = util.$('#eruda');
 }
 

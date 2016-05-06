@@ -20,8 +20,7 @@ function genCssFile(fontData)
         data.splice(2, 5, '    src: url(\'data:application/x-font-woff;charset=utf-8;base64,' +
                           fontData + '\') format(\'woff\');');
         data = data.join('\n');
-        data = data.replace('icon-"', 'eruda-icon-"');
-        data =
+        data = data.replace(/icon-"/g, 'eruda-icon-"');
 
         writeCssFile(data);
     });

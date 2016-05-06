@@ -5,7 +5,7 @@
     font-style: normal;
 }
 
-[class^="eruda-icon-"], [class*=" icon-"] {
+[class^="eruda-icon-"], [class*=" eruda-icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
     speak: none;
