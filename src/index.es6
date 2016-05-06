@@ -7,6 +7,7 @@ import Snippets from './Snippets/Snippets.es6'
 import Resources from './Resources/Resources.es6'
 import Info from './Info/Info.es6'
 import Features from './Features/Features.es6'
+import Sources from './Sources/Sources.es6'
 import Settings from './Settings/Settings.es6'
 import util from './lib/util'
 import config from './lib/config.es6'
@@ -31,6 +32,7 @@ var consoleTool = new Console(),
     snippets = new Snippets(),
     resources = new Resources(),
     info = new Info(),
+    sources = new Sources(),
     features = new Features(),
     settings = new Settings();
 
@@ -40,6 +42,7 @@ devTools.add(consoleTool)
         .add(resources)
         .add(info)
         .add(snippets)
+        .add(sources)
         .add(features)
         .add(settings)
         .showTool('console');
