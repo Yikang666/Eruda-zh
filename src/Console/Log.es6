@@ -305,7 +305,7 @@ function transMsg(msg)
         msg = 'Object ' + JSON.stringify(msg);
     }
 
-    return util.escape(msg);
+    return util.escape(util.toStr(msg));
 }
 
 function transMultipleMsg(args)
@@ -328,6 +328,5 @@ function transCode(code)
 function txtToHtml(str)
 {
     return str.replace(/\n/g, '<br/>')
-              .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-              .replace(/ /g, '&nbsp;&nbsp;');
+              .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 }

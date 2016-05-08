@@ -93,6 +93,7 @@ export default class Elements extends Tool
         this._curCssStore = new CssStore(el);
         this._highlight.setEl(el);
         this._rmDefComputedStyle = true;
+        window.$0 = el;
 
         this._render();
     }
