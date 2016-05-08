@@ -26,7 +26,7 @@ export default class Elements extends Tool
         this._bindEvent();
         this._htmlEl = document.getElementsByTagName('html')[0];
         this._initHighlight();
-        this._setEl(this._htmlEl, 0);
+        this._setEl(this._htmlEl);
     }
     show()
     {
@@ -40,7 +40,7 @@ export default class Elements extends Tool
 
         var parent = this._curEl.parentNode;
 
-        this._setEl(parent, this._curLevel - 1);
+        this._setEl(parent);
     }
     _bindEvent()
     {
@@ -50,12 +50,11 @@ export default class Elements extends Tool
         {
             var idx = util.$(this).data('idx');
 
-            var el = self._curEl.childNodes[idx],
-                level = self._curLevel + 1;
+            var el = self._curEl.childNodes[idx];
 
             if (el.nodeType !== 1) return;
 
-            self._setEl(el, level);
+            self._setEl(el);
         }).on('click', '.toggle-all-computed-style', () =>
         {
             this._toggleAllComputedStyle();
@@ -70,7 +69,7 @@ export default class Elements extends Tool
                       util.$(this).toggleClass('eruda-active');
                       self._toggleHighlight()
                   })
-                  .on('click', '.reset', () => this._setEl(this._htmlEl, 0));
+                  .on('click', '.reset', () => this._setEl(this._htmlEl));
     }
     _toggleAllComputedStyle()
     {
@@ -88,10 +87,9 @@ export default class Elements extends Tool
 
         this._render();
     }
-    _setEl(el, level)
+    _setEl(el)
     {
         this._curEl = el;
-        this._curLevel = level;
         this._curCssStore = new CssStore(el);
         this._highlight.setEl(el);
         this._rmDefComputedStyle = true;
@@ -115,7 +113,7 @@ export default class Elements extends Tool
 
         ret.children = formatChildNodes(childNodes);
         ret.attributes = formatAttr(attributes);
-        ret.name = formatElName(tagName, id, className, attributes) + '(' + this._curLevel + ')';
+        ret.name = formatElName(tagName, id, className, attributes);
 
         if (needNoStyle(tagName)) return ret;
 
