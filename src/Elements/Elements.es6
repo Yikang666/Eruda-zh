@@ -50,8 +50,10 @@ export default class Elements extends Tool
         {
             var idx = util.$(this).data('idx');
 
-            var el = self._curEl.children[idx],
+            var el = self._curEl.childNodes[idx],
                 level = self._curLevel + 1;
+
+            if (el.nodeType !== 1) return;
 
             self._setEl(el, level);
         }).on('click', '.toggle-all-computed-style', () =>
@@ -89,7 +91,6 @@ export default class Elements extends Tool
     _setEl(el, level)
     {
         this._curEl = el;
-        this._$curEl = util.$(el);
         this._curLevel = level;
         this._curCssStore = new CssStore(el);
         this._highlight.setEl(el);
@@ -107,15 +108,13 @@ export default class Elements extends Tool
         var {
                 className,
                 id,
-                children,
+                childNodes,
                 attributes,
-                textContent,
                 tagName
             } = el;
 
-        ret.children = formatChildren(children);
+        ret.children = formatChildNodes(childNodes);
         ret.attributes = formatAttr(attributes);
-        if (children.length === 0) ret.textContent = textContent;
         ret.name = formatElName(tagName, id, className, attributes) + '(' + this._curLevel + ')';
 
         if (needNoStyle(tagName)) return ret;
@@ -139,7 +138,7 @@ export default class Elements extends Tool
 
 function formatElName(tagName, id, className, attributes)
 {
-    var ret = tagName.toLowerCase();
+    var ret = '<span class="eruda-red">' + tagName.toLowerCase() + '</span>';
 
     if (id !== '') ret += '#' + id;
 
@@ -178,15 +177,29 @@ function formatAttr(attributes)
     return ret;
 }
 
-function formatChildren(children)
+function formatChildNodes(nodes)
 {
     var ret = [];
 
-    for (var i = 0, len = children.length; i < len; i++)
+    for (var i = 0, len = nodes.length; i < len; i++)
     {
-        var child = children[i];
-        if (child.id === 'eruda') break;
-        ret.push(formatElName(child.tagName, child.id, child.className, child.attributes));
+        var child = nodes[i];
+        if (child.nodeType === 3)
+        {
+            var val = util.trim(child.nodeValue);
+            if (val !== '') ret.push({
+                text: val,
+                idx: i
+            });
+            continue;
+        }
+        if (child.nodeType === 1 || child.id !== 'eruda')
+        {
+            ret.push({
+                text: formatElName(child.tagName, child.id, child.className, child.attributes),
+                idx: i
+            });
+        }
     }
 
     return ret;
