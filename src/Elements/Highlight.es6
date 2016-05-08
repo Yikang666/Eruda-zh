@@ -44,7 +44,7 @@ export default class Highlight
 
         function getNumStyle(name)
         {
-            return util.pxToNum(computedStyle.getPropertyValue(name));
+            return pxToNum(computedStyle.getPropertyValue(name));
         }
 
         var ml = getNumStyle('margin-left'),
@@ -95,4 +95,9 @@ export default class Highlight
         this._$padding = this._$el.find('.eruda-padding');
         this._$content = this._$el.find('.eruda-content');
     }
+}
+
+function pxToNum(str)
+{
+    return util.toNum(str.replace('px', ''));
 }

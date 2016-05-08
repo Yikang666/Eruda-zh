@@ -182,6 +182,8 @@ export default class Log extends util.Emitter
             times: 1
         });
 
+        if (!log.isCode) log.val = txtToHtml(log.val);
+
         var lastLog = this._lastLog;
 
         if (lastLog.type === log.type && lastLog.val === log.val)
@@ -321,4 +323,11 @@ function transMultipleMsg(args)
 function transCode(code)
 {
     return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
+}
+
+function txtToHtml(str)
+{
+    return str.replace(/\n/g, '<br/>')
+              .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+              .replace(/ /g, '&nbsp;&nbsp;');
 }

@@ -1,6 +1,6 @@
 @import "variable";
 
-#eruda {
+.container {
     pointer-events: none;
     position: fixed;
     left: 0;
@@ -16,10 +16,6 @@
     }
     ul {
         list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    pre {
         padding: 0;
         margin: 0;
     }

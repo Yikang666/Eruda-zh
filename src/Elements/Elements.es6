@@ -138,7 +138,7 @@ export default class Elements extends Tool
 
 function formatElName(tagName, id, className, attributes)
 {
-    var ret = '<span class="eruda-red">' + tagName.toLowerCase() + '</span>';
+    var ret = '<span class="eruda-blue">' + tagName.toLowerCase() + '</span>';
 
     if (id !== '') ret += '#' + id;
 

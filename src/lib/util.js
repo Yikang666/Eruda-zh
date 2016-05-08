@@ -2268,52 +2268,6 @@ module.exports = (function ()
         return exports;
     })({});
 
-    /* ------------------------------ toNum ------------------------------ */
-
-    var toNum = _.toNum = (function (exports)
-    {
-        /* Convert value to a number.
-         *
-         * |Name  |Type  |Desc            |
-         * |------------------------------|
-         * |val   |*     |Value to process|
-         * |return|number|Resulted number |
-         *
-         * ```javascript
-         * toNum('5'); // -> 5
-         * ```
-         */
-
-        exports = function (val)
-        {
-            if (isNum(val)) return val;
-
-            if (isObj(val))
-            {
-                var temp = isFn(val.valueOf) ? val.valueOf() : val;
-                val = isObj(temp) ? (temp + '') : temp;
-            }
-
-            if (!isStr(val)) return val === 0 ? val : +val;
-
-            return +val;
-        };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ pxToNum ------------------------------ */
-
-    var pxToNum = _.pxToNum = (function (exports)
-    {
-        function exports(str)
-        {
-            return toNum(str.replace('px', ''));
-        }
-
-        return exports;
-    })({});
-
     /* ------------------------------ rtrim ------------------------------ */
 
     var rtrim = _.rtrim = (function (exports)
@@ -2387,6 +2341,40 @@ module.exports = (function ()
         exports = function (str, prefix)
         {
             return str.indexOf(prefix) === 0;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ toNum ------------------------------ */
+
+    var toNum = _.toNum = (function (exports)
+    {
+        /* Convert value to a number.
+         *
+         * |Name  |Type  |Desc            |
+         * |------------------------------|
+         * |val   |*     |Value to process|
+         * |return|number|Resulted number |
+         *
+         * ```javascript
+         * toNum('5'); // -> 5
+         * ```
+         */
+
+        exports = function (val)
+        {
+            if (isNum(val)) return val;
+
+            if (isObj(val))
+            {
+                var temp = isFn(val.valueOf) ? val.valueOf() : val;
+                val = isObj(temp) ? (temp + '') : temp;
+            }
+
+            if (!isStr(val)) return val === 0 ? val : +val;
+
+            return +val;
         };
 
         return exports;
