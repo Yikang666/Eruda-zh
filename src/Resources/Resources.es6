@@ -163,6 +163,29 @@ export default class Resources extends Tool
 
             util.cookie.remove(key);
             self.refreshCookie()._render();
+        }).on('click', '.img-link', function ()
+        {
+            var src = util.$(this).attr('src');
+
+            var img = new Image();
+
+            img.onload = function ()
+            {
+                var sources = parent.get('sources');
+
+                sources.set({
+                    type: 'img',
+                    val: {
+                        width: this.width,
+                        height: this.height,
+                        src: src
+                    }
+                });
+
+                parent.showTool('sources');
+            };
+
+            img.src = src;
         }).on('click', '.css-link', linkFactory('css'))
           .on('click', '.js-link', linkFactory('js'));
 

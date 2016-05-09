@@ -101,9 +101,7 @@
         {{#if imageData}}
             {{#each imageData}}
                 <li>
-                    <a href="{{this}}" target="_blank">
-                        <img src="{{this}}" data-exclude="true"/>
-                    </a>
+                    <img src="{{this}}" data-exclude="true" class="img-link"/>
                 </li>
             {{/each}}
         {{else}}

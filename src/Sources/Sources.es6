@@ -63,6 +63,7 @@ export default class Sources extends Tool
     _loadTpl()
     {
         this._codeTpl = require('./code.hbs');
+        this._imgTpl = require('./image.hbs');
     }
     _render()
     {
@@ -76,7 +77,13 @@ export default class Sources extends Tool
             case 'js':
             case 'css':
                 return this._renderCode();
+            case 'img':
+                return this._renderImg();
         }
+    }
+    _renderImg()
+    {
+        this._$el.html(this._imgTpl(this._data.val));
     }
     _renderCode()
     {

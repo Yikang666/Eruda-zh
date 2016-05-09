@@ -131,12 +131,11 @@ export default class Elements extends Tool
         var {
                 className,
                 id,
-                childNodes,
                 attributes,
                 tagName
             } = el;
 
-        ret.children = formatChildNodes(childNodes);
+        ret.children = formatChildNodes(el.childNodes);
         ret.attributes = formatAttr(attributes);
         ret.name = formatElName({tagName, id, className, attributes});
 

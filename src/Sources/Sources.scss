@@ -10,5 +10,20 @@
             overflow-x: auto;
             min-height: 100%;
         }
+        .image {
+            padding: $common-padding;
+            .img-container {
+                text-align: center;
+                img {
+                    max-width: 100%;
+                    box-shadow: $box-shadow;
+                }
+            }
+            .img-info {
+                text-align: center;
+                margin-top: 20px;
+                color: $gray;
+            }
+        }
     }
 } }
