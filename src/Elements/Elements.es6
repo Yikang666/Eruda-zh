@@ -192,7 +192,7 @@ function formatChildNodes(nodes)
             });
             continue;
         }
-        if (child.nodeType === 1 || child.id !== 'eruda')
+        if (child.nodeType === 1 && child.id !== 'eruda')
         {
             ret.push({
                 text: formatElName(child.tagName, child.id, child.className, child.attributes),

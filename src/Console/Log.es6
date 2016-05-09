@@ -1,4 +1,6 @@
 import util from '../lib/util'
+import highlight from '../lib/highlight.es6'
+import beautify from 'js-beautify'
 
 require('./Log.scss');
 
@@ -40,7 +42,8 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'input',
             ignoreFilter: true,
-            val: transCode(jsCode)
+            isCode: true,
+            val: jsCode
         });
 
         try {
@@ -182,7 +185,13 @@ export default class Log extends util.Emitter
             times: 1
         });
 
-        if (!log.isCode && log.type != 'html') log.val = txtToHtml(log.val);
+        if (log.isCode)
+        {
+            log.val = highlight(beautify(log.val), 'js');
+        } else if (log.type != 'html')
+        {
+            log.val = txtToHtml(log.val);
+        }
 
         var lastLog = this._lastLog;
 
@@ -318,11 +327,6 @@ function transMultipleMsg(args)
     });
 
     return ret.join(' ');
-}
-
-function transCode(code)
-{
-    return code.replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
 }
 
 function txtToHtml(str)

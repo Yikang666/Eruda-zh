@@ -19,6 +19,9 @@
                 color: #fff;
                 border-radius: 4px;
             }
+            &.input {
+                background: #fff;
+            }
             &.log, &.output, &.info, &.dir {
                 border-bottom: 1px solid #b4b4b4;
             }

@@ -1,7 +1,7 @@
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import beautify from 'js-beautify'
-import highlight from './highlight.es6'
+import highlight from '../lib/highlight.es6'
 
 require('./Sources.scss');
 
