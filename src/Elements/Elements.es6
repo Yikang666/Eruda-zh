@@ -15,9 +15,11 @@ export default class Elements extends Tool
         this._rmDefComputedStyle = true;
         this._highlightElement = false;
     }
-    init($el)
+    init($el, parent)
     {
         super.init($el);
+
+        this._parent = parent;
 
         $el.html('<div class="eruda-show-area"></div>');
         this._$showArea = $el.find('.eruda-show-area');
@@ -50,11 +52,33 @@ export default class Elements extends Tool
         {
             var idx = util.$(this).data('idx');
 
-            var el = self._curEl.childNodes[idx];
+            var curEl = self._curEl,
+                el = curEl.childNodes[idx];
 
-            if (el.nodeType !== 1) return;
+            if (el.nodeType === 3)
+            {
+                var parent = self._parent,
+                    sources = parent.get('sources');
 
-            self._setEl(el);
+                var curTagName = curEl.tagName,
+                    type;
+
+                switch (curTagName)
+                {
+                    case 'SCRIPT': type = 'js'; break;
+                    case 'STYLE': type = 'css'; break;
+                    default: return;
+                }
+
+                sources.set({
+                    type: type,
+                    val: el.nodeValue
+                });
+
+                parent.showTool('sources');
+            }
+
+            if (el.nodeType === 1) return self._setEl(el);
         }).on('click', '.toggle-all-computed-style', () =>
         {
             this._toggleAllComputedStyle();
@@ -114,7 +138,7 @@ export default class Elements extends Tool
 
         ret.children = formatChildNodes(childNodes);
         ret.attributes = formatAttr(attributes);
-        ret.name = formatElName(tagName, id, className, attributes);
+        ret.name = formatElName({tagName, id, className, attributes});
 
         if (needNoStyle(tagName)) return ret;
 
@@ -135,9 +159,15 @@ export default class Elements extends Tool
     }
 }
 
-function formatElName(tagName, id, className, attributes)
+function formatElName(data)
 {
-    var ret = '<span class="eruda-blue">' + tagName.toLowerCase() + '</span>';
+    var {
+            id,
+            className,
+            attributes
+        } = data;
+
+    var ret = '<span class="eruda-blue">' + data.tagName.toLowerCase() + '</span>';
 
     if (id !== '') ret += '#' + id;
 
@@ -192,10 +222,17 @@ function formatChildNodes(nodes)
             });
             continue;
         }
-        if (child.nodeType === 1 && child.id !== 'eruda')
+        if (child.nodeType === 1 &&
+            child.id !== 'eruda' &&
+            child.className.indexOf('eruda') < 0)
         {
             ret.push({
-                text: formatElName(child.tagName, child.id, child.className, child.attributes),
+                text: formatElName({
+                    tagName: child.tagName,
+                    id: child.id,
+                    className: child.className,
+                    attributes: child.attributes
+                }),
                 idx: i
             });
         }
@@ -237,11 +274,11 @@ function rmDefComputedStyle(computedStyle)
     return ret;
 }
 
-var noStyleTag = ['script', 'style', 'meta', 'title', 'link', 'head'];
+var NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 function needNoStyle(tagName)
 {
     tagName = tagName.toLowerCase();
 
-    return noStyleTag.indexOf(tagName) > -1;
+    return NO_STYLE_TAG.indexOf(tagName) > -1;
 }

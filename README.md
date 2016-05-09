@@ -22,6 +22,7 @@ Browse it on your phone: [http://liriliri.github.io/eruda/index.html?eruda=true]
 * Resource: Show localStorage, cookie information.
 * Info: Show url, user agent info.
 * Snippets: Include snippets you used most often.
+* Sources: Html, js, css source viewer.
 * Features: Browser feature detections.
 
 ## Install
