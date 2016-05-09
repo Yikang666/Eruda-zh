@@ -182,7 +182,7 @@ export default class Log extends util.Emitter
             times: 1
         });
 
-        if (!log.isCode) log.val = txtToHtml(log.val);
+        if (!log.isCode && log.type != 'html') log.val = txtToHtml(log.val);
 
         var lastLog = this._lastLog;
 
