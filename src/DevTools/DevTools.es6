@@ -10,10 +10,12 @@ function activeEruda(flag)
     window.localStorage.setItem('active-eruda', flag);
 }
 
-export default class DevTools
+export default class DevTools extends util.Emitter
 {
     constructor($parent)
     {
+        super();
+
         this._$parent = $parent;
         this._isShow = false;
         this._opacity = 1;
@@ -53,7 +55,7 @@ export default class DevTools
         var name = tool.name;
 
         this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
-        tool.init(this._$tools.find('.eruda-' + name));
+        tool.init(this._$tools.find('.eruda-' + name), this);
         tool.active = false;
         this._tools[name] = tool;
 
@@ -96,8 +98,12 @@ export default class DevTools
         var tool = tools[name];
         if (!tool) return;
 
+        var lastTool = {};
+
         util.each(tools, (tool) =>
         {
+            if (tool.active) lastTool = tool;
+
             tool.active = false;
             tool.hide();
         });
@@ -106,6 +112,8 @@ export default class DevTools
         tool.show();
 
         this._navBar.activeTool(name);
+
+        this.emit('showTool', name, lastTool);
 
         return this;
     }

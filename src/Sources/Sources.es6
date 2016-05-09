@@ -15,9 +15,12 @@ export default class Sources extends Tool
 
         this._loadTpl();
     }
-    init($el)
+    init($el, parent)
     {
         super.init($el);
+
+        this._parent = parent;
+        this._bindEvent();
     }
     set(data)
     {
@@ -42,12 +45,19 @@ export default class Sources extends Tool
 
             return this._render();
         }
-        get(location.href, (err, data) =>
+        util.get(location.href, (err, data) =>
         {
             if (err) return;
 
             this._html = data;
             this._reset();
+        });
+    }
+    _bindEvent()
+    {
+        this._parent.on('showTool', (name, lastTool) =>
+        {
+            if (name !== this.name && lastTool.name === this.name) this._reset();
         });
     }
     _loadTpl()
@@ -72,43 +82,27 @@ export default class Sources extends Tool
     {
         var data = this._data;
 
-        var code = '';
+        var code = data.val;
 
-        switch (data.type)
+        // If source code too big, don't process it.
+        if (data.val.length < 100000)
         {
-            case 'html':
-                code = beautify.html(data.val);
-                break;
-            case 'css':
-                code = beautify.css(data.val);
-                break;
-            case 'js':
-                code = beautify(data.val);
-                break;
-        }
+            switch (data.type)
+            {
+                case 'html':
+                    code = beautify.html(code);
+                    break;
+                case 'css':
+                    code = beautify.css(code);
+                    break;
+                case 'js':
+                    code = beautify(code);
+                    break;
+            }
 
-        code = highlight(code, data.type);
+            code = highlight(code, data.type);
+        }
 
         this._$el.html(this._codeTpl({code: code}));
     }
-}
-
-function get(url, cb)
-{
-    var xhr = new window.XMLHttpRequest();
-
-    xhr.onload = function ()
-    {
-        var status = xhr.status;
-
-        if ((status >= 200 && status < 300) || status === 304)
-        {
-            cb(null, xhr.responseText);
-        }
-    };
-
-    xhr.onerror = function () { cb(xhr) };
-
-    xhr.open('GET', url);
-    xhr.send();
 }

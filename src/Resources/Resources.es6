@@ -3,26 +3,6 @@ import util from '../lib/util'
 
 require('./Resources.scss');
 
-function getState(type, len)
-{
-    if (type === 'localStore' || len === 0) return '';
-
-    var warn = 0, danger = 0;
-
-    switch (type)
-    {
-        case 'cookie': warn = 30; danger = 60; break;
-        case 'script': warn = 5; danger = 10; break;
-        case 'stylesheet': warn = 4; danger = 8; break;
-        case 'image': warn = 50; danger = 100; break;
-    }
-
-    if (len >= danger) return 'eruda-danger';
-    if (len >= warn) return 'eruda-warn';
-
-    return 'eruda-ok';
-}
-
 export default class Resources extends Tool
 {
     constructor()
@@ -36,9 +16,11 @@ export default class Resources extends Tool
         this._imageData = [];
         this._tpl = require('./Resources.hbs');
     }
-    init($el)
+    init($el, parent)
     {
         super.init($el);
+
+        this._parent = parent;
 
         this.refresh();
         this._bindEvent();
@@ -155,6 +137,8 @@ export default class Resources extends Tool
     {
         var self = this;
 
+        var parent = this._parent;
+
         this._$el.on('click', '.refresh-local-storage', () =>
         {
             this.refreshLocalStorage()._render();
@@ -179,9 +163,37 @@ export default class Resources extends Tool
 
             util.cookie.remove(key);
             self.refreshCookie()._render();
-        });
+        }).on('click', '.css-link', linkFactory('css'))
+          .on('click', '.js-link', linkFactory('js'));
 
         util.orientation.on('change', () => this._render());
+
+        function linkFactory(type)
+        {
+            return function (e)
+            {
+                var url = util.$(this).attr('href');
+
+                if (!isCrossOrig(url))
+                {
+                    e.preventDefault();
+
+                    return util.get(url, (err, data) =>
+                    {
+                        if (err) return;
+
+                        var sources = parent.get('sources');
+
+                        sources.set({
+                            type: type,
+                            val: data
+                        });
+
+                        parent.showTool('sources');
+                    });
+                }
+            };
+        }
     }
     _render()
     {
@@ -213,4 +225,31 @@ export default class Resources extends Tool
             $li.css({height: $li.get(0).offsetWidth});
         }, 150);
     }
+}
+
+function getState(type, len)
+{
+    if (type === 'localStore' || len === 0) return '';
+
+    var warn = 0, danger = 0;
+
+    switch (type)
+    {
+        case 'cookie': warn = 30; danger = 60; break;
+        case 'script': warn = 5; danger = 10; break;
+        case 'stylesheet': warn = 4; danger = 8; break;
+        case 'image': warn = 50; danger = 100; break;
+    }
+
+    if (len >= danger) return 'eruda-danger';
+    if (len >= warn) return 'eruda-warn';
+
+    return 'eruda-ok';
+}
+
+var origin = window.location.origin;
+
+function isCrossOrig(url)
+{
+    return !util.startWith(url, origin);
 }

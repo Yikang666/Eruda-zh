@@ -24,11 +24,12 @@ export default class Console extends Tool
     overrideConsole()
     {
         var log = this._log,
+            origConsole = {},
             winConsole = window.console;
 
         function override(name)
         {
-            var origin = winConsole[name];
+            var origin = origConsole[name] = winConsole[name];
 
             winConsole[name] = function ()
             {
@@ -38,9 +39,9 @@ export default class Console extends Tool
             };
         }
 
-        var methods = ['log', 'error', 'info', 'warn', 'dir', 'time', 'timeEnd', 'clear'];
+        CONSOLE_METHOD.forEach((name) => override(name));
 
-        methods.forEach((name) => override(name));
+        this._origConsole = origConsole;
 
         return this;
     }
@@ -61,7 +62,15 @@ export default class Console extends Tool
     {
         super.destroy();
 
-        window.onerror = this._origOnerror;
+        var origOnerror = this._origOnerror;
+        if (origOnerror) window.onerror = origOnerror;
+
+        var origConsole = this._origConsole;
+        if (origConsole)
+        {
+            var winConsole = window.console;
+            CONSOLE_METHOD.forEach((name) => winConsole[name] = origConsole[name]);
+        }
     }
     _appendTpl()
     {
@@ -149,4 +158,6 @@ export default class Console extends Tool
         if (cfg.get('overrideConsole')) this.overrideConsole();
     }
 }
+
+const CONSOLE_METHOD = ['log', 'error', 'info', 'warn', 'dir', 'time', 'timeEnd', 'clear'];
 

@@ -2,9 +2,11 @@
 
 .dev-tools { .tools {
     .sources {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         .code {
             padding: $common-padding;
-            overflow-x: scroll;
+            overflow-x: auto;
             min-height: 100%;
         }
     }
