@@ -13,6 +13,7 @@
     * {
         box-sizing: border-box;
         pointer-events: all;
+        -webkit-tap-highlight-color: transparent;
     }
     ul {
         list-style: none;
