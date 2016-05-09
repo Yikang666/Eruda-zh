@@ -123,7 +123,7 @@ export default class Elements extends Tool
         ret.computedStyle = computedStyle;
 
         var styles = cssStore.getMatchedCSSRules();
-        styles.unshift(getAttrStyle(attributes));
+        styles.unshift(getInlineStyle(el.style));
         ret.styles = styles;
 
         return ret;
@@ -204,32 +204,18 @@ function formatChildNodes(nodes)
     return ret;
 }
 
-function getAttrStyle(attribute)
+function getInlineStyle(style)
 {
     var ret = {
         selectorText: 'element.style',
         style: {}
     };
 
-    for (var i = 0, len = attribute.length; i < len; i++)
+    for (var i = 0, len = style.length; i < len; i++)
     {
-        var attr = attribute[i];
+        var s = style[i];
 
-        if (attr.name === 'style')
-        {
-            var elStyle = {},
-                rules = attr.value.split(';');
-
-            util.each(rules, function (rule)
-            {
-                rule = rule.split(':');
-                elStyle[rule[0]] = rule[1];
-            });
-
-            ret.style = elStyle;
-
-            break;
-        }
+        ret.style[s] = style[s];
     }
 
     return ret;
