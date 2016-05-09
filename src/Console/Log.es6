@@ -20,6 +20,7 @@ export default class Log extends util.Emitter
     clear()
     {
         this._logs = [];
+        this._lastLog = {};
 
         this._render();
     }
@@ -195,7 +196,9 @@ export default class Log extends util.Emitter
 
         var lastLog = this._lastLog;
 
-        if (lastLog.type === log.type && lastLog.val === log.val)
+        if (log.type !== 'html' &&
+            lastLog.type === log.type &&
+            lastLog.val === log.val)
         {
             lastLog.times++;
             lastLog.showTimes = true;
