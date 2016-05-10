@@ -13,11 +13,27 @@ export default class Network extends Tool
 
         this._tpl = require('./Network.hbs');
     }
+    init($el)
+    {
+        super.init($el);
+
+        this._bindEvent();
+    }
     show()
     {
         super.show();
 
         this._getPerformanceTimingData();
+    }
+    _bindEvent()
+    {
+        var $el = this._$el;
+
+        $el.on('click', '.eruda-expand', function ()
+        {
+            util.$(this).hide();
+            $el.find('.eruda-performance-timing-detail').show();
+        });
     }
     _getPerformanceTimingData()
     {
