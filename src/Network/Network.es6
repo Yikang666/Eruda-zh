@@ -13,18 +13,11 @@ export default class Network extends Tool
 
         this._tpl = require('./Network.hbs');
     }
-    init($el)
+    show()
     {
-        super.init($el);
+        super.show();
 
-        window.addEventListener('load', () =>
-        {
-            // SetTimeout is required to make sure timing data is initialized.
-            setTimeout(() =>
-            {
-                this._getPerformanceTimingData()
-            }, 1000);
-        }, false);
+        this._getPerformanceTimingData();
     }
     _getPerformanceTimingData()
     {
