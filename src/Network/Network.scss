@@ -57,5 +57,18 @@
                 }
             }
         }
+        .request {
+            background: #fff;
+            li {
+                border-top: 1px solid $gray;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                span {
+                    display: block;
+                    float: left;
+                    padding: 5px 10px;
+                }
+            }
+        }
     }
 } }

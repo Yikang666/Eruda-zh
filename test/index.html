@@ -27,6 +27,23 @@
         <div>
             <img src="http://7xn2zy.com1.z0.glb.clouddn.com/blog_elf.jpg">
         </div>
+        <script>
+            function req(url)
+            {
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', url);
+                xhr.send();
+            }
+            setTimeout(function ()
+            {
+                req('http://localhost:3000/test/style.css');
+            }, 2000);
+            setTimeout(function ()
+            {
+                req('http://localhost:3000/test/style.css');
+            }, 2000);
+        </script>
     </div>
 </body>
 </html>

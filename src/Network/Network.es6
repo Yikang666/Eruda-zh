@@ -1,4 +1,5 @@
 import Tool from '../DevTools/Tool.es6'
+import Request from './Request.es6'
 import util from '../lib/util'
 
 require('./Network.scss');
@@ -10,6 +11,7 @@ export default class Network extends Tool
         super();
         this.name = 'network';
         this._performanceTimingData = [];
+        this._requests = {};
 
         this._tpl = require('./Network.hbs');
     }
@@ -18,12 +20,73 @@ export default class Network extends Tool
         super.init($el);
 
         this._bindEvent();
+        this.overrideXhr();
     }
     show()
     {
         super.show();
 
         this._getPerformanceTimingData();
+    }
+    overrideXhr()
+    {
+        var winXhrProto = window.XMLHttpRequest.prototype;
+
+        var origSend = winXhrProto.send,
+            origOpen = winXhrProto.open;
+
+        var self = this;
+
+        winXhrProto.open = function (method, url)
+        {
+            var xhr = this;
+
+            var req = xhr.erudaRequest = new Request(xhr, method, url);
+
+            req.on('send', (id, data) => self._addReq(id, data));
+
+            xhr.addEventListener('readystatechange', function ()
+            {
+                switch (xhr.readyState)
+                {
+                    case 2: return req.handleHeadersReceived();
+                    case 3: return req.handleLoading();
+                    case 4: return req.handleDone();
+                }
+            });
+
+            origOpen.apply(this, arguments);
+        };
+
+        winXhrProto.send = function ()
+        {
+            var req = this.erudaRequest;
+            if (req) req.handleSend();
+
+            origSend.apply(this, arguments);
+        };
+    }
+    _addReq(id, data)
+    {
+        util.defaults(data, {
+            name: 'unknown',
+            status: 'pending',
+            type: 'unknown',
+            size: 0,
+            startTime: util.now()
+        });
+
+        this._requests[id] = data;
+
+        this._render();
+    }
+    _updateReq(id, data)
+    {
+        if (!this._requests[id]) return;
+
+        util.extend(this._requests[id], data);
+
+        this._render();
     }
     _bindEvent()
     {
@@ -132,7 +195,8 @@ export default class Network extends Tool
     {
         this._$el.html(this._tpl({
             data: this._performanceTimingData,
-            timing: this._performanceTiming
+            timing: this._performanceTiming,
+            requests: this._requests
         }));
     }
 }
