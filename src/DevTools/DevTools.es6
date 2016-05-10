@@ -16,7 +16,7 @@ export default class DevTools extends util.Emitter
     {
         super();
 
-        this._$parent = $parent;
+        this.$parent = $parent;
         this._isShow = false;
         this._opacity = 1;
         this._tools = {};
@@ -153,7 +153,7 @@ export default class DevTools extends util.Emitter
     }
     _appendTpl()
     {
-        var $parent = this._$parent;
+        var $parent = this.$parent;
 
         $parent.append(require('./DevTools.hbs')());
 

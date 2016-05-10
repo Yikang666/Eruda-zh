@@ -61,8 +61,12 @@ settings.separator()
 function appendContainer()
 {
     if (eruda) eruda.destroy();
-    util.$('body').append('<div id="eruda" class="eruda-container"></div>');
-    $container = util.$('#eruda');
+
+    var containerNode = document.createElement('div');
+    containerNode.id = 'eruda';
+    containerNode.className = 'eruda-container';
+    document.documentElement.appendChild(containerNode);
+    $container = util.$(containerNode);
 }
 
 module.exports = {

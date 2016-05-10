@@ -4,9 +4,9 @@ require('./Highlight.scss');
 
 export default class Highlight
 {
-    constructor()
+    constructor($container)
     {
-        this._appendTpl();
+        this._appendTpl($container);
     }
     setEl(el)
     {
@@ -86,9 +86,9 @@ export default class Highlight
             height: bh - pt - pb
         });
     }
-    _appendTpl()
+    _appendTpl($container)
     {
-        util.$('body').append(require('./Highlight.hbs')());
+        $container.append(require('./Highlight.hbs')());
 
         this._$el = util.$('.eruda-elements-highlight');
         this._$margin = this._$el.find('.eruda-margin');

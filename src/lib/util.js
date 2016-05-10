@@ -909,6 +909,30 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ isEl ------------------------------ */
+
+    var isEl = _.isEl = (function (exports)
+    {
+        /* Check if value is a DOM element.
+         *
+         * |Name  |Type   |Desc                          |
+         * |---------------------------------------------|
+         * |val   |*      |Value to check                |
+         * |return|boolean|True if value is a DOM element|
+         *
+         * ```javascript
+         * isEl(document.body); // -> true
+         * ```
+         */
+
+        exports = function (val)
+        {
+            return !!(val && val.nodeType === 1);
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ isErr ------------------------------ */
 
     var isErr = _.isErr = (function (exports)
@@ -1805,7 +1829,7 @@ module.exports = (function ()
             if (!elDisplay[nodeName])
             {
                 el = document.createElement(nodeName);
-                document.body.appendChild(el);
+                document.documentElement.appendChild(el);
                 display = getComputedStyle(el, '').getPropertyValue("display");
                 el.parentNode.removeChild(el);
                 display == "none" && (display = "block");

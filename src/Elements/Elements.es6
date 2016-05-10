@@ -26,7 +26,7 @@ export default class Elements extends Tool
         $el.append(require('./BottomBar.hbs')());
 
         this._bindEvent();
-        this._htmlEl = document.getElementsByTagName('html')[0];
+        this._htmlEl = document.documentElement;
         this._initHighlight();
         this._setEl(this._htmlEl);
     }
@@ -40,7 +40,10 @@ export default class Elements extends Tool
     {
         if (this._curEl === this._htmlEl) return;
 
-        var parent = this._curEl.parentNode;
+        var parentQueue = this._curParentQueue;
+
+        var parent = parentQueue.shift();
+        while (!isElExist(parent)) parent = parentQueue.shift();
 
         this._setEl(parent);
     }
@@ -54,6 +57,8 @@ export default class Elements extends Tool
 
             var curEl = self._curEl,
                 el = curEl.childNodes[idx];
+
+            if (!isElExist(el)) self._render();
 
             if (el.nodeType === 3)
             {
@@ -103,7 +108,7 @@ export default class Elements extends Tool
     }
     _initHighlight()
     {
-        this._highlight = new Highlight();
+        this._highlight = new Highlight(this._parent.$parent);
     }
     _toggleHighlight()
     {
@@ -118,6 +123,16 @@ export default class Elements extends Tool
         this._highlight.setEl(el);
         this._rmDefComputedStyle = true;
         window.$0 = el;
+
+        var parentQueue = [];
+
+        var parent = el.parentNode;
+        while (parent)
+        {
+            parentQueue.push(parent);
+            parent = parent.parentNode;
+        }
+        this._curParentQueue = parentQueue;
 
         this._render();
     }
@@ -153,9 +168,16 @@ export default class Elements extends Tool
     }
     _render()
     {
+        if (!isElExist(this._curEl)) return this._back();
+
         this._highlight[this._highlightElement ? 'show' : 'hide']();
         this._$showArea.html(this._tpl(this._getData()));
     }
+}
+
+function isElExist(val)
+{
+    return util.isEl(val) && val.parentNode;
 }
 
 function formatElName(data)
