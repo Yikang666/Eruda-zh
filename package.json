@@ -2,7 +2,7 @@
   "name": "eruda",
   "version": "0.2.2",
   "description": "Console for mobile JavaScript",
-  "main": "index.js",
+  "main": "dist/eruda.js",
   "scripts": {
     "dev": "webpack --watch",
     "release": "webpack & uglifyjs dist/eruda.js -o dist/eruda.min.js",
