@@ -55,7 +55,7 @@ export default function highlight(str, lang)
     util.each(lang, (val, key) =>
     {
         str = str.replace(new RegExp("___end"+ key +"___","g"), "</span>")
-                 .replace(new RegExp("___"+ key +"___","g"), "<span class='litelighterstyle' style='"+ style[val.style] +"'>");
+                 .replace(new RegExp("___"+ key +"___","g"), "<span style='"+ style[val.style] +"'>");
     });
 
     util.each(lang, (val) =>

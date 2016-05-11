@@ -56,5 +56,80 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+        .json {
+            font-size: 14px;
+            line-height: 1.2;
+            background: #fff;
+            min-height: 100%;
+            padding: $common-padding 25px 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            &, ul {
+                list-style: none !important;
+            }
+            ul {
+                padding: 0 !important;
+                padding-left: 20px !important;
+                margin: 0 !important;
+            }
+            li {
+                position: relative;
+            }
+            & > li > .key,
+            & .array .key {
+                display: none;
+            }
+            .array .object .key {
+                display: inline;
+            }
+            li:after {
+                content: ",";
+            }
+            li:last-child:after {
+                content: "";
+            }
+            .null {
+                color: #a71d5d;
+            }
+            .string {
+                color: #183691;
+            }
+            .number {
+                color: #0086b3;
+            }
+            .boolean {
+                color: #a71d5d;
+            }
+            .key {
+                color: #183691;
+            }
+            .expanded:before {
+                content: "-";
+                font-size: 1.5em;
+                width: 13px;
+                text-align: center;
+                line-height: 13px;
+                font-family: sans-serif;
+                position: absolute;
+                left: -15px;
+                top: 0;
+            }
+            .collapsed:before {
+                content: "+";
+                font-size: 1.5em;
+                color: #000;
+                top: 1px;
+            }
+            li .collapsed ~ .close:before {
+                content: "... ";
+                color: #999;
+            }
+            .hidden ~ ul {
+                display: none;
+            }
+            span {
+                position: static !important;
+            }
+        }
     }
 } }

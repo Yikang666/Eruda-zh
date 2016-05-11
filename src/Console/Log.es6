@@ -13,11 +13,14 @@ export default class Log extends util.Emitter
         this._$el = $el;
         this._parent = parent;
         this._logs = [];
+        this._renderLogs = [];
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
         this._isUpdated = false;
         this._lastLog = {};
         this._timer = {};
+
+        this._bindEvent();
     }
     clear()
     {
@@ -29,6 +32,8 @@ export default class Log extends util.Emitter
     }
     input(jsCode)
     {
+        var src = jsCode;
+
         jsCode = util.trim(jsCode);
 
         if (util.startWith(jsCode, ':'))
@@ -47,6 +52,7 @@ export default class Log extends util.Emitter
             type: 'input',
             ignoreFilter: true,
             isCode: true,
+            src: src,
             val: jsCode
         });
 
@@ -62,23 +68,23 @@ export default class Log extends util.Emitter
     }
     output(msg)
     {
-        msg = transMsg(msg);
-
         this._insert({
             type: 'output',
             ignoreFilter: true,
-            val: msg
+            src: msg,
+            val: transMsg(msg)
         });
 
         return this;
     }
     dir(obj)
     {
-        var msg = util.isObj(obj) ? JSON.stringify(obj, null, 4) : transMsg(obj);
+        var msg = util.isObj(obj) ? JSON.stringify(obj, null, 4) : transMsg(obj, true);
 
         this._insert({
             type: 'dir',
             isCode: true,
+            src: obj,
             val: msg
         });
 
@@ -86,10 +92,12 @@ export default class Log extends util.Emitter
     }
     log()
     {
-        var msg = transMultipleMsg(arguments);
+        var msg = transMultipleMsg(arguments),
+            src = arguments.length === 1 ? arguments[0] : arguments;
 
         this._insert({
             type: 'log',
+            src,
             val: msg
         });
 
@@ -107,7 +115,8 @@ export default class Log extends util.Emitter
     }
     error(msg)
     {
-        var ignoreFilter = false;
+        var src = msg,
+            ignoreFilter = false;
 
         if (util.isErr(msg))
         {
@@ -121,6 +130,7 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'error',
             ignoreFilter: ignoreFilter,
+            src: src,
             val: msg
         });
 
@@ -128,10 +138,12 @@ export default class Log extends util.Emitter
     }
     info()
     {
-        var msg = transMultipleMsg(arguments);
+        var msg = transMultipleMsg(arguments),
+            src = arguments.length === 1 ? arguments[0] : arguments;
 
         this._insert({
             type: 'info',
+            src,
             val: msg
         });
 
@@ -139,10 +151,12 @@ export default class Log extends util.Emitter
     }
     warn()
     {
-        var msg = transMultipleMsg(arguments);
+        var msg = transMultipleMsg(arguments),
+            src = arguments.length === 1 ? arguments[0] : arguments;
 
         this._insert({
             type: 'warn',
+            src,
             val: msg
         });
 
@@ -190,6 +204,8 @@ export default class Log extends util.Emitter
             times: 1
         });
 
+        log.src = log.src || log.val;
+
         if (log.isCode)
         {
             log.val = highlight(beautify(log.val), 'js');
@@ -215,6 +231,22 @@ export default class Log extends util.Emitter
 
         this._isUpdated = true;
         this.render();
+    }
+    _bindEvent()
+    {
+        var self = this;
+
+        this._$el.on('click', '.eruda-log-item', function ()
+        {
+            var idx = util.$(this).data('idx');
+
+            var src = self._renderLogs[idx].src;
+
+            try {
+                if (!util.isObj(src)) src = JSON.parse(src);
+                self.emit('viewJson', src);
+            } catch (e) {}
+        });
     }
     _runCmd(cmd)
     {
@@ -250,7 +282,7 @@ export default class Log extends util.Emitter
 
         this._isUpdated = false;
 
-        var logs = this._filterLogs(this._logs);
+        var logs = this._renderLogs = this._filterLogs(this._logs);
 
         this._$el.html(this._tpl({
             logs: logs
@@ -310,7 +342,7 @@ function errToStr(err, msg)
     return msg + stack;
 }
 
-function transMsg(msg)
+function transMsg(msg, noEscape)
 {
     if (util.isUndef(msg))
     {
@@ -326,7 +358,11 @@ function transMsg(msg)
         msg = 'Object ' + JSON.stringify(msg);
     }
 
-    return util.escape(util.toStr(msg));
+    msg = util.toStr(msg);
+
+    if (noEscape) return msg;
+
+    return util.escape(msg);
 }
 
 function transMultipleMsg(args)

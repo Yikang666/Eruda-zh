@@ -1,6 +1,6 @@
 <ul>
     {{#each logs}}
-        <li class="eruda-{{type}}">
+        <li class="eruda-{{type}} eruda-log-item" data-idx="{{@index}}">
             {{#if showTimes}}<span class="eruda-times">{{times}}</span>{{/if}}
             {{#if isCode}}
                 <pre>{{{val}}}</pre>

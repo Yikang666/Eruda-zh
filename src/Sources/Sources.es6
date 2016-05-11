@@ -2,6 +2,7 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import beautify from 'js-beautify'
 import highlight from '../lib/highlight.es6'
+import JsonViewer from './JsonViewer.es6'
 
 require('./Sources.scss');
 
@@ -105,6 +106,7 @@ export default class Sources extends Tool
                 case 'css': return this.set('css', resTxt);
                 case 'html': return this.set('html', resTxt);
                 case 'javascript': return this.set('js', resTxt);
+                case 'json': return this.set('json', resTxt);
             }
             switch (data.type)
             {
@@ -117,6 +119,7 @@ export default class Sources extends Tool
         this._codeTpl = require('./code.hbs');
         this._imgTpl = require('./image.hbs');
         this._httpTpl = require('./http.hbs');
+        this._jsonTpl = require('./json.hbs');
     }
     _render()
     {
@@ -134,6 +137,8 @@ export default class Sources extends Tool
                 return this._renderImg();
             case 'http':
                 return this._renderHttp();
+            case 'json':
+                return this._renderJson();
         }
     }
     _renderImg()
@@ -170,5 +175,16 @@ export default class Sources extends Tool
         }
 
         this._$el.html(this._codeTpl({code: code}));
+    }
+    _renderJson()
+    {
+        this._$el.html(this._jsonTpl());
+
+        var val = this._data.val;
+
+        try {
+            if (util.isStr(val)) val = JSON.parse(val);
+            new JsonViewer(val, this._$el.find('.eruda-json'));
+        } catch (e) {}
     }
 }

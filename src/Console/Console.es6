@@ -12,10 +12,11 @@ export default class Console extends Tool
         super();
         this.name = 'console';
     }
-    init($el)
+    init($el, parent)
     {
         super.init($el);
 
+        this._parent = parent;
         this._appendTpl();
         this._initLog();
         this._bindEvent();
@@ -116,6 +117,7 @@ export default class Console extends Tool
         var $input = this._$input,
             $inputBtns = this._$inputBtns,
             $control = this._$control,
+            parent = this._parent,
             log = this._log;
 
         $control.on('click', '.clear-console', () => log.clear());
@@ -139,6 +141,12 @@ export default class Console extends Tool
         });
 
         $input.on('focusin', () => this._showInput());
+
+        log.on('viewJson', (data) =>
+        {
+            parent.get('sources').set('json', data);
+            parent.showTool('sources');
+        });
     }
     _hideInput()
     {
