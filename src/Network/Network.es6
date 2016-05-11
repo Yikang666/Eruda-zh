@@ -92,9 +92,8 @@ export default class Network extends Tool
     {
         var $el = this._$el;
 
-        $el.on('click', '.eruda-expand', function ()
+        $el.on('click', '.eruda-performance-timing', function ()
         {
-            util.$(this).hide();
             $el.find('.eruda-performance-timing-detail').show();
         });
     }
