@@ -188,7 +188,7 @@ export default class Log extends util.Emitter
         if (!startTime) return;
 
         var duration = util.now() - startTime;
-        this.log('<div class="eruda-blue">' + name + ':' + duration + 'ms</div>');
+        this.html('<div class="eruda-blue">' + name + ':' + duration + 'ms</div>');
         delete  this._timer[name];
 
         return this;
