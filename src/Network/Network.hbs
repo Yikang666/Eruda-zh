@@ -9,7 +9,7 @@
 </div>
 
 <div class="eruda-performance-timing-data">
-    <table class="eruda-performance-timing-detail">
+    <table>
         <thead>
             <tr>
                 <th>Name</th>
@@ -31,6 +31,11 @@
     {{#each requests}}
         <li>
             <span>{{name}}</span>
+            <span>{{status}}</span>
+            <span>{{method}}</span>
+            <span>{{type}}</span>
+            <span>{{size}}B</span>
+            <span>{{time}}ms</span>
         </li>
     {{/each}}
 </ul>

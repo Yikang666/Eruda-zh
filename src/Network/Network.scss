@@ -29,9 +29,9 @@
         .performance-timing-data {
             padding: 0 10px 10px;
             text-align: center;
+            display: none;
             table {
                 width: 100%;
-                display: none;
                 background: #fff;
                 border-collapse: collapse;
                 text-align: left;
@@ -50,12 +50,18 @@
             background: #fff;
             li {
                 border-top: 1px solid $gray;
-                overflow-y: auto;
+                overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
                 span {
-                    display: block;
-                    float: left;
-                    padding: 5px 10px;
+                    display: inline-block;
+                    line-height: 40px;
+                    height: 40px;
+                    padding: 0 10px;
+                    font-size: 14px;
+                }
+                &:nth-child(even) {
+                    background: $gray-light;
                 }
             }
         }

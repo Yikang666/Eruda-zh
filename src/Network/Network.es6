@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool.es6'
 import Request from './Request.es6'
 import util from '../lib/util'
+import config from '../lib/config.es6'
 
 require('./Network.scss');
 
@@ -20,20 +21,21 @@ export default class Network extends Tool
         super.init($el);
 
         this._bindEvent();
-        this.overrideXhr();
+        this._initConfig();
     }
     show()
     {
         super.show();
 
         this._getPerformanceTimingData();
+        this._render();
     }
     overrideXhr()
     {
         var winXhrProto = window.XMLHttpRequest.prototype;
 
-        var origSend = winXhrProto.send,
-            origOpen = winXhrProto.open;
+        var origSend = this._origSend = winXhrProto.send,
+            origOpen = this._origOpen = winXhrProto.open;
 
         var self = this;
 
@@ -44,13 +46,13 @@ export default class Network extends Tool
             var req = xhr.erudaRequest = new Request(xhr, method, url);
 
             req.on('send', (id, data) => self._addReq(id, data));
+            req.on('update', (id, data) => self._updateReq(id, data));
 
             xhr.addEventListener('readystatechange', function ()
             {
                 switch (xhr.readyState)
                 {
                     case 2: return req.handleHeadersReceived();
-                    case 3: return req.handleLoading();
                     case 4: return req.handleDone();
                 }
             });
@@ -66,6 +68,18 @@ export default class Network extends Tool
             origSend.apply(this, arguments);
         };
     }
+    restoreXhr()
+    {
+        var winXhrProto = window.XMLHttpRequest.prototype;
+
+        if (this._origOpen) winXhrProto.open = this._origOpen;
+        if (this._origSend) winXhrProto.send = this._origSend;
+    }
+    destroy()
+    {
+        super.destroy();
+        this.restoreXhr();
+    }
     _addReq(id, data)
     {
         util.defaults(data, {
@@ -73,7 +87,9 @@ export default class Network extends Tool
             status: 'pending',
             type: 'unknown',
             size: 0,
-            startTime: util.now()
+            method: 'GET',
+            startTime: util.now(),
+            time: 0
         });
 
         this._requests[id] = data;
@@ -82,9 +98,13 @@ export default class Network extends Tool
     }
     _updateReq(id, data)
     {
-        if (!this._requests[id]) return;
+        var target = this._requests[id];
 
-        util.extend(this._requests[id], data);
+        if (!target) return;
+
+        util.extend(target, data);
+
+        target.time = target.time - target.startTime;
 
         this._render();
     }
@@ -94,7 +114,7 @@ export default class Network extends Tool
 
         $el.on('click', '.eruda-performance-timing', function ()
         {
-            $el.find('.eruda-performance-timing-detail').show();
+            $el.find('.eruda-performance-timing-data').show();
         });
     }
     _getPerformanceTimingData()
@@ -187,11 +207,29 @@ export default class Network extends Tool
             performanceTiming[val] = timing[val] === 0 ? 0 : timing[val] - start;
         });
         this._performanceTiming = performanceTiming;
+    }
+    _initConfig()
+    {
+        var cfg = this.config = config.create('eruda-network');
 
-        this._render();
+        cfg.set(util.defaults(cfg.get(), {
+            overrideXhr: false
+        }));
+
+        if (cfg.get('overrideXhr')) this.overrideXhr();
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'overrideXhr': return val ? this.overrideXhr() : this.restoreXhr();
+            }
+        });
     }
     _render()
     {
+        if (!this.active) return;
+
         this._$el.html(this._tpl({
             data: this._performanceTimingData,
             timing: this._performanceTiming,

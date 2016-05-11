@@ -21,6 +21,12 @@ export default class Console extends Tool
         this._bindEvent();
         this._initConfig();
     }
+    show()
+    {
+        super.show();
+
+        this._log.render();
+    }
     overrideConsole()
     {
         var log = this._log,
@@ -45,6 +51,15 @@ export default class Console extends Tool
 
         return this;
     }
+    restoreConsole()
+    {
+        var origConsole = this._origConsole;
+        if (origConsole)
+        {
+            var winConsole = window.console;
+            CONSOLE_METHOD.forEach((name) => winConsole[name] = origConsole[name]);
+        }
+    }
     catchGlobalErr()
     {
         var log = this._log;
@@ -58,19 +73,17 @@ export default class Console extends Tool
 
         return this;
     }
+    ignoreGlobalErr()
+    {
+        var origOnerror = this._origOnerror;
+        if (origOnerror) window.onerror = origOnerror;
+    }
     destroy()
     {
         super.destroy();
 
-        var origOnerror = this._origOnerror;
-        if (origOnerror) window.onerror = origOnerror;
-
-        var origConsole = this._origConsole;
-        if (origConsole)
-        {
-            var winConsole = window.console;
-            CONSOLE_METHOD.forEach((name) => winConsole[name] = origConsole[name]);
-        }
+        this.ignoreGlobalErr();
+        this.restoreConsole();
     }
     _appendTpl()
     {
@@ -85,7 +98,7 @@ export default class Console extends Tool
     }
     _initLog()
     {
-        this._log = new Log(this._$logs);
+        this._log = new Log(this._$logs, this);
 
         this._log.on('filter', (filter) =>
         {
@@ -156,6 +169,15 @@ export default class Console extends Tool
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
+                case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
+            }
+        });
     }
 }
 

@@ -6,14 +6,16 @@ require('./Log.scss');
 
 export default class Log extends util.Emitter
 {
-    constructor($el)
+    constructor($el, parent)
     {
         super();
 
         this._$el = $el;
+        this._parent = parent;
         this._logs = [];
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
+        this._isUpdated = false;
         this._lastLog = {};
         this._timer = {};
     }
@@ -22,7 +24,8 @@ export default class Log extends util.Emitter
         this._logs = [];
         this._lastLog = {};
 
-        this._render();
+        this._isUpdated = true;
+        this.render();
     }
     input(jsCode)
     {
@@ -151,7 +154,8 @@ export default class Log extends util.Emitter
 
         this.emit('filter', type);
 
-        this._render();
+        this._isUpdated = true;
+        this.render();
     }
     help()
     {
@@ -209,7 +213,8 @@ export default class Log extends util.Emitter
             this._lastLog = log;
         }
 
-        this._render();
+        this._isUpdated = true;
+        this.render();
     }
     _runCmd(cmd)
     {
@@ -239,8 +244,12 @@ export default class Log extends util.Emitter
             this.warn('Failed to load ' + name);
         });
     }
-    _render()
+    render()
     {
+        if (!this._parent.active || !this._isUpdated) return;
+
+        this._isUpdated = false;
+
         var logs = this._filterLogs(this._logs);
 
         this._$el.html(this._tpl({

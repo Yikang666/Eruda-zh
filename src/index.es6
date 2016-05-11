@@ -56,7 +56,9 @@ settings.separator()
         .add(devTools.config, 'halfScreen', 'Half Screen Size')
         .separator()
         .add(consoleTool.config, 'catchGlobalErr', 'Catch Global Errors')
-        .add(consoleTool.config, 'overrideConsole', 'Override Console');
+        .add(consoleTool.config, 'overrideConsole', 'Override Console')
+        .separator()
+        .add(network.config, 'overrideXhr', 'Catch ajax requests');
 
 function appendContainer()
 {
