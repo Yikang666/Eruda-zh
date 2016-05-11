@@ -22,17 +22,52 @@ export default class Sources extends Tool
         this._parent = parent;
         this._bindEvent();
     }
-    set(data)
+    set(type, val)
     {
-        this._data = data;
+        if (type === 'img')
+        {
+            // _isInit is required to set true for async process.
+            this._isInit = true;
+
+            var img = new Image();
+
+            var self = this;
+
+            img.onload = function ()
+            {
+                self._data = {
+                    type: 'img',
+                    val: {
+                        width: this.width,
+                        height: this.height,
+                        src: val
+                    }
+                };
+
+                self._render();
+            };
+
+            img.src = val;
+
+            return;
+        }
+
+        this._data = {
+            type: type,
+            val: val
+        };
 
         this._render();
+
+        return this;
     }
     show()
     {
         super.show();
 
         if (!this._isInit) this._reset();
+
+        return this;
     }
     _reset()
     {
@@ -59,11 +94,29 @@ export default class Sources extends Tool
         {
             if (name !== this.name && lastTool.name === this.name) this._reset();
         });
+
+        this._$el.on('click', '.eruda-http .eruda-response', () =>
+        {
+            var data = this._data.val,
+                resTxt = data.resTxt;
+
+            switch (data.subType)
+            {
+                case 'css': return this.set('css', resTxt);
+                case 'html': return this.set('html', resTxt);
+                case 'javascript': return this.set('js', resTxt);
+            }
+            switch (data.type)
+            {
+                case 'image': return this.set('img', data.url);
+            }
+        });
     }
     _loadTpl()
     {
         this._codeTpl = require('./code.hbs');
         this._imgTpl = require('./image.hbs');
+        this._httpTpl = require('./http.hbs');
     }
     _render()
     {
@@ -79,11 +132,17 @@ export default class Sources extends Tool
                 return this._renderCode();
             case 'img':
                 return this._renderImg();
+            case 'http':
+                return this._renderHttp();
         }
     }
     _renderImg()
     {
         this._$el.html(this._imgTpl(this._data.val));
+    }
+    _renderHttp()
+    {
+        this._$el.html(this._httpTpl(this._data.val));
     }
     _renderCode()
     {

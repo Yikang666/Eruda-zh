@@ -75,10 +75,7 @@ export default class Elements extends Tool
                     default: return;
                 }
 
-                sources.set({
-                    type: type,
-                    val: el.nodeValue
-                });
+                sources.set(type, el.nodeValue);
 
                 parent.showTool('sources');
             }

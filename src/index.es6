@@ -58,7 +58,7 @@ settings.separator()
         .add(consoleTool.config, 'catchGlobalErr', 'Catch Global Errors')
         .add(consoleTool.config, 'overrideConsole', 'Override Console')
         .separator()
-        .add(network.config, 'overrideXhr', 'Catch ajax requests');
+        .add(network.config, 'overrideXhr', 'Catch Ajax Requests');
 
 function appendContainer()
 {

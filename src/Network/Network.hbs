@@ -27,15 +27,16 @@
     </table>
 </div>
 
-<ul class="eruda-request">
+<ul class="eruda-requests">
     {{#each requests}}
-        <li>
+        <li class="eruda-request" data-id="{{@key}}">
             <span>{{name}}</span>
             <span>{{status}}</span>
             <span>{{method}}</span>
-            <span>{{type}}</span>
-            <span>{{size}}B</span>
+            <span>{{subType}}</span>
+            <span>{{size}}</span>
             <span>{{time}}ms</span>
+            <span class="eruda-blue">{{url}}</span>
         </li>
     {{/each}}
 </ul>

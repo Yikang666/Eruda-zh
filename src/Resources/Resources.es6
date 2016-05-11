@@ -167,25 +167,11 @@ export default class Resources extends Tool
         {
             var src = util.$(this).attr('src');
 
-            var img = new Image();
+            var sources = parent.get('sources');
 
-            img.onload = function ()
-            {
-                var sources = parent.get('sources');
+            sources.set('img', src);
 
-                sources.set({
-                    type: 'img',
-                    val: {
-                        width: this.width,
-                        height: this.height,
-                        src: src
-                    }
-                });
-
-                parent.showTool('sources');
-            };
-
-            img.src = src;
+            parent.showTool('sources');
         }).on('click', '.css-link', linkFactory('css'))
           .on('click', '.js-link', linkFactory('js'));
 
@@ -207,10 +193,7 @@ export default class Resources extends Tool
 
                         var sources = parent.get('sources');
 
-                        sources.set({
-                            type: type,
-                            val: data
-                        });
+                        sources.set(type, data);
 
                         parent.showTool('sources');
                     });

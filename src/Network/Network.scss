@@ -46,8 +46,9 @@
                 }
             }
         }
-        .request {
+        .requests {
             background: #fff;
+            border-bottom: 1px solid $gray;
             li {
                 border-top: 1px solid $gray;
                 overflow-x: auto;

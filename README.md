@@ -18,7 +18,7 @@ Browse it on your phone: [http://liriliri.github.io/eruda/index.html?eruda=true]
 
 * Console: Display JavaScript logs.
 * Elements: Check dom state.
-* Network: Show performance timing.
+* Network: Show performance timing, ajax requests status.
 * Resource: Show localStorage, cookie information.
 * Info: Show url, user agent info.
 * Snippets: Include snippets you used most often.

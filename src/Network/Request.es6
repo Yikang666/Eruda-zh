@@ -15,27 +15,56 @@ export default class Request extends util.Emitter
     {
         this.emit('send', this._id, {
             name: getFileName(this._url),
-            method: this._method
+            url: this._url,
+            method: this._method,
+            xhr: this._xhr
         });
     }
     handleHeadersReceived()
     {
         var xhr = this._xhr;
 
+        var type = getType(xhr.getResponseHeader('Content-Type'));
+
         this.emit('update', this._id, {
-            type: getType(xhr.getResponseHeader('Content-Type')),
-            size: xhr.getResponseHeader('Content-Length'),
-            time: util.now()
+            type: type.type,
+            subType: type.subType,
+            size: formatSize(xhr.getResponseHeader('Content-Length')),
+            time: util.now(),
+            resHeaders: getHeaders(xhr)
         });
     }
     handleDone()
     {
         this.emit('update', this._id, {
             status: this._xhr.status,
-            time: util.now()
+            done: true,
+            time: util.now(),
+            resTxt: this._xhr.responseText
         });
     }
 };
+
+function getHeaders(xhr)
+{
+    var raw = xhr.getAllResponseHeaders(),
+        lines = raw.split('\n');
+
+    var ret = {};
+
+    util.each(lines, (line) =>
+    {
+        line = util.trim(line);
+
+        if (line === '') return;
+
+        var [key, val] = line.split(':', 2);
+
+        ret[key] = util.trim(val);
+    });
+
+    return ret;
+}
 
 function getFileName(url)
 {
@@ -50,5 +79,17 @@ function getType(contentType)
 {
     if (!contentType) return 'unknown';
 
-    return util.last(contentType.split(';')[0].split('/'));
+    var type = contentType.split(';')[0].split('/');
+
+    return {
+        type: type[0],
+        subType: util.last(type)
+    }
+}
+
+function formatSize(size)
+{
+    if (size < 1024) return size + 'B';
+
+    return (size / 1024).toFixed(1) + 'KB';
 }

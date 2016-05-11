@@ -16,10 +16,11 @@ export default class Network extends Tool
 
         this._tpl = require('./Network.hbs');
     }
-    init($el)
+    init($el, parent)
     {
         super.init($el);
 
+        this._parent = parent;
         this._bindEvent();
         this._initConfig();
     }
@@ -83,13 +84,19 @@ export default class Network extends Tool
     _addReq(id, data)
     {
         util.defaults(data, {
-            name: 'unknown',
+            name: '',
+            url: '',
             status: 'pending',
             type: 'unknown',
+            subType: 'unknown',
             size: 0,
             method: 'GET',
             startTime: util.now(),
-            time: 0
+            time: 0,
+            resHeaders: {},
+            resTxt: '',
+            xhr: {},
+            done: false
         });
 
         this._requests[id] = data;
@@ -110,11 +117,34 @@ export default class Network extends Tool
     }
     _bindEvent()
     {
-        var $el = this._$el;
+        var $el = this._$el,
+            parent = this._parent;
+
+        var self = this;
 
         $el.on('click', '.eruda-performance-timing', function ()
         {
             $el.find('.eruda-performance-timing-data').show();
+        });
+
+        $el.on('click', '.eruda-request', function ()
+        {
+            var id = util.$(this).data('id'),
+                data = self._requests[id];
+
+            if (!data.done) return;
+
+            var sources = parent.get('sources');
+
+            sources.set('http', {
+                url: data.url,
+                resTxt: data.resTxt,
+                type: data.type,
+                subType: data.subType,
+                resHeaders: data.resHeaders
+            });
+
+            parent.showTool('sources');
         });
     }
     _getPerformanceTimingData()

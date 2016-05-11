@@ -8,6 +8,7 @@
             background: #fff;
             padding: $common-padding;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             min-height: 100%;
         }
         .image {
@@ -23,6 +24,36 @@
                 text-align: center;
                 margin-top: 20px;
                 color: $gray;
+            }
+        }
+        .http {
+            .breadcrumb {
+                background: #fff;
+                padding: $common-padding;
+                margin-bottom: 10px;
+            }
+            .section {
+                background: #fff;
+                h2 {
+                    background: $blue;
+                    padding: $common-padding;
+                    color: #fff;
+                    font-size: 16px;
+                }
+                margin-bottom: 10px;
+                table {
+                    td {
+                        font-size: 14px;
+                        padding: 5px 10px;
+                    }
+                }
+            }
+            .response {
+                background: #fff;
+                padding: $common-padding;
+                margin-bottom: 10px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
         }
     }

@@ -1,0 +1,17 @@
+<div class="eruda-http">
+    <div class="eruda-breadcrumb">{{url}}</div>
+    <div class="eruda-section">
+        <h2>Response Headers</h2>
+        <table class="eruda-headers">
+            <tbody>
+                {{#each resHeaders}}
+                    <tr>
+                        <td>{{@key}}</td>
+                        <td>{{.}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <pre class="eruda-response">{{resTxt}}</pre>
+</div>
