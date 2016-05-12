@@ -6,7 +6,11 @@ export default class Highlight
 {
     constructor($parent)
     {
+        this._isShow = false;
+        this._top = 0;
+
         this._appendTpl($parent);
+        this._bindEvent();
     }
     setEl(el)
     {
@@ -15,14 +19,16 @@ export default class Highlight
     }
     show()
     {
-        this._calSizeAndPos();
+        this._isShow = true;
+        this.render();
         this._$el.show();
     }
     hide()
     {
+        this._isShow = false;
         this._$el.hide();
     }
-    _calSizeAndPos()
+    render()
     {
         var $target = this._$target;
 
@@ -33,9 +39,11 @@ export default class Highlight
                 height
             } = $target.offset();
 
+        this._top = top;
+
         this._$el.css({
             left: left,
-            top: top,
+            top: top - window.scrollY,
             width: width,
             height: height
         });
@@ -85,6 +93,14 @@ export default class Highlight
             width: bw - pl - pr,
             height: bh - pt - pb
         });
+    }
+    _bindEvent()
+    {
+        window.addEventListener('scroll', () =>
+        {
+            if (!this._isShow) return;
+            this._$el.css('top', this._top - window.scrollY);
+        }, false);
     }
     _appendTpl($parent)
     {
