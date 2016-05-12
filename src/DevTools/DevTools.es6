@@ -54,8 +54,8 @@ export default class DevTools extends util.Emitter
 
         var name = tool.name;
 
-        this._$tools.append('<div class="eruda-' + name + ' eruda-tool"></div>');
-        tool.init(this._$tools.find('.eruda-' + name), this);
+        this._$tools.append(`<div class="eruda-${name} eruda-tool"></div>`);
+        tool.init(this._$tools.find(`.eruda-${name}`), this);
         tool.active = false;
         this._tools[name] = tool;
 

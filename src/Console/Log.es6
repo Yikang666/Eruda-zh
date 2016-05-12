@@ -188,7 +188,7 @@ export default class Log extends util.Emitter
         if (!startTime) return;
 
         var duration = util.now() - startTime;
-        this.html('<div class="eruda-blue">' + name + ':' + duration + 'ms</div>');
+        this.html(`<div class="eruda-blue">${name}: ${duration}ms</div>`);
         delete  this._timer[name];
 
         return this;
@@ -271,9 +271,9 @@ export default class Log extends util.Emitter
     {
         util.loadJs(libraries[name], (result) =>
         {
-            if (result) return this.log(name + ' is loaded');
+            if (result) return this.log(`${name} is loaded`);
 
-            this.warn('Failed to load ' + name);
+            this.warn(`Failed to load ${name}`);
         });
     }
     render()
@@ -332,11 +332,11 @@ function errToStr(err, msg)
     var lines = err.stack.split('\n');
 
     if (util.isUndef(msg)) msg = lines[0] + '<br/>';
-    var stack = '<div class="eruda-stack">' + lines.slice(1).join('<br/>') + '</div>';
+    var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
 
     stack = stack.replace(regJsUrl, function (match)
     {
-        return '<a href="' + match + '" target="_blank">' + match + '</a>';
+        return `<a href="${match}" target="_blank">${match}</a>`;
     });
 
     return msg + stack;
@@ -355,7 +355,7 @@ function transMsg(msg, noEscape)
         msg = JSON.stringify(msg);
     } else if (util.isObj(msg))
     {
-        msg = 'Object ' + JSON.stringify(msg);
+        msg = `Object ${JSON.stringify(msg)}`;
     }
 
     msg = util.toStr(msg);

@@ -185,15 +185,15 @@ function formatElName(data)
             attributes
         } = data;
 
-    var ret = '<span class="eruda-blue">' + data.tagName.toLowerCase() + '</span>';
+    var ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`;
 
-    if (id !== '') ret += '#' + id;
+    if (id !== '') ret += `#${id}`;
 
     util.each(className.split(/\s+/g), (val) =>
     {
         if (util.trim(val) === '') return;
 
-        ret += '.' + val;
+        ret += `.${val}`;
     });
 
     util.each(attributes, (attr) =>
@@ -202,7 +202,7 @@ function formatElName(data)
 
         if (name === 'id' || name === 'class' || name === 'style') return;
 
-        ret += ' ' + name + '="' + attr.value + '"';
+        ret += ` ' ${name}="${attr.value}"`;
     });
 
     return ret;
