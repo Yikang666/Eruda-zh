@@ -151,7 +151,7 @@ export default class Resources extends Tool
         }).on('click', '.refresh-image', () =>
         {
             this.refreshImage()._render();
-        }).on('click', '.delete-local-storage', function ()
+        }).on('click', '.delete-local-storage', function (e)
         {
             var key = util.$(this).data('key');
 
@@ -163,19 +163,32 @@ export default class Resources extends Tool
 
             util.cookie.remove(key);
             self.refreshCookie()._render();
+        }).on('click', '.eruda-local-storage-val', function ()
+        {
+            var key = util.$(this).data('key'),
+                val = localStorage.getItem(key);
+
+            try {
+                showSources('json', JSON.parse(val));
+            } catch(e) {}
         }).on('click', '.img-link', function ()
         {
             var src = util.$(this).attr('src');
 
-            var sources = parent.get('sources');
-
-            sources.set('img', src);
-
-            parent.showTool('sources');
+            showSources('img', src);
         }).on('click', '.css-link', linkFactory('css'))
           .on('click', '.js-link', linkFactory('js'));
 
         util.orientation.on('change', () => this._render());
+
+        function showSources(type, data)
+        {
+            var sources = parent.get('sources');
+
+            sources.set(type, data);
+
+            parent.showTool('sources');
+        }
 
         function linkFactory(type)
         {
@@ -191,11 +204,7 @@ export default class Resources extends Tool
                     {
                         if (err) return;
 
-                        var sources = parent.get('sources');
-
-                        sources.set(type, data);
-
-                        parent.showTool('sources');
+                        showSources(type, data);
                     });
                 }
             };
