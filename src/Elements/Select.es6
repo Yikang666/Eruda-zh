@@ -29,5 +29,3 @@ export default class Select extends util.Emitter
         return this;
     }
 }
-
-const CLASS_NAME = 'eruda-elements-select';
