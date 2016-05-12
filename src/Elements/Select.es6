@@ -10,7 +10,9 @@ export default class Select extends util.Emitter
 
         this._listener = function (e)
         {
-            self.disable().emit('select', e.target);
+            self.emit('select', e.target);
+
+            e.preventDefault();
 
             return false;
         };

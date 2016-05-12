@@ -15,6 +15,7 @@ export default class Elements extends Tool
         this._tpl = require('./Elements.hbs');
         this._rmDefComputedStyle = true;
         this._highlightElement = false;
+        this._selectElement = false;
     }
     init($el, parent)
     {
@@ -52,7 +53,6 @@ export default class Elements extends Tool
     _bindEvent()
     {
         var self = this,
-            parent = this._parent,
             select = this._select;
 
         this._$el.on('click', '.eruda-child', function ()
@@ -95,23 +95,10 @@ export default class Elements extends Tool
         $bottomBar.on('click', '.eruda-back', () => this._back())
                   .on('click', '.eruda-refresh', () => this._render())
                   .on('click', '.eruda-highlight', () => this._toggleHighlight())
-                  .on('click', '.eruda-select', () =>
-                  {
-                      parent.hide();
-                      if (this._highlightElement) this._toggleHighlight();
-                      this._render();
-
-                      this._select.enable();
-                  })
+                  .on('click', '.eruda-select', () => this._toggleSelect())
                   .on('click', '.eruda-reset', () => this._setEl(this._htmlEl));
 
-        select.on('select', (target) =>
-        {
-            parent.show();
-
-            if (!this._highlightElement) this._toggleHighlight();
-            this._setEl(target);
-        });
+        select.on('select', (target) => this._setEl(target));
     }
     _toggleAllComputedStyle()
     {
@@ -129,10 +116,29 @@ export default class Elements extends Tool
     }
     _toggleHighlight()
     {
+        if (this._selectElement) return;
+
         this._$el.find('.eruda-highlight').toggleClass('eruda-active');
         this._highlightElement = !this._highlightElement;
 
         this._render();
+    }
+    _toggleSelect()
+    {
+        var select = this._select;
+
+        this._$el.find('.eruda-select').toggleClass('eruda-active');
+        if (!this._selectElement && !this._highlightElement) this._toggleHighlight();
+        this._selectElement = !this._selectElement;
+
+        if (this._selectElement)
+        {
+            select.enable();
+            this._parent.hide();
+        } else
+        {
+            select.disable();
+        }
     }
     _setEl(el)
     {

@@ -5,6 +5,10 @@
     right: 0;
     opacity: .5;
     z-index: -100;
+    pointer-events: none !important;
+    * {
+        pointer-events: none !important;
+    }
     .margin {
         position: absolute;
         background: #e8925b;
