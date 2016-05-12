@@ -17,13 +17,14 @@ export default class Select extends util.Emitter
     }
     enable()
     {
-        document.body.addEventListener('click', this._listener, true);
+        this.disable();
+        document.body.addEventListener('touchstart', this._listener, true);
 
         return this;
     }
     disable()
     {
-        document.body.removeEventListener('click', this._listener, true);
+        document.body.removeEventListener('touchstart', this._listener, true);
 
         return this;
     }
