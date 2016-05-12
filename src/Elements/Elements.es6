@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool.es6'
 import CssStore from './CssStore.es6'
 import Highlight from './Highlight.es6'
+import Select from './Select.es6'
 import util from '../lib/util'
 
 require('./Elements.scss');
@@ -25,9 +26,10 @@ export default class Elements extends Tool
         this._$showArea = $el.find('.eruda-show-area');
         $el.append(require('./BottomBar.hbs')());
 
-        this._bindEvent();
         this._htmlEl = document.documentElement;
         this._initHighlight();
+        this._initSelect();
+        this._bindEvent();
         this._setEl(this._htmlEl);
     }
     show()
@@ -49,7 +51,9 @@ export default class Elements extends Tool
     }
     _bindEvent()
     {
-        var self = this;
+        var self = this,
+            parent = this._parent,
+            select = this._select;
 
         this._$el.on('click', '.eruda-child', function ()
         {
@@ -88,14 +92,26 @@ export default class Elements extends Tool
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
 
-        $bottomBar.on('click', '.back', () => this._back())
-                  .on('click', '.refresh', () => this._render())
-                  .on('click', '.highlight', function ()
+        $bottomBar.on('click', '.eruda-back', () => this._back())
+                  .on('click', '.eruda-refresh', () => this._render())
+                  .on('click', '.eruda-highlight', () => this._toggleHighlight())
+                  .on('click', '.eruda-select', () =>
                   {
-                      util.$(this).toggleClass('eruda-active');
-                      self._toggleHighlight()
+                      parent.hide();
+                      if (this._highlightElement) this._toggleHighlight();
+                      this._render();
+
+                      this._select.enable();
                   })
-                  .on('click', '.reset', () => this._setEl(this._htmlEl));
+                  .on('click', '.eruda-reset', () => this._setEl(this._htmlEl));
+
+        select.on('select', (target) =>
+        {
+            parent.show();
+
+            if (!this._highlightElement) this._toggleHighlight();
+            this._setEl(target);
+        });
     }
     _toggleAllComputedStyle()
     {
@@ -107,8 +123,13 @@ export default class Elements extends Tool
     {
         this._highlight = new Highlight(this._parent.$parent);
     }
+    _initSelect()
+    {
+        this._select = new Select();
+    }
     _toggleHighlight()
     {
+        this._$el.find('.eruda-highlight').toggleClass('eruda-active');
         this._highlightElement = !this._highlightElement;
 
         this._render();
@@ -202,7 +223,7 @@ function formatElName(data)
 
         if (name === 'id' || name === 'class' || name === 'style') return;
 
-        ret += ` ' ${name}="${attr.value}"`;
+        ret += ` ${name}="${attr.value}"`;
     });
 
     return ret;

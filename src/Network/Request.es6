@@ -89,6 +89,8 @@ function getType(contentType)
 
 function formatSize(size)
 {
+    if (!util.isNum(size)) size = 0;
+
     if (size < 1024) return size + 'B';
 
     return (size / 1024).toFixed(1) + 'KB';

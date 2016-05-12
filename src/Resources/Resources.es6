@@ -135,49 +135,45 @@ export default class Resources extends Tool
     }
     _bindEvent()
     {
-        var self = this;
+        var self = this,
+            $el = this._$el,
+            parent = this._parent;
 
-        var parent = this._parent;
+        $el.on('click', '.refresh-local-storage', () => this.refreshLocalStorage()._render())
+           .on('click', '.refresh-cookie', () => this.refreshCookie()._render())
+           .on('click', '.refresh-script', () => this.refreshScript()._render())
+           .on('click', '.refresh-image', () => this.refreshImage()._render())
+           .on('click', '.delete-local-storage', function (e)
+           {
+               var key = util.$(this).data('key');
 
-        this._$el.on('click', '.refresh-local-storage', () =>
-        {
-            this.refreshLocalStorage()._render();
-        }).on('click', '.refresh-cookie', () =>
-        {
-            this.refreshCookie()._render();
-        }).on('click', '.refresh-script', () =>
-        {
-            this.refreshScript()._render();
-        }).on('click', '.refresh-image', () =>
-        {
-            this.refreshImage()._render();
-        }).on('click', '.delete-local-storage', function (e)
-        {
-            var key = util.$(this).data('key');
+               localStorage.removeItem(key);
+               self.refreshLocalStorage()._render();
+           })
+           .on('click', '.delete-cookie', function ()
+           {
+               var key = util.$(this).data('key');
 
-            localStorage.removeItem(key);
-            self.refreshLocalStorage()._render();
-        }).on('click', '.delete-cookie', function ()
-        {
-            var key = util.$(this).data('key');
+               util.cookie.remove(key);
+               self.refreshCookie()._render();
+           })
+           .on('click', '.eruda-local-storage-val', function ()
+           {
+               var key = util.$(this).data('key'),
+                   val = localStorage.getItem(key);
 
-            util.cookie.remove(key);
-            self.refreshCookie()._render();
-        }).on('click', '.eruda-local-storage-val', function ()
-        {
-            var key = util.$(this).data('key'),
-                val = localStorage.getItem(key);
+               try {
+                   showSources('json', JSON.parse(val));
+               } catch(e) {}
+           })
+           .on('click', '.img-link', function ()
+           {
+               var src = util.$(this).attr('src');
 
-            try {
-                showSources('json', JSON.parse(val));
-            } catch(e) {}
-        }).on('click', '.img-link', function ()
-        {
-            var src = util.$(this).attr('src');
-
-            showSources('img', src);
-        }).on('click', '.css-link', linkFactory('css'))
-          .on('click', '.js-link', linkFactory('js'));
+               showSources('img', src);
+           })
+           .on('click', '.css-link', linkFactory('css'))
+           .on('click', '.js-link', linkFactory('js'));
 
         util.orientation.on('change', () => this._render());
 
