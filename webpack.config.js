@@ -15,7 +15,11 @@ module.exports = {
         loaders: [
             {
                 test: /\.es6$/,
-                loader: 'babel?presets[]=es2015'
+                loader: 'babel',
+                query: {
+                    presets: ['es2015'],
+                    plugins: ['transform-runtime']
+                }
             },
             {
                 test: /\.scss$/,
