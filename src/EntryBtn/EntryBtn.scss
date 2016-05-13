@@ -16,7 +16,7 @@
         position: relative;
         top: 1px;
     }
-    &.active {
+    &.active, &:active {
         opacity: .8;
     }
 } }

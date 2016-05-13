@@ -446,13 +446,13 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (css)
+        function exports(css)
         {
             var style = document.createElement('style');
             style.textContent = css;
             style.type = 'text/css';
-            document.body.appendChild(style);
-        };
+            document.head.appendChild(style);
+        }
 
         return exports;
     })({});
@@ -2578,6 +2578,32 @@ module.exports = (function ()
                 return true;
             });
         };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ upperFirst ------------------------------ */
+
+    var upperFirst = _.upperFirst = (function (exports)
+    {
+        /* Convert the first character of string to upper case.
+         *
+         * |Name  |Type  |Desc             |
+         * |-------------------------------|
+         * |str   |string|String to convert|
+         * |return|string|Converted string |
+         *
+         * ```javascript
+         * upperFirst('red'); // -> RED
+         * ```
+         */
+
+        function exports(str)
+        {
+            if (str.length < 1) return str;
+
+            return str[0].toUpperCase() + str.slice(1);
+        }
 
         return exports;
     })({});

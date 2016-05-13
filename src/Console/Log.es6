@@ -79,12 +79,13 @@ export default class Log extends util.Emitter
     }
     dir(obj)
     {
-        var msg = util.isObj(obj) ? JSON.stringify(obj, null, 4) : transMsg(obj, true);
+        var src = util.isObj(obj) ? extractObj(obj) : obj,
+            msg = util.isObj(src) ? JSON.stringify(src, null, 4) : transMsg(src, true);
 
         this._insert({
             type: 'dir',
             isCode: true,
-            src: obj,
+            src,
             val: msg
         });
 
@@ -93,7 +94,7 @@ export default class Log extends util.Emitter
     log()
     {
         var msg = transMultipleMsg(arguments),
-            src = arguments.length === 1 ? arguments[0] : arguments;
+            src = extractSrc(arguments);
 
         this._insert({
             type: 'log',
@@ -344,18 +345,15 @@ function errToStr(err, msg)
 
 function transMsg(msg, noEscape)
 {
-    if (util.isUndef(msg))
-    {
-        msg = 'undefined';
-    } else if (util.isFn(msg))
+    if (util.isFn(msg))
     {
         msg = msg.toString();
-    } else if (util.isArr(msg))
-    {
-        msg = JSON.stringify(msg);
     } else if (util.isObj(msg))
     {
-        msg = `Object ${JSON.stringify(msg)}`;
+        msg = `${util.upperFirst(typeof msg)} ${JSON.stringify(extractObj(msg))}`;
+    } else if (util.isUndef(msg))
+    {
+        msg = 'undefined';
     }
 
     msg = util.toStr(msg);
@@ -363,6 +361,133 @@ function transMsg(msg, noEscape)
     if (noEscape) return msg;
 
     return util.escape(msg);
+}
+
+function extractSrc(args)
+{
+    if (args.length !== 1) return args;
+
+    var ret = args[0];
+
+    if (util.isObj(ret)) ret = extractObj(ret);
+
+    return ret;
+}
+
+function extractObj(obj)
+{
+    return JSON.parse(stringify(obj));
+}
+
+// Modified from: https://jsconsole.com/
+function stringify(obj, simple, visited)
+{
+    var json = '',
+        type = '',
+        parts = [],
+        names = [],
+        circular = false,
+        i, vi;
+
+    visited = visited || [];
+
+    try {
+        type = ({}).toString.call(obj);
+    } catch (e)
+    {
+        type = '[object Object]';
+    }
+
+    for (vi = 0; vi < visited.length; vi++)
+    {
+        if (obj === visited[vi])
+        {
+            circular = true;
+            break;
+        }
+    }
+
+    if (circular)
+    {
+        json = '"[circular]"';
+    } else if (type == '[object String]')
+    {
+        json = `"${escapeJsonStr(obj)}"`;
+    } else if (type == '[object Array]')
+    {
+        visited.push(obj);
+
+        json = '[';
+        for (i = 0; i < obj.length; i++)
+        {
+            parts.push(`"${stringify(obj[i], simple, visited)}"`);
+        }
+        json += parts.join(', ') + ']';
+    } else if (type == '[object Object]')
+    {
+        visited.push(obj);
+
+        json = '{';
+        for (i in obj) names.push(i);
+        names.sort(sortName);
+        for (i = 0; i < names.length; i++)
+        {
+            parts.push(`${stringify(names[i], undefined, visited)}: ${stringify(obj[ names[i] ], simple, visited)}`);
+        }
+        json += parts.join(', ') + '}';
+    } else if (type == '[object Number]')
+    {
+        json = obj + '';
+    } else if (type == '[object Boolean]')
+    {
+        json = obj ? 'true' : 'false';
+    } else if (type == '[object Function]')
+    {
+        json = `"${escapeJsonStr(obj.toString())}"`;
+    } else if (obj === null)
+    {
+        json = 'null';
+    } else if (obj === undefined)
+    {
+        json = '"undefined"';
+    } else if (simple == undefined)
+    {
+        visited.push(obj);
+
+        json = '{\n';
+        for (i in obj) names.push(i);
+        names.sort(sortName);
+        for (i = 0; i < names.length; i++)
+        {
+            try
+            {
+                parts.push(`"${names[i]}": ${stringify(obj[names[i]], true, visited)}`);
+            } catch (e) {}
+        }
+
+        json += parts.join(',\n') + '\n}';
+    } else
+    {
+        try
+        {
+            json = `"${obj}"`;
+        } catch (e) {}
+    }
+
+    return json;
+}
+
+function escapeJsonStr(str)
+{
+    return str.replace(/\n/g, '\\n')
+              .replace(/\r/, '\\r')
+              .replace(/"/g, '\\"')
+              .replace(/\t/g, '\\t');
+}
+
+function sortName(a, b)
+{
+    return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
 }
 
 function transMultipleMsg(args)
