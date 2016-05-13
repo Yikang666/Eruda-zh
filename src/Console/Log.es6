@@ -255,13 +255,6 @@ export default class Log extends util.Emitter
 
         switch (cmd)
         {
-            case 'c': return this.clear();
-            case 'a': return this.filter('all');
-            case 'e': return this.filter('error');
-            case 'i': return this.filter('info');
-            case 'w': return this.filter('warn');
-            case 'l': return this.filter('log');
-            case 'h': return this.help();
             case '$': return this._loadJs('jQuery');
             case '_': return this._loadJs('underscore');
             default:
