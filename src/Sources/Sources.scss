@@ -78,6 +78,7 @@
             }
             li {
                 position: relative;
+                white-space: nowrap;
             }
             & > li > .key,
             & .array .key {

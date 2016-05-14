@@ -66,13 +66,15 @@ export default class Log extends util.Emitter
 
         return this;
     }
-    output(msg)
+    output(val)
     {
+        var src = util.isObj(val) ? extractObj(val) : val;
+
         this._insert({
             type: 'output',
             ignoreFilter: true,
-            src: msg,
-            val: transMsg(msg)
+            src,
+            val: transMsg(val)
         });
 
         return this;
@@ -413,7 +415,7 @@ function stringify(obj, simple, visited)
         json = '[';
         for (i = 0; i < obj.length; i++)
         {
-            parts.push(`"${stringify(obj[i], simple, visited)}"`);
+            parts.push(`${stringify(obj[i], simple, visited)}`);
         }
         json += parts.join(', ') + ']';
     } else if (type == '[object Object]')
