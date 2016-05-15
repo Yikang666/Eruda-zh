@@ -52,6 +52,7 @@ export default class Log extends util.Emitter
             type: 'input',
             ignoreFilter: true,
             isCode: true,
+            icon: 'chevron-right',
             src,
             val: jsCode
         });
@@ -73,6 +74,7 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'output',
             ignoreFilter: true,
+            icon: 'chevron-left',
             src,
             val: transMsg(val)
         });
@@ -120,25 +122,27 @@ export default class Log extends util.Emitter
     {
         if (util.isUndef(msg)) return;
 
-        var ignoreFilter = false, src;
+        var ignoreFilter = false;
 
         if (util.isErr(msg))
         {
-            src = {
-                stack: msg.stack,
-                message: msg.message || ''
-            };
             ignoreFilter = msg.ignoreFilter;
-            msg = errToStr(msg);
         } else
         {
-            msg = errToStr(new Error(), transMsg(msg));
+            msg = new Error(msg);
         }
+
+        var src = {
+            message: msg.message || '',
+            stack: msg.stack
+        };
+        msg = errToStr(msg);
 
         this._insert({
             type: 'error',
             ignoreFilter: ignoreFilter,
             src,
+            icon: 'times-circle',
             val: msg
         });
 
@@ -152,6 +156,7 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'info',
             src,
+            icon: 'info-circle',
             val: msg
         });
 
@@ -165,6 +170,7 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'warn',
             src,
+            icon: 'exclamation-triangle',
             val: msg
         });
 
@@ -328,11 +334,12 @@ function evalJs(jsInput)
     return eval.call(window, jsInput);
 }
 
-function errToStr(err, msg)
+function errToStr(err)
 {
     var lines = err.stack.split('\n');
 
-    if (util.isUndef(msg)) msg = lines[0] + '<br/>';
+    var msg = `${lines[0]}<br/>`;
+
     var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
 
     stack = stack.replace(regJsUrl, function (match)

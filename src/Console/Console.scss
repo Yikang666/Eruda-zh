@@ -11,7 +11,7 @@
             height: 40px;
             line-height: 20px;
             width: 100%;
-            .icon-blocked, .icon-info {
+            .icon-ban, .icon-info-circle {
                 display: inline-block;
                 color: $gray;
                 padding: 5px;
@@ -22,10 +22,10 @@
                     color: $gray-light;
                 }
             }
-            .icon-blocked {
+            .icon-ban {
                 left: 10px;
             }
-            .icon-info {
+            .icon-info-circle {
                 right: 10px;
             }
             .filter {
@@ -66,9 +66,13 @@
                     width: 50%;
                     display: inline-block;
                     text-align: center;
+                    border-right: 1px solid $gray-light;
                     height: 40px;
                     line-height: 40px;
                     float: left;
+                    &:last-child {
+                        border-right: none;
+                    }
                     &:active {
                         background: $blue;
                         color: #fff;

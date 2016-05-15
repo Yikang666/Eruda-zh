@@ -1,6 +1,11 @@
 <ul>
     {{#each logs}}
         <li class="eruda-{{type}} eruda-log-item" data-idx="{{@index}}">
+            {{#if icon}}
+                <div class="eruda-icon-container">
+                    <span class="eruda-icon eruda-icon-{{icon}}"></span>
+                </div>
+            {{/if}}
             {{#if showTimes}}<div class="eruda-times">{{times}}</div>{{/if}}
             <div class="eruda-log-content-wrapper">
                 <div class="eruda-log-content">

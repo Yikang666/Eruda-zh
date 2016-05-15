@@ -17,19 +17,41 @@
             a {
                 color: $blue !important;
             }
-            .times {
-                background: $blue;
-                padding: 5px;
-                color: #fff;
-                border-radius: 4px;
+            .times, .icon-container {
                 float: left;
                 margin-right: 5px;
+            }
+            .icon-container {
+                .icon {
+                    line-height: 20px;
+                    font-size: 12px;
+                    color: $gray-dark;
+                }
+                .icon-chevron-right {
+                    color: $blue;
+                }
+                .icon-info-circle {
+                    color: $blue;
+                }
+                .icon-times-circle {
+                    color: $red-dark;
+                }
+                .icon-exclamation-triangle {
+                    color: $yellow-dark;
+                }
+            }
+            .times {
+                background: $blue;
+                padding: 2px 4px;
+                color: #fff;
+                border-radius: 10px;
             }
             .log-content-wrapper {
                 overflow: hidden;
             }
             .log-content
             {
+                line-height: 20px;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
@@ -73,6 +95,9 @@
             }
             &.info {
                 color: $blue;
+            }
+            &.output {
+                color: $gray-dark;
             }
         }
     }

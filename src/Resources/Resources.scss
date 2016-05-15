@@ -39,10 +39,6 @@
                 border-radius: 50%;
                 font-size: 12px;
                 cursor: pointer;
-                .icon-loop {
-                    position: relative;
-                    top: 1px;
-                }
             }
         }
         .link-list {
@@ -82,7 +78,7 @@
             td {
                 padding: 10px;
                 word-break: break-all;
-                .icon-bin {
+                .icon-trash {
                     color: $red-dark;
                     display: inline-block;
                     padding: 5px;

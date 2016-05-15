@@ -1,4 +1,4 @@
-// Icons: info, blocked, terminal, bin, loop
+// Icons(Font-awesome): times-circle, exclamation-triangle, chevron-left, chevron-right, repeat, trash, cog, ban, info-circle
 
 var fs = require('fs'),
     path = require('path');
