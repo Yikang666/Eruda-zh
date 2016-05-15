@@ -474,10 +474,12 @@ function stringify(obj, simple, visited)
 
 function escapeJsonStr(str)
 {
-    return str.replace(/\n/g, '\\n')
-              .replace(/\r/, '\\r')
+    return str.replace(/\\/g, '\\\\')
               .replace(/"/g, '\\"')
-              .replace(/\t/g, '\\t');
+              .replace(/\f/g, '\\f')
+              .replace(/\n/g, '\\n')
+              .replace(/\r/g, '')
+              .replace(/\t/g, '');
 }
 
 function sortName(a, b)

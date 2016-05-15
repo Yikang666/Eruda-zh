@@ -34,7 +34,7 @@ export default class Console extends Tool
             origConsole = {},
             winConsole = window.console;
 
-        function override(name)
+        CONSOLE_METHOD.forEach((name) =>
         {
             var origin = origConsole[name] = winConsole[name];
 
@@ -44,9 +44,7 @@ export default class Console extends Tool
 
                 origin.apply(winConsole, arguments);
             };
-        }
-
-        CONSOLE_METHOD.forEach((name) => override(name));
+        });
 
         this._origConsole = origConsole;
 
