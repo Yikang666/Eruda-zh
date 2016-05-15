@@ -11,10 +11,6 @@
     font-size: 25px;
     text-align: center;
     line-height: 40px;
-    span {
-        position: relative;
-        top: 1px;
-    }
     &.active, &:active {
         opacity: .8;
     }

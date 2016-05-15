@@ -4,13 +4,13 @@ import config from '../lib/config.es6'
 
 require('./EntryBtn.scss');
 
-export default class HomeBtn extends util.Emitter
+export default class EntryBtn extends util.Emitter
 {
     constructor($parent)
     {
         super();
-        this._$parent = $parent;
 
+        this._$parent = $parent;
         this._appendTpl();
         this._makeDraggable();
         this._initConfig();
@@ -22,7 +22,6 @@ export default class HomeBtn extends util.Emitter
         var $parent = this._$parent;
 
         $parent.append(require('./EntryBtn.hbs')());
-
         this._$el = $parent.find('.eruda-home-btn');
     }
     _setPos(orientationChanged)
@@ -35,10 +34,7 @@ export default class HomeBtn extends util.Emitter
 
         if (outOfRange ||
             !cfg.get('rememberPos') ||
-            orientationChanged)
-        {
-            pos = defPost;
-        }
+            orientationChanged) pos = defPost;
 
         this._$el.css({
             left: pos.x,
@@ -62,8 +58,8 @@ export default class HomeBtn extends util.Emitter
             if (cfg.get('rememberPos'))
             {
                 cfg.set('pos', {
-                    x: util.toNum(this._$el.css('left').replace('px', '')),
-                    y: util.toNum(this._$el.css('top').replace('px', ''))
+                    x: util.pxToNum(this._$el.css('left')),
+                    y: util.pxToNum(this._$el.css('top'))
                 });
             }
 
@@ -74,9 +70,7 @@ export default class HomeBtn extends util.Emitter
     }
     _makeDraggable()
     {
-        this._draggabilly = new Draggabilly(this._$el.get(0), {
-            containment: true
-        });
+        this._draggabilly = new Draggabilly(this._$el.get(0), {containment: true});
     }
     _initConfig()
     {
@@ -89,13 +83,10 @@ export default class HomeBtn extends util.Emitter
     }
 };
 
-function getDefPos()
+var getDefPos = () =>
 {
-    var wh = window.innerHeight,
-        ww = window.innerWidth;
-
     return {
-        x: ww - 50,
-        y: wh - 50
+        x: window.innerWidth - 50,
+        y: window.innerHeight - 50
     };
-}
+};
