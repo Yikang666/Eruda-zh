@@ -61,12 +61,12 @@ export default class Network extends Tool
             origOpen.apply(this, arguments);
         };
 
-        winXhrProto.send = function ()
+        winXhrProto.send = function (...args)
         {
             var req = this.erudaRequest;
             if (req) req.handleSend();
 
-            origSend.apply(this, arguments);
+            origSend.apply(this, args);
         };
     }
     restoreXhr()

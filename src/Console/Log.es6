@@ -26,34 +26,28 @@ export default class Log extends util.Emitter
     {
         this._logs = [];
         this._lastLog = {};
-
         this._isUpdated = true;
-        this.render();
+
+        return this.render();
     }
     input(jsCode)
     {
-        var src = jsCode;
-
-        jsCode = util.trim(jsCode);
-
         if (util.startWith(jsCode, ':'))
         {
-            var cmd = jsCode.slice(1);
-            this._runCmd(cmd);
+            this._runCmd(jsCode.slice(1));
 
             return this;
         } else if (util.startWith(jsCode, '/'))
         {
-            var regexp = util.trim(jsCode.slice(1));
-            return this.filter(new RegExp(util.escapeRegExp(regexp)));
+            return this.filter(new RegExp(util.escapeRegExp(jsCode.slice(1))));
         }
 
-        this._insert({
+        this.insert({
             type: 'input',
             ignoreFilter: true,
             isCode: true,
             icon: 'chevron-right',
-            src,
+            src: jsCode,
             val: jsCode
         });
 
@@ -69,121 +63,83 @@ export default class Log extends util.Emitter
     }
     output(val)
     {
-        var src = util.isObj(val) ? extractObj(val) : val;
-
-        this._insert({
+        return this.insert({
             type: 'output',
             ignoreFilter: true,
             icon: 'chevron-left',
-            src,
+            src: util.isObj(val) ? extractObj(val) : val,
             val: transMsg(val)
         });
-
-        return this;
     }
     dir(obj)
     {
         var src = util.isObj(obj) ? extractObj(obj) : obj,
             msg = util.isObj(src) ? JSON.stringify(src, null, 4) : transMsg(src, true);
 
-        this._insert({
+        return this.insert({
             type: 'dir',
             isCode: true,
             src,
             val: msg
         });
-
-        return this;
     }
-    log()
+    log(...args)
     {
-        var msg = transMultipleMsg(arguments),
-            src = extractSrc(arguments);
-
-        this._insert({
+        return this.insert({
             type: 'log',
-            src,
-            val: msg
+            src: extractSrc(args),
+            val: transMultipleMsg(args)
         });
-
-        return this;
     }
-    html(msg)
+    html(val)
     {
-        this._insert({
+        return this.insert({
             type: 'html',
             ignoreFilter: true,
-            val: msg
+            val
         });
-
-        return this;
     }
     error(msg)
     {
         if (util.isUndef(msg)) return;
 
-        var ignoreFilter = false;
+        if (!util.isErr(msg)) msg = new Error(msg);
 
-        if (util.isErr(msg))
-        {
-            ignoreFilter = msg.ignoreFilter;
-        } else
-        {
-            msg = new Error(msg);
-        }
-
-        var src = {
-            message: msg.message || '',
-            stack: msg.stack
-        };
-        msg = errToStr(msg);
-
-        this._insert({
+        return this.insert({
             type: 'error',
-            ignoreFilter: ignoreFilter,
-            src,
+            ignoreFilter: msg.ignoreFilter,
+            src: {
+                message: msg.message || '',
+                stack: msg.stack
+            },
             icon: 'times-circle',
-            val: msg
+            val: errToStr(msg)
         });
-
-        return this;
     }
-    info()
+    info(...args)
     {
-        var msg = transMultipleMsg(arguments),
-            src = arguments.length === 1 ? arguments[0] : arguments;
-
-        this._insert({
+        return this.insert({
             type: 'info',
-            src,
+            src: extractSrc(args),
             icon: 'info-circle',
-            val: msg
+            val: transMultipleMsg(args)
         });
-
-        return this;
     }
-    warn()
+    warn(...args)
     {
-        var msg = transMultipleMsg(arguments),
-            src = arguments.length === 1 ? arguments[0] : arguments;
-
-        this._insert({
+        return this.insert({
             type: 'warn',
-            src,
+            src: extractSrc(args),
             icon: 'exclamation-triangle',
-            val: msg
+            val: transMultipleMsg(args)
         });
-
-        return this;
     }
     filter(type)
     {
         this._filter = type;
-
         this.emit('filter', type);
-
         this._isUpdated = true;
-        this.render();
+        return this.render();
     }
     help()
     {
@@ -200,14 +156,11 @@ export default class Log extends util.Emitter
         var startTime = this._timer[name];
 
         if (!startTime) return;
+        delete this._timer[name];
 
-        var duration = util.now() - startTime;
-        this.html(`<div class="eruda-blue">${name}: ${duration}ms</div>`);
-        delete  this._timer[name];
-
-        return this;
+        return this.html(`<div class="eruda-blue">${name}: ${util.now() - startTime}ms</div>`);
     }
-    _insert(log)
+    insert(log)
     {
         util.defaults(log, {
             type: 'log',
@@ -239,12 +192,11 @@ export default class Log extends util.Emitter
         } else
         {
             this._logs.push(log);
-
             this._lastLog = log;
         }
 
         this._isUpdated = true;
-        this.render();
+        return this.render();
     }
     _bindEvent()
     {
@@ -252,9 +204,8 @@ export default class Log extends util.Emitter
 
         this._$el.on('click', '.eruda-log-item', function ()
         {
-            var idx = util.$(this).data('idx');
-
-            var src = self._renderLogs[idx].src;
+            var idx = util.$(this).data('idx'),
+                src = self._renderLogs[idx].src;
 
             try {
                 if (!util.isObj(src)) src = JSON.parse(src);
@@ -264,9 +215,7 @@ export default class Log extends util.Emitter
     }
     _runCmd(cmd)
     {
-        cmd = util.trim(cmd);
-
-        switch (cmd)
+        switch (cmd.trim())
         {
             case '$': return this._loadJs('jQuery');
             case '_': return this._loadJs('underscore');
@@ -286,15 +235,11 @@ export default class Log extends util.Emitter
     render()
     {
         if (!this._parent.active || !this._isUpdated) return;
-
         this._isUpdated = false;
 
         var logs = this._renderLogs = this._filterLogs(this._logs);
 
-        this._$el.html(this._tpl({
-            logs: logs
-        }));
-
+        this._$el.html(this._tpl({logs: logs}));
         this._scrollToBottom();
     }
     _filterLogs(logs)
@@ -305,7 +250,7 @@ export default class Log extends util.Emitter
 
         var isRegexp = util.isRegExp(filter);
 
-        return util.filter(logs, (val) =>
+        return logs.filter((val) =>
         {
             if (isRegexp) return filter.test(val.val);
 
@@ -321,33 +266,20 @@ export default class Log extends util.Emitter
 }
 
 var cmdList = require('./cmdList.json'),
-    helpMsg = require('./help.hbs')({
-        commands: cmdList
-    });
-
-var libraries = require('./libraries.json');
+    helpMsg = require('./help.hbs')({commands: cmdList}),
+    libraries = require('./libraries.json');
 
 var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
 
-function evalJs(jsInput)
-{
-    return eval.call(window, jsInput);
-}
+var evalJs = jsInput => eval.call(window, jsInput);
 
 function errToStr(err)
 {
-    var lines = err.stack.split('\n');
+    var lines = err.stack.split('\n'),
+        msg = `${lines[0]}<br/>`,
+        stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
 
-    var msg = `${lines[0]}<br/>`;
-
-    var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
-
-    stack = stack.replace(regJsUrl, function (match)
-    {
-        return `<a href="${match}" target="_blank">${match}</a>`;
-    });
-
-    return msg + stack;
+    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }
 
 function transMsg(msg, noEscape)
@@ -377,17 +309,10 @@ function extractSrc(args)
 {
     if (args.length !== 1) return args;
 
-    var ret = args[0];
-
-    if (util.isObj(ret)) ret = extractObj(ret);
-
-    return ret;
+    return util.isObj(args[0]) ? extractObj(args[0]) : args[0];
 }
 
-function extractObj(obj)
-{
-    return JSON.parse(stringify(obj));
-}
+var extractObj = (obj) => JSON.parse(stringify(obj));
 
 // Modified from: https://jsconsole.com/
 function stringify(obj, simple, visited)
@@ -396,8 +321,7 @@ function stringify(obj, simple, visited)
         type = '',
         parts = [],
         names = [],
-        circular = false,
-        i, vi;
+        circular = false;
 
     visited = visited || [];
 
@@ -408,9 +332,9 @@ function stringify(obj, simple, visited)
         type = '[object Object]';
     }
 
-    for (vi = 0; vi < visited.length; vi++)
+    for (let i = 0, len = visited.length; i < len; i++)
     {
-        if (obj === visited[vi])
+        if (obj === visited[i])
         {
             circular = true;
             break;
@@ -428,22 +352,19 @@ function stringify(obj, simple, visited)
         visited.push(obj);
 
         json = '[';
-        for (i = 0; i < obj.length; i++)
-        {
-            parts.push(`${stringify(obj[i], simple, visited)}`);
-        }
+        util.each(obj, val => parts.push(`${stringify(val, simple, visited)}`));
         json += parts.join(', ') + ']';
     } else if (type == '[object Object]')
     {
         visited.push(obj);
 
         json = '{';
-        for (i in obj) names.push(i);
+        for (let key in obj) names.push(key);
         names.sort(sortName);
-        for (i = 0; i < names.length; i++)
+        util.each(names, val =>
         {
-            parts.push(`${stringify(names[i], undefined, visited)}: ${stringify(obj[ names[i] ], simple, visited)}`);
-        }
+            parts.push(`${stringify(val, undefined, visited)}: ${stringify(obj[val], simple, visited)}`);
+        });
         json += parts.join(', ') + '}';
     } else if (type == '[object Number]')
     {
@@ -465,16 +386,15 @@ function stringify(obj, simple, visited)
         visited.push(obj);
 
         json = '{\n';
-        for (i in obj) names.push(i);
+        for (let key in obj) names.push(key);
         names.sort(sortName);
-        for (i = 0; i < names.length; i++)
+        util.each(names, val =>
         {
             try
             {
-                parts.push(`"${names[i]}": ${stringify(obj[names[i]], true, visited)}`);
+                parts.push(`"${val}": ${stringify(obj[val], true, visited)}`);
             } catch (e) {}
-        }
-
+        });
         json += parts.join(',\n') + '\n}';
     } else
     {
@@ -487,35 +407,16 @@ function stringify(obj, simple, visited)
     return json;
 }
 
-function escapeJsonStr(str)
-{
-    return str.replace(/\\/g, '\\\\')
-              .replace(/"/g, '\\"')
-              .replace(/\f/g, '\\f')
-              .replace(/\n/g, '\\n')
-              .replace(/\r/g, '')
-              .replace(/\t/g, '');
-}
+var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
+                              .replace(/"/g, '\\"')
+                              .replace(/\f/g, '\\f')
+                              .replace(/\n/g, '\\n')
+                              .replace(/\r/g, '')
+                              .replace(/\t/g, '');
 
-function sortName(a, b)
-{
-    return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
-}
+var sortName = (a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1;
 
-function transMultipleMsg(args)
-{
-    var ret = [];
+var transMultipleMsg = args => args.map(val => transMsg(val)).join(' ');
 
-    util.each(args, function (val)
-    {
-        ret.push(transMsg(val));
-    });
-
-    return ret.join(' ');
-}
-
-function txtToHtml(str)
-{
-    return str.replace(/\n/g, '<br/>')
-              .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-}
+var txtToHtml = str => str.replace(/\n/g, '<br/>')
+                          .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');

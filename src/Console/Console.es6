@@ -10,6 +10,7 @@ export default class Console extends Tool
     constructor()
     {
         super();
+
         this.name = 'console';
     }
     init($el, parent)
@@ -22,67 +23,58 @@ export default class Console extends Tool
         this._bindEvent();
         this._initConfig();
     }
-    show()
-    {
-        super.show();
-
-        this._log.render();
-    }
     overrideConsole()
     {
         var log = this._log,
-            origConsole = {},
+            origConsole = this._origConsole = {},
             winConsole = window.console;
 
-        CONSOLE_METHOD.forEach((name) =>
+        CONSOLE_METHOD.forEach(name =>
         {
-            var origin = origConsole[name] = winConsole[name];
+            var origin = origConsole[name] = winConsole[name].bind(winConsole);
 
-            winConsole[name] = function ()
+            winConsole[name] = (...args) =>
             {
-                log[name].apply(log, arguments);
-
-                origin.apply(winConsole, arguments);
+                log[name](...args);
+                origin(...args);
             };
         });
-
-        this._origConsole = origConsole;
 
         return this;
     }
     restoreConsole()
     {
-        var origConsole = this._origConsole;
-        if (origConsole)
-        {
-            var winConsole = window.console;
-            CONSOLE_METHOD.forEach((name) => winConsole[name] = origConsole[name]);
-        }
+        if (!this._origConsole) return this;
+
+        CONSOLE_METHOD.forEach(name => window.console[name] = this._origConsole[name]);
+        delete this._origConsole;
+
+        return this;
     }
     catchGlobalErr()
     {
-        var log = this._log;
-
         this._origOnerror = window.onerror;
-        window.onerror = (errMsg, url, lineNum, column, errObj) =>
-        {
-            if (errObj) return log.error(errObj);
-            log.error(errMsg);
-        };
+
+        window.onerror = (errMsg, url, lineNum, column, errObj) => this._log.error(errObj ? errObj : errMsg);
 
         return this;
     }
     ignoreGlobalErr()
     {
-        var origOnerror = this._origOnerror;
-        if (origOnerror) window.onerror = origOnerror;
+        if (this._origOnerror)
+        {
+            window.onerror = this._origOnerror;
+            delete this._origOnerror;
+        }
+
+        return this;
     }
     destroy()
     {
         super.destroy();
 
         this.ignoreGlobalErr();
-        this.restoreConsole();
+        return this.restoreConsole();
     }
     _appendTpl()
     {
@@ -127,14 +119,11 @@ export default class Console extends Tool
         $inputBtns.on('click', '.cancel', () => this._hideInput());
         $inputBtns.on('click', '.execute', () =>
         {
-            var jsInput = $input.val();
-
-            if (util.trim(jsInput) === '') return;
+            var jsInput = $input.val().trim();
+            if (jsInput === '') return;
 
             log.input(jsInput);
-
             $input.val('').get(0).blur();
-
             this._hideInput();
         });
 
@@ -188,4 +177,3 @@ export default class Console extends Tool
 }
 
 const CONSOLE_METHOD = ['log', 'error', 'info', 'warn', 'dir', 'time', 'timeEnd', 'clear'];
-
