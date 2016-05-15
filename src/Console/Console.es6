@@ -23,6 +23,12 @@ export default class Console extends Tool
         this._bindEvent();
         this._initConfig();
     }
+    show()
+    {
+        super.show();
+
+        this._log.render();
+    }
     overrideConsole()
     {
         var log = this._log,
