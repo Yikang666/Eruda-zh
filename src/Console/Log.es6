@@ -52,7 +52,7 @@ export default class Log extends util.Emitter
             type: 'input',
             ignoreFilter: true,
             isCode: true,
-            src: src,
+            src,
             val: jsCode
         });
 
@@ -118,11 +118,16 @@ export default class Log extends util.Emitter
     }
     error(msg)
     {
-        var src = msg,
-            ignoreFilter = false;
+        if (util.isUndef(msg)) return;
+
+        var ignoreFilter = false, src;
 
         if (util.isErr(msg))
         {
+            src = {
+                stack: msg.stack,
+                message: msg.message || ''
+            };
             ignoreFilter = msg.ignoreFilter;
             msg = errToStr(msg);
         } else
@@ -133,7 +138,7 @@ export default class Log extends util.Emitter
         this._insert({
             type: 'error',
             ignoreFilter: ignoreFilter,
-            src: src,
+            src,
             val: msg
         });
 
@@ -349,6 +354,9 @@ function transMsg(msg, noEscape)
     } else if (util.isUndef(msg))
     {
         msg = 'undefined';
+    } else if (msg === null)
+    {
+        msg = 'null';
     }
 
     msg = util.toStr(msg);
