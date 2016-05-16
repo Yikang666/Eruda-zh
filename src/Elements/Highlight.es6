@@ -90,6 +90,11 @@ export default class Highlight
             width: bw - pl - pr,
             height: bh - pt - pb
         });
+
+        this._$size.css({
+            top: -mt - (top < 25 ? 0 : 25),
+            left: -ml
+        }).html(`${formatElName(this._target)} | ${width} × ${height}`);
     }
     _bindEvent()
     {
@@ -103,9 +108,31 @@ export default class Highlight
     {
         $parent.append(require('./Highlight.hbs')());
 
-        this._$el = util.$('.eruda-elements-highlight');
-        this._$margin = this._$el.find('.eruda-margin');
-        this._$padding = this._$el.find('.eruda-padding');
-        this._$content = this._$el.find('.eruda-content');
+        var $el = this._$el = util.$('.eruda-elements-highlight');
+        this._$margin = $el.find('.eruda-margin');
+        this._$padding = $el.find('.eruda-padding');
+        this._$content = $el.find('.eruda-content');
+        this._$size = $el.find('.eruda-size');
     }
+}
+
+function formatElName(el)
+{
+    var {id, className} = el;
+
+    var ret = `<span style="color:#ee78e6">${el.tagName.toLowerCase()}</span>`;
+
+    if (id !== '') ret += `<span style="color:#ffab66">#${id}</span>`;
+
+    var classes = '';
+    util.each(className.split(/\s+/g), (val) =>
+    {
+        if (util.trim(val) === '') return;
+
+        classes += `.${val}`;
+    });
+
+    ret += `<span style="color:#8ed3fb">${classes}</span>`;
+
+    return ret;
 }

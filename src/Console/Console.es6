@@ -143,7 +143,7 @@ export default class Console extends Tool
         {
             if (log.type === 'error' && this.config.get('displayIfErr'))
             {
-                parent.show().showTool('console');
+                parent.showTool('console').show();
             }
         });
     }
