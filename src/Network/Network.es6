@@ -242,9 +242,7 @@ export default class Network extends Tool
     {
         var cfg = this.config = config.create('eruda-network');
 
-        cfg.set(util.defaults(cfg.get(), {
-            overrideXhr: false
-        }));
+        cfg.set(util.defaults(cfg.get(), {overrideXhr: true}));
 
         if (cfg.get('overrideXhr')) this.overrideXhr();
 

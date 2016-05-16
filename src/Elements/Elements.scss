@@ -104,13 +104,14 @@
             left: 0;
             bottom: 0;
             width: 100%;
-            display: flex;
+            font-size: 0;
             .btn {
                 text-align: center;
                 color: $gray;
                 font-size: 14px;
                 line-height: 40px;
-                flex-grow: 1;
+                width: 20%;
+                display: inline-block;
                 &:active, &.active {
                     color: $blue;
                 }

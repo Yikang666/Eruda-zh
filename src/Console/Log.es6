@@ -195,6 +195,8 @@ export default class Log extends util.Emitter
             this._lastLog = log;
         }
 
+        this.emit('insert', log);
+
         this._isUpdated = true;
         return this.render();
     }
@@ -276,7 +278,7 @@ var evalJs = jsInput => eval.call(window, jsInput);
 function errToStr(err)
 {
     var lines = err.stack.split('\n'),
-        msg = `${lines[0]}<br/>`,
+        msg = `${err.message || lines[0]}<br/>`,
         stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
 
     return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);

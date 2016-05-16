@@ -57,6 +57,7 @@ settings.separator()
         .separator()
         .add(consoleTool.config, 'catchGlobalErr', 'Catch Global Errors')
         .add(consoleTool.config, 'overrideConsole', 'Override Console')
+        .add(consoleTool.config, 'displayIfErr', 'Auto Display If Error Occurs')
         .separator()
         .add(network.config, 'overrideXhr', 'Catch Ajax Requests');
 

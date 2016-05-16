@@ -139,6 +139,12 @@ export default class Console extends Tool
         {
             parent.get('sources').set('json', data);
             parent.showTool('sources');
+        }).on('insert', (log) =>
+        {
+            if (log.type === 'error' && this.config.get('displayIfErr'))
+            {
+                parent.show().showTool('console');
+            }
         });
     }
     _hideInput()
@@ -165,7 +171,8 @@ export default class Console extends Tool
 
         cfg.set(util.defaults(cfg.get(), {
             catchGlobalErr: true,
-            overrideConsole: true
+            overrideConsole: true,
+            displayIfErr: false
         }));
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
