@@ -21,10 +21,7 @@ export default class Info extends Tool
     }
     add(name, val)
     {
-        this._msgs.push({
-            name: name,
-            val: val
-        });
+        this._msgs.push({name, val});
 
         this._render();
 
@@ -32,15 +29,10 @@ export default class Info extends Tool
     }
     _addDefInfo()
     {
-        util.each(defInfo, (info) =>
-        {
-            this.add(info.name, info.val);
-        });
+        util.each(defInfo, info => this.add(info.name, info.val));
     }
     _render()
     {
-        this._$el.html(this._tpl({
-            messages: this._msgs
-        }));
+        this._$el.html(this._tpl({messages: this._msgs}));
     }
 }

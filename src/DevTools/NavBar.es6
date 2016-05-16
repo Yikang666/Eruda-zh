@@ -36,16 +36,14 @@ export default class NavBar extends util.Emitter
         {
             var $this = util.$(this);
 
-            $this.text() === name ? $this.addClass('eruda-active') : $this.rmClass('eruda-active');
+            $this[$this.text() === name ? 'addClass' : 'rmClass']('eruda-active');
         });
     }
     _bindEvent()
     {
-        var $el = this._$el;
-
         var self = this;
 
-        $el.on('click', 'li', function ()
+        this._$el.on('click', 'li', function ()
         {
             self.emit('showTool', util.$(this).text());
         });

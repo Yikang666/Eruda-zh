@@ -260,7 +260,4 @@ function getState(type, len)
 
 var origin = window.location.origin;
 
-function isCrossOrig(url)
-{
-    return !util.startWith(url, origin);
-}
+var isCrossOrig = url => !util.startWith(url, origin);

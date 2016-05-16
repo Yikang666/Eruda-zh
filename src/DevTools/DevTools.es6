@@ -5,11 +5,6 @@ import config from '../lib/config.es6'
 
 require('./DevTools.scss');
 
-function activeEruda(flag)
-{
-    window.localStorage.setItem('active-eruda', flag);
-}
-
 export default class DevTools extends util.Emitter
 {
     constructor($parent)
@@ -147,9 +142,7 @@ export default class DevTools extends util.Emitter
     }
     _setHalfScreen(flag)
     {
-        this._$el.css({
-            height: flag ? '50%': '100%'
-        });
+        this._$el.css({height: flag ? '50%': '100%'});
     }
     _appendTpl()
     {
@@ -163,9 +156,9 @@ export default class DevTools extends util.Emitter
     _initNavBar()
     {
         this._navBar = new NavBar(this._$el.find('.eruda-nav-bar ul'));
-        this._navBar.on('showTool', (name) =>
-        {
-            this.showTool(name);
-        });
+        this._navBar.on('showTool', name => this.showTool(name));
     }
 }
+
+var activeEruda = flag => window.localStorage.setItem('active-eruda', flag);
+

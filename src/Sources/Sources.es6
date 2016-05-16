@@ -53,10 +53,7 @@ export default class Sources extends Tool
             return;
         }
 
-        this._data = {
-            type: type,
-            val: val
-        };
+        this._data = {type, val};
 
         this._render();
 

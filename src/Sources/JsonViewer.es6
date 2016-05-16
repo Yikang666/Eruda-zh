@@ -85,7 +85,4 @@ function createEl(key, val)
             </li>`;
 }
 
-function encode(str)
-{
-    return util.escape(util.toStr(str));
-}
+var encode = str => util.escape(util.toStr(str));

@@ -4,7 +4,7 @@ function formatStyle(style)
 {
     var ret = {};
 
-    for (var i = 0, len = style.length; i < len; i++)
+    for (let i = 0, len = style.length; i < len; i++)
     {
         var name = style[i];
 

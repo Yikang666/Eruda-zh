@@ -31,10 +31,7 @@ export default class Features extends Tool
             if (specialNames[feature]) feature = specialNames[feature];
             feature = feature.replace(/\//g, '');
 
-            modernizr.on(feature, (result) =>
-            {
-                this._add(feature, result);
-            });
+            modernizr.on(feature, (result) => this._add(feature, result));
         });
     }
     _add(name, result)
@@ -45,8 +42,6 @@ export default class Features extends Tool
     }
     _render()
     {
-        this._$el.html(this._tpl({
-            features: this._features
-        }));
+        this._$el.html(this._tpl({features: this._features}));
     }
 }
