@@ -17,15 +17,20 @@ export default class Features extends Tool
         this.name = 'features';
         this._tpl = require('./Features.hbs');
         this._features = {};
+        this._isInit = false;
     }
-    init($el)
+    show()
     {
-        super.init($el);
+        super.show();
 
-        this._initFeatures();
+        if (!this._isInit) this._initFeatures();
     }
     _initFeatures()
     {
+        this._isInit = true;
+
+        modernizr.testRunner();
+
         util.each(featureNames, (feature) =>
         {
             if (specialNames[feature]) feature = specialNames[feature];

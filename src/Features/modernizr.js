@@ -22,7 +22,7 @@
  * of control over the experience.
 */
 
-;(function(window, document, undefined){
+
   var tests = [];
   
 
@@ -1275,7 +1275,7 @@ to be the File object's prototype.)
    * version of that property that the browser actually supports.
    *
    * For example, in older Firefox...
-   * ```
+   * ```js
    * prefixed('boxSizing')
    * ```
    * returns 'MozBoxSizing'
@@ -2833,7 +2833,7 @@ Modernizr.video.ogg     // 'probably'
 
 
   // Run each test
-  testRunner();
+  Modernizr.testRunner = testRunner;
 
   delete ModernizrProto.addTest;
   delete ModernizrProto.addAsyncTest;
@@ -2844,10 +2844,10 @@ Modernizr.video.ogg     // 'probably'
   }
 
   // Leak Modernizr namespace
-  window.Modernizr = Modernizr;
+  
 
 
 ;
 
-})(window, document);
+
 module.exports = Modernizr;

@@ -69,6 +69,7 @@
                 td {
                     padding: 5px 10px;
                     &.key {
+                        white-space: nowrap;
                         color: $red-dark;
                     }
                 }
