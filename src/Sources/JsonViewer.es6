@@ -58,7 +58,7 @@ function createEl(key, val)
     {
         return `<li>
                    <span class="eruda-key">"${encode(key)}":</span>
-                   <span class="eruda-null">"${encode(val)}"</span>
+                   <span class="eruda-null">null</span>
                </li>`;
     }
     if (util.isObj(val))

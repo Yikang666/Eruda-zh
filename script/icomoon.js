@@ -1,4 +1,7 @@
-// Icons(Font-awesome): times-circle, exclamation-triangle, chevron-left, chevron-right, repeat, trash, cog, ban, info-circle
+/* Icons(Font-awesome): times-circle, exclamation-triangle, chevron-left,
+ * chevron-right, repeat, trash, cog, ban, info-circle, hand-pointer-o, eye,
+ * rotate-left
+ */
 
 var fs = require('fs'),
     path = require('path');
