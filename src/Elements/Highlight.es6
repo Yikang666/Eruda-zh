@@ -30,23 +30,10 @@ export default class Highlight
     }
     render()
     {
-        var $target = this._$target;
-
-        var {
-                left,
-                width,
-                top,
-                height
-            } = $target.offset();
+        var {left, width, top, height} = this._$target.offset();
 
         this._top = top;
-
-        this._$el.css({
-            left: left,
-            top: top - window.scrollY,
-            width: width,
-            height: height
-        });
+        this._$el.css({left, top: top - window.scrollY, width, height});
 
         var computedStyle = getComputedStyle(this._target, '');
 
@@ -92,7 +79,7 @@ export default class Highlight
         });
 
         this._$size.css({
-            top: -mt - (top < 25 ? 0 : 25),
+            top: -mt - (top - mt < 25 ? 0 : 25),
             left: -ml
         }).html(`${formatElName(this._target)} | ${width} × ${height}`);
     }

@@ -11,6 +11,7 @@ export default class Elements extends Tool
     constructor()
     {
         super();
+
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');
         this._rmDefComputedStyle = true;
@@ -28,8 +29,8 @@ export default class Elements extends Tool
         $el.append(require('./BottomBar.hbs')());
 
         this._htmlEl = document.documentElement;
-        this._initHighlight();
-        this._initSelect();
+        this._highlight = new Highlight(this._parent.$parent);
+        this._select = new Select();
         this._bindEvent();
         this._setEl(this._htmlEl);
     }
@@ -43,9 +44,9 @@ export default class Elements extends Tool
     {
         if (this._curEl === this._htmlEl) return;
 
-        var parentQueue = this._curParentQueue;
+        var parentQueue = this._curParentQueue,
+            parent = parentQueue.shift();
 
-        var parent = parentQueue.shift();
         while (!isElExist(parent)) parent = parentQueue.shift();
 
         this._setEl(parent);
@@ -57,19 +58,16 @@ export default class Elements extends Tool
 
         this._$el.on('click', '.eruda-child', function ()
         {
-            var idx = util.$(this).data('idx');
-
-            var curEl = self._curEl,
+            var idx = util.$(this).data('idx'),
+                curEl = self._curEl,
                 el = curEl.childNodes[idx];
 
             if (!isElExist(el)) self._render();
 
             if (el.nodeType === 3)
             {
-                var parent = self._parent,
-                    sources = parent.get('sources');
-
-                var curTagName = curEl.tagName,
+                let parent = self._parent,
+                    curTagName = curEl.tagName,
                     type;
 
                 switch (curTagName)
@@ -79,16 +77,12 @@ export default class Elements extends Tool
                     default: return;
                 }
 
-                sources.set(type, el.nodeValue);
-
+                parent.get('sources').set(type, el.nodeValue);
                 parent.showTool('sources');
             }
 
             if (el.nodeType === 1) return self._setEl(el);
-        }).on('click', '.toggle-all-computed-style', () =>
-        {
-            this._toggleAllComputedStyle();
-        });
+        }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
 
@@ -98,21 +92,13 @@ export default class Elements extends Tool
                   .on('click', '.eruda-select', () => this._toggleSelect())
                   .on('click', '.eruda-reset', () => this._setEl(this._htmlEl));
 
-        select.on('select', (target) => this._setEl(target));
+        select.on('select', target => this._setEl(target));
     }
     _toggleAllComputedStyle()
     {
         this._rmDefComputedStyle = !this._rmDefComputedStyle;
 
         this._render();
-    }
-    _initHighlight()
-    {
-        this._highlight = new Highlight(this._parent.$parent);
-    }
-    _initSelect()
-    {
-        this._select = new Select();
     }
     _toggleHighlight()
     {
@@ -167,12 +153,7 @@ export default class Elements extends Tool
         var el = this._curEl,
             cssStore = this._curCssStore;
 
-        var {
-                className,
-                id,
-                attributes,
-                tagName
-            } = el;
+        var {className, id, attributes, tagName} = el;
 
         ret.children = formatChildNodes(el.childNodes);
         ret.attributes = formatAttr(attributes);
@@ -199,18 +180,11 @@ export default class Elements extends Tool
     }
 }
 
-function isElExist(val)
-{
-    return util.isEl(val) && val.parentNode;
-}
+var isElExist = val => util.isEl(val) && val.parentNode;
 
 function formatElName(data)
 {
-    var {
-            id,
-            className,
-            attributes
-        } = data;
+    var {id, className, attributes} = data;
 
     var ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`;
 
@@ -218,49 +192,35 @@ function formatElName(data)
 
     util.each(className.split(/\s+/g), (val) =>
     {
-        if (util.trim(val) === '') return;
-
+        if (val.trim() === '') return;
         ret += `.${val}`;
     });
 
     util.each(attributes, (attr) =>
     {
         var name = attr.name;
-
         if (name === 'id' || name === 'class' || name === 'style') return;
-
         ret += ` ${name}="${attr.value}"`;
     });
 
     return ret;
 }
 
-function formatAttr(attributes)
+var formatAttr = attributes => util.map(attributes, attr =>
 {
-    var ret = [];
-
-    for (var i = 0, len = attributes.length; i < len; i++)
-    {
-        var attr = attributes[i];
-        ret.push({
-            name: attr.name,
-            value: attr.value
-        });
-    }
-
-    return ret;
-}
+    return {name: attr.name, value: attr.value};
+});
 
 function formatChildNodes(nodes)
 {
     var ret = [];
 
-    for (var i = 0, len = nodes.length; i < len; i++)
+    for (let i = 0, len = nodes.length; i < len; i++)
     {
         var child = nodes[i];
         if (child.nodeType === 3)
         {
-            var val = util.trim(child.nodeValue);
+            var val = child.nodeValue.trim();
             if (val !== '') ret.push({
                 text: val,
                 idx: i
@@ -272,12 +232,7 @@ function formatChildNodes(nodes)
             child.className.indexOf('eruda') < 0)
         {
             ret.push({
-                text: formatElName({
-                    tagName: child.tagName,
-                    id: child.id,
-                    className: child.className,
-                    attributes: child.attributes
-                }),
+                text: formatElName(child),
                 idx: i
             });
         }
@@ -293,7 +248,7 @@ function getInlineStyle(style)
         style: {}
     };
 
-    for (var i = 0, len = style.length; i < len; i++)
+    for (let i = 0, len = style.length; i < len; i++)
     {
         var s = style[i];
 
@@ -321,9 +276,4 @@ function rmDefComputedStyle(computedStyle)
 
 var NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
-function needNoStyle(tagName)
-{
-    tagName = tagName.toLowerCase();
-
-    return NO_STYLE_TAG.indexOf(tagName) > -1;
-}
+var needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
