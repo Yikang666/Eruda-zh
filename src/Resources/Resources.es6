@@ -1,13 +1,14 @@
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 
-require('./Resources.scss');
-
 export default class Resources extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Resources.scss');
+
         this.name = 'resources';
         this._localStoreData = [];
         this._cookieData = [];
@@ -180,6 +181,7 @@ export default class Resources extends Tool
         function showSources(type, data)
         {
             var sources = parent.get('sources');
+            if (!sources) return;
 
             sources.set(type, data);
 

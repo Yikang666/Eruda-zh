@@ -1,13 +1,14 @@
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 
-require('./Settings.scss');
-
 export default class Settings extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Settings.scss');
+
         this.name = 'settings';
         this._switchTpl = require('./switch.hbs');
         this._settings = [];

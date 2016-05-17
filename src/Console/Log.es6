@@ -2,13 +2,13 @@ import util from '../lib/util'
 import highlight from '../lib/highlight.es6'
 import beautify from 'js-beautify'
 
-require('./Log.scss');
-
 export default class Log extends util.Emitter
 {
     constructor($el, parent)
     {
         super();
+
+        require('./Log.scss');
 
         this._$el = $el;
         this._parent = parent;

@@ -2,13 +2,14 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import defInfo from './defInfo.es6'
 
-require('./Info.scss');
-
 export default class Info extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Info.scss');
+
         this.name = 'info';
         this._tpl = require('./Info.hbs');
         this._msgs = [];

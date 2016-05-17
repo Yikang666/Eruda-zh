@@ -3,13 +3,13 @@ import util from '../lib/util'
 import Tool from './Tool.es6'
 import config from '../lib/config.es6'
 
-require('./DevTools.scss');
-
 export default class DevTools extends util.Emitter
 {
     constructor($parent)
     {
         super();
+
+        require('./DevTools.scss');
 
         this.$parent = $parent;
         this._isShow = false;
@@ -49,7 +49,7 @@ export default class DevTools extends util.Emitter
 
         var name = tool.name;
 
-        this._$tools.append(`<div class="eruda-${name} eruda-tool"></div>`);
+        this._$tools.prepend(`<div class="eruda-${name} eruda-tool"></div>`);
         tool.init(this._$tools.find(`.eruda-${name}`), this);
         tool.active = false;
         this._tools[name] = tool;
@@ -97,10 +97,12 @@ export default class DevTools extends util.Emitter
 
         util.each(tools, (tool) =>
         {
-            if (tool.active) lastTool = tool;
-
-            tool.active = false;
-            tool.hide();
+            if (tool.active)
+            {
+                lastTool = tool;
+                tool.active = false;
+                tool.hide();
+            }
         });
 
         tool.active = true;
@@ -156,7 +158,7 @@ export default class DevTools extends util.Emitter
     _initNavBar()
     {
         this._navBar = new NavBar(this._$el.find('.eruda-nav-bar ul'));
-        this._navBar.on('showTool', name => this.showTool(name));
+        this._navBar.on('showTool', (name) => this.showTool(name));
     }
 }
 

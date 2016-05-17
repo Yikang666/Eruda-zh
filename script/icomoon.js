@@ -31,7 +31,7 @@ function genCssFile(fontData)
 
 function writeCssFile(data)
 {
-    fs.writeFile(path.resolve(__dirname, '../src/icon.css'), data, 'utf-8', function (err, data)
+    fs.writeFile(path.resolve(__dirname, '../src/style/icon.css'), data, 'utf-8', function (err, data)
     {
         if (err) return console.log(err);
 

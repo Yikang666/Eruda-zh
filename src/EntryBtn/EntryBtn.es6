@@ -2,13 +2,13 @@ import util from '../lib/util'
 import Draggabilly from 'draggabilly'
 import config from '../lib/config.es6'
 
-require('./EntryBtn.scss');
-
 export default class EntryBtn extends util.Emitter
 {
     constructor($parent)
     {
         super();
+
+        require('./EntryBtn.scss');
 
         this._$parent = $parent;
         this._appendTpl();
@@ -22,7 +22,7 @@ export default class EntryBtn extends util.Emitter
         var $parent = this._$parent;
 
         $parent.append(require('./EntryBtn.hbs')());
-        this._$el = $parent.find('.eruda-home-btn');
+        this._$el = $parent.find('.eruda-entry-btn');
     }
     _setPos(orientationChanged)
     {

@@ -2,13 +2,14 @@ import Tool from '../DevTools/Tool.es6'
 import defSnippets from './defSnippets.es6'
 import util from '../lib/util'
 
-require('./Snippets.scss');
-
 export default class Snippets extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Snippets.scss');
+
         this.name = 'snippets';
 
         this._snippets = [];

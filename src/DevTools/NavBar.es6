@@ -1,12 +1,13 @@
 import util from '../lib/util'
 
-require('./NavBar.scss');
-
 export default class NavBar extends util.Emitter
 {
     constructor($el)
     {
         super();
+
+        require('./NavBar.scss');
+
         this._$el = $el;
         this._len = 0;
 
@@ -15,7 +16,7 @@ export default class NavBar extends util.Emitter
     add(name)
     {
         this._len++;
-        this._$el.append(`<li class="${name}">${name}</li>`)
+        this._$el.prepend(`<li class="${name}">${name}</li>`)
                  .css({width: this._len * 69});
     }
     remove(name)

@@ -3,13 +3,13 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import config from '../lib/config.es6'
 
-require('./Console.scss');
-
 export default class Console extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Console.scss');
 
         this.name = 'console';
     }
@@ -137,7 +137,10 @@ export default class Console extends Tool
 
         log.on('viewJson', (data) =>
         {
-            parent.get('sources').set('json', data);
+            var sources = parent.get('sources');
+            if (!sources) return;
+
+            sources.set('json', data);
             parent.showTool('sources');
         }).on('insert', (log) =>
         {
@@ -186,6 +189,13 @@ export default class Console extends Tool
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
             }
         });
+
+        var settings = this._parent.get('settings');
+
+        settings.add(cfg, 'catchGlobalErr', 'Catch Global Errors')
+                .add(cfg, 'overrideConsole', 'Override Console')
+                .add(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
+                .separator()
     }
 }
 

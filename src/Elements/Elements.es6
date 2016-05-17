@@ -4,13 +4,13 @@ import Highlight from './Highlight.es6'
 import Select from './Select.es6'
 import util from '../lib/util'
 
-require('./Elements.scss');
-
 export default class Elements extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Elements.scss');
 
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');
@@ -49,7 +49,7 @@ export default class Elements extends Tool
 
         while (!isElExist(parent)) parent = parentQueue.shift();
 
-        this._setEl(parent);
+        this._setElAndRender(parent);
     }
     _bindEvent()
     {
@@ -62,9 +62,7 @@ export default class Elements extends Tool
                 curEl = self._curEl,
                 el = curEl.childNodes[idx];
 
-            if (!isElExist(el)) self._render();
-
-            if (el.nodeType === 3)
+            if (el && el.nodeType === 3)
             {
                 let parent = self._parent,
                     curTagName = curEl.tagName,
@@ -77,11 +75,18 @@ export default class Elements extends Tool
                     default: return;
                 }
 
-                parent.get('sources').set(type, el.nodeValue);
-                parent.showTool('sources');
+                let sources = parent.get('sources');
+
+                if (sources)
+                {
+                    sources.set(type, el.nodeValue);
+                    parent.showTool('sources');
+                }
+
+                return;
             }
 
-            if (el.nodeType === 1) return self._setEl(el);
+            !isElExist(el) ? self._render() : self._setEl(el);
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
@@ -90,9 +95,9 @@ export default class Elements extends Tool
                   .on('click', '.eruda-refresh', () => this._render())
                   .on('click', '.eruda-highlight', () => this._toggleHighlight())
                   .on('click', '.eruda-select', () => this._toggleSelect())
-                  .on('click', '.eruda-reset', () => this._setEl(this._htmlEl));
+                  .on('click', '.eruda-reset', () => this._setElAndRender(this._htmlEl));
 
-        select.on('select', target => this._setEl(target));
+        select.on('select', target => this._setElAndRender(target));
     }
     _toggleAllComputedStyle()
     {
@@ -143,7 +148,10 @@ export default class Elements extends Tool
             parent = parent.parentNode;
         }
         this._curParentQueue = parentQueue;
-
+    }
+    _setElAndRender(e)
+    {
+        this._setEl(e);
         this._render();
     }
     _getData()

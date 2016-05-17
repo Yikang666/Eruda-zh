@@ -2,8 +2,6 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import modernizr from './modernizr'
 
-require('./Features.scss');
-
 var featureList = require('./featureList.json');
 
 var featureNames = featureList['feature-detects'],
@@ -14,6 +12,9 @@ export default class Features extends Tool
     constructor()
     {
         super();
+
+        require('./Features.scss');
+
         this.name = 'features';
         this._tpl = require('./Features.hbs');
         this._features = {};

@@ -4,13 +4,14 @@ import beautify from 'js-beautify'
 import highlight from '../lib/highlight.es6'
 import JsonViewer from './JsonViewer.es6'
 
-require('./Sources.scss');
-
 export default class Sources extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Sources.scss');
+
         this.name = 'sources';
         this._isInit = false;
 

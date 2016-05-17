@@ -1,11 +1,11 @@
 import util from '../lib/util'
 
-require('./Highlight.scss');
-
 export default class Highlight
 {
     constructor($parent)
     {
+        require('./Highlight.scss');
+
         this._isShow = false;
         this._top = 0;
 

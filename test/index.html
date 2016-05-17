@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Eruda</title>
     <link rel="stylesheet" href="style.css">
-    <script>
-        (function () {
-            var src = '../dist/eruda.js';
-            if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
-            document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
-        })();
-    </script>
+    <script src="../dist/eruda.js"></script>
+    <script>eruda.init();</script>
 </head>
 <body>
     <div id="test-element" class="border" style="color:red">

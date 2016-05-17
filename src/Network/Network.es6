@@ -3,13 +3,14 @@ import Request from './Request.es6'
 import util from '../lib/util'
 import config from '../lib/config.es6'
 
-require('./Network.scss');
-
 export default class Network extends Tool
 {
     constructor()
     {
         super();
+
+        require('./Network.scss');
+
         this.name = 'network';
         this._performanceTimingData = [];
         this._requests = {};
@@ -136,6 +137,8 @@ export default class Network extends Tool
 
             var sources = parent.get('sources');
 
+            if (!sources) return;
+
             sources.set('http', {
                 url: data.url,
                 resTxt: data.resTxt,
@@ -253,6 +256,10 @@ export default class Network extends Tool
                 case 'overrideXhr': return val ? this.overrideXhr() : this.restoreXhr();
             }
         });
+
+        var settings = this._parent.get('settings');
+        settings.add(cfg, 'overrideXhr', 'Catch Ajax Requests')
+                .separator();
     }
     _render()
     {
