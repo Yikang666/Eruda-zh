@@ -86,7 +86,7 @@ export default class Elements extends Tool
                 return;
             }
 
-            !isElExist(el) ? self._render() : self._setEl(el);
+            !isElExist(el) ? self._render() : self._setElAndRender(el);
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');

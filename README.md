@@ -12,7 +12,7 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 ![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode.png)
 
-Browse it on your phone: [http://liriliri.github.io/eruda/index.html?eruda=true](http://liriliri.github.io/eruda/index.html?eruda=true)
+Browse it on your phone: [http://liriliri.github.io/eruda/index.html](http://liriliri.github.io/eruda/index.html)
 
 ## Features
 
