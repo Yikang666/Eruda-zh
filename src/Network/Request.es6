@@ -70,9 +70,9 @@ function getFileName(url)
 {
     var ret = util.last(url.split('/'));
 
-    if (ret.indexOf('?') > -1) ret = ret.split('?')[0];
+    if (ret.indexOf('?') > -1) ret = ret.split('?')[0].trim();
 
-    return ret;
+    return ret === '' ? 'unknown' : ret;
 }
 
 function getType(contentType)

@@ -85,6 +85,9 @@
                 }
                 &.key {
                     white-space: nowrap;
+                    max-width: 120px;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
                 &.control {
                     width: 40px;
