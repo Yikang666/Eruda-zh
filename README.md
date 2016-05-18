@@ -17,7 +17,7 @@ Browse it on your phone: [http://liriliri.github.io/eruda/](http://liriliri.gith
 In order to try it for different sites, execute the script below on browser address bar.
 
 ```javascript
-javascript:(function () { var script = document.createElement('script'); script.src="//liriliri.github.io/eruda/eruda.min.js"; document.body.appendChild(script); script.onload=function () { eruda.init() } })();
+javascript:(function () { var script = document.createElement('script'); script.src="//liriliri.github.io/eruda/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 ```
 
 ## Features

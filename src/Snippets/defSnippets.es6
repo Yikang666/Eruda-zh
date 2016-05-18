@@ -24,8 +24,20 @@ export default [
         name: 'Refresh Page',
         fn: function ()
         {
-            window.location.reload();
+            var url = window.location.href;
+
+            window.location.replace(query(url, 'timestamp', util.now()));
         },
-        desc: 'Refresh current page'
+        desc: 'Add timestamp to url and refresh'
     }
 ];
+
+function query(uri, key, val)
+{
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i"),
+        separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+    if (uri.match(re)) return uri.replace(re, '$1' + key + "=" + val + '$2');
+
+    return uri + separator + key + "=" + val;
+}
