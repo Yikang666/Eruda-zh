@@ -1,3 +1,7 @@
+html {
+    font-size: 46px;
+}
+
 #test-element {
     margin: 15px auto;
     padding: 10px;

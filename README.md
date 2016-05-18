@@ -14,7 +14,7 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 Browse it on your phone: [http://liriliri.github.io/eruda/](http://liriliri.github.io/eruda/)
 
-In order to try it on different sites, execute the script below on address bar.
+In order to try it for different sites, execute the script below on browser address bar.
 
 ```javascript
 javascript:(function () { var script = document.createElement('script'); script.src="//liriliri.github.io/eruda/eruda.min.js"; document.body.appendChild(script); script.onload=function () { eruda.init() } })();
