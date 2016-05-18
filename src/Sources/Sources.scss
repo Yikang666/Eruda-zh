@@ -4,6 +4,7 @@
     .sources {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        font-size: 14px;
         .code, .raw {
             background: #fff;
             padding: $common-padding;
@@ -12,7 +13,12 @@
             min-height: 100%;
         }
         .image {
-            padding: $common-padding;
+            .breadcrumb {
+                background: #fff;
+                padding: $common-padding;
+                margin-bottom: 10px;
+                word-break: break-all;
+            }
             .img-container {
                 text-align: center;
                 img {

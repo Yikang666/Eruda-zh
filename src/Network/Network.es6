@@ -258,7 +258,8 @@ export default class Network extends Tool
         });
 
         var settings = this._parent.get('settings');
-        settings.add(cfg, 'overrideXhr', 'Catch Ajax Requests')
+        settings.text('Network')
+                .add(cfg, 'overrideXhr', 'Catch Ajax Requests')
                 .separator();
     }
     _render()

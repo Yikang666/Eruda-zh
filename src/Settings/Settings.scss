@@ -7,6 +7,11 @@
         .separator {
             height: 10px;
         }
+        .text {
+            padding: $common-padding;
+            color: $gray-dark;
+            font-size: 12px;
+        }
         .switch {
             padding: 10px;
             background: #fff;

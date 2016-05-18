@@ -16,14 +16,14 @@ export default class NavBar extends util.Emitter
     add(name)
     {
         this._len++;
-        this._$el.prepend(`<li class="${name}">${name}</li>`)
-                 .css({width: this._len * 69});
+        this._$el.prepend(`<li class="${name}">${name}</li>`);
+        this._resetWidth();
     }
     remove(name)
     {
         this._len--;
         this._$el.find(`li.${name}`).remove();
-        this._$el.css({width: this._len * 69});
+        this._resetWidth();
     }
     destroy()
     {
@@ -37,8 +37,18 @@ export default class NavBar extends util.Emitter
         {
             var $this = util.$(this);
 
-            $this[$this.text() === name ? 'addClass' : 'rmClass']('eruda-active');
+            if ($this.text() === name)
+            {
+                $this.addClass('eruda-active');
+            } else
+            {
+                $this.rmClass('eruda-active');
+            }
         });
+    }
+    _resetWidth()
+    {
+        this._$el.css({width: this._len * 69});
     }
     _bindEvent()
     {

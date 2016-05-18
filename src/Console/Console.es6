@@ -192,7 +192,8 @@ export default class Console extends Tool
 
         var settings = this._parent.get('settings');
 
-        settings.add(cfg, 'catchGlobalErr', 'Catch Global Errors')
+        settings.text('Console')
+                .add(cfg, 'catchGlobalErr', 'Catch Global Errors')
                 .add(cfg, 'overrideConsole', 'Override Console')
                 .add(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
                 .separator()

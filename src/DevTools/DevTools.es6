@@ -88,6 +88,9 @@ export default class DevTools extends util.Emitter
     }
     showTool(name)
     {
+        if (this._curTool === name) return;
+        this._curTool = name;
+
         var tools = this._tools;
 
         var tool = tools[name];
@@ -139,7 +142,7 @@ export default class DevTools extends util.Emitter
     }
     _setTransparency(flag)
     {
-        this._opacity = flag ? 0.9 : 1;
+        this._opacity = flag ? 0.7 : 1;
         if (this._isShow) this._$el.css({opacity: this._opacity});
     }
     _setHalfScreen(flag)

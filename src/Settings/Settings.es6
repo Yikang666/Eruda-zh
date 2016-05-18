@@ -41,6 +41,12 @@ export default class Settings extends Tool
 
         return this;
     }
+    text(text)
+    {
+        this._$el.append(`<div class="eruda-text">${text}</div>`);
+
+        return this;
+    }
     _bindEvent()
     {
         var self = this;

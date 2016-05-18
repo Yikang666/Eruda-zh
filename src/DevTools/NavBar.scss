@@ -9,6 +9,7 @@
         -webkit-overflow-scrolling: touch;
         left: 0;
         top: 0;
+        box-shadow: $box-shadow;
         z-index: 100;
         background: $blue;
         ul {
@@ -24,9 +25,11 @@
                 text-align: center;
                 opacity: 0.5;
                 text-transform: capitalize;
+                transition: all .3s;
                 &.active {
                     color: #fff;
                     opacity: 1;
+                    background: $blue-light;
                     border-bottom: 3px solid #fff;
                 }
             }

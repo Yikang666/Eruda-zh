@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.3.1
- * Build http://modernizr.com/download?-audio-bloburls-boxshadow-boxsizing-canvas-cookies-cssanimations-csscalc-csstransforms-csstransforms3d-csstransitions-datauri-fetch-filereader-filesystem-flash-flexbox-fullscreen-geolocation-hashchange-history-indexeddb-json-localstorage-notification-performance-placeholder-pointerevents-promises-queryselector-scriptasync-scriptdefer-serviceworker-sessionstorage-stylescoped-svg-templatestrings-touchevents-typedarrays-video-webgl-webp-webpalpha-websockets-websqldatabase-xhr2-dontmin
+ * Build http://modernizr.com/download?-audio-bloburls-boxshadow-boxsizing-canvas-cookies-cssanimations-csscalc-csstransforms-csstransforms3d-csstransitions-datauri-fetch-filereader-filesystem-flexbox-fullscreen-geolocation-hashchange-history-indexeddb-json-localstorage-notification-performance-placeholder-pointerevents-promises-queryselector-scriptasync-scriptdefer-serviceworker-sessionstorage-stylescoped-svg-templatestrings-touchevents-typedarrays-video-webgl-webp-webpalpha-websockets-websqldatabase-xhr2-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -1355,6 +1355,225 @@ to be the File object's prototype.)
 
   Modernizr.addTest('filesystem', !!prefixed('requestFileSystem', window));
 
+/*!
+{
+  "name": "placeholder attribute",
+  "property": "placeholder",
+  "tags": ["forms", "attribute"],
+  "builderAliases": ["forms_placeholder"]
+}
+!*/
+/* DOC
+Tests for placeholder attribute in inputs and textareas
+*/
+
+  Modernizr.addTest('placeholder', ('placeholder' in createElement('input') && 'placeholder' in createElement('textarea')));
+
+/*!
+{
+  "name": "Fullscreen API",
+  "property": "fullscreen",
+  "caniuse": "fullscreen",
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en/API/Fullscreen"
+  }],
+  "polyfills": ["screenfulljs"],
+  "builderAliases": ["fullscreen_api"]
+}
+!*/
+/* DOC
+Detects support for the ability to make the current website take over the user's entire screen
+*/
+
+  // github.com/Modernizr/Modernizr/issues/739
+  Modernizr.addTest('fullscreen', !!(prefixed('exitFullscreen', document, false) || prefixed('cancelFullScreen', document, false)));
+
+/*!
+{
+  "name": "Geolocation API",
+  "property": "geolocation",
+  "caniuse": "geolocation",
+  "tags": ["media"],
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/WebAPI/Using_geolocation"
+  }],
+  "polyfills": [
+    "joshuabell-polyfill",
+    "webshims",
+    "geo-location-javascript",
+    "geolocation-api-polyfill"
+  ]
+}
+!*/
+/* DOC
+Detects support for the Geolocation API for users to provide their location to web applications.
+*/
+
+  // geolocation is often considered a trivial feature detect...
+  // Turns out, it's quite tricky to get right:
+  //
+  // Using !!navigator.geolocation does two things we don't want. It:
+  //   1. Leaks memory in IE9: github.com/Modernizr/Modernizr/issues/513
+  //   2. Disables page caching in WebKit: webk.it/43956
+  //
+  // Meanwhile, in Firefox < 8, an about:config setting could expose
+  // a false positive that would throw an exception: bugzil.la/688158
+
+  Modernizr.addTest('geolocation', 'geolocation' in navigator);
+
+
+  /**
+   * Modernizr.hasEvent() detects support for a given event
+   *
+   * @memberof Modernizr
+   * @name Modernizr.hasEvent
+   * @optionName Modernizr.hasEvent()
+   * @optionProp hasEvent
+   * @access public
+   * @function hasEvent
+   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
+   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
+   * @returns {boolean}
+   * @example
+   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
+   *  By default, it does this detection on a div element
+   *
+   * ```js
+   *  hasEvent('blur') // true;
+   * ```
+   *
+   * However, you are able to give an object as a second argument to hasEvent to
+   * detect an event on something other than a div.
+   *
+   * ```js
+   *  hasEvent('devicelight', window) // true;
+   * ```
+   *
+   */
+
+  var hasEvent = (function() {
+
+    // Detect whether event support can be detected via `in`. Test on a DOM element
+    // using the "blur" event b/c it should always exist. bit.ly/event-detection
+    var needsFallback = !('onblur' in document.documentElement);
+
+    function inner(eventName, element) {
+
+      var isSupported;
+      if (!eventName) { return false; }
+      if (!element || typeof element === 'string') {
+        element = createElement(element || 'div');
+      }
+
+      // Testing via the `in` operator is sufficient for modern browsers and IE.
+      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
+      // "resize", whereas `in` "catches" those.
+      eventName = 'on' + eventName;
+      isSupported = eventName in element;
+
+      // Fallback technique for old Firefox - bit.ly/event-detection
+      if (!isSupported && needsFallback) {
+        if (!element.setAttribute) {
+          // Switch to generic element if it lacks `setAttribute`.
+          // It could be the `document`, `window`, or something else.
+          element = createElement('div');
+        }
+
+        element.setAttribute(eventName, '');
+        isSupported = typeof element[eventName] === 'function';
+
+        if (element[eventName] !== undefined) {
+          // If property was created, "remove it" by setting value to `undefined`.
+          element[eventName] = undefined;
+        }
+        element.removeAttribute(eventName);
+      }
+
+      return isSupported;
+    }
+    return inner;
+  })();
+
+
+  ModernizrProto.hasEvent = hasEvent;
+  
+/*!
+{
+  "name": "Hashchange event",
+  "property": "hashchange",
+  "caniuse": "hashchange",
+  "tags": ["history"],
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/window.onhashchange"
+  }],
+  "polyfills": [
+    "jquery-hashchange",
+    "moo-historymanager",
+    "jquery-ajaxy",
+    "hasher",
+    "shistory"
+  ]
+}
+!*/
+/* DOC
+Detects support for the `hashchange` event, fired when the current location fragment changes.
+*/
+
+  Modernizr.addTest('hashchange', function() {
+    if (hasEvent('hashchange', window) === false) {
+      return false;
+    }
+
+    // documentMode logic from YUI to filter out IE8 Compat Mode
+    //   which false positives.
+    return (document.documentMode === undefined || document.documentMode > 7);
+  });
+
+/*!
+{
+  "name": "History API",
+  "property": "history",
+  "caniuse": "history",
+  "tags": ["history"],
+  "authors": ["Hay Kranen", "Alexander Farkas"],
+  "notes": [{
+    "name": "W3C Spec",
+    "href": "https://www.w3.org/TR/html51/browsers.html#the-history-interface"
+  }, {
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/window.history"
+  }],
+  "polyfills": ["historyjs", "html5historyapi"]
+}
+!*/
+/* DOC
+Detects support for the History API for manipulating the browser session history.
+*/
+
+  Modernizr.addTest('history', function() {
+    // Issue #733
+    // The stock browser on Android 2.2 & 2.3, and 4.0.x returns positive on history support
+    // Unfortunately support is really buggy and there is no clean way to detect
+    // these bugs, so we fall back to a user agent sniff :(
+    var ua = navigator.userAgent;
+
+    // We only want Android 2 and 4.0, stock browser, and not Chrome which identifies
+    // itself as 'Mobile Safari' as well, nor Windows Phone (issue #1471).
+    if ((ua.indexOf('Android 2.') !== -1 ||
+        (ua.indexOf('Android 4.0') !== -1)) &&
+        ua.indexOf('Mobile Safari') !== -1 &&
+        ua.indexOf('Chrome') === -1 &&
+        ua.indexOf('Windows Phone') === -1) {
+      return false;
+    }
+
+    // Return the regular check
+    return (window.history && 'pushState' in window.history);
+  });
+
 
   /**
    * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
@@ -1633,345 +1852,6 @@ to be the File object's prototype.)
   });
 
   
-
-/*!
-  {
-  "name": "Flash",
-  "property": "flash",
-  "tags": ["flash"],
-  "polyfills": ["shumway"]
-  }
-  !*/
-/* DOC
-Detects Flash support as well as Flash-blocking plugins
-*/
-
-  Modernizr.addAsyncTest(function() {
-    /* jshint -W053 */
-
-    var attachBody = function(body) {
-      if (!docElement.contains(body)) {
-        docElement.appendChild(body);
-      }
-    };
-    var removeFakeBody = function(body) {
-      // If we’re rockin’ an attached fake body, clean it up
-      if (body.fake && body.parentNode) {
-        body.parentNode.removeChild(body);
-      }
-    };
-    var runTest = function(result, embed) {
-      var bool = !!result;
-      if (bool) {
-        bool = new Boolean(bool);
-        bool.blocked = (result === 'blocked');
-      }
-      addTest('flash', function() { return bool; });
-
-      if (embed && body.contains(embed)) {
-
-        // in case embed has been wrapped, as with ClickToPlugin
-        while (embed.parentNode !== body) {
-          embed = embed.parentNode;
-        }
-
-        body.removeChild(embed);
-      }
-
-    };
-    var easy_detect;
-    var activex;
-    // we wrap activex in a try/catch because when Flash is disabled through
-    // ActiveX controls, it throws an error.
-    try {
-      // Pan is an API that exists for Flash objects.
-      activex = 'ActiveXObject' in window && 'Pan' in new window.ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-    } catch (e) {}
-
-    easy_detect = !(('plugins' in navigator && 'Shockwave Flash' in navigator.plugins) || activex);
-
-    if (easy_detect || isSVG) {
-      runTest(false);
-    }
-    else {
-      // Flash seems to be installed, but it might be blocked. We have to
-      // actually create an element to see what happens to it.
-      var embed = createElement('embed');
-      var body = getBody();
-      var blockedDetect;
-      var inline_style;
-
-      embed.type = 'application/x-shockwave-flash';
-
-      // Need to do this in the body (fake or otherwise) otherwise IE8 complains
-      body.appendChild(embed);
-
-      // Pan doesn't exist in the embed if its IE (its on the ActiveXObjeect)
-      // so this check is for all other browsers.
-      if (!('Pan' in embed) && !activex) {
-        attachBody(body);
-        runTest('blocked', embed);
-        removeFakeBody(body);
-        return;
-      }
-
-      blockedDetect = function() {
-        // if we used a fake body originally, we need to restart this test, since
-        // we haven't been attached to the DOM, and therefore none of the blockers
-        // have had time to work.
-        attachBody(body);
-        if (!docElement.contains(body)) {
-          body = document.body || body;
-          embed = createElement('embed');
-          embed.type = 'application/x-shockwave-flash';
-          body.appendChild(embed);
-          return setTimeout(blockedDetect, 1000);
-        }
-        if (!docElement.contains(embed)) {
-          runTest('blocked');
-        }
-        else {
-          inline_style = embed.style.cssText;
-          if (inline_style !== '') {
-            // the style of the element has changed automatically. This is a
-            // really poor heuristic, but for lower end Flash blocks, it the
-            // only change they can make.
-            runTest('blocked', embed);
-          }
-          else {
-            runTest(true, embed);
-          }
-        }
-        removeFakeBody(body);
-      };
-
-      // If we have got this far, there is still a chance a userland plugin
-      // is blocking us (either changing the styles, or automatically removing
-      // the element). Both of these require us to take a step back for a moment
-      // to allow for them to get time of the thread, hence a setTimeout.
-      //
-      setTimeout(blockedDetect, 10);
-    }
-  });
-
-/*!
-{
-  "name": "placeholder attribute",
-  "property": "placeholder",
-  "tags": ["forms", "attribute"],
-  "builderAliases": ["forms_placeholder"]
-}
-!*/
-/* DOC
-Tests for placeholder attribute in inputs and textareas
-*/
-
-  Modernizr.addTest('placeholder', ('placeholder' in createElement('input') && 'placeholder' in createElement('textarea')));
-
-/*!
-{
-  "name": "Fullscreen API",
-  "property": "fullscreen",
-  "caniuse": "fullscreen",
-  "notes": [{
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en/API/Fullscreen"
-  }],
-  "polyfills": ["screenfulljs"],
-  "builderAliases": ["fullscreen_api"]
-}
-!*/
-/* DOC
-Detects support for the ability to make the current website take over the user's entire screen
-*/
-
-  // github.com/Modernizr/Modernizr/issues/739
-  Modernizr.addTest('fullscreen', !!(prefixed('exitFullscreen', document, false) || prefixed('cancelFullScreen', document, false)));
-
-/*!
-{
-  "name": "Geolocation API",
-  "property": "geolocation",
-  "caniuse": "geolocation",
-  "tags": ["media"],
-  "notes": [{
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en-US/docs/WebAPI/Using_geolocation"
-  }],
-  "polyfills": [
-    "joshuabell-polyfill",
-    "webshims",
-    "geo-location-javascript",
-    "geolocation-api-polyfill"
-  ]
-}
-!*/
-/* DOC
-Detects support for the Geolocation API for users to provide their location to web applications.
-*/
-
-  // geolocation is often considered a trivial feature detect...
-  // Turns out, it's quite tricky to get right:
-  //
-  // Using !!navigator.geolocation does two things we don't want. It:
-  //   1. Leaks memory in IE9: github.com/Modernizr/Modernizr/issues/513
-  //   2. Disables page caching in WebKit: webk.it/43956
-  //
-  // Meanwhile, in Firefox < 8, an about:config setting could expose
-  // a false positive that would throw an exception: bugzil.la/688158
-
-  Modernizr.addTest('geolocation', 'geolocation' in navigator);
-
-
-  /**
-   * Modernizr.hasEvent() detects support for a given event
-   *
-   * @memberof Modernizr
-   * @name Modernizr.hasEvent
-   * @optionName Modernizr.hasEvent()
-   * @optionProp hasEvent
-   * @access public
-   * @function hasEvent
-   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
-   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
-   * @returns {boolean}
-   * @example
-   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
-   *  By default, it does this detection on a div element
-   *
-   * ```js
-   *  hasEvent('blur') // true;
-   * ```
-   *
-   * However, you are able to give an object as a second argument to hasEvent to
-   * detect an event on something other than a div.
-   *
-   * ```js
-   *  hasEvent('devicelight', window) // true;
-   * ```
-   *
-   */
-
-  var hasEvent = (function() {
-
-    // Detect whether event support can be detected via `in`. Test on a DOM element
-    // using the "blur" event b/c it should always exist. bit.ly/event-detection
-    var needsFallback = !('onblur' in document.documentElement);
-
-    function inner(eventName, element) {
-
-      var isSupported;
-      if (!eventName) { return false; }
-      if (!element || typeof element === 'string') {
-        element = createElement(element || 'div');
-      }
-
-      // Testing via the `in` operator is sufficient for modern browsers and IE.
-      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
-      // "resize", whereas `in` "catches" those.
-      eventName = 'on' + eventName;
-      isSupported = eventName in element;
-
-      // Fallback technique for old Firefox - bit.ly/event-detection
-      if (!isSupported && needsFallback) {
-        if (!element.setAttribute) {
-          // Switch to generic element if it lacks `setAttribute`.
-          // It could be the `document`, `window`, or something else.
-          element = createElement('div');
-        }
-
-        element.setAttribute(eventName, '');
-        isSupported = typeof element[eventName] === 'function';
-
-        if (element[eventName] !== undefined) {
-          // If property was created, "remove it" by setting value to `undefined`.
-          element[eventName] = undefined;
-        }
-        element.removeAttribute(eventName);
-      }
-
-      return isSupported;
-    }
-    return inner;
-  })();
-
-
-  ModernizrProto.hasEvent = hasEvent;
-  
-/*!
-{
-  "name": "Hashchange event",
-  "property": "hashchange",
-  "caniuse": "hashchange",
-  "tags": ["history"],
-  "notes": [{
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en-US/docs/Web/API/window.onhashchange"
-  }],
-  "polyfills": [
-    "jquery-hashchange",
-    "moo-historymanager",
-    "jquery-ajaxy",
-    "hasher",
-    "shistory"
-  ]
-}
-!*/
-/* DOC
-Detects support for the `hashchange` event, fired when the current location fragment changes.
-*/
-
-  Modernizr.addTest('hashchange', function() {
-    if (hasEvent('hashchange', window) === false) {
-      return false;
-    }
-
-    // documentMode logic from YUI to filter out IE8 Compat Mode
-    //   which false positives.
-    return (document.documentMode === undefined || document.documentMode > 7);
-  });
-
-/*!
-{
-  "name": "History API",
-  "property": "history",
-  "caniuse": "history",
-  "tags": ["history"],
-  "authors": ["Hay Kranen", "Alexander Farkas"],
-  "notes": [{
-    "name": "W3C Spec",
-    "href": "https://www.w3.org/TR/html51/browsers.html#the-history-interface"
-  }, {
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en-US/docs/Web/API/window.history"
-  }],
-  "polyfills": ["historyjs", "html5historyapi"]
-}
-!*/
-/* DOC
-Detects support for the History API for manipulating the browser session history.
-*/
-
-  Modernizr.addTest('history', function() {
-    // Issue #733
-    // The stock browser on Android 2.2 & 2.3, and 4.0.x returns positive on history support
-    // Unfortunately support is really buggy and there is no clean way to detect
-    // these bugs, so we fall back to a user agent sniff :(
-    var ua = navigator.userAgent;
-
-    // We only want Android 2 and 4.0, stock browser, and not Chrome which identifies
-    // itself as 'Mobile Safari' as well, nor Windows Phone (issue #1471).
-    if ((ua.indexOf('Android 2.') !== -1 ||
-        (ua.indexOf('Android 4.0') !== -1)) &&
-        ua.indexOf('Mobile Safari') !== -1 &&
-        ua.indexOf('Chrome') === -1 &&
-        ua.indexOf('Windows Phone') === -1) {
-      return false;
-    }
-
-    // Return the regular check
-    return (window.history && 'pushState' in window.history);
-  });
 
 /*!
 {
