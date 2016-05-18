@@ -79,7 +79,7 @@ export default class Resources extends Tool
         {
             localStoreData.push({
                 key: key,
-                val: val.slice(0, 500)
+                val: sliceStr(val, 200)
             });
         });
 
@@ -165,7 +165,10 @@ export default class Resources extends Tool
 
                try {
                    showSources('json', JSON.parse(val));
-               } catch(e) {}
+               } catch(e)
+               {
+                   showSources('raw', val);
+               }
            })
            .on('click', '.img-link', function ()
            {
@@ -263,3 +266,5 @@ function getState(type, len)
 var origin = window.location.origin;
 
 var isCrossOrig = url => !util.startWith(url, origin);
+
+var sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';

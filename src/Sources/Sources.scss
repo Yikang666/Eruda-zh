@@ -4,7 +4,7 @@
     .sources {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        .code {
+        .code, .raw {
             background: #fff;
             padding: $common-padding;
             overflow-x: auto;

@@ -118,6 +118,7 @@ export default class Sources extends Tool
         this._imgTpl = require('./image.hbs');
         this._httpTpl = require('./http.hbs');
         this._jsonTpl = require('./json.hbs');
+        this._rawTpl = require('./raw.hbs');
     }
     _render()
     {
@@ -137,6 +138,8 @@ export default class Sources extends Tool
                 return this._renderHttp();
             case 'json':
                 return this._renderJson();
+            case 'raw':
+                return this._renderRaw();
         }
     }
     _renderImg()
@@ -184,5 +187,9 @@ export default class Sources extends Tool
             if (util.isStr(val)) val = JSON.parse(val);
             new JsonViewer(val, this._$el.find('.eruda-json'));
         } catch (e) {}
+    }
+    _renderRaw()
+    {
+        this._$el.html(this._rawTpl({val: this._data.val}));
     }
 }
