@@ -1,5 +1,7 @@
 # Eruda
 
+[![npm version](https://badge.fury.io/js/eruda.svg)](https://badge.fury.io/js/eruda) 
+
 Console for Mobile Browsers.
 
 ![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot2.jpg)
@@ -69,8 +71,11 @@ under html root element.
 * tool: Choose which default tools you want, by default all will be added.
 
 ```javascript
+var el = document.createElement('div');
+document.body.appendChild(el);
+
 eruda.init({
-    container: document.createElement('div'),
+    container: el,
     tool: ['console', 'elements']
 });
 ```
@@ -80,7 +85,7 @@ eruda.init({
 It is possible to enhance Eruda with more features by writing plugins. Check
 source code of plugins below to learn how to write your own custom tool panels.
 
-* [eruda-fps](https://github.com/liriliri/eruda-fps): Displaying page fps info.
+* [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 
 ## License
 
