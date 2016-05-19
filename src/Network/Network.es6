@@ -113,6 +113,7 @@ export default class Network extends Tool
         util.extend(target, data);
 
         target.time = target.time - target.startTime;
+        target.displayTime = formatTime(target.time);
 
         this._render();
     }
@@ -272,4 +273,11 @@ export default class Network extends Tool
             requests: this._requests
         }));
     }
+}
+
+function formatTime(time)
+{
+    if (time < 1000) return time + 'ms';
+
+    return (time / 1000).toFixed(1) + 's';
 }

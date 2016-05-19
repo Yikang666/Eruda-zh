@@ -42,7 +42,7 @@ npm install eruda --save
 Add this script to your page.
 
 ```html
-<script src="node_modules/eruda/dist/eruda.min.js'"></script>
+<script src="node_modules/eruda/dist/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 

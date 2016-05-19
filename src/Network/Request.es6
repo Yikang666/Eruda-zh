@@ -29,18 +29,21 @@ export default class Request extends util.Emitter
         this.emit('update', this._id, {
             type: type.type,
             subType: type.subType,
-            size: formatSize(xhr.getResponseHeader('Content-Length')),
+            size: getSize(xhr, true),
             time: util.now(),
             resHeaders: getHeaders(xhr)
         });
     }
     handleDone()
     {
+        var xhr = this._xhr;
+
         this.emit('update', this._id, {
-            status: this._xhr.status,
+            status: xhr.status,
             done: true,
+            size: getSize(xhr),
             time: util.now(),
-            resTxt: this._xhr.responseText
+            resTxt: xhr.responseText
         });
     }
 };
@@ -87,11 +90,36 @@ function getType(contentType)
     }
 }
 
-function formatSize(size)
+function getSize(xhr, headersOnly)
 {
-    size = util.toNum(size);
+    var size = 0;
+
+    function getStrSize()
+    {
+        if (!headersOnly)
+        {
+            var resTxt = xhr.responseText;
+            if (resTxt) size = lenToUtf8Bytes(resTxt);
+        }
+    }
+
+    try {
+        size = util.toNum(xhr.getResponseHeader('Content-Length'));
+    } catch (e)
+    {
+        getStrSize();
+    }
+
+    if (size === 0) getStrSize();
 
     if (size < 1024) return size + 'B';
 
     return (size / 1024).toFixed(1) + 'KB';
+}
+
+function lenToUtf8Bytes(str)
+{
+    var m = encodeURIComponent(str).match(/%[89ABab]/g);
+
+    return str.length + (m ? m.length : 0);
 }
