@@ -22,19 +22,34 @@ export default class Select extends util.Emitter
         {
             clearTimeout(self._timer);
         };
+
+        this._clickListener = function (e)
+        {
+            e.preventDefault();
+        };
     }
     enable()
     {
         this.disable();
-        document.body.addEventListener('touchstart', this._startListener, true);
-        document.body.addEventListener('touchmove', this._moveListener, true);
+        function addEvent(type, listener)
+        {
+            document.body.addEventListener(type, listener, true);
+        }
+        addEvent('touchstart', this._startListener);
+        addEvent('touchmove', this._moveListener);
+        addEvent('click', this._clickListener);
 
         return this;
     }
     disable()
     {
-        document.body.removeEventListener('touchstart', this._startListener, true);
-        document.body.removeEventListener('touchmove', this._moveListener, true);
+        function rmEvent(type, listener)
+        {
+            document.body.removeEventListener(type, listener, true);
+        }
+        rmEvent('touchstart', this._startListener);
+        rmEvent('touchmove', this._moveListener);
+        rmEvent('click', this._clickListener);
 
         return this;
     }

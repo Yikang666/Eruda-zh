@@ -173,6 +173,9 @@ export default class Sources extends Tool
             }
 
             code = highlight(code, data.type);
+        } else
+        {
+            code = util.escape(code);
         }
 
         this._$el.html(this._codeTpl({code: code}));
