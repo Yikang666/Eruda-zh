@@ -153,8 +153,11 @@ export default class Network extends Tool
     }
     _getPerformanceTimingData()
     {
-        var performance = window.webkitPerformance || window.performance,
-            timing = performance.timing;
+        var performance = window.webkitPerformance || window.performance;
+
+        if (!performance) return;
+
+        var timing = performance.timing;
 
         var data = [];
 
