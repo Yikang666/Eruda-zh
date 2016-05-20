@@ -18,7 +18,6 @@ export default class Elements extends Tool
         this._rmDefComputedStyle = true;
         this._highlightElement = false;
         this._selectElement = false;
-        this._events = {};
     }
     init($el, parent)
     {
@@ -50,19 +49,15 @@ export default class Elements extends Tool
         var origAddEvent = this._origAddEvent = winEventProto.addEventListener,
             origRmEvent = this._origRmEvent = winEventProto.removeEventListener;
 
-        var self = this;
-
         winEventProto.addEventListener = function (type, listener, useCapture)
         {
-            var id = this.erudaEventId = this.erudaEventId || util.uniqId('event');
-            self._addEvent(id, type, listener, useCapture);
+            addEvent(this, type, listener, useCapture);
             origAddEvent.apply(this, arguments);
         };
 
         winEventProto.removeEventListener = function (type, listener, useCapture)
         {
-            var id = this.erudaEventId;
-            if (id) self._rmEvent(id, type, listener, useCapture);
+            rmEvent(this, type, listener, useCapture);
             origRmEvent.apply(this, arguments);
         };
     }
@@ -78,41 +73,6 @@ export default class Elements extends Tool
         super.destroy();
 
         this.restoreEventTarget();
-    }
-    _addEvent(id, type, listener, useCapture = false)
-    {
-        if (!util.isFn(listener) && !util.isBool(useCapture)) return;
-
-        var events = this._events;
-
-        events[id] = events[id] || {};
-        events[id][type] = events[id][type] || [];
-        events[id][type].push({
-            listener: listener,
-            listenerStr: listener.toString(),
-            useCapture: useCapture
-        });
-    }
-    _rmEvent(id, type, listener, useCapture = false)
-    {
-        if (!util.isFn(listener) && !util.isBool(useCapture)) return;
-
-        var events = this._events;
-
-        if (!(events[id] && events[id][type])) return;
-
-        var listeners = events[id][type];
-
-        for (let i = 0, len = listeners.length; i < len; i++)
-        {
-            if (listeners[i].listener === listener)
-            {
-                listeners.splice(i, 1);
-                break;
-            }
-        }
-
-        if (listener.length === 0) delete events[id][type];
     }
     _back()
     {
@@ -241,12 +201,8 @@ export default class Elements extends Tool
         ret.attributes = formatAttr(attributes);
         ret.name = formatElName({tagName, id, className, attributes});
 
-        var eventId = el.erudaEventId;
-        if (eventId)
-        {
-            var listeners = this._events[eventId];
-            if (util.keys(listeners).length !== 0) ret.listeners = listeners;
-        }
+        var events = el.erudaEvents;
+        if (events && util.keys(events).length !== 0) ret.listeners = events;
 
         if (needNoStyle(tagName)) return ret;
 
@@ -285,7 +241,7 @@ export default class Elements extends Tool
 
         var settings = this._parent.get('settings');
         settings.text('Elements')
-                .add(cfg, 'overrideEventTarget', 'Show Event Listeners')
+                .add(cfg, 'overrideEventTarget', 'Catch Event Listeners')
                 .separator();
     }
 }
@@ -387,3 +343,40 @@ function rmDefComputedStyle(computedStyle)
 var NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 var needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
+
+
+function addEvent(el, type, listener, useCapture = false)
+{
+    if (!util.isFn(listener) || !util.isBool(useCapture)) return;
+
+    var events = el.erudaEvents = el.erudaEvents || {};
+
+    events[type] = events[type] || [];
+    events[type].push({
+        listener: listener,
+        listenerStr: listener.toString(),
+        useCapture: useCapture
+    });
+}
+
+function rmEvent(el, type, listener, useCapture = false)
+{
+    if (!util.isFn(listener) || !util.isBool(useCapture)) return;
+
+    var events = el.erudaEvents;
+
+    if (!(events && events[type])) return;
+
+    var listeners = events[type];
+
+    for (let i = 0, len = listeners.length; i < len; i++)
+    {
+        if (listeners[i].listener === listener)
+        {
+            listeners.splice(i, 1);
+            break;
+        }
+    }
+
+    if (listener.length === 0) delete events[type];
+}
