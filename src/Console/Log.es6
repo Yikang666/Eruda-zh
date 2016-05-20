@@ -334,6 +334,13 @@ function stringify(obj, simple, visited)
         type = '[object Object]';
     }
 
+    var isFn = (type == '[object Function]'),
+        isStr = (type == '[object String]'),
+        isArr = (type == '[object Array]'),
+        isObj = (type == '[object Object]'),
+        isNum = (type == '[object Number]'),
+        isBool = (type == '[object Boolean]');
+
     for (let i = 0, len = visited.length; i < len; i++)
     {
         if (obj === visited[i])
@@ -346,37 +353,41 @@ function stringify(obj, simple, visited)
     if (circular)
     {
         json = '"[circular]"';
-    } else if (type == '[object String]')
+    } else if (isStr)
     {
         json = `"${escapeJsonStr(obj)}"`;
-    } else if (type == '[object Array]')
+    } else if (isArr)
     {
         visited.push(obj);
 
         json = '[';
         util.each(obj, val => parts.push(`${stringify(val, simple, visited)}`));
         json += parts.join(', ') + ']';
-    } else if (type == '[object Object]')
+    } else if (isObj || isFn)
     {
         visited.push(obj);
 
-        json = '{';
         for (let key in obj) names.push(key);
         names.sort(sortName);
-        util.each(names, val =>
+        if (names.length === 0 && isFn)
         {
-            parts.push(`${stringify(val, undefined, visited)}: ${stringify(obj[val], simple, visited)}`);
-        });
-        json += parts.join(', ') + '}';
-    } else if (type == '[object Number]')
+            json = `"${escapeJsonStr(obj.toString())}"`;
+        } else
+        {
+            json = '{';
+            if (isFn) parts.push(`"function": "${escapeJsonStr(obj.toString())}"`);
+            util.each(names, val =>
+            {
+                parts.push(`${stringify(val, undefined, visited)}: ${stringify(obj[val], simple, visited)}`);
+            });
+            json += parts.join(', ') + '}';
+        }
+    } else if (isNum)
     {
         json = obj + '';
-    } else if (type == '[object Boolean]')
+    } else if (isBool)
     {
         json = obj ? 'true' : 'false';
-    } else if (type == '[object Function]')
-    {
-        json = `"${escapeJsonStr(obj.toString())}"`;
     } else if (obj === null)
     {
         json = 'null';
