@@ -103,9 +103,9 @@ export default class Elements extends Tool
 
         var listeners = events[id][type];
 
-        for (let i = 0, len = listener.length; i < len; i++)
+        for (let i = 0, len = listeners.length; i < len; i++)
         {
-            if (listener[i].listener === listener)
+            if (listeners[i].listener === listener)
             {
                 listeners.splice(i, 1);
                 break;
