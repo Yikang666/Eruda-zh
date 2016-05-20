@@ -9,3 +9,8 @@ html {
 .border {
     border: 15px solid #fff;
 }
+.fixed-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}

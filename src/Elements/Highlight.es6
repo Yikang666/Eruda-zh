@@ -7,7 +7,6 @@ export default class Highlight
         require('./Highlight.scss');
 
         this._isShow = false;
-        this._top = 0;
 
         this._appendTpl($parent);
         this._bindEvent();
@@ -32,7 +31,6 @@ export default class Highlight
     {
         var {left, width, top, height} = this._$target.offset();
 
-        this._top = top;
         this._$el.css({left, top: top - window.scrollY, width, height});
 
         var computedStyle = getComputedStyle(this._target, '');
@@ -88,7 +86,7 @@ export default class Highlight
         window.addEventListener('scroll', () =>
         {
             if (!this._isShow) return;
-            this._$el.css('top', this._top - window.scrollY);
+            this.render();
         }, false);
     }
     _appendTpl($parent)
