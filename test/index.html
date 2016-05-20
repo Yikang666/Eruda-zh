@@ -25,6 +25,23 @@
         </div>
         <button>Test</button>
         <script>
+            document.body.addEventListener('click', function ()
+            {
+                console.log('test');
+            }, false);
+            var test = document.getElementById('test-element');
+            test.addEventListener('click', function ()
+            {
+                console.log('test2');
+            }, false);
+            test.addEventListener('click', function ()
+            {
+                console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
+            }, true);
+            test.addEventListener('touchstart', function ()
+            {
+                console.log('test3');
+            }, false);
             function req(url)
             {
                 var xhr = new XMLHttpRequest();
@@ -35,11 +52,15 @@
             setTimeout(function ()
             {
                 req('http://localhost:3000/test/style.css');
-            }, 2000);
+            }, 1000);
             setTimeout(function ()
             {
                 req('http://localhost:3000/test/data.json');
             }, 2000);
+            setTimeout(function ()
+            {
+                req('http://localhost:3000/test/empty.json');
+            }, 3000);
         </script>
     </div>
 </body>

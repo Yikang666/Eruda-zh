@@ -80,7 +80,7 @@
             background: #fff;
             font-size: 12px;
             .style-wrapper {
-                padding: 10px;
+                padding: $common-padding;
                 .style-rules {
                     box-shadow: $box-shadow;
                     border: 1px solid $gray;
@@ -95,6 +95,33 @@
                     }
                     &:last-child {
                         margin-bottom: 0;
+                    }
+                }
+            }
+        }
+        .listeners {
+            background: #fff;
+            font-size: 12px;
+            .listener-wrapper {
+                padding: $common-padding;
+                .listener {
+                    box-shadow: $box-shadow;
+                    margin-bottom: 10px;
+                    background: #fff;
+                    .listener-type {
+                        padding: $common-padding;
+                        background: $blue;
+                        color: #fff;
+                    }
+                    .listener-content li {
+                        padding: $common-padding;
+                        border: 1px solid $gray;
+                        border-top: none;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                        &.capture {
+                            background: $gray-light;
+                        }
                     }
                 }
             }

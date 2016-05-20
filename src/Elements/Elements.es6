@@ -3,6 +3,7 @@ import CssStore from './CssStore.es6'
 import Highlight from './Highlight.es6'
 import Select from './Select.es6'
 import util from '../lib/util'
+import config from '../lib/config.es6'
 
 export default class Elements extends Tool
 {
@@ -17,6 +18,7 @@ export default class Elements extends Tool
         this._rmDefComputedStyle = true;
         this._highlightElement = false;
         this._selectElement = false;
+        this._events = {};
     }
     init($el, parent)
     {
@@ -32,6 +34,7 @@ export default class Elements extends Tool
         this._highlight = new Highlight(this._parent.$parent);
         this._select = new Select();
         this._bindEvent();
+        this._initConfig();
         this._setEl(this._htmlEl);
     }
     show()
@@ -39,6 +42,77 @@ export default class Elements extends Tool
         super.show();
 
         this._render();
+    }
+    overrideEventTarget()
+    {
+        var winEventProto = window.EventTarget.prototype;
+
+        var origAddEvent = this._origAddEvent = winEventProto.addEventListener,
+            origRmEvent = this._origRmEvent = winEventProto.removeEventListener;
+
+        var self = this;
+
+        winEventProto.addEventListener = function (type, listener, useCapture)
+        {
+            var id = this.erudaEventId = this.erudaEventId || util.uniqId('event');
+            self._addEvent(id, type, listener, useCapture);
+            origAddEvent.apply(this, arguments);
+        };
+
+        winEventProto.removeEventListener = function (type, listener, useCapture)
+        {
+            var id = this.erudaEventId;
+            if (id) self._rmEvent(id, type, listener, useCapture);
+            origRmEvent.apply(this, arguments);
+        };
+    }
+    restoreEventTarget()
+    {
+        var winEventProto = window.EventTarget.prototype;
+
+        if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
+        if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
+    }
+    destroy()
+    {
+        super.destroy();
+
+        this.restoreEventTarget();
+    }
+    _addEvent(id, type, listener, useCapture = false)
+    {
+        if (!util.isFn(listener) && !util.isBool(useCapture)) return;
+
+        var events = this._events;
+
+        events[id] = events[id] || {};
+        events[id][type] = events[id][type] || [];
+        events[id][type].push({
+            listener: listener,
+            listenerStr: listener.toString(),
+            useCapture: useCapture
+        });
+    }
+    _rmEvent(id, type, listener, useCapture = false)
+    {
+        if (!util.isFn(listener) && !util.isBool(useCapture)) return;
+
+        var events = this._events;
+
+        if (!(events[id] && events[id][type])) return;
+
+        var listeners = events[id][type];
+
+        for (let i = 0, len = listener.length; i < len; i++)
+        {
+            if (listener[i].listener === listener)
+            {
+                listeners.splice(i, 1);
+                break;
+            }
+        }
+
+        if (listener.length === 0) delete events[id][type];
     }
     _back()
     {
@@ -167,6 +241,13 @@ export default class Elements extends Tool
         ret.attributes = formatAttr(attributes);
         ret.name = formatElName({tagName, id, className, attributes});
 
+        var eventId = el.erudaEventId;
+        if (eventId)
+        {
+            var listeners = this._events[eventId];
+            if (util.keys(listeners).length !== 0) ret.listeners = listeners;
+        }
+
         if (needNoStyle(tagName)) return ret;
 
         var computedStyle = cssStore.getComputedStyle();
@@ -185,6 +266,27 @@ export default class Elements extends Tool
 
         this._highlight[this._highlightElement ? 'show' : 'hide']();
         this._$showArea.html(this._tpl(this._getData()));
+    }
+    _initConfig()
+    {
+        var cfg = this.config = config.create('eruda-elements');
+
+        cfg.set(util.defaults(cfg.get(), {overrideEventTarget: true}));
+
+        if (cfg.get('overrideEventTarget')) this.overrideEventTarget();
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'overrideEventTarget': return val ? this.overrideEventTarget(): this.restoreEventTarget();
+            }
+        });
+
+        var settings = this._parent.get('settings');
+        settings.text('Elements')
+                .add(cfg, 'overrideEventTarget', 'Show Event Listeners')
+                .separator();
     }
 }
 

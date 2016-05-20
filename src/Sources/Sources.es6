@@ -148,6 +148,10 @@ export default class Sources extends Tool
     }
     _renderHttp()
     {
+        var val = this._data.val;
+
+        val.hasResTxt = (val.resTxt.trim() !== '');
+
         this._$el.html(this._httpTpl(this._data.val));
     }
     _renderCode()

@@ -64,3 +64,20 @@
         </div>
     </div>
 {{/if}}
+{{#if listeners}}
+    <div class="eruda-listeners eruda-section">
+        <h2>Event Listeners</h2>
+        <div class="eruda-listener-wrapper">
+            {{#each listeners}}
+               <div class="eruda-listener">
+                   <div class="eruda-listener-type">{{@key}}</div>
+                   <ul class="eruda-listener-content">
+                       {{#each .}}
+                           <li class="{{#if useCapture}}eruda-capture{{/if}}">{{listenerStr}}</li>
+                       {{/each}}
+                   </ul>
+               </div>
+            {{/each}}
+        </div>
+    </div>
+{{/if}}
