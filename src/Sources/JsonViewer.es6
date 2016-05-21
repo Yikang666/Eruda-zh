@@ -57,7 +57,7 @@ function createEl(key, val)
     if (val === null)
     {
         return `<li>
-                   <span class="eruda-key">"${encode(key)}":</span>
+                   <span class="eruda-key">${encode(key)}:</span>
                    <span class="eruda-null">null</span>
                </li>`;
     }
@@ -65,7 +65,7 @@ function createEl(key, val)
     {
         var obj = `<li>
                        <span class="eruda-expanded"></span>
-                       <span class="eruda-key">"${encode(key)}"</span>
+                       <span class="eruda-key">${encode(key)}</span>
                        <span class="eruda-open">${open}</span>
                        <ul class="eruda-${type}">`;
         obj += jsonToHtml(val);
@@ -74,13 +74,13 @@ function createEl(key, val)
     if (util.isNum(val) || util.isBool(val))
     {
         return `<li>
-                   <span class="eruda-key">"${encode(key)}": </span>
+                   <span class="eruda-key">${encode(key)}: </span>
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
     }
 
     return `<li>
-                <span class="eruda-key">"${encode(key)}": </span>
+                <span class="eruda-key">${encode(key)}: </span>
                 <span class="eruda-${typeof val}">"${encode(val)}"</span>
             </li>`;
 }

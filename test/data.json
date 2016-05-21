@@ -12,7 +12,8 @@
                 {
                     "location": "A very very long long address!!!!!!!!!!!!",
                     "number": 654321
-                }
+                },
+                null
             ]
         }
     }
