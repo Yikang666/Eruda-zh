@@ -44,6 +44,8 @@ export default class Elements extends Tool
     }
     overrideEventTarget()
     {
+        if (!window.EventTarget) return;
+
         var winEventProto = window.EventTarget.prototype;
 
         var origAddEvent = this._origAddEvent = winEventProto.addEventListener,
@@ -63,6 +65,8 @@ export default class Elements extends Tool
     }
     restoreEventTarget()
     {
+        if (!window.EventTarget) return;
+
         var winEventProto = window.EventTarget.prototype;
 
         if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
