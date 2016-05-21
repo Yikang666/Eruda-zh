@@ -29,7 +29,6 @@ export default class Network extends Tool
     {
         super.show();
 
-        this._getPerformanceTimingData();
         this._render();
     }
     overrideXhr()
@@ -249,7 +248,10 @@ export default class Network extends Tool
     {
         var cfg = this.config = config.create('eruda-network');
 
-        cfg.set(util.defaults(cfg.get(), {overrideXhr: true}));
+        cfg.set(util.defaults(cfg.get(), {
+            disablePerformance: false,
+            overrideXhr: true
+        }));
 
         if (cfg.get('overrideXhr')) this.overrideXhr();
 
@@ -264,17 +266,23 @@ export default class Network extends Tool
         var settings = this._parent.get('settings');
         settings.text('Network')
                 .add(cfg, 'overrideXhr', 'Catch Ajax Requests')
+                .add(cfg, 'disablePerformance', 'Disable Performance Timing')
                 .separator();
     }
     _render()
     {
         if (!this.active) return;
 
-        this._renderHtml(this._tpl({
-            data: this._performanceTimingData,
-            timing: this._performanceTiming,
-            requests: this._requests
-        }));
+        var renderData = {requests: this._requests};
+
+        if (!this.config.get('disablePerformance'))
+        {
+            this._getPerformanceTimingData();
+            renderData.data = this._performanceTimingData;
+            renderData.timing = this._performanceTiming;
+        }
+
+        this._renderHtml(this._tpl(renderData));
     }
     _renderHtml(html)
     {
