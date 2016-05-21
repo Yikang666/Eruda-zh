@@ -208,10 +208,12 @@ export default class Elements extends Tool
 
         var computedStyle = cssStore.getComputedStyle();
         if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+        processStyleRules(computedStyle);
         ret.computedStyle = computedStyle;
 
         var styles = cssStore.getMatchedCSSRules();
         styles.unshift(getInlineStyle(el.style));
+        styles.forEach(style => processStyleRules(style.style));
         ret.styles = styles;
 
         return ret;
@@ -252,7 +254,18 @@ export default class Elements extends Tool
     }
 }
 
-var isElExist = val => util.isEl(val) && val.parentNode;
+function processStyleRules(style)
+{
+    util.each(style, (val, key) =>
+    {
+        if (util.startWith(val, 'rgb'))
+        {
+            style[key] = `<span class="eruda-style-color" style="background-color: ${val}"></span>${val}`;
+        }
+    });
+}
+
+const isElExist = val => util.isEl(val) && val.parentNode;
 
 function formatElName(data)
 {

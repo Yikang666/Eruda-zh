@@ -58,6 +58,13 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+        .style-color {
+            width: 7px;
+            height: 7px;
+            margin-right: 2px;
+            border: 1px solid $gray-dark;
+            display: inline-block;
+        }
         .computed-style {
             background: #fff;
             font-size: 12px;

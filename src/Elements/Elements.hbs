@@ -38,7 +38,7 @@
                 {{#each computedStyle}}
                     <tr>
                         <td class="eruda-key">{{@key}}</td>
-                        <td>{{this}}</td>
+                        <td>{{{.}}}</td>
                     </tr>
                 {{/each}}
                 </tbody>
@@ -55,7 +55,7 @@
                     <div>{{selectorText}} {</div>
                     {{#each style}}
                         <div class="eruda-rule">
-                            <span>{{@key}}</span>: {{this}};
+                            <span>{{@key}}</span>: {{{.}}};
                         </div>
                     {{/each}}
                     <div>}</div>
