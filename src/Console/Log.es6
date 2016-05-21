@@ -339,6 +339,7 @@ function stringify(obj, simple, visited)
         isArr = (type == '[object Array]'),
         isObj = (type == '[object Object]'),
         isNum = (type == '[object Number]'),
+        isSymbol = (type == '[object Symbol]'),
         isBool = (type == '[object Boolean]');
 
     for (let i = 0, len = visited.length; i < len; i++)
@@ -391,6 +392,9 @@ function stringify(obj, simple, visited)
     } else if (obj === null)
     {
         json = 'null';
+    } else if (isSymbol)
+    {
+        json = '"Symbol"';
     } else if (obj === undefined)
     {
         json = '"undefined"';
