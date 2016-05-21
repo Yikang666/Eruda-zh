@@ -44,9 +44,7 @@ export default class Elements extends Tool
     }
     overrideEventTarget()
     {
-        if (!window.EventTarget) return;
-
-        var winEventProto = window.EventTarget.prototype;
+        var winEventProto = getWinEventProto();
 
         var origAddEvent = this._origAddEvent = winEventProto.addEventListener,
             origRmEvent = this._origRmEvent = winEventProto.removeEventListener;
@@ -65,9 +63,7 @@ export default class Elements extends Tool
     }
     restoreEventTarget()
     {
-        if (!window.EventTarget) return;
-
-        var winEventProto = window.EventTarget.prototype;
+        var winEventProto = getWinEventProto();
 
         if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
         if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
@@ -384,3 +380,5 @@ function rmEvent(el, type, listener, useCapture = false)
 
     if (listener.length === 0) delete events[type];
 }
+
+var getWinEventProto = () => (window.EventTarget && window.EventTarget.prototype) || window.Node.prototype;
