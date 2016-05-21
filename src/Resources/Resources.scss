@@ -39,6 +39,9 @@
                 border-radius: 50%;
                 font-size: 12px;
                 cursor: pointer;
+                &:active {
+                    color: $gray-light;
+                }
             }
         }
         .link-list {

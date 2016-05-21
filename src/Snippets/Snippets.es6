@@ -56,8 +56,14 @@ export default class Snippets extends Tool
     }
     _render()
     {
-        this._$el.html(this._tpl({
+        this._renderHtml(this._tpl({
             snippets: this._snippets
         }));
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
 }

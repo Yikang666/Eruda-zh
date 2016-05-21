@@ -221,7 +221,13 @@ export default class Elements extends Tool
         if (!isElExist(this._curEl)) return this._back();
 
         this._highlight[this._highlightElement ? 'show' : 'hide']();
-        this._$showArea.html(this._tpl(this._getData()));
+        this._renderHtml(this._tpl(this._getData()));
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$showArea.html(html);
     }
     _initConfig()
     {

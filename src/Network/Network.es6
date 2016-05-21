@@ -270,11 +270,17 @@ export default class Network extends Tool
     {
         if (!this.active) return;
 
-        this._$el.html(this._tpl({
+        this._renderHtml(this._tpl({
             data: this._performanceTimingData,
             timing: this._performanceTiming,
             requests: this._requests
         }));
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
 }
 

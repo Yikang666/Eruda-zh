@@ -144,7 +144,7 @@ export default class Sources extends Tool
     }
     _renderImg()
     {
-        this._$el.html(this._imgTpl(this._data.val));
+        this._renderHtml(this._imgTpl(this._data.val));
     }
     _renderHttp()
     {
@@ -152,7 +152,7 @@ export default class Sources extends Tool
 
         val.hasResTxt = (val.resTxt.trim() !== '');
 
-        this._$el.html(this._httpTpl(this._data.val));
+        this._renderHtml(this._httpTpl(this._data.val));
     }
     _renderCode()
     {
@@ -182,11 +182,11 @@ export default class Sources extends Tool
             code = util.escape(code);
         }
 
-        this._$el.html(this._codeTpl({code: code}));
+        this._renderHtml(this._codeTpl({code: code}));
     }
     _renderJson()
     {
-        this._$el.html(this._jsonTpl());
+        this._renderHtml(this._jsonTpl());
 
         var val = this._data.val;
 
@@ -197,6 +197,12 @@ export default class Sources extends Tool
     }
     _renderRaw()
     {
-        this._$el.html(this._rawTpl({val: this._data.val}));
+        this._renderHtml(this._rawTpl({val: this._data.val}));
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
 }

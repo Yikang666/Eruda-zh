@@ -219,7 +219,7 @@ export default class Resources extends Tool
             stylesheetData = this._stylesheetData,
             imageData = this._imageData;
 
-        this._$el.html(this._tpl({
+        this._renderHtml(this._tpl({
             localStoreData: localStoreData,
             localStoreState: getState('localStore', localStoreData.length),
             cookieData: cookieData,
@@ -240,6 +240,12 @@ export default class Resources extends Tool
 
             $li.css({height: $li.get(0).offsetWidth});
         }, 150);
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
 }
 

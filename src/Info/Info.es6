@@ -34,6 +34,12 @@ export default class Info extends Tool
     }
     _render()
     {
-        this._$el.html(this._tpl({messages: this._msgs}));
+        this._renderHtml(this._tpl({messages: this._msgs}));
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
 }

@@ -241,8 +241,14 @@ export default class Log extends util.Emitter
 
         var logs = this._renderLogs = this._filterLogs(this._logs);
 
-        this._$el.html(this._tpl({logs: logs}));
+        this._renderHtml(this._tpl({logs: logs}));
         this._scrollToBottom();
+    }
+    _renderHtml(html)
+    {
+        if (html === this._lastHtml) return;
+        this._lastHtml = html;
+        this._$el.html(html);
     }
     _filterLogs(logs)
     {
