@@ -397,7 +397,8 @@ function rmEvent(el, type, listener, useCapture = false)
         }
     }
 
-    if (listener.length === 0) delete events[type];
+    if (listeners.length === 0) delete events[type];
+    if (util.keys(events).length === 0) delete el.erudaEvents;
 }
 
 var getWinEventProto = () => (window.EventTarget && window.EventTarget.prototype) || window.Node.prototype;
