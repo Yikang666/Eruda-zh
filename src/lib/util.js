@@ -1367,42 +1367,6 @@ module.exports = (function ()
          * |methods|object  |Public methods                   |
          * |statics|object  |Static methods                   |
          * |return |function|Function used to create instances|
-         *
-         * ```javascript
-         * var People = Class({
-         *     initialize: function (name, age)
-         *     {
-         *         this.name = name;
-         *         this.age = age;
-         *     },
-         *     introduce: function ()
-         *     {
-         *         return 'I am ' + this.name + ', ' + this.age + ' years old.'.
-         *     }
-         * });
-         *
-         * var Student = People.extend({
-         *     initialize: function (name, age, school)
-         *     {
-         *         this.callSuper('initialize', name, age);
-         *
-         *         this.school = school.
-         *     },
-         *     introduce: function ()
-         *     {
-         *         return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
-         *     }
-         * }, {
-         *     is: function (obj)
-         *     {
-         *         return obj instanceof Student;
-          *    }
-         * });
-         *
-         * var a = new Student('allen', 17, 'Hogwarts');
-         * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
-         * Student.is(a); // -> true
-         * ```
          */
 
         var regCallSuper = /callSuper/;
@@ -2480,6 +2444,53 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ trim ------------------------------ */
+
+    var trim = _.trim = (function (exports)
+    {
+        /* Remove chars or white-spaces from beginning end of string.
+         *
+         * |Name  |Type         |Desc                  |
+         * |-------------------------------------------|
+         * |str   |string       |The string to trim    |
+         * |chars |string\|array|The characters to trim|
+         * |return|string       |The trimmed string    |
+         *
+         * ```javascript
+         * trim(' abc  '); // -> 'abc'
+         * trim('_abc_', '_'); // -> 'abc'
+         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
+         * ```
+         */
+
+        var regSpace = /^\s+|\s+$/g;
+
+        exports = function (str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            return ltrim(rtrim(str, chars), chars);
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ getFileName ------------------------------ */
+
+    var getFileName = _.getFileName = (function (exports)
+    {
+        function exports(url)
+        {
+            var ret = last(url.split('/'));
+
+            if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0]);
+
+            return ret === '' ? 'unknown' : ret;
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ startWith ------------------------------ */
 
     var startWith = _.startWith = (function (exports)
@@ -2528,37 +2539,6 @@ module.exports = (function ()
         {
             return val == null ? '' : val.toString();
         }
-
-        return exports;
-    })({});
-
-    /* ------------------------------ trim ------------------------------ */
-
-    var trim = _.trim = (function (exports)
-    {
-        /* Remove chars or white-spaces from beginning end of string.
-         *
-         * |Name  |Type         |Desc                  |
-         * |-------------------------------------------|
-         * |str   |string       |The string to trim    |
-         * |chars |string\|array|The characters to trim|
-         * |return|string       |The trimmed string    |
-         *
-         * ```javascript
-         * trim(' abc  '); // -> 'abc'
-         * trim('_abc_', '_'); // -> 'abc'
-         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
-         * ```
-         */
-
-        var regSpace = /^\s+|\s+$/g;
-
-        exports = function (str, chars)
-        {
-            if (chars == null) return str.replace(regSpace, '');
-
-            return ltrim(rtrim(str, chars), chars);
-        };
 
         return exports;
     })({});

@@ -29,16 +29,31 @@
     </div>
 {{/if}}
 
-<ul class="eruda-requests">
-    {{#each requests}}
-        <li class="eruda-request" data-id="{{@key}}">
-            <span>{{name}}</span>
-            <span>{{status}}</span>
-            <span>{{method}}</span>
-            <span>{{subType}}</span>
-            <span>{{size}}</span>
-            <span>{{displayTime}}</span>
-            <span class="eruda-blue">{{url}}</span>
-        </li>
-    {{/each}}
-</ul>
+{{#if entries}}
+    <ul class="eruda-entries">
+        {{#each entries}}
+            <li class="eruda-entry" data-idx="{{@index}}">
+                <span>{{name}}</span>
+                <span>{{initiatorType}}</span>
+                <span>{{displayTime}}</span>
+                <span class="eruda-blue">{{url}}</span>
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}
+
+{{#if requests}}
+    <ul class="eruda-requests">
+        {{#each requests}}
+            <li class="eruda-request" data-id="{{@key}}">
+                <span>{{name}}</span>
+                <span>{{status}}</span>
+                <span>{{method}}</span>
+                <span>{{subType}}</span>
+                <span>{{size}}</span>
+                <span>{{displayTime}}</span>
+                <span class="eruda-blue">{{url}}</span>
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}

@@ -14,7 +14,7 @@ export default class Request extends util.Emitter
     handleSend()
     {
         this.emit('send', this._id, {
-            name: getFileName(this._url),
+            name: util.getFileName(this._url),
             url: this._url,
             method: this._method,
             xhr: this._xhr
@@ -67,15 +67,6 @@ function getHeaders(xhr)
     });
 
     return ret;
-}
-
-function getFileName(url)
-{
-    var ret = util.last(url.split('/'));
-
-    if (ret.indexOf('?') > -1) ret = ret.split('?')[0].trim();
-
-    return ret === '' ? 'unknown' : ret;
 }
 
 function getType(contentType)

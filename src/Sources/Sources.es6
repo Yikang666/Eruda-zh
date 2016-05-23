@@ -79,8 +79,13 @@ export default class Sources extends Tool
 
             return this._render();
         }
+
+        if (this._isGettingHtml) return;
+        this._isGettingHtml = true;
+
         util.get(location.href, (err, data) =>
         {
+            this._isGettingHtml = false;
             if (err) return;
 
             this._html = data;

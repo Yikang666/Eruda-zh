@@ -13,6 +13,9 @@ export default class Network extends Tool
 
         this.name = 'network';
         this._performanceTimingData = [];
+        this._performanceTiming = {};
+        this._resourceTimingData = [];
+        this._performance = window.webkitPerformance || window.performance;
         this._requests = {};
 
         this._tpl = require('./Network.hbs');
@@ -126,33 +129,44 @@ export default class Network extends Tool
         $el.on('click', '.eruda-performance-timing', function ()
         {
             $el.find('.eruda-performance-timing-data').show();
-        });
-
-        $el.on('click', '.eruda-request', function ()
+        }).on('click', '.eruda-request', function ()
         {
             var id = util.$(this).data('id'),
                 data = self._requests[id];
 
             if (!data.done) return;
 
-            var sources = parent.get('sources');
-
-            if (!sources) return;
-
-            sources.set('http', {
+            showSources('http', {
                 url: data.url,
                 resTxt: data.resTxt,
                 type: data.type,
                 subType: data.subType,
                 resHeaders: data.resHeaders
             });
+        }).on('click', '.eruda-entry', function ()
+        {
+            var idx = util.$(this).data('idx'),
+                data = self._resourceTimingData[Number(idx)];
+
+            if (data.initiatorType === 'img')
+            {
+                showSources('img', data.url);
+            }
+        });
+
+        function showSources(type, data)
+        {
+            var sources = parent.get('sources');
+            if (!sources) return;
+
+            sources.set(type, data);
 
             parent.showTool('sources');
-        });
+        }
     }
     _getPerformanceTimingData()
     {
-        var performance = window.webkitPerformance || window.performance;
+        var performance = this._performance;
 
         if (!performance) return;
 
@@ -244,12 +258,37 @@ export default class Network extends Tool
         });
         this._performanceTiming = performanceTiming;
     }
+    _getResourceTimingData()
+    {
+        var performance = this._performance;
+        if (!performance || !util.isFn(performance.getEntries)) return;
+
+        var entries = performance.getEntries();
+
+        var data = [];
+
+        var hideXhr = this.config.get('hideXhrResource');
+        entries.forEach(entry =>
+        {
+            if (hideXhr && entry.initiatorType === 'xmlhttprequest') return;
+
+            data.push({
+                name: util.getFileName(entry.name),
+                displayTime: formatTime(entry.duration),
+                url: entry.name,
+                initiatorType: entry.initiatorType
+            });
+        });
+
+        this._resourceTimingData = data;
+    }
     _initConfig()
     {
         var cfg = this.config = config.create('eruda-network');
 
         cfg.set(util.defaults(cfg.get(), {
             disablePerformance: false,
+            hideXhrResource: true,
             overrideXhr: true
         }));
 
@@ -265,7 +304,8 @@ export default class Network extends Tool
 
         var settings = this._parent.get('settings');
         settings.text('Network')
-                .add(cfg, 'overrideXhr', 'Catch Ajax Requests')
+                .add(cfg, 'overrideXhr', 'Catch Xhr Requests')
+                .add(cfg, 'hideXhrResource', 'Hide Xhr Resource Timing')
                 .add(cfg, 'disablePerformance', 'Disable Performance Timing')
                 .separator();
     }
@@ -273,7 +313,14 @@ export default class Network extends Tool
     {
         if (!this.active) return;
 
-        var renderData = {requests: this._requests};
+        this._getResourceTimingData();
+
+        var renderData = {entries: this._resourceTimingData};
+
+        if (util.keys(this._requests).length > 0)
+        {
+            renderData.requests = this._requests;
+        }
 
         if (!this.config.get('disablePerformance'))
         {
@@ -294,6 +341,8 @@ export default class Network extends Tool
 
 function formatTime(time)
 {
+    time = Math.round(time);
+
     if (time < 1000) return time + 'ms';
 
     return (time / 1000).toFixed(1) + 's';
