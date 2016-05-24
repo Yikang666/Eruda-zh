@@ -88,7 +88,7 @@ export default class DevTools extends util.Emitter
     }
     showTool(name)
     {
-        if (this._curTool === name) return;
+        if (this._curTool === name) return this;
         this._curTool = name;
 
         var tools = this._tools;
