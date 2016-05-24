@@ -11,6 +11,7 @@ export default class Resources extends Tool
 
         this.name = 'resources';
         this._localStoreData = [];
+        this._sessionStoreData = [];
         this._cookieData = [];
         this._scriptData = [];
         this._stylesheetData = [];
@@ -29,6 +30,7 @@ export default class Resources extends Tool
     refresh()
     {
         return this.refreshLocalStorage()
+                   .refreshSessionStorage()
                    .refreshCookie()
                    .refreshScript()
                    .refreshStylesheet()
@@ -70,22 +72,32 @@ export default class Resources extends Tool
     }
     refreshLocalStorage()
     {
-        var localStoreData = [];
+        this._refreshStorage('local');
+
+        return this;
+    }
+    refreshSessionStorage()
+    {
+        this._refreshStorage('session');
+
+        return this;
+    }
+    _refreshStorage(type)
+    {
+        var storeData = [];
 
         // Mobile safari is not able to loop through localStorage directly.
-        var localStore = JSON.parse(JSON.stringify(window.localStorage));
+        var store = JSON.parse(JSON.stringify(window[type + 'Storage']));
 
-        util.each(localStore, function (val, key)
+        util.each(store, function (val, key)
         {
-            localStoreData.push({
+            storeData.push({
                 key: key,
                 val: sliceStr(val, 200)
             });
         });
 
-        this._localStoreData = localStoreData;
-
-        return this;
+        this['_' + type + 'StoreData'] = storeData;
     }
     refreshCookie()
     {
@@ -141,15 +153,25 @@ export default class Resources extends Tool
             parent = this._parent;
 
         $el.on('click', '.refresh-local-storage', () => this.refreshLocalStorage()._render())
+           .on('click', '.refresh-session-storage', () => this.refreshSessionStorage()._render())
            .on('click', '.refresh-cookie', () => this.refreshCookie()._render())
            .on('click', '.refresh-script', () => this.refreshScript()._render())
            .on('click', '.refresh-image', () => this.refreshImage()._render())
-           .on('click', '.delete-local-storage', function (e)
+           .on('click', '.delete-storage', function ()
            {
-               var key = util.$(this).data('key');
+               var $this = util.$(this),
+                   key = $this.data('key'),
+                   type = $this.data('type');
 
-               localStorage.removeItem(key);
-               self.refreshLocalStorage()._render();
+               if (type === 'local')
+               {
+                   localStorage.removeItem(key);
+                   self.refreshLocalStorage()._render();
+               } else
+               {
+                   sessionStorage.removeItem(key);
+                   self.refreshSessionStorage()._render();
+               }
            })
            .on('click', '.delete-cookie', function ()
            {
@@ -158,10 +180,13 @@ export default class Resources extends Tool
                util.cookie.remove(key);
                self.refreshCookie()._render();
            })
-           .on('click', '.eruda-local-storage-val', function ()
+           .on('click', '.eruda-storage-val', function ()
            {
-               var key = util.$(this).data('key'),
-                   val = localStorage.getItem(key);
+               var $this = util.$(this),
+                   key = $this.data('key'),
+                   type = $this.data('type');
+
+               var val = type === 'local' ? localStorage.getItem(key) : sessionStorage.getItem(key);
 
                try {
                    showSources('json', JSON.parse(val));
@@ -213,15 +238,14 @@ export default class Resources extends Tool
     }
     _render()
     {
-        var localStoreData = this._localStoreData,
-            cookieData = this._cookieData,
+        var cookieData = this._cookieData,
             scriptData = this._scriptData,
             stylesheetData = this._stylesheetData,
             imageData = this._imageData;
 
         this._renderHtml(this._tpl({
-            localStoreData: localStoreData,
-            localStoreState: getState('localStore', localStoreData.length),
+            localStoreData: this._localStoreData,
+            sessionStoreData: this._sessionStoreData,
             cookieData: cookieData,
             cookieState: getState('cookie', cookieData.length),
             scriptData: scriptData,
@@ -251,7 +275,7 @@ export default class Resources extends Tool
 
 function getState(type, len)
 {
-    if (type === 'localStore' || len === 0) return '';
+    if (len === 0) return '';
 
     var warn = 0, danger = 0;
 

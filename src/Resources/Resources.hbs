@@ -1,6 +1,6 @@
 <div class="eruda-section">
-    <h2 class="eruda-title {{localStoreState}}">
-        LocalStorage
+    <h2 class="eruda-title">
+        Local Storage
         <div class="eruda-btn refresh-local-storage" ontouchstart>
             <span class="eruda-icon-repeat"></span>
         </div>
@@ -11,9 +11,9 @@
                 {{#each localStoreData}}
                     <tr>
                         <td class="eruda-key">{{key}}</td>
-                        <td class="eruda-local-storage-val" data-key="{{key}}">{{val}}</td>
+                        <td class="eruda-storage-val" data-key="{{key}}" data-type="local">{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-icon-trash delete-local-storage" data-key="{{key}}"></span>
+                            <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="local"></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -22,6 +22,33 @@
                     <td>Empty</td>
                 </tr>
             {{/if}}
+        </tbody>
+    </table>
+</div>
+<div class="eruda-section">
+    <h2 class="eruda-title">
+        Session Storage
+        <div class="eruda-btn refresh-session-storage" ontouchstart>
+            <span class="eruda-icon-repeat"></span>
+        </div>
+    </h2>
+    <table>
+        <tbody>
+        {{#if sessionStoreData}}
+            {{#each sessionStoreData}}
+                <tr>
+                    <td class="eruda-key">{{key}}</td>
+                    <td class="eruda-storage-val" data-key="{{key}}" data-type="session">{{val}}</td>
+                    <td class="eruda-control">
+                        <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="session"></span>
+                    </td>
+                </tr>
+            {{/each}}
+        {{else}}
+            <tr>
+                <td>Empty</td>
+            </tr>
+        {{/if}}
         </tbody>
     </table>
 </div>
