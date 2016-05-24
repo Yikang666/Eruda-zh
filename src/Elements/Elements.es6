@@ -275,11 +275,14 @@ function formatElName(data)
 
     if (id !== '') ret += `#${id}`;
 
-    util.each(className.split(/\s+/g), (val) =>
+    if (util.isStr(className))
     {
-        if (val.trim() === '') return;
-        ret += `.${val}`;
-    });
+        util.each(className.split(/\s+/g), (val) =>
+        {
+            if (val.trim() === '') return;
+            ret += `.${val}`;
+        });
+    }
 
     util.each(attributes, (attr) =>
     {
@@ -312,9 +315,12 @@ function formatChildNodes(nodes)
             });
             continue;
         }
+
+        var isSvg = !util.isStr(child.className);
+
         if (child.nodeType === 1 &&
             child.id !== 'eruda' &&
-            child.className.indexOf('eruda') < 0)
+            (isSvg || child.className.indexOf('eruda') < 0))
         {
             ret.push({
                 text: formatElName(child),

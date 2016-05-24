@@ -110,12 +110,15 @@ function formatElName(el)
     if (id !== '') ret += `<span style="color:#ffab66">#${id}</span>`;
 
     var classes = '';
-    util.each(className.split(/\s+/g), (val) =>
+    if (util.isStr(className))
     {
-        if (util.trim(val) === '') return;
+        util.each(className.split(/\s+/g), (val) =>
+        {
+            if (util.trim(val) === '') return;
 
-        classes += `.${val}`;
-    });
+            classes += `.${val}`;
+        });
+    }
 
     ret += `<span style="color:#8ed3fb">${classes}</span>`;
 
