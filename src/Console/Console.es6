@@ -37,7 +37,11 @@ export default class Console extends Tool
 
         CONSOLE_METHOD.forEach(name =>
         {
-            var origin = origConsole[name] = winConsole[name].bind(winConsole);
+            var origin = origConsole[name] = util.noop;
+            if (winConsole[name])
+            {
+                origin = origConsole[name] = winConsole[name].bind(winConsole);
+            }
 
             winConsole[name] = (...args) =>
             {
