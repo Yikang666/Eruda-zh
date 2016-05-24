@@ -254,14 +254,13 @@ export default class Elements extends Tool
     }
 }
 
+var regColor = /rgba?\((.*?)\)/g;
+
 function processStyleRules(style)
 {
     util.each(style, (val, key) =>
     {
-        if (util.startWith(val, 'rgb'))
-        {
-            style[key] = `<span class="eruda-style-color" style="background-color: ${val}"></span>${val}`;
-        }
+        style[key] = val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&');
     });
 }
 
@@ -368,7 +367,6 @@ function rmDefComputedStyle(computedStyle)
 var NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 var needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
-
 
 function addEvent(el, type, listener, useCapture = false)
 {

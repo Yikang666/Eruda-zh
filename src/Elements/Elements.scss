@@ -96,6 +96,7 @@
                     margin-bottom: 10px;
                     .rule {
                         padding-left: 2em;
+                        word-break: break-all;
                         span {
                             color: $red-dark;
                         }

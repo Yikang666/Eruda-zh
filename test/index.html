@@ -29,45 +29,43 @@
         <div>
             <img src="http://7xn2zy.com1.z0.glb.clouddn.com/blog_elf.jpg">
         </div>
-        <button>Test</button>
-        <script>
-            document.body.addEventListener('click', function ()
-            {
-                console.log('test');
-            }, false);
-            var test = document.getElementById('test-element');
-            test.addEventListener('click', function ()
-            {
-                console.log('test2');
-            }, false);
-            test.addEventListener('click', function ()
-            {
-                console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
-            }, true);
-            test.addEventListener('touchstart', function ()
-            {
-                console.log('test3');
-            }, false);
-            function req(url)
-            {
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', url);
-                xhr.send();
-            }
-            /*setTimeout(function ()
-            {
-                req('http://localhost:3000/test/style.css');
-            }, 1000);
-            setTimeout(function ()
-            {
-                req('http://localhost:3000/test/data.json');
-            }, 2000);
-            setTimeout(function ()
-            {
-                req('http://localhost:3000/test/empty.json');
-            }, 3000);*/
-        </script>
     </div>
+    <button>Test</button>
+    <button onclick="xxx();">Trigger Error</button>
+    <div style="height: 500px;"></div>
+    <script>
+        var test = document.getElementById('test-element');
+        test.addEventListener('click', function ()
+        {
+            console.log('test2');
+        }, false);
+        test.addEventListener('click', function ()
+        {
+            console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
+        }, true);
+        test.addEventListener('touchstart', function ()
+        {
+            console.log('test3');
+        }, false);
+        function req(url)
+        {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url);
+            xhr.send();
+        }
+        setTimeout(function ()
+        {
+            req('http://localhost:3000/test/style.css');
+        }, 1000);
+        setTimeout(function ()
+        {
+            req('http://localhost:3000/test/data.json');
+        }, 2000);
+        setTimeout(function ()
+        {
+            req('http://localhost:3000/test/empty.json');
+        }, 3000);
+    </script>
 </body>
 </html>
