@@ -11,11 +11,14 @@ export default class Request extends util.Emitter
         this._url = url;
         this._id = util.uniqId('request');
     }
-    handleSend()
+    handleSend(data)
     {
+        if (!util.isStr(data)) data = '';
+
         this.emit('send', this._id, {
             name: util.getFileName(this._url),
             url: this._url,
+            data: data,
             method: this._method,
             xhr: this._xhr
         });

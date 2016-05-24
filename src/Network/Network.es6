@@ -64,12 +64,12 @@ export default class Network extends Tool
             origOpen.apply(this, arguments);
         };
 
-        winXhrProto.send = function (...args)
+        winXhrProto.send = function (data)
         {
             var req = this.erudaRequest;
-            if (req) req.handleSend();
+            if (req) req.handleSend(data);
 
-            origSend.apply(this, args);
+            origSend.apply(this, arguments);
         };
     }
     restoreXhr()
@@ -93,6 +93,7 @@ export default class Network extends Tool
             type: 'unknown',
             subType: 'unknown',
             size: 0,
+            data: '',
             method: 'GET',
             startTime: util.now(),
             time: 0,
@@ -138,6 +139,7 @@ export default class Network extends Tool
 
             showSources('http', {
                 url: data.url,
+                data: data.data,
                 resTxt: data.resTxt,
                 type: data.type,
                 subType: data.subType,
