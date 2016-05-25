@@ -160,7 +160,7 @@ export default class DevTools extends util.Emitter
     }
     _initNavBar()
     {
-        this._navBar = new NavBar(this._$el.find('.eruda-nav-bar ul'));
+        this._navBar = new NavBar(this._$el.find('.eruda-nav-bar'));
         this._navBar.on('showTool', (name) => this.showTool(name));
     }
 }
