@@ -39,14 +39,17 @@ export default class Request extends util.Emitter
     }
     handleDone()
     {
-        var xhr = this._xhr;
+        var xhr = this._xhr,
+            resType = xhr.responseType;
+
+        var resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
 
         this.emit('update', this._id, {
             status: xhr.status,
             done: true,
             size: getSize(xhr),
             time: util.now(),
-            resTxt: xhr.responseText
+            resTxt: resTxt
         });
     }
 };

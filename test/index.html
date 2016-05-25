@@ -66,6 +66,11 @@
         {
             req('http://localhost:3000/test/empty.json');
         }, 3000);
+
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'arraybuffer';
+        xhr.open('GET', 'http://localhost:3000/test/data.json');
+        xhr.send();
     </script>
 </body>
 </html>
