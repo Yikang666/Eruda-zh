@@ -9,7 +9,8 @@ module.exports = {
     output: {
         path: __dirname + '/dist/',
         filename: 'eruda.js',
-        library: ['eruda']
+        library: ['eruda'],
+        libraryTarget: 'umd'
     },
     module: {
         loaders: [
