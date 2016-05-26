@@ -78,9 +78,10 @@ module.exports = {
         {
             el = document.createElement('div');
             document.documentElement.appendChild(el);
-            el.id = 'eruda';
-            el.className = 'eruda-container'
         }
+
+        el.id = 'eruda';
+        el.className = 'eruda-container';
 
         this._$el = util.$(el);
     },

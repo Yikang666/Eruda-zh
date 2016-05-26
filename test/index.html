@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Eruda</title>
     <link rel="stylesheet" href="style.css">
+
     <script>
         window.onerror = function (msg) {
             alert(msg);
         }
     </script>
     <script src="../dist/eruda.js"></script>
-    <script>eruda.init();</script>
 </head>
 <body>
     <div id="test-element" class="border" style="color:red">
@@ -72,5 +72,12 @@
         xhr.open('GET', 'http://localhost:3000/test/data.json');
         xhr.send();
     </script>
+    <script>
+        var el = document.createElement('div');
+        document.body.appendChild(el);
+        eruda.init({container: el});
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+    <script>FastClick.attach(document.body);</script>
 </body>
 </html>
