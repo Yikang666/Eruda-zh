@@ -7,7 +7,7 @@
         font-size: 14px;
         .code, .raw {
             background: #fff;
-            padding: $common-padding;
+            padding: $padding;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             min-height: 100%;
@@ -15,7 +15,7 @@
         .image {
             .breadcrumb {
                 background: #fff;
-                padding: $common-padding;
+                padding: $padding;
                 margin-bottom: 10px;
                 word-break: break-all;
             }
@@ -35,7 +35,7 @@
         .http {
             .breadcrumb {
                 background: #fff;
-                padding: $common-padding;
+                padding: $padding;
                 margin-bottom: 10px;
                 word-break: break-all;
             }
@@ -43,7 +43,7 @@
                 background: #fff;
                 h2 {
                     background: $blue;
-                    padding: $common-padding;
+                    padding: $padding;
                     color: #fff;
                     font-size: 16px;
                 }
@@ -60,7 +60,7 @@
             }
             .response, .data {
                 background: #fff;
-                padding: $common-padding;
+                padding: $padding;
                 margin-bottom: 10px;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
@@ -71,7 +71,7 @@
             line-height: 1.2;
             background: #fff;
             min-height: 100%;
-            padding: $common-padding 25px 10px;
+            padding: $padding 25px 10px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             &, ul {

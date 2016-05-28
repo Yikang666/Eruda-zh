@@ -1,13 +1,22 @@
 $box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .05), 0 1px 4px 0 rgba(0, 0, 0, .08), 0 3px 1px -2px rgba(0, 0, 0, .2);
-$common-padding: 10px;
+$border-radius: 4px;
 
-$blue: #76a2ee;
-$blue-light: #afc5ea;
-$gray: #b4b4b4;
-$gray-light: #f2f2f2;
-$gray-dark: #888;
-$red: #eda29b;
+$padding: 10px;
+
+$font-size: 14px;
+$font-size-s: 12px;
+$font-size-l: 16px;
+
+$anim-duration: .3s;
+
+// https://www.google.com/design/spec/style/color.html#color-color-palette
+$blue: #2196f3;
+$blue-light: #90caf9;
+$gray: #707d8b;
+$gray-light: #eceffe;
+$gray-dark: #263238;
+$red: #f44336;
 $red-dark: #f73c37;
-$green: #8de191;
-$yellow: #fff5c2;
+$green: #009688;
+$yellow: #ff9800;
 $yellow-dark: #ff9900;

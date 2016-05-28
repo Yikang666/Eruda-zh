@@ -13,30 +13,17 @@ import util from './lib/util'
 import config from './lib/config.es6'
 
 module.exports = {
-    init(options)
+    init(options = {})
     {
         require('./style/style.scss');
         require('./style/reset.scss');
         require('./style/icon.css');
 
-        options = options || {};
         util.defaults(options, {
             tool: ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features']
         });
         options.tool = util.toArr(options.tool).reverse();
         this._options = options;
-
-        this.config = config;
-        this.util = util;
-
-        this.Console = Console;
-        this.Elements = Elements;
-        this.Network = Network;
-        this.Sources = Sources;
-        this.Resources = Resources;
-        this.Info = Info;
-        this.Snippets = Snippets;
-        this.Features = Features;
 
         this._initContainer();
         this._initDevTools();
@@ -44,6 +31,8 @@ module.exports = {
         this._initSettings();
         this._initTools();
     },
+    config, util,
+    Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
     get(name)
     {
         return util.isUndef(name) ? this._devTools : this._devTools.get(name);
@@ -68,18 +57,13 @@ module.exports = {
     },
     _initContainer()
     {
-        var el;
+        let el = this._options.container;
 
-        var container = this._options.container;
-        if (util.isEl(container))
-        {
-            el = container;
-        } else
+        if (!el)
         {
             el = document.createElement('div');
             document.documentElement.appendChild(el);
         }
-
         el.id = 'eruda';
         el.className = 'eruda-container';
 
@@ -91,15 +75,15 @@ module.exports = {
     },
     _initEntryBtn()
     {
-        var entryBtn = this._entryBtn = new EntryBtn(this._$el);
+        let entryBtn = this._entryBtn = new EntryBtn(this._$el);
 
         entryBtn.on('click', () => this._devTools.toggle());
     },
     _initSettings()
     {
-        var devTools = this._devTools;
+        let devTools = this._devTools,
+            settings = new Settings();
 
-        var settings = new Settings();
         devTools.add(settings);
 
         settings.separator()
@@ -112,18 +96,15 @@ module.exports = {
     },
     _initTools()
     {
-        var tool = this._options.tool,
+        let tool = this._options.tool,
             devTools = this._devTools;
 
         tool.forEach(name =>
         {
-            var Tool = this[util.upperFirst(name)];
-
+            let Tool = this[util.upperFirst(name)];
             if (Tool) devTools.add(new Tool());
         });
 
         devTools.showTool(util.last(tool) || 'settings');
     }
 };
-
-

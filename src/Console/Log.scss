@@ -1,14 +1,17 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools { .console {
     .logs {
-        transform: translateZ(0);
+        @include overflow-auto(y);
         height: 100%;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        font-size: 14px;
+        font-size: $font-size;
         li {
-            padding: 10px;
+            background: #fff;
+            margin: 10px 0;
+            padding: $padding;
+            border-top: 1px solid $gray-light;
+            border-bottom: 1px solid $gray-light;
             &:after {
                 content: '';
                 display: block;
@@ -51,20 +54,17 @@
             }
             .log-content
             {
+                @include overflow-auto(x);
                 line-height: 20px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
             }
             &.input {
                 background: #fff;
-            }
-            &.log, &.output, &.info, &.dir {
-                border-bottom: 1px solid #b4b4b4;
             }
             &.html {
                 table {
                     width: 100%;
                     background: #fff;
+                    border-bottom: 1px solid $gray-light;
                     border-collapse: collapse;
                     th {
                         background: $blue;

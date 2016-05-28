@@ -4,7 +4,7 @@
 {{#if children}}
     <ul class="eruda-children">
         {{#each children}}
-            <li class="eruda-child" data-idx="{{idx}}">{{{text}}}</li>
+            <li class="eruda-child {{#if isCmt}}eruda-green{{/if}}" data-idx="{{idx}}">{{{text}}}</li>
         {{/each}}
     </ul>
 {{/if}}

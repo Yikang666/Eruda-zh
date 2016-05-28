@@ -304,12 +304,15 @@ function formatChildNodes(nodes)
 
     for (let i = 0, len = nodes.length; i < len; i++)
     {
-        var child = nodes[i];
-        if (child.nodeType === 3)
+        var child = nodes[i],
+            nodeType = child.nodeType;
+
+        if (nodeType === 3 || nodeType === 8)
         {
             var val = child.nodeValue.trim();
             if (val !== '') ret.push({
                 text: val,
+                isCmt: nodeType === 8,
                 idx: i
             });
             continue;
@@ -317,7 +320,7 @@ function formatChildNodes(nodes)
 
         var isSvg = !util.isStr(child.className);
 
-        if (child.nodeType === 1 &&
+        if (nodeType === 1 &&
             child.id !== 'eruda' &&
             (isSvg || child.className.indexOf('eruda') < 0))
         {

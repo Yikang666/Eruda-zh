@@ -2,22 +2,23 @@
 
 .dev-tools { .tools {
     .info {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        font-size: 14px;
+        font-size: $font-size;
         li {
-            overflow-x: auto;
-            border-bottom: 1px solid $gray;
+            background: #fff;
+            margin: 10px;
+            box-shadow: $box-shadow;
             .title, .content {
-                padding: 10px;
-            }
-            .content {
-                margin: 0;
+                padding: $padding;
             }
             .title {
                 padding-bottom: 0;
                 font-size: 16px;
                 color: $blue;
+            }
+            .content {
+                margin: 0;
+                user-select: text;
+                word-break: break-all;
             }
         }
     }

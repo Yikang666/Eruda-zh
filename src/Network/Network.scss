@@ -1,23 +1,23 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools {
     .network {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         .performance-timing {
-            padding: 10px;
+            padding: $padding;
             .inner-wrapper {
                 background: $blue;
                 .bar {
+                    @include overflow-auto(x);
                     border-bottom: 1px solid #fff;
-                    overflow-x: auto;
-                    -webkit-overflow-scrolling: touch;
                     span {
-                        font-size: 12px;
+                        font-size: $font-size-s;
                         white-space: nowrap;
                         color: #fff;
                         padding: 5px 0;
-                        background: $red-dark;
+                        background: $red;
                         display: inline-block;
                     }
                     &:last-child {
@@ -48,10 +48,10 @@
         }
         .requests, .entries {
             background: #fff;
-            border-bottom: 1px solid $gray;
+            border-bottom: 1px solid $gray-light;
             margin-bottom: 10px;
             li {
-                border-top: 1px solid $gray;
+                border-top: 1px solid $gray-light;
                 overflow: auto;
                 height: 41px;
                 -webkit-overflow-scrolling: touch;

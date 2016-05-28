@@ -1,14 +1,13 @@
 @import "../style/variable";
+@import "../style/mixin";
+
+$height: 55px;
+$item-width: 69px;
 
 .dev-tools {
     .nav-bar {
-        height: 50px;
-        overflow-y: auto;
-        position: absolute;
-        width: 100%;
-        -webkit-overflow-scrolling: touch;
-        left: 0;
-        top: 0;
+        @include absolute(100%, $height);
+        @include overflow-auto(y);
         box-shadow: $box-shadow;
         z-index: 100;
         background: $blue;
@@ -17,30 +16,28 @@
             li {
                 cursor: pointer;
                 display: inline-block;
-                height: 50px;
-                line-height: 50px;
-                width: 69px;
-                color: $gray-light;
-                font-size: 12px;
+                height: $height;
+                line-height: $height;
+                width: $item-width;
+                color: #fff;
+                font-size: $font-size-s;
                 text-align: center;
-                opacity: 0.5;
                 text-transform: capitalize;
-                transition: all .3s;
+                transition: all $anim-duration;
                 &.active {
                     color: #fff;
-                    opacity: 1;
                     background: $blue-light;
                 }
             }
         }
         .bottom-bar {
-            transition: left .3s;
+            transition: left $anim-duration;
             height: 3px;
             background: #fff;
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 69px;
+            width: $item-width;
         }
     }
 }

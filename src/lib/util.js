@@ -935,6 +935,45 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ startWith ------------------------------ */
+
+    var startWith = _.startWith = (function (exports)
+    {
+        /* Check if string starts with the given target string.
+         *
+         * |Name  |Type   |Desc                             |
+         * |------------------------------------------------|
+         * |str   |string |The string to search             |
+         * |prefix|string |String prefix                    |
+         * |return|boolean|True if string starts with prefix|
+         *
+         * ```javascript
+         * startWith('ab', 'a'); // -> true
+         * ```
+         */
+
+        exports = function (str, prefix)
+        {
+            return str.indexOf(prefix) === 0;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ isCrossOrig ------------------------------ */
+
+    var isCrossOrig = _.isCrossOrig = (function (exports)
+    {
+        var origin = window.location.origin;
+
+        function exports(url)
+        {
+            return !startWith(url, origin);
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ isEl ------------------------------ */
 
     var isEl = _.isEl = (function (exports)
@@ -1172,6 +1211,17 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ noop ------------------------------ */
+
+    var noop = _.noop = (function (exports)
+    {
+        /* A no-operation function. */
+
+        exports = function () {};
+
+        return exports;
+    })({});
+
     /* ------------------------------ now ------------------------------ */
 
     var now = _.now = (function (exports)
@@ -1367,6 +1417,42 @@ module.exports = (function ()
          * |methods|object  |Public methods                   |
          * |statics|object  |Static methods                   |
          * |return |function|Function used to create instances|
+         *
+         * ```javascript
+         * var People = Class({
+         *     initialize: function (name, age)
+         *     {
+         *         this.name = name;
+         *         this.age = age;
+         *     },
+         *     introduce: function ()
+         *     {
+         *         return 'I am ' + this.name + ', ' + this.age + ' years old.'.
+         *     }
+         * });
+         *
+         * var Student = People.extend({
+         *     initialize: function (name, age, school)
+         *     {
+         *         this.callSuper('initialize', name, age);
+         *
+         *         this.school = school.
+         *     },
+         *     introduce: function ()
+         *     {
+         *         return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
+         *     }
+         * }, {
+         *     is: function (obj)
+         *     {
+         *         return obj instanceof Student;
+          *    }
+         * });
+         *
+         * var a = new Student('allen', 17, 'Hogwarts');
+         * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
+         * Student.is(a); // -> true
+         * ```
          */
 
         var regCallSuper = /callSuper/;
@@ -2487,31 +2573,6 @@ module.exports = (function ()
 
             return ret === '' ? 'unknown' : ret;
         }
-
-        return exports;
-    })({});
-
-    /* ------------------------------ startWith ------------------------------ */
-
-    var startWith = _.startWith = (function (exports)
-    {
-        /* Check if string starts with the given target string.
-         *
-         * |Name  |Type   |Desc                             |
-         * |------------------------------------------------|
-         * |str   |string |The string to search             |
-         * |prefix|string |String prefix                    |
-         * |return|boolean|True if string starts with prefix|
-         *
-         * ```javascript
-         * startWith('ab', 'a'); // -> true
-         * ```
-         */
-
-        exports = function (str, prefix)
-        {
-            return str.indexOf(prefix) === 0;
-        };
 
         return exports;
     })({});

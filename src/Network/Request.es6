@@ -8,7 +8,7 @@ export default class Request extends util.Emitter
 
         this._xhr = xhr;
         this._method = method;
-        this._url = url;
+        this._url = fullUrl(url);
         this._id = util.uniqId('request');
     }
     handleSend(data)
@@ -32,7 +32,7 @@ export default class Request extends util.Emitter
         this.emit('update', this._id, {
             type: type.type,
             subType: type.subType,
-            size: getSize(xhr, true),
+            size: getSize(xhr, true, this._url),
             time: util.now(),
             resHeaders: getHeaders(xhr)
         });
@@ -47,7 +47,7 @@ export default class Request extends util.Emitter
         this.emit('update', this._id, {
             status: xhr.status,
             done: true,
-            size: getSize(xhr),
+            size: getSize(xhr, false, this._url),
             time: util.now(),
             resTxt: resTxt
         });
@@ -87,7 +87,7 @@ function getType(contentType)
     }
 }
 
-function getSize(xhr, headersOnly)
+function getSize(xhr, headersOnly, url)
 {
     var size = 0;
 
@@ -100,11 +100,17 @@ function getSize(xhr, headersOnly)
         }
     }
 
-    try {
-        size = util.toNum(xhr.getResponseHeader('Content-Length'));
-    } catch (e)
+    if (util.isCrossOrig(url))
     {
         getStrSize();
+    } else
+    {
+        try {
+            size = util.toNum(xhr.getResponseHeader('Content-Length'));
+        } catch (e)
+        {
+            getStrSize();
+        }
     }
 
     if (size === 0) getStrSize();
@@ -119,4 +125,13 @@ function lenToUtf8Bytes(str)
     var m = encodeURIComponent(str).match(/%[89ABab]/g);
 
     return str.length + (m ? m.length : 0);
+}
+
+var origin = window.location.origin;
+
+function fullUrl(url)
+{
+    if (util.startWith(url, 'http')) return url;
+
+    return origin + url;
 }

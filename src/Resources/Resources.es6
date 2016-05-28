@@ -177,7 +177,7 @@ export default class Resources extends Tool
            {
                var key = util.$(this).data('key');
 
-               util.cookie.remove(key);
+               delCookie(key);
                self.refreshCookie()._render();
            })
            .on('click', '.eruda-storage-val', function ()
@@ -222,7 +222,7 @@ export default class Resources extends Tool
             {
                 var url = util.$(this).attr('href');
 
-                if (!isCrossOrig(url))
+                if (!util.isCrossOrig(url))
                 {
                     e.preventDefault();
 
@@ -293,8 +293,34 @@ function getState(type, len)
     return 'eruda-ok';
 }
 
-var origin = window.location.origin;
+var {hostname, pathname} = window.location;
 
-var isCrossOrig = url => !util.startWith(url, origin);
+function delCookie(key)
+{
+    util.cookie.remove(key);
+
+    let hostNames = hostname.split('.'),
+        pathNames = pathname.split('/'),
+        domain = '',
+        pathLen = pathNames.length,
+        path;
+
+    for (let i = hostNames.length - 1; i >= 0; i--)
+    {
+        let hostName = hostNames[i];
+        if (hostName === '') continue;
+        domain = (domain === '') ? hostName : hostName + '.' + domain ;
+
+        path = '/';
+        util.cookie.remove(key, {domain, path});
+        for (let j = 0; j < pathLen; j++)
+        {
+            let pathName = pathNames[j];
+            if (pathName === '') continue;
+            path += pathName;
+            util.cookie.remove(key, {domain, path});
+        }
+    }
+}
 
 var sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';
