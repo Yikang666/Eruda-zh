@@ -2,7 +2,11 @@
 @import "../style/mixin";
 
 .dev-tools {
-    @include absolute();
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    bottom: 0;
     padding-top: 55px !important;
     background: #fff;
     z-index: 500;
