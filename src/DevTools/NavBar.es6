@@ -19,7 +19,7 @@ export default class NavBar extends util.Emitter
     add(name)
     {
         this._len++;
-        this._$ul.prepend(`<li class="${name}">${name}</li>`);
+        this._$ul.prepend(`<li class="${name}" ontouchstart>${name}</li>`);
         this._resetWidth();
     }
     remove(name)

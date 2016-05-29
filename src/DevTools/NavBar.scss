@@ -23,9 +23,11 @@ $item-width: 69px;
                 font-size: $font-size-s;
                 text-align: center;
                 text-transform: capitalize;
-                transition: all $anim-duration;
+                transition: background $anim-duration;
+                &:active {
+                    background: $blue-dark;
+                }
                 &.active {
-                    color: #fff;
                     background: $blue-light;
                 }
             }

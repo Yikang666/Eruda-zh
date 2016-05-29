@@ -133,5 +133,7 @@ function fullUrl(url)
 {
     if (util.startWith(url, 'http')) return url;
 
+    if (!util.startWith(url, '/')) url = '/' + url;
+
     return origin + url;
 }

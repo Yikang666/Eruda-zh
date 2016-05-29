@@ -87,11 +87,11 @@ module.exports = {
         devTools.add(settings);
 
         settings.separator()
-                .add(this._entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
+                .switch(this._entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
                 .separator()
-                .add(devTools.config, 'activeEruda', 'Always Activated')
-                .add(devTools.config, 'transparent', 'Transparent')
-                .add(devTools.config, 'halfScreen', 'Half Screen Size')
+                .switch(devTools.config, 'activeEruda', 'Always Activated')
+                .switch(devTools.config, 'transparent', 'Transparent')
+                .switch(devTools.config, 'halfScreen', 'Half Screen Size')
                 .separator();
     },
     _initTools()

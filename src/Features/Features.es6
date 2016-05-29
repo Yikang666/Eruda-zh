@@ -32,19 +32,21 @@ export default class Features extends Tool
 
         modernizr.testRunner();
 
+        let i = 0,
+            featureNum = featureNames.length;
+
         util.each(featureNames, (feature) =>
         {
             if (specialNames[feature]) feature = specialNames[feature];
             feature = feature.replace(/\//g, '');
 
-            modernizr.on(feature, (result) => this._add(feature, result));
+            modernizr.on(feature, result =>
+            {
+                this._features[feature] = result;
+                i++;
+                if (i === featureNum) this._render();
+            });
         });
-    }
-    _add(name, result)
-    {
-        this._features[name] = result;
-
-        this._render();
     }
     _render()
     {

@@ -39,8 +39,9 @@
                 border-radius: 50%;
                 font-size: 12px;
                 cursor: pointer;
+                transition: color $anim-duration;
                 &:active {
-                    color: $gray-light;
+                    color: $gray-dark;
                 }
             }
         }
@@ -82,9 +83,13 @@
                 padding: 10px;
                 word-break: break-all;
                 .icon-trash {
-                    color: $red-dark;
+                    color: $red;
                     display: inline-block;
                     padding: 5px;
+                    transition: color $anim-duration;
+                    &:active {
+                        color: $red-dark;
+                    }
                 }
                 &.key {
                     white-space: nowrap;

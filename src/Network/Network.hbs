@@ -45,7 +45,7 @@
 {{#if requests}}
     <ul class="eruda-requests">
         {{#each requests}}
-            <li class="eruda-request" data-id="{{@key}}">
+            <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
                 <span>{{name}}</span>
                 <span>{{status}}</span>
                 <span>{{method}}</span>

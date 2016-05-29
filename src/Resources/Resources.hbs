@@ -13,7 +13,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td class="eruda-storage-val" data-key="{{key}}" data-type="local">{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="local"></span>
+                            <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="local" ontouchstart></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -40,7 +40,7 @@
                     <td class="eruda-key">{{key}}</td>
                     <td class="eruda-storage-val" data-key="{{key}}" data-type="session">{{val}}</td>
                     <td class="eruda-control">
-                        <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="session"></span>
+                        <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="session" ontouchstart></span>
                     </td>
                 </tr>
             {{/each}}
@@ -67,7 +67,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-icon-trash delete-cookie" data-key="{{key}}"></span>
+                            <span class="eruda-icon-trash delete-cookie" data-key="{{key}}" ontouchstart></span>
                         </td>
                     </tr>
                 {{/each}}

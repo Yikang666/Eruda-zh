@@ -56,6 +56,11 @@
                 height: 41px;
                 -webkit-overflow-scrolling: touch;
                 white-space: nowrap;
+                &.error {
+                    span {
+                        color: $red;
+                    }
+                }
                 span {
                     display: inline-block;
                     line-height: 40px;

@@ -20,6 +20,7 @@
             .btn {
                 background: $red;
                 cursor: pointer;
+                transition: background $anim-duration;
             }
             .btn:active {
                 background: $red-dark;

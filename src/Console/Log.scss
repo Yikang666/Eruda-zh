@@ -37,7 +37,7 @@
                     color: $blue;
                 }
                 .icon-times-circle {
-                    color: $red-dark;
+                    color: $red;
                 }
                 .icon-exclamation-triangle {
                     color: $yellow-dark;
@@ -79,22 +79,22 @@
                 }
             }
             &.error {
-                background: #fff0f0;
-                color: #f00;
-                border-top: 1px solid #ffd7d7;
-                border-bottom: 1px solid #ffd7d7;
+                background: $red-light;
+                color: $red;
+                border-top: 1px solid $red;
+                border-bottom: 1px solid $red;
                 .stack {
-                    color: #000;
+                    color: $gray-dark;
                     padding-left: 1.2em;
                 }
                 .times {
-                    background: #f00;
+                    background: $red;
                 }
             }
             &.warn {
                 background: #fffbe6;
-                border-top: 1px solid #fff5c2;
-                border-bottom: 1px solid #fff5c2;
+                border-top: 1px solid $yellow;
+                border-bottom: 1px solid $yellow;
             }
             &.info {
                 color: $blue;

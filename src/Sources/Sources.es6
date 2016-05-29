@@ -155,7 +155,8 @@ export default class Sources extends Tool
     {
         var val = this._data.val;
 
-        val.hasResTxt = (val.resTxt.trim() !== '');
+        if (val.resTxt.trim() === '') delete val.resTxt;
+        if (util.isEmpty(val.resHeaders)) delete val.resHeaders;
 
         this._renderHtml(this._httpTpl(this._data.val));
     }

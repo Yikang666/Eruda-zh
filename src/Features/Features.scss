@@ -1,9 +1,9 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools {
     .features {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        @include overflow-auto(y);
         ul {
             margin-top: 5px;
             li {
@@ -11,6 +11,7 @@
                 float: left;
                 padding: 5px;
                 .inner-wrapper {
+                    @include overflow-auto(x);
                     box-shadow: $box-shadow;
                     font-size: 12px;
                     text-decoration: underline;
@@ -20,11 +21,16 @@
                     border-radius: 4px;
                     text-align: center;
                     background: $red;
-                    overflow-x: auto;
-                    -webkit-overflow-scrolling: touch;
+                    transition: background $anim-duration;
+                    &:active {
+                        background: $red-dark;
+                    }
                     &.ok {
                         background: #fff;
                         color: $gray;
+                        &:active {
+                            background: $gray-light;
+                        }
                     }
                 }
             }
@@ -42,6 +48,10 @@
             text-decoration: none;
             text-align: center;
             margin-top: 10px;
+            transition: background $anim-duration;
+            &:active {
+                background: $blue-dark;
+            }
         }
     }
 } }

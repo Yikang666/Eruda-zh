@@ -19,7 +19,7 @@ export default class Settings extends Tool
 
         this._bindEvent();
     }
-    add(config, key, desc)
+    switch(config, key, desc)
     {
         this._settings.push({
             config: config,

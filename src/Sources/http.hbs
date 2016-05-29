@@ -7,16 +7,22 @@
         <h2>Response Headers</h2>
         <table class="eruda-headers">
             <tbody>
-                {{#each resHeaders}}
+                {{#if resHeaders}}
+                    {{#each resHeaders}}
+                        <tr>
+                            <td class="eruda-key">{{@key}}</td>
+                            <td>{{.}}</td>
+                        </tr>
+                    {{/each}}
+                {{else}}
                     <tr>
-                        <td class="eruda-key">{{@key}}</td>
-                        <td>{{.}}</td>
+                        <td>Empty</td>
                     </tr>
-                {{/each}}
+                {{/if}}
             </tbody>
         </table>
     </div>
-    {{#if hasResTxt}}
+    {{#if resTxt}}
         <pre class="eruda-response">{{resTxt}}</pre>
     {{/if}}
 </div>

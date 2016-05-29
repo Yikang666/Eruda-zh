@@ -530,26 +530,27 @@ module.exports = (function ()
         return exports;
     })({});
 
-    /* ------------------------------ isArr ------------------------------ */
+    /* ------------------------------ isArgs ------------------------------ */
 
-    var isArr = _.isArr = (function (exports)
+    var isArgs = _.isArgs = (function (exports)
     {
-        /* Check if value is an `Array` object.
+        /* Check if value is classified as an arguments object.
          *
-         * |Name  |Type   |Desc                              |
-         * |-------------------------------------------------|
-         * |val   |*      |The value to check                |
-         * |return|boolean|True if value is an `Array` object|
+         * |Name  |Type   |Desc                                |
+         * |---------------------------------------------------|
+         * |value |*      |Value to check                      |
+         * |return|boolean|True if value is an arguments object|
          *
          * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
+         * (function () {
+         *     isArgs(arguments); // -> true
+         * })();
          * ```
          */
 
-        exports = Array.isArray || function (val)
+        exports = function (val)
         {
-            return objToStr(val) === '[object Array]';
+            return objToStr(val) === '[object Arguments]';
         };
 
         return exports;
@@ -909,6 +910,31 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ isArr ------------------------------ */
+
+    var isArr = _.isArr = (function (exports)
+    {
+        /* Check if value is an `Array` object.
+         *
+         * |Name  |Type   |Desc                              |
+         * |-------------------------------------------------|
+         * |val   |*      |The value to check                |
+         * |return|boolean|True if value is an `Array` object|
+         *
+         * ```javascript
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         * ```
+         */
+
+        exports = Array.isArray || function (val)
+        {
+            return objToStr(val) === '[object Array]';
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ isBool ------------------------------ */
 
     var isBool = _.isBool = (function (exports)
@@ -993,6 +1019,38 @@ module.exports = (function ()
         exports = function (val)
         {
             return !!(val && val.nodeType === 1);
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ isEmpty ------------------------------ */
+
+    var isEmpty = _.isEmpty = (function (exports)
+    {
+        /* Check if value is an empty object or array.
+         *
+         * |Name  |Type   |Desc                  |
+         * |-------------------------------------|
+         * |val   |*      |Value to check        |
+         * |return|boolean|True if value is empty|
+         *
+         * ```javascript
+         * isEmpty([]); // -> true
+         * isEmpty({}); // -> true
+         * ```
+         */
+
+        exports = function (val)
+        {
+            if (val == null) return true;
+
+            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
+            {
+                return val.length === 0;
+            }
+
+            return keys(val).length === 0;
         };
 
         return exports;

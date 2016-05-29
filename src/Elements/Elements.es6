@@ -249,7 +249,7 @@ export default class Elements extends Tool
 
         var settings = this._parent.get('settings');
         settings.text('Elements')
-                .add(cfg, 'overrideEventTarget', 'Catch Event Listeners')
+                .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
                 .separator();
     }
 }
@@ -326,6 +326,7 @@ function formatChildNodes(nodes)
         {
             ret.push({
                 text: formatElName(child),
+                isEl: true,
                 idx: i
             });
         }

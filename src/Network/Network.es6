@@ -118,6 +118,8 @@ export default class Network extends Tool
         target.time = target.time - target.startTime;
         target.displayTime = formatTime(target.time);
 
+        if (target.done && (target.status < 200 || target >= 300)) target.hasErr = true;
+
         this._render();
     }
     _bindEvent()
@@ -306,9 +308,9 @@ export default class Network extends Tool
 
         var settings = this._parent.get('settings');
         settings.text('Network')
-                .add(cfg, 'overrideXhr', 'Catch Xhr Requests')
-                .add(cfg, 'hideXhrResource', 'Hide Xhr Resource Timing')
-                .add(cfg, 'disablePerformance', 'Disable Performance Timing')
+                .switch(cfg, 'overrideXhr', 'Catch Xhr Requests')
+                .switch(cfg, 'hideXhrResource', 'Hide Xhr Resource Timing')
+                .switch(cfg, 'disablePerformance', 'Disable Performance Timing')
                 .separator();
     }
     _render()
@@ -319,7 +321,7 @@ export default class Network extends Tool
 
         var renderData = {entries: this._resourceTimingData};
 
-        if (util.keys(this._requests).length > 0)
+        if (!util.isEmpty(this._requests))
         {
             renderData.requests = this._requests;
         }
