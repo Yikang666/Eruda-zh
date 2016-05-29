@@ -122,32 +122,33 @@ export default class DevTools extends util.Emitter
         var cfg = this.config = config.create('eruda-dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
-            transparent: false,
-            halfScreen: false,
+            transparency: '100%',
+            displaySize: '100%',
             activeEruda: false
         }));
 
-        if (cfg.get('transparent')) this._setTransparency(true);
-        if (cfg.get('halfScreen')) this._setHalfScreen(true);
+        this._setTransparency(cfg.get('transparency'));
+        this._setDisplaySize(cfg.get('displaySize'));
 
         cfg.on('change', (key, val) =>
         {
             switch (key)
             {
-                case 'transparent': return this._setTransparency(val);
-                case 'halfScreen': return this._setHalfScreen(val);
+                case 'transparency': return this._setTransparency(val);
+                case 'displaySize': return this._setDisplaySize(val);
                 case 'activeEruda': return activeEruda(val);
             }
         });
     }
-    _setTransparency(flag)
+    _setTransparency(opacity)
     {
-        this._opacity = flag ? 0.7 : 1;
-        if (this._isShow) this._$el.css({opacity: this._opacity});
+        opacity = +opacity.replace('%', '') / 100;
+        this._opacity = opacity;
+        if (this._isShow) this._$el.css({opacity});
     }
-    _setHalfScreen(flag)
+    _setDisplaySize(height)
     {
-        this._$el.css({height: flag ? '50%': '100%'});
+        this._$el.css({height});
     }
     _appendTpl()
     {

@@ -12,11 +12,38 @@
             color: $gray-dark;
             font-size: 12px;
         }
-        .switch {
-            padding: 10px;
+        .select .head, .switch {
+            padding: $padding;
             background: #fff;
-            font-size: 14px;
+            font-size: $font-size;
             border-bottom: 1px solid $gray-light;
+        }
+        .select .head {
+            transition: background $anim-duration, color $anim-duration;
+            span {
+                float: right;
+            }
+            &:active {
+                background: $blue;
+                color: #fff;
+            }
+        }
+        .select ul {
+            display: none;
+            &.open {
+                display: block;
+            }
+            li {
+                padding: $padding;
+                background: $gray-light;
+                transition: background $anim-duration, color $anim-duration;
+                &:active {
+                    background: $blue;
+                    color: #fff;
+                }
+            }
+        }
+        .switch {
             .checkbox {
                 float: right;
                 position: relative;
