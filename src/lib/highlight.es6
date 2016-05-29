@@ -33,7 +33,7 @@ export default function highlight(str, lang)
 
     str = str.replace(/___(?!subtmpl)\w+?___/g, function($0)
     {
-        var end = $0.substr(3, 3) ==='end',
+        var end = $0.substr(3, 3) === 'end',
             tag = (!end? $0.substr(3) : $0.substr(6)).replace(/_/g,''),
             lastTag = lvls.length > 0 ? lvls[lvls.length - 1] : null;
 
@@ -65,6 +65,7 @@ export default function highlight(str, lang)
         str = str.replace(/___subtmpl\d+___/g, function($tmpl)
         {
             var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, "$1"), 10);
+
             return subLangs[i];
         });
     });
@@ -73,9 +74,8 @@ export default function highlight(str, lang)
 };
 
 var style = {
-    code: 'background-color:#ffffff;color:#555;',
-    comment: 'color:#969896',
-    string: 'color:#183691',
+    comment: 'color:#63a35c;',
+    string: 'color:#183691;',
     number: 'color:#0086b3;',
     keyword: 'color:#a71d5d;',
     operators: 'color:#a71d5d;'
@@ -96,8 +96,8 @@ language.html = {
     comment: {re: /(&lt;!\-\-([\s\S]*?)\-\-&gt;)/g, style: 'comment'},
     tag: {re: /(&lt;\/?\w(.|\n)*?\/?&gt;)/g, style: 'keyword', embed: ['string']},
     string: language.js.string,
-    css: {re: /(?:&lt;style.*?&gt;)([\s\S]+?)(?:&lt;\/style&gt;)/gi, language: 'css'},
-    script: {re: /(?:&lt;script.*?&gt;)([\s\S]+?)(?:&lt;\/script&gt;)/gi, language: 'js'}
+    css: {re: /(?:&lt;style.*?&gt;)([\s\S]*)?(?:&lt;\/style&gt;)/gi, language: 'css'},
+    script: {re: /(?:&lt;script.*?&gt;)([\s\S]*?)(?:&lt;\/script&gt;)/gi, language: 'js'}
 };
 
 language.css = {

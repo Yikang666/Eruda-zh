@@ -1,4 +1,5 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools {
     .sources {
@@ -12,13 +13,12 @@
             -webkit-overflow-scrolling: touch;
             min-height: 100%;
         }
+        .code {
+            font-family: $font-family-code;
+            font-size: $font-size-s;
+        }
         .image {
-            .breadcrumb {
-                background: #fff;
-                padding: $padding;
-                margin-bottom: 10px;
-                word-break: break-all;
-            }
+            @include breadcrumb();
             .img-container {
                 text-align: center;
                 img {
@@ -33,12 +33,7 @@
             }
         }
         .http {
-            .breadcrumb {
-                background: #fff;
-                padding: $padding;
-                margin-bottom: 10px;
-                word-break: break-all;
-            }
+            @include breadcrumb();
             .section {
                 background: #fff;
                 h2 {
@@ -67,7 +62,8 @@
             }
         }
         .json {
-            font-size: 14px;
+            font-family: $font-family-code;
+            font-size: $font-size-s;
             line-height: 1.2;
             background: #fff;
             min-height: 100%;
@@ -123,13 +119,12 @@
                 font-family: sans-serif;
                 position: absolute;
                 left: -15px;
-                top: 0;
+                top: -2px;
             }
             .collapsed:before {
                 content: "+";
                 font-size: 1.5em;
                 color: #000;
-                top: 1px;
             }
             li .collapsed ~ .close:before {
                 content: "... ";

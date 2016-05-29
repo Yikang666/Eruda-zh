@@ -9,15 +9,7 @@
             @include overflow-auto(y);
             height: 100%;
         }
-        .breadcrumb {
-            background: #fff;
-            margin-bottom: 10px;
-            word-break: break-all;
-            padding: $padding;
-            font-size: $font-size-l;
-            min-height: 40px;
-            border-bottom: 1px solid $gray-light;
-        }
+        @include breadcrumb();
         .section {
             h2 {
                 background: $blue;

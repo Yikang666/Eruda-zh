@@ -16,18 +16,25 @@ export default class JsonViewer
     }
     _bindEvent()
     {
-        this._$el.on('click', '.eruda-expanded', function ()
+        this._$el.on('click', 'li', function (e)
         {
-            var $this = util.$(this);
+            var $this = util.$(this),
+                $firstSpan = util.$(this).find('span').eq(0);
 
-            $this.parent().find('ul').eq(0).hide();
-            $this.addClass('eruda-collapsed');
-        }).on('click', '.eruda-expanded.eruda-collapsed', function ()
-        {
-            var $this = util.$(this);
+            if (!$firstSpan.hasClass('eruda-expanded')) return;
 
-            $this.rmClass('eruda-collapsed');
-            $this.parent().find('ul').eq(0).show();
+            e.stopPropagation();
+
+            var $ul = $this.find('ul').eq(0);
+            if ($firstSpan.hasClass('eruda-collapsed'))
+            {
+                $firstSpan.rmClass('eruda-collapsed');
+                $ul.show();
+            } else
+            {
+                $firstSpan.addClass('eruda-collapsed');
+                $ul.hide();
+            }
         });
     }
 }

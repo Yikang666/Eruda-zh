@@ -18,12 +18,12 @@
                 text-align: center;
             }
             .btn {
-                background: $red;
+                background: $blue;
                 cursor: pointer;
                 transition: background $anim-duration;
             }
             .btn:active {
-                background: $red-dark;
+                background: $blue-dark;
             }
             .description {
                 background: #fff;

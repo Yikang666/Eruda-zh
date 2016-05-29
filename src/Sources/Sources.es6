@@ -13,7 +13,6 @@ export default class Sources extends Tool
         require('./Sources.scss');
 
         this.name = 'sources';
-        this._isInit = false;
 
         this._loadTpl();
     }
@@ -28,8 +27,7 @@ export default class Sources extends Tool
     {
         if (type === 'img')
         {
-            // _isInit is required to set true for async process.
-            this._isInit = true;
+            this._isFetchingData = true;
 
             var img = new Image();
 
@@ -37,6 +35,7 @@ export default class Sources extends Tool
 
             img.onload = function ()
             {
+                self._isFetchingData = false;
                 self._data = {
                     type: 'img',
                     val: {
@@ -47,6 +46,10 @@ export default class Sources extends Tool
                 };
 
                 self._render();
+            };
+            img.onerror = function ()
+            {
+                self._isFetchingData = false;
             };
 
             img.src = val;
@@ -64,11 +67,14 @@ export default class Sources extends Tool
     {
         super.show();
 
-        if (!this._isInit) this._reset();
+        if (!this._data && !this._isFetchingData)
+        {
+            this._renderDef();
+        }
 
         return this;
     }
-    _reset()
+    _renderDef()
     {
         if (this._html)
         {
@@ -89,14 +95,17 @@ export default class Sources extends Tool
             if (err) return;
 
             this._html = data;
-            this._reset();
+            this._renderDef();
         });
     }
     _bindEvent()
     {
         this._parent.on('showTool', (name, lastTool) =>
         {
-            if (name !== this.name && lastTool.name === this.name) this._reset();
+            if (name !== this.name && lastTool.name === this.name)
+            {
+                delete this._data;
+            }
         });
 
         this._$el.on('click', '.eruda-http .eruda-response', () =>
@@ -210,5 +219,7 @@ export default class Sources extends Tool
         if (html === this._lastHtml) return;
         this._lastHtml = html;
         this._$el.html(html);
+        // Need setTimeout to make it work
+        setTimeout(() => this._$el.get(0).scrollTop = 0, 0);
     }
 }
