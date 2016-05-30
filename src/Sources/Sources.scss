@@ -3,14 +3,11 @@
 
 .dev-tools { .tools {
     .sources {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        font-size: 14px;
+        @include overflow-auto(y);
         .code, .raw {
+            @include overflow-auto(x);
             background: #fff;
             padding: $padding;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             min-height: 100%;
         }
         .code {
@@ -54,22 +51,20 @@
                 }
             }
             .response, .data {
+                @include overflow-auto(x);
                 background: #fff;
                 padding: $padding;
                 margin-bottom: 10px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
             }
         }
         .json {
+            @include overflow-auto(x);
             font-family: $font-family-code;
             font-size: $font-size-s;
             line-height: 1.2;
             background: #fff;
             min-height: 100%;
             padding: $padding 25px 10px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             &, ul {
                 list-style: none !important;
             }

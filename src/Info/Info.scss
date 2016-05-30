@@ -1,8 +1,9 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools {
     .info {
-        font-size: $font-size;
+        @include overflow-auto(y);
         li {
             background: #fff;
             margin: 10px;
@@ -12,7 +13,7 @@
             }
             .title {
                 padding-bottom: 0;
-                font-size: 16px;
+                font-size: $font-size-l;
                 color: $blue;
             }
             .content {

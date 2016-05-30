@@ -68,12 +68,6 @@ export default class Elements extends Tool
         if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
         if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
     }
-    destroy()
-    {
-        super.destroy();
-
-        this.restoreEventTarget();
-    }
     _back()
     {
         if (this._curEl === this._htmlEl) return;
@@ -167,6 +161,8 @@ export default class Elements extends Tool
     }
     _setEl(el)
     {
+        if (isErudaEl(el)) return;
+
         this._curEl = el;
         this._curCssStore = new CssStore(el);
         this._highlight.setEl(el);
@@ -410,3 +406,18 @@ function rmEvent(el, type, listener, useCapture = false)
 }
 
 var getWinEventProto = () => (window.EventTarget && window.EventTarget.prototype) || window.Node.prototype;
+
+function isErudaEl(el)
+{
+    let parentNode = el.parentNode;
+
+    if (!parentNode) return false;
+
+    while (parentNode)
+    {
+        parentNode = parentNode.parentNode;
+        if (parentNode && parentNode.id === 'eruda') return true;
+    }
+
+    return false;
+}

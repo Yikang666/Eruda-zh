@@ -79,11 +79,6 @@ export default class Network extends Tool
         if (this._origOpen) winXhrProto.open = this._origOpen;
         if (this._origSend) winXhrProto.send = this._origSend;
     }
-    destroy()
-    {
-        super.destroy();
-        this.restoreXhr();
-    }
     _addReq(id, data)
     {
         util.defaults(data, {

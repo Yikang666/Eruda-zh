@@ -3,8 +3,7 @@
 
 .dev-tools { .tools {
     .network {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        @include overflow-auto(y);
         .performance-timing {
             padding: $padding;
             .inner-wrapper {
@@ -46,15 +45,19 @@
                 }
             }
         }
+        .title {
+            background: $gray;
+            padding: $padding;
+            color: #fff;
+        }
         .requests, .entries {
             background: #fff;
             border-bottom: 1px solid $gray-light;
             margin-bottom: 10px;
             li {
+                @include overflow-auto(x);
                 border-top: 1px solid $gray-light;
-                overflow: auto;
                 height: 41px;
-                -webkit-overflow-scrolling: touch;
                 white-space: nowrap;
                 &.error {
                     span {
@@ -66,13 +69,17 @@
                     line-height: 40px;
                     height: 40px;
                     padding: 0 10px;
-                    font-size: 14px;
+                    font-size: $font-size-s;
                     vertical-align: top;
                 }
                 &:nth-child(even) {
                     background: $gray-light;
                 }
             }
+        }
+        .entries {
+            @include overflow-auto(y);
+            max-height: 200px;
         }
     }
 } }

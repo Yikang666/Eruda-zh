@@ -58,33 +58,11 @@ export default class DevTools extends util.Emitter
 
         return this;
     }
-    remove(name)
-    {
-        var tool = this._tools[name];
-
-        delete this._tools[name];
-        this._navBar.remove(name);
-
-        tool.destroy();
-        if (tool.active)
-        {
-            var keys = util.keys(this._tools);
-            if (keys.length > 0) this.showTool(keys[0]);
-        }
-
-        return this;
-    }
     get(name)
     {
         var tool = this._tools[name];
 
         if (tool) return tool;
-    }
-    destroy()
-    {
-        util.each(this._tools, (tool, key) => this.remove(key));
-        this._navBar.destroy();
-        this._$el.remove();
     }
     showTool(name)
     {

@@ -1,9 +1,9 @@
 @import "../style/variable";
+@import "../style/mixin";
 
 .dev-tools { .tools {
     .settings {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        @include overflow-auto(y);
         .separator {
             height: 10px;
         }

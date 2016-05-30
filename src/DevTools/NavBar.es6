@@ -22,16 +22,6 @@ export default class NavBar extends util.Emitter
         this._$ul.prepend(`<li class="${name}" ontouchstart>${name}</li>`);
         this._resetWidth();
     }
-    remove(name)
-    {
-        this._len--;
-        this._$ul.find(`li.${name}`).remove();
-        this._resetWidth();
-    }
-    destroy()
-    {
-        this._$el.remove();    
-    }
     activeTool(name)
     {
         var self = this;

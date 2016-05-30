@@ -16,8 +16,4 @@ export default class Tool
 
         return this;
     }
-    destroy()
-    {
-        this._$el.remove();
-    }
 }

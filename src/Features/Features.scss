@@ -5,6 +5,7 @@
     .features {
         @include overflow-auto(y);
         ul {
+            @include clear-float();
             margin-top: 5px;
             li {
                 width: 33.3%;
@@ -33,11 +34,6 @@
                         }
                     }
                 }
-            }
-            &::after {
-                display: block;
-                content: '';
-                clear: both;
             }
         }
         .html5test {

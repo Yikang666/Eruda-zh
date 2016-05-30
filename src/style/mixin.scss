@@ -28,3 +28,11 @@
         border-bottom: 1px solid $gray-light;
     }
 }
+
+@mixin clear-float {
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}

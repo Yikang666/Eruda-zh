@@ -26,6 +26,7 @@ export default class Select extends util.Emitter
         this._clickListener = function (e)
         {
             e.preventDefault();
+            e.stopImmediatePropagation();
         };
     }
     enable()

@@ -30,6 +30,7 @@
 {{/if}}
 
 {{#if entries}}
+    <div class="eruda-title">ResourceTiming</div>
     <ul class="eruda-entries">
         {{#each entries}}
             <li class="eruda-entry" data-idx="{{@index}}">
@@ -43,6 +44,7 @@
 {{/if}}
 
 {{#if requests}}
+    <div class="eruda-title">XMLHttpRequest</div>
     <ul class="eruda-requests">
         {{#each requests}}
             <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
