@@ -4,7 +4,7 @@
 
 Console for Mobile Browsers.
 
-![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot2.jpg)
+![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot3.jpg)
 
 ## Why
 
@@ -12,7 +12,7 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 ## Demo
 
-![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode.png)
+![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode2.png)
 
 Browse it on your phone: [http://liriliri.github.io/eruda/](http://liriliri.github.io/eruda/)
 
