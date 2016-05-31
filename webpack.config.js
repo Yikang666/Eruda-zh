@@ -1,8 +1,11 @@
 var autoprefixer = require('autoprefixer'),
     classPrefix = require('postcss-class-prefix'),
+    webpack = require('webpack'),
+    pkg = require('./package.json'),
     path = require('path');
 
-var nodeModDir = path.resolve('./node_modules/') + '/';
+var nodeModDir = path.resolve('./node_modules/') + '/',
+    banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage;
 
 module.exports = {
     entry: './src/index.es6',
@@ -44,6 +47,9 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new webpack.BannerPlugin(banner)
+    ],
     postcss: function ()
     {
         return [classPrefix('eruda-'), autoprefixer];

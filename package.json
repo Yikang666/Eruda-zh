@@ -5,7 +5,7 @@
   "main": "dist/eruda.js",
   "scripts": {
     "dev": "webpack --watch",
-    "release": "webpack & webpack -p --output-filename eruda.min.js & uglifyjs dist/eruda.min.js -o dist/eruda.min.js --mangle",
+    "release": "webpack & webpack -p --output-filename eruda.min.js & uglifyjs dist/eruda.min.js -o dist/eruda.min.js --mangle --comments all",
     "serve": "nws -p 3000"
   },
   "repository": {
