@@ -180,6 +180,25 @@ export default class Resources extends Tool
                delCookie(key);
                self.refreshCookie()._render();
            })
+           .on('click', '.eruda-clear-storage', function ()
+           {
+               var type = util.$(this).data('type');
+
+               if (type === 'local')
+               {
+                   util.each(self._localStoreData, val => localStorage.removeItem(val.key));
+                   self.refreshLocalStorage()._render();
+               } else
+               {
+                   util.each(self._sessionStoreData, val => sessionStorage.removeItem(val.key));
+                   self.refreshSessionStorage()._render();
+               }
+           })
+           .on('click', '.eruda-clear-cookie', () =>
+           {
+               util.each(this._cookieData, val => delCookie(val.key));
+               this.refreshCookie()._render();
+           })
            .on('click', '.eruda-storage-val', function ()
            {
                var $this = util.$(this),

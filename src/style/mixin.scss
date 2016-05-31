@@ -36,3 +36,24 @@
         clear: both;
     }
 }
+
+@mixin right-circle-btn {
+    .btn {
+        margin-left: 10px;
+        float: right;
+        display: inline-block;
+        background: #fff;
+        color: $gray;
+        text-align: center;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        border-radius: 50%;
+        font-size: 12px;
+        cursor: pointer;
+        transition: color $anim-duration;
+        &:active {
+            color: $gray-dark;
+        }
+    }
+}

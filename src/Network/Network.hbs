@@ -43,19 +43,28 @@
     </ul>
 {{/if}}
 
-{{#if requests}}
-    <div class="eruda-title">XMLHttpRequest</div>
+{{#if displayReq}}
+    <div class="eruda-title">
+        XMLHttpRequest
+        <div class="eruda-btn eruda-clear-xhr" ontouchstart>
+            <span class="eruda-icon-ban"></span>
+        </div>
+    </div>
     <ul class="eruda-requests">
-        {{#each requests}}
-            <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
-                <span>{{name}}</span>
-                <span>{{status}}</span>
-                <span>{{method}}</span>
-                <span>{{subType}}</span>
-                <span>{{size}}</span>
-                <span>{{displayTime}}</span>
-                <span class="eruda-blue">{{url}}</span>
-            </li>
-        {{/each}}
+        {{#if requests}}
+            {{#each requests}}
+                <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
+                    <span>{{name}}</span>
+                    <span>{{status}}</span>
+                    <span>{{method}}</span>
+                    <span>{{subType}}</span>
+                    <span>{{size}}</span>
+                    <span>{{displayTime}}</span>
+                    <span class="eruda-blue">{{url}}</span>
+                </li>
+            {{/each}}
+        {{else}}
+            <li><span>Empty</span></li>
+        {{/if}}
     </ul>
 {{/if}}

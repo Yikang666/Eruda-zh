@@ -37,12 +37,12 @@
                     background: $blue;
                     padding: $padding;
                     color: #fff;
-                    font-size: 16px;
+                    font-size: $font-size;
                 }
                 margin-bottom: 10px;
                 table {
                     td {
-                        font-size: 14px;
+                        font-size: $font-size-s;
                         padding: 5px 10px;
                     }
                     .key {
@@ -54,6 +54,7 @@
                 @include overflow-auto(x);
                 background: #fff;
                 padding: $padding;
+                font-size: $font-size-s;
                 margin-bottom: 10px;
             }
         }

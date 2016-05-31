@@ -13,10 +13,10 @@
             overflow: hidden;
         }
         .title {
-            padding: 10px;
+            @include right-circle-btn();
+            padding: $padding;
             color: #fff;
             background: $blue;
-            font-size: 14px;
             &.ok {
                 background: $green;
             }
@@ -25,24 +25,6 @@
             }
             &.danger {
                 background: $red;
-            }
-            .btn {
-                float: right;
-                margin-right: 2px;
-                display: inline-block;
-                background: #fff;
-                color: $gray;
-                text-align: center;
-                width: 18px;
-                height: 18px;
-                line-height: 18px;
-                border-radius: 50%;
-                font-size: 12px;
-                cursor: pointer;
-                transition: color $anim-duration;
-                &:active {
-                    color: $gray-dark;
-                }
             }
         }
         .link-list {
@@ -78,23 +60,28 @@
             td {
                 padding: 10px;
                 word-break: break-all;
-                .icon-trash {
-                    color: $red;
-                    display: inline-block;
-                    padding: 5px;
-                    transition: color $anim-duration;
-                    &:active {
-                        color: $red-dark;
-                    }
-                }
                 &.key {
                     @include overflow-auto(x);
                     white-space: nowrap;
                     max-width: 120px;
                 }
                 &.control {
+                    padding: 0;
+                    font-size: 0;
                     width: 40px;
-                    text-align: center;
+                    .icon-trash {
+                        color: $red;
+                        font-size: $font-size;
+                        display: inline-block;
+                        width: 40px;
+                        height: 40px;
+                        text-align: center;
+                        line-height: 40px;
+                        transition: color $anim-duration;
+                        &:active {
+                            color: $red-dark;
+                        }
+                    }
                 }
             }
             background: #fff;

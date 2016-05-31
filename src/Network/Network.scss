@@ -46,6 +46,7 @@
             }
         }
         .title {
+            @include right-circle-btn();
             background: $gray;
             padding: $padding;
             color: #fff;

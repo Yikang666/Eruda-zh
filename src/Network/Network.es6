@@ -15,10 +15,11 @@ export default class Network extends Tool
         this._performanceTimingData = [];
         this._performanceTiming = {};
         this._resourceTimingData = [];
-        this._performance = window.webkitPerformance || window.performance;
         this._requests = {};
-
         this._tpl = require('./Network.hbs');
+
+        var performance = this._performance = window.webkitPerformance || window.performance;
+        this._hasResourceTiming = performance && util.isFn(performance.getEntries);
     }
     init($el, parent)
     {
@@ -151,6 +152,10 @@ export default class Network extends Tool
             {
                 showSources('img', data.url);
             }
+        }).on('click', '.eruda-clear-xhr', function ()
+        {
+            self._requests = {};
+            self._render();
         });
 
         function showSources(type, data)
@@ -259,14 +264,12 @@ export default class Network extends Tool
     }
     _getResourceTimingData()
     {
-        var performance = this._performance;
-        if (!performance || !util.isFn(performance.getEntries)) return;
+        if (!this._hasResourceTiming) return;
 
-        var entries = performance.getEntries();
+        var entries = this._performance.getEntries(),
+            hideXhr = this.config.get('hideXhrResource'),
+            data = [];
 
-        var data = [];
-
-        var hideXhr = this.config.get('hideXhrResource');
         entries.forEach(entry =>
         {
             if (hideXhr && entry.initiatorType === 'xmlhttprequest') return;
@@ -303,25 +306,30 @@ export default class Network extends Tool
 
         var settings = this._parent.get('settings');
         settings.text('Network')
-                .switch(cfg, 'overrideXhr', 'Catch Xhr Requests')
-                .switch(cfg, 'hideXhrResource', 'Hide Xhr Resource Timing')
-                .switch(cfg, 'disablePerformance', 'Disable Performance Timing')
+                .switch(cfg, 'overrideXhr', 'Catch Xhr Requests');
+
+        if (this._hasResourceTiming) settings.switch(cfg, 'hideXhrResource', 'Hide Xhr Resource Timing');
+
+        settings.switch(cfg, 'disablePerformance', 'Disable Performance Timing')
                 .separator();
     }
     _render()
     {
         if (!this.active) return;
 
+        var cfg = this.config;
+
         this._getResourceTimingData();
 
         var renderData = {entries: this._resourceTimingData};
 
-        if (!util.isEmpty(this._requests))
+        if (cfg.get('overrideXhr'))
         {
-            renderData.requests = this._requests;
+            renderData.displayReq = true;
+            if (!util.isEmpty(this._requests)) renderData.requests = this._requests;
         }
 
-        if (!this.config.get('disablePerformance'))
+        if (!cfg.get('disablePerformance'))
         {
             this._getPerformanceTimingData();
             renderData.data = this._performanceTimingData;
