@@ -10,6 +10,8 @@ export default class Select extends util.Emitter
 
         this._startListener = function (e)
         {
+            if (util.isErudaEl(e.target)) return;
+
             self._timer = setTimeout(function ()
             {
                 self.emit('select', e.target);
@@ -25,6 +27,8 @@ export default class Select extends util.Emitter
 
         this._clickListener = function (e)
         {
+            if (util.isErudaEl(e.target)) return;
+
             e.preventDefault();
             e.stopImmediatePropagation();
         };
