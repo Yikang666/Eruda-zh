@@ -34,12 +34,12 @@ export default class Elements extends Tool
         this._select = new Select();
         this._bindEvent();
         this._initConfig();
-        this._setEl(this._htmlEl);
     }
     show()
     {
         super.show();
 
+        if (!this._curEl) this._setEl(this._htmlEl);
         this._render();
     }
     overrideEventTarget()

@@ -279,7 +279,18 @@ var cmdList = require('./cmdList.json'),
 
 var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
 
-var evalJs = jsInput => eval.call(window, jsInput);
+var evalJs = jsInput =>
+{
+    var ret;
+
+    try {
+        ret = eval.call(window, `(${jsInput})`);
+    } catch (e) {
+        ret = eval.call(window, jsInput);
+    }
+
+    return ret;
+};
 
 function errToStr(err)
 {
@@ -292,7 +303,10 @@ function errToStr(err)
 
 function transMsg(msg, noEscape)
 {
-    if (util.isFn(msg))
+    if (util.isEl(msg))
+    {
+        msg = msg.outerHTML;
+    } else if (util.isFn(msg))
     {
         msg = msg.toString();
     } else if (util.isObj(msg))
