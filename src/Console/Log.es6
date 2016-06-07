@@ -8,7 +8,7 @@ export default class Log extends util.Emitter
     {
         super();
 
-        require('./Log.scss');
+        util.evalCss(require('./Log.scss'));
 
         this._$el = $el;
         this._parent = parent;

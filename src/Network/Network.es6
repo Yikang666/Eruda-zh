@@ -9,7 +9,7 @@ export default class Network extends Tool
     {
         super();
 
-        require('./Network.scss');
+        util.evalCss(require('./Network.scss'));
 
         this.name = 'network';
         this._performanceTimingData = [];

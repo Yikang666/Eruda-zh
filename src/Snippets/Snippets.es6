@@ -8,7 +8,7 @@ export default class Snippets extends Tool
     {
         super();
 
-        require('./Snippets.scss');
+        util.evalCss(require('./Snippets.scss'));
 
         this.name = 'snippets';
 

@@ -435,23 +435,15 @@ module.exports = (function ()
 
     var evalCss = _.evalCss = (function (exports)
     {
-        /* Load css into page.
-         *
-         * |Name|Type|Desc|
-         * |--------------|
-         * |css|string|Css code|
-         *
-         * ```javascript
-         * evalCss('body{background:#08c}');
-         * ```
-         */
-
         function exports(css)
         {
-            var style = document.createElement('style');
-            style.textContent = css;
+            var container = exports.container || document.head,
+                style = document.createElement('style');
+
             style.type = 'text/css';
-            document.head.appendChild(style);
+            style.textContent = css;
+
+            container.appendChild(style);
         }
 
         return exports;

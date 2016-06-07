@@ -27,11 +27,11 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css', 'postcss', 'sass']
+                loaders: ['css', 'postcss', 'sass']
             },
             {
                 test: /\.css$/,
-                loaders: ['style', 'css', 'postcss']
+                loaders: ['css', 'postcss']
             },
             // https://github.com/wycats/handlebars.js/issues/1134
             {

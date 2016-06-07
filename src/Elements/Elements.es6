@@ -11,7 +11,7 @@ export default class Elements extends Tool
     {
         super();
 
-        require('./Elements.scss');
+        util.evalCss(require('./Elements.scss'));
 
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');

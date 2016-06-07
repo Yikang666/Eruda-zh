@@ -13,7 +13,7 @@ export default class Features extends Tool
     {
         super();
 
-        require('./Features.scss');
+        util.evalCss(require('./Features.scss'));
 
         this.name = 'features';
         this._tpl = require('./Features.hbs');

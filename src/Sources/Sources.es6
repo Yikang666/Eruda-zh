@@ -10,7 +10,7 @@ export default class Sources extends Tool
     {
         super();
 
-        require('./Sources.scss');
+        util.evalCss(require('./Sources.scss'));
 
         this.name = 'sources';
 

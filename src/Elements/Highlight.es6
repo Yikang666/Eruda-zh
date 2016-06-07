@@ -4,7 +4,7 @@ export default class Highlight
 {
     constructor($parent)
     {
-        require('./Highlight.scss');
+        util.evalCss(require('./Highlight.scss'));
 
         this._isShow = false;
 

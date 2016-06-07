@@ -7,7 +7,7 @@ export default class Resources extends Tool
     {
         super();
 
-        require('./Resources.scss');
+        util.evalCss(require('./Resources.scss'));
 
         this.name = 'resources';
         this._localStoreData = [];

@@ -8,7 +8,7 @@ export default class EntryBtn extends util.Emitter
     {
         super();
 
-        require('./EntryBtn.scss');
+        util.evalCss(require('./EntryBtn.scss'));
 
         this._$parent = $parent;
         this._appendTpl();

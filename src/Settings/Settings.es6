@@ -7,7 +7,7 @@ export default class Settings extends Tool
     {
         super();
 
-        require('./Settings.scss');
+        util.evalCss(require('./Settings.scss'));
 
         this.name = 'settings';
         this._switchTpl = require('./switch.hbs');

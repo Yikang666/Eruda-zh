@@ -9,7 +9,7 @@ export default class DevTools extends util.Emitter
     {
         super();
 
-        require('./DevTools.scss');
+        util.evalCss(require('./DevTools.scss'));
 
         this.$parent = $parent;
         this._isShow = false;

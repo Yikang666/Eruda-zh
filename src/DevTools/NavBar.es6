@@ -6,7 +6,7 @@ export default class NavBar extends util.Emitter
     {
         super();
 
-        require('./NavBar.scss');
+        util.evalCss(require('./NavBar.scss'));
 
         this._$el = $el;
         $el.html('<ul></ul><div class="eruda-bottom-bar"></div>');

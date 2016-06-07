@@ -8,7 +8,7 @@ export default class Info extends Tool
     {
         super();
 
-        require('./Info.scss');
+        util.evalCss(require('./Info.scss'));
 
         this.name = 'info';
         this._tpl = require('./Info.hbs');

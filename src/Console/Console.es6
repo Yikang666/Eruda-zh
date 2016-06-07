@@ -9,7 +9,7 @@ export default class Console extends Tool
     {
         super();
 
-        require('./Console.scss');
+        util.evalCss(require('./Console.scss'));
 
         this.name = 'console';
     }

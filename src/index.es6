@@ -15,10 +15,6 @@ import config from './lib/config.es6'
 module.exports = {
     init(options = {})
     {
-        require('./style/style.scss');
-        require('./style/reset.scss');
-        require('./style/icon.css');
-
         util.defaults(options, {
             tool: ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features']
         });
@@ -26,6 +22,7 @@ module.exports = {
         this._options = options;
 
         this._initContainer();
+        this._initStyle();
         this._initDevTools();
         this._initEntryBtn();
         this._initSettings();
@@ -72,6 +69,15 @@ module.exports = {
     _initDevTools()
     {
         this._devTools = new DevTools(this._$el);
+    },
+    _initStyle()
+    {
+        this._$el.append('<div class="eruda-style-container"></div>');
+        util.evalCss.container = this._$el.find('.eruda-style-container').get(0);
+
+        util.evalCss(require('./style/style.scss') +
+                     require('./style/reset.scss') +
+                     require('./style/icon.css'));
     },
     _initEntryBtn()
     {
