@@ -81,8 +81,10 @@ export default class Elements extends Tool
     }
     _bindEvent()
     {
-        var self = this,
+        let self = this,
+            parent = this._parent,
             select = this._select;
+
 
         this._$el.on('click', '.eruda-child', function ()
         {
@@ -92,8 +94,7 @@ export default class Elements extends Tool
 
             if (el && el.nodeType === 3)
             {
-                let parent = self._parent,
-                    curTagName = curEl.tagName,
+                let curTagName = curEl.tagName,
                     type;
 
                 switch (curTagName)
@@ -115,6 +116,16 @@ export default class Elements extends Tool
             }
 
             !isElExist(el) ? self._render() : self._setElAndRender(el);
+        }).on('click', '.eruda-listener-content', function ()
+        {
+            let text = util.$(this).text(),
+                sources = parent.get('sources');
+
+            if (sources)
+            {
+                sources.set('js', text);
+                parent.showTool('sources');
+            }
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');

@@ -311,7 +311,7 @@ function transMsg(msg, noEscape)
         msg = msg.toString();
     } else if (util.isObj(msg))
     {
-        msg = `${util.upperFirst(typeof msg)} ${JSON.stringify(extractObj(msg))}`;
+        msg = `${util.upperFirst(typeof msg)} ${JSON.stringify(extractObj(msg, true))}`;
     } else if (util.isUndef(msg))
     {
         msg = 'undefined';
@@ -334,18 +334,20 @@ function extractSrc(args)
     return util.isObj(args[0]) ? extractObj(args[0]) : args[0];
 }
 
-var extractObj = (obj) => JSON.parse(stringify(obj));
+var extractObj = (obj, noProto) => JSON.parse(stringify(obj, null, obj, noProto));
 
 // Modified from: https://jsconsole.com/
-function stringify(obj, simple, visited)
+function stringify(obj, visited, topObj, noProto)
 {
-    var json = '',
+    let json = '',
         type = '',
         parts = [],
         names = [],
+        proto,
         circular = false;
 
     visited = visited || [];
+    topObj = topObj || obj;
 
     try {
         type = ({}).toString.call(obj);
@@ -382,30 +384,46 @@ function stringify(obj, simple, visited)
         visited.push(obj);
 
         json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, simple, visited)}`));
+        util.each(obj, val => parts.push(`${stringify(val, visited, null, noProto)}`));
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
         visited.push(obj);
 
-        for (let key in obj) names.push(key);
-        names.sort(sortName);
+        names = Object.getOwnPropertyNames(obj);
+        proto = Object.getPrototypeOf(obj);
+        if (proto === Object.prototype || isFn || noProto) proto = null;
+        if (proto) proto = `"_proto_": ${stringify(proto, visited, topObj)}`;
+        names.sort(sortObjName);
+        if (isFn)
+        {
+            // We don't these properties to be display for functions.
+            names = names.filter(val => ['arguments', 'caller', 'name', 'length', 'prototype'].indexOf(val) < 0);
+        }
         if (names.length === 0 && isFn)
         {
             json = `"${escapeJsonStr(obj.toString())}"`;
         } else
         {
             json = '{';
-            if (isFn) parts.push(`"function": "${escapeJsonStr(obj.toString())}"`);
-            util.each(names, val =>
+            if (isFn)
             {
-                parts.push(`${stringify(val, undefined, visited)}: ${stringify(obj[val], simple, visited)}`);
+                // Function length is restricted to 500 for performance reason.
+                var fnStr = obj.toString();
+                if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
+                parts.push(`"function": "${escapeJsonStr(fnStr)}"`);
+            }
+            util.each(names, name =>
+            {
+                parts.push(`"${escapeJsonStr(name)}": ${stringify(obj[name], visited, null, noProto)}`);
             });
+            if (proto) parts.push(proto);
             json += parts.join(', ') + '}';
         }
     } else if (isNum)
     {
         json = obj + '';
+        if (util.endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
     } else if (isBool)
     {
         json = obj ? 'true' : 'false';
@@ -418,27 +436,44 @@ function stringify(obj, simple, visited)
     } else if (obj === undefined)
     {
         json = '"undefined"';
-    } else if (simple == undefined)
-    {
-        visited.push(obj);
-
-        json = '{\n';
-        for (let key in obj) names.push(key);
-        names.sort(sortName);
-        util.each(names, val =>
-        {
-            try
-            {
-                parts.push(`"${val}": ${stringify(obj[val], true, visited)}`);
-            } catch (e) {}
-        });
-        json += parts.join(',\n') + '\n}';
     } else
     {
         try
         {
+            visited.push(obj);
+
+            json = '{\n';
+            names = Object.getOwnPropertyNames(obj);
+            proto = Object.getPrototypeOf(obj);
+            if (proto === Object.prototype || noProto) proto = null;
+            if (proto)
+            {
+                try
+                {
+                    proto = `"_proto_": ${stringify(proto, visited, topObj)}`;
+                } catch(e)
+                {
+                    proto = `"_proto": "${escapeJsonStr(e.message)}"`;
+                }
+            }
+            names.sort(sortObjName);
+            util.each(names, name =>
+            {
+                let val = topObj[name];
+
+                try
+                {
+                    parts.push(`"${escapeJsonStr(name)}": ${stringify(val, visited, null, noProto)}`);
+                } catch (e)
+                {
+                    parts.push(`"${escapeJsonStr(name)}": "${escapeJsonStr(e.message)}"`);
+                }
+            });
+            if (proto) parts.push(proto);
+            json += parts.join(',\n') + '\n}';
+        } catch (e) {
             json = `"${obj}"`;
-        } catch (e) {}
+        }
     }
 
     return json;
@@ -446,12 +481,21 @@ function stringify(obj, simple, visited)
 
 var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
                               .replace(/"/g, '\\"')
-                              .replace(/\f/g, '\\f')
-                              .replace(/\n/g, '\\n')
-                              .replace(/\r/g, '')
-                              .replace(/\t/g, '');
+                              .replace(/\f|\n|\r|\t/g, '');
 
-var sortName = (a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+var sortObjName = (a, b) =>
+{
+    let codeA = a.charCodeAt(0),
+        codeB = b.charCodeAt(0);
+
+    if (isLetter(codeA) && !isLetter(codeB)) return -1;
+    if (!isLetter(codeA) && isLetter(codeB)) return 1;
+
+    return codeA > codeB ? 1 : -1;
+};
+
+var isLetter = code => (code > 64 && code < 90) || (code > 96 && code < 123);
+
 
 var transMultipleMsg = args => args.map(val => transMsg(val)).join(' ');
 

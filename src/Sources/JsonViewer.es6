@@ -1,4 +1,5 @@
 import util from '../lib/util'
+import highlight from '../lib/highlight.es6'
 
 export default class JsonViewer
 {
@@ -12,7 +13,7 @@ export default class JsonViewer
     }
     _appendTpl()
     {
-        this._$el.html(jsonToHtml(this._data));
+        this._$el.html(jsonToHtml(this._data, true));
     }
     _bindEvent()
     {
@@ -39,16 +40,19 @@ export default class JsonViewer
     }
 }
 
-function jsonToHtml(data)
+function jsonToHtml(data, firstLevel)
 {
     var ret = '';
 
-    util.each(data, (val, key) => ret += createEl(key, val));
+    for (let key in data)
+    {
+        if (Object.hasOwnProperty.call(data, key)) ret += createEl(key, data[key], firstLevel);
+    }
 
     return ret;
 }
 
-function createEl(key, val)
+function createEl(key, val, firstLevel)
 {
     var type = 'object',
         open = '{',
@@ -71,10 +75,10 @@ function createEl(key, val)
     if (util.isObj(val))
     {
         var obj = `<li>
-                       <span class="eruda-expanded"></span>
+                       <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
                        <span class="eruda-key">${encode(key)}</span>
                        <span class="eruda-open">${open}</span>
-                       <ul class="eruda-${type}">`;
+                       <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
         return obj + `</ul><span class="eruda-close">${close}</span></li>`;
     }
@@ -84,6 +88,13 @@ function createEl(key, val)
                    <span class="eruda-key">${encode(key)}: </span>
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
+    }
+    if (util.isStr(val) && util.startWith(val, 'function'))
+    {
+        return `<li>
+                   <span class="eruda-key">${encode(key)}: </span>
+                   <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
+                </li>`
     }
 
     return `<li>

@@ -51,7 +51,7 @@ Add this script to your page.
 <script>eruda.init();</script>
 ```
 
-The JavaScript file size is quite huge(about 75kb gzipped) and therefore not
+The JavaScript file size is quite huge(about 85kb gzipped) and therefore not
 suitable to include in mobile pages. It's recommended to make sure eruda is
 loaded only when eruda is set to true on url(http://example.com/?eruda=true),
 for example:
