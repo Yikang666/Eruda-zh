@@ -74,7 +74,18 @@ export default class Log extends util.Emitter
     dir(obj)
     {
         var src = util.isObj(obj) ? extractObj(obj) : obj,
-            msg = util.isObj(src) ? JSON.stringify(src, null, 4) : transMsg(src, true);
+            msg;
+
+        if (util.isObj(src))
+        {
+            msg = JSON.stringify(src, null, 4);
+            msg = msg.replace(/erudaProto/g, '__proto__')
+                     .replace(/erudaObjAbstract/g, '__abstract__');
+
+        } else
+        {
+            msg = transMsg(src, true);
+        }
 
         return this.insert({
             type: 'dir',
@@ -334,10 +345,10 @@ function extractSrc(args)
     return util.isObj(args[0]) ? extractObj(args[0]) : args[0];
 }
 
-var extractObj = (obj, noProto) => JSON.parse(stringify(obj, null, obj, noProto));
+var extractObj = (obj, simple) => JSON.parse(stringify(obj, null, obj, simple));
 
 // Modified from: https://jsconsole.com/
-function stringify(obj, visited, topObj, noProto)
+function stringify(obj, visited, topObj, simple)
 {
     let json = '',
         type = '',
@@ -384,7 +395,7 @@ function stringify(obj, visited, topObj, noProto)
         visited.push(obj);
 
         json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, visited, null, noProto)}`));
+        util.each(obj, val => parts.push(`${stringify(val, visited, null, simple)}`));
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
@@ -392,8 +403,8 @@ function stringify(obj, visited, topObj, noProto)
 
         names = Object.getOwnPropertyNames(obj);
         proto = Object.getPrototypeOf(obj);
-        if (proto === Object.prototype || isFn || noProto) proto = null;
-        if (proto) proto = `"_proto_": ${stringify(proto, visited, topObj)}`;
+        if (proto === Object.prototype || isFn || simple) proto = null;
+        if (proto) proto = `"erudaProto": ${stringify(proto, visited, topObj)}`;
         names.sort(sortObjName);
         if (isFn)
         {
@@ -411,11 +422,11 @@ function stringify(obj, visited, topObj, noProto)
                 // Function length is restricted to 500 for performance reason.
                 var fnStr = obj.toString();
                 if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
-                parts.push(`"function": "${escapeJsonStr(fnStr)}"`);
+                parts.push(`"erudaObjAbstract": "${escapeJsonStr(fnStr)}"`);
             }
             util.each(names, name =>
             {
-                parts.push(`"${escapeJsonStr(name)}": ${stringify(obj[name], visited, null, noProto)}`);
+                parts.push(`"${escapeJsonStr(name)}": ${stringify(obj[name], visited, null, simple)}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(', ') + '}';
@@ -443,17 +454,18 @@ function stringify(obj, visited, topObj, noProto)
             visited.push(obj);
 
             json = '{\n';
+            if (!simple) parts.push(`"erudaObjAbstract": "${type.replace(/(\[object )|]/g, '')}"`);
             names = Object.getOwnPropertyNames(obj);
             proto = Object.getPrototypeOf(obj);
-            if (proto === Object.prototype || noProto) proto = null;
+            if (proto === Object.prototype || simple) proto = null;
             if (proto)
             {
                 try
                 {
-                    proto = `"_proto_": ${stringify(proto, visited, topObj)}`;
+                    proto = `"erudaProto": ${stringify(proto, visited, topObj)}`;
                 } catch(e)
                 {
-                    proto = `"_proto": "${escapeJsonStr(e.message)}"`;
+                    proto = `"erudaProto": "${escapeJsonStr(e.message)}"`;
                 }
             }
             names.sort(sortObjName);
@@ -463,7 +475,7 @@ function stringify(obj, visited, topObj, noProto)
 
                 try
                 {
-                    parts.push(`"${escapeJsonStr(name)}": ${stringify(val, visited, null, noProto)}`);
+                    parts.push(`"${escapeJsonStr(name)}": ${stringify(val, visited, null, simple)}`);
                 } catch (e)
                 {
                     parts.push(`"${escapeJsonStr(name)}": "${escapeJsonStr(e.message)}"`);
@@ -491,7 +503,7 @@ var sortObjName = (a, b) =>
     if (isLetter(codeA) && !isLetter(codeB)) return -1;
     if (!isLetter(codeA) && isLetter(codeB)) return 1;
 
-    return codeA > codeB ? 1 : -1;
+    return a > b ? 1 : -1;
 };
 
 var isLetter = code => (code > 64 && code < 90) || (code > 96 && code < 123);

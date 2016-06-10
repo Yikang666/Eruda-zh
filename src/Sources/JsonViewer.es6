@@ -24,7 +24,7 @@ export default class JsonViewer
 
             if (!$firstSpan.hasClass('eruda-expanded')) return;
 
-            e.stopPropagation();
+            e.stopImmediatePropagation();
 
             var $ul = $this.find('ul').eq(0);
             if ($firstSpan.hasClass('eruda-collapsed'))
@@ -46,6 +46,7 @@ function jsonToHtml(data, firstLevel)
 
     for (let key in data)
     {
+        if (key === 'erudaObjAbstract') continue;
         if (Object.hasOwnProperty.call(data, key)) ret += createEl(key, data[key], firstLevel);
     }
 
@@ -57,6 +58,8 @@ function createEl(key, val, firstLevel)
     var type = 'object',
         open = '{',
         close = '}';
+
+    if (key === 'erudaProto') key = '__proto__';
 
     if (util.isArr(val))
     {
@@ -77,7 +80,7 @@ function createEl(key, val, firstLevel)
         var obj = `<li>
                        <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
                        <span class="eruda-key">${encode(key)}</span>
-                       <span class="eruda-open">${open}</span>
+                       <span class="eruda-open">${open} ${(val['erudaObjAbstract'] || '')}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
         return obj + `</ul><span class="eruda-close">${close}</span></li>`;
