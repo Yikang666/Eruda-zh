@@ -5,13 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Eruda</title>
     <link rel="stylesheet" href="style.css">
-
-    <script>
-        window.onerror = function (msg) {
-            alert(msg);
-        }
-    </script>
-    <script src="../dist/eruda.js"></script>
+    <script src="assets/eruda.js"></script>
 </head>
 <body>
     <div id="test-element" class="border" style="color:red">
@@ -58,28 +52,28 @@
         }
         setTimeout(function ()
         {
-            req('http://localhost:3000/test/style.css');
+            req('http://localhost:8080/webpack-dev-server/test/style.css');
         }, 1000);
         setTimeout(function ()
         {
-            req('http://localhost:3000/test/data.json');
+            req('http://localhost:8080/webpack-dev-server/test/data.json');
         }, 2000);
         setTimeout(function ()
         {
-            req('http://localhost:3000/test/empty.json');
+            req('http://localhost:8080/webpack-dev-server/test/empty.json');
         }, 3000);
 
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'arraybuffer';
-        xhr.open('GET', 'http://localhost:3000/test/data.json');
+        xhr.open('GET', 'http://localhost:8080/webpack-dev-server/test/data.json');
         xhr.send();
     </script>
     <script>
         var el = document.createElement('div');
         document.body.appendChild(el);
-        eruda.init({container: el});
+        setTimeout(function () { eruda.init({container: el}) }, 1000);
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
-    <script>FastClick.attach(document.body);</script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+    <script>FastClick.attach(document.body);</script>-->
 </body>
 </html>

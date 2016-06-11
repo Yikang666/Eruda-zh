@@ -1,12 +1,11 @@
 {
   "name": "eruda",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "Console for Mobile Browsers",
   "main": "dist/eruda.js",
   "scripts": {
-    "dev": "webpack --watch",
-    "release": "webpack & webpack -p --output-filename eruda.min.js & uglifyjs dist/eruda.min.js -o dist/eruda.min.js --mangle --comments all",
-    "serve": "nws -p 3000"
+    "release": "webpack && webpack -p --config script/release.js",
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",

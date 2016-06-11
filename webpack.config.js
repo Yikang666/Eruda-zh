@@ -8,9 +8,16 @@ var nodeModDir = path.resolve('./node_modules/') + '/',
     banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage;
 
 module.exports = {
+    devtool: 'source-map',
     entry: './src/index.es6',
+    devServer: {
+        contentBase: './test'
+    },
     output: {
         path: __dirname + '/dist/',
+        devtoolLineToLine: true,
+        sourceMapFilename: "./eruda.js.map",
+        publicPath: "/assets/",
         filename: 'eruda.js',
         library: ['eruda'],
         libraryTarget: 'umd'

@@ -28,13 +28,16 @@ export default class EntryBtn extends util.Emitter
     {
         var cfg = this.config,
             pos = cfg.get('pos'),
-            defPost = getDefPos();
+            defPos = getDefPos();
 
-        var outOfRange = pos.x > defPost.x + 10 || pos.y > defPost.y + 10;
+        var outOfRange = pos.x > defPos.x + 10 ||
+                         pos.x < 0 ||
+                         pos.y < 0 ||
+                         pos.y > defPos.y + 10;
 
         if (outOfRange ||
             !cfg.get('rememberPos') ||
-            orientationChanged) pos = defPost;
+            orientationChanged) pos = defPos;
 
         this._$el.css({
             left: pos.x,
