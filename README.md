@@ -1,6 +1,8 @@
+[中文](https://github.com/liriliri/eruda/blob/master/docs/Readme_CH.md)
+
 # Eruda
 
-[![npm version](https://badge.fury.io/js/eruda.svg)](https://badge.fury.io/js/eruda) 
+[![npm version](https://badge.fury.io/js/eruda.svg)](https://badge.fury.io/js/eruda)
 
 Console for Mobile Browsers.
 
@@ -8,9 +10,9 @@ Console for Mobile Browsers.
 
 ## Why
 
-Logging things out on mobile browser is never an easy stuff. I used to include 
-`window onerror alert` script inside pages to find out JavaScript errors, kind 
-of stupid and inefficient. Desktop browser DevTools is great, and I wish there 
+Logging things out on mobile browser is never an easy stuff. I used to include
+`window onerror alert` script inside pages to find out JavaScript errors, kind
+of stupid and inefficient. Desktop browser DevTools is great, and I wish there
 is a similar one on mobile side, which leads to the creation of Eruda.
 
 ## Demo
@@ -90,8 +92,8 @@ source code of plugins below to learn how to write your own custom tool panels.
 
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 
-> When writing plugins, You can use utilities exposed by Eruda, see 
-[docs](https://github.com/liriliri/eruda/blob/master/docs/util.md) here.
+> When writing plugins, you can use utilities exposed by Eruda, see
+[docs](https://github.com/liriliri/eruda/blob/master/docs/Util_Api.md) here.
 
 ## License
 
