@@ -5,7 +5,8 @@
   "main": "dist/eruda.js",
   "scripts": {
     "release": "webpack && webpack -p --config script/release.js",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "utilDoc": "eustia docs  src/lib/util.js -f md -o docs/util.md"
   },
   "repository": {
     "type": "git",
