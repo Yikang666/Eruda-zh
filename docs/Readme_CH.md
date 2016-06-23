@@ -56,6 +56,16 @@ Js文件对于移动端来说略重（gzip后大概85kb）。建议通过url参�
 * container: 用于插件初始化的Dom元素，如果不设置，默认创建div作为容器直接置于html根结点下面。
 * tool：指定要初始化哪些面板，默认加载所有。
 
+```javascript
+var el = document.createElement('div');
+document.body.appendChild(el);
+
+eruda.init({
+    container: el,
+    tool: ['console', 'elements']
+});
+```
+
 > 该工具支持自行编写插件，可参考[eruda-fps](https://github.com/liriliri/eruda-fps)。
 
 ## Demo
