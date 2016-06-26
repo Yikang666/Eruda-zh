@@ -95,7 +95,8 @@ function getSize(xhr, headersOnly, url)
     {
         if (!headersOnly)
         {
-            var resTxt = xhr.responseText;
+            var resType = xhr.responseType;
+            var resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
             if (resTxt) size = lenToUtf8Bytes(resTxt);
         }
     }

@@ -16,11 +16,24 @@ export default class Log extends util.Emitter
         this._renderLogs = [];
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
+        this._maxNum = 'infinite';
         this._isUpdated = false;
         this._lastLog = {};
         this._timer = {};
 
         this._bindEvent();
+    }
+    setMaxNum(num)
+    {
+        var logs = this._logs;
+
+        this._maxNum = num;
+        if (util.isNum(num) && logs.length > num)
+        {
+            this._logs = logs.slice(logs.length - num);
+            this._isUpdated = true;
+            this.render();
+        }
     }
     clear()
     {
@@ -173,6 +186,10 @@ export default class Log extends util.Emitter
     }
     insert(log)
     {
+        var logs = this._logs;
+
+        if (this._maxNum !== 'infinite' && logs.length >= this._maxNum) logs.shift();
+
         util.defaults(log, {
             type: 'log',
             isCode: false,
@@ -202,7 +219,7 @@ export default class Log extends util.Emitter
             lastLog.showTimes = true;
         } else
         {
-            this._logs.push(log);
+            logs.push(log);
             this._lastLog = log;
         }
 
@@ -316,7 +333,8 @@ function transMsg(msg, noEscape)
 {
     if (util.isEl(msg))
     {
-        msg = msg.outerHTML;
+        msg = `<pre>${highlight(beautify.html(msg.outerHTML), 'html')}</pre>`;
+        noEscape = true;
     } else if (util.isFn(msg))
     {
         msg = msg.toString();

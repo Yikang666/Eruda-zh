@@ -29,49 +29,55 @@
     <button onclick="xxx();">Trigger Error</button>
     <div style="height: 500px;"></div>
     <script>
-        // Test scripts
-        var test = document.getElementById('test-element');
-        test.addEventListener('click', function ()
+        function init()
         {
-            console.log('test2');
-        }, false);
-        test.addEventListener('click', function ()
-        {
-            console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
-        }, true);
-        test.addEventListener('touchstart', function ()
-        {
-            console.log('test3');
-        }, false);
-        function req(url)
-        {
-            var xhr = new XMLHttpRequest();
+            // Test scripts
+            var test = document.getElementById('test-element');
+            test.addEventListener('click', function ()
+            {
+                console.log('test2');
+            }, false);
+            test.addEventListener('click', function ()
+            {
+                console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
+            }, true);
+            test.addEventListener('touchstart', function ()
+            {
+                console.log('test3');
+            }, false);
+            function req(url)
+            {
+                var xhr = new XMLHttpRequest();
 
-            xhr.open('GET', url);
+                xhr.open('GET', url);
+                xhr.send();
+            }
+            setTimeout(function ()
+            {
+                req('http://localhost:8080/webpack-dev-server/test/style.css');
+            }, 1000);
+            setTimeout(function ()
+            {
+                req('http://localhost:8080/webpack-dev-server/test/data.json');
+            }, 2000);
+            setTimeout(function ()
+            {
+                req('http://localhost:8080/webpack-dev-server/test/empty.json');
+            }, 3000);
+
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'arraybuffer';
+            xhr.open('GET', 'http://localhost:8080/webpack-dev-server/test/data.json');
             xhr.send();
         }
-        setTimeout(function ()
-        {
-            req('http://localhost:8080/webpack-dev-server/test/style.css');
-        }, 1000);
-        setTimeout(function ()
-        {
-            req('http://localhost:8080/webpack-dev-server/test/data.json');
-        }, 2000);
-        setTimeout(function ()
-        {
-            req('http://localhost:8080/webpack-dev-server/test/empty.json');
-        }, 3000);
-
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer';
-        xhr.open('GET', 'http://localhost:8080/webpack-dev-server/test/data.json');
-        xhr.send();
     </script>
     <script>
         var el = document.createElement('div');
         document.body.appendChild(el);
-        setTimeout(function () { eruda.init({container: el}) }, 1000);
+        setTimeout(function () {
+            eruda.init({container: el});
+            init();
+        }, 1000);
     </script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
     <script>FastClick.attach(document.body);</script>-->
