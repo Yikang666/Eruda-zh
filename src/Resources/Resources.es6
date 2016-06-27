@@ -1,5 +1,6 @@
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
+import config from '../lib/config.es6'
 
 export default class Resources extends Tool
 {
@@ -11,6 +12,7 @@ export default class Resources extends Tool
 
         this.name = 'resources';
         this._localStoreData = [];
+        this._hideErudaSetting = false;
         this._sessionStoreData = [];
         this._cookieData = [];
         this._scriptData = [];
@@ -26,6 +28,7 @@ export default class Resources extends Tool
 
         this.refresh();
         this._bindEvent();
+        this._initConfig();
     }
     refresh()
     {
@@ -89,8 +92,10 @@ export default class Resources extends Tool
         // Mobile safari is not able to loop through localStorage directly.
         var store = JSON.parse(JSON.stringify(window[type + 'Storage']));
 
-        util.each(store, function (val, key)
+        util.each(store, (val, key) =>
         {
+            if (this._hideErudaSetting && util.startWith(key, 'eruda')) return;
+
             storeData.push({
                 key: key,
                 val: sliceStr(val, 200)
@@ -254,6 +259,29 @@ export default class Resources extends Tool
                 }
             };
         }
+    }
+    _initConfig()
+    {
+        var cfg = this.config = config.create('eruda-resources');
+
+        cfg.set(util.defaults(cfg.get(), {
+            hideErudaSetting: true
+        }));
+
+        if (cfg.get('hideErudaSetting')) this._hideErudaSetting = true;
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'hideErudaSetting': this._hideErudaSetting = val; return;
+            }
+        });
+
+        var settings = this._parent.get('settings');
+        settings.text('Resources')
+                .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
+                .separator();
     }
     _render()
     {
