@@ -10,7 +10,7 @@ module.exports = (function ()
         /* Get the last element of array.
          *
          * |Name  |Type |Desc                     |
-         * |--------------------------------------|
+         * |------|-----|-------------------------|
          * |arr   |array|The array to query       |
          * |return|*    |The last element of array|
          *
@@ -36,7 +36,7 @@ module.exports = (function ()
         /* Check if value is undefined.
          *
          * |Name  |Type   |Desc                      |
-         * |-----------------------------------------|
+         * |------|-------|--------------------------|
          * |val   |*      |The value to check        |
          * |return|boolean|True if value is undefined|
          *
@@ -61,7 +61,7 @@ module.exports = (function ()
         /* Check if value is the language type of Object.
          *
          * |Name  |Type   |Desc                      |
-         * |-----------------------------------------|
+         * |------|-------|--------------------------|
          * |val   |*      |The value to check        |
          * |return|boolean|True if value is an object|
          *
@@ -90,7 +90,7 @@ module.exports = (function ()
         /* Inherit the prototype methods from one constructor into another.
          *
          * |Name      |Type    |Desc       |
-         * |-------------------------------|
+         * |----------|--------|-----------|
          * |Class     |function|Child Class|
          * |SuperClass|function|Super Class|
          *
@@ -137,7 +137,7 @@ module.exports = (function ()
         /* Checks if key is a direct property.
          *
          * |Name  |Type   |Desc                            |
-         * |-----------------------------------------------|
+         * |------|-------|--------------------------------|
          * |obj   |object |The object to query             |
          * |key   |string |The path to check               |
          * |return|boolean|True if key is a direct property|
@@ -180,7 +180,7 @@ module.exports = (function ()
         /* Retrieve all the names of object's own and inherited properties.
          *
          * |Name  |Type  |Desc                           |
-         * |---------------------------------------------|
+         * |------|------|-------------------------------|
          * |obj   |object|The object to query            |
          * |return|array |The array of all property names|
          *
@@ -212,7 +212,7 @@ module.exports = (function ()
         /* Split different string case to an array.
          *
          * |Name  |Type  |Desc           |
-         * |-----------------------------|
+         * |------|------|---------------|
          * |str   |string|String to split|
          * |return|array |Result array   |
          *
@@ -250,7 +250,7 @@ module.exports = (function ()
         /* Convert string to "camelCase".
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |str   |string|String to convert |
          * |return|string|Camel cased string|
          *
@@ -293,7 +293,7 @@ module.exports = (function ()
         /* Convert string to "kebabCase".
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |str   |string|String to convert |
          * |return|string|Kebab cased string|
          *
@@ -320,7 +320,7 @@ module.exports = (function ()
         /* Get the index at which the first occurrence of value.
          *
          * |Name       |Type  |Desc                |
-         * |---------------------------------------|
+         * |-----------|------|--------------------|
          * |arr        |array |Array to search     |
          * |val        |*     |Value to search for |
          * |[fromIdx=0]|number|Index to search from|
@@ -345,7 +345,7 @@ module.exports = (function ()
         /* Create an array of the own enumerable property names of object.
          *
          * |Name  |Type  |Desc                       |
-         * |-----------------------------------------|
+         * |------|------|---------------------------|
          * |obj   |object|The object to query        |
          * |return|array |The array of property names|
          */
@@ -372,7 +372,7 @@ module.exports = (function ()
         /* Check if string ends with the given target string.
          *
          * |Name  |Type   |Desc                           |
-         * |----------------------------------------------|
+         * |------|-------|-------------------------------|
          * |str   |string |The string to search           |
          * |suffix|string |String suffix                  |
          * |return|boolean|True if string ends with target|
@@ -399,7 +399,7 @@ module.exports = (function ()
         /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
          *
          * |Name  |Type  |Desc            |
-         * |------------------------------|
+         * |------|------|----------------|
          * |str   |string|String to escape|
          * |return|string|Escaped string  |
          *
@@ -441,7 +441,7 @@ module.exports = (function ()
         /* Escape special chars to be used as literals in RegExp constructors.
          *
          * |Name  |Type  |Desc            |
-         * |------------------------------|
+         * |------|------|----------------|
          * |str   |string|string to escape|
          * |return|string|Escaped string  |
          *
@@ -510,7 +510,7 @@ module.exports = (function ()
         /* Return the first argument given.
          *
          * |Name  |Type|Desc       |
-         * |-----------------------|
+         * |------|----|-----------|
          * |val   |*   |Any value  |
          * |return|*   |Given value|
          *
@@ -534,7 +534,7 @@ module.exports = (function ()
         /* Alias of Object.prototype.toString.
          *
          * |Name  |Type  |Desc                                    |
-         * |------------------------------------------------------|
+         * |------|------|----------------------------------------|
          * |value |*     |Source value                            |
          * |return|string|String representation of the given value|
          */
@@ -556,7 +556,7 @@ module.exports = (function ()
         /* Check if value is classified as an arguments object.
          *
          * |Name  |Type   |Desc                                |
-         * |---------------------------------------------------|
+         * |------|-------|------------------------------------|
          * |value |*      |Value to check                      |
          * |return|boolean|True if value is an arguments object|
          *
@@ -581,9 +581,9 @@ module.exports = (function ()
     {
         /* Checks if value is classified as a Number primitive or object.
          *
-         * |Name|Type|Desc|
-         * |--------------|
-         * |value|*|The value to check|
+         * |Name  |Type   |Desc                                             |
+         * |------|-------|-------------------------------------------------|
+         * |value |*      |The value to check                               |
          * |return|boolean|True if value is correctly classified, else false|
          */
 
@@ -622,7 +622,7 @@ module.exports = (function ()
         /* Iterates over elements of collection and invokes iteratee for each element.
          *
          * |Name    |Type         |Desc                          |
-         * |-----------------------------------------------------|
+         * |--------|-------------|------------------------------|
          * |obj     |object\|array|Collection to iterate over    |
          * |iteratee|function     |Function invoked per iteration|
          * |[ctx]   |*            |Function context              |
@@ -661,7 +661,7 @@ module.exports = (function ()
         /* Used to create extend, extendOwn and defaults.
          *
          * |Name    |Type    |Desc                          |
-         * |------------------------------------------------|
+         * |--------|--------|------------------------------|
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
          * |return  |function|The result function, extend...|
@@ -697,7 +697,7 @@ module.exports = (function ()
         /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |obj   |object|Destination object|
          * |*src  |object|Sources objects   |
          * |return|object|Destination object|
@@ -721,14 +721,14 @@ module.exports = (function ()
          * ## get: get cookie value.
          *
          * |Name  |Type  |Desc                      |
-         * |----------------------------------------|
+         * |------|------|--------------------------|
          * |key   |string|Cookie key                |
          * |return|string|Corresponding cookie value|
          *
          * ## set: set cookie value.
          *
          * |Name     |Type   |Desc          |
-         * |--------------------------------|
+         * |---------|-------|--------------|
          * |key      |string |Cookie key    |
          * |val      |string |Cookie value  |
          * |[options]|object |Cookie options|
@@ -737,7 +737,7 @@ module.exports = (function ()
          * ## remove: remove cookie value.
          *
          * |Name     |Type   |Desc          |
-         * |--------------------------------|
+         * |---------|-------|--------------|
          * |key      |string |Cookie key    |
          * |[options]|object |Cookie options|
          * |return   |exports|Module cookie |
@@ -824,7 +824,7 @@ module.exports = (function ()
         /* Copy all of the properties in the source objects over to the destination object.
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |obj   |object|Destination object|
          * |*src  |object|Sources objects   |
          * |return|object|Destination object|
@@ -846,7 +846,7 @@ module.exports = (function ()
         /* Like extend, but only copies own properties over to the destination object.
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |obj   |object|Destination object|
          * |*src  |object|Sources objects   |
          * |return|object|Destination object|
@@ -868,7 +868,7 @@ module.exports = (function ()
         /* Creates an array of the own enumerable property values of object.
          *
          * |Name  |Type  |Desc                    |
-         * |--------------------------------------|
+         * |------|------|------------------------|
          * |obj   |object|Object to query         |
          * |return|array |Array of property values|
          *
@@ -912,7 +912,7 @@ module.exports = (function ()
         /* Check if value is a string primitive.
          *
          * |Name  |Type   |Desc                               |
-         * |--------------------------------------------------|
+         * |------|-------|-----------------------------------|
          * |val   |*      |The value to check                 |
          * |return|boolean|True if value is a string primitive|
          *
@@ -936,7 +936,7 @@ module.exports = (function ()
         /* Check if value is an `Array` object.
          *
          * |Name  |Type   |Desc                              |
-         * |-------------------------------------------------|
+         * |------|-------|----------------------------------|
          * |val   |*      |The value to check                |
          * |return|boolean|True if value is an `Array` object|
          *
@@ -961,7 +961,7 @@ module.exports = (function ()
         /* Check if value is a boolean primitive.
          *
          * |Name  |Type   |Desc                      |
-         * |-----------------------------------------|
+         * |------|-------|--------------------------|
          * |val   |*      |The value to check        |
          * |return|boolean|True if value is a boolean|
          *
@@ -987,7 +987,7 @@ module.exports = (function ()
         /* Check if string starts with the given target string.
          *
          * |Name  |Type   |Desc                             |
-         * |------------------------------------------------|
+         * |------|-------|---------------------------------|
          * |str   |string |The string to search             |
          * |prefix|string |String prefix                    |
          * |return|boolean|True if string starts with prefix|
@@ -1026,7 +1026,7 @@ module.exports = (function ()
         /* Check if value is a DOM element.
          *
          * |Name  |Type   |Desc                          |
-         * |---------------------------------------------|
+         * |------|-------|------------------------------|
          * |val   |*      |Value to check                |
          * |return|boolean|True if value is a DOM element|
          *
@@ -1050,7 +1050,7 @@ module.exports = (function ()
         /* Check if value is an empty object or array.
          *
          * |Name  |Type   |Desc                  |
-         * |-------------------------------------|
+         * |------|-------|----------------------|
          * |val   |*      |Value to check        |
          * |return|boolean|True if value is empty|
          *
@@ -1082,7 +1082,7 @@ module.exports = (function ()
         /* Check if value is an error.
          *
          * |Name  |Type   |Desc                     |
-         * |----------------------------------------|
+         * |------|-------|-------------------------|
          * |val   |*      |The value to check       |
          * |return|boolean|True if value is an error|
          *
@@ -1128,7 +1128,7 @@ module.exports = (function ()
         /* Check if value is a function.
          *
          * |Name  |Type   |Desc                       |
-         * |------------------------------------------|
+         * |------|-------|---------------------------|
          * |val   |*      |The value to check         |
          * |return|boolean|True if value is a function|
          *
@@ -1156,8 +1156,8 @@ module.exports = (function ()
     {
         /* Check if keys and values in src are contained in obj.
          *
-         * |Name  |Type  |Desc                               |
-         * |-------------------------------------------------|
+         * |Name  |Type   |Desc                              |
+         * |------|-------|----------------------------------|
          * |obj   |object |Object to inspect                 |
          * |src   |object |Object of property values to match|
          * |return|boolean|True if object is match           |
@@ -1195,7 +1195,7 @@ module.exports = (function ()
         /* Check if value is a regular expression.
          *
          * |Name  |Type   |Desc                                 |
-         * |----------------------------------------------------|
+         * |------|-------|-------------------------------------|
          * |val   |*      |The value to check                   |
          * |return|boolean|True if value is a regular expression|
          *
@@ -1244,7 +1244,7 @@ module.exports = (function ()
         /* Remove chars or white-spaces from beginning of string.
          *
          * |Name  |Type         |Desc                  |
-         * |-------------------------------------------|
+         * |------|-------------|----------------------|
          * |str   |string       |The string to trim    |
          * |chars |string\|array|The characters to trim|
          * |return|string       |The trimmed string    |
@@ -1403,7 +1403,7 @@ module.exports = (function ()
         /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
          *
          * |Name     |Type    |Desc                                   |
-         * |----------------------------------------------------------|
+         * |---------|--------|---------------------------------------|
          * |obj      |array   |Collection to iterate over             |
          * |predicate|function|Function invoked per iteration         |
          * |[ctx]    |*       |Predicate context                      |
@@ -1441,7 +1441,7 @@ module.exports = (function ()
         /* Create an array of values by running each element in collection through iteratee.
          *
          * |Name    |Type         |Desc                          |
-         * |-----------------------------------------------------|
+         * |--------|-------------|------------------------------|
          * |obj     |array\|object|Collection to iterate over    |
          * |iteratee|function     |Function invoked per iteration|
          * |[ctx]   |*            |Function context              |
@@ -1479,7 +1479,7 @@ module.exports = (function ()
         /* Convert value to an array.
          *
          * |Name  |Type |Desc            |
-         * |-----------------------------|
+         * |------|-----|----------------|
          * |val   |*    |Value to convert|
          * |return|array|Converted array |
          *
@@ -1512,7 +1512,7 @@ module.exports = (function ()
         /* Create JavaScript class.
          *
          * |Name   |Type    |Desc                             |
-         * |--------------------------------------------------|
+         * |-------|--------|---------------------------------|
          * |methods|object  |Public methods                   |
          * |statics|object  |Static methods                   |
          * |return |function|Function used to create instances|
@@ -2244,7 +2244,7 @@ module.exports = (function ()
         /* Check if predicate return truthy for any element.
          *
          * |Name     |Type         |Desc                                          |
-         * |----------------------------------------------------------------------|
+         * |---------|-------------|----------------------------------------------|
          * |obj      |array\|object|Collection to iterate over                    |
          * |predicate|function     |Function to invoked per iteration             |
          * |ctx      |*            |Predicate context                             |
@@ -2537,7 +2537,7 @@ module.exports = (function ()
         /* Convert value to a number.
          *
          * |Name  |Type  |Desc            |
-         * |------------------------------|
+         * |------|------|----------------|
          * |val   |*     |Value to process|
          * |return|number|Resulted number |
          *
@@ -2583,7 +2583,7 @@ module.exports = (function ()
         /* Remove chars or white-spaces from end of string.
          *
          * |Name  |Type         |Desc                  |
-         * |-------------------------------------------|
+         * |------|-------------|----------------------|
          * |str   |string       |The string to trim    |
          * |chars |string\|array|The characters to trim|
          * |return|string       |The trimmed string    |
@@ -2636,7 +2636,7 @@ module.exports = (function ()
         /* Remove chars or white-spaces from beginning end of string.
          *
          * |Name  |Type         |Desc                  |
-         * |-------------------------------------------|
+         * |------|-------------|----------------------|
          * |str   |string       |The string to trim    |
          * |chars |string\|array|The characters to trim|
          * |return|string       |The trimmed string    |
@@ -2683,7 +2683,7 @@ module.exports = (function ()
         /* Convert value to a string.
          *
          * |Name  |Type  |Desc            |
-         * |------------------------------|
+         * |------|------|----------------|
          * |val   |*     |Value to convert|
          * |return|string|Resulted string |
          *
@@ -2710,7 +2710,7 @@ module.exports = (function ()
         /* Generate a globally-unique id.
          *
          * |Name  |Type  |Desc              |
-         * |--------------------------------|
+         * |------|------|------------------|
          * |prefix|string|Id prefix         |
          * |return|string|Globally-unique id|
          *
@@ -2738,7 +2738,7 @@ module.exports = (function ()
         /* Create duplicate-free version of an array.
          *
          * |Name     |Type    |Desc                         |
-         * |------------------------------------------------|
+         * |---------|--------|-----------------------------|
          * |arr      |array   |Array to inspect             |
          * |[compare]|function|Function for comparing values|
          * |return   |array   |New duplicate free array     |
@@ -2777,7 +2777,7 @@ module.exports = (function ()
         /* Convert the first character of string to upper case.
          *
          * |Name  |Type  |Desc             |
-         * |-------------------------------|
+         * |------|------|-----------------|
          * |str   |string|String to convert|
          * |return|string|Converted string |
          *

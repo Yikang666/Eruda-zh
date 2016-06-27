@@ -5,7 +5,7 @@
 Get the last element of array.
 
  |Name  |Type |Desc                     |
- |--------------------------------------|
+ |------|-----|-------------------------|
  |arr   |array|The array to query       |
  |return|*    |The last element of array|
 
@@ -18,7 +18,7 @@ Get the last element of array.
 Check if value is undefined.
 
  |Name  |Type   |Desc                      |
- |-----------------------------------------|
+ |------|-------|--------------------------|
  |val   |*      |The value to check        |
  |return|boolean|True if value is undefined|
 
@@ -32,7 +32,7 @@ Check if value is undefined.
 Check if value is the language type of Object.
 
  |Name  |Type   |Desc                      |
- |-----------------------------------------|
+ |------|-------|--------------------------|
  |val   |*      |The value to check        |
  |return|boolean|True if value is an object|
 
@@ -48,7 +48,7 @@ Check if value is the language type of Object.
 Inherit the prototype methods from one constructor into another.
 
  |Name      |Type    |Desc       |
- |-------------------------------|
+ |----------|--------|-----------|
  |Class     |function|Child Class|
  |SuperClass|function|Super Class|
 
@@ -77,7 +77,7 @@ Inherit the prototype methods from one constructor into another.
 Checks if key is a direct property.
 
  |Name  |Type   |Desc                            |
- |-----------------------------------------------|
+ |------|-------|--------------------------------|
  |obj   |object |The object to query             |
  |key   |string |The path to check               |
  |return|boolean|True if key is a direct property|
@@ -95,7 +95,7 @@ No documentation.
 Retrieve all the names of object's own and inherited properties.
 
  |Name  |Type  |Desc                           |
- |---------------------------------------------|
+ |------|------|-------------------------------|
  |obj   |object|The object to query            |
  |return|array |The array of all property names|
 
@@ -112,7 +112,7 @@ Retrieve all the names of object's own and inherited properties.
 Split different string case to an array.
 
  |Name  |Type  |Desc           |
- |-----------------------------|
+ |------|------|---------------|
  |str   |string|String to split|
  |return|array |Result array   |
 
@@ -130,7 +130,7 @@ Split different string case to an array.
 Convert string to "camelCase".
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |str   |string|String to convert |
  |return|string|Camel cased string|
 
@@ -146,7 +146,7 @@ Convert string to "camelCase".
 Convert string to "kebabCase".
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |str   |string|String to convert |
  |return|string|Kebab cased string|
 
@@ -162,7 +162,7 @@ Convert string to "kebabCase".
 Get the index at which the first occurrence of value.
 
  |Name       |Type  |Desc                |
- |---------------------------------------|
+ |-----------|------|--------------------|
  |arr        |array |Array to search     |
  |val        |*     |Value to search for |
  |[fromIdx=0]|number|Index to search from|
@@ -176,7 +176,7 @@ Get the index at which the first occurrence of value.
 Create an array of the own enumerable property names of object.
 
  |Name  |Type  |Desc                       |
- |-----------------------------------------|
+ |------|------|---------------------------|
  |obj   |object|The object to query        |
  |return|array |The array of property names|
 
@@ -185,7 +185,7 @@ Create an array of the own enumerable property names of object.
 Check if string ends with the given target string.
 
  |Name  |Type   |Desc                           |
- |----------------------------------------------|
+ |------|-------|-------------------------------|
  |str   |string |The string to search           |
  |suffix|string |String suffix                  |
  |return|boolean|True if string ends with target|
@@ -199,7 +199,7 @@ Check if string ends with the given target string.
 Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
 
  |Name  |Type  |Desc            |
- |------------------------------|
+ |------|------|----------------|
  |str   |string|String to escape|
  |return|string|Escaped string  |
 
@@ -212,7 +212,7 @@ Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' charact
 Escape special chars to be used as literals in RegExp constructors.
 
  |Name  |Type  |Desc            |
- |------------------------------|
+ |------|------|----------------|
  |str   |string|string to escape|
  |return|string|Escaped string  |
 
@@ -233,7 +233,7 @@ No documentation.
 Return the first argument given.
 
  |Name  |Type|Desc       |
- |-----------------------|
+ |------|----|-----------|
  |val   |*   |Any value  |
  |return|*   |Given value|
 
@@ -246,7 +246,7 @@ Return the first argument given.
 Alias of Object.prototype.toString.
 
  |Name  |Type  |Desc                                    |
- |------------------------------------------------------|
+ |------|------|----------------------------------------|
  |value |*     |Source value                            |
  |return|string|String representation of the given value|
 
@@ -255,7 +255,7 @@ Alias of Object.prototype.toString.
 Check if value is classified as an arguments object.
 
  |Name  |Type   |Desc                                |
- |---------------------------------------------------|
+ |------|-------|------------------------------------|
  |value |*      |Value to check                      |
  |return|boolean|True if value is an arguments object|
 
@@ -269,9 +269,9 @@ Check if value is classified as an arguments object.
 
 Checks if value is classified as a Number primitive or object.
 
- |Name|Type|Desc|
- |--------------|
- |value|*|The value to check|
+ |Name  |Type   |Desc                                             |
+ |------|-------|-------------------------------------------------|
+ |value |*      |The value to check                               |
  |return|boolean|True if value is correctly classified, else false|
 
 ## isArrLike 
@@ -283,7 +283,7 @@ No documentation.
 Iterates over elements of collection and invokes iteratee for each element.
 
  |Name    |Type         |Desc                          |
- |-----------------------------------------------------|
+ |--------|-------------|------------------------------|
  |obj     |object\|array|Collection to iterate over    |
  |iteratee|function     |Function invoked per iteration|
  |[ctx]   |*            |Function context              |
@@ -297,7 +297,7 @@ Iterates over elements of collection and invokes iteratee for each element.
 Used to create extend, extendOwn and defaults.
 
  |Name    |Type    |Desc                          |
- |------------------------------------------------|
+ |--------|--------|------------------------------|
  |keysFn  |function|Function to get object keys   |
  |defaults|boolean |No override when set to true  |
  |return  |function|The result function, extend...|
@@ -307,7 +307,7 @@ Used to create extend, extendOwn and defaults.
 Fill in undefined properties in object with the first value present in the following list of defaults objects.
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |obj   |object|Destination object|
  |*src  |object|Sources objects   |
  |return|object|Destination object|
@@ -323,14 +323,14 @@ Simple api for handling browser cookies.
  ## get: get cookie value.
 
  |Name  |Type  |Desc                      |
- |----------------------------------------|
+ |------|------|--------------------------|
  |key   |string|Cookie key                |
  |return|string|Corresponding cookie value|
 
  ## set: set cookie value.
 
  |Name     |Type   |Desc          |
- |--------------------------------|
+ |---------|-------|--------------|
  |key      |string |Cookie key    |
  |val      |string |Cookie value  |
  |[options]|object |Cookie options|
@@ -339,7 +339,7 @@ Simple api for handling browser cookies.
  ## remove: remove cookie value.
 
  |Name     |Type   |Desc          |
- |--------------------------------|
+ |---------|-------|--------------|
  |key      |string |Cookie key    |
  |[options]|object |Cookie options|
  |return   |exports|Module cookie |
@@ -355,7 +355,7 @@ Simple api for handling browser cookies.
 Copy all of the properties in the source objects over to the destination object.
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |obj   |object|Destination object|
  |*src  |object|Sources objects   |
  |return|object|Destination object|
@@ -369,7 +369,7 @@ Copy all of the properties in the source objects over to the destination object.
 Like extend, but only copies own properties over to the destination object.
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |obj   |object|Destination object|
  |*src  |object|Sources objects   |
  |return|object|Destination object|
@@ -383,7 +383,7 @@ Like extend, but only copies own properties over to the destination object.
 Creates an array of the own enumerable property values of object.
 
  |Name  |Type  |Desc                    |
- |--------------------------------------|
+ |------|------|------------------------|
  |obj   |object|Object to query         |
  |return|array |Array of property values|
 
@@ -400,7 +400,7 @@ No documentation.
 Check if value is a string primitive.
 
  |Name  |Type   |Desc                               |
- |--------------------------------------------------|
+ |------|-------|-----------------------------------|
  |val   |*      |The value to check                 |
  |return|boolean|True if value is a string primitive|
 
@@ -413,7 +413,7 @@ Check if value is a string primitive.
 Check if value is an `Array` object.
 
  |Name  |Type   |Desc                              |
- |-------------------------------------------------|
+ |------|-------|----------------------------------|
  |val   |*      |The value to check                |
  |return|boolean|True if value is an `Array` object|
 
@@ -427,7 +427,7 @@ Check if value is an `Array` object.
 Check if value is a boolean primitive.
 
  |Name  |Type   |Desc                      |
- |-----------------------------------------|
+ |------|-------|--------------------------|
  |val   |*      |The value to check        |
  |return|boolean|True if value is a boolean|
 
@@ -442,7 +442,7 @@ Check if value is a boolean primitive.
 Check if string starts with the given target string.
 
  |Name  |Type   |Desc                             |
- |------------------------------------------------|
+ |------|-------|---------------------------------|
  |str   |string |The string to search             |
  |prefix|string |String prefix                    |
  |return|boolean|True if string starts with prefix|
@@ -460,7 +460,7 @@ No documentation.
 Check if value is a DOM element.
 
  |Name  |Type   |Desc                          |
- |---------------------------------------------|
+ |------|-------|------------------------------|
  |val   |*      |Value to check                |
  |return|boolean|True if value is a DOM element|
 
@@ -473,7 +473,7 @@ Check if value is a DOM element.
 Check if value is an empty object or array.
 
  |Name  |Type   |Desc                  |
- |-------------------------------------|
+ |------|-------|----------------------|
  |val   |*      |Value to check        |
  |return|boolean|True if value is empty|
 
@@ -487,7 +487,7 @@ Check if value is an empty object or array.
 Check if value is an error.
 
  |Name  |Type   |Desc                     |
- |----------------------------------------|
+ |------|-------|-------------------------|
  |val   |*      |The value to check       |
  |return|boolean|True if value is an error|
 
@@ -504,7 +504,7 @@ No documentation.
 Check if value is a function.
 
  |Name  |Type   |Desc                       |
- |------------------------------------------|
+ |------|-------|---------------------------|
  |val   |*      |The value to check         |
  |return|boolean|True if value is a function|
 
@@ -519,8 +519,8 @@ Check if value is a function.
 
 Check if keys and values in src are contained in obj.
 
- |Name  |Type  |Desc                               |
- |-------------------------------------------------|
+ |Name  |Type   |Desc                              |
+ |------|-------|----------------------------------|
  |obj   |object |Object to inspect                 |
  |src   |object |Object of property values to match|
  |return|boolean|True if object is match           |
@@ -534,7 +534,7 @@ Check if keys and values in src are contained in obj.
 Check if value is a regular expression.
 
  |Name  |Type   |Desc                                 |
- |----------------------------------------------------|
+ |------|-------|-------------------------------------|
  |val   |*      |The value to check                   |
  |return|boolean|True if value is a regular expression|
 
@@ -551,7 +551,7 @@ Inject script tag into page with given src value.
 Remove chars or white-spaces from beginning of string.
 
  |Name  |Type         |Desc                  |
- |-------------------------------------------|
+ |------|-------------|----------------------|
  |str   |string       |The string to trim    |
  |chars |string\|array|The characters to trim|
  |return|string       |The trimmed string    |
@@ -588,7 +588,7 @@ function
 Iterates over elements of collection, returning an array of all the values that pass a truth test.
 
  |Name     |Type    |Desc                                   |
- |----------------------------------------------------------|
+ |---------|--------|---------------------------------------|
  |obj      |array   |Collection to iterate over             |
  |predicate|function|Function invoked per iteration         |
  |[ctx]    |*       |Predicate context                      |
@@ -606,7 +606,7 @@ Iterates over elements of collection, returning an array of all the values that 
 Create an array of values by running each element in collection through iteratee.
 
  |Name    |Type         |Desc                          |
- |-----------------------------------------------------|
+ |--------|-------------|------------------------------|
  |obj     |array\|object|Collection to iterate over    |
  |iteratee|function     |Function invoked per iteration|
  |[ctx]   |*            |Function context              |
@@ -621,7 +621,7 @@ Create an array of values by running each element in collection through iteratee
 Convert value to an array.
 
  |Name  |Type |Desc            |
- |-----------------------------|
+ |------|-----|----------------|
  |val   |*    |Value to convert|
  |return|array|Converted array |
 
@@ -637,7 +637,7 @@ Convert value to an array.
 Create JavaScript class.
 
  |Name   |Type    |Desc                             |
- |--------------------------------------------------|
+ |-------|--------|---------------------------------|
  |methods|object  |Public methods                   |
  |statics|object  |Static methods                   |
  |return |function|Function used to create instances|
@@ -735,7 +735,7 @@ No documentation.
 Check if predicate return truthy for any element.
 
  |Name     |Type         |Desc                                          |
- |----------------------------------------------------------------------|
+ |---------|-------------|----------------------------------------------|
  |obj      |array\|object|Collection to iterate over                    |
  |predicate|function     |Function to invoked per iteration             |
  |ctx      |*            |Predicate context                             |
@@ -765,7 +765,7 @@ No documentation.
 Convert value to a number.
 
  |Name  |Type  |Desc            |
- |------------------------------|
+ |------|------|----------------|
  |val   |*     |Value to process|
  |return|number|Resulted number |
 
@@ -782,7 +782,7 @@ No documentation.
 Remove chars or white-spaces from end of string.
 
  |Name  |Type         |Desc                  |
- |-------------------------------------------|
+ |------|-------------|----------------------|
  |str   |string       |The string to trim    |
  |chars |string\|array|The characters to trim|
  |return|string       |The trimmed string    |
@@ -798,7 +798,7 @@ Remove chars or white-spaces from end of string.
 Remove chars or white-spaces from beginning end of string.
 
  |Name  |Type         |Desc                  |
- |-------------------------------------------|
+ |------|-------------|----------------------|
  |str   |string       |The string to trim    |
  |chars |string\|array|The characters to trim|
  |return|string       |The trimmed string    |
@@ -818,7 +818,7 @@ No documentation.
 Convert value to a string.
 
  |Name  |Type  |Desc            |
- |------------------------------|
+ |------|------|----------------|
  |val   |*     |Value to convert|
  |return|string|Resulted string |
 
@@ -834,7 +834,7 @@ Convert value to a string.
 Generate a globally-unique id.
 
  |Name  |Type  |Desc              |
- |--------------------------------|
+ |------|------|------------------|
  |prefix|string|Id prefix         |
  |return|string|Globally-unique id|
 
@@ -847,7 +847,7 @@ Generate a globally-unique id.
 Create duplicate-free version of an array.
 
  |Name     |Type    |Desc                         |
- |------------------------------------------------|
+ |---------|--------|-----------------------------|
  |arr      |array   |Array to inspect             |
  |[compare]|function|Function for comparing values|
  |return   |array   |New duplicate free array     |
@@ -861,7 +861,7 @@ Create duplicate-free version of an array.
 Convert the first character of string to upper case.
 
  |Name  |Type  |Desc             |
- |-------------------------------|
+ |------|------|-----------------|
  |str   |string|String to convert|
  |return|string|Converted string |
 

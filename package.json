@@ -6,7 +6,7 @@
   "scripts": {
     "release": "webpack && webpack -p --config script/release.js",
     "dev": "webpack-dev-server",
-    "utilDoc": "eustia docs  src/lib/util.js -f md -o docs/util.md"
+    "utilDoc": "eustia docs src/lib/util.js -f md -o docs/Util_Api.md"
   },
   "repository": {
     "type": "git",
