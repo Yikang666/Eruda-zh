@@ -37,7 +37,7 @@ export default function highlight(str, lang)
             tag = (!end? $0.substr(3) : $0.substr(6)).replace(/_/g,''),
             lastTag = lvls.length > 0 ? lvls[lvls.length - 1] : null;
 
-        if(!end && (lastTag == null || tag == lastTag || (lastTag != null && lang[lastTag].embed != undefined && lang[lastTag].embed.indexOf(tag) > -1)))
+        if(!end && (lastTag == null || tag == lastTag || (lastTag != null && lang[lastTag] && lang[lastTag].embed != undefined && lang[lastTag].embed.indexOf(tag) > -1)))
         {
             lvls.push(tag);
 

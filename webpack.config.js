@@ -8,7 +8,7 @@ var nodeModDir = path.resolve('./node_modules/') + '/',
     banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage;
 
 module.exports = {
-    devtool: 'source-map',
+    devtool: false,
     entry: './src/index.es6',
     devServer: {
         contentBase: './test'

@@ -1,5 +1,6 @@
 import Tool from '../DevTools/Tool.es6'
 import CssStore from './CssStore.es6'
+import stringify from '../lib/stringify.es6'
 import Highlight from './Highlight.es6'
 import Select from './Select.es6'
 import util from '../lib/util'
@@ -126,6 +127,18 @@ export default class Elements extends Tool
                 sources.set('js', text);
                 parent.showTool('sources');
             }
+        }).on('click', '.eruda-breadcrumb', () =>
+        {
+            let data = this._elData || JSON.parse(stringify(this._curEl, null, this._curEl, false)),
+                sources = parent.get('sources');
+
+            this._elData = data;
+
+            if (sources)
+            {
+                sources.set('json', data);
+                parent.showTool('sources');
+            }
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
@@ -173,6 +186,7 @@ export default class Elements extends Tool
     _setEl(el)
     {
         this._curEl = el;
+        this._elData = null;
         this._curCssStore = new CssStore(el);
         this._highlight.setEl(el);
         this._rmDefComputedStyle = true;

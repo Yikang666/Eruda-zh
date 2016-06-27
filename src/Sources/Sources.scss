@@ -15,7 +15,9 @@
             font-size: $font-size-s;
         }
         .image {
-            @include breadcrumb();
+            .breadcrumb {
+                @include breadcrumb();
+            }
             .img-container {
                 text-align: center;
                 img {
@@ -30,7 +32,9 @@
             }
         }
         .http {
-            @include breadcrumb();
+            .breadcrumb {
+                @include breadcrumb();
+            }
             .section {
                 background: #fff;
                 h2 {

@@ -9,7 +9,17 @@
             @include overflow-auto(y);
             height: 100%;
         }
-        @include breadcrumb();
+        .breadcrumb {
+            @include breadcrumb();
+            transition: background $anim-duration, color $anim-duration;
+            &:active {
+                background: $blue;
+                color: #fff;
+                span {
+                    color: #fff;
+                }
+            }
+        }
         .section {
             h2 {
                 background: $blue;

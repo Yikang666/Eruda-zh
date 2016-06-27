@@ -18,15 +18,13 @@
 }
 
 @mixin breadcrumb {
-    .breadcrumb {
-        background: #fff;
-        margin-bottom: 10px;
-        word-break: break-all;
-        padding: $padding;
-        font-size: $font-size-l;
-        min-height: 40px;
-        border-bottom: 1px solid $gray-light;
-    }
+    background: #fff;
+    margin-bottom: 10px;
+    word-break: break-all;
+    padding: $padding;
+    font-size: $font-size-l;
+    min-height: 40px;
+    border-bottom: 1px solid $gray-light;
 }
 
 @mixin clear-float {
