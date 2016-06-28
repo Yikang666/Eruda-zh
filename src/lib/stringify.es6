@@ -79,12 +79,7 @@ export default function stringify(obj, visited, topObj, simple)
             }
             util.each(names, name =>
             {
-                try {
-                    parts.push(`"${escapeJsonStr(name)}": ${stringify(obj[name], visited, null, simple)}`);
-                } catch (e)
-                {
-                    parts.push(`"${escapeJsonStr(name)}": "${escapeJsonStr(e.message)}"`);
-                }
+                parts.push(`"${escapeJsonStr(name)}": ${stringify(topObj[name], visited, null, simple)}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(', ') + '}';
@@ -134,15 +129,7 @@ export default function stringify(obj, visited, topObj, simple)
             names.sort(sortObjName);
             util.each(names, name =>
             {
-                try
-                {
-                    let val = topObj[name];
-
-                    parts.push(`"${escapeJsonStr(name)}": ${stringify(val, visited, null, simple)}`);
-                } catch (e)
-                {
-                    parts.push(`"${escapeJsonStr(name)}": "${escapeJsonStr(e.message)}"`);
-                }
+                parts.push(`"${escapeJsonStr(name)}": ${stringify(topObj[name], visited, null, simple)}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(',\n') + '\n}';

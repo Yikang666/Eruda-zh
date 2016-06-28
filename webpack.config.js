@@ -11,7 +11,8 @@ module.exports = {
     devtool: false,
     entry: './src/index.es6',
     devServer: {
-        contentBase: './test'
+        contentBase: './test',
+        port: 3000
     },
     output: {
         path: __dirname + '/dist/',
