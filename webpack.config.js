@@ -16,8 +16,6 @@ module.exports = {
     },
     output: {
         path: __dirname + '/dist/',
-        devtoolLineToLine: true,
-        sourceMapFilename: "./eruda.js.map",
         publicPath: "/assets/",
         filename: 'eruda.js',
         library: ['eruda'],

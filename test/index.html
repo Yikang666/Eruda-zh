@@ -54,20 +54,20 @@
             }
             setTimeout(function ()
             {
-                req('http://localhost:8080/webpack-dev-server/test/style.css');
+                req('webpack-dev-server/test/style.css');
             }, 1000);
             setTimeout(function ()
             {
-                req('http://localhost:8080/webpack-dev-server/test/data.json');
+                req('webpack-dev-server/test/data.json');
             }, 2000);
             setTimeout(function ()
             {
-                req('http://localhost:8080/webpack-dev-server/test/empty.json');
+                req('webpack-dev-server/test/empty.json');
             }, 3000);
 
             var xhr = new XMLHttpRequest();
             xhr.responseType = 'arraybuffer';
-            xhr.open('GET', 'http://localhost:8080/webpack-dev-server/test/data.json');
+            xhr.open('GET', 'webpack-dev-server/test/data.json');
             xhr.send();
         }
     </script>

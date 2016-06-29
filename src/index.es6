@@ -13,26 +13,22 @@ import util from './lib/util'
 import config from './lib/config.es6'
 
 module.exports = {
-    init(options = {})
+    init({el, tool} = {})
     {
-        util.defaults(options, {
-            tool: ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features']
-        });
-        options.tool = util.toArr(options.tool).reverse();
-        this._options = options;
-
-        this._initContainer();
+        this._initContainer(el);
         this._initStyle();
         this._initDevTools();
         this._initEntryBtn();
         this._initSettings();
-        this._initTools();
+        this._initTools(tool);
     },
     config, util,
     Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
     get(name)
     {
-        return util.isUndef(name) ? this._devTools : this._devTools.get(name);
+        let devTools = this._devTools;
+
+        return name ? devTools : devTools.get(name);
     },
     add(tool)
     {
@@ -48,21 +44,24 @@ module.exports = {
     },
     show(name)
     {
-        util.isUndef(name) ? this._devTools.show() : this._devTools.showTool(name);
+        let devTools = this._devTools;
+
+        name ? devTools.show() : devTools.showTool(name);
 
         return this;
     },
-    _initContainer()
+    _initContainer(el)
     {
-        let el = this._options.container;
-
         if (!el)
         {
             el = document.createElement('div');
             document.documentElement.appendChild(el);
         }
-        el.id = 'eruda';
-        el.className = 'eruda-container';
+
+        Object.assign(el, {
+            id: 'eruda',
+            className: 'eruda-container'
+        });
 
         this._$el = util.$(el);
     },
@@ -72,18 +71,22 @@ module.exports = {
     },
     _initStyle()
     {
-        this._$el.append('<div class="eruda-style-container"></div>');
-        util.evalCss.container = this._$el.find('.eruda-style-container').get(0);
+        let className = 'eruda-style-container',
+            $el = this._$el;
 
-        util.evalCss(require('./style/style.scss') +
-                     require('./style/reset.scss') +
-                     require('./style/icon.css'));
+        $el.append(`<div class="${className}"></div>`);
+
+        util.evalCss.container = $el.find(`.${className}`).get(0);
+        util.evalCss(
+            require('./style/style.scss') +
+            require('./style/reset.scss') +
+            require('./style/icon.css')
+        );
     },
     _initEntryBtn()
     {
-        let entryBtn = this._entryBtn = new EntryBtn(this._$el);
-
-        entryBtn.on('click', () => this._devTools.toggle());
+        this._entryBtn = new EntryBtn(this._$el);
+        this._entryBtn.on('click', () => this._devTools.toggle());
     },
     _initSettings()
     {
@@ -100,10 +103,11 @@ module.exports = {
                 .select(devTools.config, 'displaySize', 'Display Size', ['100%', '90%', '80%', '70%', '60%', '50%'])
                 .separator();
     },
-    _initTools()
+    _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features'])
     {
-        let tool = this._options.tool,
-            devTools = this._devTools;
+        tool = util.toArr(tool).reverse();
+
+        let devTools = this._devTools;
 
         tool.forEach(name =>
         {
