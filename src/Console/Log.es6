@@ -287,7 +287,7 @@ export default class Log extends util.Emitter
 
         var isRegexp = util.isRegExp(filter);
 
-        return logs.filter((val) =>
+        return logs.filter(val =>
         {
             if (isRegexp) return filter.test(val.val);
 

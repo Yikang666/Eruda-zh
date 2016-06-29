@@ -9,19 +9,16 @@ export default class Console extends Tool
     {
         super();
 
-        util.evalCss(require('./Console.scss'));
-
         this.name = 'console';
     }
     init($el, parent)
     {
         super.init($el);
 
-        this._parent = parent;
         this._appendTpl();
         this._initLog();
-        this._bindEvent();
-        this._initConfig();
+        this._initConfig(parent);
+        this._bindEvent(parent);
     }
     show()
     {
@@ -31,17 +28,14 @@ export default class Console extends Tool
     }
     overrideConsole()
     {
-        var log = this._log,
+        let log = this._log,
             origConsole = this._origConsole = {},
             winConsole = window.console;
 
         CONSOLE_METHOD.forEach(name =>
         {
-            var origin = origConsole[name] = util.noop;
-            if (winConsole[name])
-            {
-                origin = origConsole[name] = winConsole[name].bind(winConsole);
-            }
+            let origin = origConsole[name] = util.noop;
+            if (winConsole[name]) origin = origConsole[name] = winConsole[name].bind(winConsole);
 
             winConsole[name] = (...args) =>
             {
@@ -81,71 +75,76 @@ export default class Console extends Tool
     }
     _appendTpl()
     {
-        var $el = this._$el;
+        let $el = this._$el;
 
+        util.evalCss(require('./Console.scss'));
         $el.append(require('./Console.hbs')());
-        this._$control = $el.find('.eruda-control');
-        this._$logs = $el.find('.eruda-logs');
-        this._$inputContainer = $el.find('.eruda-js-input');
-        this._$input = this._$inputContainer.find('textarea');
-        this._$inputBtns = this._$inputContainer.find('.eruda-buttons');
+
+        let _$inputContainer = $el.find('.eruda-js-input'),
+            _$input = _$inputContainer.find('textarea'),
+            _$inputBtns = _$inputContainer.find('.eruda-buttons');
+
+        Object.assign(this, {
+            _$control: $el.find('.eruda-control'),
+            _$logs: $el.find('.eruda-logs'),
+            _$inputContainer, _$input, _$inputBtns
+        });
     }
     _initLog()
     {
-        this._log = new Log(this._$logs, this);
+        let $filter = this._$control.find('.filter'),
+            log = this._log = new Log(this._$logs, this);
 
-        this._log.on('filter', (filter) =>
+        log.on('filter', (filter) => $filter.each(function ()
         {
-            this._$control.find('.filter').each(function ()
-            {
-                var $this = util.$(this),
-                    isMatch = $this.data('filter') === filter;
+            let $this = util.$(this),
+                isMatch = $this.data('filter') === filter;
 
-                $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
-            });
-        });
+            $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
+        }));
     }
-    _bindEvent()
+    _bindEvent(parent)
     {
-        var $input = this._$input,
+        let $input = this._$input,
             $inputBtns = this._$inputBtns,
             $control = this._$control,
-            parent = this._parent,
-            log = this._log;
+            log = this._log,
+            config = this.config;
 
-        $control.on('click', '.clear-console', () => log.clear());
-        $control.on('click', '.filter', function ()
-        {
-            log.filter(util.$(this).data('filter'));
-        }).on('click', '.help', () => log.help());
+        $control.on('click', '.clear-console', () => log.clear())
+                .on('click', '.filter', function ()
+                {
+                    log.filter(util.$(this).data('filter'))
+                })
+                .on('click', '.help', () => log.help());
 
-        $inputBtns.on('click', '.cancel', () => this._hideInput());
-        $inputBtns.on('click', '.execute', () =>
-        {
-            var jsInput = $input.val().trim();
-            if (jsInput === '') return;
+        $inputBtns.on('click', '.cancel', () => this._hideInput())
+                  .on('click', '.execute', () =>
+                  {
+                      let jsInput = $input.val().trim();
+                      if (jsInput === '') return;
 
-            log.input(jsInput);
-            $input.val('').get(0).blur();
-            this._hideInput();
-        });
+                      log.input(jsInput);
+                      $input.val('').get(0).blur();
+                      this._hideInput();
+                  });
 
         $input.on('focusin', () => this._showInput());
 
         log.on('viewJson', (data) =>
-        {
-            var sources = parent.get('sources');
-            if (!sources) return;
+           {
+               let sources = parent.get('sources');
+               if (!sources) return;
 
-            sources.set('json', data);
-            parent.showTool('sources');
-        }).on('insert', (log) =>
-        {
-            if (log.type === 'error' && this.config.get('displayIfErr'))
-            {
-                parent.showTool('console').show();
-            }
-        });
+               sources.set('json', data);
+               parent.showTool('sources');
+           })
+           .on('insert', (log) =>
+           {
+               let autoShow = log.type === 'error' && config.get('displayIfErr');
+
+               if (autoShow) parent.showTool('console').show();
+           });
     }
     _hideInput()
     {
@@ -165,9 +164,10 @@ export default class Console extends Tool
 
         this._$inputBtns.show();
     }
-    _initConfig()
+    _initConfig(parent)
     {
-        var cfg = this.config = config.create('eruda-console');
+        let cfg = this.config = config.create('eruda-console'),
+            log = this._log;
 
         cfg.set(util.defaults(cfg.get(), {
             catchGlobalErr: true,
@@ -176,12 +176,12 @@ export default class Console extends Tool
             maxLogNum: 'infinite'
         }));
 
-        var maxLogNum = cfg.get('maxLogNum');
+        let maxLogNum = cfg.get('maxLogNum');
         maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum;
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
-        this._log.setMaxNum(maxLogNum);
+        log.setMaxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
         {
@@ -189,11 +189,11 @@ export default class Console extends Tool
             {
                 case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
-                case 'maxLogNum': return this._log.setMaxNum(val === 'infinite' ? val : +val);
+                case 'maxLogNum': return log.setMaxNum(val === 'infinite' ? val : +val);
             }
         });
 
-        var settings = this._parent.get('settings');
+        let settings = parent.get('settings');
 
         settings.text('Console')
                 .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
