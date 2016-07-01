@@ -13,6 +13,7 @@ export default class NavBar extends util.Emitter
         this._$ul = $el.find('ul');
         this._$bottomBar = $el.find('.eruda-bottom-bar');
         this._len = 0;
+        this._height = 55;
 
         this._bindEvent();
     }
@@ -20,7 +21,12 @@ export default class NavBar extends util.Emitter
     {
         this._len++;
         this._$ul.prepend(`<li class="${name}" ontouchstart>${name}</li>`);
-        this._resetWidth();
+        this._resetStyle();
+    }
+    setHeight(height)
+    {
+        this._height = height;
+        this._resetStyle();
     }
     activeTool(name)
     {
@@ -40,9 +46,16 @@ export default class NavBar extends util.Emitter
             }
         });
     }
-    _resetWidth()
+    _resetStyle()
     {
+        var height = this._height;
+
+        this._$el.css('height', height);
         this._$ul.css({width: this._len * ITEM_WIDTH});
+        this._$ul.find('li').css({
+            'height': height,
+            'lineHeight': height
+        });
     }
     _bindEvent()
     {

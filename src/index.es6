@@ -99,6 +99,7 @@ module.exports = {
                 .switch(this._entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
                 .separator()
                 .switch(devTools.config, 'activeEruda', 'Always Activated')
+                .switch(devTools.config, 'tinyNavBar', 'Tiny Navigation Bar')
                 .select(devTools.config, 'transparency', 'Transparency', ['100%', '95%', '90%', '85%', '80%', '75%', '70%'])
                 .select(devTools.config, 'displaySize', 'Display Size', ['100%', '90%', '80%', '70%', '60%', '50%'])
                 .separator();

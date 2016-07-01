@@ -57,6 +57,7 @@
             margin-bottom: 10px;
             li {
                 @include overflow-auto(x);
+                cursor: pointer;
                 border-top: 1px solid $gray-light;
                 height: 41px;
                 white-space: nowrap;

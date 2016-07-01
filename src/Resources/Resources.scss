@@ -42,6 +42,7 @@
             background: #fff;
             padding: $padding !important;
             li {
+                cursor: pointer;
                 width: 25%;
                 float: left;
                 overflow-y: hidden;
@@ -70,6 +71,7 @@
                     font-size: 0;
                     width: 40px;
                     .icon-trash {
+                        cursor: pointer;
                         color: $red;
                         font-size: $font-size;
                         display: inline-block;

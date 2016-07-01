@@ -11,6 +11,7 @@
         }
         .breadcrumb {
             @include breadcrumb();
+            cursor: pointer;
             transition: background $anim-duration, color $anim-duration;
             &:active {
                 background: $blue;
@@ -27,6 +28,9 @@
                 color: #fff;
                 font-size: $font-size;
                 transition: background $anim-duration;
+                &.active-effect {
+                    cursor: pointer;
+                }
                 &.active-effect:active {
                     background: $blue-dark;
                 }
@@ -39,6 +43,7 @@
             border-bottom: 1px solid $gray-light;
             li {
                 @include overflow-auto(x);
+                cursor: pointer;
                 padding: $padding;
                 border-top: 1px solid $gray-light;
                 white-space: nowrap;
@@ -158,6 +163,7 @@
             font-size: 0;
             border-top: 1px solid $gray-light;
             .btn {
+                cursor: pointer;
                 text-align: center;
                 color: $gray;
                 font-size: 14px;

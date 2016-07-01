@@ -102,11 +102,13 @@ export default class DevTools extends util.Emitter
         cfg.set(util.defaults(cfg.get(), {
             transparency: '100%',
             displaySize: '100%',
+            tinyNavBar: false,
             activeEruda: false
         }));
 
         this._setTransparency(cfg.get('transparency'));
         this._setDisplaySize(cfg.get('displaySize'));
+        this._setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55);
 
         cfg.on('change', (key, val) =>
         {
@@ -115,8 +117,14 @@ export default class DevTools extends util.Emitter
                 case 'transparency': return this._setTransparency(val);
                 case 'displaySize': return this._setDisplaySize(val);
                 case 'activeEruda': return activeEruda(val);
+                case 'tinyNavBar': return this._setNavBarHeight(val ? 30 : 55);
             }
         });
+    }
+    _setNavBarHeight(height)
+    {
+        this._$el.css('paddingTop', height);
+        this._navBar.setHeight(height);
     }
     _setTransparency(opacity)
     {

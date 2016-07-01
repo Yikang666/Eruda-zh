@@ -12,6 +12,9 @@
             color: $gray-dark;
             font-size: 12px;
         }
+        .select {
+            cursor: pointer;
+        }
         .select .head, .switch {
             padding: $padding;
             background: #fff;
