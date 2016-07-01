@@ -272,14 +272,18 @@ export default class Elements extends Tool
     }
 }
 
-var regColor = /rgba?\((.*?)\)/g;
-
 function processStyleRules(style)
 {
-    util.each(style, (val, key) =>
-    {
-        style[key] = val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&');
-    });
+    util.each(style, (val, key) => style[key] = processStyleRule(val));
+}
+
+let regColor = /rgba?\((.*?)\)/g,
+    regCssUrl = /url\("?(.*?)"?\)/g;
+
+function processStyleRule(val)
+{
+    return val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&')
+              .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`);
 }
 
 const isElExist = val => util.isEl(val) && val.parentNode;
@@ -313,7 +317,14 @@ function formatElName(data)
 
 var formatAttr = attributes => util.map(attributes, attr =>
 {
-    return {name: attr.name, value: attr.value};
+    let {name, value} = attr;
+    value = util.escape(value);
+
+    let isLink = (name === 'src' || name === 'href') && !util.startWith(value, 'data');
+    if (isLink) value = wrapLink(value);
+    if (name === 'style') value = processStyleRule(value);
+
+    return {name, value};
 });
 
 function formatChildNodes(nodes)
@@ -428,3 +439,5 @@ function rmEvent(el, type, listener, useCapture = false)
 }
 
 var getWinEventProto = () => (window.EventTarget && window.EventTarget.prototype) || window.Node.prototype;
+
+let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;

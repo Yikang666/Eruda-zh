@@ -43,13 +43,16 @@
             border-bottom: 1px solid $gray-light;
             li {
                 @include overflow-auto(x);
-                cursor: pointer;
+                cursor: default;
                 padding: $padding;
                 border-top: 1px solid $gray-light;
                 white-space: nowrap;
                 transition: background $anim-duration, color $anim-duration;
                 span {
                     transition: color $anim-duration;
+                }
+                &.active-effect {
+                    cursor: pointer;
                 }
                 &.active-effect:active {
                     background: $blue;
@@ -63,6 +66,9 @@
         .attributes {
             background: #fff;
             font-size: 12px;
+            a {
+                color: $blue;
+            }
             .table-wrapper {
                 @include overflow-auto(x);
             }
@@ -89,6 +95,9 @@
         .computed-style {
             background: #fff;
             font-size: 12px;
+            a {
+                color: $blue;
+            }
             .table-wrapper {
                 @include overflow-auto(y);
                 max-height: 200px;
@@ -117,6 +126,9 @@
                     .rule {
                         padding-left: 2em;
                         word-break: break-all;
+                        a {
+                            color: $blue;
+                        }
                         span {
                             color: $red;
                         }
