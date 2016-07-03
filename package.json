@@ -1,8 +1,8 @@
 {
   "name": "eruda",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Console for Mobile Browsers",
-  "main": "dist/eruda.js",
+  "main": "eruda.js",
   "scripts": {
     "release": "webpack && webpack -p --config script/release.js",
     "dev": "webpack-dev-server",
