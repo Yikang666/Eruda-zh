@@ -53,6 +53,13 @@ Add this script to your page.
 <script>eruda.init();</script>
 ```
 
+It's also available on [jsDelivr](http://www.jsdelivr.com/?query=eruda).
+
+```html
+<script src="//cdn.jsdelivr.net/eruda/1.0.0/eruda.min.js"></script>
+<script>eruda.init();</script>
+```
+
 The JavaScript file size is quite huge(about 85kb gzipped) and therefore not
 suitable to include in mobile pages. It's recommended to make sure eruda is
 loaded only when eruda is set to true on url(http://example.com/?eruda=true),
