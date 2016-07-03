@@ -49,7 +49,7 @@ npm install eruda --save
 Add this script to your page.
 
 ```html
-<script src="node_modules/eruda/dist/eruda.min.js"></script>
+<script src="node_modules/eruda/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
@@ -60,7 +60,7 @@ for example:
 
 ```javascript
 (function () {
-    var src = 'node_modules/eruda/dist/eruda.min.js';
+    var src = 'node_modules/eruda/eruda.min.js';
     if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
     document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
     document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');

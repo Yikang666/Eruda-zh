@@ -15,7 +15,7 @@ module.exports = {
         port: 3000
     },
     output: {
-        path: __dirname + '/dist/',
+        path: __dirname,
         publicPath: "/assets/",
         filename: 'eruda.js',
         library: ['eruda'],

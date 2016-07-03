@@ -37,7 +37,7 @@ npm install eruda --save
 在页面中加载脚本：
 
 ```html
-<script src="node_modules/eruda/dist/eruda.min.js"></script>
+<script src="node_modules/eruda/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
@@ -45,7 +45,7 @@ Js文件对于移动端来说略重（gzip后大概85kb）。建议通过url参�
 
 ```javascript
 (function () {
-    var src = 'node_modules/eruda/dist/eruda.min.js';
+    var src = 'node_modules/eruda/eruda.min.js';
     if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
     document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
     document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
