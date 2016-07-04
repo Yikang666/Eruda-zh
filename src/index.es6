@@ -46,7 +46,7 @@ module.exports = {
     {
         let devTools = this._devTools;
 
-        name ? devTools.show() : devTools.showTool(name);
+        name ? devTools.showTool(name) : devTools.show();
 
         return this;
     },
