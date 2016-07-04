@@ -28,7 +28,7 @@ module.exports = {
     {
         let devTools = this._devTools;
 
-        return name ? devTools : devTools.get(name);
+        return name ? devTools.get(name) : devTools;
     },
     add(tool)
     {
