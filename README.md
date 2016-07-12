@@ -53,10 +53,10 @@ Add this script to your page.
 <script>eruda.init();</script>
 ```
 
-It's also available on [jsDelivr](http://www.jsdelivr.com/?query=eruda).
+It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda).
 
 ```html
-<script src="//cdn.jsdelivr.net/eruda/1.0.0/eruda.min.js"></script>
+<script src="//cdn.jsdelivr.net/eruda/1.0.4/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
@@ -101,6 +101,11 @@ source code of plugins below to learn how to write your own custom tool panels.
 
 > When writing plugins, you can use utilities exposed by Eruda, see
 [docs](https://github.com/liriliri/eruda/blob/master/docs/Util_Api.md) here.
+
+## Related Projects
+
+* [eustia](https://github.com/liriliri/eustia): Generator of eruda's utility library.
+* [freego](https://github.com/surunzi/freego): Http redirect proxy injecting eruda on every page.
 
 ## License
 
