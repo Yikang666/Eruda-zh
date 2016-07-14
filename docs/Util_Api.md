@@ -1,4 +1,4 @@
-# Eustia Documentation
+# Eruda Util Documentation
 
 ## last 
 
@@ -55,17 +55,17 @@ Inherit the prototype methods from one constructor into another.
 ```javascript
 function People(name)
 {
-this._name = name;
+    this._name = name;
 }
 People.prototype = {
-getName: function ()
-{
-return this._name;
-}
+    getName: function ()
+    {
+        return this._name;
+    }
 };
 function Student(name)
 {
-this._name = name;
+    this._name = name;
 }
 inherits(Student, People);
 var s = new Student('RedHood');
@@ -261,7 +261,7 @@ Check if value is classified as an arguments object.
 
 ```javascript
 (function () {
-isArgs(arguments); // -> true
+    isArgs(arguments); // -> true
 })();
 ```
 
@@ -597,7 +597,7 @@ Iterates over elements of collection, returning an array of all the values that 
 ```javascript
 filter([1, 2, 3, 4, 5], function (val)
 {
-return val % 2 === 0;
+    return val % 2 === 0;
 }); // -> [2, 4]
 ```
 
@@ -644,33 +644,33 @@ Create JavaScript class.
 
 ```javascript
 var People = Class({
-initialize: function (name, age)
-{
-this.name = name;
-this.age = age;
-},
-introduce: function ()
-{
-return 'I am ' + this.name + ', ' + this.age + ' years old.'.
-}
+    initialize: function (name, age)
+    {
+        this.name = name;
+        this.age = age;
+    },
+    introduce: function ()
+    {
+        return 'I am ' + this.name + ', ' + this.age + ' years old.'.
+    }
 });
 
 var Student = People.extend({
-initialize: function (name, age, school)
-{
-this.callSuper('initialize', name, age);
+    initialize: function (name, age, school)
+    {
+        this.callSuper('initialize', name, age);
 
-this.school = school.
-},
-introduce: function ()
-{
-return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
-}
+        this.school = school.
+    },
+    introduce: function ()
+    {
+        return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
+    }
 }, {
-is: function (obj)
-{
-return obj instanceof Student;
-}
+    is: function (obj)
+    {
+        return obj instanceof Student;
+   }
 });
 
 var a = new Student('allen', 17, 'Hogwarts');
@@ -744,7 +744,7 @@ Check if predicate return truthy for any element.
 ```javascript
 some([2, 5], function (val)
 {
-return val % 2 === 0;
+    return val % 2 === 0;
 }); // -> true
 ```
 
