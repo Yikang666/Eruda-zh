@@ -1,4 +1,4 @@
-[中文](https://github.com/liriliri/eruda/blob/master/docs/Readme_CH.md)
+[中文](https://github.com/liriliri/eruda/blob/master/doc/Readme_CH.md)
 
 # Eruda
 
@@ -100,7 +100,7 @@ source code of plugins below to learn how to write your own custom tool panels.
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 
 > When writing plugins, you can use utilities exposed by Eruda, see
-[docs](https://github.com/liriliri/eruda/blob/master/docs/Util_Api.md) here.
+[docs](https://github.com/liriliri/eruda/blob/master/doc/Util_Api.md) here.
 
 ## Related Projects
 
