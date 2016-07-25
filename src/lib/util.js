@@ -1,11 +1,11 @@
 // Built by eustia.
 module.exports = (function ()
 {
-        var _ = {};
+    var _ = {};
 
     /* ------------------------------ last ------------------------------ */
 
-    var last = _.last = (function (exports)
+    var last = _.last = (function ()
     {
         /* Get the last element of array.
          *
@@ -19,25 +19,25 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (arr)
+        function exports(arr)
         {
             var len = arr ? arr.length : 0;
 
             if (len) return arr[len - 1];
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isUndef ------------------------------ */
 
-    var isUndef = _.isUndef = (function (exports)
+    var isUndef = _.isUndef = (function ()
     {
         /* Check if value is undefined.
          *
          * |Name  |Type   |Desc                      |
          * |------|-------|--------------------------|
-         * |val   |*      |The value to check        |
+         * |val   |*      |Value to check            |
          * |return|boolean|True if value is undefined|
          *
          * ```javascript
@@ -46,23 +46,23 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return val === void 0;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isObj ------------------------------ */
 
-    var isObj = _.isObj = (function (exports)
+    var isObj = _.isObj = (function ()
     {
         /* Check if value is the language type of Object.
          *
          * |Name  |Type   |Desc                      |
          * |------|-------|--------------------------|
-         * |val   |*      |The value to check        |
+         * |val   |*      |Value to check            |
          * |return|boolean|True if value is an object|
          *
          * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
@@ -73,19 +73,19 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             var type = typeof val;
 
             return !!val && (type === 'function' || type === 'object');
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ inherits ------------------------------ */
 
-    var inherits = _.inherits = (function (exports)
+    var inherits = _.inherits = (function ()
     {
         /* Inherit the prototype methods from one constructor into another.
          *
@@ -119,27 +119,27 @@ module.exports = (function ()
 
         function noop() {}
 
-        exports = function (Class, SuperClass)
+        function exports(Class, SuperClass)
         {
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
 
             noop.prototype  = SuperClass.prototype;
             Class.prototype = new noop();
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ has ------------------------------ */
 
-    var has = _.has = (function (exports)
+    var has = _.has = (function ()
     {
         /* Checks if key is a direct property.
          *
          * |Name  |Type   |Desc                            |
          * |------|-------|--------------------------------|
-         * |obj   |object |The object to query             |
-         * |key   |string |The path to check               |
+         * |obj   |object |Object to query                 |
+         * |key   |string |Path to check                   |
          * |return|boolean|True if key is a direct property|
          *
          * ```javascript
@@ -149,19 +149,20 @@ module.exports = (function ()
 
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
-        exports = function (obj, key)
+        function exports(obj, key)
         {
             return hasOwnProp.call(obj, key);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ slice ------------------------------ */
 
     var slice = _.slice = (function (exports)
     {
-        // TODO
+        /* TODO
+         */
 
         var arrProto = Array.prototype;
 
@@ -175,14 +176,14 @@ module.exports = (function ()
 
     /* ------------------------------ allKeys ------------------------------ */
 
-    var allKeys = _.allKeys = (function (exports)
+    var allKeys = _.allKeys = (function ()
     {
         /* Retrieve all the names of object's own and inherited properties.
          *
-         * |Name  |Type  |Desc                           |
-         * |------|------|-------------------------------|
-         * |obj   |object|The object to query            |
-         * |return|array |The array of all property names|
+         * |Name  |Type  |Desc                       |
+         * |------|------|---------------------------|
+         * |obj   |object|Object to query            |
+         * |return|array |Array of all property names|
          *
          * > Members of Object's prototype won't be retrieved.
          *
@@ -193,21 +194,21 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (obj)
+        function exports(obj)
         {
             var ret = [], key;
 
             for (key in obj) ret.push(key);
 
             return ret;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ splitCase ------------------------------ */
 
-    var splitCase = _.splitCase = (function (exports)
+    var splitCase = _.splitCase = (function ()
     {
         /* Split different string case to an array.
          *
@@ -241,11 +242,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ camelCase ------------------------------ */
 
-    var camelCase = _.camelCase = (function (exports)
+    var camelCase = _.camelCase = (function ()
     {
         /* Convert string to "camelCase".
          *
@@ -284,11 +285,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ kebabCase ------------------------------ */
 
-    var kebabCase = _.kebabCase = (function (exports)
+    var kebabCase = _.kebabCase = (function ()
     {
         /* Convert string to "kebabCase".
          *
@@ -311,13 +312,13 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ idxOf ------------------------------ */
 
-    var idxOf = _.idxOf = (function (exports)
+    var idxOf = _.idxOf = (function ()
     {
-        /* Get the index at which the first occurrence of value.
+        /* Get the index at which the first occurrence of value. TODO
          *
          * |Name       |Type  |Desc                |
          * |-----------|------|--------------------|
@@ -330,13 +331,13 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (arr, val, fromIdx)
+        function exports(arr, val, fromIdx)
         {
             return Array.prototype.indexOf.call(arr, val);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ keys ------------------------------ */
 
@@ -344,10 +345,10 @@ module.exports = (function ()
     {
         /* Create an array of the own enumerable property names of object.
          *
-         * |Name  |Type  |Desc                       |
-         * |------|------|---------------------------|
-         * |obj   |object|The object to query        |
-         * |return|array |The array of property names|
+         * |Name  |Type  |Desc                   |
+         * |------|------|-----------------------|
+         * |obj   |object|Object to query        |
+         * |return|array |Array of property names|
          */
 
         exports = Object.keys || function (obj)
@@ -367,7 +368,7 @@ module.exports = (function ()
 
     /* ------------------------------ endWith ------------------------------ */
 
-    var endWith = _.endWith = (function (exports)
+    var endWith = _.endWith = (function ()
     {
         /* Check if string ends with the given target string.
          *
@@ -382,19 +383,19 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (str, suffix)
+        function exports(str, suffix)
         {
             var idx = str.length - suffix.length;
 
             return idx >= 0 && str.indexOf(suffix, idx) === idx;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ escape ------------------------------ */
 
-    var escape = _.escape = (function (exports)
+    var escape = _.escape = (function ()
     {
         /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
          *
@@ -432,17 +433,17 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ escapeRegExp ------------------------------ */
 
-    var escapeRegExp = _.escapeRegExp = (function (exports)
+    var escapeRegExp = _.escapeRegExp = (function ()
     {
         /* Escape special chars to be used as literals in RegExp constructors.
          *
          * |Name  |Type  |Desc            |
          * |------|------|----------------|
-         * |str   |string|string to escape|
+         * |str   |string|String to escape|
          * |return|string|Escaped string  |
          *
          * ```javascript
@@ -456,11 +457,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ evalCss ------------------------------ */
 
-    var evalCss = _.evalCss = (function (exports)
+    var evalCss = _.evalCss = (function ()
     {
         function exports(css)
         {
@@ -474,11 +475,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ get ------------------------------ */
 
-    var get = _.get = (function (exports)
+    var get = _.get = (function ()
     {
         function exports(url, cb)
         {
@@ -501,11 +502,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ identity ------------------------------ */
 
-    var identity = _.identity = (function (exports)
+    var identity = _.identity = (function ()
     {
         /* Return the first argument given.
          *
@@ -519,39 +520,43 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return val;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ objToStr ------------------------------ */
 
-    var objToStr = _.objToStr = (function (exports)
+    var objToStr = _.objToStr = (function ()
     {
         /* Alias of Object.prototype.toString.
          *
-         * |Name  |Type  |Desc                                    |
-         * |------|------|----------------------------------------|
-         * |value |*     |Source value                            |
-         * |return|string|String representation of the given value|
+         * |Name  |Type  |Desc                                |
+         * |------|------|------------------------------------|
+         * |value |*     |Source value                        |
+         * |return|string|String representation of given value|
+         * 
+         * ```javascript
+         * objToStr(5); // -> '[object Number]'
+         * ```
          */
 
         var ObjToStr = Object.prototype.toString;
 
-        exports = function (val)
+        function exports(val)
         {
             return ObjToStr.call(val);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isArgs ------------------------------ */
 
-    var isArgs = _.isArgs = (function (exports)
+    var isArgs = _.isArgs = (function ()
     {
         /* Check if value is classified as an arguments object.
          *
@@ -567,72 +572,84 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return objToStr(val) === '[object Arguments]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isNum ------------------------------ */
 
-    var isNum = _.isNum = (function (exports)
+    var isNum = _.isNum = (function ()
     {
         /* Checks if value is classified as a Number primitive or object.
          *
-         * |Name  |Type   |Desc                                             |
-         * |------|-------|-------------------------------------------------|
-         * |value |*      |The value to check                               |
-         * |return|boolean|True if value is correctly classified, else false|
+         * |Name  |Type   |Desc                                 |
+         * |------|-------|-------------------------------------|
+         * |value |*      |Value to check                       |
+         * |return|boolean|True if value is correctly classified|
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return objToStr(val) === '[object Number]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isArrLike ------------------------------ */
 
-    var isArrLike = _.isArrLike = (function (exports)
+    var isArrLike = _.isArrLike = (function ()
     {
-        // TODO
+        /* Check if value is array-like.
+         *
+         * |Name  |Type   |Desc                       |
+         * |------|-------|---------------------------|
+         * |value |*      |Value to check             |
+         * |return|boolean|True if value is array like|
+         *
+         * ```javascript
+         * isArrLike('test'); // -> true
+         * isArrLike(document.body.children); // -> true;
+         * isArrLike([1, 2, 3]); // -> true
+         * ```
+         */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-        exports = function (val)
+        function exports(val)
         {
             if (!has(val, 'length')) return false;
 
             var len = val.length;
 
             return isNum(len) && len >= 0 && len <= MAX_ARR_IDX;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ each ------------------------------ */
 
-    var each = _.each = (function (exports)
+    var each = _.each = (function ()
     {
         /* Iterates over elements of collection and invokes iteratee for each element.
          *
-         * |Name    |Type         |Desc                          |
-         * |--------|-------------|------------------------------|
-         * |obj     |object\|array|Collection to iterate over    |
-         * |iteratee|function     |Function invoked per iteration|
-         * |[ctx]   |*            |Function context              |
+         * |Name    |Type        |Desc                          |
+         * |--------|------------|------------------------------|
+         * |obj     |object array|Collection to iterate over    |
+         * |iteratee|function    |Function invoked per iteration|
+         * |[ctx]   |*           |Function context              |
          *
          * ```javascript
          * each({'a': 1, 'b': 2}, function (val, key) {});
          * ```
          */
 
-        exports = function (obj, iteratee, ctx)
+        function exports(obj, iteratee, ctx)
         {
             var i, len;
 
@@ -649,14 +666,14 @@ module.exports = (function ()
             }
 
             return obj;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ createAssigner ------------------------------ */
 
-    var createAssigner = _.createAssigner = (function (exports)
+    var createAssigner = _.createAssigner = (function ()
     {
         /* Used to create extend, extendOwn and defaults.
          *
@@ -664,10 +681,10 @@ module.exports = (function ()
          * |--------|--------|------------------------------|
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
-         * |return  |function|The result function, extend...|
+         * |return  |function|Result function, extend...    |
          */
 
-        exports = function (keysFn, defaults)
+        function exports(keysFn, defaults)
         {
             return function (obj)
             {
@@ -685,10 +702,10 @@ module.exports = (function ()
 
                 return obj;
             };
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ defaults ------------------------------ */
 
@@ -718,14 +735,18 @@ module.exports = (function ()
     {
         /* Simple api for handling browser cookies.
          *
-         * ## get: get cookie value.
+         * ### get
+         *
+         * Get cookie value.
          *
          * |Name  |Type  |Desc                      |
          * |------|------|--------------------------|
          * |key   |string|Cookie key                |
          * |return|string|Corresponding cookie value|
          *
-         * ## set: set cookie value.
+         * ### set
+         *
+         * Set cookie value.
          *
          * |Name     |Type   |Desc          |
          * |---------|-------|--------------|
@@ -734,7 +755,9 @@ module.exports = (function ()
          * |[options]|object |Cookie options|
          * |return   |exports|Module cookie |
          *
-         * ## remove: remove cookie value.
+         * ### remove
+         *
+         * Remove cookie value.
          *
          * |Name     |Type   |Desc          |
          * |---------|-------|--------------|
@@ -810,6 +833,7 @@ module.exports = (function ()
             {
                 options = options || {};
                 options.expires = -1;
+
                 return setCookie(key, '', options);
             }
         };
@@ -863,7 +887,7 @@ module.exports = (function ()
 
     /* ------------------------------ values ------------------------------ */
 
-    var values = _.values = (function (exports)
+    var values = _.values = (function ()
     {
         /* Creates an array of the own enumerable property values of object.
          *
@@ -877,43 +901,54 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (obj)
+        function exports(obj)
         {
             var ret = [];
 
             each(obj, function (val) { ret.push(val) });
 
             return ret;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ contain ------------------------------ */
 
-    var contain = _.contain = (function (exports)
+    var contain = _.contain = (function ()
     {
-        // TODO
+        /* Check if the value is present in the list.
+         *
+         * |Name  |Type   |Desc                                |
+         * |------|-------|------------------------------------|
+         * |array |array  |Target list                         |
+         * |value |*      |Value to check                      |
+         * |return|boolean|True if value is present in the list|
+         *
+         * ```javascript
+         * contain([1, 2, 3], 1); // -> true
+         * ```
+         */
 
-        exports = function (arr, val)
+        function exports(arr, val)
         {
             if (!isArrLike(arr)) arr = values(arr);
 
             return idxOf(arr, val) >= 0;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isStr ------------------------------ */
 
-    var isStr = _.isStr = (function (exports)
+    var isStr = _.isStr = (function ()
     {
         /* Check if value is a string primitive.
          *
          * |Name  |Type   |Desc                               |
          * |------|-------|-----------------------------------|
-         * |val   |*      |The value to check                 |
+         * |val   |*      |Value to check                     |
          * |return|boolean|True if value is a string primitive|
          *
          * ```javascript
@@ -921,13 +956,13 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return objToStr(val) === '[object String]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isArr ------------------------------ */
 
@@ -956,13 +991,13 @@ module.exports = (function ()
 
     /* ------------------------------ isBool ------------------------------ */
 
-    var isBool = _.isBool = (function (exports)
+    var isBool = _.isBool = (function ()
     {
         /* Check if value is a boolean primitive.
          *
          * |Name  |Type   |Desc                      |
          * |------|-------|--------------------------|
-         * |val   |*      |The value to check        |
+         * |val   |*      |Value to check            |
          * |return|boolean|True if value is a boolean|
          *
          * ```javascript
@@ -972,23 +1007,23 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return val === true || val === false;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ startWith ------------------------------ */
 
-    var startWith = _.startWith = (function (exports)
+    var startWith = _.startWith = (function ()
     {
         /* Check if string starts with the given target string.
          *
          * |Name  |Type   |Desc                             |
          * |------|-------|---------------------------------|
-         * |str   |string |The string to search             |
+         * |str   |string |String to search                 |
          * |prefix|string |String prefix                    |
          * |return|boolean|True if string starts with prefix|
          *
@@ -997,17 +1032,17 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (str, prefix)
+        function exports(str, prefix)
         {
             return str.indexOf(prefix) === 0;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isCrossOrig ------------------------------ */
 
-    var isCrossOrig = _.isCrossOrig = (function (exports)
+    var isCrossOrig = _.isCrossOrig = (function ()
     {
         var origin = window.location.origin;
 
@@ -1017,11 +1052,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isEl ------------------------------ */
 
-    var isEl = _.isEl = (function (exports)
+    var isEl = _.isEl = (function ()
     {
         /* Check if value is a DOM element.
          *
@@ -1035,17 +1070,17 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return !!(val && val.nodeType === 1);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isEmpty ------------------------------ */
 
-    var isEmpty = _.isEmpty = (function (exports)
+    var isEmpty = _.isEmpty = (function ()
     {
         /* Check if value is an empty object or array.
          *
@@ -1060,7 +1095,7 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             if (val == null) return true;
 
@@ -1070,20 +1105,20 @@ module.exports = (function ()
             }
 
             return keys(val).length === 0;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isErr ------------------------------ */
 
-    var isErr = _.isErr = (function (exports)
+    var isErr = _.isErr = (function ()
     {
         /* Check if value is an error.
          *
          * |Name  |Type   |Desc                     |
          * |------|-------|-------------------------|
-         * |val   |*      |The value to check       |
+         * |val   |*      |Value to check           |
          * |return|boolean|True if value is an error|
          *
          * ```javascript
@@ -1091,17 +1126,17 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return objToStr(val) === '[object Error]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isErudaEl ------------------------------ */
 
-    var isErudaEl = _.isErudaEl = (function (exports)
+    var isErudaEl = _.isErudaEl = (function ()
     {
         function exports(el)
         {
@@ -1119,17 +1154,17 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isFn ------------------------------ */
 
-    var isFn = _.isFn = (function (exports)
+    var isFn = _.isFn = (function ()
     {
         /* Check if value is a function.
          *
          * |Name  |Type   |Desc                       |
          * |------|-------|---------------------------|
-         * |val   |*      |The value to check         |
+         * |val   |*      |Value to check             |
          * |return|boolean|True if value is a function|
          *
          * Generator function is also classified as true.
@@ -1140,19 +1175,19 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             var objStr = objToStr(val);
 
             return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isMatch ------------------------------ */
 
-    var isMatch = _.isMatch = (function (exports)
+    var isMatch = _.isMatch = (function ()
     {
         /* Check if keys and values in src are contained in obj.
          *
@@ -1167,7 +1202,7 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (obj, src)
+        function exports(obj, src)
         {
             var _keys = keys(src),
                 len = _keys.length;
@@ -1183,20 +1218,20 @@ module.exports = (function ()
             }
 
             return true;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ isRegExp ------------------------------ */
 
-    var isRegExp = _.isRegExp = (function (exports)
+    var isRegExp = _.isRegExp = (function ()
     {
         /* Check if value is a regular expression.
          *
          * |Name  |Type   |Desc                                 |
          * |------|-------|-------------------------------------|
-         * |val   |*      |The value to check                   |
+         * |val   |*      |Value to check                       |
          * |return|boolean|True if value is a regular expression|
          *
          * ```javascript
@@ -1204,19 +1239,19 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             return objToStr(val) === '[object RegExp]';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ loadJs ------------------------------ */
 
     var loadJs = _.loadJs = (function (exports)
     {
-        /* Inject script tag into page with given src value.
+        /* Inject script tag into page with given src value. TODO
          */
 
         exports = function (url, cb)
@@ -1239,15 +1274,15 @@ module.exports = (function ()
 
     /* ------------------------------ ltrim ------------------------------ */
 
-    var ltrim = _.ltrim = (function (exports)
+    var ltrim = _.ltrim = (function ()
     {
         /* Remove chars or white-spaces from beginning of string.
          *
-         * |Name  |Type         |Desc                  |
-         * |------|-------------|----------------------|
-         * |str   |string       |The string to trim    |
-         * |chars |string\|array|The characters to trim|
-         * |return|string       |The trimmed string    |
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
          *
          * ```javascript
          * ltrim(' abc  '); // -> 'abc  '
@@ -1258,14 +1293,14 @@ module.exports = (function ()
 
         var regSpace = /^\s+/;
 
-        exports = function (str, chars)
+        function exports(str, chars)
         {
             if (chars == null) return str.replace(regSpace, '');
 
-            var start   = 0,
-                len     = str.length,
+            var start = 0,
+                len = str.length,
                 charLen = chars.length,
-                found   = true,
+                found = true,
                 i, c;
 
             while (found && start < len)
@@ -1286,18 +1321,19 @@ module.exports = (function ()
             }
 
             return (start >= len) ? '' : str.substr(start, len);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ matcher ------------------------------ */
 
-    var matcher = _.matcher = (function (exports)
+    var matcher = _.matcher = (function ()
     {
-        // TODO
+        /* TODO
+         */
 
-        exports = function (attrs)
+        function exports(attrs)
         {
             attrs = extendOwn({}, attrs);
 
@@ -1305,27 +1341,37 @@ module.exports = (function ()
             {
                 return isMatch(obj, attrs);
             };
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ noop ------------------------------ */
 
-    var noop = _.noop = (function (exports)
+    var noop = _.noop = (function ()
     {
-        /* A no-operation function. */
+        /* A no-operation function.
+         *
+         * ```javascript
+         * noop(); // Does nothing
+         * ```
+         */
 
-        exports = function () {};
+        function exports() {}
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ now ------------------------------ */
 
     var now = _.now = (function (exports)
     {
-        /* Gets the number of milliseconds that have elapsed since the Unix epoch. */
+        /* Gets the number of milliseconds that have elapsed since the Unix epoch.
+         *
+         * ```javascript
+         * now(); // -> 1468826678701
+         * ```
+         */
 
         exports = Date.now || function ()
         {
@@ -1337,9 +1383,12 @@ module.exports = (function ()
 
     /* ------------------------------ optimizeCb ------------------------------ */
 
-    var optimizeCb = _.optimizeCb = (function (exports)
+    var optimizeCb = _.optimizeCb = (function ()
     {
-        exports = function (func, ctx, argCount)
+        /* TODO
+         */
+
+        function exports(func, ctx, argCount)
         {
             if (isUndef(ctx)) return func;
 
@@ -1363,17 +1412,16 @@ module.exports = (function ()
             {
                 return func.apply(ctx, arguments);
             };
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ safeCb ------------------------------ */
 
     var safeCb = _.safeCb = (function (exports)
     {
-        /* function
-         * safeCb: Create callback based on input value.
+        /* Create callback based on input value. TODO
          */
 
         exports = function (val, ctx, argCount)
@@ -1398,7 +1446,7 @@ module.exports = (function ()
 
     /* ------------------------------ filter ------------------------------ */
 
-    var filter = _.filter = (function (exports)
+    var filter = _.filter = (function ()
     {
         /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
          *
@@ -1417,7 +1465,7 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (obj, predicate, ctx)
+        function exports(obj, predicate, ctx)
         {
             var ret = [];
 
@@ -1429,30 +1477,30 @@ module.exports = (function ()
             });
 
             return ret;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ map ------------------------------ */
 
-    var map = _.map = (function (exports)
+    var map = _.map = (function ()
     {
         /* Create an array of values by running each element in collection through iteratee.
          *
-         * |Name    |Type         |Desc                          |
-         * |--------|-------------|------------------------------|
-         * |obj     |array\|object|Collection to iterate over    |
-         * |iteratee|function     |Function invoked per iteration|
-         * |[ctx]   |*            |Function context              |
-         * |return  |array        |New mapped array              |
+         * |Name    |Type        |Desc                          |
+         * |--------|------------|------------------------------|
+         * |obj     |array object|Collection to iterate over    |
+         * |iteratee|function    |Function invoked per iteration|
+         * |[ctx]   |*           |Function context              |
+         * |return  |array       |New mapped array              |
          *
          * ```javascript
          * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
          * ```
          */
 
-        exports = function (obj, iteratee, ctx)
+        function exports(obj, iteratee, ctx)
         {
             iteratee = safeCb(iteratee, ctx);
 
@@ -1467,14 +1515,14 @@ module.exports = (function ()
             }
 
             return results;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ toArr ------------------------------ */
 
-    var toArr = _.toArr = (function (exports)
+    var toArr = _.toArr = (function ()
     {
         /* Convert value to an array.
          *
@@ -1491,7 +1539,7 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (val)
+        function exports(val)
         {
             if (!val) return [];
 
@@ -1500,22 +1548,22 @@ module.exports = (function ()
             if (isArrLike(val) && !isStr(val)) return map(val);
 
             return [val];
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ Class ------------------------------ */
 
-    var Class = _.Class = (function (exports)
+    var Class = _.Class = (function ()
     {
         /* Create JavaScript class.
          *
-         * |Name   |Type    |Desc                             |
-         * |-------|--------|---------------------------------|
-         * |methods|object  |Public methods                   |
-         * |statics|object  |Static methods                   |
-         * |return |function|Function used to create instances|
+         * |Name     |Type    |Desc                             |
+         * |---------|--------|---------------------------------|
+         * |methods  |object  |Public methods                   |
+         * |[statics]|object  |Static methods                   |
+         * |return   |function|Function used to create instances|
          *
          * ```javascript
          * var People = Class({
@@ -1553,6 +1601,11 @@ module.exports = (function ()
          * Student.is(a); // -> true
          * ```
          */
+
+        function exports(methods, statics)
+        {
+            return Base.extend(methods, statics);
+        }
 
         var regCallSuper = /callSuper/;
 
@@ -1605,11 +1658,6 @@ module.exports = (function ()
             return ctor;
         }
 
-        exports = function (methods, statics)
-        {
-            return Base.extend(methods, statics);
-        };
-
         var Base = exports.Base = makeClass(Object, {
             className: 'Base',
             callSuper: function (name)
@@ -1627,12 +1675,15 @@ module.exports = (function ()
         });
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ Emitter ------------------------------ */
 
     var Emitter = _.Emitter = (function (exports)
     {
+        /* TODO
+         */
+
         exports = Class({
             initialize: function ()
             {
@@ -1703,13 +1754,23 @@ module.exports = (function ()
 
     var Select = _.Select = (function (exports)
     {
-        /* jQuery like dom manipulator.
+        /* Simple wrapper of querySelectorAll to make dom selection easier.
+         *
+         * ### Constructor
+         *
+         * |Name    |Type  |Desc               |
+         * |--------|------|-------------------|
+         * |selector|string|Dom selector string|
+         *
+         * ```javascript
+         * var test = new Select('#test');
+         * ```
          */
 
         function mergeArr(first, second)
         {
             var len = second.length,
-                i   = first.length;
+                i = first.length;
 
             for (var j = 0; j < len; j++) first[i++] = second[j];
 
@@ -1730,7 +1791,7 @@ module.exports = (function ()
 
                 if (selector.nodeType)
                 {
-                    this[0]     = selector;
+                    this[0] = selector;
                     this.length = 1;
                 }
             },
@@ -1761,30 +1822,83 @@ module.exports = (function ()
         return exports;
     })({});
 
-    /* ------------------------------ $safeNodes ------------------------------ */
+    /* ------------------------------ $safeEls ------------------------------ */
 
-    var $safeNodes = _.$safeNodes = (function (exports)
+    var $safeEls = _.$safeEls = (function ()
     {
-        exports = function (nodes)
-        {
-            if (isStr(nodes)) return new Select(nodes);
+        /* Convert value into an array, if it's a string, do querySelector.
+         *
+         * |Name  |Type                |Desc             |
+         * |------|--------------------|-----------------|
+         * |value |element array string|Value to convert |
+         * |return|array               |Array of elements|
+         *
+         * ```
+         * $safeEls('.test'); // -> Array of elements with test class
+         * ```
+         */
 
-            return toArr(nodes);
-        };
+        function exports(val)
+        {
+            return toArr(isStr(val) ? new Select(val) : val);
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $attr ------------------------------ */
 
-    var $attr = _.$attr = (function (exports)
+    var $attr = _.$attr = (function ()
     {
-        exports = function (nodes, name, val)
+        /* Element attribute manipulation.
+         *
+         * Get the value of an attribute for the first element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                            |
+         * |-------|--------------------|--------------------------------|
+         * |element|string array element|Elements to manipulate          |
+         * |name   |string              |Attribute name                  |
+         * |return |string              |Attribute value of first element|
+         *
+         * Set one or more attributes for the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |name   |string              |Attribute name        |
+         * |value  |string              |Attribute value       |
+         *
+         * |Name      |Type                |Desc                                  |
+         * |----------|--------------------|--------------------------------------|
+         * |element   |string array element|Elements to manipulate                |
+         * |attributes|object              |Object of attribute-value pairs to set|
+         *
+         * ### remove
+         *
+         * Remove an attribute from each element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |name   |string              |Attribute name        |
+         *
+         * ```javascript
+         * $attr('#test', 'attr1', 'test');
+         * $attr('#test', 'attr1'); // -> test
+         * $attr.remove('#test', 'attr1');
+         * $attr('#test', {
+         *     'attr1': 'test',
+         *     'attr2': 'test'
+         * });
+         * ```
+         */
+
+        function exports(els, name, val)
         {
-            nodes = $safeNodes(nodes);
+            els = $safeEls(els);
 
             var isGetter = isUndef(val) && isStr(name);
-            if (isGetter) return getAttr(nodes[0], name);
+            if (isGetter) return getAttr(els[0], name);
 
             var attrs = name;
             if (!isObj(attrs))
@@ -1793,15 +1907,15 @@ module.exports = (function ()
                 attrs[name] = val;
             }
 
-            setAttr(nodes, attrs);
-        };
+            setAttr(els, attrs);
+        }
 
-        exports.remove = function (nodes, names)
+        exports.remove = function (els, names)
         {
-            nodes = $safeNodes(nodes);
+            els = $safeEls(els);
             names = toArr(names);
 
-            each(nodes, function (node)
+            each(els, function (node)
             {
                 each(names, function (name)
                 {
@@ -1810,30 +1924,37 @@ module.exports = (function ()
             });
         };
 
-        function getAttr(node, name)
+        function getAttr(el, name)
         {
-            return node.getAttribute(name);
+            return el.getAttribute(name);
         }
 
-        function setAttr(nodes, attrs)
+        function setAttr(els, attrs)
         {
-            each(nodes, function (node)
+            each(els, function (el)
             {
                 each(attrs, function (val, name)
                 {
-                    node.setAttribute(name, val);
+                    el.setAttribute(name, val);
                 });
             })
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $data ------------------------------ */
 
-    var $data = _.$data = (function (exports)
+    var $data = _.$data = (function ()
     {
-        exports = function (nodes, name, val)
+        /* Data manipulation TODO
+         *
+         * ```javascript
+         * $data('#test', 'attr1', 'eustia');
+         * ```
+         */
+
+        function exports(nodes, name, val)
         {
             var dataName = name;
 
@@ -1848,18 +1969,51 @@ module.exports = (function ()
             }
 
             return $attr(nodes, dataName, val);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $css ------------------------------ */
 
-    var $css = _.$css = (function (exports)
+    var $css = _.$css = (function ()
     {
-        exports = function (nodes, name, val)
+        /* Element css manipulation.
+         *
+         * Get the computed style properties for the first element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                      |
+         * |-------|--------------------|--------------------------|
+         * |element|string array element|Elements to manipulate    |
+         * |name   |string              |Property name             |
+         * |return |string              |Css value of first element|
+         *
+         * Set one or more CSS properties for the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |name   |string              |Property name         |
+         * |value  |string              |Css value             |
+         *
+         * |Name      |Type                |Desc                            |
+         * |----------|--------------------|--------------------------------|
+         * |element   |string array element|Elements to manipulate          |
+         * |properties|object              |Object of css-value pairs to set|
+         *
+         * ```javascript
+         * $css('#test', {
+         *     'color': '#fff',
+         *     'background': 'black'
+         * });
+         * $css('#test', 'display', 'block');
+         * $css('#test', 'color'); // -> #fff
+         * ```
+         */
+
+        function exports(nodes, name, val)
         {
-            nodes = $safeNodes(nodes);
+            nodes = $safeEls(nodes);
 
             var isGetter = isUndef(val) && isStr(name);
             if (isGetter) return getCss(nodes[0], name);
@@ -1872,7 +2026,7 @@ module.exports = (function ()
             }
 
             setCss(nodes, css);
-        };
+        }
 
         function getCss(node, name)
         {
@@ -1910,12 +2064,19 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $insert ------------------------------ */
 
     var $insert = _.$insert = (function (exports)
     {
+        /* Insert html on different position. TODO
+         *
+         * ```javascript
+         * $insert.append('#test', '<div>test</div>');
+         * ```
+         */
+
         exports = {
             before: insertFactory('beforebegin'),
             after: insertFactory('afterend'),
@@ -1927,7 +2088,7 @@ module.exports = (function ()
         {
             return function (nodes, val)
             {
-                nodes = $safeNodes(nodes);
+                nodes = $safeEls(nodes);
 
                 each(nodes, function (node)
                 {
@@ -1941,31 +2102,62 @@ module.exports = (function ()
 
     /* ------------------------------ $offset ------------------------------ */
 
-    var $offset = _.$offset = (function (exports)
+    var $offset = _.$offset = (function ()
     {
-        exports = function (nodes)
+        /* Get the position of the element in document.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to get offset|
+         *
+         * ```javascript
+         * $offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
+         * ```
+         */
+
+        function exports(els)
         {
-            nodes = $safeNodes(nodes);
+            els = $safeEls(els);
 
-            var node = nodes[0];
+            var el = els[0];
 
-            var clientRect = node.getBoundingClientRect();
+            var clientRect = el.getBoundingClientRect();
 
             return {
                 left: clientRect.left + window.pageXOffset,
-                top : clientRect.top  + window.pageYOffset,
-                width : Math.round(clientRect.width),
+                top: clientRect.top + window.pageYOffset,
+                width: Math.round(clientRect.width),
                 height: Math.round(clientRect.height)
             };
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $property ------------------------------ */
 
     var $property = _.$property = (function (exports)
     {
+        /* Element property html, text, val getter and setter.
+         *
+         * ### html
+         *
+         * Get the HTML contents of the first element in the set of matched elements or set the HTML contents of every matched element.
+         *
+         * ### text
+         *
+         * Get the combined text contents of each element in the set of matched elements, including their descendants, or set the text contents of the matched elements.
+         *
+         * ### val
+         *
+         * Get the current value of the first element in the set of matched elements or set the value of every matched element.
+         *
+         * ```javascript
+         * $property.html('#test', 'eris');
+         * $property.html('#test'); // -> eris
+         * ```
+         */
+
         exports = {
             html: propFactory('innerHTML'),
             text: propFactory('textContent'),
@@ -1976,7 +2168,7 @@ module.exports = (function ()
         {
             return function (nodes, val)
             {
-                nodes = $safeNodes(nodes);
+                nodes = $safeEls(nodes);
 
                 if (isUndef(val)) return nodes[0][name];
 
@@ -1992,71 +2184,96 @@ module.exports = (function ()
 
     /* ------------------------------ $remove ------------------------------ */
 
-    var $remove = _.$remove = (function (exports)
+    var $remove = _.$remove = (function ()
     {
-        exports = function (nodes)
+        /* Remove the set of matched elements from the DOM.
+         *
+         * |Name   |Type                |Desc              |
+         * |-------|--------------------|------------------|
+         * |element|string array element|Elements to delete|
+         *
+         * ```javascript
+         * $remove('#test');
+         * ```
+         */
+
+        function exports(els)
         {
-            nodes = $safeNodes(nodes);
+            els = $safeEls(els);
 
-            each(nodes, function (node)
+            each(els, function (el)
             {
-                var parent = node.parentNode;
+                var parent = el.parentNode;
 
-                if (parent) parent.removeChild(node);
+                if (parent) parent.removeChild(el);
             });
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $show ------------------------------ */
 
-    var $show = _.$show = (function (exports)
+    var $show = _.$show = (function ()
     {
-        exports = function (nodes)
-        {
-            nodes = $safeNodes(nodes);
+        /* Show elements.
+         *
+         * |Name   |Type                |Desc            |
+         * |-------|--------------------|----------------|
+         * |element|string array element|Elements to show|
+         *
+         * ```javascript
+         * $show('#test');
+         * ```
+         */
 
-            each(nodes, function (node)
+        function exports(els)
+        {
+            els = $safeEls(els);
+
+            each(els, function (el)
             {
-                if (isHidden(node))
+                if (isHidden(el))
                 {
-                    node.style.display = getDefDisplay(node.nodeName);
+                    el.style.display = getDefDisplay(el.nodeName);
                 }
             });
-        };
+        }
 
-        function isHidden(node)
+        function isHidden(el)
         {
-            return getComputedStyle(node, '').getPropertyValue('display') == 'none';
+            return getComputedStyle(el, '').getPropertyValue('display') == 'none';
         }
 
         var elDisplay = {};
 
-        function getDefDisplay(nodeName)
+        function getDefDisplay(elName)
         {
             var el, display;
 
-            if (!elDisplay[nodeName])
+            if (!elDisplay[elName])
             {
-                el = document.createElement(nodeName);
+                el = document.createElement(elName);
                 document.documentElement.appendChild(el);
                 display = getComputedStyle(el, '').getPropertyValue("display");
                 el.parentNode.removeChild(el);
                 display == "none" && (display = "block");
-                elDisplay[nodeName] = display;
+                elDisplay[elName] = display;
             }
 
-            return elDisplay[nodeName];
+            return elDisplay[elName];
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ delegate ------------------------------ */
 
     var delegate = _.delegate = (function (exports)
     {
+        /* TODO
+         */
+
         function retTrue()  { return true }
         function retFalse() { return false }
 
@@ -2210,6 +2427,16 @@ module.exports = (function ()
 
     var $event = _.$event = (function (exports)
     {
+        /* bind events to certain dom elements. TODO
+         *
+         * ```javascript
+         * event.on('#test', 'click', function ()
+         * {
+         *     // ...
+         * });
+         * ```
+         */
+
         exports = {
             on: eventFactory('add'),
             off: eventFactory('remove')
@@ -2219,7 +2446,7 @@ module.exports = (function ()
         {
             return function (nodes, event, selector, handler)
             {
-                nodes = $safeNodes(nodes);
+                nodes = $safeEls(nodes);
 
                 if (isUndef(handler))
                 {
@@ -2239,16 +2466,16 @@ module.exports = (function ()
 
     /* ------------------------------ some ------------------------------ */
 
-    var some = _.some = (function (exports)
+    var some = _.some = (function ()
     {
         /* Check if predicate return truthy for any element.
          *
-         * |Name     |Type         |Desc                                          |
-         * |---------|-------------|----------------------------------------------|
-         * |obj      |array\|object|Collection to iterate over                    |
-         * |predicate|function     |Function to invoked per iteration             |
-         * |ctx      |*            |Predicate context                             |
-         * |return   |boolean      |True if any element passes the predicate check|
+         * |Name     |Type        |Desc                                          |
+         * |---------|------------|----------------------------------------------|
+         * |obj      |array object|Collection to iterate over                    |
+         * |predicate|function    |Function to invoked per iteration             |
+         * |ctx      |*           |Predicate context                             |
+         * |return   |boolean     |True if any element passes the predicate check|
          *
          * ```javascript
          * some([2, 5], function (val)
@@ -2258,7 +2485,7 @@ module.exports = (function ()
          * ```
          */
 
-        exports = function (obj, predicate, ctx)
+        function exports(obj, predicate, ctx)
         {
             predicate = safeCb(predicate, ctx);
 
@@ -2272,65 +2499,115 @@ module.exports = (function ()
             }
 
             return false;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ $class ------------------------------ */
 
     var $class = _.$class = (function (exports)
     {
+        /* Element class manipulations.
+         *
+         * ### add
+         *
+         * Add the specified class(es) to each element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |names  |string array        |Classes to add        |
+         *
+         * ### has
+         *
+         * Determine whether any of the matched elements are assigned the given class.
+         *
+         * |Name   |Type                |Desc                                 |
+         * |-------|--------------------|-------------------------------------|
+         * |element|string array element|Elements to manipulate               |
+         * |name   |string              |Class name                           |
+         * |return |boolean             |True if elements has given class name|
+         *
+         * ### toggle
+         *
+         * Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the state argument.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |name   |string              |Class name to toggle  |
+         *
+         * ### remove
+         *
+         * Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |names  |string              |Class names to remove |
+         *
+         * ```javascript
+         * $class.add('#test', 'class1');
+         * $class.add('#test', ['class1', 'class2']);
+         * $class.has('#test', 'class1'); // -> true
+         * $class.remove('#test', 'class1');
+         * $class.has('#test', 'class1'); // -> false
+         * $class.toggle('#test', 'class1');
+         * $class.has('#test', 'class1'); // -> true
+         * ```
+         */
+
         exports = {
-            add: function (nodes, name)
+            add: function (els, name)
             {
-                nodes = $safeNodes(nodes);
+                els = $safeEls(els);
                 var names = toArr(name);
 
-                each(nodes, function (node)
+                each(els, function (el)
                 {
                     var classList = [];
 
                     each(names, function (name)
                     {
-                        if (!exports.has(node, name)) classList.push(name);
+                        if (!exports.has(el, name)) classList.push(name);
                     });
 
-                    if (classList.length !== 0) node.className += ' ' + classList.join(' ');
+                    if (classList.length !== 0) el.className += ' ' + classList.join(' ');
                 });
             },
-            has: function (nodes, name)
+            has: function (els, name)
             {
-                nodes = $safeNodes(nodes);
+                els = $safeEls(els);
 
                 var regName = new RegExp('(^|\\s)' + name + '(\\s|$)');
 
-                return some(nodes, function (node)
+                return some(els, function (el)
                 {
-                    return regName.test(node.className);
+                    return regName.test(el.className);
                 });
             },
-            toggle: function (nodes, name)
+            toggle: function (els, name)
             {
-                nodes = $safeNodes(nodes);
+                els = $safeEls(els);
 
-                each(nodes, function (node)
+                each(els, function (el)
                 {
-                    if (!exports.has(node, name)) return exports.add(node, name);
+                    if (!exports.has(el, name)) return exports.add(el, name);
 
-                    exports.remove(node, name);
+                    exports.remove(el, name);
                 });
             },
-            remove: function (nodes, name)
+            remove: function (els, name)
             {
-                nodes = $safeNodes(nodes);
+                els = $safeEls(els);
                 var names = toArr(name);
 
-                each(nodes, function (node)
+                each(els, function (el)
                 {
                     each(names, function (name)
                     {
-                        node.classList.remove(name);
+                        el.classList.remove(name);
                     });
                 });
             }
@@ -2341,15 +2618,20 @@ module.exports = (function ()
 
     /* ------------------------------ $ ------------------------------ */
 
-    var $ = _.$ = (function (exports)
+    var $ = _.$ = (function ()
     {
-        /* jQuery like style dom manipulator.
+        /* jQuery like style dom manipulator. TODO
+         *
+         * ```javascript
+         * var $btn = $('#btn');
+         * $btn.html('eustia');
+         * ```
          */
 
-        exports = function (selector)
+        function exports(selector)
         {
             return new Select(selector);
-        };
+        }
 
         Select.methods({
             offset: function ()
@@ -2511,7 +2793,7 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ orientation ------------------------------ */
 
@@ -2566,7 +2848,7 @@ module.exports = (function ()
 
     /* ------------------------------ pxToNum ------------------------------ */
 
-    var pxToNum = _.pxToNum = (function (exports)
+    var pxToNum = _.pxToNum = (function ()
     {
         function exports(str)
         {
@@ -2574,19 +2856,19 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ rtrim ------------------------------ */
 
-    var rtrim = _.rtrim = (function (exports)
+    var rtrim = _.rtrim = (function ()
     {
         /* Remove chars or white-spaces from end of string.
          *
-         * |Name  |Type         |Desc                  |
-         * |------|-------------|----------------------|
-         * |str   |string       |The string to trim    |
-         * |chars |string\|array|The characters to trim|
-         * |return|string       |The trimmed string    |
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
          *
          * ```javascript
          * rtrim(' abc  '); // -> ' abc'
@@ -2597,7 +2879,7 @@ module.exports = (function ()
 
         var regSpace = /\s+$/;
 
-        exports = function (str, chars)
+        function exports(str, chars)
         {
             if (chars == null) return str.replace(regSpace, '');
 
@@ -2624,22 +2906,22 @@ module.exports = (function ()
             }
 
             return (end >= 0) ? str.substring(0, end + 1) : '';
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ trim ------------------------------ */
 
-    var trim = _.trim = (function (exports)
+    var trim = _.trim = (function ()
     {
         /* Remove chars or white-spaces from beginning end of string.
          *
-         * |Name  |Type         |Desc                  |
-         * |------|-------------|----------------------|
-         * |str   |string       |The string to trim    |
-         * |chars |string\|array|The characters to trim|
-         * |return|string       |The trimmed string    |
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
          *
          * ```javascript
          * trim(' abc  '); // -> 'abc'
@@ -2650,19 +2932,19 @@ module.exports = (function ()
 
         var regSpace = /^\s+|\s+$/g;
 
-        exports = function (str, chars)
+        function exports(str, chars)
         {
             if (chars == null) return str.replace(regSpace, '');
 
             return ltrim(rtrim(str, chars), chars);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ getFileName ------------------------------ */
 
-    var getFileName = _.getFileName = (function (exports)
+    var getFileName = _.getFileName = (function ()
     {
         function exports(url)
         {
@@ -2674,11 +2956,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ toStr ------------------------------ */
 
-    var toStr = _.toStr = (function (exports)
+    var toStr = _.toStr = (function ()
     {
         /* Convert value to a string.
          *
@@ -2701,11 +2983,11 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ uniqId ------------------------------ */
 
-    var uniqId = _.uniqId = (function (exports)
+    var uniqId = _.uniqId = (function ()
     {
         /* Generate a globally-unique id.
          *
@@ -2721,19 +3003,19 @@ module.exports = (function ()
 
         var idCounter = 0;
 
-        exports = function (prefix)
+        function exports(prefix)
         {
             var id = ++idCounter + '';
 
             return prefix ? prefix + id : id;
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ unique ------------------------------ */
 
-    var unique = _.unique = (function (exports)
+    var unique = _.unique = (function ()
     {
         /* Create duplicate-free version of an array.
          *
@@ -2748,9 +3030,7 @@ module.exports = (function ()
          * ```
          */
 
-        function isEqual(a, b) { return a === b }
-
-        exports = function (arr, compare)
+        function exports(arr, compare)
         {
             compare = compare || isEqual;
 
@@ -2765,14 +3045,19 @@ module.exports = (function ()
 
                 return true;
             });
-        };
+        }
+
+        function isEqual(a, b)
+        {
+            return a === b;
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ upperFirst ------------------------------ */
 
-    var upperFirst = _.upperFirst = (function (exports)
+    var upperFirst = _.upperFirst = (function ()
     {
         /* Convert the first character of string to upper case.
          *
@@ -2794,7 +3079,7 @@ module.exports = (function ()
         }
 
         return exports;
-    })({});
+    })();
 
     return _;
 })();
