@@ -3,7 +3,7 @@
 /.idea/
 /src/
 /test/
-/docs/
+/doc/
 /script/
 .gitignore
 .eustia
