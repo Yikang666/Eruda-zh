@@ -133,6 +133,7 @@ export default class Sources extends Tool
         this._httpTpl = require('./http.hbs');
         this._jsonTpl = require('./json.hbs');
         this._rawTpl = require('./raw.hbs');
+        this._iframeTpl = require('./iframe.hbs');
     }
     _render()
     {
@@ -154,6 +155,8 @@ export default class Sources extends Tool
                 return this._renderJson();
             case 'raw':
                 return this._renderRaw();
+            case 'iframe':
+                return this._renderIframe();
         }
     }
     _renderImg()
@@ -213,6 +216,10 @@ export default class Sources extends Tool
     _renderRaw()
     {
         this._renderHtml(this._rawTpl({val: this._data.val}));
+    }
+    _renderIframe()
+    {
+        this._renderHtml(this._iframeTpl({src: this._data.val}));
     }
     _renderHtml(html)
     {

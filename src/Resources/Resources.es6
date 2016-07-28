@@ -238,24 +238,30 @@ export default class Resources extends Tool
             sources.set(type, data);
 
             parent.showTool('sources');
+
+            return true;
         }
 
         function linkFactory(type)
         {
             return function (e)
             {
+                if (!parent.get('sources')) return;
+                e.preventDefault();
+
                 var url = util.$(this).attr('href');
 
                 if (!util.isCrossOrig(url))
                 {
-                    e.preventDefault();
-
                     return util.get(url, (err, data) =>
                     {
                         if (err) return;
 
                         showSources(type, data);
                     });
+                } else
+                {
+                    showSources('iframe', url);
                 }
             };
         }
