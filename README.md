@@ -53,10 +53,10 @@ Add this script to your page.
 <script>eruda.init();</script>
 ```
 
-It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda).
+It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [cdnjs](https://cdnjs.com/libraries/eruda).
 
 ```html
-<script src="//cdn.jsdelivr.net/eruda/1.0.4/eruda.min.js"></script>
+<script src="//cdn.jsdelivr.net/eruda/1.0.5/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
