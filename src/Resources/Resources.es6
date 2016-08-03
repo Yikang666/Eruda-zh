@@ -140,7 +140,7 @@ export default class Resources extends Tool
         });
 
         imageData = util.unique(imageData);
-
+        imageData.sort();
         this._imageData = imageData;
 
         return this;
