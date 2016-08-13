@@ -17,6 +17,7 @@ export default class Console extends Tool
 
         this._appendTpl();
         this._initLog();
+        this._exposeLog();
         this._initConfig(parent);
         this._bindEvent(parent);
     }
@@ -102,6 +103,12 @@ export default class Console extends Tool
 
             $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
         }));
+    }
+    _exposeLog()
+    {
+        let log = this._log;
+
+        CONSOLE_METHOD.forEach(name => this[name] = (...args) => log[name](...args));
     }
     _bindEvent(parent)
     {
