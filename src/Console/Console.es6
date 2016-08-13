@@ -179,6 +179,7 @@ export default class Console extends Tool
         cfg.set(util.defaults(cfg.get(), {
             catchGlobalErr: true,
             overrideConsole: true,
+            displayExtraInfo: false,
             displayIfErr: false,
             maxLogNum: 'infinite'
         }));
@@ -188,6 +189,7 @@ export default class Console extends Tool
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
+        if (cfg.get('displayExtraInfo')) log.displayExtraInfo(true);
         log.setMaxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
@@ -197,6 +199,7 @@ export default class Console extends Tool
                 case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
                 case 'maxLogNum': return log.setMaxNum(val === 'infinite' ? val : +val);
+                case 'displayExtraInfo': return log.displayExtraInfo(val);
             }
         });
 
@@ -206,6 +209,7 @@ export default class Console extends Tool
                 .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
                 .switch(cfg, 'overrideConsole', 'Override Console')
                 .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
+                .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
                 .select(cfg, 'maxLogNum', 'Max Log Number', ['infinite', '250', '125', '100', '50', '10'])
                 .separator()
     }

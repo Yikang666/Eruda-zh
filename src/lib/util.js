@@ -159,20 +159,55 @@ module.exports = (function ()
 
     /* ------------------------------ slice ------------------------------ */
 
-    var slice = _.slice = (function (exports)
+    var slice = _.slice = (function ()
     {
-        /* TODO
+        /* Create slice of source array or array-like object.
+         *
+         * |Name              |Type  |Desc                      |
+         * |------------------|------|--------------------------|
+         * |array             |array |Array to slice            |
+         * |[start=0]         |number|Start position            |
+         * |[end=array.length]|number|End position, not included|
+         *
+         * ```javascript
+         * slice([1, 2, 3, 4], 1, 2); // -> [2]
+         * ```
          */
 
-        var arrProto = Array.prototype;
-
-        exports = function (arr, start, end)
+        function exports(arr, start, end)
         {
-            return arrProto.slice.call(arr, start, end);
-        };
+            var len = arr.length;
+
+            if (start == null)
+            {
+                start = 0;
+            } else if (start < 0)
+            {
+                start = Math.max(len + start, 0);
+            } else
+            {
+                start = Math.min(start, len);
+            }
+
+            if (end == null)
+            {
+                end = len;
+            } else if (end < 0)
+            {
+                end = Math.max(len + end, 0);
+            } else
+            {
+                end = Math.min(end, len);
+            }
+
+            var ret = [];
+            while (start < end) ret.push(arr[start++]);
+
+            return ret;
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ allKeys ------------------------------ */
 
@@ -201,6 +236,42 @@ module.exports = (function ()
             for (key in obj) ret.push(key);
 
             return ret;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ before ------------------------------ */
+
+    var before = _.before = (function ()
+    {
+        /* Create a function that invokes less than n times.
+         *
+         * |Name  |Type    |Desc                                            |
+         * |------|--------|------------------------------------------------|
+         * |n     |number  |Number of calls at which fn is no longer invoked|
+         * |fn    |function|Function to restrict                            |
+         * |return|function|New restricted function                         |
+         *
+         * Subsequent calls to the created function return the result of the last fn invocation.
+         *
+         * ```javascript
+         * $(element).on('click', before(5, function() {}));
+         * // -> allow function to be call 4 times at last.
+         * ```
+         */
+
+        function exports(n, fn)
+        {
+            var memo;
+
+            return function ()
+            {
+                if (--n > 0) memo = fn.apply(this, arguments);
+                if (n <= 1) fn = null;
+
+                return memo;
+            };
         }
 
         return exports;
@@ -600,6 +671,84 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ isStr ------------------------------ */
+
+    var isStr = _.isStr = (function ()
+    {
+        /* Check if value is a string primitive.
+         *
+         * |Name  |Type   |Desc                               |
+         * |------|-------|-----------------------------------|
+         * |val   |*      |Value to check                     |
+         * |return|boolean|True if value is a string primitive|
+         *
+         * ```javascript
+         * isStr('eris'); // -> true
+         * ```
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object String]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isArr ------------------------------ */
+
+    var isArr = _.isArr = (function (exports)
+    {
+        /* Check if value is an `Array` object.
+         *
+         * |Name  |Type   |Desc                              |
+         * |------|-------|----------------------------------|
+         * |val   |*      |The value to check                |
+         * |return|boolean|True if value is an `Array` object|
+         *
+         * ```javascript
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         * ```
+         */
+
+        exports = Array.isArray || function (val)
+        {
+            return objToStr(val) === '[object Array]';
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ isFn ------------------------------ */
+
+    var isFn = _.isFn = (function ()
+    {
+        /* Check if value is a function.
+         *
+         * |Name  |Type   |Desc                       |
+         * |------|-------|---------------------------|
+         * |val   |*      |Value to check             |
+         * |return|boolean|True if value is a function|
+         *
+         * Generator function is also classified as true.
+         *
+         * ```javascript
+         * isFn(function() {}); // -> true
+         * isFn(function*() {}); // -> true
+         * ```
+         */
+
+        function exports(val)
+        {
+            var objStr = objToStr(val);
+
+            return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ isArrLike ------------------------------ */
 
     var isArrLike = _.isArrLike = (function ()
@@ -610,6 +759,8 @@ module.exports = (function ()
          * |------|-------|---------------------------|
          * |value |*      |Value to check             |
          * |return|boolean|True if value is array like|
+         *
+         * > Function returns false.
          *
          * ```javascript
          * isArrLike('test'); // -> true
@@ -626,7 +777,7 @@ module.exports = (function ()
 
             var len = val.length;
 
-            return isNum(len) && len >= 0 && len <= MAX_ARR_IDX;
+            return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
         }
 
         return exports;
@@ -940,55 +1091,6 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ isStr ------------------------------ */
-
-    var isStr = _.isStr = (function ()
-    {
-        /* Check if value is a string primitive.
-         *
-         * |Name  |Type   |Desc                               |
-         * |------|-------|-----------------------------------|
-         * |val   |*      |Value to check                     |
-         * |return|boolean|True if value is a string primitive|
-         *
-         * ```javascript
-         * isStr('eris'); // -> true
-         * ```
-         */
-
-        function exports(val)
-        {
-            return objToStr(val) === '[object String]';
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ isArr ------------------------------ */
-
-    var isArr = _.isArr = (function (exports)
-    {
-        /* Check if value is an `Array` object.
-         *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |The value to check                |
-         * |return|boolean|True if value is an `Array` object|
-         *
-         * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
-         * ```
-         */
-
-        exports = Array.isArray || function (val)
-        {
-            return objToStr(val) === '[object Array]';
-        };
-
-        return exports;
-    })({});
-
     /* ------------------------------ isBool ------------------------------ */
 
     var isBool = _.isBool = (function ()
@@ -1156,35 +1258,6 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ isFn ------------------------------ */
-
-    var isFn = _.isFn = (function ()
-    {
-        /* Check if value is a function.
-         *
-         * |Name  |Type   |Desc                       |
-         * |------|-------|---------------------------|
-         * |val   |*      |Value to check             |
-         * |return|boolean|True if value is a function|
-         *
-         * Generator function is also classified as true.
-         *
-         * ```javascript
-         * isFn(function() {}); // -> true
-         * isFn(function*() {}); // -> true
-         * ```
-         */
-
-        function exports(val)
-        {
-            var objStr = objToStr(val);
-
-            return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ isMatch ------------------------------ */
 
     var isMatch = _.isMatch = (function ()
@@ -1271,6 +1344,79 @@ module.exports = (function ()
 
         return exports;
     })({});
+
+    /* ------------------------------ repeat ------------------------------ */
+
+    var repeat = _.repeat = (function (exports)
+    {
+        /* Repeat string n-times.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |str   |string|String to repeat|
+         * |n     |number|Repeat times    |
+         * |return|string|Repeated string |
+         *
+         * ```javascript
+         * repeat('a', 3); // -> 'aaa'
+         * repeat('ab', 2); // -> 'abab'
+         * repeat('*', 0); // -> ''
+         * ```
+         */
+
+        exports = function (str, n)
+        {
+            var ret = '';
+
+            if (n < 1) return '';
+
+            while (n > 0)
+            {
+                if (n & 1) ret += str;
+                n >>= 1;
+                str += str;
+            }
+
+            return ret;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ lpad ------------------------------ */
+
+    var lpad = _.lpad = (function ()
+    {
+        /* Pad string on the left side if it's shorter than length.
+         *
+         * |Name   |Type  |Desc                  |
+         * |-------|------|----------------------|
+         * |str    |string|String to pad         |
+         * |len    |number|Padding length        |
+         * |[chars]|string|String used as padding|
+         * |return |string|Resulted string       |
+         *
+         * ```javascript
+         * lpad('a', 5); // -> '    a'
+         * lpad('a', 5, '-'); // -> '----a'
+         * lpad('abc', 3, '-'); // -> 'abc'
+         * lpad('abc', 5, 'ab'); // -> 'ababc'
+         * ```
+         */
+
+        function exports(str, len, chars)
+        {
+            var strLen = str.length;
+
+            chars = chars || ' ';
+
+            if (strLen < len) str = (repeat(chars, len - strLen) + str).slice(-len);
+
+            return str;
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ ltrim ------------------------------ */
 
@@ -1677,107 +1823,42 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ Emitter ------------------------------ */
-
-    var Emitter = _.Emitter = (function (exports)
-    {
-        /* TODO
-         */
-
-        exports = Class({
-            initialize: function ()
-            {
-                this._events = this._events || {};
-            },
-            on: function (event, listener)
-            {
-                this._events[event] = this._events[event] || [];
-                this._events[event].push(listener);
-
-                return this;
-            },
-            off: function (event, listener)
-            {
-                if (!has(this._events, event)) return;
-
-                this._events[event].splice(this._events[event].indexOf(listener), 1);
-
-                return this;
-            },
-            once: function (event, listener)
-            {
-                var fired = false;
-
-                function g()
-                {
-                    this.off(event, g);
-                    if (!fired)
-                    {
-                        fired = true;
-                        listener.apply(this, arguments);
-                    }
-                }
-
-                this.on(event, g);
-
-                return this;
-            },
-            emit: function (event)
-            {
-                if (!has(this._events, event)) return;
-
-                var args = slice(arguments, 1);
-
-                each(this._events[event], function (val)
-                {
-                    val.apply(this, args);
-                }, this);
-
-                return this;
-            }
-        }, {
-            mixin: function (obj)
-            {
-                each(['on', 'off', 'once', 'emit'], function (val)
-                {
-                    obj[val] = Emitter.prototype[val];
-                });
-
-                obj._events = obj._events || {};
-            }
-        });
-
-        return exports;
-    })({});
-
     /* ------------------------------ Select ------------------------------ */
 
     var Select = _.Select = (function (exports)
     {
         /* Simple wrapper of querySelectorAll to make dom selection easier.
          *
-         * ### Constructor
+         * ### constructor
          *
          * |Name    |Type  |Desc               |
          * |--------|------|-------------------|
          * |selector|string|Dom selector string|
          *
+         * ### find
+         *
+         * Get desdendants of current matched elements.
+         *
+         * |Name    |Type  |Desc               |
+         * |--------|------|-------------------|
+         * |selector|string|Dom selector string|
+         *
+         * ### each
+         *
+         * Iterate over matched elements.
+         *
+         * |Name|Type    |Desc                                |
+         * |----|--------|------------------------------------|
+         * |fn  |function|Function to execute for each element|
+         *
          * ```javascript
-         * var test = new Select('#test');
+         * var $test = new Select('#test');
+         * $test.find('.test').each(function (idx, element)
+         * {
+         *     // Manipulate dom nodes
+         * });
          * ```
          */
-
-        function mergeArr(first, second)
-        {
-            var len = second.length,
-                i = first.length;
-
-            for (var j = 0; j < len; j++) first[i++] = second[j];
-
-            first.length = i;
-
-            return first;
-        }
 
         exports = Class({
             className: 'Select',
@@ -1819,6 +1900,18 @@ module.exports = (function ()
 
         var rootSelect = new exports(document);
 
+        function mergeArr(first, second)
+        {
+            var len = second.length,
+                i = first.length;
+
+            for (var j = 0; j < len; j++) first[i++] = second[j];
+
+            first.length = i;
+
+            return first;
+        }
+
         return exports;
     })({});
 
@@ -1833,7 +1926,7 @@ module.exports = (function ()
          * |value |element array string|Value to convert |
          * |return|array               |Array of elements|
          *
-         * ```
+         * ```javascript
          * $safeEls('.test'); // -> Array of elements with test class
          * ```
          */
@@ -1947,7 +2040,7 @@ module.exports = (function ()
 
     var $data = _.$data = (function ()
     {
-        /* Data manipulation TODO
+        /* Wrapper of $attr, adds data- prefix to keys.
          *
          * ```javascript
          * $data('#test', 'attr1', 'eustia');
@@ -2070,10 +2163,39 @@ module.exports = (function ()
 
     var $insert = _.$insert = (function (exports)
     {
-        /* Insert html on different position. TODO
+        /* Insert html on different position.
+         *
+         * ### before
+         *
+         * Insert content before elements.
+         *
+         * ### after
+         *
+         * Insert content after elements.
+         *
+         * ### prepend
+         *
+         * Insert content to the beginning of elements.
+         *
+         * ### append
+         *
+         * Insert content to the end of elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |content|string              |Html strings          |
          *
          * ```javascript
-         * $insert.append('#test', '<div>test</div>');
+         * // <div id="test"><div class="mark"></div></div>
+         * $insert.before('#test', '<div>eris</div>');
+         * // -> <div>eris</div><div id="test"><div class="mark"></div></div>
+         * $insert.after('#test', '<div>eris</div>');
+         * // -> <div id="test"><div class="mark"></div></div><div>eris</div>
+         * $insert.prepend('#test', '<div>eris</div>');
+         * // -> <div id="test"><div>eris</div><div class="mark"></div></div>
+         * $insert.append('#test', '<div>eris</div>');
+         * // -> <div id="test"><div class="mark"></div><div>eris</div></div>
          * ```
          */
 
@@ -2142,15 +2264,19 @@ module.exports = (function ()
          *
          * ### html
          *
-         * Get the HTML contents of the first element in the set of matched elements or set the HTML contents of every matched element.
+         * Get the HTML contents of the first element in the set of matched elements or
+         * set the HTML contents of every matched element.
          *
          * ### text
          *
-         * Get the combined text contents of each element in the set of matched elements, including their descendants, or set the text contents of the matched elements.
+         * Get the combined text contents of each element in the set of matched
+         * elements, including their descendants, or set the text contents of the
+         * matched elements.
          *
          * ### val
          *
-         * Get the current value of the first element in the set of matched elements or set the value of every matched element.
+         * Get the current value of the first element in the set of matched elements or
+         * set the value of every matched element.
          *
          * ```javascript
          * $property.html('#test', 'eris');
@@ -2794,6 +2920,217 @@ module.exports = (function ()
 
         return exports;
     })();
+
+    /* ------------------------------ restArgs ------------------------------ */
+
+    var restArgs = _.restArgs = (function ()
+    {
+        /* This accumulates the arguments passed into an array, after a given index.
+         *
+         * |Name      |Type    |Desc                                   |
+         * |----------|--------|---------------------------------------|
+         * |function  |function|Function that needs rest parameters    |
+         * |startIndex|number  |The start index to accumulates         |
+         * |return    |function|Generated function with rest parameters|
+         *
+         * ```javascript
+         * var paramArr = _.restArgs(function (rest) { return rest });
+         * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+         * ```
+         */
+
+        function exports(fn, startIdx)
+        {
+            startIdx = startIdx == null ? fn.length - 1 : +startIdx;
+
+            return function ()
+            {
+                var len = Math.max(arguments.length - startIdx, 0),
+                    rest = new Array(len),
+                    i;
+
+                for (i = 0; i < len; i++) rest[i] = arguments[i + startIdx];
+
+                // Call runs faster than apply.
+                switch (startIdx)
+                {
+                    case 0: return fn.call(this, rest);
+                    case 1: return fn.call(this, arguments[0], rest);
+                    case 2: return fn.call(this, arguments[0], arguments[1], rest);
+                }
+
+                var args = new Array(startIdx + 1);
+
+                for (i = 0; i < startIdx; i++) args[i] = arguments[i];
+
+                args[startIdx] = rest;
+
+                return fn.apply(this, args);
+            };
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ partial ------------------------------ */
+
+    var partial = _.partial = (function (exports)
+    {
+        /* Partially apply a function by filling in given arguments.
+         *
+         * |Name    |Type    |Desc                                    |
+         * |--------|--------|----------------------------------------|
+         * |fn      |function|Function to partially apply arguments to|
+         * |partials|...*    |Arguments to be partially applied       |
+         * |return  |function|New partially applied function          |
+         *
+         * ```javascript
+         * var sub5 = partial(function (a, b) { return b - a }, 5);
+         * sub(20); // -> 15
+         * ```
+         */
+
+        exports = restArgs(function (fn, partials)
+        {
+            return function ()
+            {
+                var args = [];
+
+                args = args.concat(partials);
+                args = args.concat(toArr(arguments));
+
+                return fn.apply(this, args);
+            };
+        });
+
+        return exports;
+    })({});
+
+    /* ------------------------------ once ------------------------------ */
+
+    var once = _.once = (function (exports)
+    {
+        /* Create a function that invokes once.
+         *
+         * |Name  |Type    |Desc                   |
+         * |------|--------|-----------------------|
+         * |fn    |function|Function to restrict   |
+         * |return|function|New restricted function|
+         *
+         * ```javascript
+         * function init() {};
+         * var initOnce = once(init);
+         * initOnce();
+         * initOnce(); // -> init is invoked once
+         * ```
+         */
+
+        exports = partial(before, 2);
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Emitter ------------------------------ */
+
+    var Emitter = _.Emitter = (function (exports)
+    {
+        /* Event emitter class which provides observer pattern.
+         *
+         * ### on
+         *
+         * Bind event.
+         *
+         * ### off
+         *
+         * Unbind event.
+         *
+         * ### once
+         *
+         * Bind event that trigger once.
+         *
+         * |Name    |Type    |Desc          |
+         * |--------|--------|--------------|
+         * |event   |string  |Event name    |
+         * |listener|function|Event listener|
+         *
+         * ### emit
+         *
+         * Emit event.
+         *
+         * |Name   |Type  |Desc                        |
+         * |-------|------|----------------------------|
+         * |event  |string|Event name                  |
+         * |...args|*     |Arguments passed to listener|
+         *
+         * ### mixin
+         *
+         * [static] Mixin object class methods.
+         *
+         * |Name|Type  |Desc           |
+         * |----|------|---------------|
+         * |obj |object|Object to mixin|
+         *
+         * ```javascript
+         * var event = new Emitter();
+         * event.on('test', function () { console.log('test') });
+         * event.emit('test'); // Logs out 'test'.
+         * Emitter.mixin({});
+         * ```
+         */
+
+        exports = Class({
+            initialize: function ()
+            {
+                this._events = this._events || {};
+            },
+            on: function (event, listener)
+            {
+                this._events[event] = this._events[event] || [];
+                this._events[event].push(listener);
+
+                return this;
+            },
+            off: function (event, listener)
+            {
+                if (!has(this._events, event)) return;
+
+                this._events[event].splice(this._events[event].indexOf(listener), 1);
+
+                return this;
+            },
+            once: function (event, listener)
+            {
+                this.on(event, once(listener));
+
+                return this;
+            },
+            emit: function (event)
+            {
+                if (!has(this._events, event)) return;
+
+                var args = slice(arguments, 1);
+
+                each(this._events[event], function (val)
+                {
+                    val.apply(this, args);
+                }, this);
+
+                return this;
+            }
+        }, {
+            mixin: function (obj)
+            {
+                each(['on', 'off', 'once', 'emit'], function (val)
+                {
+                    obj[val] = Emitter.prototype[val];
+                });
+
+                obj._events = obj._events || {};
+            }
+        });
+
+        return exports;
+    })({});
 
     /* ------------------------------ orientation ------------------------------ */
 

@@ -6,7 +6,15 @@
         @include overflow-auto(y);
         height: 100%;
         font-size: $font-size;
-        li {
+        .header {
+            @include overflow-auto(x);
+            white-space: nowrap;
+            margin: 10px 0;
+            padding: 0 $padding;
+            font-size: $font-size-s;
+            color: $gray;
+        }
+        .log-item {
             @include clear-float();
             background: #fff;
             margin: 10px 0;

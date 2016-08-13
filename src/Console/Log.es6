@@ -18,6 +18,7 @@ export default class Log extends util.Emitter
         this._tpl = require('./Log.hbs');
         this._filter = 'all';
         this._maxNum = 'infinite';
+        this._displayExtraInfo = false;
         this._isUpdated = false;
         this._lastLog = {};
         this._timer = {};
@@ -35,6 +36,10 @@ export default class Log extends util.Emitter
             this._isUpdated = true;
             this.render();
         }
+    }
+    displayExtraInfo(flag)
+    {
+        this._displayExtraInfo = flag;
     }
     clear()
     {
@@ -210,6 +215,13 @@ export default class Log extends util.Emitter
             log.val = txtToHtml(log.val);
         }
 
+        if (this._displayExtraInfo)
+        {
+            log.hasHeader = true;
+            log.time = getCurTime();
+            log.from = getFrom();
+        }
+
         var lastLog = this._lastLog;
 
         if (log.type !== 'html' &&
@@ -218,6 +230,7 @@ export default class Log extends util.Emitter
         {
             lastLog.times++;
             lastLog.showTimes = true;
+            if (log.time) lastLog.time = log.time;
         } else
         {
             logs.push(log);
@@ -363,6 +376,34 @@ function extractSrc(args)
 
     return util.isObj(args[0]) ? extractObj(args[0]) : args[0];
 }
+
+function getCurTime()
+{
+    let d = new Date();
+
+    return `${padZero(d.getHours())}:${padZero(d.getMinutes())}:${padZero(d.getSeconds())}`;
+}
+
+function getFrom()
+{
+    let e = new Error(),
+        ret = '',
+        lines = e.stack.split('\n');
+
+    for (let i = 0, len = lines.length; i < len; i++)
+    {
+        ret = lines[i];
+        if (ret.indexOf('winConsole') > -1 && i < len - 1)
+        {
+            ret = lines[i+1];
+            break;
+        }
+    }
+
+    return ret;
+}
+
+var padZero = (num) => util.lpad(util.toStr(num), 2, '0');
 
 var extractObj = (obj, simple) => JSON.parse(stringify(obj, null, obj, simple));
 
