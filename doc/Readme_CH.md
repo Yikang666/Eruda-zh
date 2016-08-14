@@ -41,7 +41,7 @@ npm install eruda --save
 <script>eruda.init();</script>
 ```
 
-Js文件对于移动端来说略重（gzip后大概85kb）。建议通过url参数来控制是否加载调试器，比如：
+Js文件对于移动端来说略重（gzip后大概80kb）。建议通过url参数来控制是否加载调试器，比如：
 
 ```javascript
 (function () {

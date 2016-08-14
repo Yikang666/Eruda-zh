@@ -1,3 +1,7 @@
+<a href="http://liriliri.github.io/eustia/" target="_blank">
+    <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda.jpg">
+</a>
+
 [中文](https://github.com/liriliri/eruda/blob/master/doc/Readme_CH.md)
 
 # Eruda
@@ -60,7 +64,7 @@ It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [c
 <script>eruda.init();</script>
 ```
 
-The JavaScript file size is quite huge(about 85kb gzipped) and therefore not
+The JavaScript file size is quite huge(about 80kb gzipped) and therefore not
 suitable to include in mobile pages. It's recommended to make sure eruda is
 loaded only when eruda is set to true on url(http://example.com/?eruda=true),
 for example:
