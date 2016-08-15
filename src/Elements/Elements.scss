@@ -9,6 +9,27 @@
             @include overflow-auto(y);
             height: 100%;
         }
+        .parents {
+            @include overflow-auto(x);
+            background: #fff;
+            padding: $padding;
+            white-space: nowrap;
+            border-bottom: 1px solid $gray-light;
+            cursor: pointer;
+            font-size: $font-size-s;
+            li {
+                display: inline-block;
+                .parent {
+                    display: inline-block;
+                }
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+            .icon-chevron-right {
+                font-size: 8px;
+            }
+        }
         .breadcrumb {
             @include breadcrumb();
             cursor: pointer;
@@ -180,7 +201,7 @@
                 color: $gray;
                 font-size: 14px;
                 line-height: 40px;
-                width: 20%;
+                width: 25%;
                 display: inline-block;
                 transition: background $anim-duration, color $anim-duration;
                 &:active {

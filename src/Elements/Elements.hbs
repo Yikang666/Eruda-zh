@@ -1,4 +1,14 @@
-<div class="eruda-breadcrumb" ontouchstart>
+{{#if parents}}
+    <ul class="eruda-parents">
+        {{#each parents}}
+            <li>
+                <div class="eruda-parent" data-idx="{{idx}}">{{{text}}}</div>
+                <span class="eruda-icon-chevron-right"></span>
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}
+<div class="eruda-breadcrumb">
     {{{name}}}
 </div>
 {{#if children}}

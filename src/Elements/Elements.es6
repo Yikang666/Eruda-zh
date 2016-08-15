@@ -86,7 +86,6 @@ export default class Elements extends Tool
             parent = this._parent,
             select = this._select;
 
-
         this._$el.on('click', '.eruda-child', function ()
         {
             var idx = util.$(this).data('idx'),
@@ -139,12 +138,20 @@ export default class Elements extends Tool
                 sources.set('json', data);
                 parent.showTool('sources');
             }
+        }).on('click', '.eruda-parent', function ()
+        {
+            let idx = util.$(this).data('idx'),
+                curEl = self._curEl,
+                el = curEl.parentNode;
+
+            while (idx-- && el.parentNode) el = el.parentNode;
+
+            !isElExist(el) ? self._render() : self._setElAndRender(el);
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         var $bottomBar = this._$el.find('.eruda-bottom-bar');
 
-        $bottomBar.on('click', '.eruda-back', () => this._back())
-                  .on('click', '.eruda-refresh', () => this._render())
+        $bottomBar.on('click', '.eruda-refresh', () => this._render())
                   .on('click', '.eruda-highlight', () => this._toggleHighlight())
                   .on('click', '.eruda-select', () => this._toggleSelect())
                   .on('click', '.eruda-reset', () => this._setElAndRender(this._htmlEl));
@@ -215,6 +222,7 @@ export default class Elements extends Tool
 
         var {className, id, attributes, tagName} = el;
 
+        ret.parents = getParents(el);
         ret.children = formatChildNodes(el.childNodes);
         ret.attributes = formatAttr(attributes);
         ret.name = formatElName({tagName, id, className, attributes});
@@ -288,7 +296,7 @@ function processStyleRule(val)
 
 const isElExist = val => util.isEl(val) && val.parentNode;
 
-function formatElName(data)
+function formatElName(data, {noAttr = false} = {})
 {
     var {id, className, attributes} = data;
 
@@ -305,12 +313,15 @@ function formatElName(data)
         });
     }
 
-    util.each(attributes, (attr) =>
+    if (!noAttr)
     {
-        var name = attr.name;
-        if (name === 'id' || name === 'class' || name === 'style') return;
-        ret += ` ${name}="${attr.value}"`;
-    });
+        util.each(attributes, (attr) =>
+        {
+            var name = attr.name;
+            if (name === 'id' || name === 'class' || name === 'style') return;
+            ret += ` ${name}="${attr.value}"`;
+        });
+    }
 
     return ret;
 }
@@ -362,6 +373,25 @@ function formatChildNodes(nodes)
     }
 
     return ret;
+}
+
+function getParents(el)
+{
+    var ret = [],
+        i = 0,
+        parent = el.parentNode;
+
+    while (parent && parent.nodeType === 1)
+    {
+        ret.push({
+            text: formatElName(parent, {noAttr: true}),
+            idx: i++
+        });
+
+        parent = parent.parentNode;
+    }
+
+    return ret.reverse();
 }
 
 function getInlineStyle(style)
