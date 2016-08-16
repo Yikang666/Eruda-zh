@@ -1,11 +1,12 @@
 {
   "name": "eruda",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
   "scripts": {
     "release": "webpack && webpack -p --config script/release.js",
     "dev": "webpack-dev-server",
+    "cpTestLib": "bash script/cpTestLib.sh",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/Util_Api.md -t \"Eruda Util Documentation\""
   },
   "repository": {
@@ -33,6 +34,9 @@
     "draggabilly": "^2.1.0",
     "handlebars": "^4.0.5",
     "handlebars-loader": "^1.1.4",
+    "jasmine-core": "^2.4.1",
+    "jasmine-jquery": "^2.1.1",
+    "jquery": "^3.1.0",
     "js-beautify": "^1.6.2",
     "json-loader": "^0.5.4",
     "modernizr": "^3.3.1",

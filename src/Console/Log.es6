@@ -298,11 +298,13 @@ export default class Log extends util.Emitter
 
         if (filter === 'all') return logs;
 
-        var isRegexp = util.isRegExp(filter);
+        var isRegexp = util.isRegExp(filter),
+            isFn = util.isFn(filter);
 
         return logs.filter(val =>
         {
-            if (isRegexp) return filter.test(val.val);
+            if (isFn) return filter(val);
+            if (isRegexp) return filter.test(util.stripHtmlTag(val.val));
 
             return val.ignoreFilter || val.type === filter;
         });
@@ -337,8 +339,11 @@ var evalJs = jsInput =>
 function errToStr(err)
 {
     var lines = err.stack.split('\n'),
-        msg = `${err.message || lines[0]}<br/>`,
-        stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
+        msg = `${err.message || lines[0]}<br/>`;
+
+    lines = lines.filter(val => val.indexOf('eruda') < 0);
+
+    var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
 
     return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }

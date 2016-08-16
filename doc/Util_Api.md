@@ -140,7 +140,7 @@ $css('#test', 'color'); // -> #fff
 
 ## $data 
 
-Data manipulation TODO
+Wrapper of $attr, adds data- prefix to keys.
 
 ```javascript
 $data('#test', 'attr1', 'eustia');
@@ -159,10 +159,39 @@ event.on('#test', 'click', function ()
 
 ## $insert 
 
-Insert html on different position. TODO
+Insert html on different position.
+
+### before
+
+Insert content before elements.
+
+### after
+
+Insert content after elements.
+
+### prepend
+
+Insert content to the beginning of elements.
+
+### append
+
+Insert content to the end of elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|content|string              |Html strings          |
 
 ```javascript
-$insert.append('#test', '<div>test</div>');
+// <div id="test"><div class="mark"></div></div>
+$insert.before('#test', '<div>eris</div>');
+// -> <div>eris</div><div id="test"><div class="mark"></div></div>
+$insert.after('#test', '<div>eris</div>');
+// -> <div id="test"><div class="mark"></div></div><div>eris</div>
+$insert.prepend('#test', '<div>eris</div>');
+// -> <div id="test"><div>eris</div><div class="mark"></div></div>
+$insert.append('#test', '<div>eris</div>');
+// -> <div id="test"><div class="mark"></div><div>eris</div></div>
 ```
 
 ## $offset 
@@ -183,15 +212,19 @@ Element property html, text, val getter and setter.
 
 ### html
 
-Get the HTML contents of the first element in the set of matched elements or set the HTML contents of every matched element.
+Get the HTML contents of the first element in the set of matched elements or
+set the HTML contents of every matched element.
 
 ### text
 
-Get the combined text contents of each element in the set of matched elements, including their descendants, or set the text contents of the matched elements.
+Get the combined text contents of each element in the set of matched
+elements, including their descendants, or set the text contents of the
+matched elements.
 
 ### val
 
-Get the current value of the first element in the set of matched elements or set the value of every matched element.
+Get the current value of the first element in the set of matched elements or
+set the value of every matched element.
 
 ```javascript
 $property.html('#test', 'eris');
@@ -219,7 +252,7 @@ Convert value into an array, if it's a string, do querySelector.
 |value |element array string|Value to convert |
 |return|array               |Array of elements|
 
-```
+```javascript
 $safeEls('.test'); // -> Array of elements with test class
 ```
 
@@ -283,20 +316,81 @@ Student.is(a); // -> true
 
 ## Emitter 
 
-TODO
+Event emitter class which provides observer pattern.
+
+### on
+
+Bind event.
+
+### off
+
+Unbind event.
+
+### once
+
+Bind event that trigger once.
+
+|Name    |Type    |Desc          |
+|--------|--------|--------------|
+|event   |string  |Event name    |
+|listener|function|Event listener|
+
+### emit
+
+Emit event.
+
+|Name   |Type  |Desc                        |
+|-------|------|----------------------------|
+|event  |string|Event name                  |
+|...args|*     |Arguments passed to listener|
+
+### mixin
+
+[static] Mixin object class methods.
+
+|Name|Type  |Desc           |
+|----|------|---------------|
+|obj |object|Object to mixin|
+
+```javascript
+var event = new Emitter();
+event.on('test', function () { console.log('test') });
+event.emit('test'); // Logs out 'test'.
+Emitter.mixin({});
+```
 
 ## Select 
 
 Simple wrapper of querySelectorAll to make dom selection easier.
 
-### Constructor
+### constructor
 
 |Name    |Type  |Desc               |
 |--------|------|-------------------|
 |selector|string|Dom selector string|
 
+### find
+
+Get desdendants of current matched elements.
+
+|Name    |Type  |Desc               |
+|--------|------|-------------------|
+|selector|string|Dom selector string|
+
+### each
+
+Iterate over matched elements.
+
+|Name|Type    |Desc                                |
+|----|--------|------------------------------------|
+|fn  |function|Function to execute for each element|
+
 ```javascript
-var test = new Select('#test');
+var $test = new Select('#test');
+$test.find('.test').each(function (idx, element)
+{
+    // Manipulate dom nodes
+});
 ```
 
 ## allKeys 
@@ -314,6 +408,23 @@ Retrieve all the names of object's own and inherited properties.
 var obj = Object.create({zero: 0});
 obj.one = 1;
 allKeys(obj) // -> ['zero', 'one']
+```
+
+## before 
+
+Create a function that invokes less than n times.
+
+|Name  |Type    |Desc                                            |
+|------|--------|------------------------------------------------|
+|n     |number  |Number of calls at which fn is no longer invoked|
+|fn    |function|Function to restrict                            |
+|return|function|New restricted function                         |
+
+Subsequent calls to the created function return the result of the last fn invocation.
+
+```javascript
+$(element).on('click', before(5, function() {}));
+// -> allow function to be call 4 times at last.
 ```
 
 ## camelCase 
@@ -634,6 +745,8 @@ Check if value is array-like.
 |value |*      |Value to check             |
 |return|boolean|True if value is array like|
 
+> Function returns false.
+
 ```javascript
 isArrLike('test'); // -> true
 isArrLike(document.body.children); // -> true;
@@ -840,6 +953,24 @@ last([1, 2]); // -> 2
 
 Inject script tag into page with given src value. TODO
 
+## lpad 
+
+Pad string on the left side if it's shorter than length.
+
+|Name   |Type  |Desc                  |
+|-------|------|----------------------|
+|str    |string|String to pad         |
+|len    |number|Padding length        |
+|[chars]|string|String used as padding|
+|return |string|Resulted string       |
+
+```javascript
+lpad('a', 5); // -> '    a'
+lpad('a', 5, '-'); // -> '----a'
+lpad('abc', 3, '-'); // -> 'abc'
+lpad('abc', 5, 'ab'); // -> 'ababc'
+```
+
 ## ltrim 
 
 Remove chars or white-spaces from beginning of string.
@@ -904,6 +1035,22 @@ Alias of Object.prototype.toString.
 objToStr(5); // -> '[object Number]'
 ```
 
+## once 
+
+Create a function that invokes once.
+
+|Name  |Type    |Desc                   |
+|------|--------|-----------------------|
+|fn    |function|Function to restrict   |
+|return|function|New restricted function|
+
+```javascript
+function init() {};
+var initOnce = once(init);
+initOnce();
+initOnce(); // -> init is invoked once
+```
+
 ## optimizeCb 
 
 TODO
@@ -912,9 +1059,55 @@ TODO
 
 No documentation.
 
+## partial 
+
+Partially apply a function by filling in given arguments.
+
+|Name    |Type    |Desc                                    |
+|--------|--------|----------------------------------------|
+|fn      |function|Function to partially apply arguments to|
+|partials|...*    |Arguments to be partially applied       |
+|return  |function|New partially applied function          |
+
+```javascript
+var sub5 = partial(function (a, b) { return b - a }, 5);
+sub(20); // -> 15
+```
+
 ## pxToNum 
 
 No documentation.
+
+## repeat 
+
+Repeat string n-times.
+
+|Name  |Type  |Desc            |
+|------|------|----------------|
+|str   |string|String to repeat|
+|n     |number|Repeat times    |
+|return|string|Repeated string |
+
+```javascript
+repeat('a', 3); // -> 'aaa'
+repeat('ab', 2); // -> 'abab'
+repeat('*', 0); // -> ''
+```
+
+## restArgs 
+
+This accumulates the arguments passed into an array, after a given index.
+
+|Name      |Type    |Desc                                   |
+|----------|--------|---------------------------------------|
+|function  |function|Function that needs rest parameters    |
+|startIndex|number  |The start index to accumulates         |
+|return    |function|Generated function with rest parameters|
+
+```javascript
+var paramArr = _.restArgs(function (rest) { return rest });
+paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+```
 
 ## rtrim 
 
@@ -938,7 +1131,17 @@ Create callback based on input value. TODO
 
 ## slice 
 
-TODO
+Create slice of source array or array-like object.
+
+|Name              |Type  |Desc                      |
+|------------------|------|--------------------------|
+|array             |array |Array to slice            |
+|[start=0]         |number|Start position            |
+|[end=array.length]|number|End position, not included|
+
+```javascript
+slice([1, 2, 3, 4], 1, 2); // -> [2]
+```
 
 ## some 
 
@@ -988,6 +1191,19 @@ Check if string starts with the given target string.
 
 ```javascript
 startWith('ab', 'a'); // -> true
+```
+
+## stripHtmlTag 
+
+Strip html tags from a string.
+
+|Name  |Type  |Desc           |
+|------|------|---------------|
+|str   |string|String to strip|
+|return|string|Resulted string|
+
+```javascript
+stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
 ```
 
 ## toArr 

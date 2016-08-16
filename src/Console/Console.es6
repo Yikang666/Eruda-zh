@@ -106,9 +106,15 @@ export default class Console extends Tool
     }
     _exposeLog()
     {
-        let log = this._log;
+        let log = this._log,
+            methods = ['filter'].concat(CONSOLE_METHOD);
 
-        CONSOLE_METHOD.forEach(name => this[name] = (...args) => log[name](...args));
+        methods.forEach(name => this[name] = (...args) =>
+        {
+            log[name](...args);
+
+            return this;
+        });
     }
     _bindEvent(parent)
     {

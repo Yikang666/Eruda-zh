@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Eruda</title>
     <link rel="stylesheet" href="style.css">
-    <script src="effect.js"></script>
     <script src="assets/eruda.js"></script>
 </head>
 <body>
+    <div id="test-list">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
     <div id="test-element" class="border super-long1 super-long2 super-long-class-name" style="color:red">
         <!-- This is a comment -->
         <div class="child-one" style="background-image: url(http://7xn2zy.com1.z0.glb.clouddn.com/blog_elf.jpg); color: rgb(255, 80, 0);">One</div>
@@ -73,13 +77,14 @@
         }
     </script>
     <script>
-        var el = document.createElement('div');
-        document.body.appendChild(el);
-        setTimeout(function () {
-            eruda.init({container: el});
-            init();
-            eruda.get('console').log('test');
-        }, 1000);
+        (function () {
+            var el = document.createElement('div');
+            document.body.appendChild(el);
+            setTimeout(function ()
+            {
+                eruda.init({container: el});
+            }, 1000);
+        })();
     </script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
     <script>FastClick.attach(document.body);</script>-->
