@@ -3,7 +3,9 @@ function boot(name)
     // Need a little delay to make sure width and height of webpack dev server iframe are initialized.
     setTimeout(function ()
     {
-        eruda.init({tool: name});
+        eruda.init({
+            tool: name === 'settings' ? [] : name
+        });
         eruda.show().get().config.set('displaySize', '50%');
         loadJs('lib/boot', function ()
         {

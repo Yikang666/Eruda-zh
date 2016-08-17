@@ -58,15 +58,15 @@ export default class Settings extends Tool
     }
     _bindEvent()
     {
-        var self = this;
+        let self = this;
 
         this._$el.on('click', '.eruda-checkbox', function ()
         {
-            var $input = util.$(this).find('input'),
+            let $input = util.$(this).find('input'),
                 idx = $input.data('idx'),
                 val = $input.get(0).checked;
 
-            var setting = self._settings[idx];
+            let setting = self._settings[idx];
             setting.config.set(setting.key, val);
         }).on('click', '.eruda-select .eruda-head', function ()
         {
