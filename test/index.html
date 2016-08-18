@@ -3,90 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Eruda</title>
+    <title>Eruda Test Page</title>
     <link rel="stylesheet" href="style.css">
     <script src="assets/eruda.js"></script>
 </head>
 <body>
-    <div id="test-list">
-        <ul>
-            <li></li>
-        </ul>
-    </div>
-    <div id="test-element" class="border super-long1 super-long2 super-long-class-name" style="color:red">
-        <!-- This is a comment -->
-        <div class="child-one" style="background-image: url(http://7xn2zy.com1.z0.glb.clouddn.com/blog_elf.jpg); color: rgb(255, 80, 0);">One</div>
-        <div class="child-two">Two</div>
-        <a href="https://github.com/liriliri/eruda">GitHub</a>
-        <div class="child-three" style="height: 500px">
-            This is a very long text!
-            This is a very long text!
-            This is a very long text!
-            This is a very long text!
-            This is a very long text!
-        </div>
-        <div class="fixed-footer">This is a footer!</div>
-        <div>
-            <img src="http://7xn2zy.com1.z0.glb.clouddn.com/blog_elf.jpg">
-        </div>
-    </div>
-    <button>Test</button>
-    <button onclick="xxx();">Trigger Error</button>
-    <div style="height: 500px;"></div>
-    <script>
-        function init()
-        {
-            // Test scripts
-            var test = document.getElementById('test-element');
-            test.addEventListener('click', function ()
-            {
-                console.log('test2');
-            }, false);
-            test.addEventListener('click', function ()
-            {
-                console.log('This is something really really cool!!!!! Laaaaaaaaaa!!!!!!!!!!!!!!!');
-            }, true);
-            test.addEventListener('touchstart', function ()
-            {
-                console.log('test3');
-            }, false);
-            function req(url)
-            {
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', url);
-                xhr.send();
-            }
-            setTimeout(function ()
-            {
-                req('webpack-dev-server/test/style.css');
-            }, 1000);
-            setTimeout(function ()
-            {
-                req('webpack-dev-server/test/data.json');
-            }, 2000);
-            setTimeout(function ()
-            {
-                req('webpack-dev-server/test/empty.json');
-            }, 3000);
-
-            var xhr = new XMLHttpRequest();
-            xhr.responseType = 'arraybuffer';
-            xhr.open('GET', 'webpack-dev-server/test/data.json');
-            xhr.send();
-        }
-    </script>
-    <script>
-        (function () {
-            var el = document.createElement('div');
-            document.body.appendChild(el);
-            setTimeout(function ()
-            {
-                eruda.init({container: el});
-            }, 1000);
-        })();
-    </script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
-    <script>FastClick.attach(document.body);</script>-->
+<header>ERUDA TEST PAGE</header>
+<nav id="test-list">
+    <ul>
+        <li>
+            <a href="console.html">console</a>
+        </li>
+        <li>
+            <a href="elements.html">elements</a>
+        </li>
+        <li>
+            <a href="network.html">network</a>
+        </li>
+        <li>
+            <a href="resources.html">resources</a>
+        </li>
+        <li>
+            <a href="sources.html">sources</a>
+        </li>
+        <li>
+            <a href="info.html">info</a>
+        </li>
+        <li>
+            <a href="snippets.html">snippets</a>
+        </li>
+        <li>
+            <a href="features.html">features</a>
+        </li>
+        <li>
+            <a href="settings.html">settings</a>
+        </li>
+        <li>
+            <a href="manual.html">manual</a>
+        </li>
+    </ul>
+</nav>
+<script>
+    (function () {
+        var el = document.createElement('div');
+        document.body.appendChild(el);
+        setTimeout(function () {
+            eruda.init({container: el});
+            eruda.show().get().config.set('displaySize', '50%');
+        }, 1000);
+    })();
+</script>
 </body>
 </html>

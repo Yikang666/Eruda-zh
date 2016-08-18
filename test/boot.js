@@ -7,6 +7,9 @@ function boot(name)
             tool: name === 'settings' ? [] : name
         });
         eruda.show().get().config.set('displaySize', '50%');
+
+        if (name == null) return;
+
         loadJs('lib/boot', function ()
         {
             loadJs('lib/jasmine-jquery', function ()
