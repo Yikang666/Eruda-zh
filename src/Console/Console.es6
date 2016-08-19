@@ -1,4 +1,4 @@
-import Log from './Log.es6'
+import Log from './Logger.es6'
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import config from '../lib/config.es6'
@@ -16,7 +16,7 @@ export default class Console extends Tool
         super.init($el);
 
         this._appendTpl();
-        this._initLog();
+        this._initLogger();
         this._exposeLog();
         this._initConfig(parent);
         this._bindEvent(parent);
@@ -25,11 +25,11 @@ export default class Console extends Tool
     {
         super.show();
 
-        this._log.render();
+        this._logger.render();
     }
     overrideConsole()
     {
-        let log = this._log,
+        let logger = this._logger,
             origConsole = this._origConsole = {},
             winConsole = window.console;
 
@@ -40,7 +40,7 @@ export default class Console extends Tool
 
             winConsole[name] = (...args) =>
             {
-                log[name](...args);
+                logger[name](...args);
                 origin(...args);
             };
         });
@@ -60,7 +60,7 @@ export default class Console extends Tool
     {
         this._origOnerror = window.onerror;
 
-        window.onerror = (errMsg, url, lineNum, column, errObj) => this._log.error(errObj ? errObj : errMsg);
+        window.onerror = (errMsg, url, lineNum, column, errObj) => this._logger.error(errObj ? errObj : errMsg);
 
         return this;
     }
@@ -91,12 +91,12 @@ export default class Console extends Tool
             _$inputContainer, _$input, _$inputBtns
         });
     }
-    _initLog()
+    _initLogger()
     {
         let $filter = this._$control.find('.filter'),
-            log = this._log = new Log(this._$logs, this);
+            logger = this._logger = new Logger(this._$logs, this);
 
-        log.on('filter', (filter) => $filter.each(function ()
+        logger.on('filter', (filter) => $filter.each(function ()
         {
             let $this = util.$(this),
                 isMatch = $this.data('filter') === filter;
@@ -106,12 +106,12 @@ export default class Console extends Tool
     }
     _exposeLog()
     {
-        let log = this._log,
+        let logger = this._logger,
             methods = ['filter'].concat(CONSOLE_METHOD);
 
         methods.forEach(name => this[name] = (...args) =>
         {
-            log[name](...args);
+            logger[name](...args);
 
             return this;
         });
@@ -121,15 +121,15 @@ export default class Console extends Tool
         let $input = this._$input,
             $inputBtns = this._$inputBtns,
             $control = this._$control,
-            log = this._log,
+            logger = this._logger,
             config = this.config;
 
-        $control.on('click', '.clear-console', () => log.clear())
+        $control.on('click', '.clear-console', () => logger.clear())
                 .on('click', '.filter', function ()
                 {
-                    log.filter(util.$(this).data('filter'))
+                    logger.filter(util.$(this).data('filter'))
                 })
-                .on('click', '.help', () => log.help());
+                .on('click', '.help', () => logger.help());
 
         $inputBtns.on('click', '.cancel', () => this._hideInput())
                   .on('click', '.execute', () =>
@@ -137,14 +137,14 @@ export default class Console extends Tool
                       let jsInput = $input.val().trim();
                       if (jsInput === '') return;
 
-                      log.input(jsInput);
+                      logger.input(jsInput);
                       $input.val('').get(0).blur();
                       this._hideInput();
                   });
 
         $input.on('focusin', () => this._showInput());
 
-        log.on('viewJson', (data) =>
+        logger.on('viewJson', (data) =>
            {
                let sources = parent.get('sources');
                if (!sources) return;
@@ -180,7 +180,7 @@ export default class Console extends Tool
     _initConfig(parent)
     {
         let cfg = this.config = config.create('eruda-console'),
-            log = this._log;
+            logger = this._logger;
 
         cfg.set(util.defaults(cfg.get(), {
             catchGlobalErr: true,
@@ -195,8 +195,8 @@ export default class Console extends Tool
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
-        if (cfg.get('displayExtraInfo')) log.displayExtraInfo(true);
-        log.setMaxNum(maxLogNum);
+        if (cfg.get('displayExtraInfo')) logger.displayExtraInfo(true);
+        logger.setMaxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
         {
@@ -204,8 +204,8 @@ export default class Console extends Tool
             {
                 case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
-                case 'maxLogNum': return log.setMaxNum(val === 'infinite' ? val : +val);
-                case 'displayExtraInfo': return log.displayExtraInfo(val);
+                case 'maxLogNum': return logger.setMaxNum(val === 'infinite' ? val : +val);
+                case 'displayExtraInfo': return logger.displayExtraInfo(val);
             }
         });
 
