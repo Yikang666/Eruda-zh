@@ -2,179 +2,64 @@ import util from '../lib/util'
 import stringify from '../lib/stringify.es6'
 import highlight from '../lib/highlight.es6'
 import beautify from 'js-beautify'
-import Log from './Log'
+import Log from './Log.es6'
 
 export default class Logger extends util.Emitter
 {
     constructor($el, parent)
     {
         super();
-
         util.evalCss(require('./Logger.scss'));
 
         this._$el = $el;
         this._parent = parent;
         this._logs = [];
-        this._renderLogs = [];
-        this._tpl = require('./Logger.hbs');
+        this._timer = {};
         this._filter = 'all';
         this._maxNum = 'infinite';
         this._displayExtraInfo = false;
-        this._isUpdated = false;
-        this._lastLog = {};
-        this._timer = {};
 
         this._bindEvent();
-    }
-    setMaxNum(num)
-    {
-        var logs = this._logs;
-
-        this._maxNum = num;
-        if (util.isNum(num) && logs.length > num)
-        {
-            this._logs = logs.slice(logs.length - num);
-            this._isUpdated = true;
-            this.render();
-        }
     }
     displayExtraInfo(flag)
     {
         this._displayExtraInfo = flag;
     }
-    clear()
+    maxNum(val)
     {
-        this._logs = [];
-        this._lastLog = {};
-        this._isUpdated = true;
+        var logs = this._logs;
 
+        this._maxNum = val;
+        if (util.isNum(val) && logs.length > val)
+        {
+            this._logs = logs.slice(logs.length - val);
+            this._isUpdated = true;
+            this.render();
+        }
+    }
+    filter(val)
+    {
+        this._filter = val;
+        this.emit('filter', val);
         return this.render();
-    }
-    input(jsCode)
-    {
-        if (util.startWith(jsCode, ':'))
-        {
-            this._runCmd(jsCode.slice(1));
-
-            return this;
-        } else if (util.startWith(jsCode, '/'))
-        {
-            return this.filter(new RegExp(util.escapeRegExp(jsCode.slice(1))));
-        }
-
-        this.insert({
-            type: 'input',
-            ignoreFilter: true,
-            isCode: true,
-            icon: 'chevron-right',
-            src: jsCode,
-            val: jsCode
-        });
-
-        try {
-            this.output(evalJs(jsCode));
-        } catch (e)
-        {
-            e.ignoreFilter = true;
-            this.error(e);
-        }
-
-        return this;
-    }
-    output(val)
-    {
-        return this.insert({
-            type: 'output',
-            ignoreFilter: true,
-            icon: 'chevron-left',
-            src: util.isObj(val) ? extractObj(val) : val,
-            val: transMsg(val)
-        });
-    }
-    dir(obj)
-    {
-        var src = util.isObj(obj) ? extractObj(obj) : obj,
-            msg;
-
-        if (util.isObj(src))
-        {
-            msg = JSON.stringify(src, null, 4);
-            msg = msg.replace(/erudaProto/g, '__proto__')
-                     .replace(/erudaObjAbstract/g, '__abstract__');
-
-        } else
-        {
-            msg = transMsg(src, true);
-        }
-
-        return this.insert({
-            type: 'dir',
-            isCode: true,
-            src,
-            val: msg
-        });
     }
     log(...args)
     {
-        return this.insert({
-            type: 'log',
-            src: extractSrc(args),
-            val: transMultipleMsg(args)
-        });
-    }
-    html(val)
-    {
-        return this.insert({
-            type: 'html',
-            ignoreFilter: true,
-            val
-        });
-    }
-    error(msg)
-    {
-        if (util.isUndef(msg)) return;
+        this.insert('log', args);
 
-        if (!util.isErr(msg)) msg = new Error(msg);
+        return this;
+    }
+    dir(...args)
+    {
+        this.insert('dir', args);
 
-        return this.insert({
-            type: 'error',
-            ignoreFilter: msg.ignoreFilter,
-            src: {
-                message: msg.message || '',
-                stack: msg.stack
-            },
-            icon: 'times-circle',
-            val: errToStr(msg)
-        });
+        return this;
     }
-    info(...args)
+    table(...args)
     {
-        return this.insert({
-            type: 'info',
-            src: extractSrc(args),
-            icon: 'info-circle',
-            val: transMultipleMsg(args)
-        });
-    }
-    warn(...args)
-    {
-        return this.insert({
-            type: 'warn',
-            src: extractSrc(args),
-            icon: 'exclamation-triangle',
-            val: transMultipleMsg(args)
-        });
-    }
-    filter(type)
-    {
-        this._filter = type;
-        this.emit('filter', type);
-        this._isUpdated = true;
-        return this.render();
-    }
-    help()
-    {
-        return this.html(helpMsg);
+        this.insert('table', args);
+
+        return this;
     }
     time(name)
     {
@@ -191,107 +76,95 @@ export default class Logger extends util.Emitter
 
         return this.html(`<div class="eruda-blue">${name}: ${util.now() - startTime}ms</div>`);
     }
-    insert(log)
+    clear()
     {
-        var logs = this._logs;
+        this._logs = [];
 
-        if (this._maxNum !== 'infinite' && logs.length >= this._maxNum) logs.shift();
-
-        util.defaults(log, {
-            type: 'log',
-            isCode: false,
-            ignoreFilter: false,
-            val: '',
-            showTimes: false,
-            times: 1
-        });
-
-        log.src = log.src || log.val;
-
-        if (log.isCode)
-        {
-            log.val = highlight(beautify(log.val), 'js');
-        } else if (log.type != 'html')
-        {
-            log.val = txtToHtml(log.val);
-        }
-
-        if (this._displayExtraInfo)
-        {
-            log.hasHeader = true;
-            log.time = getCurTime();
-            log.from = getFrom();
-        }
-
-        var lastLog = this._lastLog;
-
-        if (log.type !== 'html' &&
-            lastLog.type === log.type &&
-            lastLog.val === log.val)
-        {
-            lastLog.times++;
-            lastLog.showTimes = true;
-            if (log.time) lastLog.time = log.time;
-        } else
-        {
-            logs.push(log);
-            this._lastLog = log;
-        }
-
-        this.emit('insert', log);
-
-        this._isUpdated = true;
         return this.render();
     }
-    _bindEvent()
+    info(...args)
     {
-        var self = this;
-
-        this._$el.on('click', '.eruda-log-item', function ()
-        {
-            var idx = util.$(this).data('idx'),
-                src = self._renderLogs[idx].src;
-
-            try {
-                if (!util.isObj(src)) src = JSON.parse(src);
-                self.emit('viewJson', src);
-            } catch (e) {}
-        });
+        return this.insert('info', args);
     }
-    _runCmd(cmd)
+    error(...args)
     {
-        switch (cmd.trim())
+        return this.insert('error', args);
+    }
+    warn(...args)
+    {
+        return this.insert('warn', args);
+    }
+    input(jsCode)
+    {
+        if (util.startWith(jsCode, ':'))
         {
-            case '$': return this._loadJs('jQuery');
-            case '_': return this._loadJs('underscore');
-            default:
-                this.warn('Unknown command').help();
+            this._runCmd(jsCode.slice(1));
+
+            return this;
+        } else if (util.startWith(jsCode, '/'))
+        {
+            return this.filter(new RegExp(util.escapeRegExp(jsCode.slice(1))));
         }
-    }
-    _loadJs(name)
-    {
-        util.loadJs(libraries[name], (result) =>
-        {
-            if (result) return this.log(`${name} is loaded`);
 
-            this.warn(`Failed to load ${name}`);
-        });
+        this.insert('input', [jsCode]);
+
+        try {
+            this.output(evalJs(jsCode));
+        } catch (e)
+        {
+            this.error(e);
+        }
+
+        return this;
+    }
+    output(val)
+    {
+        return this.insert('output', [val]);
+    }
+    html(...args)
+    {
+        return this.insert('html', args);
+    }
+    help()
+    {
+        return this.html(helpMsg);
     }
     render()
     {
-        if (!this._parent.active || !this._isUpdated) return;
-        this._isUpdated = false;
+        let html = '',
+            logs = this._logs;
 
-        var logs = this._renderLogs = this._filterLogs(this._logs);
+        logs = this._renderLogs = this._filterLogs(logs);
 
-        this._renderHtml(this._tpl({logs: logs}));
-        this._scrollToBottom();
-    }
-    _renderHtml(html)
-    {
-        if (html === this._lastHtml) return;
-        this._lastHtml = html;
+        for (let i = 0, len = logs.length; i < len; i++)
+        {
+            html += logs[i].formattedMsg;
+        }
+
         this._$el.html(html);
+        this.scrollToBottom();
+
+        return this;
+    }
+    insert(type, args)
+    {
+        let logs = this._logs;
+
+        let log = new Log({
+            type, args,
+            idx: logs.length,
+            header: this._displayExtraInfo
+        });
+        logs.push(log);
+        this.render();
+
+        return this;
+    }
+    scrollToBottom()
+    {
+        var el = this._$el.get(0);
+
+        el.scrollTop = el.scrollHeight;
     }
     _filterLogs(logs)
     {
@@ -310,19 +183,45 @@ export default class Logger extends util.Emitter
             return val.ignoreFilter || val.type === filter;
         });
     }
-    _scrollToBottom()
+    _loadJs(name)
     {
-        var el = this._$el.get(0);
+        util.loadJs(libraries[name], (result) =>
+        {
+            if (result) return this.log(`${name} is loaded`);
 
-        el.scrollTop = el.scrollHeight;
+            this.warn(`Failed to load ${name}`);
+        });
+    }
+    _runCmd(cmd)
+    {
+        switch (cmd.trim())
+        {
+            case '$': return this._loadJs('jQuery');
+            case '_': return this._loadJs('underscore');
+            default:
+                this.warn('Unknown command').help();
+        }
+    }
+    _bindEvent()
+    {
+        var self = this;
+
+        this._$el.on('click', '.eruda-log-item', function ()
+        {
+            var idx = util.$(this).data('idx'),
+                src = self._renderLogs[idx].src;
+
+            try {
+                if (!util.isObj(src)) src = JSON.parse(src);
+                self.emit('viewJson', src);
+            } catch (e) {}
+        });
     }
 }
 
 var cmdList = require('./cmdList.json'),
     helpMsg = require('./help.hbs')({commands: cmdList}),
     libraries = require('./libraries.json');
-
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
 
 var evalJs = jsInput =>
 {
@@ -336,84 +235,3 @@ var evalJs = jsInput =>
 
     return ret;
 };
-
-function errToStr(err)
-{
-    var lines = err.stack.split('\n'),
-        msg = `${err.message || lines[0]}<br/>`;
-
-    lines = lines.filter(val => val.indexOf('eruda') < 0);
-
-    var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
-
-    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
-}
-
-function transMsg(msg, noEscape)
-{
-    if (util.isEl(msg))
-    {
-        msg = `<pre>${highlight(beautify.html(msg.outerHTML), 'html')}</pre>`;
-        noEscape = true;
-    } else if (util.isFn(msg))
-    {
-        msg = msg.toString();
-    } else if (util.isObj(msg))
-    {
-        msg = `${util.upperFirst(typeof msg)} ${JSON.stringify(extractObj(msg, true))}`;
-    } else if (util.isUndef(msg))
-    {
-        msg = 'undefined';
-    } else if (msg === null)
-    {
-        msg = 'null';
-    }
-
-    msg = util.toStr(msg);
-
-    if (noEscape) return msg;
-
-    return util.escape(msg);
-}
-
-function extractSrc(args)
-{
-    if (args.length !== 1) return args;
-
-    return util.isObj(args[0]) ? extractObj(args[0]) : args[0];
-}
-
-function getCurTime()
-{
-    let d = new Date();
-
-    return `${padZero(d.getHours())}:${padZero(d.getMinutes())}:${padZero(d.getSeconds())}`;
-}
-
-function getFrom()
-{
-    let e = new Error(),
-        ret = '',
-        lines = e.stack.split('\n');
-
-    for (let i = 0, len = lines.length; i < len; i++)
-    {
-        ret = lines[i];
-        if (ret.indexOf('winConsole') > -1 && i < len - 1)
-        {
-            ret = lines[i+1];
-            break;
-        }
-    }
-
-    return ret;
-}
-
-var padZero = (num) => util.lpad(util.toStr(num), 2, '0');
-
-var extractObj = (obj, simple) => JSON.parse(stringify(obj, null, obj, simple));
-
-var transMultipleMsg = args => args.map(val => transMsg(val)).join(' ');
-
-var txtToHtml = str => str.replace(/\n/g, '<br/>')
-                          .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');

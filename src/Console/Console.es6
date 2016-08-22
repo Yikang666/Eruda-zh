@@ -1,4 +1,4 @@
-import Log from './Logger.es6'
+import Logger from './Logger.es6'
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import config from '../lib/config.es6'
@@ -17,7 +17,7 @@ export default class Console extends Tool
 
         this._appendTpl();
         this._initLogger();
-        this._exposeLog();
+        this._exposeLogger();
         this._initConfig(parent);
         this._bindEvent(parent);
     }
@@ -104,10 +104,10 @@ export default class Console extends Tool
             $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
         }));
     }
-    _exposeLog()
+    _exposeLogger()
     {
         let logger = this._logger,
-            methods = ['filter'].concat(CONSOLE_METHOD);
+            methods = ['filter', 'html'].concat(CONSOLE_METHOD);
 
         methods.forEach(name => this[name] = (...args) =>
         {
@@ -196,7 +196,7 @@ export default class Console extends Tool
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
         if (cfg.get('displayExtraInfo')) logger.displayExtraInfo(true);
-        logger.setMaxNum(maxLogNum);
+        logger.maxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
         {
@@ -204,7 +204,7 @@ export default class Console extends Tool
             {
                 case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
-                case 'maxLogNum': return logger.setMaxNum(val === 'infinite' ? val : +val);
+                case 'maxLogNum': return logger.maxNum(val === 'infinite' ? val : +val);
                 case 'displayExtraInfo': return logger.displayExtraInfo(val);
             }
         });
