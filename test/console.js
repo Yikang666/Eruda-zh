@@ -11,12 +11,18 @@ describe('log', function ()
         expect($tool.find('.eruda-log')).toContainText(text);
     });
 
+    it('clear', function ()
+    {
+        tool.clear();
+        expect($tool.find('.eruda-log')).toHaveLength(0);
+    });
+
     it('basic object', function ()
     {
         var obj = {a: 1};
 
         tool.clear().log(obj);
-        expect($tool.find('.eruda-log')).toContainText('Object {"a":1}');
+        expect($tool.find('.eruda-log')).toContainText('Object {a: 1}');
     });
 
     it('html', function ()
@@ -37,8 +43,14 @@ describe('substitution', function ()
 {
     it('number', function ()
     {
-        tool.clear().log('Eruda is %d', 1, 'year old');
+        tool.clear().log('Eruda is %d', 1.2, 'year old');
         expect($tool.find('.eruda-log')).toContainText('Eruda is 1 year old');
+
+        tool.clear().log('%i', 1.2, 'year old');
+        expect($tool.find('.eruda-log')).toContainText('1 year old');
+
+        tool.clear().log('%f', 1.2, 'year old');
+        expect($tool.find('.eruda-log')).toContainText('1.2 year old');
     });
 
     it('string', function ()
@@ -49,8 +61,11 @@ describe('substitution', function ()
 
     it('object', function ()
     {
-        tool.clear().log('Object is %o', {a: 1});
-        expect($tool.find('.eruda-log')).toContainText('Object is {"a":1}');
+        tool.clear().log('Object is %O', {a: 1});
+        expect($tool.find('.eruda-log')).toContainText('Object is {a: 1}');
+
+        tool.clear().log('Dom is %o', document.createElement('script'));
+        expect($tool.find('.eruda-log')).toContainText('Dom is <script></script>');
     });
 });
 

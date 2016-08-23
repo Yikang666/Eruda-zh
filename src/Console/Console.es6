@@ -195,7 +195,7 @@ export default class Console extends Tool
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
-        if (cfg.get('displayExtraInfo')) logger.displayExtraInfo(true);
+        if (cfg.get('displayExtraInfo')) logger.displayHeader(true);
         logger.maxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
@@ -205,7 +205,7 @@ export default class Console extends Tool
                 case 'catchGlobalErr': return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
                 case 'maxLogNum': return logger.maxNum(val === 'infinite' ? val : +val);
-                case 'displayExtraInfo': return logger.displayExtraInfo(val);
+                case 'displayExtraInfo': return logger.displayHeader(val);
             }
         });
 

@@ -5,15 +5,24 @@ import beautify from 'js-beautify'
 
 export default class Log
 {
-    constructor({type, args, idx, header})
+    constructor({
+        type = 'log',
+        args = [],
+        idx = 0,
+        displayHeader = false,
+        ignoreFilter = false})
     {
-        this._type = type;
-        this._args = args;
-        this._idx = idx;
-        this._header = header;
-        this._ignoreFilter = false;
+        this.type = type;
+        this.args = args;
+        this.idx = idx;
+        this.displayHeader = displayHeader;
+        this.ignoreFilter = false;
 
-        this._preProcess();
+        if (displayHeader)
+        {
+            this.time = getCurTime();
+            this.from = getFrom();
+        }
     }
     get formattedMsg()
     {
@@ -21,38 +30,30 @@ export default class Log
 
         return this._formattedMsg;
     }
-    get ignoreFilter()
+    _needSrc()
     {
-        return this._ignoreFilter;
-    }
-    get type()
-    {
-        return this._type;
-    }
-    _preProcess()
-    {
-        switch (this._type)
+        let {type, args} = this;
+
+        if (type === 'html') return false;
+
+        if (args.length === 1)
         {
-            case 'input':
-            case 'output':
-                this._ignoreFilter = true;
-                break;
+            let arg = args[0];
+            if (util.isStr(arg)) return false;
+            if (util.isBool(arg)) return false;
+            if (util.isNum(arg)) return false;
         }
 
-        if (this._header)
-        {
-            this._time = getCurTime();
-            this._from = getFrom();
-        }
+        return true;
     }
     _formatMsg()
     {
-        let type = this._type,
-            idx = this._idx,
-            hasHeader = this._header,
-            time = this._time,
-            from = this._from,
-            args = this._args;
+        let {type, idx, displayHeader, time, from, args} = this;
+
+        if (this._needSrc())
+        {
+            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, false);
+        }
 
         let msg = '', icon;
 
@@ -85,10 +86,9 @@ export default class Log
                 break;
         }
 
-        msg = render({msg, type, icon, idx, hasHeader, time, from});
-        this.src = stringify(this._args);
+        msg = render({msg, type, icon, idx, displayHeader, time, from});
 
-        delete this._args;
+        delete this.args;
         this._formattedMsg = msg;
     }
 }
@@ -142,7 +142,9 @@ function formatMsg(args)
             args[i] = 'null';
         } else
         {
-            args[i] = util.escape(util.toStr(val));
+            val = util.toStr(val);
+            if (i !== 0) val = util.escape(val);
+            args[i] = val;
         }
     }
 
@@ -151,7 +153,7 @@ function formatMsg(args)
 
 function substituteStr(args)
 {
-    var str = args[0],
+    var str = util.escape(args[0]),
         newStr = '';
 
     args.shift();
@@ -166,16 +168,30 @@ function substituteStr(args)
             let arg = args.shift();
             switch (str[i])
             {
+                case 'i':
                 case 'd':
+                    newStr += util.toInt(arg);
+                    break;
+                case 'f':
                     newStr += util.toNum(arg);
                     break;
                 case 's':
                     newStr += util.toStr(arg);
                     break;
+                case 'O':
+                    if (util.isObj(arg))
+                    {
+                        newStr += stringify(arg, {simple: true, keyQuotes: false, highlight: true});
+                    }
+                    break;
                 case 'o':
-                    try {
-                        newStr += JSON.stringify(arg);
-                    } catch (e) {}
+                    if (util.isEl(arg))
+                    {
+                        newStr += formatEl(arg);
+                    } else if (util.isObj(arg))
+                    {
+                        newStr += stringify(arg, {simple: true, keyQuotes: false, highlight: true});
+                    }
                     break;
                 default:
                     i--;
@@ -195,7 +211,7 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${util.upperFirst(typeof val)} ${JSON.stringify(extractObj(val, true))}`;
+    return `${getObjType(val)} ${stringify(val, {keyQuotes: false, simple: true, highlight: true})}`;
 }
 
 function formatFn(val)
@@ -234,9 +250,16 @@ function getFrom()
     return ret;
 }
 
+function getObjType(obj)
+{
+    if (obj.constructor) return obj.constructor.name;
+
+    return util.upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
+}
+
 var padZero = (num) => util.lpad(util.toStr(num), 2, '0');
 
 var tpl = require('./Log.hbs');
 var render = data => tpl(data);
 
-var extractObj = (obj, simple) => JSON.parse(stringify(obj, null, obj, simple));
+var extractObj = (obj, simple) => JSON.parse(stringify(obj, {simple}));

@@ -99,6 +99,13 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
                 </li>`
     }
+    if (val === '(...)' || val === '[circular]')
+    {
+        return `<li>
+                   <span class="eruda-key">${encode(key)}: </span>
+                   <span class="eruda-special">${val}</span>
+                </li>`
+    }
 
     return `<li>
                 <span class="eruda-key">${encode(key)}: </span>

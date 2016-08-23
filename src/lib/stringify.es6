@@ -1,7 +1,14 @@
 import util from './util'
 
 // Modified from: https://jsconsole.com/
-export default function stringify(obj, visited, topObj, simple)
+export default function stringify(obj, {
+    visited = [],
+    topObj,
+    simple = false,
+    keyQuotes = true,
+    getterVal = false,
+    highlight = false
+} = {})
 {
     let json = '',
         type = '',
@@ -10,8 +17,28 @@ export default function stringify(obj, visited, topObj, simple)
         proto,
         circular = false;
 
-    visited = visited || [];
     topObj = topObj || obj;
+    let dbQuotes = keyQuotes ? '"' : '';
+
+    let keyWrapper = '',
+        numWrapper = '',
+        strWrapper = '',
+        nullWrapper = '',
+        wrapperEnd = '';
+
+    if (highlight)
+    {
+        keyWrapper = '<span style="color: #a71d5d;">';
+        numWrapper = '<span style="color: #0086b3;">';
+        nullWrapper = '<span style="color: #0086b3;">';
+        strWrapper = '<span style="color: #183691;">';
+        wrapperEnd = '</span>'
+    }
+
+    let wrapKey = key => keyWrapper + dbQuotes + key + dbQuotes + wrapperEnd,
+        wrapNum = num => numWrapper + num + wrapperEnd,
+        wrapStr = str => strWrapper + str + wrapperEnd,
+        wrapNull = str => nullWrapper + str + wrapperEnd;
 
     try {
         type = ({}).toString.call(obj);
@@ -39,16 +66,16 @@ export default function stringify(obj, visited, topObj, simple)
 
     if (circular)
     {
-        json = '"[circular]"';
+        json = wrapStr('"[circular]"');
     } else if (isStr)
     {
-        json = `"${escapeJsonStr(obj)}"`;
+        json = wrapStr(`"${escapeJsonStr(obj)}"`);
     } else if (isArr)
     {
         visited.push(obj);
 
         json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, visited, null, simple)}`));
+        util.each(obj, val => parts.push(`${stringify(val, {visited, simple, getterVal, keyQuotes, highlight})}`));
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
@@ -57,16 +84,16 @@ export default function stringify(obj, visited, topObj, simple)
         names = Object.getOwnPropertyNames(obj);
         proto = Object.getPrototypeOf(obj);
         if (proto === Object.prototype || isFn || simple) proto = null;
-        if (proto) proto = `"erudaProto": ${stringify(proto, visited, topObj)}`;
+        if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, getterVal, topObj, keyQuotes, highlight})}`;
         names.sort(sortObjName);
         if (isFn)
         {
-            // We don't these properties to be display for functions.
+            // We don't need these properties to display for functions.
             names = names.filter(val => ['arguments', 'caller', 'name', 'length', 'prototype'].indexOf(val) < 0);
         }
         if (names.length === 0 && isFn)
         {
-            json = `"${escapeJsonStr(obj.toString())}"`;
+            json = wrapStr(`"${escapeJsonStr(obj.toString())}"`);
         } else
         {
             json = '{';
@@ -75,11 +102,21 @@ export default function stringify(obj, visited, topObj, simple)
                 // Function length is restricted to 500 for performance reason.
                 var fnStr = obj.toString();
                 if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
-                parts.push(`"erudaObjAbstract": "${escapeJsonStr(fnStr)}"`);
+                parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr('"' + escapeJsonStr(fnStr) + '"')}`);
             }
             util.each(names, name =>
             {
-                parts.push(`"${escapeJsonStr(name)}": ${stringify(topObj[name], visited, null, simple)}`);
+                let key = wrapKey(escapeJsonStr(name));
+
+                if (!getterVal)
+                {
+                    let descriptor = Object.getOwnPropertyDescriptor(obj, name);
+                    if (descriptor.get)
+                    {
+                        return parts.push(`${key}: "(...)"`);
+                    }
+                }
+                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(', ') + '}';
@@ -87,19 +124,25 @@ export default function stringify(obj, visited, topObj, simple)
     } else if (isNum)
     {
         json = obj + '';
-        if (util.endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
+        if (util.endWith(json, 'Infinity') || json === 'NaN')
+        {
+            json = `"${json}"`;
+        } else
+        {
+            json = wrapNum(json);
+        }
     } else if (isBool)
     {
         json = obj ? 'true' : 'false';
     } else if (obj === null)
     {
-        json = 'null';
+        json = wrapNull('null');
     } else if (isSymbol)
     {
-        json = '"Symbol"';
+        json = wrapStr('"Symbol"');
     } else if (obj === undefined)
     {
-        json = '"undefined"';
+        json = wrapStr('"undefined"');
     } else if (type === '[object HTMLAllCollection]')
     {
         // https://docs.webplatform.org/wiki/dom/HTMLAllCollection
@@ -112,7 +155,7 @@ export default function stringify(obj, visited, topObj, simple)
             visited.push(obj);
 
             json = '{\n';
-            if (!simple) parts.push(`"erudaObjAbstract": "${type.replace(/(\[object )|]/g, '')}"`);
+            if (!simple) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
             names = Object.getOwnPropertyNames(obj);
             proto = Object.getPrototypeOf(obj);
             if (proto === Object.prototype || simple) proto = null;
@@ -120,21 +163,31 @@ export default function stringify(obj, visited, topObj, simple)
             {
                 try
                 {
-                    proto = `"erudaProto": ${stringify(proto, visited, topObj)}`;
+                    proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, topObj, getterVal, keyQuotes, highlight})}`;
                 } catch(e)
                 {
-                    proto = `"erudaProto": "${escapeJsonStr(e.message)}"`;
+                    proto = `${wrapKey('erudaProto')}: ${wrapStr('"' + escapeJsonStr(e.message) + '"')}`;
                 }
             }
             names.sort(sortObjName);
             util.each(names, name =>
             {
-                parts.push(`"${escapeJsonStr(name)}": ${stringify(topObj[name], visited, null, simple)}`);
+                let key = wrapKey(escapeJsonStr(name));
+
+                if (!getterVal)
+                {
+                    let descriptor = Object.getOwnPropertyDescriptor(obj, name);
+                    if (descriptor.get)
+                    {
+                        return parts.push(`${key}: "(...)"`);
+                    }
+                }
+                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(',\n') + '\n}';
         } catch (e) {
-            json = `"${obj}"`;
+            json = wrapStr(`"${obj}"`);
         }
     }
 

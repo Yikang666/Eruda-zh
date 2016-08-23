@@ -3345,6 +3345,34 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ toInt ------------------------------ */
+
+    var toInt = _.toInt = (function ()
+    {
+        /* Convert value to an integer.
+         *
+         * |Name  |Type  |Desc             |
+         * |------|------|-----------------|
+         * |val   |*     |Value to convert |
+         * |return|number|Converted integer|
+         *
+         * ```javascript
+         * toInt(1.1); // -> 1
+         * ```
+         */
+
+        function exports(val)
+        {
+            if (!val) return val === 0 ? val : 0;
+
+            val = toNum(val);
+
+            return val - val % 1;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ toStr ------------------------------ */
 
     var toStr = _.toStr = (function ()

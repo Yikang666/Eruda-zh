@@ -17,13 +17,13 @@ export default class Logger extends util.Emitter
         this._timer = {};
         this._filter = 'all';
         this._maxNum = 'infinite';
-        this._displayExtraInfo = false;
+        this._displayHeader = false;
 
         this._bindEvent();
     }
-    displayExtraInfo(flag)
+    displayHeader(flag)
     {
-        this._displayExtraInfo = flag;
+        this._displayHeader = flag;
     }
     maxNum(val)
     {
@@ -106,20 +106,32 @@ export default class Logger extends util.Emitter
             return this.filter(new RegExp(util.escapeRegExp(jsCode.slice(1))));
         }
 
-        this.insert('input', [jsCode]);
+        this.insert({
+            type: 'input',
+            args: [jsCode],
+            ignoreFilter: true
+        });
 
         try {
             this.output(evalJs(jsCode));
         } catch (e)
         {
-            this.error(e);
+            this.insert({
+                type: 'error',
+                ignoreFilter: true,
+                args: [e]
+            });
         }
 
         return this;
     }
     output(val)
     {
-        return this.insert('output', [val]);
+        return this.insert({
+            type: 'output',
+            args: [val],
+            ignoreFilter: true
+        });
     }
     html(...args)
     {
@@ -150,11 +162,13 @@ export default class Logger extends util.Emitter
     {
         let logs = this._logs;
 
-        let log = new Log({
-            type, args,
+        let options = util.isStr(type) ? {type, args} : type;
+        util.extend(options, {
             idx: logs.length,
-            header: this._displayExtraInfo
+            displayHeader: this._displayHeader
         });
+
+        let log = new Log(options);
         logs.push(log);
         this.render();
 

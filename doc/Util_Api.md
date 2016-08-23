@@ -846,6 +846,19 @@ Check if keys and values in src are contained in obj.
 isMatch({a: 1, b: 2}, {a: 1}); // -> true
 ```
 
+## isNull 
+
+Check if value is an Null.
+
+|Name  |Type   |Desc                   |
+|------|-------|-----------------------|
+|value |*      |Value to check         |
+|return|boolean|True if value is an Null|
+
+```javascript
+isNull(null); // -> true
+```
+
 ## isNum 
 
 Checks if value is classified as a Number primitive or object.
@@ -1220,6 +1233,19 @@ toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
 toArr('abc'); // -> ['abc']
 toArr(1); // -> []
 toArr(null); // -> []
+```
+
+## toInt 
+
+Convert value to an integer.
+
+|Name  |Type  |Desc             |
+|------|------|-----------------|
+|val   |*     |Value to convert |
+|return|number|Converted integer|
+
+```javascript
+toInt(1.1); // -> 1
 ```
 
 ## toNum 
