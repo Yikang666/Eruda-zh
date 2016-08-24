@@ -154,6 +154,7 @@ function formatMsg(args)
 function substituteStr(args)
 {
     var str = util.escape(args[0]),
+        isInCss = false,
         newStr = '';
 
     args.shift();
@@ -162,7 +163,7 @@ function substituteStr(args)
     {
         let c = str[i];
 
-        if (c === '%')
+        if (c === '%' && args.length !== 0)
         {
             i++;
             let arg = args.shift();
@@ -193,6 +194,11 @@ function substituteStr(args)
                         newStr += stringify(arg, {simple: true, keyQuotes: false, highlight: true});
                     }
                     break;
+                case 'c':
+                    if (isInCss) newStr += '</span>';
+                    isInCss = true;
+                    newStr += `<span style="${arg}">`;
+                    break;
                 default:
                     i--;
                     args.unshift(arg);
@@ -203,6 +209,7 @@ function substituteStr(args)
             newStr += c;
         }
     }
+    if (isInCss) newStr += '</span>';
 
     args.unshift(newStr);
 

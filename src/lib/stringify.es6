@@ -24,6 +24,7 @@ export default function stringify(obj, {
         numWrapper = '',
         strWrapper = '',
         nullWrapper = '',
+        boolWrapper = '',
         strEscape = str => str,
         wrapperEnd = '';
 
@@ -33,6 +34,7 @@ export default function stringify(obj, {
         numWrapper = '<span style="color: #0086b3;">';
         nullWrapper = '<span style="color: #0086b3;">';
         strWrapper = '<span style="color: #183691;">';
+        boolWrapper = '<span style="color: #0086b3;">';
         strEscape = str => util.escape(str);
         wrapperEnd = '</span>'
     }
@@ -40,6 +42,7 @@ export default function stringify(obj, {
     let wrapKey = key => keyWrapper + dbQuotes + strEscape(key) + dbQuotes + wrapperEnd,
         wrapNum = num => numWrapper + num + wrapperEnd,
         wrapStr = str => strWrapper + strEscape(str) + wrapperEnd,
+        wrapBool = bool => boolWrapper + bool + wrapperEnd,
         wrapNull = str => nullWrapper + str + wrapperEnd;
 
     try {
@@ -135,7 +138,7 @@ export default function stringify(obj, {
         }
     } else if (isBool)
     {
-        json = obj ? 'true' : 'false';
+        json = wrapBool(obj ? 'true' : 'false');
     } else if (obj === null)
     {
         json = wrapNull('null');

@@ -67,6 +67,12 @@ describe('substitution', function ()
         tool.clear().log('Dom is %o', document.createElement('script'));
         expect($tool.find('.eruda-log')).toContainText('Dom is <script></script>');
     });
+
+    it('style', function ()
+    {
+        tool.clear().log('%cblue%cgreen', 'color:blue', 'color:green');
+        expect($tool.find('.eruda-log')).toContainHtml('<span style="color:blue">blue</span><span style="color:green">green</span>');
+    });
 });
 
 
