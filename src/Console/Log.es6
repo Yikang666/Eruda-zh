@@ -60,14 +60,21 @@ export default class Log
         switch (type)
         {
             case 'log':
+                msg = formatMsg(args);
+                break;
             case 'info':
+                icon = 'info-circle';
+                msg = formatMsg(args);
+                break;
             case 'warn':
+                icon = 'exclamation-triangle';
                 msg = formatMsg(args);
                 break;
             case 'error':
+                args = substituteStr(args);
                 let err = args[0];
                 icon = 'times-circle';
-                err = util.isErr(args[0]) ? args[0] : new Error(err);
+                err = util.isErr(err) ? err : new Error(err);
                 msg = formatErr(err);
                 break;
             case 'table':
@@ -95,7 +102,40 @@ export default class Log
 
 function formatTable(args)
 {
-    return '';
+    let table = args[0],
+        ret = '',
+        filter = args[1],
+        columns = [];
+
+    if (util.isStr(filter)) filter = util.toArr(filter);
+    if (!util.isArr(filter)) filter = null;
+
+    if (!util.isArr(table)) return formatMsg(args);
+
+    table.forEach(val =>
+    {
+        if (!util.isObj(val)) return;
+        columns = columns.concat(Object.getOwnPropertyNames(val));
+    });
+    columns = util.unique(columns);
+    if (filter) columns = columns.filter(val => util.contain(filter, val));
+    if (util.isEmpty(columns)) return formatMsg(args);
+
+    ret += '<table><thead><tr><th>(index)</th>';
+    columns.forEach(val => ret += `<th>${val}</th>`);
+    ret += '</tr></thead><tbody>';
+
+    table.forEach((obj, idx) =>
+    {
+        if (!util.isObj(obj)) return;
+        ret += `<tr><td>${idx}</td>`;
+        columns.forEach(column => ret += `<td>${obj[column] || ''}</td>`);
+        ret += '</tr>'
+    });
+
+    ret += '</tbody></table>';
+
+    return ret;
 }
 
 var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
@@ -119,7 +159,7 @@ function formatJs(code)
 
 function formatMsg(args)
 {
-    if (util.isStr(args[0])) args = substituteStr(args);
+    args = substituteStr(args);
 
     for (let i = 0, len = args.length; i < len; i++)
     {
@@ -153,6 +193,8 @@ function formatMsg(args)
 
 function substituteStr(args)
 {
+    if (!util.isStr(args[0]) || args.length === 1) return args;
+
     var str = util.escape(args[0]),
         isInCss = false,
         newStr = '';

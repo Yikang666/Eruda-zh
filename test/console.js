@@ -75,11 +75,33 @@ describe('substitution', function ()
     });
 });
 
+describe('table', function ()
+{
+    it('wrong args', function ()
+    {
+        tool.clear().table('test');
+        expect($tool.find('.eruda-table')).not.toContainElement('table');
+    });
+
+    it('basic', function ()
+    {
+        tool.clear().table([{test: 1}, {test: 2, test2: 3}]);
+        expect($tool.find('.eruda-table tbody tr')).toHaveLength(2);
+        expect($tool.find('.eruda-table thead th')).toHaveLength(3);
+    });
+
+    it('filter', function ()
+    {
+        tool.clear().table([{test: 1}, {test: 2, test2: 3}], 'test');
+        expect($tool.find('.eruda-table thead th')).toHaveLength(2);
+    });
+});
+
 
 describe('filter', function ()
 {
     // Test case from https://github.com/liriliri/eruda/issues/14
-    /*it('function', function ()
+    it('function', function ()
     {
         tool.clear().filter(function (log)
         {
@@ -97,5 +119,5 @@ describe('filter', function ()
         });
         tool.log(obj);
         expect($tool.find('.eruda-logs li').length).toEqual(1);
-    });*/
+    });
 });
