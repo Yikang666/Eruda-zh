@@ -24,6 +24,7 @@ export default function stringify(obj, {
         numWrapper = '',
         strWrapper = '',
         nullWrapper = '',
+        strEscape = str => str,
         wrapperEnd = '';
 
     if (highlight)
@@ -32,12 +33,13 @@ export default function stringify(obj, {
         numWrapper = '<span style="color: #0086b3;">';
         nullWrapper = '<span style="color: #0086b3;">';
         strWrapper = '<span style="color: #183691;">';
+        strEscape = str => util.escape(str);
         wrapperEnd = '</span>'
     }
 
-    let wrapKey = key => keyWrapper + dbQuotes + key + dbQuotes + wrapperEnd,
+    let wrapKey = key => keyWrapper + dbQuotes + strEscape(key) + dbQuotes + wrapperEnd,
         wrapNum = num => numWrapper + num + wrapperEnd,
-        wrapStr = str => strWrapper + str + wrapperEnd,
+        wrapStr = str => strWrapper + strEscape(str) + wrapperEnd,
         wrapNull = str => nullWrapper + str + wrapperEnd;
 
     try {
