@@ -98,6 +98,21 @@ export default class Log
         delete this.args;
         this._formattedMsg = msg;
     }
+    static click(type, $el)
+    {
+        switch (type)
+        {
+            case 'log':
+            case 'warn':
+            case 'info':
+                return 'src';
+            case 'error':
+                $el.find('.eruda-stack').toggleClass('eruda-hidden');
+                break;
+        }
+
+        return 'handled';
+    }
 }
 
 function formatTable(args)
@@ -147,7 +162,7 @@ function formatErr(err)
 
     lines = lines.filter(val => val.indexOf('eruda') < 0);
 
-    var stack = `<div class="eruda-stack">${lines.slice(1).join('<br/>')}</div>`;
+    var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
     return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }

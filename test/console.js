@@ -31,11 +31,16 @@ describe('log', function ()
         expect($tool.find('.eruda-html')).toContainElement('span.color-blue');
     });
 
-    it('timer', function ()
+    it('timing', function ()
     {
         tool.clear().time('eruda');
         tool.clear().timeEnd('eruda');
         expect($tool.find('.eruda-html')).toHaveText(/eruda: \d+ms/);
+    });
+
+    it('error', function ()
+    {
+        tool.clear().error(new Error('error test'));
     });
 });
 
@@ -103,10 +108,10 @@ describe('filter', function ()
     // Test case from https://github.com/liriliri/eruda/issues/14
     it('function', function ()
     {
-        tool.clear().filter(function (log)
+        /*tool.clear().filter(function (log)
         {
             return !(log.type === 'error' && /deprecated(.|\n)*stringify/.test(log.src.stack));
-        });
+        });*/
 
         var obj = {};
         Object.defineProperty(obj, 'a', {

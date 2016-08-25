@@ -222,13 +222,22 @@ export default class Logger extends util.Emitter
 
         this._$el.on('click', '.eruda-log-item', function ()
         {
-            var idx = util.$(this).data('idx'),
-                src = self._renderLogs[idx].src;
+            let $el = util.$(this),
+                idx = $el.data('idx'),
+                type = $el.data('type');
 
-            try {
-                if (!util.isObj(src)) src = JSON.parse(src);
-                self.emit('viewJson', src);
-            } catch (e) {}
+            let action = Log.click(type, $el);
+
+            switch (action)
+            {
+                case 'viewSrc':
+                    let src = self._renderLogs[idx].src;
+                    try {
+                        if (!util.isObj(src)) src = JSON.parse(src);
+                        self.emit('viewJson', src);
+                    } catch (e) {}
+                    break;
+            }
         });
     }
 }
