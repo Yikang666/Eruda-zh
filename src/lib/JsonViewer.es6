@@ -1,5 +1,5 @@
-import util from '../lib/util'
-import highlight from '../lib/highlight.es6'
+import util from './util'
+import highlight from './highlight.es6'
 
 export default class JsonViewer
 {

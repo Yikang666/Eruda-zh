@@ -100,6 +100,11 @@
                 border-top: 1px solid $yellow;
                 border-bottom: 1px solid $yellow;
             }
+            &.dir {
+                .json {
+                    padding-top: 10px;
+                }
+            }
             &.info {
                 color: $blue;
             }

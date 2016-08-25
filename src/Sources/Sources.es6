@@ -2,7 +2,7 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import beautify from 'js-beautify'
 import highlight from '../lib/highlight.es6'
-import JsonViewer from './JsonViewer.es6'
+import JsonViewer from '../lib/JsonViewer.es6'
 
 export default class Sources extends Tool
 {

@@ -2,6 +2,7 @@ import util from '../lib/util'
 import stringify from '../lib/stringify.es6'
 import highlight from '../lib/highlight.es6'
 import beautify from 'js-beautify'
+import JsonViewer from '../lib/JsonViewer.es6'
 
 export default class Log
 {
@@ -62,6 +63,9 @@ export default class Log
             case 'log':
                 msg = formatMsg(args);
                 break;
+            case 'dir':
+                msg = formatDir(args);
+                break;
             case 'info':
                 icon = 'info-circle';
                 msg = formatMsg(args);
@@ -98,16 +102,34 @@ export default class Log
         delete this.args;
         this._formattedMsg = msg;
     }
-    static click(type, $el)
+    static click(type, log, $el)
     {
         switch (type)
         {
             case 'log':
             case 'warn':
             case 'info':
-                return 'src';
+                return 'viewSrc';
             case 'error':
                 $el.find('.eruda-stack').toggleClass('eruda-hidden');
+                break;
+            case 'dir':
+                if (log.src)
+                {
+                    let $json = $el.find('.eruda-json');
+                    if ($json.hasClass('eruda-hidden'))
+                    {
+                        if ($json.data('init') !== 'true')
+                        {
+                            new JsonViewer(log.src, $json);
+                            $json.data('init', 'true');
+                        }
+                        $json.rmClass('eruda-hidden');
+                    } else
+                    {
+                        $json.addClass('eruda-hidden');
+                    }
+                }
                 break;
         }
 
@@ -204,6 +226,13 @@ function formatMsg(args)
     }
 
     return args.join(' ');
+}
+
+function formatDir(args)
+{
+    let msg = formatMsg(args);
+
+    return msg + '<div class="eruda-json eruda-hidden"></div>'
 }
 
 function substituteStr(args)

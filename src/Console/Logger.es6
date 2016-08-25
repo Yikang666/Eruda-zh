@@ -224,14 +224,15 @@ export default class Logger extends util.Emitter
         {
             let $el = util.$(this),
                 idx = $el.data('idx'),
-                type = $el.data('type');
+                type = $el.data('type'),
+                log = self._renderLogs[idx];
 
-            let action = Log.click(type, $el);
+            let action = Log.click(type, log, $el);
 
             switch (action)
             {
                 case 'viewSrc':
-                    let src = self._renderLogs[idx].src;
+                    let src = log.src;
                     try {
                         if (!util.isObj(src)) src = JSON.parse(src);
                         self.emit('viewJson', src);
