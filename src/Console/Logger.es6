@@ -183,7 +183,7 @@ export default class Logger extends util.Emitter
         let html = '',
             logs = this._logs;
 
-        logs = this._renderLogs = this._filterLogs(logs);
+        logs = this._filterLogs(logs);
 
         for (let i = 0, len = logs.length; i < len; i++)
         {

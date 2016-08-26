@@ -18,7 +18,7 @@ export default class Log
         this.idx = idx;
         this.count = 1;
         this.displayHeader = displayHeader;
-        this.ignoreFilter = false;
+        this.ignoreFilter = ignoreFilter;
 
         if (displayHeader)
         {
