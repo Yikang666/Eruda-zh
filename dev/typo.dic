@@ -8,5 +8,6 @@ focusin
 iframe
 onerror
 postcss
-textarea
 scss
+textarea
+unenumerable

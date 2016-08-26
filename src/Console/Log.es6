@@ -75,7 +75,7 @@ export default class Log
 
         if (this._needSrc())
         {
-            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, false);
+            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, {simple: false});
         }
 
         let msg = '', icon;
@@ -159,6 +159,23 @@ export default class Log
 
         return 'handled';
     }
+}
+
+// Looks like es6 doesn't support static properties yet.
+Log.showGetterVal = false;
+Log.showUnenumerable = true;
+
+function stringifyWrapper(obj, options = {})
+{
+    util.defaults(options, {
+        simple: true,
+        highlight: true,
+        keyQuotes: false,
+        getterVal: Log.showGetterVal,
+        unenumerable: Log.showUnenumerable
+    });
+
+    return stringify(obj, options);
 }
 
 function formatTable(args)
@@ -292,7 +309,7 @@ function substituteStr(args)
                 case 'O':
                     if (util.isObj(arg))
                     {
-                        newStr += stringify(arg, {simple: true, keyQuotes: false, highlight: true});
+                        newStr += stringifyWrapper(arg);
                     }
                     break;
                 case 'o':
@@ -301,7 +318,7 @@ function substituteStr(args)
                         newStr += formatEl(arg);
                     } else if (util.isObj(arg))
                     {
-                        newStr += stringify(arg, {simple: true, keyQuotes: false, highlight: true});
+                        newStr += stringifyWrapper(arg);
                     }
                     break;
                 case 'c':
@@ -328,7 +345,7 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${getObjType(val)} ${stringify(val, {keyQuotes: false, simple: true, highlight: true})}`;
+    return `${getObjType(val)} ${stringifyWrapper(val)}`;
 }
 
 function formatFn(val)
@@ -379,4 +396,12 @@ var padZero = (num) => util.lpad(util.toStr(num), 2, '0');
 var tpl = require('./Log.hbs');
 var render = data => tpl(data);
 
-var extractObj = (obj, simple) => JSON.parse(stringify(obj, {simple}));
+function extractObj(obj, options = {})
+{
+    util.defaults(options, {
+        highlight: false,
+        keyQuotes: true
+    });
+
+    return JSON.parse(stringifyWrapper(obj, options));
+}

@@ -7,8 +7,9 @@ export default function stringify(obj, {
     simple = false,
     keyQuotes = true,
     getterVal = false,
-    highlight = false
-} = {})
+    highlight = false,
+    unenumerable = true
+    } = {})
 {
     let json = '',
         type = '',
@@ -80,16 +81,16 @@ export default function stringify(obj, {
         visited.push(obj);
 
         json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, {visited, simple, getterVal, keyQuotes, highlight})}`));
+        util.each(obj, val => parts.push(`${stringify(val, {visited, simple, getterVal, keyQuotes, highlight, unenumerable})}`));
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
         visited.push(obj);
 
-        names = Object.getOwnPropertyNames(obj);
+        names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
         proto = Object.getPrototypeOf(obj);
         if (proto === Object.prototype || isFn || simple) proto = null;
-        if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, getterVal, topObj, keyQuotes, highlight})}`;
+        if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, getterVal, topObj, keyQuotes, highlight, unenumerable})}`;
         names.sort(sortObjName);
         if (isFn)
         {
@@ -121,7 +122,7 @@ export default function stringify(obj, {
                         return parts.push(`${key}: "(...)"`);
                     }
                 }
-                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight})}`);
+                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight, unenumerable})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(', ') + '}';
@@ -161,14 +162,14 @@ export default function stringify(obj, {
 
             json = '{\n';
             if (!simple) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
-            names = Object.getOwnPropertyNames(obj);
+            names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
             proto = Object.getPrototypeOf(obj);
             if (proto === Object.prototype || simple) proto = null;
             if (proto)
             {
                 try
                 {
-                    proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, topObj, getterVal, keyQuotes, highlight})}`;
+                    proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, topObj, getterVal, keyQuotes, highlight, unenumerable})}`;
                 } catch(e)
                 {
                     proto = `${wrapKey('erudaProto')}: ${wrapStr('"' + escapeJsonStr(e.message) + '"')}`;
@@ -187,7 +188,7 @@ export default function stringify(obj, {
                         return parts.push(`${key}: "(...)"`);
                     }
                 }
-                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight})}`);
+                parts.push(`${key}: ${stringify(topObj[name], {visited, getterVal, simple, keyQuotes, highlight, unenumerable})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(',\n') + '\n}';

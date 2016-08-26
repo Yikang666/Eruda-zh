@@ -186,6 +186,8 @@ export default class Console extends Tool
             catchGlobalErr: true,
             overrideConsole: true,
             displayExtraInfo: false,
+            displayUnenumerable: true,
+            displayGetterVal: false,
             displayIfErr: false,
             maxLogNum: 'infinite'
         }));
@@ -196,6 +198,8 @@ export default class Console extends Tool
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
         if (cfg.get('displayExtraInfo')) logger.displayHeader(true);
+        if (cfg.get('displayUnenumerable')) logger.displayUnenumerable(true);
+        if (cfg.get('displayGetterVal')) logger.displayGetterVal(true);
         logger.maxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
@@ -206,6 +210,8 @@ export default class Console extends Tool
                 case 'overrideConsole': return val ? this.overrideConsole() : this.restoreConsole();
                 case 'maxLogNum': return logger.maxNum(val === 'infinite' ? val : +val);
                 case 'displayExtraInfo': return logger.displayHeader(val);
+                case 'displayUnenumerable': return logger.displayUnenumerable(val);
+                case 'displayGetterVal': return logger.displayGetterVal(val);
             }
         });
 
@@ -216,6 +222,8 @@ export default class Console extends Tool
                 .switch(cfg, 'overrideConsole', 'Override Console')
                 .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
                 .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
+                .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
+                .switch(cfg, 'displayGetterVal', 'Access Getter Value')
                 .select(cfg, 'maxLogNum', 'Max Log Number', ['infinite', '250', '125', '100', '50', '10'])
                 .separator()
     }

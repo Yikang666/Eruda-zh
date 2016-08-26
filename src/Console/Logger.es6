@@ -37,6 +37,14 @@ export default class Logger extends util.Emitter
             this.render();
         }
     }
+    displayUnenumerable(flag)
+    {
+        Log.showUnenumerable = flag;
+    }
+    displayGetterVal(flag)
+    {
+        Log.showGetterVal = flag;
+    }
     filter(val)
     {
         this._filter = val;
