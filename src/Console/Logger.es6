@@ -176,7 +176,11 @@ export default class Logger extends util.Emitter
     }
     help()
     {
-        return this.html(helpMsg);
+        return this.insert({
+            type: 'html',
+            args: [helpMsg],
+            ignoreFilter: true
+        });
     }
     render()
     {
@@ -253,10 +257,10 @@ export default class Logger extends util.Emitter
 
         return logs.filter(log =>
         {
+            if (log.ignoreFilter) return true;
             if (isFn) return filter(log);
             if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
-
-            return log.ignoreFilter || log.type === filter;
+            return log.type === filter;
         });
     }
     _filterLog(log)
@@ -268,10 +272,11 @@ export default class Logger extends util.Emitter
         let isRegExp = util.isRegExp(filter),
             isFn = util.isFn(filter);
 
+        if (log.ignoreFilter) return true;
         if (isFn) return filter(log);
         if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
 
-        return log.ignoreFilter || log.type === filter;
+        return log.type === filter;
     }
     _loadJs(name)
     {
