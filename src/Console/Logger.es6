@@ -15,6 +15,7 @@ export default class Logger extends util.Emitter
         this._parent = parent;
         this._logs = [];
         this._timer = {};
+        this._lastLog = {};
         this._filter = 'all';
         this._maxNum = 'infinite';
         this._displayHeader = false;
@@ -33,7 +34,6 @@ export default class Logger extends util.Emitter
         if (util.isNum(val) && logs.length > val)
         {
             this._logs = logs.slice(logs.length - val);
-            this._isUpdated = true;
             this.render();
         }
     }
@@ -80,6 +80,7 @@ export default class Logger extends util.Emitter
     clear()
     {
         this._logs = [];
+        this._lastLog = {};
 
         return this.render();
     }
@@ -161,7 +162,8 @@ export default class Logger extends util.Emitter
     }
     insert(type, args)
     {
-        let logs = this._logs;
+        let logs = this._logs,
+            $el = this._$el;
 
         let options = util.isStr(type) ? {type, args} : type;
         util.extend(options, {
@@ -170,8 +172,32 @@ export default class Logger extends util.Emitter
         });
 
         let log = new Log(options);
-        logs.push(log);
-        this.render();
+
+        let lastLog = this._lastLog;
+        if (log.type !== 'html' &&
+            lastLog.type === log.type &&
+            lastLog.value === log.value)
+        {
+            lastLog.addCount();
+            if (log.time) lastLog.updateTime(log.time);
+            $el.find('li').last().remove();
+            log = lastLog;
+        } else
+        {
+            logs.push(log);
+            this._lastLog = log;
+        }
+
+        if (this._maxNum !== 'infinite' && logs.length >= this._maxNum)
+        {
+            $el.find('li').first().remove();
+            logs.shift();
+        }
+
+        if (this._filterLog(log) && this._parent.active) $el.append(log.formattedMsg);
+
+        this.emit('insert', log);
+        this.scrollToBottom();
 
         return this;
     }
@@ -187,16 +213,30 @@ export default class Logger extends util.Emitter
 
         if (filter === 'all') return logs;
 
-        var isRegexp = util.isRegExp(filter),
+        let isRegExp = util.isRegExp(filter),
             isFn = util.isFn(filter);
 
-        return logs.filter(val =>
+        return logs.filter(log =>
         {
-            if (isFn) return filter(val);
-            if (isRegexp) return filter.test(util.stripHtmlTag(val.formattedMsg));
+            if (isFn) return filter(log);
+            if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
 
-            return val.ignoreFilter || val.type === filter;
+            return log.ignoreFilter || log.type === filter;
         });
+    }
+    _filterLog(log)
+    {
+        let filter = this._filter;
+
+        if (filter === 'all') return true;
+
+        let isRegExp = util.isRegExp(filter),
+            isFn = util.isFn(filter);
+
+        if (isFn) return filter(log);
+        if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
+
+        return log.ignoreFilter || log.type === filter;
     }
     _loadJs(name)
     {

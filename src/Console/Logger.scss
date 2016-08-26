@@ -24,7 +24,7 @@
             a {
                 color: $blue !important;
             }
-            .times, .icon-container {
+            .count, .icon-container {
                 float: left;
                 margin-right: 5px;
             }
@@ -47,7 +47,7 @@
                     color: $yellow-dark;
                 }
             }
-            .times {
+            .count {
                 background: $blue;
                 padding: 2px 4px;
                 color: #fff;
@@ -91,7 +91,7 @@
                     color: $gray-dark;
                     padding-left: 1.2em;
                 }
-                .times {
+                .count {
                     background: $red;
                 }
             }

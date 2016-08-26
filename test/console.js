@@ -79,6 +79,15 @@ describe('substitution', function ()
         tool.clear().log('%cblue%cgreen', 'color:blue', 'color:green');
         expect($tool.find('.eruda-log')).toContainHtml('<span style="color:blue">blue</span><span style="color:green">green</span>');
     });
+
+    it('Repeat log', function ()
+    {
+        tool.clear();
+        for (let i = 0; i < 10; i++) tool.log(1);
+        let $log = $tool.find('.eruda-log-item');
+        expect($log).toHaveLength(1);
+        expect($log.find('.eruda-count')).toContainText('10');
+    });
 });
 
 describe('table', function ()
@@ -157,5 +166,7 @@ describe('filter', function ()
         tool.filter(/test2/);
         expect($tool.find('.eruda-log-item')).toHaveLength(1);
         expect($tool.find('.eruda-log')).toContainText('test2');
+
+        tool.filter('all');
     });
 });

@@ -16,6 +16,7 @@ export default class Log
         this.type = type;
         this.args = args;
         this.idx = idx;
+        this.count = 1;
         this.displayHeader = displayHeader;
         this.ignoreFilter = false;
 
@@ -26,6 +27,31 @@ export default class Log
         }
 
         this._formatMsg();
+    }
+    addCount()
+    {
+        this.count++;
+        let count = this.count,
+            msg = this.formattedMsg;
+        if (count === 2) msg = msg.replace('eruda-count eruda-hidden', 'eruda-count');
+        msg = msg.replace(/data-mark="count">\d*/, 'data-mark="count">' + count);
+
+        this.formattedMsg = msg;
+
+        return this;
+    }
+    updateTime(time)
+    {
+        let msg = this.formattedMsg;
+
+        if (this.time)
+        {
+            msg = msg.replace(/data-mark="time">(.*?)</, `data-mark="time">${time}<`);
+            this.time = time;
+            this.formattedMsg = msg;
+        }
+
+        return this;
     }
     _needSrc()
     {
@@ -94,6 +120,7 @@ export default class Log
                 break;
         }
 
+        this.value = msg;
         msg = render({msg, type, icon, idx, displayHeader, time, from});
 
         delete this.args;
