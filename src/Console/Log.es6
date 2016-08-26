@@ -137,6 +137,7 @@ export default class Log
             case 'warn':
             case 'info':
             case 'debug':
+            case 'output':
                 return 'viewSrc';
             case 'error':
                 $el.find('.eruda-stack').toggleClass('eruda-hidden');
@@ -393,7 +394,7 @@ function getFrom()
 
 function getObjType(obj)
 {
-    if (obj.constructor) return obj.constructor.name;
+    if (obj.constructor && obj.constructor.name) return obj.constructor.name;
 
     return util.upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
 }
