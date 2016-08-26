@@ -128,7 +128,7 @@ export default class Elements extends Tool
             }
         }).on('click', '.eruda-breadcrumb', () =>
         {
-            let data = this._elData || JSON.parse(stringify(this._curEl)),
+            let data = this._elData || JSON.parse(stringify(this._curEl, {getterVal: true})),
                 sources = parent.get('sources');
 
             this._elData = data;

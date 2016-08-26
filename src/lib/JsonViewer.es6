@@ -5,6 +5,8 @@ export default class JsonViewer
 {
     constructor(data, $el)
     {
+        util.evalCss(require('./json.scss'));
+
         this._data = [data];
         this._$el = $el;
 
@@ -97,14 +99,21 @@ function createEl(key, val, firstLevel)
         return `<li>
                    <span class="eruda-key">${encode(key)}: </span>
                    <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
-                </li>`
+                </li>`;
     }
     if (val === '(...)' || val === '[circular]')
     {
         return `<li>
                    <span class="eruda-key">${encode(key)}: </span>
                    <span class="eruda-special">${val}</span>
-                </li>`
+                </li>`;
+    }
+    if (val === 'undefined')
+    {
+        return `<li>
+                   <span class="eruda-key">${encode(key)}: </span>
+                   <span class="eruda-undefined">undefined</span>
+                </li>`;
     }
 
     return `<li>

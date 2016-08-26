@@ -534,8 +534,16 @@ module.exports = (function ()
 
     var evalCss = _.evalCss = (function ()
     {
+        let mark = [];
+
         function exports(css)
         {
+            for (let i = 0, len = mark.length; i < len; i++)
+            {
+                if (mark[i] === css) return;
+            }
+            mark.push(css);
+
             var container = exports.container || document.head,
                 style = document.createElement('style');
 

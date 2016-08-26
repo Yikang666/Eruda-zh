@@ -65,6 +65,8 @@ export default class Log
             if (util.isStr(arg)) return false;
             if (util.isBool(arg)) return false;
             if (util.isNum(arg)) return false;
+            if (util.isNull(arg)) return false;
+            if (util.isUndef(arg)) return false;
         }
 
         return true;
