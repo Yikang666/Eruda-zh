@@ -85,6 +85,9 @@ export default class Log
             case 'log':
                 msg = formatMsg(args);
                 break;
+            case 'debug':
+                msg = formatMsg(args);
+                break;
             case 'dir':
                 msg = formatDir(args);
                 break;
@@ -100,7 +103,7 @@ export default class Log
                 args = substituteStr(args);
                 let err = args[0];
                 icon = 'times-circle';
-                err = util.isErr(err) ? err : new Error(err);
+                err = util.isErr(err) ? err : new Error(formatMsg(args));
                 this.src = err;
                 msg = formatErr(err);
                 break;
@@ -133,10 +136,12 @@ export default class Log
             case 'log':
             case 'warn':
             case 'info':
+            case 'debug':
                 return 'viewSrc';
             case 'error':
                 $el.find('.eruda-stack').toggleClass('eruda-hidden');
                 break;
+            case 'table':
             case 'dir':
                 if (log.src)
                 {
@@ -212,18 +217,20 @@ function formatTable(args)
     });
 
     ret += '</tbody></table>';
+    ret += '<div class="eruda-json eruda-hidden"></div>';
 
     return ret;
 }
 
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g;
+var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
+    regErudaJs = /eruda(\.min)?\.js/;
 
 function formatErr(err)
 {
     var lines = err.stack.split('\n'),
         msg = `${err.message || lines[0]}<br/>`;
 
-    lines = lines.filter(val => val.indexOf('eruda') < 0);
+    lines = lines.filter(val => !regErudaJs.test(val));
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 

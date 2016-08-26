@@ -43,6 +43,22 @@ describe('log', function ()
         tool.clear().error(new Error('error test'));
         expect($tool.find('.eruda-error')).toContainElement('.eruda-stack');
     });
+
+    it('assert', function ()
+    {
+        tool.clear().assert(true, 'assert');
+        expect($tool.find('.eruda-log-item')).toHaveLength(0);
+
+        tool.assert(false, 'assert');
+        expect($tool.find('.eruda-error')).toHaveLength(1);
+    });
+
+    it('count', function ()
+    {
+        tool.clear().count('test').clear();
+        tool.count('test');
+        expect($tool.find('.eruda-log')).toContainText('test: 2');
+    });
 });
 
 describe('substitution', function ()
@@ -140,8 +156,8 @@ describe('filter', function ()
 
     it('all info error warn log', function ()
     {
-        tool.clear().log('log').info('info').error('error').warn('warn');
-        expect($tool.find('.eruda-log-item')).toHaveLength(4);
+        tool.clear().log('log').info('info').error('error').warn('warn').debug('debug');
+        expect($tool.find('.eruda-log-item')).toHaveLength(5);
 
         tool.filter('info');
         expect($tool.find('.eruda-log-item')).toHaveLength(1);
@@ -154,6 +170,10 @@ describe('filter', function ()
         tool.filter('warn');
         expect($tool.find('.eruda-log-item')).toHaveLength(1);
         expect($tool.find('.eruda-warn')).toHaveLength(1);
+
+        tool.filter('debug');
+        expect($tool.find('.eruda-log-item')).toHaveLength(1);
+        expect($tool.find('.eruda-debug')).toHaveLength(1);
 
         tool.filter('all');
     });

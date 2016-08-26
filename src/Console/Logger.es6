@@ -15,6 +15,7 @@ export default class Logger extends util.Emitter
         this._parent = parent;
         this._logs = [];
         this._timer = {};
+        this._count = {};
         this._lastLog = {};
         this._filter = 'all';
         this._maxNum = 'infinite';
@@ -52,9 +53,35 @@ export default class Logger extends util.Emitter
 
         return this.render();
     }
+    count(label)
+    {
+        let count = this._count;
+
+        !util.isUndef(count[label]) ? count[label]++ : count[label] = 1;
+
+        return this.log(`%c${label}: ${count[label]}`, 'color:#2196f3');
+    }
+    assert(...args)
+    {
+        if (args.length === 0) return;
+
+        let exp = args.shift();
+
+        if (!exp)
+        {
+            args.unshift('Assertion failed: ');
+            return this.insert('error', args);
+        }
+    }
     log(...args)
     {
         this.insert('log', args);
+
+        return this;
+    }
+    debug(...args)
+    {
+        this.insert('debug', args);
 
         return this;
     }
@@ -274,7 +301,7 @@ export default class Logger extends util.Emitter
             let $el = util.$(this),
                 idx = $el.data('idx'),
                 type = $el.data('type'),
-                log = self._renderLogs[idx];
+                log = self._logs[idx];
 
             let action = Log.click(type, log, $el);
 
