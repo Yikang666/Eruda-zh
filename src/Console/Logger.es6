@@ -41,6 +41,7 @@ export default class Logger extends util.Emitter
     {
         this._filter = val;
         this.emit('filter', val);
+
         return this.render();
     }
     log(...args)
@@ -192,7 +193,7 @@ export default class Logger extends util.Emitter
         return logs.filter(val =>
         {
             if (isFn) return filter(val);
-            if (isRegexp) return filter.test(util.stripHtmlTag(val.val));
+            if (isRegexp) return filter.test(util.stripHtmlTag(val.formattedMsg));
 
             return val.ignoreFilter || val.type === filter;
         });

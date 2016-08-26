@@ -127,7 +127,7 @@ export default class Console extends Tool
         $control.on('click', '.clear-console', () => logger.clear())
                 .on('click', '.filter', function ()
                 {
-                    logger.filter(util.$(this).data('filter'))
+                    logger.filter(util.$(this).data('filter'));
                 })
                 .on('click', '.help', () => logger.help());
 

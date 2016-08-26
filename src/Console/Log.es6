@@ -24,12 +24,8 @@ export default class Log
             this.time = getCurTime();
             this.from = getFrom();
         }
-    }
-    get formattedMsg()
-    {
-        if (!this._formattedMsg) this._formatMsg();
 
-        return this._formattedMsg;
+        this._formatMsg();
     }
     _needSrc()
     {
@@ -79,6 +75,7 @@ export default class Log
                 let err = args[0];
                 icon = 'times-circle';
                 err = util.isErr(err) ? err : new Error(err);
+                this.src = err;
                 msg = formatErr(err);
                 break;
             case 'table':
@@ -100,7 +97,7 @@ export default class Log
         msg = render({msg, type, icon, idx, displayHeader, time, from});
 
         delete this.args;
-        this._formattedMsg = msg;
+        this.formattedMsg = msg;
     }
     static click(type, log, $el)
     {

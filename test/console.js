@@ -41,6 +41,7 @@ describe('log', function ()
     it('error', function ()
     {
         tool.clear().error(new Error('error test'));
+        expect($tool.find('.eruda-error')).toContainElement('.eruda-stack');
     });
 });
 
@@ -108,10 +109,10 @@ describe('filter', function ()
     // Test case from https://github.com/liriliri/eruda/issues/14
     it('function', function ()
     {
-        /*tool.clear().filter(function (log)
+        tool.clear().filter(function (log)
         {
             return !(log.type === 'error' && /deprecated(.|\n)*stringify/.test(log.src.stack));
-        });*/
+        });
 
         var obj = {};
         Object.defineProperty(obj, 'a', {
@@ -124,5 +125,37 @@ describe('filter', function ()
         });
         tool.log(obj);
         expect($tool.find('.eruda-logs li').length).toEqual(1);
+
+        tool.filter('all');
+    });
+
+    it('all info error warn log', function ()
+    {
+        tool.clear().log('log').info('info').error('error').warn('warn');
+        expect($tool.find('.eruda-log-item')).toHaveLength(4);
+
+        tool.filter('info');
+        expect($tool.find('.eruda-log-item')).toHaveLength(1);
+        expect($tool.find('.eruda-info')).toHaveLength(1);
+
+        tool.filter('error');
+        expect($tool.find('.eruda-log-item')).toHaveLength(1);
+        expect($tool.find('.eruda-error')).toHaveLength(1);
+
+        tool.filter('warn');
+        expect($tool.find('.eruda-log-item')).toHaveLength(1);
+        expect($tool.find('.eruda-warn')).toHaveLength(1);
+
+        tool.filter('all');
+    });
+
+    it('regex', function ()
+    {
+        tool.clear().log('test').log('test2');
+        expect($tool.find('.eruda-log-item')).toHaveLength(2);
+
+        tool.filter(/test2/);
+        expect($tool.find('.eruda-log-item')).toHaveLength(1);
+        expect($tool.find('.eruda-log')).toContainText('test2');
     });
 });
