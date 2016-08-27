@@ -22,7 +22,13 @@ describe('log', function ()
         var obj = {a: 1};
 
         tool.clear().log(obj);
-        expect($tool.find('.eruda-log')).toContainText('Object {a: 1}');
+        expect($tool.find('.eruda-log')).toContainText('Object { a: 1 }');
+    });
+
+    it('dir html element', function ()
+    {
+        tool.clear().dir(document.createElement('script'));
+        expect($tool.find('.eruda-log')).not.toContainText('<script></script>');
     });
 
     it('html', function ()
@@ -84,7 +90,7 @@ describe('substitution', function ()
     it('object', function ()
     {
         tool.clear().log('Object is %O', {a: 1});
-        expect($tool.find('.eruda-log')).toContainText('Object is {a: 1}');
+        expect($tool.find('.eruda-log')).toContainText('Object is { a: 1 }');
 
         tool.clear().log('Dom is %o', document.createElement('script'));
         expect($tool.find('.eruda-log')).toContainText('Dom is <script></script>');

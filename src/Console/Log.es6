@@ -246,7 +246,7 @@ function formatJs(code)
     return highlight(beautify(code), 'js');
 }
 
-function formatMsg(args)
+function formatMsg(args, {htmlForEl = true} = {})
 {
     args = substituteStr(args);
 
@@ -254,7 +254,7 @@ function formatMsg(args)
     {
         let val = args[i];
 
-        if (util.isEl(val))
+        if (util.isEl(val) && htmlForEl)
         {
             args[i] = formatEl(val);
         } else if (util.isFn(val))
@@ -282,7 +282,9 @@ function formatMsg(args)
 
 function formatDir(args)
 {
-    let msg = formatMsg(args);
+    let msg = formatMsg(args, {
+        htmlForEl: false
+    });
 
     return msg + '<div class="eruda-json eruda-hidden"></div>'
 }
