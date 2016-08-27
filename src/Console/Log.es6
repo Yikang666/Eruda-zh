@@ -179,6 +179,7 @@ function stringifyWrapper(obj, options = {})
         simple: true,
         highlight: true,
         keyQuotes: false,
+        specialVal: true,
         getterVal: Log.showGetterVal,
         unenumerable: Log.showUnenumerable
     });
@@ -410,7 +411,8 @@ function extractObj(obj, options = {})
 {
     util.defaults(options, {
         highlight: false,
-        keyQuotes: true
+        keyQuotes: true,
+        specialVal: false
     });
 
     return JSON.parse(stringifyWrapper(obj, options));

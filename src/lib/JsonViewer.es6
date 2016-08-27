@@ -101,18 +101,11 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
                 </li>`;
     }
-    if (val === '(...)' || val === '[circular]')
+    if (val === '(...)' || val === '[circular]' || val === 'undefined' || val === 'Symbol')
     {
         return `<li>
                    <span class="eruda-key">${encode(key)}: </span>
                    <span class="eruda-special">${val}</span>
-                </li>`;
-    }
-    if (val === 'undefined')
-    {
-        return `<li>
-                   <span class="eruda-key">${encode(key)}: </span>
-                   <span class="eruda-undefined">undefined</span>
                 </li>`;
     }
 
