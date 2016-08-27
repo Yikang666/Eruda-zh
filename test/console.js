@@ -196,3 +196,32 @@ describe('filter', function ()
         tool.filter('all');
     });
 });
+
+describe('config', function ()
+{
+    var config = tool.config;
+
+    it('max number', function ()
+    {
+        config.set('maxLogNum', '10');
+        tool.clear();
+        for (var i = 0; i < 20; i++) tool.log(i);
+        expect($tool.find('.eruda-log-item')).toHaveLength(10);
+    });
+
+    it('override console', function ()
+    {
+        config.set('overrideConsole', true);
+        console.clear();
+        console.log('test');
+        expect($tool.find('.eruda-log-item')).toContainText('test');
+    });
+
+    it('display extra info', function ()
+    {
+        config.set('displayExtraInfo', true);
+        tool.clear().log('test');
+        expect($tool.find('.eruda-logs li')).toContainElement('.eruda-header');
+    });
+});
+

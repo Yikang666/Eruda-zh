@@ -227,7 +227,7 @@ export default class Logger extends util.Emitter
             this._lastLog = log;
         }
 
-        if (this._maxNum !== 'infinite' && logs.length >= this._maxNum)
+        if (this._maxNum !== 'infinite' && logs.length > this._maxNum)
         {
             $el.find('li').first().remove();
             logs.shift();
