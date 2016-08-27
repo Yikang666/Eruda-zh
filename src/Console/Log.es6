@@ -363,12 +363,12 @@ function formatObj(val)
 
 function formatFn(val)
 {
-    return val.toString();
+    return `<pre style="display:inline">${highlight(beautify.js(val.toString()), 'js')}</pre>`;
 }
 
 function formatEl(val)
 {
-    return `<pre>${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
+    return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
 }
 
 function getCurTime()
