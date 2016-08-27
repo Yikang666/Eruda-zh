@@ -206,7 +206,7 @@ export default class Logger extends util.Emitter
 
         let options = util.isStr(type) ? {type, args} : type;
         util.extend(options, {
-            idx: logs.length,
+            id: util.uniqId('log'),
             displayHeader: this._displayHeader
         });
 
@@ -304,9 +304,17 @@ export default class Logger extends util.Emitter
         this._$el.on('click', '.eruda-log-item', function ()
         {
             let $el = util.$(this),
-                idx = $el.data('idx'),
+                id = $el.data('id'),
                 type = $el.data('type'),
-                log = self._logs[idx];
+                logs = self._logs,
+                log;
+
+            for (let i = 0, len = logs.length; i < len; i++)
+            {
+                log = logs[i];
+                if (log.id === id) break;
+            }
+            if (!log) return;
 
             let action = Log.click(type, log, $el);
 

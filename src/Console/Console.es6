@@ -197,9 +197,9 @@ export default class Console extends Tool
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
-        if (cfg.get('displayExtraInfo')) logger.displayHeader(true);
-        if (cfg.get('displayUnenumerable')) logger.displayUnenumerable(true);
-        if (cfg.get('displayGetterVal')) logger.displayGetterVal(true);
+        logger.displayHeader(cfg.get('displayExtraInfo'));
+        logger.displayUnenumerable(cfg.get('displayUnenumerable'));
+        logger.displayGetterVal(cfg.get('displayGetterVal'));
         logger.maxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>

@@ -9,14 +9,14 @@ export default class Log
     constructor({
         type = 'log',
         args = [],
-        idx = 0,
+        id,
         displayHeader = false,
         ignoreFilter = false})
     {
         this.type = type;
         this.args = args;
-        this.idx = idx;
         this.count = 1;
+        this.id = id;
         this.displayHeader = displayHeader;
         this.ignoreFilter = ignoreFilter;
 
@@ -73,7 +73,7 @@ export default class Log
     }
     _formatMsg()
     {
-        let {type, idx, displayHeader, time, from, args} = this;
+        let {type, id, displayHeader, time, from, args} = this;
 
         if (this._needSrc())
         {
@@ -126,7 +126,7 @@ export default class Log
         }
 
         this.value = msg;
-        msg = render({msg, type, icon, idx, displayHeader, time, from});
+        msg = render({msg, type, icon, id, displayHeader, time, from});
 
         delete this.args;
         this.formattedMsg = msg;
