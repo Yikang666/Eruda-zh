@@ -10,7 +10,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 
 1. 按钮拖拽，面板透明度大小设置。
 
-2. Console面板：捕获Console日志，支持log、error、info、warn、dir、time/timeEnd、clear；支持按日志类型及正则表达式过滤；支持快捷命令加载underscore、jQuery库；支持JavaScript脚本执行。
+2. Console面板：捕获Console日志，支持log、error、info、warn、dir、time/timeEnd、clear、count、assert、table；支持占位符，包括%c自定义样式输出；支持按日志类型及正则表达式过滤；支持快捷命令加载underscore、jQuery库；支持JavaScript脚本执行。
 
 3. Elements面板：查看标签内容及属性；查看应用在Dom上的样式；支持页面元素高亮；支持屏幕直接点击选取；查看Dom上绑定的各类事件。
 
