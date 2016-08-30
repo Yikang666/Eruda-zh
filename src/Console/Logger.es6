@@ -59,7 +59,7 @@ export default class Logger extends util.Emitter
 
         !util.isUndef(count[label]) ? count[label]++ : count[label] = 1;
 
-        return this.log(`%c${label}: ${count[label]}`, 'color:#2196f3');
+        return this.html(`<div class="eruda-blue">${label}: ${count[label]}</div>`);
     }
     assert(...args)
     {

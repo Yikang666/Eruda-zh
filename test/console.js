@@ -63,7 +63,7 @@ describe('log', function ()
     {
         tool.clear().count('test').clear();
         tool.count('test');
-        expect($tool.find('.eruda-log')).toContainText('test: 2');
+        expect($tool.find('.eruda-html')).toContainText('test: 2');
     });
 });
 
