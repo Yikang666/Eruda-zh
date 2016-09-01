@@ -46,6 +46,10 @@ export default class Logger extends util.Emitter
     {
         Log.showGetterVal = flag;
     }
+    viewLogInSources(flag)
+    {
+        Log.showSrcInSources = flag;
+    }
     filter(val)
     {
         this._filter = val;
@@ -321,11 +325,7 @@ export default class Logger extends util.Emitter
             switch (action)
             {
                 case 'viewSrc':
-                    let src = log.src;
-                    try {
-                        if (!util.isObj(src)) src = JSON.parse(src);
-                        self.emit('viewJson', src);
-                    } catch (e) {}
+                    self.emit('viewJson', log.src);
                     break;
             }
         });

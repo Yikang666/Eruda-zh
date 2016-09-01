@@ -188,6 +188,7 @@ export default class Console extends Tool
             displayExtraInfo: false,
             displayUnenumerable: true,
             displayGetterVal: false,
+            viewLogInSources: false,
             displayIfErr: false,
             maxLogNum: 'infinite'
         }));
@@ -200,6 +201,7 @@ export default class Console extends Tool
         logger.displayHeader(cfg.get('displayExtraInfo'));
         logger.displayUnenumerable(cfg.get('displayUnenumerable'));
         logger.displayGetterVal(cfg.get('displayGetterVal'));
+        logger.viewLogInSources(cfg.get('viewLogInSources'));
         logger.maxNum(maxLogNum);
 
         cfg.on('change', (key, val) =>
@@ -212,6 +214,7 @@ export default class Console extends Tool
                 case 'displayExtraInfo': return logger.displayHeader(val);
                 case 'displayUnenumerable': return logger.displayUnenumerable(val);
                 case 'displayGetterVal': return logger.displayGetterVal(val);
+                case 'viewLogInSources': return logger.viewLogInSources(val);
             }
         });
 
@@ -224,6 +227,7 @@ export default class Console extends Tool
                 .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
                 .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
                 .switch(cfg, 'displayGetterVal', 'Access Getter Value')
+                .switch(cfg, 'viewLogInSources', 'View Log In Sources Panel')
                 .select(cfg, 'maxLogNum', 'Max Log Number', ['infinite', '250', '125', '100', '50', '10'])
                 .separator()
     }

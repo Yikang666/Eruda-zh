@@ -103,7 +103,7 @@
                 border-top: 1px solid $yellow;
                 border-bottom: 1px solid $yellow;
             }
-            &.dir, &.table {
+            &.dir, &.table, &.log, &.info, &.warn, &.output, &.debug {
                 .json {
                     padding-top: 10px;
                 }

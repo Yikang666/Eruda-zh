@@ -140,14 +140,11 @@ export default class Log
             case 'info':
             case 'debug':
             case 'output':
-                return 'viewSrc';
-            case 'error':
-                $el.find('.eruda-stack').toggleClass('eruda-hidden');
-                break;
             case 'table':
             case 'dir':
                 if (log.src)
                 {
+                    if (Log.showSrcInSources) return 'viewSrc';
                     let $json = $el.find('.eruda-json');
                     if ($json.hasClass('eruda-hidden'))
                     {
@@ -163,6 +160,9 @@ export default class Log
                     }
                 }
                 break;
+            case 'error':
+                $el.find('.eruda-stack').toggleClass('eruda-hidden');
+                break;
         }
 
         return 'handled';
@@ -172,6 +172,7 @@ export default class Log
 // Looks like es6 doesn't support static properties yet.
 Log.showGetterVal = false;
 Log.showUnenumerable = true;
+Log.showSrcInSources = false;
 
 function stringifyWrapper(obj, options = {})
 {
@@ -277,17 +278,10 @@ function formatMsg(args, {htmlForEl = true} = {})
         }
     }
 
-    return args.join(' ');
+    return args.join(' ') + '<div class="eruda-json eruda-hidden"></div>';
 }
 
-function formatDir(args)
-{
-    let msg = formatMsg(args, {
-        htmlForEl: false
-    });
-
-    return msg + '<div class="eruda-json eruda-hidden"></div>'
-}
+var formatDir = args => formatMsg(args, {htmlForEl: false});
 
 function substituteStr(args)
 {
