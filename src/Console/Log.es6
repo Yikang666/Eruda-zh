@@ -77,7 +77,7 @@ export default class Log
 
         if (this._needSrc())
         {
-            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, {simple: false});
+            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, {prototype: true});
         }
 
         let msg = '', icon;
@@ -177,7 +177,7 @@ Log.showSrcInSources = false;
 function stringifyWrapper(obj, options = {})
 {
     util.defaults(options, {
-        simple: true,
+        prototype: false,
         highlight: true,
         keyQuotes: false,
         specialVal: true,
