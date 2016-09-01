@@ -4,7 +4,7 @@ import util from './util'
 export default function stringify(obj, {
     visited = [],
     topObj,
-    prototype = false,
+    simple = false,
     keyQuotes = true,
     getterVal = false,
     highlight = false,
@@ -103,7 +103,7 @@ export default function stringify(obj, {
         visited.push(obj);
 
         json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, {visited, specialVal, prototype, getterVal, keyQuotes, highlight, unenumerable})}`));
+        util.each(obj, val => parts.push(`${stringify(val, {visited, specialVal, simple, getterVal, keyQuotes, highlight, unenumerable})}`));
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
@@ -111,7 +111,7 @@ export default function stringify(obj, {
 
         names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
         proto = Object.getPrototypeOf(obj);
-        if (proto === Object.prototype || isFn || prototype) proto = null;
+        if (proto === Object.prototype || isFn || simple) proto = null;
         if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, {visited, specialVal, getterVal, topObj, keyQuotes, highlight, unenumerable})}`;
         names.sort(sortObjName);
         if (isFn)
@@ -144,7 +144,7 @@ export default function stringify(obj, {
                         return parts.push(`${key}: ${wrapStr('(...)')}`);
                     }
                 }
-                parts.push(`${key}: ${stringify(topObj[name], {visited, specialVal, getterVal, prototype, keyQuotes, highlight, unenumerable})}`);
+                parts.push(`${key}: ${stringify(topObj[name], {visited, specialVal, getterVal, simple, keyQuotes, highlight, unenumerable})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(', ') + ' }';
@@ -183,10 +183,10 @@ export default function stringify(obj, {
             visited.push(obj);
 
             json = '{ ';
-            if (!prototype) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
+            if (!simple) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
             names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
             proto = Object.getPrototypeOf(obj);
-            if (proto === Object.prototype || prototype) proto = null;
+            if (proto === Object.prototype || simple) proto = null;
             if (proto)
             {
                 try
@@ -210,7 +210,7 @@ export default function stringify(obj, {
                         return parts.push(`${key}: ${wrapStr('(...)')}`);
                     }
                 }
-                parts.push(`${key}: ${stringify(topObj[name], {visited, specialVal, getterVal, prototype, keyQuotes, highlight, unenumerable})}`);
+                parts.push(`${key}: ${stringify(topObj[name], {visited, specialVal, getterVal, simple, keyQuotes, highlight, unenumerable})}`);
             });
             if (proto) parts.push(proto);
             json += parts.join(',\n') + ' }';
