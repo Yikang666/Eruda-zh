@@ -73,7 +73,7 @@ function createEl(key, val, firstLevel)
     if (val === null)
     {
         return `<li>
-                   <span class="eruda-key">${encode(key)}:</span>
+                   ${wrapKey(key)}
                    <span class="eruda-null">null</span>
                </li>`;
     }
@@ -81,7 +81,7 @@ function createEl(key, val, firstLevel)
     {
         var obj = `<li>
                        <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
-                       <span class="eruda-key">${encode(key)}</span>
+                       ${firstLevel ? '' : wrapKey(key)}
                        <span class="eruda-open">${open} ${(val['erudaObjAbstract'] || '')}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
@@ -90,29 +90,39 @@ function createEl(key, val, firstLevel)
     if (util.isNum(val) || util.isBool(val))
     {
         return `<li>
-                   <span class="eruda-key">${encode(key)}: </span>
+                   ${wrapKey(key)}
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
     }
     if (util.isStr(val) && util.startWith(val, 'function'))
     {
         return `<li>
-                   <span class="eruda-key">${encode(key)}: </span>
+                   ${wrapKey(key)}
                    <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
                 </li>`;
     }
     if (val === '(...)' || val === '[circular]' || val === 'undefined' || val === 'Symbol')
     {
         return `<li>
-                   <span class="eruda-key">${encode(key)}: </span>
+                   ${wrapKey(key)}
                    <span class="eruda-special">${val}</span>
                 </li>`;
     }
 
     return `<li>
-                <span class="eruda-key">${encode(key)}: </span>
+                ${wrapKey(key)}
                 <span class="eruda-${typeof val}">"${encode(val)}"</span>
             </li>`;
 }
+
+function wrapKey(key)
+{
+    var keyClass = 'eruda-key';
+    if (util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
+
+    return `<span class="${keyClass}">${encode(key)}</span>: `;
+}
+
+const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf'];
 
 var encode = str => util.escape(util.toStr(str));
