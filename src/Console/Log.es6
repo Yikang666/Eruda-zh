@@ -59,17 +59,12 @@ export default class Log
 
         if (type === 'html') return false;
 
-        if (args.length === 1)
+        for (let i = 0, len = args.length; i < len; i++)
         {
-            let arg = args[0];
-            if (util.isStr(arg)) return false;
-            if (util.isBool(arg)) return false;
-            if (util.isNum(arg)) return false;
-            if (util.isNull(arg)) return false;
-            if (util.isUndef(arg)) return false;
+            if (util.isObj(args[i])) return true;
         }
 
-        return true;
+        return false;
     }
     _formatMsg()
     {
@@ -77,7 +72,7 @@ export default class Log
 
         if (this._needSrc())
         {
-            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args, {simple: false});
+            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args);
         }
 
         let msg = '', icon;
@@ -178,11 +173,13 @@ function stringifyWrapper(obj, options = {})
 {
     util.defaults(options, {
         simple: true,
+        keyNum: 5,
+        sortKeys: false,
         highlight: true,
         keyQuotes: false,
         specialVal: true,
         getterVal: Log.showGetterVal,
-        unenumerable: Log.showUnenumerable
+        unenumerable: false
     });
 
     return stringify(obj, options);
@@ -408,6 +405,11 @@ function extractObj(obj, options = {})
     util.defaults(options, {
         highlight: false,
         keyQuotes: true,
+        simple: false,
+        sortKeys: true,
+        keyNum: 0,
+        getterVal: Log.showGetterVal,
+        unenumerable: Log.showUnenumerable,
         specialVal: false
     });
 

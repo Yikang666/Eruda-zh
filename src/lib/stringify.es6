@@ -10,6 +10,8 @@ export default function stringify(obj, {
     getterVal = false,
     highlight = false,
     specialVal = false,
+    sortKeys = true,
+    keyNum = 0,
     unenumerable = true
     } = {})
 {
@@ -17,17 +19,20 @@ export default function stringify(obj, {
         type = '',
         parts = [],
         names = [],
+        objEllipsis = '',
         proto,
         circular = false;
 
     topObj = topObj || obj;
 
     let passOpts = {
-            visited, specialVal, simple, getterVal, keyQuotes, highlight, unenumerable,
+            visited, specialVal, simple, getterVal, keyQuotes, highlight,
+            unenumerable, keyNum, sortKeys,
             level: level + 1
         },
         passProtoOpts = {
-            visited, specialVal, getterVal, topObj, keyQuotes, highlight, unenumerable,
+            visited, specialVal, getterVal, topObj, keyQuotes, highlight,
+            unenumerable, keyNum, sortKeys,
             level: level + 1
         };
     let dbQuotes = keyQuotes ? '"' : '',
@@ -71,11 +76,13 @@ export default function stringify(obj, {
             {
                 return fnWrapper + 'function' + wrapperEnd + ' ( )';
             }
-            if (util.contain(SPECIAL_VAL, str) ||
-                util.startWith(str, 'Array[') ||
-                util.startWith(str, '[object '))
+            if (util.contain(SPECIAL_VAL, str) || util.startWith(str, 'Array['))
             {
                 return specialWrapper + strEscape(str) + wrapperEnd;
+            }
+            if (util.startWith(str, '[object '))
+            {
+                return specialWrapper + strEscape(str.replace(/(\[object )|]/g, '')) + wrapperEnd;
             }
         }
 
@@ -127,12 +134,19 @@ export default function stringify(obj, {
     } else if (isObj || isFn)
     {
         visited.push(obj);
+        if (canBeProto(obj))
+        {
+            obj = Object.getPrototypeOf(obj);
+            visited.push(obj);
+        }
 
         names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
+        if (keyNum && names.length > keyNum) objEllipsis = '...';
+        if (keyNum) names = names.slice(0, keyNum);
         proto = Object.getPrototypeOf(obj);
         if (proto === Object.prototype || isFn || simple) proto = null;
         if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
-        names.sort(sortObjName);
+        if (sortKeys) names.sort(sortObjName);
         if (isFn)
         {
             // We don't need these properties to display for functions.
@@ -168,7 +182,7 @@ export default function stringify(obj, {
                     parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
                 });
                 if (proto) parts.push(proto);
-                json += parts.join(', ') + ' }';
+                json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
                 json = wrapStr('Object');
@@ -201,17 +215,27 @@ export default function stringify(obj, {
         // https://docs.webplatform.org/wiki/dom/HTMLAllCollection
         // Might cause a performance issue when stringify a dom element.
         json = wrapStr('[object HTMLAllCollection]');
-    } else
+    } else if (type === '[object HTMLDocument]')
     {
+        // Same as reason above.
+        json = wrapStr('[object HTMLDocument]');
+    } else {
         try
         {
             visited.push(obj);
+            if (canBeProto(obj))
+            {
+                obj = Object.getPrototypeOf(obj);
+                visited.push(obj);
+            }
 
             if (doStringify)
             {
                 json = '{ ';
                 if (!simple) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
+                if (keyNum && names.length > keyNum) objEllipsis = '...';
+                if (keyNum) names = names.slice(0, keyNum);
                 proto = Object.getPrototypeOf(obj);
                 if (proto === Object.prototype || simple) proto = null;
                 if (proto)
@@ -224,7 +248,7 @@ export default function stringify(obj, {
                         proto = `${wrapKey('erudaProto')}: ${wrapStr(escapeJsonStr(e.message))}`;
                     }
                 }
-                names.sort(sortObjName);
+                if (sortKeys) names.sort(sortObjName);
                 util.each(names, name =>
                 {
                     let key = wrapKey(escapeJsonStr(name));
@@ -240,7 +264,7 @@ export default function stringify(obj, {
                     parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
                 });
                 if (proto) parts.push(proto);
-                json += parts.join(', ') + ' }';
+                json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
                 json = wrapStr(obj);
@@ -259,15 +283,48 @@ var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"')
     .replace(/\f|\n|\r|\t/g, '');
 
+// $, upperCase, lowerCase, _
 var sortObjName = (a, b) =>
 {
-    let codeA = a.charCodeAt(0),
-        codeB = b.charCodeAt(0);
+    let lenA = a.length,
+        lenB = b.length,
+        len = lenA > lenB ? lenB : lenA;
 
-    if (isLetter(codeA) && !isLetter(codeB)) return -1;
-    if (!isLetter(codeA) && isLetter(codeB)) return 1;
+    for (let i = 0; i < len; i++)
+    {
+        let codeA = a.charCodeAt(i),
+            codeB = b.charCodeAt(i),
+            cmpResult = cmpCode(codeA, codeB);
 
-    return a > b ? 1 : -1;
+        if (cmpResult !== 0) return cmpResult;
+    }
+
+    if (lenA > lenB) return 1;
+    if (lenA < lenB) return -1;
+    return 0;
 };
 
-var isLetter = code => (code > 64 && code < 90) || (code > 96 && code < 123);
+function cmpCode(a, b)
+{
+    a = transCode(a);
+    b = transCode(b);
+
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+}
+
+function transCode(code)
+{
+    if (code === 95) return 123;
+    return code;
+}
+
+function canBeProto(obj)
+{
+    let emptyObj = util.isEmpty(Object.getOwnPropertyNames(obj)),
+        proto = Object.getPrototypeOf(obj);
+
+    return emptyObj && proto && proto !== Object.prototype;
+}
+
