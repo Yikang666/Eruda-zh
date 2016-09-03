@@ -215,7 +215,7 @@ export default function stringify(obj, {
         // https://docs.webplatform.org/wiki/dom/HTMLAllCollection
         // Might cause a performance issue when stringify a dom element.
         json = wrapStr('[object HTMLAllCollection]');
-    } else if (type === '[object HTMLDocument]')
+    } else if (type === '[object HTMLDocument]' && level > 0)
     {
         // Same as reason above.
         json = wrapStr('[object HTMLDocument]');
