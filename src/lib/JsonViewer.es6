@@ -126,6 +126,6 @@ function createEl(key, val, firstLevel)
 }
 
 
-const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf'];
+const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf', 'length'];
 
 var encode = str => util.escape(util.toStr(str));

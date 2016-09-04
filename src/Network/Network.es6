@@ -220,7 +220,7 @@ export default class Network extends Tool
 
         data.push(getData('Total', navigationStart, loadEventEnd));
         data.push(getData('Network/Server', navigationStart, responseStart));
-        data.push(getData('App cache', fetchStart, domainLookupStart));
+        data.push(getData('App Cache', fetchStart, domainLookupStart));
         data.push(getData('DNS', domainLookupStart, domainLookupEnd));
         data.push(getData('TCP', connectStart, connectEnd));
         data.push(getData('Time to First Byte', requestStart, responseStart));

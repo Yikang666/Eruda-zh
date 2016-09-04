@@ -33,14 +33,14 @@ javascript:(function () { var script = document.createElement('script'); script.
 
 ## Features
 
-* Console: Display JavaScript logs.
-* Elements: Check dom state.
-* Network: Show performance timing, ajax requests status.
-* Resource: Show localStorage, cookie information.
-* Info: Show url, user agent info.
-* Snippets: Include snippets used most often.
-* Sources: Html, js, css source viewer.
-* Features: Browser feature detections.
+* [Console](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#console): Display JavaScript logs.
+* [Elements](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#elements): Check dom state.
+* [Network](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#network): Show performance timing, ajax requests status.
+* [Resource](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#resources): Show localStorage, cookie information.
+* [Info](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#info): Show url, user agent info.
+* [Snippets](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#snippets): Include snippets used most often.
+* [Sources](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#sources): Html, js, css source viewer.
+* [Features](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#features): Browser feature detections.
 
 ## Install
 
