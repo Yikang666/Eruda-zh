@@ -70,6 +70,16 @@ function createEl(key, val, firstLevel)
         close = ']';
     }
 
+    function wrapKey(key)
+    {
+        if (firstLevel) return '';
+
+        var keyClass = 'eruda-key';
+        if (util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
+
+        return `<span class="${keyClass}">${encode(key)}</span>: `;
+    }
+
     if (val === null)
     {
         return `<li>
@@ -81,7 +91,7 @@ function createEl(key, val, firstLevel)
     {
         var obj = `<li>
                        <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
-                       ${firstLevel ? '' : wrapKey(key)}
+                       ${wrapKey(key)}
                        <span class="eruda-open">${open} ${(val['erudaObjAbstract'] || '')}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
@@ -115,13 +125,6 @@ function createEl(key, val, firstLevel)
             </li>`;
 }
 
-function wrapKey(key)
-{
-    var keyClass = 'eruda-key';
-    if (util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
-
-    return `<span class="${keyClass}">${encode(key)}</span>: `;
-}
 
 const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf'];
 
