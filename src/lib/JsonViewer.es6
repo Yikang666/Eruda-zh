@@ -1,5 +1,4 @@
 import util from './util'
-import highlight from './highlight.es6'
 
 export default class JsonViewer
 {
@@ -108,7 +107,7 @@ function createEl(key, val, firstLevel)
     {
         return `<li>
                    ${wrapKey(key)}
-                   <span class="eruda-function">${val.length > 250 ? encode(val) : highlight(val, 'js')}</span>
+                   <span class="eruda-function">${encode(val).replace('function', '<span style="color:#a71d5d">function</span>')}</span>
                 </li>`;
     }
     if (val === '(...)' || val === '[circular]' || val === 'undefined' || val === 'Symbol')

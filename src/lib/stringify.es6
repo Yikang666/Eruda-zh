@@ -72,6 +72,7 @@ export default function stringify(obj, {
 
         if (specialVal)
         {
+            str = str.replace(/\\/g, '');
             if (util.startWith(str, 'function'))
             {
                 return fnWrapper + 'function' + wrapperEnd + ' ( )';
@@ -154,7 +155,7 @@ export default function stringify(obj, {
         }
         if (names.length === 0 && isFn)
         {
-            json = wrapStr(escapeJsonStr(obj.toString()));
+            json = wrapStr(escapeJsonStr(extractFnHead(obj)));
         } else
         {
             if (doStringify)
@@ -176,7 +177,9 @@ export default function stringify(obj, {
                         let descriptor = Object.getOwnPropertyDescriptor(obj, name);
                         if (descriptor.get)
                         {
-                            return parts.push(`${key}: ${wrapStr('(...)')}`);
+                            parts.push(`${key}: ${wrapStr('(...)')}`);
+                            parts.push(`${wrapKey(escapeJsonStr('get ' + name))}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.get)))}`);
+                            return;
                         }
                     }
                     parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
@@ -258,7 +261,9 @@ export default function stringify(obj, {
                         let descriptor = Object.getOwnPropertyDescriptor(obj, name);
                         if (descriptor.get)
                         {
-                            return parts.push(`${key}: ${wrapStr('(...)')}`);
+                            parts.push(`${key}: ${wrapStr('(...)')}`);
+                            parts.push(`${wrapKey(escapeJsonStr('get ' + name))}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.get)))}`);
+                            return;
                         }
                     }
                     parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
@@ -318,6 +323,18 @@ function transCode(code)
 {
     if (code === 95) return 123;
     return code;
+}
+
+let regFnHead = /function(.*?)\(\)/;
+
+function extractFnHead(fn)
+{
+    let str = fn.toString(),
+        fnHead = str.match(regFnHead);
+
+    if (fnHead) return fnHead[0];
+
+    return str;
 }
 
 function canBeProto(obj)
