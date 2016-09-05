@@ -325,7 +325,7 @@ function transCode(code)
     return code;
 }
 
-let regFnHead = /function(.*?)\(\)/;
+let regFnHead = /function(.*?)\((.*?)\)/;
 
 function extractFnHead(fn)
 {
