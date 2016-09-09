@@ -76,6 +76,41 @@ console.html('<span style="color:red">Red</span>');
 
 ## Snippets
 
+Allow you to register small function that can be triggered multiple times.
+
+### clear
+
+Clear Snippets.
+
+### add
+
+Add Snippet.
+
+|Name|Type    |Desc                    |
+|----|--------|------------------------|
+|name|string  |Snippet name            |
+|fn  |function|Function to be triggered|
+|desc|string  |Snippet description     |
+
+```javascript
+snippets.add('hello', function () 
+{
+    console.log('Hello World!');
+}, 'Display hello on console');
+```
+
+### remove
+
+Remove specified log.
+
+|Name|Type  |Desc             |
+|----|------|-----------------|
+|name|string|Snippet to remove|
+
+```javascript
+snippets.remove('hello');
+```
+
 ## Features
 
 ## Settings

@@ -24,13 +24,31 @@ export default class Snippets extends Tool
     }
     add(name, fn, desc)
     {
-        this._snippets.push({
-            name: name,
-            fn: fn,
-            desc: desc
-        });
+        this._snippets.push({name, fn, desc});
 
         this._render();
+
+        return this;
+    }
+    remove(name)
+    {
+        let snippets = this._snippets;
+
+        for (let i = 0, len = snippets.length; i < len; i++)
+        {
+            if (snippets[i].name === name) snippets.splice(i, 1);
+        }
+
+        this._render();
+
+        return this;
+    }
+    clear()
+    {
+        this._snippets = [];
+        this._render();
+
+        return this;
     }
     _bindEvent()
     {
