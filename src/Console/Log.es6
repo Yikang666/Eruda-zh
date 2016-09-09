@@ -72,7 +72,13 @@ export default class Log
 
         if (this._needSrc())
         {
-            this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args);
+            if (type === 'table')
+            {
+                this.src = extractObj(args[0]);
+            } else
+            {
+                this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args);
+            }
         }
 
         let msg = '', icon;

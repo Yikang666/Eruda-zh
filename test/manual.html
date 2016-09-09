@@ -4,10 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Manual</title>
+    <link rel="stylesheet" href="style.css">
     <script src="assets/eruda.js"></script>
     <script src="boot.js"></script>
 </head>
 <body>
+<header>Manual Test</header>
+<nav>
+    <ul>
+        <li>
+            <a href="#" id="issue17">#17</a>
+        </li>
+    </ul>
+</nav>
+<script>
+    function addClickEvent(id, listener)
+    {
+        document.getElementById(id).addEventListener('click', function (e)
+        {
+            e.preventDefault();
+            listener();
+        }, false);
+    }
+    addClickEvent('issue17', function ()
+    {
+        var B = function () {};
+        var A = function () { this._data = 'eruda' };
+        A.prototype = Object.create(B.prototype);
+        Object.defineProperty(A.prototype, 'data', {
+            get: function () { return this._data }
+        });
+        var a = new A();
+        console.log(a);
+    });
+</script>
 <script>boot();</script>
 </body>
 </html>
