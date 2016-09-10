@@ -3,10 +3,11 @@
 
 .dev-tools { .tools {
     .features {
-        @include overflow-auto(y);
+        padding-bottom: 40px;
         ul {
+            @include overflow-auto(y);
             @include clear-float();
-            margin-top: 5px;
+            height: 100%;
             li {
                 width: 33.3%;
                 float: left;
@@ -36,10 +37,15 @@
             }
         }
         .html5test {
+            position: absolute;
+            left: 0;
+            bottom: 0;
             color: #fff;
+            width: 100%;
             background: $blue;
             display: block;
-            padding: 10px;
+            height: 40px;
+            line-height: 40px;
             text-decoration: none;
             text-align: center;
             margin-top: 10px;
