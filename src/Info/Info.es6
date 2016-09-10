@@ -28,6 +28,27 @@ export default class Info extends Tool
 
         return this;
     }
+    remove(name)
+    {
+        let msgs = this._msgs;
+
+        for (let i = 0, len = msgs.length; i < len; i++)
+        {
+            if (msgs[i].name === name) msgs.splice(i, 1);
+        }
+
+        this._render();
+
+        return this;
+    }
+    clear()
+    {
+        this._msgs = [];
+
+        this._render();
+
+        return this;
+    }
     _addDefInfo()
     {
         util.each(defInfo, info => this.add(info.name, info.val));

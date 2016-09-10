@@ -74,6 +74,40 @@ console.html('<span style="color:red">Red</span>');
 
 ## Info
 
+Display special information, could be used for displaying user info to track 
+user logs.
+ 
+By default, page url and browser user agent is shown.
+
+### clear
+
+Clear infos.
+
+### add
+
+Add infos.
+
+|Name   |Type  |Desc        |
+|-------|------|------------|
+|name   |string|Info name   |
+|content|string|Info content|
+
+```javascript
+info.add('title', 'content');
+```
+
+### remove
+
+Remove specified info.
+
+|Name|Type  |Desc     |
+|----|------|---------|
+|name|string|Info name|
+
+```javascript
+info.remove('title');
+```
+
 ## Snippets
 
 Allow you to register small function that can be triggered multiple times.
