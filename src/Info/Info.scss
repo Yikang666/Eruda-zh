@@ -2,7 +2,7 @@
 @import "../style/mixin";
 
 .dev-tools { .tools {
-    .info {
+    .info.tool {
         @include overflow-auto(y);
         li {
             background: #fff;
