@@ -110,7 +110,7 @@ info.remove('title');
 
 ## Snippets
 
-Allow you to register small function that can be triggered multiple times.
+Allow you to register small functions that can be triggered multiple times.
 
 ### clear
 
@@ -135,7 +135,7 @@ snippets.add('hello', function ()
 
 ### remove
 
-Remove specified log.
+Remove specified snippet.
 
 |Name|Type  |Desc             |
 |----|------|-----------------|
