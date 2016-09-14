@@ -21,6 +21,8 @@ export default function stringify(obj, {
         names = [],
         objEllipsis = '',
         proto,
+        circularId,
+        id = '',
         circular = false;
 
     topObj = topObj || obj;
@@ -66,6 +68,15 @@ export default function stringify(obj, {
         wrapBool = bool => boolWrapper + bool + wrapperEnd,
         wrapNull = str => nullWrapper + str + wrapperEnd;
 
+    function visit(value)
+    {
+        let id = util.uniqId('erudaJson');
+
+        visited.push({id, value});
+
+        return id;
+    }
+
     function wrapStr(str)
     {
         str = util.toStr(str);
@@ -80,6 +91,10 @@ export default function stringify(obj, {
             if (util.contain(SPECIAL_VAL, str) || util.startWith(str, 'Array['))
             {
                 return specialWrapper + strEscape(str) + wrapperEnd;
+            }
+            if (util.startWith(str, '[circular]'))
+            {
+                return specialWrapper + '[circular]' + wrapperEnd;
             }
             if (util.startWith(str, '[object '))
             {
@@ -106,27 +121,29 @@ export default function stringify(obj, {
 
     for (let i = 0, len = visited.length; i < len; i++)
     {
-        if (obj === visited[i])
+        if (obj === visited[i].value)
         {
             circular = true;
+            circularId = visited[i].id;
             break;
         }
     }
 
     if (circular)
     {
-        json = wrapStr('[circular]');
+        json = wrapStr('[circular]' + ' ' + circularId);
     } else if (isStr)
     {
         json = wrapStr(escapeJsonStr(obj));
     } else if (isArr)
     {
-        visited.push(obj);
+        id = visit(obj);
 
         if (doStringify)
         {
             json = '[';
             util.each(obj, val => parts.push(`${stringify(val, passOpts)}`));
+            if (!simple) parts.push(`"${id}"`);
             json += parts.join(', ') + ']';
         } else
         {
@@ -134,11 +151,12 @@ export default function stringify(obj, {
         }
     } else if (isObj || isFn)
     {
-        visited.push(obj);
+        id = visit(obj);
+
         if (canBeProto(obj))
         {
             obj = Object.getPrototypeOf(obj);
-            visited.push(obj);
+            id = visit(obj);
         }
 
         names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
@@ -168,6 +186,7 @@ export default function stringify(obj, {
                     if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
                     parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(escapeJsonStr(fnStr))}`);
                 }
+                if (!simple) parts.push(`"erudaId": "${id}"`);
                 util.each(names, name =>
                 {
                     let key = wrapKey(escapeJsonStr(name));
@@ -225,17 +244,21 @@ export default function stringify(obj, {
     } else {
         try
         {
-            visited.push(obj);
+            id = visit(obj);
             if (canBeProto(obj))
             {
                 obj = Object.getPrototypeOf(obj);
-                visited.push(obj);
+                id = visit(obj);
             }
 
             if (doStringify)
             {
                 json = '{ ';
-                if (!simple) parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
+                if (!simple)
+                {
+                    parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
+                    parts.push(`"erudaId": "${id}"`);
+                }
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
                 if (keyNum && names.length > keyNum) objEllipsis = '...';
                 if (keyNum) names = names.slice(0, keyNum);
@@ -274,7 +297,8 @@ export default function stringify(obj, {
             {
                 json = wrapStr(obj);
             }
-        } catch (e) {
+        } catch (e)
+        {
             json = wrapStr(obj);
         }
     }
@@ -282,7 +306,7 @@ export default function stringify(obj, {
     return json;
 }
 
-const SPECIAL_VAL = ['(...)', '[circular]', 'undefined', 'Symbol', 'Object'];
+const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object'];
 
 var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"')

@@ -4,7 +4,7 @@ Each default tool provided by eruda can be accessed by `eruda.get('Tool Name')`.
 
 ## Console
 
-Displays console logs. Implementation detail follows the [console api spec](https://github.com/DeveloperToolsWG/console-object/blob/master/api.md).
+Display console logs. Implementation detail follows the [console api spec](https://github.com/DeveloperToolsWG/console-object/blob/master/api.md).
 
 ### Config
 
@@ -37,7 +37,7 @@ console.error(new Error('eruda'));
 
 ### filter
 
-Filters logs.
+Filter logs.
 
 |Name  |Type                  |Desc         |
 |------|----------------------|-------------|
@@ -54,7 +54,7 @@ console.filter(function (log)
 
 ### html
 
-Logs out html content.
+Log out html content.
 
 |Name|Type  |Desc       |
 |----|------|-----------|

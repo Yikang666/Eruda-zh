@@ -61,6 +61,7 @@ function createEl(key, val, firstLevel)
         close = '}';
 
     if (key === 'erudaProto') key = '__proto__';
+    if (key === 'erudaId') return `<li id="${val}" class="eruda-hidden"></li>`;
 
     if (util.isArr(val))
     {
@@ -103,6 +104,10 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
     }
+    if (util.isStr(val) && util.startWith(val, 'erudaJson'))
+    {
+        return `<li id="${val}" class="eruda-hidden"></li>`;
+    }
     if (util.isStr(val) && util.startWith(val, 'function'))
     {
         return `<li>
@@ -110,7 +115,7 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-function">${encode(val).replace('function', '<span style="color:#a71d5d">function</span>')}</span>
                 </li>`;
     }
-    if (val === '(...)' || val === '[circular]' || val === 'undefined' || val === 'Symbol')
+    if (val === '(...)' || val === 'undefined' || val === 'Symbol')
     {
         return `<li>
                    ${wrapKey(key)}
@@ -118,12 +123,17 @@ function createEl(key, val, firstLevel)
                 </li>`;
     }
 
+    if (util.isStr(val) && util.startWith(val, '[circular]'))
+    {
+        let id = util.last(val.split(' '));
+        return `<li class="eruda-circular" class="eruda-hidden" data-id="${id}"></li>`;
+    }
+
     return `<li>
                 ${wrapKey(key)}
                 <span class="eruda-${typeof val}">"${encode(val)}"</span>
             </li>`;
 }
-
 
 const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf', 'length'];
 
