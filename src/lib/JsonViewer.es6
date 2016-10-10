@@ -112,7 +112,7 @@ function createEl(key, val, firstLevel)
     {
         return `<li>
                    ${wrapKey(key)}
-                   <span class="eruda-function">${encode(val).replace('function', '<span style="color:#a71d5d">function</span>')}</span>
+                   <span class="eruda-function">${encode(val).replace('function', '')}</span>
                 </li>`;
     }
     if (val === '(...)' || val === 'undefined' || val === 'Symbol')

@@ -6,7 +6,7 @@
   "scripts": {
     "release": "webpack && webpack -p --config script/release.js",
     "dev": "webpack-dev-server",
-    "cpTestLib": "bash script/cpTestLib.sh",
+    "cpTestLib": "script/cpTestLib.sh",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/Util_Api.md -t \"Eruda Util Documentation\""
   },
   "repository": {
