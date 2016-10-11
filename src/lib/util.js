@@ -1759,13 +1759,13 @@ module.exports = (function ()
          * var Student = People.extend({
          *     initialize: function (name, age, school)
          *     {
-         *         this.callSuper('initialize', name, age);
+         *         this.callSuper(People, 'initialize', arguments);
          *
          *         this.school = school.
          *     },
          *     introduce: function ()
          *     {
-         *         return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
+         *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.'.
          *     }
          * }, {
          *     is: function (obj)
@@ -1795,22 +1795,13 @@ module.exports = (function ()
             {
                 var args = toArr(arguments);
 
-                if (has(ctor.prototype, 'initialize') &&
-                    !regCallSuper.test(this.initialize.toString()) &&
-                    this.callSuper)
-                {
-                    args.unshift('initialize');
-                    this.callSuper.apply(this, args);
-                    args.shift();
-                }
-
                 return this.initialize
                        ? this.initialize.apply(this, args) || this
                        : this;
             };
 
             inherits(ctor, parent);
-            ctor.superclass = ctor.prototype.superclass = parent;
+            ctor.prototype.superclass = parent;
 
             ctor.extend = function (methods, statics)
             {
@@ -1838,13 +1829,13 @@ module.exports = (function ()
 
         var Base = exports.Base = makeClass(Object, {
             className: 'Base',
-            callSuper: function (name)
+            callSuper: function (parent, name, args)
             {
-                var superMethod = this.superclass.prototype[name];
+                var superMethod = parent.prototype[name];
 
                 if (!superMethod) return;
 
-                return superMethod.apply(this, toArr(arguments).slice(1));
+                return superMethod.apply(this, args);
             },
             toString: function ()
             {
@@ -2588,7 +2579,7 @@ module.exports = (function ()
         /* bind events to certain dom elements. TODO
          *
          * ```javascript
-         * event.on('#test', 'click', function ()
+         * $event.on('#test', 'click', function ()
          * {
          *     // ...
          * });
@@ -3420,7 +3411,7 @@ module.exports = (function ()
          * |return|string|Globally-unique id|
          *
          * ```javascript
-         * uniqueId('eusita_'); // -> 'eustia_xxx'
+         * uniqId('eusita_'); // -> 'eustia_xxx'
          * ```
          */
 
@@ -3499,6 +3490,35 @@ module.exports = (function ()
             if (str.length < 1) return str;
 
             return str[0].toUpperCase() + str.slice(1);
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ wrap ------------------------------ */
+
+    var wrap = _.wrap = (function ()
+    {
+        /* Wrap the function inside a wrapper function, passing it as the first argument.
+         *
+         * |Name   |Type    |Desc            |
+         * |-------|--------|----------------|
+         * |fn     |*       |Function to wrap|
+         * |wrapper|function|Wrapper function|
+         * |return |function|New function    |
+         *
+         * ```javascript
+         * var p = wrap(escape, function(fn, text)
+         * {
+         *     return '<p>' + fn(text) + '</p>';
+         * });
+         * p('You & Me'); // -> '<p>You &amp; Me</p>'
+         * ```
+         */
+
+        function exports(fn, wrapper)
+        {
+            return partial(wrapper, fn);
         }
 
         return exports;

@@ -1,5 +1,6 @@
 import util from '../lib/util'
 import stringify from '../lib/stringify.es6'
+import origGetAbstract from '../lib/getAbstract.es6'
 import highlight from '../lib/highlight.es6'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer.es6'
@@ -175,6 +176,14 @@ Log.showGetterVal = false;
 Log.showUnenumerable = true;
 Log.showSrcInSources = false;
 
+var getAbstract = util.wrap(origGetAbstract, function (fn, obj)
+{
+    return fn(obj, {
+        getterVal: Log.showGetterVal,
+        unenumerable: false
+    });
+});
+
 function stringifyWrapper(obj, options = {})
 {
     util.defaults(options, {
@@ -319,7 +328,7 @@ function substituteStr(args)
                 case 'O':
                     if (util.isObj(arg))
                     {
-                        newStr += stringifyWrapper(arg);
+                        newStr += getAbstract(arg);
                     }
                     break;
                 case 'o':
@@ -328,7 +337,7 @@ function substituteStr(args)
                         newStr += formatEl(arg);
                     } else if (util.isObj(arg))
                     {
-                        newStr += stringifyWrapper(arg);
+                        newStr += getAbstract(arg);
                     }
                     break;
                 case 'c':
@@ -355,7 +364,7 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${getObjType(val)} ${stringifyWrapper(val)}`;
+    return `${getObjType(val)} ${getAbstract(val)}`;
 }
 
 function formatFn(val)

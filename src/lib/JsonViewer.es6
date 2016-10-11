@@ -56,19 +56,12 @@ function jsonToHtml(data, firstLevel)
 
 function createEl(key, val, firstLevel)
 {
-    var type = 'object',
-        open = '{',
-        close = '}';
+    var type = 'object';
 
     if (key === 'erudaProto') key = '__proto__';
     if (key === 'erudaId') return `<li id="${val}" class="eruda-hidden"></li>`;
 
-    if (util.isArr(val))
-    {
-        type = 'array';
-        open = '[';
-        close = ']';
-    }
+    if (util.isArr(val)) type = 'array';
 
     function wrapKey(key)
     {
@@ -89,13 +82,16 @@ function createEl(key, val, firstLevel)
     }
     if (util.isObj(val))
     {
+        var objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
+
         var obj = `<li>
                        <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
                        ${wrapKey(key)}
-                       <span class="eruda-open">${open} ${(val['erudaObjAbstract'] || '')}</span>
+                       <span class="eruda-open">${objAbstract}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
-        return obj + `</ul><span class="eruda-close">${close}</span></li>`;
+
+        return obj + `</ul><span class="eruda-close"></span></li>`;
     }
     if (util.isNum(val) || util.isBool(val))
     {

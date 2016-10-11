@@ -65,7 +65,6 @@
         top: 3px;
     }
     li .collapsed ~ .close:before {
-        content: "... ";
         color: #999;
     }
     .hidden ~ ul {
