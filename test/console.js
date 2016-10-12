@@ -105,8 +105,8 @@ describe('substitution', function ()
     it('Repeat log', function ()
     {
         tool.clear();
-        for (let i = 0; i < 10; i++) tool.log(1);
-        let $log = $tool.find('.eruda-log-item');
+        for (var i = 0; i < 10; i++) tool.log(1);
+        var $log = $tool.find('.eruda-log-item');
         expect($log).toHaveLength(1);
         expect($log.find('.eruda-count')).toContainText('10');
     });
@@ -134,7 +134,6 @@ describe('table', function ()
     });
 });
 
-
 describe('filter', function ()
 {
     // Test case from https://github.com/liriliri/eruda/issues/14
@@ -142,7 +141,7 @@ describe('filter', function ()
     {
         tool.clear().filter(function (log)
         {
-            return !(log.type === 'error' && /deprecated(.|\n)*stringify/.test(log.src.stack));
+            return log.type !== 'error';
         });
 
         var obj = {};

@@ -184,22 +184,6 @@ var getAbstract = util.wrap(origGetAbstract, function (fn, obj)
     });
 });
 
-function stringifyWrapper(obj, options = {})
-{
-    util.defaults(options, {
-        simple: true,
-        keyNum: 5,
-        sortKeys: false,
-        highlight: true,
-        keyQuotes: false,
-        specialVal: true,
-        getterVal: Log.showGetterVal,
-        unenumerable: false
-    });
-
-    return stringify(obj, options);
-}
-
 function formatTable(args)
 {
     let table = args[0],
@@ -418,15 +402,9 @@ var render = data => tpl(data);
 function extractObj(obj, options = {})
 {
     util.defaults(options, {
-        highlight: false,
-        keyQuotes: true,
-        simple: false,
-        sortKeys: true,
-        keyNum: 0,
         getterVal: Log.showGetterVal,
-        unenumerable: Log.showUnenumerable,
-        specialVal: false
+        unenumerable: Log.showUnenumerable
     });
 
-    return JSON.parse(stringifyWrapper(obj, options));
+    return JSON.parse(stringify(obj, options));
 }

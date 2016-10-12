@@ -74,8 +74,7 @@ export default function getAbstract(obj, {
         type = '[object Object]';
     }
 
-    var isFn = (type == '[object Function]'),
-        isStr = (type == '[object String]'),
+    let isStr = (type == '[object String]'),
         isArr = (type == '[object Array]'),
         isObj = (type == '[object Object]'),
         isNum = (type == '[object Number]'),

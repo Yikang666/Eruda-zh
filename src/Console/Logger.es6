@@ -1,7 +1,4 @@
 import util from '../lib/util'
-import stringify from '../lib/stringify.es6'
-import highlight from '../lib/highlight.es6'
-import beautify from 'js-beautify'
 import Log from './Log.es6'
 
 export default class Logger extends util.Emitter

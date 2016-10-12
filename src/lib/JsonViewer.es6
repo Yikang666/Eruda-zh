@@ -23,6 +23,8 @@ export default class JsonViewer
             var $this = util.$(this),
                 $firstSpan = util.$(this).find('span').eq(0);
 
+            if ($this.data('first-level') === 'true') return;
+
             if (!$firstSpan.hasClass('eruda-expanded')) return;
 
             e.stopImmediatePropagation();
@@ -56,10 +58,16 @@ function jsonToHtml(data, firstLevel)
 
 function createEl(key, val, firstLevel)
 {
-    var type = 'object';
+    let type = 'object',
+        isUnenumerable = false;
 
     if (key === 'erudaProto') key = '__proto__';
     if (key === 'erudaId') return `<li id="${val}" class="eruda-hidden"></li>`;
+    if (util.startWith(key, 'erudaUnenumerable'))
+    {
+        key = util.trim(key.replace('erudaUnenumerable', ''));
+        isUnenumerable = true;
+    }
 
     if (util.isArr(val)) type = 'array';
 
@@ -67,8 +75,8 @@ function createEl(key, val, firstLevel)
     {
         if (firstLevel) return '';
 
-        var keyClass = 'eruda-key';
-        if (util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
+        let keyClass = 'eruda-key';
+        if (isUnenumerable || util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
 
         return `<span class="${keyClass}">${encode(key)}</span>: `;
     }
@@ -84,10 +92,10 @@ function createEl(key, val, firstLevel)
     {
         var objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
 
-        var obj = `<li>
+        var obj = `<li data-first-level="${firstLevel}">
                        <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
                        ${wrapKey(key)}
-                       <span class="eruda-open">${objAbstract}</span>
+                       <span class="eruda-open">${firstLevel ? '' : objAbstract}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
         obj += jsonToHtml(val);
 
@@ -111,7 +119,7 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-function">${encode(val).replace('function', '')}</span>
                 </li>`;
     }
-    if (val === '(...)' || val === 'undefined' || val === 'Symbol')
+    if (val === 'undefined' || val === 'Symbol')
     {
         return `<li>
                    ${wrapKey(key)}
@@ -119,11 +127,11 @@ function createEl(key, val, firstLevel)
                 </li>`;
     }
 
-    if (util.isStr(val) && util.startWith(val, '[circular]'))
+    /*if (util.isStr(val) && util.startWith(val, '[circular]'))
     {
         let id = util.last(val.split(' '));
         return `<li class="eruda-circular" class="eruda-hidden" data-id="${id}"></li>`;
-    }
+    }*/
 
     return `<li>
                 ${wrapKey(key)}
@@ -131,6 +139,6 @@ function createEl(key, val, firstLevel)
             </li>`;
 }
 
-const LIGHTER_KEY = ['__proto__', 'constructor', 'toString', 'valueOf', 'length'];
+const LIGHTER_KEY = ['__proto__'];
 
 var encode = str => util.escape(util.toStr(str));

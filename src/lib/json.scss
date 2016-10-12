@@ -13,7 +13,7 @@
     }
     ul {
         padding: 0 !important;
-        padding-left: 20px !important;
+        padding-left: 15px !important;
         margin: 0 !important;
     }
     li {
@@ -22,6 +22,9 @@
     }
     & > li > .key {
         display: none;
+    }
+    & > li {
+        padding: $padding 0;
     }
     .array .object .key {
         display: inline;
