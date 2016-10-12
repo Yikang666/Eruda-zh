@@ -506,6 +506,20 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ escapeJsonStr ------------------------------ */
+
+    var escapeJsonStr = _.escapeJsonStr = (function ()
+    {
+        function exports(str)
+        {
+            return str.replace(/\\/g, '\\\\')
+                      .replace(/"/g, '\\"')
+                      .replace(/\f|\n|\r|\t/g, '');
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ escapeRegExp ------------------------------ */
 
     var escapeRegExp = _.escapeRegExp = (function ()

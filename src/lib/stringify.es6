@@ -2,11 +2,11 @@ import util from './util'
 
 // Modified from: https://jsconsole.com/
 export default function stringify(obj, {
-    visited = [],
+    visitor = new Visitor(),
     topObj,
     level = 0,
+    circularMarker = false,
     getterVal = false,
-    specialVal = false,
     unenumerable = true
     } = {})
 {
@@ -15,67 +15,19 @@ export default function stringify(obj, {
         parts = [],
         names = [],
         proto,
-        circularId,
+        objAbstract,
+        circularObj,
         allKeys, keys,
-        id = '',
-        circular = false;
+        id = '';
 
     topObj = topObj || obj;
 
-    let passOpts = {
-            visited, specialVal, getterVal,
-            unenumerable,
-            level: level + 1
-        },
-        passProtoOpts = {
-            visited, specialVal, getterVal, topObj,
-            unenumerable,
-            level: level + 1
-        };
+    let passOpts = {visitor, getterVal, unenumerable, level: level + 1},
+        passProtoOpts = {visitor, getterVal, topObj, unenumerable, level: level + 1};
 
-    let specialWrapper = '',
-        fnWrapper = '',
-        strEscape = str => str,
-        wrapperEnd = '';
+    let wrapKey = key => `"${key}"`,
+        wrapStr = str => `"${util.toStr(str)}"`;
 
-    let wrapKey = key => '"' + strEscape(key) + '"';
-
-    function visit(value)
-    {
-        let id = util.uniqId('erudaJson');
-
-        visited.push({id, value});
-
-        return id;
-    }
-
-    function wrapStr(str)
-    {
-        str = util.toStr(str);
-
-        if (specialVal)
-        {
-            str = str.replace(/\\/g, '');
-            if (util.startWith(str, 'function'))
-            {
-                return fnWrapper + 'function' + wrapperEnd + ' ( )';
-            }
-            if (util.contain(SPECIAL_VAL, str) || util.startWith(str, 'Array['))
-            {
-                return specialWrapper + strEscape(str) + wrapperEnd;
-            }
-            if (util.startWith(str, '[circular]'))
-            {
-                return specialWrapper + '[circular]' + wrapperEnd;
-            }
-            if (util.startWith(str, '[object '))
-            {
-                return specialWrapper + strEscape(str.replace(/(\[object )|]/g, '')) + wrapperEnd;
-            }
-        }
-
-        return strEscape(`"${str}"`);
-    }
     try {
         type = ({}).toString.call(obj);
     } catch (e)
@@ -91,25 +43,18 @@ export default function stringify(obj, {
         isSymbol = (type == '[object Symbol]'),
         isBool = (type == '[object Boolean]');
 
-    for (let i = 0, len = visited.length; i < len; i++)
-    {
-        if (obj === visited[i].value)
-        {
-            circular = true;
-            circularId = visited[i].id;
-            break;
-        }
-    }
+    circularObj = visitor.check(obj);
 
-    if (circular)
+    if (circularObj)
     {
-        json = wrapStr('[circular]' + ' ' + circularId);
+        json = stringify(circularObj.abstract, {circularMarker: true});
     } else if (isStr)
     {
-        json = wrapStr(escapeJsonStr(obj));
+        json = wrapStr(util.escapeJsonStr(obj));
     } else if (isArr)
     {
-        id = visit(obj);
+        id = visitor.visit(obj);
+        visitor.updateAbstract(id, [`erudaCircular ${id}`]);
 
         json = '[';
         util.each(obj, val => parts.push(`${stringify(val, passOpts)}`));
@@ -117,19 +62,23 @@ export default function stringify(obj, {
         json += parts.join(', ') + ']';
     } else if (isObj || isFn)
     {
-        id = visit(obj);
+        id = visitor.visit(obj);
 
         if (canBeProto(obj))
         {
             obj = Object.getPrototypeOf(obj);
-            id = visit(obj);
+            id = visitor.visit(obj);
         }
 
         allKeys = Object.getOwnPropertyNames(obj);
         keys = Object.keys(obj);
         names = unenumerable ? allKeys : keys;
         proto = Object.getPrototypeOf(obj);
-        if (proto) proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
+        if (circularMarker && proto === Object.prototype) proto = null;
+        if (proto)
+        {
+            proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
+        }
         names.sort(sortObjName);
         if (isFn)
         {
@@ -137,29 +86,14 @@ export default function stringify(obj, {
             names = names.filter(val => ['arguments', 'caller', 'prototype'].indexOf(val) < 0);
         }
         json = '{ ';
-        if (isFn) parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(getFnAbstract(obj))}`);
-        parts.push(`"erudaId": "${id}"`);
-        util.each(names, name =>
-        {
-            let unenumerable = !util.contain(keys, name) ? 'erudaUnenumerable' : '',
-                key = wrapKey(unenumerable + ' ' + escapeJsonStr(name)),
-                getKey = wrapKey(unenumerable + ' ' + escapeJsonStr('get ' + name)),
-                setKey = wrapKey(unenumerable + ' ' + escapeJsonStr('set ' + name));
-
-            let descriptor = Object.getOwnPropertyDescriptor(obj, name),
-                hasGetter = descriptor && descriptor.get,
-                hasSetter = descriptor && descriptor.set;
-            if (!getterVal && hasGetter)
-            {
-                parts.push(`${getKey}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.get)))}`);
-            }
-            if (hasSetter)
-            {
-                parts.push(`${setKey}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.set)))}`);
-            }
-            if (!getterVal && hasGetter) return;
-            parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
+        objAbstract = isFn ? getFnAbstract(obj) : type.replace(/(\[object )|]/g, '');
+        visitor.updateAbstract(id, {
+            erudaObjAbstract: objAbstract,
+            erudaCircular: id
         });
+        parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`);
+        if (!circularMarker) parts.push(`"erudaId": "${id}"`);
+        util.each(names, objIteratee);
         if (proto) parts.push(proto);
         json += parts.join(', ') + ' }';
     } else if (isNum)
@@ -193,20 +127,26 @@ export default function stringify(obj, {
     } else {
         try
         {
-            id = visit(obj);
+            id = visitor.visit(obj);
             if (canBeProto(obj))
             {
                 obj = Object.getPrototypeOf(obj);
-                id = visit(obj);
+                id = visitor.visit(obj);
             }
 
             json = '{ ';
-            parts.push(`${wrapKey('erudaObjAbstract')}: "${type.replace(/(\[object )|]/g, '')}"`);
-            parts.push(`"erudaId": "${id}"`);
+            objAbstract = type.replace(/(\[object )|]/g, '');
+            visitor.updateAbstract(id, {
+                erudaObjAbstract: objAbstract,
+                erudaCircular: id
+            });
+            parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`);
+            if (!circularMarker) parts.push(`"erudaId": "${id}"`);
             allKeys = Object.getOwnPropertyNames(obj);
             keys = Object.keys(obj);
             names = unenumerable ? allKeys : keys;
             proto = Object.getPrototypeOf(obj);
+            if (circularMarker && proto === Object.prototype) proto = null;
             if (proto)
             {
                 try
@@ -214,48 +154,45 @@ export default function stringify(obj, {
                     proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
                 } catch(e)
                 {
-                    proto = `${wrapKey('erudaProto')}: ${wrapStr(escapeJsonStr(e.message))}`;
+                    proto = `${wrapKey('erudaProto')}: ${wrapStr(e.message)}`;
                 }
             }
             names.sort(sortObjName);
-            util.each(names, name =>
-            {
-                let unenumerable = !util.contain(keys, name) ? 'erudaUnenumerable' : '',
-                    key = wrapKey(unenumerable + ' ' + escapeJsonStr(name)),
-                    getKey = wrapKey(unenumerable + ' ' + escapeJsonStr('get ' + name)),
-                    setKey = wrapKey(unenumerable + ' ' + escapeJsonStr('set ' + name));
-
-                let descriptor = Object.getOwnPropertyDescriptor(obj, name),
-                    hasGetter = descriptor && descriptor.get,
-                    hasSetter = descriptor && descriptor.set;
-                if (!getterVal && hasGetter)
-                {
-                    parts.push(`${getKey}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.get)))}`);
-                }
-                if (hasSetter)
-                {
-                    parts.push(`${setKey}: ${wrapStr(escapeJsonStr(extractFnHead(descriptor.set)))}`);
-                }
-                if (!getterVal && hasGetter) return;
-                parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
-            });
+            util.each(names, objIteratee);
             if (proto) parts.push(proto);
             json += parts.join(', ') + ' }';
         } catch (e)
         {
-            json = wrapStr(e.message);
-            // json = wrapStr(obj);
+            json = wrapStr(obj);
+        }
+    }
+
+    function objIteratee(name)
+    {
+        let unenumerable = !util.contain(keys, name) ? 'erudaUnenumerable ' : '',
+            key = wrapKey(unenumerable + util.escapeJsonStr(name)),
+            getKey = wrapKey(unenumerable + util.escapeJsonStr('get ' + name)),
+            setKey = wrapKey(unenumerable + util.escapeJsonStr('set ' + name));
+
+        let descriptor = Object.getOwnPropertyDescriptor(obj, name),
+            hasGetter = descriptor && descriptor.get,
+            hasSetter = descriptor && descriptor.set;
+
+        if (!getterVal && hasGetter)
+        {
+            parts.push(`${getKey}: ${wrapStr(util.escapeJsonStr(extractFnHead(descriptor.get)))}`);
+        } else
+        {
+            parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
+        }
+        if (hasSetter)
+        {
+            parts.push(`${setKey}: ${wrapStr(util.escapeJsonStr(extractFnHead(descriptor.set)))}`);
         }
     }
 
     return json;
 }
-
-const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object'];
-
-var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"')
-    .replace(/\f|\n|\r|\t/g, '');
 
 // $, upperCase, lowerCase, _
 var sortObjName = (a, b) =>
@@ -311,7 +248,7 @@ function getFnAbstract(fn)
     let fnStr = fn.toString();
     if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
 
-    return escapeJsonStr(extractFnHead(fnStr).replace('function', ''));
+    return util.escapeJsonStr(extractFnHead(fnStr).replace('function', ''));
 }
 
 function canBeProto(obj)
@@ -322,3 +259,39 @@ function canBeProto(obj)
     return emptyObj && proto && proto !== Object.prototype;
 }
 
+class Visitor
+{
+    constructor()
+    {
+        this._visited = [];
+        this._map = {};
+    }
+    visit(val)
+    {
+        let id = util.uniqId('erudaJson');
+
+        this._visited.push({id, val, abstract: {}});
+        this._map[id] = util.last(this._visited);
+
+        return id;
+    }
+    check(val)
+    {
+        let visited = this._visited;
+
+        for (let i = 0, len = visited.length; i < len; i++)
+        {
+            if (val === visited[i].val) return visited[i];
+        }
+
+        return false;
+    }
+    update(id, data)
+    {
+        util.extend(this._map[id], data);
+    }
+    updateAbstract(id, abstract)
+    {
+        this.update(id, {abstract});
+    }
+}

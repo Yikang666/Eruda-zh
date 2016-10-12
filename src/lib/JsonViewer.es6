@@ -8,22 +8,31 @@ export default class JsonViewer
 
         this._data = [data];
         this._$el = $el;
+        this._map = {};
 
         this._appendTpl();
         this._bindEvent();
     }
     _appendTpl()
     {
-        this._$el.html(jsonToHtml(this._data, true));
+        this._$el.html(jsonToHtml(this._data, this._map, true));
     }
     _bindEvent()
     {
+        var map = this._map;
+
         this._$el.on('click', 'li', function (e)
         {
             var $this = util.$(this),
+                circularId = $this.data('circular'),
                 $firstSpan = util.$(this).find('span').eq(0);
 
-            if ($this.data('first-level') === 'true') return;
+            if ($this.data('first-level')) return;
+            if (circularId)
+            {
+                $this.find('ul').html(jsonToHtml(map[circularId], map, false));
+                $this.rmAttr('data-circular');
+            }
 
             if (!$firstSpan.hasClass('eruda-expanded')) return;
 
@@ -43,33 +52,44 @@ export default class JsonViewer
     }
 }
 
-function jsonToHtml(data, firstLevel)
+function jsonToHtml(data, map, firstLevel)
 {
     var ret = '';
 
     for (let key in data)
     {
-        if (key === 'erudaObjAbstract') continue;
-        if (Object.hasOwnProperty.call(data, key)) ret += createEl(key, data[key], firstLevel);
+        let val = data[key];
+
+        if (key === 'erudaObjAbstract' ||
+            key === 'erudaCircular' ||
+            key === 'erudaId' ||
+            (util.isStr(val) && util.startWith(val, 'erudaJson'))) continue;
+
+        if (Object.hasOwnProperty.call(data, key)) ret += createEl(key, val, map, firstLevel);
     }
 
     return ret;
 }
 
-function createEl(key, val, firstLevel)
+function createEl(key, val, map, firstLevel = false)
 {
     let type = 'object',
-        isUnenumerable = false;
+        isUnenumerable = false,
+        id;
 
     if (key === 'erudaProto') key = '__proto__';
-    if (key === 'erudaId') return `<li id="${val}" class="eruda-hidden"></li>`;
     if (util.startWith(key, 'erudaUnenumerable'))
     {
         key = util.trim(key.replace('erudaUnenumerable', ''));
         isUnenumerable = true;
     }
 
-    if (util.isArr(val)) type = 'array';
+    if (util.isArr(val))
+    {
+        type = 'array';
+        let lastVal = util.last(val);
+        if (util.isStr(val) && util.startWith(lastVal, 'erudaJson')) id = lastVal;
+    }
 
     function wrapKey(key)
     {
@@ -90,14 +110,17 @@ function createEl(key, val, firstLevel)
     }
     if (util.isObj(val))
     {
+        if (val.erudaId) id = val.erudaId;
+        let circularId = val.erudaCircular;
+        if (id) map[id] = val;
         var objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
 
-        var obj = `<li data-first-level="${firstLevel}">
-                       <span class="eruda-expanded ${firstLevel ? '' : 'eruda-collapsed'}"></span>
+        var obj = `<li ${firstLevel ? 'data-first-level="true"' : ''} ${circularId ? 'data-circular="' + circularId + '"' : ''}>
+                       <span class="${firstLevel ? '' : 'eruda-expanded eruda-collapsed'}"></span>
                        ${wrapKey(key)}
                        <span class="eruda-open">${firstLevel ? '' : objAbstract}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
-        obj += jsonToHtml(val);
+        obj += jsonToHtml(val, map);
 
         return obj + `</ul><span class="eruda-close"></span></li>`;
     }
@@ -107,10 +130,6 @@ function createEl(key, val, firstLevel)
                    ${wrapKey(key)}
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
-    }
-    if (util.isStr(val) && util.startWith(val, 'erudaJson'))
-    {
-        return `<li id="${val}" class="eruda-hidden"></li>`;
     }
     if (util.isStr(val) && util.startWith(val, 'function'))
     {
@@ -126,12 +145,6 @@ function createEl(key, val, firstLevel)
                    <span class="eruda-special">${val}</span>
                 </li>`;
     }
-
-    /*if (util.isStr(val) && util.startWith(val, '[circular]'))
-    {
-        let id = util.last(val.split(' '));
-        return `<li class="eruda-circular" class="eruda-hidden" data-id="${id}"></li>`;
-    }*/
 
     return `<li>
                 ${wrapKey(key)}

@@ -3,7 +3,6 @@ import util from './util'
 
 // Modified from: https://jsconsole.com/
 export default function getAbstract(obj, {
-    visited = [],
     topObj,
     level = 0,
     getterVal = false,
@@ -17,16 +16,12 @@ export default function getAbstract(obj, {
         names = [],
         objEllipsis = '',
         circular = false,
-        i, len;
+        i;
 
     topObj = topObj || obj;
 
-    let passOpts = {
-            visited, getterVal,
-            unenumerable,
-            level: level + 1
-        };
-    let doStringify = level === 0;
+    let passOpts = {getterVal, unenumerable, level: level + 1},
+        doStringify = level === 0;
 
     let keyWrapper = '<span style="color: #a71d5d;">',
         fnWrapper = '<span style="color: #a71d5d;">',
@@ -67,6 +62,31 @@ export default function getAbstract(obj, {
 
         return strWrapper + strEscape(`"${str}"`) + wrapperEnd;
     }
+
+    function objIteratee(name)
+    {
+        if (i > keyNum)
+        {
+            objEllipsis = '...';
+            return;
+        }
+        let key = wrapKey(util.escapeJsonStr(name));
+
+        if (!getterVal)
+        {
+            let descriptor = Object.getOwnPropertyDescriptor(obj, name);
+            if (descriptor.get)
+            {
+                parts.push(`${key}: ${wrapStr('(...)')}`);
+                i++;
+                return;
+            }
+        }
+        if (typeof topObj[name] === 'function') return;
+        parts.push(`${key}: ${getAbstract(topObj[name], passOpts)}`);
+        i++;
+    }
+
     try {
         type = ({}).toString.call(obj);
     } catch (e)
@@ -81,25 +101,14 @@ export default function getAbstract(obj, {
         isSymbol = (type == '[object Symbol]'),
         isBool = (type == '[object Boolean]');
 
-    for (i = 0, len = visited.length; i < len; i++)
-    {
-        if (obj === visited[i])
-        {
-            circular = true;
-            break;
-        }
-    }
-
     if (circular)
     {
         json = wrapStr('[circular]');
     } else if (isStr)
     {
-        json = wrapStr(escapeJsonStr(obj));
+        json = wrapStr(util.escapeJsonStr(obj));
     } else if (isArr)
     {
-        visited.push(obj);
-
         if (doStringify)
         {
             json = '[';
@@ -111,8 +120,6 @@ export default function getAbstract(obj, {
         }
     } else if (isObj)
     {
-        visited.push(obj);
-
         if (canBeProto(obj))
         {
             obj = Object.getPrototypeOf(obj);
@@ -123,29 +130,7 @@ export default function getAbstract(obj, {
         {
             i = 1;
             json = '{ ';
-            util.each(names, name =>
-            {
-                if (i > keyNum)
-                {
-                    objEllipsis = '...';
-                    return;
-                }
-                let key = wrapKey(escapeJsonStr(name));
-
-                if (!getterVal)
-                {
-                    let descriptor = Object.getOwnPropertyDescriptor(obj, name);
-                    if (descriptor.get)
-                    {
-                        parts.push(`${key}: ${wrapStr('(...)')}`);
-                        i++;
-                        return;
-                    }
-                }
-                if (typeof topObj[name] === 'function') return;
-                parts.push(`${key}: ${getAbstract(topObj[name], passOpts)}`);
-                i++;
-            });
+            util.each(names, objIteratee);
             json += parts.join(', ') + objEllipsis + ' }';
         } else
         {
@@ -185,7 +170,6 @@ export default function getAbstract(obj, {
     } else {
         try
         {
-            visited.push(obj);
             if (canBeProto(obj))
             {
                 obj = Object.getPrototypeOf(obj);
@@ -196,29 +180,7 @@ export default function getAbstract(obj, {
                 i = 1;
                 json = '{ ';
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
-                util.each(names, name =>
-                {
-                    if (i > keyNum)
-                    {
-                        objEllipsis = '...';
-                        return;
-                    }
-                    let key = wrapKey(escapeJsonStr(name));
-
-                    if (!getterVal)
-                    {
-                        let descriptor = Object.getOwnPropertyDescriptor(obj, name);
-                        if (descriptor.get)
-                        {
-                            parts.push(`${key}: ${wrapStr('(...)')}`);
-                            i++;
-                            return;
-                        }
-                    }
-                    if (typeof topObj[name] === 'function') return;
-                    parts.push(`${key}: ${getAbstract(topObj[name], passOpts)}`);
-                    i++;
-                });
+                util.each(names, objIteratee);
                 json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
@@ -234,10 +196,6 @@ export default function getAbstract(obj, {
 }
 
 const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object'];
-
-var escapeJsonStr = str => str.replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"')
-    .replace(/\f|\n|\r|\t/g, '');
 
 function canBeProto(obj)
 {
