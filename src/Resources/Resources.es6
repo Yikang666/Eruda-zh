@@ -358,6 +358,8 @@ function delCookie(key)
         pathLen = pathNames.length,
         path;
 
+    let deleted = () => !util.cookie.get(key);
+
     for (let i = hostNames.length - 1; i >= 0; i--)
     {
         let hostName = hostNames[i];
@@ -366,12 +368,23 @@ function delCookie(key)
 
         path = '/';
         util.cookie.remove(key, {domain, path});
+        if (deleted()) return;
+        util.cookie.remove(key, {domain});
+        if (deleted()) return;
         for (let j = 0; j < pathLen; j++)
         {
             let pathName = pathNames[j];
             if (pathName === '') continue;
             path += pathName;
             util.cookie.remove(key, {domain, path});
+            if (deleted()) return;
+            util.cookie.remove(key, {path});
+            if (deleted()) return;
+            path += '/';
+            util.cookie.remove(key, {domain, path});
+            if (deleted()) return;
+            util.cookie.remove(key, {path});
+            if (deleted()) return;
         }
     }
 }
