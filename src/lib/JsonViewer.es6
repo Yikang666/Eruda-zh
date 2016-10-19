@@ -88,7 +88,7 @@ function createEl(key, val, map, firstLevel = false)
     {
         type = 'array';
         let lastVal = util.last(val);
-        if (util.isStr(val) && util.startWith(lastVal, 'erudaJson')) id = lastVal;
+        if (util.isStr(lastVal) && util.startWith(lastVal, 'erudaJson')) id = lastVal;
     }
 
     function wrapKey(key)
