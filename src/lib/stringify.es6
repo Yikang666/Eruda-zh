@@ -11,7 +11,7 @@ export default function stringify(obj, {
     } = {})
 {
     let json = '',
-        type = '',
+        type,
         parts = [],
         names = [],
         proto,
@@ -25,15 +25,10 @@ export default function stringify(obj, {
     let passOpts = {visitor, getterVal, unenumerable, level: level + 1},
         passProtoOpts = {visitor, getterVal, topObj, unenumerable, level: level + 1};
 
-    let wrapKey = key => `"${key}"`,
-        wrapStr = str => `"${util.toStr(str)}"`;
+    let wrapKey = key => `"${util.escapeJsonStr(key)}"`,
+        wrapStr = str => `"${util.escapeJsonStr(util.toStr(str))}"`;
 
-    try {
-        type = ({}).toString.call(obj);
-    } catch (e)
-    {
-        type = '[object Object]';
-    }
+    type = getType(obj);
 
     var isFn = (type == '[object Function]'),
         isStr = (type == '[object String]'),
@@ -50,17 +45,8 @@ export default function stringify(obj, {
         json = stringify(circularObj.abstract, {circularMarker: true});
     } else if (isStr)
     {
-        json = wrapStr(util.escapeJsonStr(obj));
-    } else if (isArr)
-    {
-        id = visitor.visit(obj);
-        visitor.updateAbstract(id, [`erudaCircular ${id}`]);
-
-        json = '[';
-        util.each(obj, val => parts.push(`${stringify(val, passOpts)}`));
-        parts.push(`"${id}"`);
-        json += parts.join(', ') + ']';
-    } else if (isObj || isFn)
+        json = wrapStr(obj);
+    } else if (isArr || isObj || isFn)
     {
         id = visitor.visit(obj);
 
@@ -86,7 +72,7 @@ export default function stringify(obj, {
             names = names.filter(val => ['arguments', 'caller'].indexOf(val) < 0);
         }
         json = '{ ';
-        objAbstract = isFn ? getFnAbstract(obj) : type.replace(/(\[object )|]/g, '');
+        objAbstract = getObjAbstract(obj);
         visitor.updateAbstract(id, {
             erudaObjAbstract: objAbstract,
             erudaCircular: id
@@ -132,7 +118,7 @@ export default function stringify(obj, {
             }
 
             json = '{ ';
-            objAbstract = type.replace(/(\[object )|]/g, '');
+            objAbstract = getObjAbstract(obj);
             visitor.updateAbstract(id, {
                 erudaObjAbstract: objAbstract,
                 erudaCircular: id
@@ -167,9 +153,9 @@ export default function stringify(obj, {
     function objIteratee(name)
     {
         let unenumerable = !util.contain(keys, name) ? 'erudaUnenumerable ' : '',
-            key = wrapKey(unenumerable + util.escapeJsonStr(name)),
-            getKey = wrapKey(unenumerable + util.escapeJsonStr('get ' + name)),
-            setKey = wrapKey(unenumerable + util.escapeJsonStr('set ' + name));
+            key = wrapKey(unenumerable + name),
+            getKey = wrapKey(unenumerable + 'get ' + name),
+            setKey = wrapKey(unenumerable + 'set ' + name);
 
         let descriptor = Object.getOwnPropertyDescriptor(obj, name),
             hasGetter = descriptor && descriptor.get,
@@ -177,6 +163,7 @@ export default function stringify(obj, {
 
         if (!getterVal && hasGetter)
         {
+            parts.push(`${key}: "(...)"`);
             parts.push(`${getKey}: ${stringify(descriptor.get, passOpts)}`);
         } else
         {
@@ -252,7 +239,7 @@ function getFnAbstract(fn)
     let fnStr = fn.toString();
     if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
 
-    return util.escapeJsonStr(extractFnHead(fnStr).replace('function', ''));
+    return extractFnHead(fnStr).replace('function', '');
 }
 
 function canBeProto(obj)
@@ -261,6 +248,30 @@ function canBeProto(obj)
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
+}
+
+function getObjAbstract(obj)
+{
+    if (util.isFn(obj)) return getFnAbstract(obj);
+    if (util.isRegExp(obj)) return obj.toString();
+
+    let type = getType(obj);
+
+    return type.replace(/(\[object )|]/g, '')
+}
+
+function getType(obj)
+{
+    let type;
+
+    try {
+        type = ({}).toString.call(obj);
+    } catch (e)
+    {
+        type = '[object Object]';
+    }
+
+    return type;
 }
 
 class Visitor

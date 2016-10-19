@@ -35,6 +35,7 @@ export default function getAbstract(obj, {
 
     let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd,
         wrapNum = num => numWrapper + num + wrapperEnd,
+        wrapRegExp = (str) => strWrapper + str + wrapperEnd,
         wrapBool = bool => boolWrapper + bool + wrapperEnd,
         wrapNull = str => nullWrapper + str + wrapperEnd;
 
@@ -98,6 +99,7 @@ export default function getAbstract(obj, {
         isArr = (type == '[object Array]'),
         isObj = (type == '[object Object]'),
         isNum = (type == '[object Number]'),
+        isRegExp = (type == '[object RegExp]'),
         isSymbol = (type == '[object Symbol]'),
         isBool = (type == '[object Boolean]');
 
@@ -107,6 +109,9 @@ export default function getAbstract(obj, {
     } else if (isStr)
     {
         json = wrapStr(util.escapeJsonStr(obj));
+    } else if (isRegExp)
+    {
+        json = wrapRegExp(util.escapeJsonStr(obj.toString()));
     } else if (isArr)
     {
         if (doStringify)
@@ -158,15 +163,6 @@ export default function getAbstract(obj, {
     } else if (obj === undefined)
     {
         json = wrapStr('undefined');
-    } else if (type === '[object HTMLAllCollection]')
-    {
-        // https://docs.webplatform.org/wiki/dom/HTMLAllCollection
-        // Might cause a performance issue when stringify a dom element.
-        json = wrapStr('[object HTMLAllCollection]');
-    } else if (type === '[object HTMLDocument]' && level > 1)
-    {
-        // Same as reason above.
-        json = wrapStr('[object HTMLDocument]');
     } else {
         try
         {
@@ -184,7 +180,7 @@ export default function getAbstract(obj, {
                 json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
-                json = wrapStr(obj);
+                json = type.replace(/(\[object )|]/g, '');
             }
         } catch (e)
         {

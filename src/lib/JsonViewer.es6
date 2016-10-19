@@ -84,12 +84,7 @@ function createEl(key, val, map, firstLevel = false)
         isUnenumerable = true;
     }
 
-    if (util.isArr(val))
-    {
-        type = 'array';
-        let lastVal = util.last(val);
-        if (util.isStr(lastVal) && util.startWith(lastVal, 'erudaJson')) id = lastVal;
-    }
+    if (util.isArr(val)) type = 'array';
 
     function wrapKey(key)
     {
@@ -110,7 +105,14 @@ function createEl(key, val, map, firstLevel = false)
     }
     if (util.isObj(val))
     {
-        if (val.erudaId) id = val.erudaId;
+        if (val.erudaId)
+        {
+            id = val.erudaId;
+        } else
+        {
+            id = util.uniqId('erudaJson');
+            val.erudaId = id;
+        }
         let circularId = val.erudaCircular;
         if (id) map[id] = val;
         let objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
@@ -140,7 +142,7 @@ function createEl(key, val, map, firstLevel = false)
                    <span class="eruda-function">${encode(val).replace('function', '')}</span>
                 </li>`;
     }
-    if (val === 'undefined' || val === 'Symbol')
+    if (val === 'undefined' || val === 'Symbol' || val === '(...)')
     {
         return `<li>
                    ${wrapKey(key)}
