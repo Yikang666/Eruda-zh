@@ -204,7 +204,8 @@ export default class Sources extends Tool
     }
     _renderJson()
     {
-        this._renderHtml(this._jsonTpl());
+        // Using cache will keep binding json events to the same elements.
+        this._renderHtml(this._jsonTpl(), false);
 
         var val = this._data.val;
 
@@ -221,9 +222,9 @@ export default class Sources extends Tool
     {
         this._renderHtml(this._iframeTpl({src: this._data.val}));
     }
-    _renderHtml(html)
+    _renderHtml(html, cache = true)
     {
-        if (html === this._lastHtml) return;
+        if (cache && html === this._lastHtml) return;
         this._lastHtml = html;
         this._$el.html(html);
         // Need setTimeout to make it work
