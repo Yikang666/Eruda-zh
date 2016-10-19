@@ -350,15 +350,13 @@ var {hostname, pathname} = window.location;
 
 function delCookie(key)
 {
-    util.cookie.remove(key);
-
     let hostNames = hostname.split('.'),
         pathNames = pathname.split('/'),
         domain = '',
         pathLen = pathNames.length,
         path;
 
-    let deleted = () => !util.cookie.get(key);
+    if (del()) return;
 
     for (let i = hostNames.length - 1; i >= 0; i--)
     {
@@ -367,25 +365,26 @@ function delCookie(key)
         domain = (domain === '') ? hostName : hostName + '.' + domain ;
 
         path = '/';
-        util.cookie.remove(key, {domain, path});
-        if (deleted()) return;
-        util.cookie.remove(key, {domain});
-        if (deleted()) return;
+        if (del({domain, path}) || del({domain})) return;
+
         for (let j = 0; j < pathLen; j++)
         {
             let pathName = pathNames[j];
             if (pathName === '') continue;
+
             path += pathName;
-            util.cookie.remove(key, {domain, path});
-            if (deleted()) return;
-            util.cookie.remove(key, {path});
-            if (deleted()) return;
+            if (del({domain, path}) || del({path})) return;
+
             path += '/';
-            util.cookie.remove(key, {domain, path});
-            if (deleted()) return;
-            util.cookie.remove(key, {path});
-            if (deleted()) return;
+            if (del({domain, path}) || del({path})) return;
         }
+    }
+
+    function del(options = {})
+    {
+        util.cookie.remove(key, options);
+
+        return !util.cookie.get(key);
     }
 }
 

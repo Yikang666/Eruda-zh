@@ -83,7 +83,7 @@ export default function stringify(obj, {
         if (isFn)
         {
             // We don't need these properties to display for functions.
-            names = names.filter(val => ['arguments', 'caller', 'prototype'].indexOf(val) < 0);
+            names = names.filter(val => ['arguments', 'caller'].indexOf(val) < 0);
         }
         json = '{ ';
         objAbstract = isFn ? getFnAbstract(obj) : type.replace(/(\[object )|]/g, '');
@@ -99,10 +99,7 @@ export default function stringify(obj, {
     } else if (isNum)
     {
         json = obj + '';
-        if (util.endWith(json, 'Infinity') || json === 'NaN')
-        {
-            json = `"${json}"`;
-        }
+        if (util.endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
     } else if (isBool)
     {
         json = obj ? 'true' : 'false';
@@ -180,14 +177,21 @@ export default function stringify(obj, {
 
         if (!getterVal && hasGetter)
         {
-            parts.push(`${getKey}: ${wrapStr(util.escapeJsonStr(extractFnHead(descriptor.get)))}`);
+            parts.push(`${getKey}: ${stringify(descriptor.get, passOpts)}`);
         } else
         {
-            parts.push(`${key}: ${stringify(topObj[name], passOpts)}`);
+            let val;
+            try {
+                val = topObj[name];
+            } catch(e)
+            {
+                val = e.message;
+            }
+            parts.push(`${key}: ${stringify(val, passOpts)}`);
         }
         if (hasSetter)
         {
-            parts.push(`${setKey}: ${wrapStr(util.escapeJsonStr(extractFnHead(descriptor.set)))}`);
+            parts.push(`${setKey}: ${stringify(descriptor.set, passOpts)}`);
         }
     }
 

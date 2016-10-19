@@ -19,26 +19,26 @@ export default class JsonViewer
     }
     _bindEvent()
     {
-        var map = this._map;
+        let map = this._map;
 
         this._$el.on('click', 'li', function (e)
         {
-            var $this = util.$(this),
-                circularId = $this.data('circular'),
+            let $this = util.$(this),
+                circularId = $this.data('object-id'),
                 $firstSpan = util.$(this).find('span').eq(0);
 
             if ($this.data('first-level')) return;
             if (circularId)
             {
                 $this.find('ul').html(jsonToHtml(map[circularId], map, false));
-                $this.rmAttr('data-circular');
+                $this.rmAttr('data-object-id');
             }
 
             if (!$firstSpan.hasClass('eruda-expanded')) return;
 
             e.stopImmediatePropagation();
 
-            var $ul = $this.find('ul').eq(0);
+            let $ul = $this.find('ul').eq(0);
             if ($firstSpan.hasClass('eruda-collapsed'))
             {
                 $firstSpan.rmClass('eruda-collapsed');
@@ -54,7 +54,7 @@ export default class JsonViewer
 
 function jsonToHtml(data, map, firstLevel)
 {
-    var ret = '';
+    let ret = '';
 
     for (let key in data)
     {
@@ -113,14 +113,16 @@ function createEl(key, val, map, firstLevel = false)
         if (val.erudaId) id = val.erudaId;
         let circularId = val.erudaCircular;
         if (id) map[id] = val;
-        var objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
+        let objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
 
-        var obj = `<li ${firstLevel ? 'data-first-level="true"' : ''} ${circularId ? 'data-circular="' + circularId + '"' : ''}>
+        let obj = `<li ${firstLevel ? 'data-first-level="true"' : ''} ${'data-object-id="' + (circularId ? circularId : id) + '"'}>
                        <span class="${firstLevel ? '' : 'eruda-expanded eruda-collapsed'}"></span>
                        ${wrapKey(key)}
                        <span class="eruda-open">${firstLevel ? '' : objAbstract}</span>
                        <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
-        obj += jsonToHtml(val, map);
+
+        let jsonHtml = jsonToHtml(val, map);
+        if (firstLevel) obj += jsonHtml;
 
         return obj + `</ul><span class="eruda-close"></span></li>`;
     }
