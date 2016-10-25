@@ -1,7 +1,7 @@
 var autoprefixer = require('autoprefixer'),
     classPrefix = require('postcss-class-prefix'),
     webpack = require('webpack'),
-    pkg = require('./package.json'),
+    pkg = require('../package.json'),
     path = require('path');
 
 var nodeModDir = path.resolve('./node_modules/') + '/',
@@ -15,7 +15,7 @@ module.exports = {
         port: 3000
     },
     output: {
-        path: __dirname,
+        path: path.resolve(__dirname, '../'),
         publicPath: "/assets/",
         filename: 'eruda.js',
         library: ['eruda'],

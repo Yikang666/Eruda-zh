@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 
-exports = require('./../webpack.config');
+exports = require('./webpack.dev');
 
 exports.output.filename = 'eruda.min.js';
 exports.devtool = false;
