@@ -211,8 +211,10 @@ export default class Sources extends Tool
 
         try {
             if (util.isStr(val)) val = JSON.parse(val);
-            new JsonViewer(val, this._$el.find('.eruda-json'));
+        /* eslint-disable no-empty */
         } catch (e) {}
+
+        new JsonViewer(val, this._$el.find('.eruda-json'));
     }
     _renderRaw()
     {

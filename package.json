@@ -4,9 +4,10 @@
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
   "scripts": {
-    "release": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
+    "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
     "dev": "webpack-dev-server --config script/webpack.dev.js",
     "cpTestLib": "script/cpTestLib.sh",
+    "lint": "eslint --ext .es6 src",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/Util_Api.md -t \"Eruda Util Documentation\""
   },
   "repository": {
@@ -23,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/liriliri/eruda/issues"
   },
-  "homepage": "https://github.com/liriliri/eruda#readme",
+  "homepage": "https://liriliri.github.io/eruda",
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "babel-core": "^6.6.5",

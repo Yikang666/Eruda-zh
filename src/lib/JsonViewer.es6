@@ -126,7 +126,7 @@ function createEl(key, val, map, firstLevel = false)
         let jsonHtml = jsonToHtml(val, map);
         if (firstLevel) obj += jsonHtml;
 
-        return obj + `</ul><span class="eruda-close"></span></li>`;
+        return obj + '</ul><span class="eruda-close"></span></li>';
     }
     if (util.isNum(val) || util.isBool(val))
     {

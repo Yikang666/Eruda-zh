@@ -178,6 +178,7 @@ export default class Network extends Tool
 
         var data = [];
 
+        /* eslint-disable no-unused-vars */
         var {
                 navigationStart,
                 unloadEventStart,

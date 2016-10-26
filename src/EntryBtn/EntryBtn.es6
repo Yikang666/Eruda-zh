@@ -84,7 +84,7 @@ export default class EntryBtn extends util.Emitter
             pos: getDefPos()
         }));
     }
-};
+}
 
 var getDefPos = () =>
 {

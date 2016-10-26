@@ -82,7 +82,7 @@ export default class Log
             }
         }
 
-        let msg = '', icon;
+        let msg = '', icon, err;
 
         switch (type)
         {
@@ -105,7 +105,7 @@ export default class Log
                 break;
             case 'error':
                 args = substituteStr(args);
-                let err = args[0];
+                err = args[0];
                 icon = 'times-circle';
                 err = util.isErr(err) ? err : new Error(formatMsg(args));
                 this.src = err;

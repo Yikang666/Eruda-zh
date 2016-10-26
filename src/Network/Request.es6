@@ -52,7 +52,7 @@ export default class Request extends util.Emitter
             resTxt: resTxt
         });
     }
-};
+}
 
 function getHeaders(xhr)
 {

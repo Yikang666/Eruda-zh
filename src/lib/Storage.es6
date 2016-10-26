@@ -8,6 +8,7 @@ var localStore = {
 
         try {
             val = JSON.parse(val);
+        /* eslint-disable no-empty */
         } catch (e) {}
 
         return val;
@@ -71,4 +72,4 @@ export default class Storage extends util.Emitter
 
         return this.save();
     }
-};
+}

@@ -15,10 +15,10 @@ export default function highlight(str, lang)
     {
         if (!val.language) return;
 
-        str = str.replace(val.re, function($1, $2, $3)
+        str = str.replace(val.re, function($1, $2)
         {
             subLangs[subLangSi++] = highlight($2, val.language);
-            return $1.replace($2, '___subtmpl'+ (subLangSi - 1) +'___');
+            return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
         });
     });
 
@@ -26,7 +26,7 @@ export default function highlight(str, lang)
     {
         if (language[val.language]) return;
 
-        str = str.replace(val.re, "___"+ key +"___$1___end"+ key +"___");
+        str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
     });
 
     var lvls = [];
@@ -49,13 +49,13 @@ export default function highlight(str, lang)
             return $0;
         }
 
-        return "";
+        return '';
     });
 
     util.each(lang, (val, key) =>
     {
-        str = str.replace(new RegExp("___end"+ key +"___","g"), "</span>")
-                 .replace(new RegExp("___"+ key +"___","g"), "<span style='"+ style[val.style] +"'>");
+        str = str.replace(new RegExp('___end' + key + '___', 'g'), '</span>')
+                 .replace(new RegExp('___' + key + '___', 'g'), '<span style="' + style[val.style] + '">');
     });
 
     util.each(lang, (val) =>
@@ -64,14 +64,14 @@ export default function highlight(str, lang)
 
         str = str.replace(/___subtmpl\d+___/g, function($tmpl)
         {
-            var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, "$1"), 10);
+            var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
 
             return subLangs[i];
         });
     });
 
     return str;
-};
+}
 
 var style = {
     comment: 'color:#63a35c;',

@@ -18,7 +18,7 @@ function formatStyle(style)
 
 var elProto = Element.prototype;
 
-var matchesSel = function (el, selText) { return false };
+var matchesSel = function () { return false };
 
 if (elProto.webkitMatchesSelector)
 {
@@ -55,6 +55,7 @@ export default class CssStore
                 // Mobile safari will throw DOM Exception 12 error, need to try catch it.
                 try {
                     matchesEl = this._elMatchesSel(cssRule.selectorText);
+                /* eslint-disable no-empty */
                 } catch (e) {}
 
                 if (!matchesEl) return;
@@ -72,4 +73,4 @@ export default class CssStore
     {
         return matchesSel(this._el, selText);
     }
-};
+}

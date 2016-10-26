@@ -85,4 +85,4 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         });
     }
-};
+}
