@@ -252,6 +252,7 @@ function canBeProto(obj)
 
 function getObjAbstract(obj)
 {
+    if (util.isArr(obj)) return `Array[${obj.length}]`;
     if (util.isFn(obj)) return getFnAbstract(obj);
     if (util.isRegExp(obj)) return obj.toString();
 

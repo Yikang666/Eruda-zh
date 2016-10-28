@@ -597,6 +597,20 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ getObjType ------------------------------ */
+
+    var getObjType = _.getObjType = (function ()
+    {
+        function exports(obj)
+        {
+            if (obj.constructor && obj.constructor.name) return obj.constructor.name;
+
+            return util.upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ identity ------------------------------ */
 
     var identity = _.identity = (function ()

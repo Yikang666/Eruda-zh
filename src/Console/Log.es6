@@ -348,7 +348,7 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${getObjType(val)} ${getAbstract(val)}`;
+    return `${util.getObjType(val)} ${getAbstract(val)}`;
 }
 
 function formatFn(val)
@@ -385,13 +385,6 @@ function getFrom()
     }
 
     return ret;
-}
-
-function getObjType(obj)
-{
-    if (obj.constructor && obj.constructor.name) return obj.constructor.name;
-
-    return util.upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
 }
 
 var padZero = (num) => util.lpad(util.toStr(num), 2, '0');

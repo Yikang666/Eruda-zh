@@ -44,21 +44,10 @@ export default function getAbstract(obj, {
         str = util.toStr(str);
 
         str = str.replace(/\\/g, '');
-        if (util.startWith(str, 'function'))
-        {
-            return fnWrapper + 'function' + wrapperEnd + ' ( )';
-        }
+
         if (util.contain(SPECIAL_VAL, str) || util.startWith(str, 'Array['))
         {
             return specialWrapper + strEscape(str) + wrapperEnd;
-        }
-        if (util.startWith(str, '[circular]'))
-        {
-            return specialWrapper + '[circular]' + wrapperEnd;
-        }
-        if (util.startWith(str, '[object '))
-        {
-            return specialWrapper + strEscape(str.replace(/(\[object )|]/g, '')) + wrapperEnd;
         }
 
         return strWrapper + strEscape(`"${str}"`) + wrapperEnd;
@@ -139,7 +128,7 @@ export default function getAbstract(obj, {
             json += parts.join(', ') + objEllipsis + ' }';
         } else
         {
-            json = wrapStr('Object');
+            json = util.getObjType(obj);
         }
     } else if (isNum)
     {
@@ -180,7 +169,7 @@ export default function getAbstract(obj, {
                 json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
-                json = type.replace(/(\[object )|]/g, '');
+                json = util.getObjType(obj);
             }
         } catch (e)
         {
