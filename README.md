@@ -2,7 +2,7 @@
     <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
 </a>
 
-[中文](https://github.com/liriliri/eruda/blob/master/doc/Readme_CH.md)
+[中文](https://github.com/liriliri/eruda/blob/master/doc/README_CH.md)
 
 # Eruda
 
@@ -33,14 +33,14 @@ javascript:(function () { var script = document.createElement('script'); script.
 
 ## Features
 
-* [Console](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#console): Display JavaScript logs.
-* [Elements](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#elements): Check dom state.
-* [Network](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#network): Show performance timing, ajax requests status.
-* [Resource](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#resources): Show localStorage, cookie information.
-* [Info](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#info): Show url, user agent info.
-* [Snippets](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#snippets): Include snippets used most often.
-* [Sources](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#sources): Html, js, css source viewer.
-* [Features](https://github.com/liriliri/eruda/blob/master/doc/Tool_Api.md#features): Browser feature detections.
+* [Console](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#console): Display JavaScript logs.
+* [Elements](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#elements): Check dom state.
+* [Network](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#network): Show performance timing, ajax requests status.
+* [Resource](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#resources): Show localStorage, cookie information.
+* [Info](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#info): Show url, user agent info.
+* [Snippets](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#snippets): Include snippets used most often.
+* [Sources](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#sources): Html, js, css source viewer.
+* [Features](https://github.com/liriliri/eruda/blob/master/doc/TOOL_API.md#features): Browser feature detections.
 
 ## Install
 
@@ -82,7 +82,7 @@ for example:
 
 When initialization, a configuration object can be passed in.
 
-* container: Container element. If not set, it will append a element directly
+* container: Container element. If not set, it will append an element directly
 under html root element.
 * tool: Choose which default tools you want, by default all will be added.
 
@@ -104,7 +104,7 @@ source code of plugins below to learn how to write your own custom tool panels.
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 
 > When writing plugins, you can use utilities exposed by Eruda, see
-[docs](https://github.com/liriliri/eruda/blob/master/doc/Util_Api.md) here.
+[docs](https://github.com/liriliri/eruda/blob/master/doc/UTIL_API.md) here.
 
 ## Related Projects
 
