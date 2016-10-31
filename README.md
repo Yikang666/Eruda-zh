@@ -106,6 +106,10 @@ source code of plugins below to learn how to write your own custom tool panels.
 > When writing plugins, you can use utilities exposed by Eruda, see
 [docs](https://github.com/liriliri/eruda/blob/master/doc/UTIL_API.md) here.
 
+## Contribution
+
+Read [Contributing Guide](https://github.com/liriliri/eruda/blob/master/doc/CONTRIBUTING.md) for development setup instructions.
+
 ## Related Projects
 
 * [eustia](https://github.com/liriliri/eustia): Generator of eruda's utility library.
