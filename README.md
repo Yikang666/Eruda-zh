@@ -114,8 +114,3 @@ Read [Contributing Guide](https://github.com/liriliri/eruda/blob/master/doc/CONT
 
 * [eustia](https://github.com/liriliri/eustia): Generator of eruda's utility library.
 * [freego](https://github.com/surunzi/freego): Http redirect proxy injecting eruda on every page.
-
-## License
-
-Eruda is released under the MIT license. Please see
-[LICENSE](https://opensource.org/licenses/MIT) for full details.
