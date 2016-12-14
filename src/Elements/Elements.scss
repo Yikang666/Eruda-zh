@@ -139,8 +139,8 @@
             .style-wrapper {
                 padding: $padding;
                 .style-rules {
+                    border-radius: $border-radius;
                     box-shadow: $box-shadow;
-                    border: 1px solid $gray;
                     padding: $padding;
                     background: #fff;
                     margin-bottom: 10px;

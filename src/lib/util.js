@@ -1382,15 +1382,27 @@ module.exports = (function ()
 
     /* ------------------------------ loadJs ------------------------------ */
 
-    var loadJs = _.loadJs = (function (exports)
+    var loadJs = _.loadJs = (function ()
     {
-        /* Inject script tag into page with given src value. TODO
+        /* Inject script tag into page with given src value.
+         *
+         * |Name|Type    |Desc           |
+         * |----|--------|---------------|
+         * |src |string  |Script source  |
+         * |cb  |function|Onload callback|
+         *
+         * ```javascript
+         * loadJs('main.js', function ()
+         * {
+         *     // Do something...
+         * });
+         * ```
          */
 
-        exports = function (url, cb)
+        function exports(src, cb)
         {
             var script = document.createElement('script');
-            script.src = url;
+            script.src = src;
             script.onload = function ()
             {
                 var isNotLoaded = script.readyState &&
@@ -1400,10 +1412,10 @@ module.exports = (function ()
                 cb && cb(!isNotLoaded);
             };
             document.body.appendChild(script);
-        };
+        }
 
         return exports;
-    })({});
+    })();
 
     /* ------------------------------ repeat ------------------------------ */
 
@@ -1536,7 +1548,20 @@ module.exports = (function ()
 
     var matcher = _.matcher = (function ()
     {
-        /* TODO
+        /* Return a predicate function that checks if attrs are contained in an object.
+         *
+         * |Name  |Type    |Desc                              |
+         * |------|--------|----------------------------------|
+         * |attrs |object  |Object of property values to match|
+         * |return|function|New predicate function            |
+         *
+         * ```javascript
+         * var objects = [
+         *     {a: 1, b: 2, c: 3 },
+         *     {a: 4, b: 5, c: 6 }
+         * ];
+         * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6 }]
+         * ```
          */
 
         function exports(attrs)
@@ -1789,7 +1814,7 @@ module.exports = (function ()
          *     {
          *         this.callSuper(People, 'initialize', arguments);
          *
-         *         this.school = school.
+         *         this.school = school;
          *     },
          *     introduce: function ()
          *     {
@@ -2797,11 +2822,23 @@ module.exports = (function ()
 
     var $ = _.$ = (function ()
     {
-        /* jQuery like style dom manipulator. TODO
+        /* jQuery like style dom manipulator.
+         *
+         * ### Available methods
+         *
+         * offset, hide, show, first, last, get, eq, on, off, html, text, val, css, attr,
+         * data, rmAttr, remove, addClass, rmClass, toggleClass, hasClass, append, prepend,
+         * before, after
          *
          * ```javascript
          * var $btn = $('#btn');
          * $btn.html('eustia');
+         * $btn.addClass('btn');
+         * $btn.show();
+         * $btn.on('click', function ()
+         * {
+         *     // Do something...
+         * });
          * ```
          */
 
@@ -3385,6 +3422,7 @@ module.exports = (function ()
          *
          * ```javascript
          * toInt(1.1); // -> 1
+         * toInt(undefined); // -> 0
          * ```
          */
 

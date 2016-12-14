@@ -5,6 +5,7 @@
     .info.tool {
         @include overflow-auto(y);
         li {
+            border-radius: $border-radius;
             background: #fff;
             margin: 10px;
             box-shadow: $box-shadow;

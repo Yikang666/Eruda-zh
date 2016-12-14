@@ -5,7 +5,7 @@
     .network {
         @include overflow-auto(y);
         .performance-timing {
-            padding: $padding;
+            padding: $padding 0;
             .inner-wrapper {
                 background: $blue;
                 .bar {
