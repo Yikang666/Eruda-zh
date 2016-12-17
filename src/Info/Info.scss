@@ -21,6 +21,14 @@
                 margin: 0;
                 user-select: text;
                 word-break: break-all;
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    th, td {
+                        border: 1px solid $gray-light;
+                        padding: 10px;
+                    }
+                }
             }
         }
     }

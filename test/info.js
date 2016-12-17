@@ -12,6 +12,11 @@ describe('default', function ()
     {
         expect($tool.find('.eruda-content').eq(1)).toContainText(navigator.userAgent);
     });
+
+    it('device', function ()
+    {
+        expect($tool.find('.eruda-content').eq(2)).toContainText(window.innerWidth);
+    });
 });
 
 describe('basic', function ()
