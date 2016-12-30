@@ -87,14 +87,21 @@ export default class Resources extends Tool
     }
     _refreshStorage(type)
     {
+        var store = util.safeStorage(type, false);
+
+        if (!store) return;
+
         var storeData = [];
 
         // Mobile safari is not able to loop through localStorage directly.
-        var store = JSON.parse(JSON.stringify(window[type + 'Storage']));
+        store = JSON.parse(JSON.stringify(store));
 
         util.each(store, (val, key) =>
         {
-            if (this._hideErudaSetting && util.startWith(key, 'eruda')) return;
+            if (this._hideErudaSetting)
+            {
+                if (util.startWith(key, 'eruda') || key === 'active-eruda') return;
+            }
 
             storeData.push({
                 key: key,

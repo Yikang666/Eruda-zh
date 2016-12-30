@@ -152,5 +152,7 @@ export default class DevTools extends util.Emitter
     }
 }
 
-var activeEruda = flag => window.localStorage.setItem('active-eruda', flag);
+var localStore = util.safeStorage('local');
+
+var activeEruda = flag => localStore.setItem('active-eruda', flag);
 

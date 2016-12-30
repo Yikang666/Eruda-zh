@@ -1,7 +1,7 @@
 import util from './util';
 
 var localStore = {
-    _storage: window.localStorage,
+    _storage: util.safeStorage('local'),
     get(key)
     {
         var val = this._storage.getItem(key);

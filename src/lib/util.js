@@ -389,7 +389,7 @@ module.exports = (function ()
 
     var idxOf = _.idxOf = (function ()
     {
-        /* Get the index at which the first occurrence of value. TODO
+        /* Get the index at which the first occurrence of value.
          *
          * |Name       |Type  |Desc                |
          * |-----------|------|--------------------|
@@ -404,7 +404,7 @@ module.exports = (function ()
 
         function exports(arr, val, fromIdx)
         {
-            return Array.prototype.indexOf.call(arr, val);
+            return Array.prototype.indexOf.call(arr, val, fromIdx);
         }
 
         return exports;
@@ -1577,6 +1577,92 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ memStorage ------------------------------ */
+
+    var memStorage = _.memStorage = (function (exports)
+    {
+        /* Memory-backed implementation of the Web Storage API.
+         *
+         * A replacement for environments where localStorage or sessionStorage is not available.
+         *
+         * ```javascript
+         * var localStorage = window.localStorage || memStorage;
+         * localStorage.setItem('test', 'eris');
+         * ```
+         */
+
+        exports = {
+            getItem: function (key)
+            {
+                return (API_KEYS[key] ? cloak[key] : this[key]) || null;
+            },
+            setItem: function (key, val)
+            {
+                API_KEYS[key] ? cloak[key] = val : this[key] = val;
+            },
+            removeItem: function (key)
+            {
+                API_KEYS[key] ? delete cloak[key] : delete this[key];
+            },
+            key: function (i)
+            {
+                var keys = enumerableKeys();
+
+                return i >= 0 && i < keys.length ? keys[i] : null;
+            },
+            clear: function ()
+            {
+                var keys = uncloakedKeys();
+
+                for (var i = 0, key; key = keys[i]; i++) delete this[key];
+
+                keys = cloakedKeys();
+
+                for (i = 0; key = keys[i]; i++) delete cloak[key];
+            }
+        };
+
+        Object.defineProperty(exports, 'length', {
+            enumerable: false,
+            configurable: true,
+            get: function ()
+            {
+                return enumerableKeys().length;
+            }
+        });
+
+        var cloak = {};
+
+        var API_KEYS = {
+            getItem: 1,
+            setItem: 1,
+            removeItem: 1,
+            key: 1,
+            clear: 1,
+            length: 1
+        };
+
+        function enumerableKeys()
+        {
+            return uncloakedKeys().concat(cloakedKeys());
+        }
+
+        function uncloakedKeys()
+        {
+            return keys(exports).filter(function (key)
+            {
+                return !API_KEYS[key];
+            });
+        }
+
+        function cloakedKeys()
+        {
+            return keys(cloak);
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ noop ------------------------------ */
 
     var noop = _.noop = (function ()
@@ -1616,32 +1702,32 @@ module.exports = (function ()
 
     var optimizeCb = _.optimizeCb = (function ()
     {
-        /* TODO
+        /* Used for function context binding.
          */
 
-        function exports(func, ctx, argCount)
+        function exports(fn, ctx, argCount)
         {
-            if (isUndef(ctx)) return func;
+            if (isUndef(ctx)) return fn;
 
             switch (argCount == null ? 3 : argCount)
             {
                 case 1: return function (val)
                 {
-                    return func.call(ctx, val);
+                    return fn.call(ctx, val);
                 };
                 case 3: return function (val, idx, collection)
                 {
-                    return func.call(ctx, val, idx, collection);
+                    return fn.call(ctx, val, idx, collection);
                 };
                 case 4: return function (accumulator, val, idx, collection)
                 {
-                    return func.call(ctx, accumulator, val, idx, collection);
+                    return fn.call(ctx, accumulator, val, idx, collection);
                 }
             }
 
             return function ()
             {
-                return func.apply(ctx, arguments);
+                return fn.apply(ctx, arguments);
             };
         }
 
@@ -1652,7 +1738,7 @@ module.exports = (function ()
 
     var safeCb = _.safeCb = (function (exports)
     {
-        /* Create callback based on input value. TODO
+        /* Create callback based on input value.
          */
 
         exports = function (val, ctx, argCount)
@@ -2473,7 +2559,32 @@ module.exports = (function ()
 
     var delegate = _.delegate = (function (exports)
     {
-        /* TODO
+        /* Event delegation.
+         *
+         * ### add
+         *
+         * Add event delegation.
+         *
+         * |Name    |Type    |Desc          |
+         * |--------|--------|--------------|
+         * |el      |element |Parent element|
+         * |type    |string  |Event type    |
+         * |selector|string  |Match selector|
+         * |cb      |function|Event callback|
+         *
+         * ### remove
+         *
+         * Remove event delegation.
+         *
+         * ```javascript
+         * var container = document.getElementById('container');
+         * function clickHandler()
+         * {
+         *     // Do something...
+         * }
+         * delegate.add(container, 'click', '.children', clickHandler);
+         * delegate.remove(container, 'click', '.children', clickHandler);
+         * ```
          */
 
         function retTrue()  { return true }
@@ -2629,13 +2740,15 @@ module.exports = (function ()
 
     var $event = _.$event = (function (exports)
     {
-        /* bind events to certain dom elements. TODO
+        /* bind events to certain dom elements.
          *
          * ```javascript
-         * $event.on('#test', 'click', function ()
+         * function clickHandler()
          * {
-         *     // ...
-         * });
+         *     // Do something...
+         * }
+         * $event.on('#test', 'click', clickHandler);
+         * $event.off('#test', 'click', clickHandler);
          * ```
          */
 
@@ -3383,6 +3496,42 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ safeStorage ------------------------------ */
+
+    var safeStorage = _.safeStorage = (function ()
+    {
+        function exports(type, memReplacement)
+        {
+            if (isUndef(memReplacement)) memReplacement = true;
+
+            var ret;
+
+            switch (type)
+            {
+                case 'local': ret = window.localStorage; break;
+                case 'session':  ret = window.sessionStorage; break;
+            }
+
+            try
+            {
+                // Safari private browsing
+                var x = 'test-localStorage-' + Date.now();
+                ret.setItem(x, x);
+                var y = ret.getItem(x);
+                ret.removeItem(x);
+                if (y !== x) throw new Error();
+            } catch (e)
+            {
+                if (memReplacement) return memStorage;
+                return;
+            }
+
+            return ret;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ stripHtmlTag ------------------------------ */
 
     var stripHtmlTag = _.stripHtmlTag = (function ()
@@ -3547,7 +3696,7 @@ module.exports = (function ()
          * |return|string|Converted string |
          *
          * ```javascript
-         * upperFirst('red'); // -> RED
+         * upperFirst('red'); // -> Red
          * ```
          */
 
