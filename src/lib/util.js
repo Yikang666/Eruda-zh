@@ -1037,7 +1037,7 @@ module.exports = (function ()
          * |Name  |Type  |Desc              |
          * |------|------|------------------|
          * |obj   |object|Destination object|
-         * |*src  |object|Sources objects   |
+         * |...src|object|Sources objects   |
          * |return|object|Destination object|
          *
          * ```javascript
@@ -1910,7 +1910,7 @@ module.exports = (function ()
          *     is: function (obj)
          *     {
          *         return obj instanceof Student;
-          *    }
+         *     }
          * });
          *
          * var a = new Student('allen', 17, 'Hogwarts');
@@ -1923,8 +1923,6 @@ module.exports = (function ()
         {
             return Base.extend(methods, statics);
         }
-
-        var regCallSuper = /callSuper/;
 
         function makeClass(parent, methods, statics)
         {

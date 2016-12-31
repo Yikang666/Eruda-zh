@@ -169,18 +169,21 @@
                     box-shadow: $box-shadow;
                     margin-bottom: 10px;
                     background: #fff;
+                    border-radius: $border-radius;
+                    overflow: hidden;
                     .listener-type {
                         padding: $padding;
                         background: $blue;
                         color: #fff;
                     }
-                    .listener-content li {
-                        @include overflow-auto(x);
-                        padding: $padding;
-                        border: 1px solid $gray;
-                        border-top: none;
-                        &.capture {
-                            background: $gray-light;
+                    .listener-content {
+                        li {
+                            @include overflow-auto(x);
+                            padding: $padding;
+                            border-top: none;
+                            &.capture {
+                                background: $gray-light;
+                            }
                         }
                     }
                 }

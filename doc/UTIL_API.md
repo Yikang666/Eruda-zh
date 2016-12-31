@@ -2,11 +2,23 @@
 
 ## $ 
 
-jQuery like style dom manipulator. TODO
+jQuery like style dom manipulator.
+
+### Available methods
+
+offset, hide, show, first, last, get, eq, on, off, html, text, val, css, attr,
+data, rmAttr, remove, addClass, rmClass, toggleClass, hasClass, append, prepend,
+before, after
 
 ```javascript
 var $btn = $('#btn');
 $btn.html('eustia');
+$btn.addClass('btn');
+$btn.show();
+$btn.on('click', function ()
+{
+    // Do something...
+});
 ```
 
 ## $attr 
@@ -148,13 +160,15 @@ $data('#test', 'attr1', 'eustia');
 
 ## $event 
 
-bind events to certain dom elements. TODO
+bind events to certain dom elements.
 
 ```javascript
-event.on('#test', 'click', function ()
+function clickHandler()
 {
-    // ...
-});
+    // Do something...
+}
+$event.on('#test', 'click', clickHandler);
+$event.off('#test', 'click', clickHandler);
 ```
 
 ## $insert 
@@ -294,19 +308,19 @@ var People = Class({
 var Student = People.extend({
     initialize: function (name, age, school)
     {
-        this.callSuper('initialize', name, age);
+        this.callSuper(People, 'initialize', arguments);
 
-        this.school = school.
+        this.school = school;
     },
     introduce: function ()
     {
-        return this.callSuper('introduce') + '\n I study at ' + this.school + '.'.
+        return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.'.
     }
 }, {
     is: function (obj)
     {
         return obj instanceof Student;
-   }
+    }
 });
 
 var a = new Student('allen', 17, 'Hogwarts');
@@ -523,7 +537,32 @@ defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood',
 
 ## delegate 
 
-TODO
+Event delegation.
+
+### add
+
+Add event delegation.
+
+|Name    |Type    |Desc          |
+|--------|--------|--------------|
+|el      |element |Parent element|
+|type    |string  |Event type    |
+|selector|string  |Match selector|
+|cb      |function|Event callback|
+
+### remove
+
+Remove event delegation.
+
+```javascript
+var container = document.getElementById('container');
+function clickHandler()
+{
+    // Do something...
+}
+delegate.add(container, 'click', '.children', clickHandler);
+delegate.remove(container, 'click', '.children', clickHandler);
+```
 
 ## each 
 
@@ -566,6 +605,10 @@ Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' charact
 escape('You & Me'); -> // -> 'You &amp; Me'
 ```
 
+## escapeJsonStr 
+
+No documentation.
+
 ## escapeRegExp 
 
 Escape special chars to be used as literals in RegExp constructors.
@@ -590,7 +633,7 @@ Copy all of the properties in the source objects over to the destination object.
 |Name  |Type  |Desc              |
 |------|------|------------------|
 |obj   |object|Destination object|
-|*src  |object|Sources objects   |
+|...src|object|Sources objects   |
 |return|object|Destination object|
 
 ```javascript
@@ -637,6 +680,10 @@ No documentation.
 
 No documentation.
 
+## getObjType 
+
+No documentation.
+
 ## has 
 
 Checks if key is a direct property.
@@ -666,7 +713,7 @@ identity('a'); // -> 'a'
 
 ## idxOf 
 
-Get the index at which the first occurrence of value. TODO
+Get the index at which the first occurrence of value.
 
 |Name       |Type  |Desc                |
 |-----------|------|--------------------|
@@ -964,7 +1011,19 @@ last([1, 2]); // -> 2
 
 ## loadJs 
 
-Inject script tag into page with given src value. TODO
+Inject script tag into page with given src value.
+
+|Name|Type    |Desc           |
+|----|--------|---------------|
+|src |string  |Script source  |
+|cb  |function|Onload callback|
+
+```javascript
+loadJs('main.js', function ()
+{
+    // Do something...
+});
+```
 
 ## lpad 
 
@@ -1017,7 +1076,31 @@ map([4, 8], function (n) { return n * n; }); // -> [16, 64]
 
 ## matcher 
 
-TODO
+Return a predicate function that checks if attrs are contained in an object.
+
+|Name  |Type    |Desc                              |
+|------|--------|----------------------------------|
+|attrs |object  |Object of property values to match|
+|return|function|New predicate function            |
+
+```javascript
+var objects = [
+    {a: 1, b: 2, c: 3 },
+    {a: 4, b: 5, c: 6 }
+];
+filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6 }]
+```
+
+## memStorage 
+
+Memory-backed implementation of the Web Storage API.
+
+A replacement for environments where localStorage or sessionStorage is not available.
+
+```javascript
+var localStorage = window.localStorage || memStorage;
+localStorage.setItem('test', 'eris');
+```
 
 ## noop 
 
@@ -1066,7 +1149,7 @@ initOnce(); // -> init is invoked once
 
 ## optimizeCb 
 
-TODO
+Used for function context binding.
 
 ## orientation 
 
@@ -1140,7 +1223,11 @@ rtrim('_abc_', ['c', '_']); // -> '_ab'
 
 ## safeCb 
 
-Create callback based on input value. TODO
+Create callback based on input value.
+
+## safeStorage 
+
+No documentation.
 
 ## slice 
 
@@ -1246,6 +1333,7 @@ Convert value to an integer.
 
 ```javascript
 toInt(1.1); // -> 1
+toInt(undefined); // -> 0
 ```
 
 ## toNum 
@@ -1303,7 +1391,7 @@ Generate a globally-unique id.
 |return|string|Globally-unique id|
 
 ```javascript
-uniqueId('eusita_'); // -> 'eustia_xxx'
+uniqId('eusita_'); // -> 'eustia_xxx'
 ```
 
 ## unique 
@@ -1330,7 +1418,7 @@ Convert the first character of string to upper case.
 |return|string|Converted string |
 
 ```javascript
-upperFirst('red'); // -> RED
+upperFirst('red'); // -> Red
 ```
 
 ## values 
@@ -1344,4 +1432,22 @@ Creates an array of the own enumerable property values of object.
 
 ```javascript
 values({one: 1, two: 2}); // -> [1, 2]
+```
+
+## wrap 
+
+Wrap the function inside a wrapper function, passing it as the first argument.
+
+|Name   |Type    |Desc            |
+|-------|--------|----------------|
+|fn     |*       |Function to wrap|
+|wrapper|function|Wrapper function|
+|return |function|New function    |
+
+```javascript
+var p = wrap(escape, function(fn, text)
+{
+    return '<p>' + fn(text) + '</p>';
+});
+p('You & Me'); // -> '<p>You &amp; Me</p>'
 ```

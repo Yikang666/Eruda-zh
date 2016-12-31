@@ -26,7 +26,7 @@
             }
         }
         .performance-timing-data {
-            padding: 0 10px 10px;
+            padding-bottom: $padding;
             text-align: center;
             display: none;
             table {
@@ -38,10 +38,13 @@
                     background: $gray;
                     text-align: left;
                     color: #fff;
+                    font-size: $font-size;
+                }
+                td {
+                    font-size: $font-size-s;
                 }
                 th, td {
                     padding: 10px;
-                    font-size: 14px;
                 }
             }
         }

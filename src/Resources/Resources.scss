@@ -28,6 +28,7 @@
             }
         }
         .link-list {
+            font-size: $font-size-s;
             li {
                 padding: 10px;
                 background: #fff;
@@ -39,6 +40,7 @@
         }
         .image-list {
             @include clear-float();
+            font-size: $font-size-s;
             background: #fff;
             padding: $padding !important;
             li {
@@ -58,6 +60,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            font-size: $font-size-s;
             td {
                 padding: 10px;
                 word-break: break-all;

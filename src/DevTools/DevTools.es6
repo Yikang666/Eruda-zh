@@ -100,8 +100,8 @@ export default class DevTools extends util.Emitter
         var cfg = this.config = config.create('eruda-dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
-            transparency: '100%',
-            displaySize: '100%',
+            transparency: '95%',
+            displaySize: '80%',
             tinyNavBar: false,
             activeEruda: false
         }));

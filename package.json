@@ -5,10 +5,10 @@
   "main": "eruda.js",
   "scripts": {
     "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
-    "dev": "webpack-dev-server --config script/webpack.dev.js",
+    "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "cpTestLib": "script/cpTestLib.sh",
     "lint": "eslint --ext .es6 src",
-    "utilDoc": "eustia doc src/lib/util.js -f md -o doc/Util_Api.md -t \"Eruda Util Documentation\""
+    "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIl_API.md -t \"Eruda Util Documentation\""
   },
   "repository": {
     "type": "git",
