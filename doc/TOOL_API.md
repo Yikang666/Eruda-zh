@@ -66,17 +66,45 @@ console.html('<span style="color:red">Red</span>');
 
 ## Elements
 
+Check dom element status.
+
+### Config
+
+|Name               |Type   |Desc                 |
+|-------------------|-------|---------------------|
+|overrideEventTarget|boolean|Catch Event Listeners|
+
 ## Network
+
+Display performance timing, resource timing and xhr requests.
+
+### Config
+
+|Name              |Type   |Desc                      |
+|------------------|-------|--------------------------|
+|disablePerformance|boolean|Disable Performance Timing|
+|hideXhrResource   |boolean|Hide Xhr Resource Timing  |
+|overrideXhr       |boolean|Catch Xhr Requests        |
 
 ## Resources
 
+LocalStorage, sessionStorage, cookies, scripts, styleSheets and images.
+
+### Config
+
+|Name            |Type   |Desc              |
+|----------------|-------|------------------|
+|hideErudaSetting|boolean|Hide Eruda Setting|
+
 ## Sources
+
+View json, html, js, css and http request detail.
 
 ## Info
 
-Display special information, could be used for displaying user info to track 
+Display special information, could be used for displaying user info to track
 user logs.
- 
+
 By default, page url and browser user agent is shown.
 
 ### clear
@@ -127,7 +155,7 @@ Add Snippet.
 |desc|string  |Snippet description     |
 
 ```javascript
-snippets.add('hello', function () 
+snippets.add('hello', function ()
 {
     console.log('Hello World!');
 }, 'Display hello on console');
@@ -147,10 +175,12 @@ snippets.remove('hello');
 
 ## Features
 
-Browser feature detections, thanks to 
+Browser feature detections, thanks to
 [modernizr](https://github.com/Modernizr/Modernizr) project.
 
-Red means unsupported, otherwise ok. All buttons is linked directly to 
+Red means unsupported, otherwise ok. All buttons is linked directly to
 related materials in [Can I Use](http://caniuse.com/) website.
 
 ## Settings
+
+Customization for all tools.
