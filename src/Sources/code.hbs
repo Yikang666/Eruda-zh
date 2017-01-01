@@ -5,12 +5,12 @@
                 <tr>
                     <td class="eruda-gutter">
                         {{#each code}}
-                            <div class="eruda-line-num">{{@key}}</div>
+                            <div class="eruda-line-num">{{idx}}</div>
                         {{/each}}
                     </td>
                     <td class="eruda-content">
                         {{#each code}}
-                            <pre class="eruda-code-line">{{{.}}}</pre>
+                            <pre class="eruda-code-line">{{{val}}}</pre>
                         {{/each}}
                     </td>
                 </tr>

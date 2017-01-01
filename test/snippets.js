@@ -7,9 +7,15 @@ describe('default', function ()
     {
         expect($tool.find('.eruda-name').eq(0)).toContainText('Border All');
     });
+
     it('refresh page', function ()
     {
         expect($tool.find('.eruda-name').eq(1)).toContainText('Refresh Page');
+    });
+
+    it('search text', function ()
+    {
+        expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text');
     });
 });
 

@@ -233,11 +233,14 @@ export default class Sources extends Tool
 
         if (this._showLineNum)
         {
-            code = code.split('\n').map(line =>
+            code = code.split('\n').map((line, idx) =>
             {
-                if (util.trim(line) === '') return '&nbsp;';
+                if (util.trim(line) === '') line = '&nbsp;';
 
-                return line;
+                return {
+                    idx: idx + 1,
+                    val: line
+                };
             });
         }
 
