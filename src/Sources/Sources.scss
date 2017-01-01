@@ -4,15 +4,36 @@
 .dev-tools { .tools {
     .sources {
         @include overflow-auto(y);
-        .code, .raw {
+        .code-wrapper, .raw-wrapper {
             @include overflow-auto(x);
+            width: 100%;
             background: #fff;
-            padding: $padding;
             min-height: 100%;
+        }
+        .raw {
+            padding: $padding;
         }
         .code {
             font-family: $font-family-code;
             font-size: $font-size-s;
+        }
+        pre.code {
+            padding: $padding;
+        }
+        table.code {
+            border-collapse: collapse;
+            .gutter {
+                background: $gray-light;
+                color: $gray;
+            }
+            .line-num {
+                border-right: 1px solid $gray;
+                padding: 0 3px 0 5px;
+                text-align: right;
+            }
+            .code-line {
+                padding: 0 4px;
+            }
         }
         .image {
             .breadcrumb {

@@ -100,6 +100,13 @@ LocalStorage, sessionStorage, cookies, scripts, styleSheets and images.
 
 View json, html, js, css and http request detail.
 
+### Config
+
+|Name       |Type   |Desc             |
+|-----------|-------|-----------------|
+|showLineNum|boolean|Show Line Numbers|
+|formatCode |boolean|Beautify Code    |
+
 ## Info
 
 Display special information, could be used for displaying user info to track

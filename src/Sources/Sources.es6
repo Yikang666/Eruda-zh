@@ -3,6 +3,7 @@ import util from '../lib/util'
 import beautify from 'js-beautify'
 import highlight from '../lib/highlight.es6'
 import JsonViewer from '../lib/JsonViewer.es6'
+import config from '../lib/config.es6'
 
 export default class Sources extends Tool
 {
@@ -13,6 +14,8 @@ export default class Sources extends Tool
         util.evalCss(require('./Sources.scss'));
 
         this.name = 'sources';
+        this._showLineNum = true;
+        this._formatCode = true;
 
         this._loadTpl();
     }
@@ -22,6 +25,7 @@ export default class Sources extends Tool
 
         this._parent = parent;
         this._bindEvent();
+        this._initConfig();
     }
     set(type, val)
     {
@@ -29,9 +33,9 @@ export default class Sources extends Tool
         {
             this._isFetchingData = true;
 
-            var img = new Image();
+            let img = new Image();
 
-            var self = this;
+            let self = this;
 
             img.onload = function ()
             {
@@ -110,7 +114,7 @@ export default class Sources extends Tool
 
         this._$el.on('click', '.eruda-http .eruda-response', () =>
         {
-            var data = this._data.val,
+            let data = this._data.val,
                 resTxt = data.resTxt;
 
             switch (data.subType)
@@ -135,11 +139,38 @@ export default class Sources extends Tool
         this._rawTpl = require('./raw.hbs');
         this._iframeTpl = require('./iframe.hbs');
     }
+    _initConfig()
+    {
+        let cfg = this.config = config.create('eruda-sources');
+
+        cfg.set(util.defaults(cfg.get(), {
+            'showLineNum': true,
+            'formatCode': true
+        }));
+
+        if (!cfg.get('showLineNum')) this._showLineNum = false;
+        if (!cfg.get('formatCode')) this._formatCode = false;
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'showLineNum': this._showLineNum = val; return;
+                case 'formatCode': this._formatCode = val; return;
+            }
+        });
+
+        var settings = this._parent.get('settings');
+        settings.text('Sources')
+                .switch(cfg, 'showLineNum', 'Show Line Numbers')
+                .switch(cfg, 'formatCode', 'Beautify Code')
+                .separator();
+    }
     _render()
     {
         this._isInit = true;
 
-        var data = this._data;
+        let data = this._data;
 
         switch (data.type)
         {
@@ -165,7 +196,7 @@ export default class Sources extends Tool
     }
     _renderHttp()
     {
-        var val = this._data.val;
+        let val = this._data.val;
 
         if (val.resTxt.trim() === '') delete val.resTxt;
         if (util.isEmpty(val.resHeaders)) delete val.resHeaders;
@@ -174,12 +205,12 @@ export default class Sources extends Tool
     }
     _renderCode()
     {
-        var data = this._data;
+        let data = this._data;
 
-        var code = data.val;
+        let code = data.val;
 
         // If source code too big, don't process it.
-        if (data.val.length < 100000)
+        if (data.val.length < 100000 && this._formatCode)
         {
             switch (data.type)
             {
@@ -200,16 +231,30 @@ export default class Sources extends Tool
             code = util.escape(code);
         }
 
-        this._renderHtml(this._codeTpl({code: code}));
+        if (this._showLineNum)
+        {
+            code = code.split('\n').map(line =>
+            {
+                if (util.trim(line) === '') return '&nbsp;';
+
+                return line;
+            });
+        }
+
+        this._renderHtml(this._codeTpl({
+            code,
+            showLineNum: this._showLineNum
+        }));
     }
     _renderJson()
     {
         // Using cache will keep binding json events to the same elements.
         this._renderHtml(this._jsonTpl(), false);
 
-        var val = this._data.val;
+        let val = this._data.val;
 
-        try {
+        try
+        {
             if (util.isStr(val)) val = JSON.parse(val);
         /* eslint-disable no-empty */
         } catch (e) {}

@@ -275,7 +275,7 @@ export default class Resources extends Tool
     }
     _initConfig()
     {
-        var cfg = this.config = config.create('eruda-resources');
+        let cfg = this.config = config.create('eruda-resources');
 
         cfg.set(util.defaults(cfg.get(), {
             hideErudaSetting: true

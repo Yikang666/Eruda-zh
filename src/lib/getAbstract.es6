@@ -24,7 +24,6 @@ export default function getAbstract(obj, {
         doStringify = level === 0;
 
     let keyWrapper = '<span style="color: #a71d5d;">',
-        fnWrapper = '<span style="color: #a71d5d;">',
         numWrapper = '<span style="color: #0086b3;">',
         nullWrapper = '<span style="color: #0086b3;">',
         strWrapper = '<span style="color: #183691;">',
