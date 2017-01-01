@@ -45,9 +45,9 @@ export default class Elements extends Tool
     }
     overrideEventTarget()
     {
-        var winEventProto = getWinEventProto();
+        let winEventProto = getWinEventProto();
 
-        var origAddEvent = this._origAddEvent = winEventProto.addEventListener,
+        let origAddEvent = this._origAddEvent = winEventProto.addEventListener,
             origRmEvent = this._origRmEvent = winEventProto.removeEventListener;
 
         winEventProto.addEventListener = function (type, listener, useCapture)
@@ -64,7 +64,7 @@ export default class Elements extends Tool
     }
     restoreEventTarget()
     {
-        var winEventProto = getWinEventProto();
+        let winEventProto = getWinEventProto();
 
         if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
         if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
@@ -149,7 +149,7 @@ export default class Elements extends Tool
             !isElExist(el) ? self._render() : self._setElAndRender(el);
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
-        var $bottomBar = this._$el.find('.eruda-bottom-bar');
+        let $bottomBar = this._$el.find('.eruda-bottom-bar');
 
         $bottomBar.on('click', '.eruda-refresh', () => this._render())
                   .on('click', '.eruda-highlight', () => this._toggleHighlight())
@@ -175,7 +175,7 @@ export default class Elements extends Tool
     }
     _toggleSelect()
     {
-        var select = this._select;
+        let select = this._select;
 
         this._$el.find('.eruda-select').toggleClass('eruda-active');
         if (!this._selectElement && !this._highlightElement) this._toggleHighlight();
@@ -198,9 +198,9 @@ export default class Elements extends Tool
         this._highlight.setEl(el);
         this._rmDefComputedStyle = true;
 
-        var parentQueue = [];
+        let parentQueue = [];
 
-        var parent = el.parentNode;
+        let parent = el.parentNode;
         while (parent)
         {
             parentQueue.push(parent);
@@ -215,29 +215,29 @@ export default class Elements extends Tool
     }
     _getData()
     {
-        var ret = {};
+        let ret = {};
 
-        var el = this._curEl,
+        let el = this._curEl,
             cssStore = this._curCssStore;
 
-        var {className, id, attributes, tagName} = el;
+        let {className, id, attributes, tagName} = el;
 
         ret.parents = getParents(el);
         ret.children = formatChildNodes(el.childNodes);
         ret.attributes = formatAttr(attributes);
         ret.name = formatElName({tagName, id, className, attributes});
 
-        var events = el.erudaEvents;
+        let events = el.erudaEvents;
         if (events && util.keys(events).length !== 0) ret.listeners = events;
 
         if (needNoStyle(tagName)) return ret;
 
-        var computedStyle = cssStore.getComputedStyle();
+        let computedStyle = cssStore.getComputedStyle();
         if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
         processStyleRules(computedStyle);
         ret.computedStyle = computedStyle;
 
-        var styles = cssStore.getMatchedCSSRules();
+        let styles = cssStore.getMatchedCSSRules();
         styles.unshift(getInlineStyle(el.style));
         styles.forEach(style => processStyleRules(style.style));
         ret.styles = styles;
@@ -259,7 +259,7 @@ export default class Elements extends Tool
     }
     _initConfig()
     {
-        var cfg = this.config = config.create('eruda-elements');
+        let cfg = this.config = config.create('eruda-elements');
 
         cfg.set(util.defaults(cfg.get(), {overrideEventTarget: true}));
 
@@ -273,7 +273,7 @@ export default class Elements extends Tool
             }
         });
 
-        var settings = this._parent.get('settings');
+        let settings = this._parent.get('settings');
         settings.text('Elements')
                 .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
                 .separator();
@@ -298,9 +298,9 @@ const isElExist = val => util.isEl(val) && val.parentNode;
 
 function formatElName(data, {noAttr = false} = {})
 {
-    var {id, className, attributes} = data;
+    let {id, className, attributes} = data;
 
-    var ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`;
+    let ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`;
 
     if (id !== '') ret += `#${id}`;
 
@@ -340,7 +340,7 @@ var formatAttr = attributes => util.map(attributes, attr =>
 
 function formatChildNodes(nodes)
 {
-    var ret = [];
+    let ret = [];
 
     for (let i = 0, len = nodes.length; i < len; i++)
     {
@@ -377,7 +377,7 @@ function formatChildNodes(nodes)
 
 function getParents(el)
 {
-    var ret = [],
+    let ret = [],
         i = 0,
         parent = el.parentNode;
 
@@ -396,14 +396,14 @@ function getParents(el)
 
 function getInlineStyle(style)
 {
-    var ret = {
+    let ret = {
         selectorText: 'element.style',
         style: {}
     };
 
     for (let i = 0, len = style.length; i < len; i++)
     {
-        var s = style[i];
+        let s = style[i];
 
         ret.style[s] = style[s];
     }
@@ -415,7 +415,7 @@ var defComputedStyle = require('./defComputedStyle.json');
 
 function rmDefComputedStyle(computedStyle)
 {
-    var ret = {};
+    let ret = {};
 
     util.each(computedStyle, (val, key) =>
     {
@@ -435,7 +435,7 @@ function addEvent(el, type, listener, useCapture = false)
 {
     if (!util.isFn(listener) || !util.isBool(useCapture)) return;
 
-    var events = el.erudaEvents = el.erudaEvents || {};
+    let events = el.erudaEvents = el.erudaEvents || {};
 
     events[type] = events[type] || [];
     events[type].push({
@@ -449,11 +449,11 @@ function rmEvent(el, type, listener, useCapture = false)
 {
     if (!util.isFn(listener) || !util.isBool(useCapture)) return;
 
-    var events = el.erudaEvents;
+    let events = el.erudaEvents;
 
     if (!(events && events[type])) return;
 
-    var listeners = events[type];
+    let listeners = events[type];
 
     for (let i = 0, len = listeners.length; i < len; i++)
     {
@@ -468,6 +468,6 @@ function rmEvent(el, type, listener, useCapture = false)
     if (util.keys(events).length === 0) delete el.erudaEvents;
 }
 
-var getWinEventProto = () => (window.EventTarget && window.EventTarget.prototype) || window.Node.prototype;
+var getWinEventProto = () => util.safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
 
-let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;
+var wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;

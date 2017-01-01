@@ -32,3 +32,11 @@
     }
 } }
 
+.search-highlight-block {
+    display: inline;
+    .keyword {
+        background: $yellow;
+        color: #fff;
+    }
+}
+

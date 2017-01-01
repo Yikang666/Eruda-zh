@@ -1,20 +1,9 @@
 import util from '../lib/util'
 
-var borderCss = '',
-    selector = 'html',
-    colors = ['f5f5f5', 'dabb3a', 'abc1c7', '472936', 'c84941', '296dd1', '67adb4', '1ea061'];
-
-util.each(colors, function (color, idx)
-{
-    selector += (idx === 0) ? '>*:not([class^="eruda-"])' : '>*';
-
-    borderCss += selector + `{border: 2px solid #${color} !important}`;
-});
-
 export default [
     {
         name: 'Border All',
-        fn: function ()
+        fn()
         {
             util.evalCss(borderCss);
         },
@@ -22,22 +11,80 @@ export default [
     },
     {
         name: 'Refresh Page',
-        fn: function ()
+        fn()
         {
-            var url = window.location.href;
+            let url = new util.Url();
+            url.setQuery('timestamp', util.now());
 
-            window.location.replace(query(url, 'timestamp', util.now()));
+            window.location.replace(url.toString());
         },
         desc: 'Add timestamp to url and refresh'
+    },
+    {
+        name: 'Search Text',
+        fn()
+        {
+            var keyword = prompt('Enter the text');
+
+            search(keyword);
+        },
+        desc: 'Highlight given text on page'
     }
 ];
 
-function query(uri, key, val)
+var borderCss = '',
+    selector = 'html',
+    colors = ['f5f5f5', 'dabb3a', 'abc1c7', '472936', 'c84941', '296dd1', '67adb4', '1ea061'];
+
+util.each(colors, (color, idx) =>
 {
-    var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i'),
-        separator = uri.indexOf('?') !== -1 ? '&' : '?';
+    selector += (idx === 0) ? '>*:not([class^="eruda-"])' : '>*';
 
-    if (uri.match(re)) return uri.replace(re, '$1' + key + '=' + val + '$2');
+    borderCss += selector + `{border: 2px solid #${color} !important}`;
+});
 
-    return uri + separator + key + '=' + val;
+function search(text)
+{
+    let root = document.documentElement,
+        regText = new RegExp(text, 'ig');
+
+    traverse(root, node =>
+    {
+        let $node = util.$(node);
+
+        if (!$node.hasClass('eruda-search-highlight-block')) return;
+
+        return document.createTextNode($node.text());
+    });
+
+    traverse(root, node =>
+    {
+        if (node.nodeType !== 3) return;
+
+        let val = node.nodeValue;
+        val = val.replace(regText, match => `<span class="eruda-keyword">${match}</span>`);
+        if (val === node.nodeValue) return;
+
+        let $ret = util.$(document.createElement('div'));
+
+        $ret.html(val);
+        $ret.addClass('eruda-search-highlight-block');
+
+        return $ret.get(0);
+    });
+}
+
+function traverse(root, processor)
+{
+    let childNodes = root.childNodes;
+
+    if (util.isErudaEl(root)) return;
+
+    for (let i = 0, len = childNodes.length; i < len; i++)
+    {
+        let newNode = traverse(childNodes[i], processor);
+        if (newNode) root.replaceChild(newNode, childNodes[i]);
+    }
+
+    return processor(root);
 }
