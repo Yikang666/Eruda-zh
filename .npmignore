@@ -5,7 +5,9 @@
 /test/
 /doc/
 /script/
+.editorconfig
+.eslintrc.json
+LICENSE
 .gitignore
 .eustia
 .npmignore
-webpack.config.js
