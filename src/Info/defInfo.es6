@@ -13,11 +13,11 @@ export default [
                   <tbody>
                       <tr>
                           <td>screen</td>
-                          <td>${screen.width}px * ${screen.height}px</td>
+                          <td>${screen.width} * ${screen.height}</td>
                       </tr>
                       <tr>
                           <td>viewport</td>
-                          <td>${window.innerWidth}px * ${window.innerHeight}px</td>
+                          <td>${window.innerWidth} * ${window.innerHeight}</td>
                       </tr>
                       <tr>
                           <td>pixel ratio</td>
