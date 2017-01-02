@@ -15,6 +15,9 @@
         <li>
             <a href="#" id="issue17">#17</a>
         </li>
+        <li>
+            <a href="#" id="plugin">Plugin</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -36,6 +39,22 @@
         });
         var a = new A();
         console.log(a);
+    });
+    addClickEvent('plugin', function ()
+    {
+        eruda.add({name: 'test'});
+        eruda.add(function (eruda)
+        {
+            console.log(eruda);
+            return {
+                name: 'test2',
+                init: function ($el)
+                {
+                    this._$el = $el;
+                    this._$el.html('This is the new plugin');
+                }
+            };
+        });
     });
 </script>
 <script>boot();</script>

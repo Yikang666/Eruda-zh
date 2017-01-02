@@ -19,8 +19,11 @@ export default class NavBar extends util.Emitter
     }
     add(name)
     {
+        let $bottomBar = this._$bottomBar;
+
         this._len++;
         this._$ul.prepend(`<li class="${name}" ontouchstart>${name}</li>`);
+        $bottomBar.css('left', util.pxToNum($bottomBar.css('left')) + ITEM_WIDTH);
         this._resetStyle();
     }
     setHeight(height)
@@ -39,7 +42,7 @@ export default class NavBar extends util.Emitter
             if ($this.text() === name)
             {
                 $this.addClass('eruda-active');
-                self._$bottomBar.css({left: ITEM_WIDTH * idx});
+                self._$bottomBar.css('left', ITEM_WIDTH * idx);
             } else
             {
                 $this.rmClass('eruda-active');

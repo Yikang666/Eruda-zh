@@ -32,6 +32,8 @@ module.exports = {
     },
     add(tool)
     {
+        if (util.isFn(tool)) tool = tool(this);
+
         this._devTools.add(tool);
 
         return this;
