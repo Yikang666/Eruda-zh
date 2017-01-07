@@ -29,6 +29,16 @@ export default [
             search(keyword);
         },
         desc: 'Highlight given text on page'
+    },
+    {
+        name: 'Edit Page',
+        fn()
+        {
+            let body = document.body;
+
+            body.contentEditable = body.contentEditable !== 'true';
+        },
+        desc: 'Toggle body contentEditable'
     }
 ];
 

@@ -62,7 +62,8 @@ module.exports = {
 
         Object.assign(el, {
             id: 'eruda',
-            className: 'eruda-container'
+            className: 'eruda-container',
+            contentEditable: false
         });
 
         this._$el = util.$(el);

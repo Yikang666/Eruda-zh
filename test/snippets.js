@@ -17,6 +17,11 @@ describe('default', function ()
     {
         expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text');
     });
+
+    it('edit page', function ()
+    {
+        expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page');
+    });
 });
 
 describe('basic', function ()
