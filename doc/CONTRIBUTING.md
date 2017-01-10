@@ -24,7 +24,6 @@ npm run build
 
 ## Project Structure
 
-- **dev**: development related files.
 - **doc**: documents.
 - **eustia**: eustia extended utilties.
 - **script**: webpack configuration, and some other useful scripts.

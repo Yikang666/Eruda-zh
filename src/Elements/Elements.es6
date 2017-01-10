@@ -43,6 +43,13 @@ export default class Elements extends Tool
         if (!this._curEl) this._setEl(this._htmlEl);
         this._render();
     }
+    set(e)
+    {
+        this._setEl(e);
+        this._render();
+
+        return this;
+    }
     overrideEventTarget()
     {
         let winEventProto = getWinEventProto();
@@ -78,7 +85,7 @@ export default class Elements extends Tool
 
         while (!isElExist(parent)) parent = parentQueue.shift();
 
-        this._setElAndRender(parent);
+        this.set(parent);
     }
     _bindEvent()
     {
@@ -115,7 +122,7 @@ export default class Elements extends Tool
                 return;
             }
 
-            !isElExist(el) ? self._render() : self._setElAndRender(el);
+            !isElExist(el) ? self._render() : self.set(el);
         }).on('click', '.eruda-listener-content', function ()
         {
             let text = util.$(this).text(),
@@ -146,7 +153,7 @@ export default class Elements extends Tool
 
             while (idx-- && el.parentNode) el = el.parentNode;
 
-            !isElExist(el) ? self._render() : self._setElAndRender(el);
+            !isElExist(el) ? self._render() : self.set(el);
         }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         let $bottomBar = this._$el.find('.eruda-bottom-bar');
@@ -154,9 +161,9 @@ export default class Elements extends Tool
         $bottomBar.on('click', '.eruda-refresh', () => this._render())
                   .on('click', '.eruda-highlight', () => this._toggleHighlight())
                   .on('click', '.eruda-select', () => this._toggleSelect())
-                  .on('click', '.eruda-reset', () => this._setElAndRender(this._htmlEl));
+                  .on('click', '.eruda-reset', () => this.set(this._htmlEl));
 
-        select.on('select', target => this._setElAndRender(target));
+        select.on('select', target => this.set(target));
     }
     _toggleAllComputedStyle()
     {
@@ -207,11 +214,6 @@ export default class Elements extends Tool
             parent = parent.parentNode;
         }
         this._curParentQueue = parentQueue;
-    }
-    _setElAndRender(e)
-    {
-        this._setEl(e);
-        this._render();
     }
     _getData()
     {

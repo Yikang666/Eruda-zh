@@ -74,6 +74,14 @@ Check dom element status.
 |-------------------|-------|---------------------|
 |overrideEventTarget|boolean|Catch Event Listeners|
 
+### set
+
+Set dom element to show.
+
+|Name|Type   |Desc              |
+|----|-------|------------------|
+|el  |element|Element to display|
+
 ## Network
 
 Display performance timing, resource timing and xhr requests.
