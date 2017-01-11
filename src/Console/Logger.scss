@@ -59,6 +59,7 @@
             .log-content
             {
                 @include overflow-auto(x);
+                white-space: pre-wrap;
                 line-height: 20px;
             }
             &.input {
