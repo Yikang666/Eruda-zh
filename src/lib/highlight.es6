@@ -29,22 +29,22 @@ export default function highlight(str, lang)
         str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
     });
 
-    var lvls = [];
+    var levels = [];
 
     str = str.replace(/___(?!subtmpl)\w+?___/g, function($0)
     {
         var end = $0.substr(3, 3) === 'end',
-            tag = (!end? $0.substr(3) : $0.substr(6)).replace(/_/g,''),
-            lastTag = lvls.length > 0 ? lvls[lvls.length - 1] : null;
+            tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g,''),
+            lastTag = levels.length > 0 ? levels[levels.length - 1] : null;
 
         if(!end && (lastTag == null || tag == lastTag || (lastTag != null && lang[lastTag] && lang[lastTag].embed != undefined && lang[lastTag].embed.indexOf(tag) > -1)))
         {
-            lvls.push(tag);
+            levels.push(tag);
 
             return $0;
         } else if(end && tag == lastTag)
         {
-            lvls.pop();
+            levels.pop();
 
             return $0;
         }
@@ -87,7 +87,6 @@ language.js = {
     comment: {re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g, style: 'comment'},
     string: {re: /(('.*?')|(".*?"))/g, style: 'string'},
     numbers: {re: /(\-?(\d+|\d+\.\d+|\.\d+))/g, style: 'number'},
-    regex: {re: /([^\/]\/[^\/].+\/(g|i|m)*)/g, style: 'number'},
     keywords: {re: /(?:\b)(function|for|foreach|while|if|else|elseif|switch|break|as|return|this|class|self|default|var|false|true|null|undefined)(?:\b)/gi, style: 'keyword'},
     operators: {re: /(\+|\-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g, style: 'operators'}
 };
