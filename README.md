@@ -60,17 +60,17 @@ Add this script to your page.
 It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [cdnjs](https://cdnjs.com/libraries/eruda).
 
 ```html
-<script src="//cdn.jsdelivr.net/eruda/1.0.5/eruda.min.js"></script>
+<script src="//cdn.jsdelivr.net/eruda/1.2.0/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
-The JavaScript file size is quite huge(about 80kb gzipped) and therefore not
+The JavaScript file size is quite huge(about 90kb gzipped) and therefore not
 suitable to include in mobile pages. It's recommended to make sure eruda is
 loaded only when eruda is set to true on url(http://example.com/?eruda=true),
 for example:
 
 ```javascript
-(function () {
+;(function () {
     var src = 'node_modules/eruda/eruda.min.js';
     if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
     document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
@@ -103,7 +103,7 @@ source code of plugins below to learn how to write your own custom tool panels.
 
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 
-> When writing plugins, you can use utilities exposed by Eruda, see
+When writing plugins, you can use utilities exposed by Eruda, see
 [docs](doc/UTIL_API.md) here.
 
 ## Contribution
