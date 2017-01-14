@@ -597,6 +597,32 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ upperFirst ------------------------------ */
+
+    var upperFirst = _.upperFirst = (function ()
+    {
+        /* Convert the first character of string to upper case.
+         *
+         * |Name  |Type  |Desc             |
+         * |------|------|-----------------|
+         * |str   |string|String to convert|
+         * |return|string|Converted string |
+         *
+         * ```javascript
+         * upperFirst('red'); // -> Red
+         * ```
+         */
+
+        function exports(str)
+        {
+            if (str.length < 1) return str;
+
+            return str[0].toUpperCase() + str.slice(1);
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ getObjType ------------------------------ */
 
     var getObjType = _.getObjType = (function ()
@@ -605,7 +631,7 @@ module.exports = (function ()
         {
             if (obj.constructor && obj.constructor.name) return obj.constructor.name;
 
-            return util.upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
+            return upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
         }
 
         return exports;
@@ -4017,32 +4043,6 @@ module.exports = (function ()
         function isEqual(a, b)
         {
             return a === b;
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ upperFirst ------------------------------ */
-
-    var upperFirst = _.upperFirst = (function ()
-    {
-        /* Convert the first character of string to upper case.
-         *
-         * |Name  |Type  |Desc             |
-         * |------|------|-----------------|
-         * |str   |string|String to convert|
-         * |return|string|Converted string |
-         *
-         * ```javascript
-         * upperFirst('red'); // -> Red
-         * ```
-         */
-
-        function exports(str)
-        {
-            if (str.length < 1) return str;
-
-            return str[0].toUpperCase() + str.slice(1);
         }
 
         return exports;
