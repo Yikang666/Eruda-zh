@@ -236,7 +236,7 @@ function formatErr(err)
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
-    return msg + stack.replace(regJsUrl, '<a href="$1" target="_blank">$1</a>');
+    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }
 
 function formatJs(code)
