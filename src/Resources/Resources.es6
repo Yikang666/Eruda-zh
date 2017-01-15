@@ -1,6 +1,5 @@
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
-import config from '../lib/config.es6'
 
 export default class Resources extends Tool
 {
@@ -28,7 +27,7 @@ export default class Resources extends Tool
 
         this.refresh();
         this._bindEvent();
-        this._initConfig();
+        this._initCfg();
     }
     refresh()
     {
@@ -273,9 +272,9 @@ export default class Resources extends Tool
             };
         }
     }
-    _initConfig()
+    _initCfg()
     {
-        let cfg = this.config = config.create('eruda-resources');
+        let cfg = this.config = util.createCfg('resources');
 
         cfg.set(util.defaults(cfg.get(), {
             hideErudaSetting: true

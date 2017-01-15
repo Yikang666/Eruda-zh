@@ -1,7 +1,6 @@
 import Tool from '../DevTools/Tool.es6'
 import Request from './Request.es6'
 import util from '../lib/util'
-import config from '../lib/config.es6'
 
 export default class Network extends Tool
 {
@@ -27,7 +26,7 @@ export default class Network extends Tool
 
         this._parent = parent;
         this._bindEvent();
-        this._initConfig();
+        this._initCfg();
     }
     show()
     {
@@ -285,9 +284,9 @@ export default class Network extends Tool
 
         this._resourceTimingData = data;
     }
-    _initConfig()
+    _initCfg()
     {
-        var cfg = this.config = config.create('eruda-network');
+        var cfg = this.config = util.createCfg('network');
 
         cfg.set(util.defaults(cfg.get(), {
             disablePerformance: false,

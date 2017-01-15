@@ -4,7 +4,6 @@ import stringify from '../lib/stringify.es6'
 import Highlight from './Highlight.es6'
 import Select from './Select.es6'
 import util from '../lib/util'
-import config from '../lib/config.es6'
 
 export default class Elements extends Tool
 {
@@ -34,7 +33,7 @@ export default class Elements extends Tool
         this._highlight = new Highlight(this._parent.$parent);
         this._select = new Select();
         this._bindEvent();
-        this._initConfig();
+        this._initCfg();
     }
     show()
     {
@@ -259,9 +258,9 @@ export default class Elements extends Tool
         this._lastHtml = html;
         this._$showArea.html(html);
     }
-    _initConfig()
+    _initCfg()
     {
-        let cfg = this.config = config.create('eruda-elements');
+        let cfg = this.config = util.createCfg('elements');
 
         cfg.set(util.defaults(cfg.get(), {overrideEventTarget: true}));
 

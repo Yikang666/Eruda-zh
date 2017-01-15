@@ -1,7 +1,6 @@
 import NavBar from './NavBar.es6'
 import util from '../lib/util'
 import Tool from './Tool.es6'
-import config from '../lib/config.es6'
 
 export default class DevTools extends util.Emitter
 {
@@ -18,7 +17,7 @@ export default class DevTools extends util.Emitter
 
         this._appendTpl();
         this._initNavBar();
-        this._initConfig();
+        this._initCfg();
     }
     show()
     {
@@ -99,9 +98,9 @@ export default class DevTools extends util.Emitter
 
         return this;
     }
-    _initConfig()
+    _initCfg()
     {
-        var cfg = this.config = config.create('eruda-dev-tools');
+        var cfg = this.config = util.createCfg('dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
             transparency: '95%',

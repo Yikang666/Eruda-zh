@@ -1,6 +1,5 @@
 import util from '../lib/util'
 import Draggabilly from 'draggabilly'
-import config from '../lib/config.es6'
 
 export default class EntryBtn extends util.Emitter
 {
@@ -13,7 +12,7 @@ export default class EntryBtn extends util.Emitter
         this._$parent = $parent;
         this._appendTpl();
         this._makeDraggable();
-        this._initConfig();
+        this._initCfg();
         this._setPos();
         this._bindEvent();
     }
@@ -75,9 +74,9 @@ export default class EntryBtn extends util.Emitter
     {
         this._draggabilly = new Draggabilly(this._$el.get(0), {containment: true});
     }
-    _initConfig()
+    _initCfg()
     {
-        var cfg = this.config = config.create('eruda-home-button');
+        var cfg = this.config = util.createCfg('home-button');
 
         cfg.set(util.defaults(cfg.get(), {
             rememberPos: true,

@@ -11,6 +11,7 @@ import Sources from './Sources/Sources.es6'
 import Settings from './Settings/Settings.es6'
 import util from './lib/util'
 import config from './lib/config.es6'
+import extraUtil from './lib/extraUtil.es6'
 
 module.exports = {
     init({el, tool} = {})
@@ -122,3 +123,6 @@ module.exports = {
         devTools.showTool(util.last(tool) || 'settings');
     }
 };
+
+extraUtil(util);
+

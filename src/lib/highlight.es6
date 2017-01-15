@@ -4,6 +4,8 @@ import util from '../lib/util'
 
 export default function highlight(str, lang)
 {
+    lang = lang || 'js';
+
     str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     lang = language[lang];

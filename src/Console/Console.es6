@@ -1,7 +1,6 @@
 import Logger from './Logger.es6'
 import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
-import config from '../lib/config.es6'
 
 export default class Console extends Tool
 {
@@ -18,7 +17,7 @@ export default class Console extends Tool
         this._appendTpl();
         this._initLogger();
         this._exposeLogger();
-        this._initConfig(parent);
+        this._initCfg(parent);
         this._bindEvent(parent);
     }
     show()
@@ -177,9 +176,9 @@ export default class Console extends Tool
 
         this._$inputBtns.show();
     }
-    _initConfig(parent)
+    _initCfg(parent)
     {
-        let cfg = this.config = config.create('eruda-console'),
+        let cfg = this.config = util.createCfg('console'),
             sources = parent.get('sources'),
             logger = this._logger;
 

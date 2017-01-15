@@ -3,7 +3,6 @@ import util from '../lib/util'
 import beautify from 'js-beautify'
 import highlight from '../lib/highlight.es6'
 import JsonViewer from '../lib/JsonViewer.es6'
-import config from '../lib/config.es6'
 
 export default class Sources extends Tool
 {
@@ -25,7 +24,7 @@ export default class Sources extends Tool
 
         this._parent = parent;
         this._bindEvent();
-        this._initConfig();
+        this._initCfg();
     }
     set(type, val)
     {
@@ -139,9 +138,9 @@ export default class Sources extends Tool
         this._rawTpl = require('./raw.hbs');
         this._iframeTpl = require('./iframe.hbs');
     }
-    _initConfig()
+    _initCfg()
     {
-        let cfg = this.config = config.create('eruda-sources');
+        let cfg = this.config = util.createCfg('sources');
 
         cfg.set(util.defaults(cfg.get(), {
             'showLineNum': true,
