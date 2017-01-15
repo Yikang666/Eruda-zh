@@ -17,6 +17,13 @@ describe('log', function ()
         expect($tool.find('.eruda-log')).toHaveLength(0);
     });
 
+    it('recognize url', function ()
+    {
+        tool.clear();
+        tool.log('http://liriliri.github.io/eruda/?plugin=fps');
+        expect($tool.find('.eruda-log')).toContainHtml('<a href="http://liriliri.github.io/eruda/?plugin=fps" target="_blank">http://liriliri.github.io/eruda/?plugin=fps</a>');
+    });
+
     it('basic object', function ()
     {
         var obj = {a: 1};

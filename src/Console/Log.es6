@@ -127,6 +127,7 @@ export default class Log
                 break;
         }
 
+        msg = recognizeUrl(msg);
         this.value = msg;
         msg = render({msg, type, icon, id, displayHeader, time, from});
 
@@ -361,11 +362,11 @@ function formatEl(val)
     return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
 }
 
-function getCurTime()
-{
-    let d = new Date();
+var regUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
-    return `${padZero(d.getHours())}:${padZero(d.getMinutes())}:${padZero(d.getSeconds())}`;
+function recognizeUrl(str)
+{
+    return str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }
 
 function getFrom()
@@ -387,7 +388,7 @@ function getFrom()
     return ret;
 }
 
-var padZero = (num) => util.lpad(util.toStr(num), 2, '0');
+var getCurTime = () => util.dateFormat('HH:MM:ss');
 
 var tpl = require('./Log.hbs');
 var render = data => tpl(data);
