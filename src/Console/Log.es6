@@ -127,7 +127,7 @@ export default class Log
                 break;
         }
 
-        msg = recognizeUrl(msg);
+        if (type !== 'error') msg = recognizeUrl(msg);
         this.value = msg;
         msg = render({msg, type, icon, id, displayHeader, time, from});
 
@@ -224,7 +224,8 @@ function formatTable(args)
     return ret;
 }
 
-var regErudaJs = /eruda(\.min)?\.js/;
+var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
+    regErudaJs = /eruda(\.min)?\.js/;
 
 function formatErr(err)
 {
@@ -232,11 +233,10 @@ function formatErr(err)
         msg = `${err.message || lines[0]}<br/>`;
 
     lines = lines.filter(val => !regErudaJs.test(val));
-    lines = lines.map(val => util.trim(val));
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
-    return msg + stack;
+    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }
 
 function formatJs(code)
@@ -364,7 +364,7 @@ function formatEl(val)
 
 var regUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
-var recognizeUrl = (str) => str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
+var recognizeUrl = str => str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 
 function getFrom()
 {
