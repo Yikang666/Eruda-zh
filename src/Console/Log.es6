@@ -224,8 +224,7 @@ function formatTable(args)
     return ret;
 }
 
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
-    regErudaJs = /eruda(\.min)?\.js/;
+var regErudaJs = /eruda(\.min)?\.js/;
 
 function formatErr(err)
 {
@@ -233,10 +232,11 @@ function formatErr(err)
         msg = `${err.message || lines[0]}<br/>`;
 
     lines = lines.filter(val => !regErudaJs.test(val));
+    lines = lines.map(val => util.trim(val));
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
-    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
+    return msg + stack;
 }
 
 function formatJs(code)
@@ -364,10 +364,7 @@ function formatEl(val)
 
 var regUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
-function recognizeUrl(str)
-{
-    return str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
-}
+var recognizeUrl = (str) => str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 
 function getFrom()
 {
