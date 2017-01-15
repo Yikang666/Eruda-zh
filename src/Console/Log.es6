@@ -236,7 +236,7 @@ function formatErr(err)
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
-    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
+    return msg + stack.replace(regJsUrl, '<a href="$1" target="_blank">$1</a>');
 }
 
 function formatJs(code)
@@ -362,9 +362,9 @@ function formatEl(val)
     return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
 }
 
-var regUrl = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+var regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
 
-var recognizeUrl = str => str.replace(regUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
+var recognizeUrl = str => str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
 
 function getFrom()
 {
