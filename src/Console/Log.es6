@@ -203,6 +203,7 @@ function formatTable(args)
         columns = columns.concat(Object.getOwnPropertyNames(val));
     });
     columns = util.unique(columns);
+    columns.sort();
     if (filter) columns = columns.filter(val => util.contain(filter, val));
     if (util.isEmpty(columns)) return formatMsg(args);
 
@@ -214,7 +215,19 @@ function formatTable(args)
     {
         if (!util.isObj(obj)) return;
         ret += `<tr><td>${idx}</td>`;
-        columns.forEach(column => ret += `<td>${obj[column] || ''}</td>`);
+        columns.forEach(column =>
+        {
+            let val = obj[column];
+            if (util.isUndef(val))
+            {
+                val = '';
+            } else if (util.isObj(val))
+            {
+                val = util.getObjType(val);
+            }
+
+            ret += `<td>${val}</td>`;
+        });
         ret += '</tr>'
     });
 

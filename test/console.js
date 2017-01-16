@@ -127,6 +127,12 @@ describe('table', function ()
         expect($tool.find('.eruda-table')).not.toContainElement('table');
     });
 
+    it('sort keys', function ()
+    {
+        tool.clear().table([{a: 1}, {d: 2, a: 2}, {c: 1}]);
+        expect($tool.find('.eruda-table thead tr')).toContainHtml('<th>(index)</th><th>a</th><th>c</th><th>d</th>');
+    });
+
     it('basic', function ()
     {
         tool.clear().table([{test: 1}, {test: 2, test2: 3}]);
