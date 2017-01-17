@@ -6,7 +6,12 @@
 
 # Eruda
 
-[![npm version](https://badge.fury.io/js/eruda.svg)](https://badge.fury.io/js/eruda)
+[![NPM version][npm-image]][npm-url]
+[![License][license-image]][npm-url]
+
+[npm-image]: https://img.shields.io/npm/v/eruda.svg
+[npm-url]: https://npmjs.org/package/eruda
+[license-image]: https://img.shields.io/npm/l/eruda.svg
 
 Console for Mobile Browsers.
 
