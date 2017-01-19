@@ -7,10 +7,13 @@
 # Eruda
 
 [![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
 [![License][license-image]][npm-url]
 
 [npm-image]: https://img.shields.io/npm/v/eruda.svg
 [npm-url]: https://npmjs.org/package/eruda
+[travis-image]: https://img.shields.io/travis/liriliri/eruda.svg
+[travis-url]: https://travis-ci.org/liriliri/eruda
 [license-image]: https://img.shields.io/npm/l/eruda.svg
 
 Console for Mobile Browsers.

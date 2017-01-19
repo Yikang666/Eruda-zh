@@ -12,4 +12,4 @@ export default function (util)
              return config.create('eruda-' + name);
          }
      });
-};
+}
