@@ -1,6 +1,14 @@
 # Eruda
 
-[![npm version](https://badge.fury.io/js/eruda.svg)](https://badge.fury.io/js/eruda)
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![License][license-image]][npm-url]
+
+[npm-image]: https://img.shields.io/npm/v/eruda.svg
+[npm-url]: https://npmjs.org/package/eruda
+[travis-image]: https://img.shields.io/travis/liriliri/eruda.svg
+[travis-url]: https://travis-ci.org/liriliri/eruda
+[license-image]: https://img.shields.io/npm/l/eruda.svg
 
 Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools 的迷你版，其主要功能包括：捕获 console 日志、检查元素状态、显示性能指标、捕获XHR请求、显示本地存储和 Cookie 信息、浏览器特性检测等等。
 
