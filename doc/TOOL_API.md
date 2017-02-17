@@ -199,3 +199,50 @@ related materials in [Can I Use](http://caniuse.com/) website.
 ## Settings
 
 Customization for all tools.
+
+### text
+
+Add text.
+
+|Name|Type  |Desc             |
+|----|------|-----------------|
+|str |string|String to display|
+
+### switch
+
+Add switch to toggle a boolean value.
+
+|Name|Type  |Desc                                   |
+|----|------|---------------------------------------|
+|cfg |object|Config object created by util.createCfg|
+|name|string|Option name                            |
+|desc|string|Option description                     |
+
+### select
+
+Add select to select a number of string values
+
+|Name  |Type  |Desc                      |
+|------|------|--------------------------|
+|cfg   |object|Config object             |
+|name  |string|Option name               |
+|desc  |string|Option description        |
+|values|array |Array of strings to select|
+
+### separator
+
+Add a separator.
+
+```javascript
+var cfg = eruda.util.createCfg('test');
+
+cfg.set(eruda.util.defaults(cfg.get(), {
+    testBool: true,
+    testSelect: 'select1'
+}));
+
+settings.text('Test')
+        .switch(cfg, 'testBool', 'Test Bool')
+        .select(cfg, 'testSelect', 'Test Select', ['select1', 'select2'])
+        .separator();
+```
