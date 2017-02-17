@@ -82,6 +82,10 @@ Set dom element to show.
 |----|-------|------------------|
 |el  |element|Element to display|
 
+```javascript
+elements.set(document.body);
+```
+
 ## Network
 
 Display performance timing, resource timing and xhr requests.
@@ -169,13 +173,6 @@ Add Snippet.
 |fn  |function|Function to be triggered|
 |desc|string  |Snippet description     |
 
-```javascript
-snippets.add('hello', function ()
-{
-    console.log('Hello World!');
-}, 'Display hello on console');
-```
-
 ### remove
 
 Remove specified snippet.
@@ -185,6 +182,11 @@ Remove specified snippet.
 |name|string|Snippet to remove|
 
 ```javascript
+snippets.add('hello', function ()
+{
+    console.log('Hello World!');
+}, 'Display hello on console');
+
 snippets.remove('hello');
 ```
 
