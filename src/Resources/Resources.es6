@@ -97,6 +97,9 @@ export default class Resources extends Tool
 
         util.each(store, (val, key) =>
         {
+            // According to issue 20, not all values are guaranteed to be string.
+            if (!util.isStr(val)) return;
+
             if (this._hideErudaSetting)
             {
                 if (util.startWith(key, 'eruda') || key === 'active-eruda') return;
@@ -218,7 +221,8 @@ export default class Resources extends Tool
 
                var val = type === 'local' ? localStorage.getItem(key) : sessionStorage.getItem(key);
 
-               try {
+               try
+               {
                    showSources('json', JSON.parse(val));
                } catch(e)
                {
