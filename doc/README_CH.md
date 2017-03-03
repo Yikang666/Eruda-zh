@@ -1,3 +1,7 @@
+<a href="http://liriliri.github.io/eruda/" target="_blank">
+    <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
+</a>
+
 # Eruda
 
 [![NPM version][npm-image]][npm-url]
