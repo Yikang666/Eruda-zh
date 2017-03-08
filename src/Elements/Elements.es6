@@ -287,12 +287,16 @@ export default class Elements extends Tool
     {
         let i, len, node;
 
+        if (util.isErudaEl(mutation.target)) return;
+
         if (mutation.type === 'attributes') 
         {
             if (mutation.target !== this._curEl) return;
             this._render();
         } else if (mutation.type === 'childList') 
         {
+            if (mutation.target === this._curEl) return this._render();
+
             let addedNodes = mutation.addedNodes;
 
             for (i = 0, len = addedNodes.length; i < len; i++) 
@@ -306,9 +310,7 @@ export default class Elements extends Tool
 
             for (i = 0, len = removedNodes.length; i < len; i++) 
             {
-                node = removedNodes[i];
-                if (node.parentNode === this._curEl) return this._render();
-                if (node === this._curEl) return this.set(this._htmlEl);
+                if (removedNodes[i] === this._curEl) return this.set(this._htmlEl);
             }
         }
     }
