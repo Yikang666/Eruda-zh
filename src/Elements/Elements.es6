@@ -33,6 +33,7 @@ export default class Elements extends Tool
         this._highlight = new Highlight(this._parent.$parent);
         this._select = new Select();
         this._bindEvent();
+        this._initObserver();
         this._initCfg();
     }
     show()
@@ -170,6 +171,19 @@ export default class Elements extends Tool
 
         this._render();
     }
+    _toggleObserver(flag) 
+    {
+        let observer = this._observer;
+
+        if (!observer) return;
+
+        flag ? observer.observe(this._htmlEl, {
+            attributes: true,
+            childList: true,
+            characterData: true,
+            subtree: true
+        }) : observer.disconnect();
+    }
     _toggleHighlight()
     {
         if (this._selectElement) return;
@@ -258,26 +272,74 @@ export default class Elements extends Tool
         this._lastHtml = html;
         this._$showArea.html(html);
     }
+    _initObserver() 
+    {
+        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+        if (!MutationObserver) return;
+
+        this._observer = new MutationObserver(mutations =>
+        {
+            util.each(mutations, mutation => this._handleMutation(mutation));
+        });
+    }
+    _handleMutation(mutation) 
+    {
+        let i, len, node;
+
+        if (mutation.type === 'attributes') 
+        {
+            if (mutation.target !== this._curEl) return;
+            this._render();
+        } else if (mutation.type === 'childList') 
+        {
+            let addedNodes = mutation.addedNodes;
+
+            for (i = 0, len = addedNodes.length; i < len; i++) 
+            {
+                node = addedNodes[i];
+
+                if (node.parentNode === this._curEl) return this._render();
+            }
+
+            let removedNodes = mutation.removedNodes;
+
+            for (i = 0, len = removedNodes.length; i < len; i++) 
+            {
+                node = removedNodes[i];
+                if (node.parentNode === this._curEl) return this._render();
+                if (node === this._curEl) return this.set(this._htmlEl);
+            }
+        }
+    }
     _initCfg()
     {
         let cfg = this.config = util.createCfg('elements');
 
-        cfg.set(util.defaults(cfg.get(), {overrideEventTarget: true}));
+        cfg.set(util.defaults(cfg.get(), {
+            overrideEventTarget: true,
+            observeElement: true
+        }));
 
         if (cfg.get('overrideEventTarget')) this.overrideEventTarget();
+        if (cfg.get('observeElement')) this._toggleObserver(true);
 
         cfg.on('change', (key, val) =>
         {
             switch (key)
             {
                 case 'overrideEventTarget': return val ? this.overrideEventTarget(): this.restoreEventTarget();
+                case 'observeElement': return this._toggleObserver(val);
             }
         });
 
         let settings = this._parent.get('settings');
         settings.text('Elements')
                 .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
-                .separator();
+        
+        if (this._observer) settings.switch(cfg, 'observeElement', 'Auto Refresh');
+
+        settings.separator();
     }
 }
 
