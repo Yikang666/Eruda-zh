@@ -294,7 +294,7 @@ Create JavaScript class.
 
 ```javascript
 var People = Class({
-    initialize: function (name, age)
+    initialize: function People(name, age)
     {
         this.name = name;
         this.age = age;
@@ -306,7 +306,7 @@ var People = Class({
 });
 
 var Student = People.extend({
-    initialize: function (name, age, school)
+    initialize: function Student(name, age, school)
     {
         this.callSuper(People, 'initialize', arguments);
 
@@ -534,14 +534,15 @@ camelCase('foo.bar'); // -> fooBar
 
 Check if the value is present in the list.
 
-|Name  |Type   |Desc                                |
-|------|-------|------------------------------------|
-|array |array  |Target list                         |
-|value |*      |Value to check                      |
-|return|boolean|True if value is present in the list|
+|Name  |Type        |Desc                                |
+|------|------------|------------------------------------|
+|array |array object|Target list                         |
+|value |*           |Value to check                      |
+|return|boolean     |True if value is present in the list|
 
 ```javascript
 contain([1, 2, 3], 1); // -> true
+contain({a: 1, b: 2}, 1); // -> true
 ```
 
 ## cookie 
@@ -977,6 +978,7 @@ Check if value is an empty object or array.
 ```javascript
 isEmpty([]); // -> true
 isEmpty({}); // -> true
+isEmpty(''); // -> true
 ```
 
 ## isErr 
@@ -1128,6 +1130,10 @@ Create an array of the own enumerable property names of object.
 |------|------|-----------------------|
 |obj   |object|Object to query        |
 |return|array |Array of property names|
+
+```javascript
+keys({a: 1}); // -> ['a']
+```
 
 ## last 
 
@@ -1496,7 +1502,7 @@ Convert value to an array.
 ```javascript
 toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
 toArr('abc'); // -> ['abc']
-toArr(1); // -> []
+toArr(1); // -> [1]
 toArr(null); // -> []
 ```
 
@@ -1601,7 +1607,7 @@ upperFirst('red'); // -> Red
 
 ## values 
 
-Creates an array of the own enumerable property values of object.
+Create an array of the own enumerable property values of object.
 
 |Name  |Type  |Desc                    |
 |------|------|------------------------|

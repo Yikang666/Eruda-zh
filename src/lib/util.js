@@ -115,17 +115,17 @@ module.exports = (function ()
          * ```
          */
 
-        var objCreate = Object.create;
-
-        function noop() {}
-
         function exports(Class, SuperClass)
         {
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
 
-            noop.prototype  = SuperClass.prototype;
-            Class.prototype = new noop();
+            noop.prototype = SuperClass.prototype;
+            Class.prototype = new noop()
         }
+
+        var objCreate = Object.create;
+
+        function noop() {}
 
         return exports;
     })();
@@ -447,6 +447,10 @@ module.exports = (function ()
          * |------|------|-----------------------|
          * |obj   |object|Object to query        |
          * |return|array |Array of property names|
+         * 
+         * ```javascript
+         * keys({a: 1}); // -> ['a']
+         * ```
          */
 
         exports = Object.keys || function (obj)
@@ -517,7 +521,7 @@ module.exports = (function ()
             '<': '&lt;',
             '>': '&gt;',
             '"': '&quot;',
-            "'": '&#x27;',
+            '\'': '&#x27;',
             '`': '&#x60;'
         };
 
@@ -803,6 +807,45 @@ module.exports = (function ()
         function exports(val)
         {
             return objToStr(val) === '[object String]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ safeGet ------------------------------ */
+
+    var safeGet = _.safeGet = (function ()
+    {
+        /* Get object property, don't throw undefined error.
+         *
+         * |Name  |Type        |Desc                     |
+         * |------|------------|-------------------------|
+         * |obj   |object      |Object to query          |
+         * |path  |array string|Path of property to get  |
+         * |return|*           |Target value or undefined|
+         *
+         * ```javascript
+         * var obj = {a: {aa: {aaa: 1}}};
+         * safeGet(obj, 'a.aa.aaa'); // -> 1
+         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
+         * safeGet(obj, 'a.b'); // -> undefined
+         * ```
+         */
+
+        function exports(obj, path)
+        {
+            if (isStr(path)) path = path.split('.');
+
+            var prop;
+
+            /* eslint-disable no-cond-assign */
+            while (prop = path.shift())
+            {
+                obj = obj[prop];
+                if (isUndef(obj)) return;
+            }
+
+            return obj;
         }
 
         return exports;
@@ -1153,7 +1196,7 @@ module.exports = (function ()
 
     var values = _.values = (function ()
     {
-        /* Creates an array of the own enumerable property values of object.
+        /* Create an array of the own enumerable property values of object.
          *
          * |Name  |Type  |Desc                    |
          * |------|------|------------------------|
@@ -1183,14 +1226,15 @@ module.exports = (function ()
     {
         /* Check if the value is present in the list.
          *
-         * |Name  |Type   |Desc                                |
-         * |------|-------|------------------------------------|
-         * |array |array  |Target list                         |
-         * |value |*      |Value to check                      |
-         * |return|boolean|True if value is present in the list|
+         * |Name  |Type        |Desc                                |
+         * |------|------------|------------------------------------|
+         * |array |array object|Target list                         |
+         * |value |*           |Value to check                      |
+         * |return|boolean     |True if value is present in the list|
          *
          * ```javascript
          * contain([1, 2, 3], 1); // -> true
+         * contain({a: 1, b: 2}, 1); // -> true
          * ```
          */
 
@@ -1218,6 +1262,7 @@ module.exports = (function ()
          * ```javascript
          * isEmpty([]); // -> true
          * isEmpty({}); // -> true
+         * isEmpty(''); // -> true
          * ```
          */
 
@@ -1483,8 +1528,8 @@ module.exports = (function ()
             script.onload = function ()
             {
                 var isNotLoaded = script.readyState &&
-                    script.readyState != "complete" &&
-                    script.readyState != "loaded";
+                    script.readyState != 'complete' &&
+                    script.readyState != 'loaded';
 
                 cb && cb(!isNotLoaded);
             };
@@ -1778,7 +1823,7 @@ module.exports = (function ()
                 }
             }
 
-            return (start >= len) ? '' : str.substr(start, len);
+            return start >= len ? '' : str.substr(start, len);
         }
 
         return exports;
@@ -1854,10 +1899,12 @@ module.exports = (function ()
             {
                 var keys = uncloakedKeys();
 
+                /* eslint-disable no-cond-assign */
                 for (var i = 0, key; key = keys[i]; i++) delete this[key];
 
                 keys = cloakedKeys();
 
+                /* eslint-disable no-cond-assign */
                 for (i = 0; key = keys[i]; i++) delete cloak[key];
             }
         };
@@ -2091,7 +2138,7 @@ module.exports = (function ()
          * ```javascript
          * toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
          * toArr('abc'); // -> ['abc']
-         * toArr(1); // -> []
+         * toArr(1); // -> [1]
          * toArr(null); // -> []
          * ```
          */
@@ -2124,7 +2171,7 @@ module.exports = (function ()
          *
          * ```javascript
          * var People = Class({
-         *     initialize: function (name, age)
+         *     initialize: function People(name, age)
          *     {
          *         this.name = name;
          *         this.age = age;
@@ -2136,7 +2183,7 @@ module.exports = (function ()
          * });
          *
          * var Student = People.extend({
-         *     initialize: function (name, age, school)
+         *     initialize: function Student(name, age, school)
          *     {
          *         this.callSuper(People, 'initialize', arguments);
          *
@@ -2167,18 +2214,17 @@ module.exports = (function ()
         function makeClass(parent, methods, statics)
         {
             statics = statics || {};
+            var className = methods.className || safeGet(methods, 'initialize.name') || '';
+            delete methods.className;
 
-            var ctor = function ()
-            {
-                var args = toArr(arguments);
-
-                return this.initialize
-                       ? this.initialize.apply(this, args) || this
-                       : this;
-            };
+            var ctor = new Function('toArr', 'return function ' + className + '()' + 
+            '{' +
+                'var args = toArr(arguments);' +
+                'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+            '};')(toArr);
 
             inherits(ctor, parent);
-            ctor.prototype.superclass = parent;
+            ctor.prototype.constructor = ctor;
 
             ctor.extend = function (methods, statics)
             {
@@ -2186,7 +2232,7 @@ module.exports = (function ()
             };
             ctor.inherits = function (Class)
             {
-                inherits(Class, ctor);
+                inherits(ctor, Class);
             };
             ctor.methods = function (methods)
             {
@@ -2210,13 +2256,11 @@ module.exports = (function ()
             {
                 var superMethod = parent.prototype[name];
 
-                if (!superMethod) return;
-
                 return superMethod.apply(this, args);
             },
             toString: function ()
             {
-                return this.className;
+                return this.constructor.name;
             }
         });
 
@@ -2781,9 +2825,9 @@ module.exports = (function ()
             {
                 el = document.createElement(elName);
                 document.documentElement.appendChild(el);
-                display = getComputedStyle(el, '').getPropertyValue("display");
+                display = getComputedStyle(el, '').getPropertyValue('display');
                 el.parentNode.removeChild(el);
-                display == "none" && (display = "block");
+                display == 'none' && (display = 'block');
                 elDisplay[elName] = display;
             }
 
@@ -3115,7 +3159,7 @@ module.exports = (function ()
             add: function (els, name)
             {
                 els = $safeEls(els);
-                var names = toArr(name);
+                var names = safeName(name);
 
                 each(els, function (el)
                 {
@@ -3154,7 +3198,7 @@ module.exports = (function ()
             remove: function (els, name)
             {
                 els = $safeEls(els);
-                var names = toArr(name);
+                var names = safeName(name);
 
                 each(els, function (el)
                 {
@@ -3165,6 +3209,11 @@ module.exports = (function ()
                 });
             }
         };
+
+        function safeName(name)
+        {
+            return isStr(name) ? name.split(/\s/) : toArr(name);
+        }
 
         return exports;
     })({});
@@ -3518,7 +3567,7 @@ module.exports = (function ()
          */
 
         exports = Class({
-            initialize: function ()
+            initialize: function Emitter()
             {
                 this._events = this._events || {};
             },
@@ -3779,6 +3828,7 @@ module.exports = (function ()
                     var key = parts.shift(),
                         val = parts.length > 0 ? parts.join('=') : null;
 
+                    key = decodeURIComponent(key);
                     val = decodeURIComponent(val);
 
                     if (isUndef(ret[key]))
@@ -3802,7 +3852,7 @@ module.exports = (function ()
                     if (isObj(val) && isEmpty(val)) return '';
                     if (isArr(val)) return exports.stringify(val, key);
 
-                    return (arrKey || key) + '=' + encodeURIComponent(val);
+                    return (arrKey ? encodeURIComponent(arrKey) : encodeURIComponent(key)) + '=' + encodeURIComponent(val);
                 }), function (str)
                 {
                     return str.length > 0;
@@ -4035,44 +4085,6 @@ module.exports = (function ()
 
         return exports;
     })({});
-
-    /* ------------------------------ safeGet ------------------------------ */
-
-    var safeGet = _.safeGet = (function ()
-    {
-        /* Get object property, don't throw undefined error.
-         *
-         * |Name  |Type        |Desc                     |
-         * |------|------------|-------------------------|
-         * |obj   |object      |Object to query          |
-         * |path  |array string|Path of property to get  |
-         * |return|*           |Target value or undefined|
-         *
-         * ```javascript
-         * var obj = {a: {aa: {aaa: 1}}};
-         * safeGet(obj, 'a.aa.aaa'); // -> 1
-         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
-         * safeGet(obj, 'a.b'); // -> undefined
-         * ```
-         */
-
-        function exports(obj, path)
-        {
-            if (isStr(path)) path = path.split('.');
-
-            var prop;
-
-            while (prop = path.shift())
-            {
-                obj = obj[prop];
-                if (isUndef(obj)) return;
-            }
-
-            return obj;
-        }
-
-        return exports;
-    })();
 
     /* ------------------------------ safeStorage ------------------------------ */
 
