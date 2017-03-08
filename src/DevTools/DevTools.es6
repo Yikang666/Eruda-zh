@@ -8,6 +8,7 @@ export default class DevTools extends util.Emitter
     {
         super();
 
+        if (!util.isMobile()) util.evalCss(require('../style/scrollbar.css'));
         util.evalCss(require('./DevTools.scss'));
 
         this.$parent = $parent;
