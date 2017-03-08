@@ -10,8 +10,7 @@ exports.plugins = exports.plugins.concat([
             warnings: false
         },
         comments: /eruda/
-    }),
-    new webpack.optimize.DedupePlugin()
+    })
 ]);
 
 module.exports = exports;

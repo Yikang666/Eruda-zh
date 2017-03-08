@@ -4,8 +4,17 @@ var autoprefixer = require('autoprefixer'),
     pkg = require('../package.json'),
     path = require('path');
 
+process.traceDeprecation = true; 
+
 var nodeModDir = path.resolve('./node_modules/') + '/',
     banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage;
+
+var postcssLoader = {
+    loader: 'postcss-loader',
+    options: {
+        plugins:  [classPrefix('eruda-'), autoprefixer]
+    }
+};   
 
 module.exports = {
     devtool: false,
@@ -25,25 +34,25 @@ module.exports = {
         loaders: [
             {
                 test: /\.es6$/,
-                loader: 'babel',
-                query: {
+                loader: 'babel-loader',
+                options: {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']
                 }
             },
             {
                 test: /\.scss$/,
-                loaders: ['css', 'postcss', 'sass']
+                loaders: ['css-loader', postcssLoader, 'sass-loader']
             },
             {
                 test: /\.css$/,
-                loaders: ['css', 'postcss']
+                loaders: ['css-loader', postcssLoader]
             },
             // https://github.com/wycats/handlebars.js/issues/1134
             {
                 test: /\.hbs$/,
                 loader: nodeModDir + 'handlebars-loader/index.js',
-                query: {
+                options: {
                     runtime: nodeModDir + 'handlebars/dist/handlebars.runtime.js'
                 }
             },
@@ -55,9 +64,5 @@ module.exports = {
     },
     plugins: [
         new webpack.BannerPlugin(banner)
-    ],
-    postcss: function ()
-    {
-        return [classPrefix('eruda-'), autoprefixer];
-    }
+    ]
 };
