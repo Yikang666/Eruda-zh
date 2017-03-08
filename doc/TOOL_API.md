@@ -73,6 +73,7 @@ Check dom element status.
 |Name               |Type   |Desc                 |
 |-------------------|-------|---------------------|
 |overrideEventTarget|boolean|Catch Event Listeners|
+|observeElement     |boolean|Auto Refresh         |
 
 ### set
 
