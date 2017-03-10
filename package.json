@@ -10,6 +10,13 @@
     "lint": "eslint --ext .es6 src",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIl_API.md -t \"Eruda Util Documentation\""
   },
+  "eustia": {
+    "files": "src/**/*.es6",
+    "ignore": "**/Info/defInfo.es6",
+    "output": "src/lib/util.js",
+    "exclude": ["createCfg"],
+    "format": "commonjs"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liriliri/eruda.git"
