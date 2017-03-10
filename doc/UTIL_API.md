@@ -480,6 +480,59 @@ url.rmQuery('eruda');
 utl.toString(); // -> 'http://example.com:8080/?foo=bar'
 ```
 
+## ajax 
+
+Perform an asynchronous HTTP request.
+
+|Name   |Type  |Desc        |
+|-------|------|------------|
+|options|object|Ajax options|
+
+Available options:
+
+|Name         |Type         |Desc                    |
+|-------------|-------------|------------------------|
+|url          |string       |Request url             |
+|data         |string object|Request data            |
+|dataType=json|string       |Response type(json, xml)|
+|success      |function     |Success callback        |
+|error        |function     |Error callback          |
+|complete     |function     |Callback after request  |
+|timeout      |number       |Request timeout         |
+
+### get
+
+Shortcut for type = GET;
+
+### post
+
+Shortcut for type = POST;
+
+|Name    |Type         |Desc            |
+|--------|-------------|----------------|
+|url     |string       |Request url     |
+|[data]  |string object|Request data    |
+|success |function     |Success callback|
+|dataType|function     |Response type   |
+
+```javascript
+ajax({
+    url: 'http://example.com',
+    data: {test: 'true'},
+    error: function () {},
+    success: function (data)
+    {
+        // ...
+    },
+    dataType: 'json'
+});
+
+ajax.get('http://example.com', {}, function (data)
+{
+    // ...
+});
+```
+
 ## allKeys 
 
 Retrieve all the names of object's own and inherited properties.
@@ -793,10 +846,6 @@ filter([1, 2, 3, 4, 5], function (val)
 }); // -> [2, 4]
 ```
 
-## get 
-
-No documentation.
-
 ## getFileName 
 
 No documentation.
@@ -936,6 +985,14 @@ isBool(false); // -> true
 isBool(1); // -> false
 ```
 
+## isBrowser 
+
+Check if running in a browser.
+
+```javascript
+console.log(isBrowser); // -> true if running in a browser
+```
+
 ## isCrossOrig 
 
 No documentation.
@@ -1026,6 +1083,19 @@ Check if keys and values in src are contained in obj.
 
 ```javascript
 isMatch({a: 1, b: 2}, {a: 1}); // -> true
+```
+
+## isMobile 
+
+Check whether client is using a mobile browser using ua.
+
+|Name                    |Type   |Desc                                 |
+|------------------------|-------|-------------------------------------|
+|[ua=navigator.userAgent]|string |User agent                           |
+|return                  |boolean|True if ua belongs to mobile browsers|
+
+```javascript
+isMobile(navigator.userAgent);
 ```
 
 ## isNull 
@@ -1239,6 +1309,23 @@ A replacement for environments where localStorage or sessionStorage is not avail
 ```javascript
 var localStorage = window.localStorage || memStorage;
 localStorage.setItem('test', 'eris');
+```
+
+## memoize 
+
+Memoize a given function by caching the computed result.
+
+|Name    |Type    |Desc                                |
+|--------|--------|------------------------------------|
+|fn      |function|Function to have its output memoized|
+|[hashFn]|function|Function to create cache key        |
+|return  |function|New memoized function               |
+
+```javascript
+var fibonacci = memoize(function(n)
+{
+    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+});
 ```
 
 ## noop 

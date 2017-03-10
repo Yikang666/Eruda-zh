@@ -92,13 +92,16 @@ export default class Sources extends Tool
         if (this._isGettingHtml) return;
         this._isGettingHtml = true;
 
-        util.get(location.href, (err, data) =>
-        {
-            this._isGettingHtml = false;
-            if (err) return;
-
-            this._html = data;
-            this._renderDef();
+        util.ajax({
+            url: location.href,
+            success: data => this._html = data,
+            error: () => this._html = 'Sorry, unable to fetch source code:(',
+            complete: () =>
+            {
+                this._isGettingHtml = false;
+                this._renderDef();
+            },
+            dataType: 'raw'
         });
     }
     _bindEvent()
@@ -159,7 +162,7 @@ export default class Sources extends Tool
             }
         });
 
-        var settings = this._parent.get('settings');
+        let settings = this._parent.get('settings');
         settings.text('Sources')
                 .switch(cfg, 'showLineNum', 'Show Line Numbers')
                 .switch(cfg, 'formatCode', 'Beautify Code')
@@ -206,10 +209,11 @@ export default class Sources extends Tool
     {
         let data = this._data;
 
-        let code = data.val;
+        let code = data.val,
+            len = data.val.length;
 
         // If source code too big, don't process it.
-        if (data.val.length < 100000 && this._formatCode)
+        if (len < MAX_BEAUTIFY_LEN && this._formatCode)
         {
             switch (data.type)
             {
@@ -230,7 +234,7 @@ export default class Sources extends Tool
             code = util.escape(code);
         }
 
-        if (this._showLineNum)
+        if (len < MAX_LINE_NUM_LEN && this._showLineNum)
         {
             code = code.split('\n').map((line, idx) =>
             {
@@ -245,7 +249,7 @@ export default class Sources extends Tool
 
         this._renderHtml(this._codeTpl({
             code,
-            showLineNum: this._showLineNum
+            showLineNum: len < MAX_LINE_NUM_LEN && this._showLineNum
         }));
     }
     _renderJson()
@@ -280,3 +284,6 @@ export default class Sources extends Tool
         setTimeout(() => this._$el.get(0).scrollTop = 0, 0);
     }
 }
+
+const MAX_BEAUTIFY_LEN = 100000,
+      MAX_LINE_NUM_LEN = 400000;

@@ -40,11 +40,11 @@ export default class Resources extends Tool
     }
     refreshScript()
     {
-        var scriptData = [];
+        let scriptData = [];
 
         util.$('script').each(function ()
         {
-            var src = this.src;
+            let src = this.src;
 
             if (src !== '') scriptData.push(src);
         });
@@ -57,7 +57,7 @@ export default class Resources extends Tool
     }
     refreshStylesheet()
     {
-        var stylesheetData = [];
+        let stylesheetData = [];
 
         util.$('link').each(function ()
         {
@@ -86,11 +86,11 @@ export default class Resources extends Tool
     }
     _refreshStorage(type)
     {
-        var store = util.safeStorage(type, false);
+        let store = util.safeStorage(type, false);
 
         if (!store) return;
 
-        var storeData = [];
+        let storeData = [];
 
         // Mobile safari is not able to loop through localStorage directly.
         store = JSON.parse(JSON.stringify(store));
@@ -115,9 +115,9 @@ export default class Resources extends Tool
     }
     refreshCookie()
     {
-        var cookieData = [];
+        let cookieData = [];
 
-        var cookie = document.cookie;
+        let cookie = document.cookie;
         if (util.trim(cookie) !== '')
         {
             util.each(document.cookie.split(';'), function (val)
@@ -136,11 +136,11 @@ export default class Resources extends Tool
     }
     refreshImage()
     {
-        var imageData = [];
+        let imageData = [];
 
         util.$('img').each(function ()
         {
-            var $this = util.$(this),
+            let $this = util.$(this),
                 src = $this.attr('src');
 
             if ($this.data('exclude') === 'true') return;
@@ -162,7 +162,7 @@ export default class Resources extends Tool
     }
     _bindEvent()
     {
-        var self = this,
+        let self = this,
             $el = this._$el,
             parent = this._parent;
 
@@ -173,7 +173,7 @@ export default class Resources extends Tool
            .on('click', '.refresh-image', () => this.refreshImage()._render())
            .on('click', '.delete-storage', function ()
            {
-               var $this = util.$(this),
+               let $this = util.$(this),
                    key = $this.data('key'),
                    type = $this.data('type');
 
@@ -189,14 +189,14 @@ export default class Resources extends Tool
            })
            .on('click', '.delete-cookie', function ()
            {
-               var key = util.$(this).data('key');
+               let key = util.$(this).data('key');
 
                delCookie(key);
                self.refreshCookie()._render();
            })
            .on('click', '.eruda-clear-storage', function ()
            {
-               var type = util.$(this).data('type');
+               let type = util.$(this).data('type');
 
                if (type === 'local')
                {
@@ -215,11 +215,11 @@ export default class Resources extends Tool
            })
            .on('click', '.eruda-storage-val', function ()
            {
-               var $this = util.$(this),
+               let $this = util.$(this),
                    key = $this.data('key'),
                    type = $this.data('type');
 
-               var val = type === 'local' ? localStorage.getItem(key) : sessionStorage.getItem(key);
+               let val = type === 'local' ? localStorage.getItem(key) : sessionStorage.getItem(key);
 
                try
                {
@@ -231,7 +231,7 @@ export default class Resources extends Tool
            })
            .on('click', '.img-link', function ()
            {
-               var src = util.$(this).attr('src');
+               let src = util.$(this).attr('src');
 
                showSources('img', src);
            })
@@ -242,7 +242,7 @@ export default class Resources extends Tool
 
         function showSources(type, data)
         {
-            var sources = parent.get('sources');
+            let sources = parent.get('sources');
             if (!sources) return;
 
             sources.set(type, data);
@@ -259,15 +259,17 @@ export default class Resources extends Tool
                 if (!parent.get('sources')) return;
                 e.preventDefault();
 
-                var url = util.$(this).attr('href');
+                let url = util.$(this).attr('href');
 
                 if (!util.isCrossOrig(url))
                 {
-                    return util.get(url, (err, data) =>
-                    {
-                        if (err) return;
-
-                        showSources(type, data);
+                    return util.ajax({
+                        url,
+                        success: data =>
+                        {
+                            showSources(type, data);
+                        },
+                        dataType: 'raw'
                     });
                 } else
                 {
@@ -294,14 +296,14 @@ export default class Resources extends Tool
             }
         });
 
-        var settings = this._parent.get('settings');
+        let settings = this._parent.get('settings');
         settings.text('Resources')
                 .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
                 .separator();
     }
     _render()
     {
-        var cookieData = this._cookieData,
+        let cookieData = this._cookieData,
             scriptData = this._scriptData,
             stylesheetData = this._stylesheetData,
             imageData = this._imageData;
@@ -323,7 +325,7 @@ export default class Resources extends Tool
 
         setTimeout(() =>
         {
-            var $li = this._$el.find('.eruda-image-list li');
+            let $li = this._$el.find('.eruda-image-list li');
 
             $li.css({height: $li.get(0).offsetWidth});
         }, 150);
@@ -340,7 +342,7 @@ function getState(type, len)
 {
     if (len === 0) return '';
 
-    var warn = 0, danger = 0;
+    let warn = 0, danger = 0;
 
     switch (type)
     {

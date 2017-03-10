@@ -209,6 +209,22 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ noop ------------------------------ */
+
+    var noop = _.noop = (function ()
+    {
+        /* A no-operation function.
+         *
+         * ```javascript
+         * noop(); // Does nothing
+         * ```
+         */
+
+        function exports() {}
+
+        return exports;
+    })();
+
     /* ------------------------------ allKeys ------------------------------ */
 
     var allKeys = _.allKeys = (function ()
@@ -601,33 +617,6 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ get ------------------------------ */
-
-    var get = _.get = (function ()
-    {
-        function exports(url, cb)
-        {
-            var xhr = new window.XMLHttpRequest();
-
-            xhr.onload = function ()
-            {
-                var status = xhr.status;
-
-                if ((status >= 200 && status < 300) || status === 304)
-                {
-                    cb(null, xhr.responseText);
-                }
-            };
-
-            xhr.onerror = function () { cb(xhr) };
-
-            xhr.open('GET', url);
-            xhr.send();
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ upperFirst ------------------------------ */
 
     var upperFirst = _.upperFirst = (function ()
@@ -768,114 +757,6 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ isNum ------------------------------ */
-
-    var isNum = _.isNum = (function ()
-    {
-        /* Checks if value is classified as a Number primitive or object.
-         *
-         * |Name  |Type   |Desc                                 |
-         * |------|-------|-------------------------------------|
-         * |value |*      |Value to check                       |
-         * |return|boolean|True if value is correctly classified|
-         */
-
-        function exports(val)
-        {
-            return objToStr(val) === '[object Number]';
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ isStr ------------------------------ */
-
-    var isStr = _.isStr = (function ()
-    {
-        /* Check if value is a string primitive.
-         *
-         * |Name  |Type   |Desc                               |
-         * |------|-------|-----------------------------------|
-         * |val   |*      |Value to check                     |
-         * |return|boolean|True if value is a string primitive|
-         *
-         * ```javascript
-         * isStr('eris'); // -> true
-         * ```
-         */
-
-        function exports(val)
-        {
-            return objToStr(val) === '[object String]';
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ safeGet ------------------------------ */
-
-    var safeGet = _.safeGet = (function ()
-    {
-        /* Get object property, don't throw undefined error.
-         *
-         * |Name  |Type        |Desc                     |
-         * |------|------------|-------------------------|
-         * |obj   |object      |Object to query          |
-         * |path  |array string|Path of property to get  |
-         * |return|*           |Target value or undefined|
-         *
-         * ```javascript
-         * var obj = {a: {aa: {aaa: 1}}};
-         * safeGet(obj, 'a.aa.aaa'); // -> 1
-         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
-         * safeGet(obj, 'a.b'); // -> undefined
-         * ```
-         */
-
-        function exports(obj, path)
-        {
-            if (isStr(path)) path = path.split('.');
-
-            var prop;
-
-            /* eslint-disable no-cond-assign */
-            while (prop = path.shift())
-            {
-                obj = obj[prop];
-                if (isUndef(obj)) return;
-            }
-
-            return obj;
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ isArr ------------------------------ */
-
-    var isArr = _.isArr = (function (exports)
-    {
-        /* Check if value is an `Array` object.
-         *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |The value to check                |
-         * |return|boolean|True if value is an `Array` object|
-         *
-         * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
-         * ```
-         */
-
-        exports = Array.isArray || function (val)
-        {
-            return objToStr(val) === '[object Array]';
-        };
-
-        return exports;
-    })({});
-
     /* ------------------------------ isFn ------------------------------ */
 
     var isFn = _.isFn = (function ()
@@ -900,6 +781,26 @@ module.exports = (function ()
             var objStr = objToStr(val);
 
             return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isNum ------------------------------ */
+
+    var isNum = _.isNum = (function ()
+    {
+        /* Checks if value is classified as a Number primitive or object.
+         *
+         * |Name  |Type   |Desc                                 |
+         * |------|-------|-------------------------------------|
+         * |value |*      |Value to check                       |
+         * |return|boolean|True if value is correctly classified|
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object Number]';
         }
 
         return exports;
@@ -1247,6 +1148,94 @@ module.exports = (function ()
 
         return exports;
     })();
+
+    /* ------------------------------ isStr ------------------------------ */
+
+    var isStr = _.isStr = (function ()
+    {
+        /* Check if value is a string primitive.
+         *
+         * |Name  |Type   |Desc                               |
+         * |------|-------|-----------------------------------|
+         * |val   |*      |Value to check                     |
+         * |return|boolean|True if value is a string primitive|
+         *
+         * ```javascript
+         * isStr('eris'); // -> true
+         * ```
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object String]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ safeGet ------------------------------ */
+
+    var safeGet = _.safeGet = (function ()
+    {
+        /* Get object property, don't throw undefined error.
+         *
+         * |Name  |Type        |Desc                     |
+         * |------|------------|-------------------------|
+         * |obj   |object      |Object to query          |
+         * |path  |array string|Path of property to get  |
+         * |return|*           |Target value or undefined|
+         *
+         * ```javascript
+         * var obj = {a: {aa: {aaa: 1}}};
+         * safeGet(obj, 'a.aa.aaa'); // -> 1
+         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
+         * safeGet(obj, 'a.b'); // -> undefined
+         * ```
+         */
+
+        function exports(obj, path)
+        {
+            if (isStr(path)) path = path.split('.');
+
+            var prop;
+
+            /* eslint-disable no-cond-assign */
+            while (prop = path.shift())
+            {
+                obj = obj[prop];
+                if (isUndef(obj)) return;
+            }
+
+            return obj;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isArr ------------------------------ */
+
+    var isArr = _.isArr = (function (exports)
+    {
+        /* Check if value is an `Array` object.
+         *
+         * |Name  |Type   |Desc                              |
+         * |------|-------|----------------------------------|
+         * |val   |*      |The value to check                |
+         * |return|boolean|True if value is an `Array` object|
+         *
+         * ```javascript
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         * ```
+         */
+
+        exports = Array.isArray || function (val)
+        {
+            return objToStr(val) === '[object Array]';
+        };
+
+        return exports;
+    })({});
 
     /* ------------------------------ isEmpty ------------------------------ */
 
@@ -2036,22 +2025,6 @@ module.exports = (function ()
 
         return exports;
     })({});
-
-    /* ------------------------------ noop ------------------------------ */
-
-    var noop = _.noop = (function ()
-    {
-        /* A no-operation function.
-         *
-         * ```javascript
-         * noop(); // Does nothing
-         * ```
-         */
-
-        function exports() {}
-
-        return exports;
-    })();
 
     /* ------------------------------ now ------------------------------ */
 
@@ -4172,6 +4145,174 @@ module.exports = (function ()
 
         return exports;
     })({});
+
+    /* ------------------------------ ajax ------------------------------ */
+
+    var ajax = _.ajax = (function ()
+    {
+        /* Perform an asynchronous HTTP request.
+         *
+         * |Name   |Type  |Desc        |
+         * |-------|------|------------|
+         * |options|object|Ajax options|
+         *
+         * Available options:
+         *
+         * |Name         |Type         |Desc                    |
+         * |-------------|-------------|------------------------|
+         * |url          |string       |Request url             |
+         * |data         |string object|Request data            |
+         * |dataType=json|string       |Response type(json, xml)|
+         * |success      |function     |Success callback        |
+         * |error        |function     |Error callback          |
+         * |complete     |function     |Callback after request  |
+         * |timeout      |number       |Request timeout         |
+         *
+         * ### get
+         *
+         * Shortcut for type = GET;
+         *
+         * ### post
+         *
+         * Shortcut for type = POST;
+         *
+         * |Name    |Type         |Desc            |
+         * |--------|-------------|----------------|
+         * |url     |string       |Request url     |
+         * |[data]  |string object|Request data    |
+         * |success |function     |Success callback|
+         * |dataType|function     |Response type   |
+         *
+         * ```javascript
+         * ajax({
+         *     url: 'http://example.com',
+         *     data: {test: 'true'},
+         *     error: function () {},
+         *     success: function (data)
+         *     {
+         *         // ...
+         *     },
+         *     dataType: 'json'
+         * });
+         *
+         * ajax.get('http://example.com', {}, function (data)
+         * {
+         *     // ...
+         * });
+         * ```
+         */
+
+        function exports(options)
+        {
+            defaults(options, exports.setting);
+
+            var type = options.type,
+                url = options.url,
+                data = options.data,
+                dataType = options.dataType,
+                success = options.success,
+                error = options.error,
+                timeout = options.timeout,
+                complete = options.complete,
+                xhr = options.xhr(),
+                abortTimeout;
+
+            xhr.onreadystatechange = function ()
+            {
+                if (xhr.readyState !== 4) return;
+
+                clearTimeout(abortTimeout);
+
+                var result;
+
+                var status = xhr.status;
+                if ((status >= 200 && status < 300) || status === 304)
+                {
+                    result = xhr.responseText;
+                    if (dataType === 'xml') result = xhr.responseXML;
+                    try {
+                        if (dataType === 'json') result = JSON.parse(result);
+                    /* eslint-disable no-empty */
+                    } catch (e) {}
+                    success(result, xhr);
+                } else
+                {
+                    error(xhr);
+                }
+
+                complete(xhr);
+            };
+
+            if (type === 'GET')
+            {
+                data = query.stringify(data);
+                url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
+            } else
+            {
+                if(isObj(data)) data = query.stringify(data);
+            }
+
+            xhr.open(type, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            if (timeout > 0) 
+            {
+                abortTimeout = setTimeout(function () 
+                {
+                    xhr.onreadystatechange = noop;
+                    xhr.abort();
+                    error(xhr, 'timeout');
+                    complete(xhr);
+                }, timeout);
+            }
+            xhr.send(type === 'GET' ? null : data);
+
+            return xhr;
+        }
+
+        exports.setting = {
+            type: 'GET',
+            success: noop,
+            error: noop,
+            complete: noop,
+            dataType: 'json',
+            data: {},
+            xhr: function () { return new XMLHttpRequest() },
+            timeout: 0
+        };
+
+        exports.get = function ()
+        {
+            return exports(parseArgs.apply(null, arguments));
+        };
+
+        exports.post = function ()
+        {
+            var options = parseArgs.apply(null, arguments);
+            options.type = 'POST';
+
+            return exports(options);
+        };
+
+        function parseArgs(url, data, success, dataType)
+        {
+            if (isFn(data))
+            {
+                dataType = success;
+                success = data;
+                data = {};
+            }
+
+            return {
+                url: url,
+                data: data,
+                success: success,
+                dataType: dataType
+            };
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ safeStorage ------------------------------ */
 
