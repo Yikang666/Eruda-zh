@@ -1,4 +1,3 @@
-/dev/
 /eustia/
 /.idea/
 /src/
@@ -7,7 +6,5 @@
 /script/
 .editorconfig
 .eslintrc.json
-LICENSE
 .gitignore
-.eustia
 .npmignore
