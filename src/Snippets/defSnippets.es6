@@ -43,6 +43,7 @@ export default [
 ];
 
 var borderCss = '',
+    styleName = util.has(document.documentElement.style, 'outline') ? 'outline' : 'border',
     selector = 'html',
     colors = ['f5f5f5', 'dabb3a', 'abc1c7', '472936', 'c84941', '296dd1', '67adb4', '1ea061'];
 
@@ -50,7 +51,7 @@ util.each(colors, (color, idx) =>
 {
     selector += (idx === 0) ? '>*:not([class^="eruda-"])' : '>*';
 
-    borderCss += selector + `{border: 2px solid #${color} !important}`;
+    borderCss += selector + `{${styleName}: 2px solid #${color} !important}`;
 });
 
 function search(text)
