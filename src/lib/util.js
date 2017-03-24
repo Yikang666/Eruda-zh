@@ -83,6 +83,31 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ startWith ------------------------------ */
+
+    var startWith = _.startWith = (function ()
+    {
+        /* Check if string starts with the given target string.
+         *
+         * |Name  |Type   |Desc                             |
+         * |------|-------|---------------------------------|
+         * |str   |string |String to search                 |
+         * |prefix|string |String prefix                    |
+         * |return|boolean|True if string starts with prefix|
+         *
+         * ```javascript
+         * startWith('ab', 'a'); // -> true
+         * ```
+         */
+
+        function exports(str, prefix)
+        {
+            return str.indexOf(prefix) === 0;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ inherits ------------------------------ */
 
     var inherits = _.inherits = (function ()
@@ -120,7 +145,7 @@ module.exports = (function ()
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
 
             noop.prototype = SuperClass.prototype;
-            Class.prototype = new noop()
+            Class.prototype = new noop();
         }
 
         var objCreate = Object.create;
@@ -350,6 +375,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * splitCase 
+         */
+
         function exports(str)
         {
             var arr = splitCase(str);
@@ -391,6 +420,10 @@ module.exports = (function ()
          * kebabCase('foo_bar'); // -> foo-bar
          * kebabCase('foo.bar'); // -> foo-bar
          * ```
+         */
+
+        /* dependencies
+         * splitCase 
          */
 
         function exports(str)
@@ -469,6 +502,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * has 
+         */
+
         exports = Object.keys || function (obj)
         {
             var ret = [], key;
@@ -484,9 +521,49 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ optimizeCb ------------------------------ */
+
+    var optimizeCb = _.optimizeCb = (function ()
+    {
+        /* Used for function context binding.
+         */
+
+        /* dependencies
+         * isUndef 
+         */
+
+        function exports(fn, ctx, argCount)
+        {
+            if (isUndef(ctx)) return fn;
+
+            switch (argCount == null ? 3 : argCount)
+            {
+                case 1: return function (val)
+                {
+                    return fn.call(ctx, val);
+                };
+                case 3: return function (val, idx, collection)
+                {
+                    return fn.call(ctx, val, idx, collection);
+                };
+                case 4: return function (accumulator, val, idx, collection)
+                {
+                    return fn.call(ctx, accumulator, val, idx, collection);
+                }
+            }
+
+            return function ()
+            {
+                return fn.apply(ctx, arguments);
+            };
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ endWith ------------------------------ */
 
-    var endWith = _.endWith = (function ()
+    _.endWith = (function ()
     {
         /* Check if string ends with the given target string.
          *
@@ -513,7 +590,7 @@ module.exports = (function ()
 
     /* ------------------------------ escape ------------------------------ */
 
-    var escape = _.escape = (function ()
+    _.escape = (function ()
     {
         /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
          *
@@ -525,6 +602,10 @@ module.exports = (function ()
          * ```javascript
          * escape('You & Me'); -> // -> 'You &amp; Me'
          * ```
+         */
+
+        /* dependencies
+         * keys 
          */
 
         function exports(str)
@@ -555,7 +636,7 @@ module.exports = (function ()
 
     /* ------------------------------ escapeJsonStr ------------------------------ */
 
-    var escapeJsonStr = _.escapeJsonStr = (function ()
+    _.escapeJsonStr = (function ()
     {
         function exports(str)
         {
@@ -569,7 +650,7 @@ module.exports = (function ()
 
     /* ------------------------------ escapeRegExp ------------------------------ */
 
-    var escapeRegExp = _.escapeRegExp = (function ()
+    _.escapeRegExp = (function ()
     {
         /* Escape special chars to be used as literals in RegExp constructors.
          *
@@ -593,7 +674,7 @@ module.exports = (function ()
 
     /* ------------------------------ evalCss ------------------------------ */
 
-    var evalCss = _.evalCss = (function ()
+    _.evalCss = (function ()
     {
         var mark = [];
 
@@ -645,8 +726,12 @@ module.exports = (function ()
 
     /* ------------------------------ getObjType ------------------------------ */
 
-    var getObjType = _.getObjType = (function ()
+    _.getObjType = (function ()
     {
+        /* dependencies
+         * upperFirst 
+         */
+
         function exports(obj)
         {
             if (obj.constructor && obj.constructor.name) return obj.constructor.name;
@@ -725,6 +810,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         function exports(val)
         {
             return objToStr(val) === '[object Arguments]';
@@ -747,6 +836,10 @@ module.exports = (function ()
          * ```javascript
          * isDate(new Date()); // -> true
          * ```
+         */
+
+        /* dependencies
+         * objToStr 
          */
 
         function exports(val)
@@ -776,6 +869,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         function exports(val)
         {
             var objStr = objToStr(val);
@@ -796,6 +893,10 @@ module.exports = (function ()
          * |------|-------|-------------------------------------|
          * |value |*      |Value to check                       |
          * |return|boolean|True if value is correctly classified|
+         */
+
+        /* dependencies
+         * objToStr 
          */
 
         function exports(val)
@@ -824,6 +925,10 @@ module.exports = (function ()
          * isArrLike(document.body.children); // -> true;
          * isArrLike([1, 2, 3]); // -> true
          * ```
+         */
+
+        /* dependencies
+         * isNum has isFn 
          */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
@@ -857,19 +962,25 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isArrLike keys optimizeCb 
+         */
+
         function exports(obj, iteratee, ctx)
         {
+            iteratee = optimizeCb(iteratee, ctx);
+
             var i, len;
 
             if (isArrLike(obj))
             {
-                for (i = 0, len = obj.length; i < len; i++) iteratee.call(ctx, obj[i], i, obj);
+                for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
             } else
             {
                 var _keys = keys(obj);
                 for (i = 0, len = _keys.length; i < len; i++)
                 {
-                    iteratee.call(ctx, obj[_keys[i]], _keys[i], obj);
+                    iteratee(obj[_keys[i]], _keys[i], obj);
                 }
             }
 
@@ -890,6 +1001,10 @@ module.exports = (function ()
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
          * |return  |function|Result function, extend...    |
+         */
+
+        /* dependencies
+         * isUndef each 
          */
 
         function exports(keysFn, defaults)
@@ -932,6 +1047,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * createAssigner allKeys 
+         */
+
         exports = createAssigner(allKeys, true);
 
         return exports;
@@ -939,7 +1058,7 @@ module.exports = (function ()
 
     /* ------------------------------ cookie ------------------------------ */
 
-    var cookie = _.cookie = (function (exports)
+    _.cookie = (function (exports)
     {
         /* Simple api for handling browser cookies.
          *
@@ -978,6 +1097,10 @@ module.exports = (function ()
          * cookie.get('a'); // -> '1'
          * cookie.remove('a');
          * ```
+         */
+
+        /* dependencies
+         * defaults isNum isUndef 
          */
 
         var defOpts = { path: '/' };
@@ -1066,6 +1189,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * createAssigner allKeys 
+         */
+
         exports = createAssigner(allKeys);
 
         return exports;
@@ -1088,6 +1215,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * keys createAssigner 
+         */
+
         exports = createAssigner(keys);
 
         return exports;
@@ -1107,6 +1238,10 @@ module.exports = (function ()
          * ```javascript
          * values({one: 1, two: 2}); // -> [1, 2]
          * ```
+         */
+
+        /* dependencies
+         * each 
          */
 
         function exports(obj)
@@ -1139,6 +1274,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * idxOf isArrLike values 
+         */
+
         function exports(arr, val)
         {
             if (!isArrLike(arr)) arr = values(arr);
@@ -1163,6 +1302,10 @@ module.exports = (function ()
          * ```javascript
          * isStr('eris'); // -> true
          * ```
+         */
+
+        /* dependencies
+         * objToStr 
          */
 
         function exports(val)
@@ -1191,6 +1334,10 @@ module.exports = (function ()
          * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
          * safeGet(obj, 'a.b'); // -> undefined
          * ```
+         */
+
+        /* dependencies
+         * isStr isUndef 
          */
 
         function exports(obj, path)
@@ -1229,6 +1376,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         exports = Array.isArray || function (val)
         {
             return objToStr(val) === '[object Array]';
@@ -1255,6 +1406,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isArrLike isArr isStr isArgs keys 
+         */
+
         function exports(val)
         {
             if (val == null) return true;
@@ -1272,7 +1427,7 @@ module.exports = (function ()
 
     /* ------------------------------ isBool ------------------------------ */
 
-    var isBool = _.isBool = (function ()
+    _.isBool = (function ()
     {
         /* Check if value is a boolean primitive.
          *
@@ -1314,35 +1469,14 @@ module.exports = (function ()
         return exports;
     })({});
 
-    /* ------------------------------ startWith ------------------------------ */
-
-    var startWith = _.startWith = (function ()
-    {
-        /* Check if string starts with the given target string.
-         *
-         * |Name  |Type   |Desc                             |
-         * |------|-------|---------------------------------|
-         * |str   |string |String to search                 |
-         * |prefix|string |String prefix                    |
-         * |return|boolean|True if string starts with prefix|
-         *
-         * ```javascript
-         * startWith('ab', 'a'); // -> true
-         * ```
-         */
-
-        function exports(str, prefix)
-        {
-            return str.indexOf(prefix) === 0;
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ isCrossOrig ------------------------------ */
 
-    var isCrossOrig = _.isCrossOrig = (function ()
+    _.isCrossOrig = (function ()
     {
+        /* dependencies
+         * startWith 
+         */
+
         var origin = window.location.origin;
 
         function exports(url)
@@ -1355,7 +1489,7 @@ module.exports = (function ()
 
     /* ------------------------------ isEl ------------------------------ */
 
-    var isEl = _.isEl = (function ()
+    _.isEl = (function ()
     {
         /* Check if value is a DOM element.
          *
@@ -1379,7 +1513,7 @@ module.exports = (function ()
 
     /* ------------------------------ isErr ------------------------------ */
 
-    var isErr = _.isErr = (function ()
+    _.isErr = (function ()
     {
         /* Check if value is an error.
          *
@@ -1393,6 +1527,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         function exports(val)
         {
             return objToStr(val) === '[object Error]';
@@ -1403,7 +1541,7 @@ module.exports = (function ()
 
     /* ------------------------------ isErudaEl ------------------------------ */
 
-    var isErudaEl = _.isErudaEl = (function ()
+    _.isErudaEl = (function ()
     {
         function exports(el)
         {
@@ -1438,6 +1576,10 @@ module.exports = (function ()
          * ```javascript
          * isMatch({a: 1, b: 2}, {a: 1}); // -> true
          * ```
+         */
+
+        /* dependencies
+         * keys 
          */
 
         function exports(obj, src)
@@ -1481,6 +1623,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * has 
+         */
+
         function exports(fn, hashFn)
         {
             var memoize = function (key)
@@ -1503,7 +1649,7 @@ module.exports = (function ()
 
     /* ------------------------------ isMobile ------------------------------ */
 
-    var isMobile = _.isMobile = (function (exports)
+    _.isMobile = (function (exports)
     {
         /* Check whether client is using a mobile browser using ua.
          *
@@ -1515,6 +1661,10 @@ module.exports = (function ()
          * ```javascript
          * isMobile(navigator.userAgent);
          * ```
+         */
+
+        /* dependencies
+         * isBrowser memoize 
          */
 
         var regMobileAll = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i,
@@ -1532,7 +1682,7 @@ module.exports = (function ()
 
     /* ------------------------------ isNull ------------------------------ */
 
-    var isNull = _.isNull = (function ()
+    _.isNull = (function ()
     {
         /* Check if value is an Null.
          *
@@ -1556,7 +1706,7 @@ module.exports = (function ()
 
     /* ------------------------------ isRegExp ------------------------------ */
 
-    var isRegExp = _.isRegExp = (function ()
+    _.isRegExp = (function ()
     {
         /* Check if value is a regular expression.
          *
@@ -1570,6 +1720,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         function exports(val)
         {
             return objToStr(val) === '[object RegExp]';
@@ -1580,7 +1734,7 @@ module.exports = (function ()
 
     /* ------------------------------ loadJs ------------------------------ */
 
-    var loadJs = _.loadJs = (function ()
+    _.loadJs = (function ()
     {
         /* Inject script tag into page with given src value.
          *
@@ -1674,6 +1828,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * repeat 
+         */
+
         function exports(str, len, chars)
         {
             var strLen = str.length;
@@ -1690,7 +1848,7 @@ module.exports = (function ()
 
     /* ------------------------------ dateFormat ------------------------------ */
 
-    var dateFormat = _.dateFormat = (function ()
+    _.dateFormat = (function ()
     {
         /* Simple but extremely useful date format function.
          *
@@ -1736,6 +1894,10 @@ module.exports = (function ()
          * dateFormat('yyyy-mm-dd HH:MM:ss'); // -> 2016-11-19 19:00:04
          * dateFormat(new Date(), 'yyyy-mm-dd'); // -> 2016-11-19
          * ```
+         */
+
+        /* dependencies
+         * isStr isDate toStr lpad 
          */
 
         function exports(date, mask, utc, gmt)
@@ -1925,6 +2087,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * extendOwn isMatch 
+         */
+
         function exports(attrs)
         {
             attrs = extendOwn({}, attrs);
@@ -1938,154 +2104,15 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ memStorage ------------------------------ */
-
-    var memStorage = _.memStorage = (function (exports)
-    {
-        /* Memory-backed implementation of the Web Storage API.
-         *
-         * A replacement for environments where localStorage or sessionStorage is not available.
-         *
-         * ```javascript
-         * var localStorage = window.localStorage || memStorage;
-         * localStorage.setItem('test', 'eris');
-         * ```
-         */
-
-        exports = {
-            getItem: function (key)
-            {
-                return (API_KEYS[key] ? cloak[key] : this[key]) || null;
-            },
-            setItem: function (key, val)
-            {
-                API_KEYS[key] ? cloak[key] = val : this[key] = val;
-            },
-            removeItem: function (key)
-            {
-                API_KEYS[key] ? delete cloak[key] : delete this[key];
-            },
-            key: function (i)
-            {
-                var keys = enumerableKeys();
-
-                return i >= 0 && i < keys.length ? keys[i] : null;
-            },
-            clear: function ()
-            {
-                var keys = uncloakedKeys();
-
-                /* eslint-disable no-cond-assign */
-                for (var i = 0, key; key = keys[i]; i++) delete this[key];
-
-                keys = cloakedKeys();
-
-                /* eslint-disable no-cond-assign */
-                for (i = 0; key = keys[i]; i++) delete cloak[key];
-            }
-        };
-
-        Object.defineProperty(exports, 'length', {
-            enumerable: false,
-            configurable: true,
-            get: function ()
-            {
-                return enumerableKeys().length;
-            }
-        });
-
-        var cloak = {};
-
-        var API_KEYS = {
-            getItem: 1,
-            setItem: 1,
-            removeItem: 1,
-            key: 1,
-            clear: 1,
-            length: 1
-        };
-
-        function enumerableKeys()
-        {
-            return uncloakedKeys().concat(cloakedKeys());
-        }
-
-        function uncloakedKeys()
-        {
-            return keys(exports).filter(function (key)
-            {
-                return !API_KEYS[key];
-            });
-        }
-
-        function cloakedKeys()
-        {
-            return keys(cloak);
-        }
-
-        return exports;
-    })({});
-
-    /* ------------------------------ now ------------------------------ */
-
-    var now = _.now = (function (exports)
-    {
-        /* Gets the number of milliseconds that have elapsed since the Unix epoch.
-         *
-         * ```javascript
-         * now(); // -> 1468826678701
-         * ```
-         */
-
-        exports = Date.now || function ()
-        {
-            return new Date().getTime();
-        };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ optimizeCb ------------------------------ */
-
-    var optimizeCb = _.optimizeCb = (function ()
-    {
-        /* Used for function context binding.
-         */
-
-        function exports(fn, ctx, argCount)
-        {
-            if (isUndef(ctx)) return fn;
-
-            switch (argCount == null ? 3 : argCount)
-            {
-                case 1: return function (val)
-                {
-                    return fn.call(ctx, val);
-                };
-                case 3: return function (val, idx, collection)
-                {
-                    return fn.call(ctx, val, idx, collection);
-                };
-                case 4: return function (accumulator, val, idx, collection)
-                {
-                    return fn.call(ctx, accumulator, val, idx, collection);
-                }
-            }
-
-            return function ()
-            {
-                return fn.apply(ctx, arguments);
-            };
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ safeCb ------------------------------ */
 
     var safeCb = _.safeCb = (function (exports)
     {
         /* Create callback based on input value.
+         */
+
+        /* dependencies
+         * isFn isObj optimizeCb matcher identity 
          */
 
         exports = function (val, ctx, argCount)
@@ -2129,6 +2156,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * safeCb each 
+         */
+
         function exports(obj, predicate, ctx)
         {
             var ret = [];
@@ -2162,6 +2193,10 @@ module.exports = (function ()
          * ```javascript
          * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
          * ```
+         */
+
+        /* dependencies
+         * safeCb keys isArrLike 
          */
 
         function exports(obj, iteratee, ctx)
@@ -2201,6 +2236,10 @@ module.exports = (function ()
          * toArr(1); // -> [1]
          * toArr(null); // -> []
          * ```
+         */
+
+        /* dependencies
+         * isArrLike map isArr isStr 
          */
 
         function exports(val)
@@ -2264,6 +2303,10 @@ module.exports = (function ()
          * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
          * Student.is(a); // -> true
          * ```
+         */
+
+        /* dependencies
+         * extend toArr inherits has safeGet 
          */
 
         function exports(methods, statics)
@@ -2364,6 +2407,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * Class isStr each 
+         */
+
         exports = Class({
             className: 'Select',
             initialize: function (selector)
@@ -2435,6 +2482,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isStr toArr Select 
+         */
+
         function exports(val)
         {
             return toArr(isStr(val) ? new Select(val) : val);
@@ -2488,6 +2539,10 @@ module.exports = (function ()
          *     'attr2': 'test'
          * });
          * ```
+         */
+
+        /* dependencies
+         * toArr isObj isStr each isUndef $safeEls 
          */
 
         function exports(els, name, val)
@@ -2551,6 +2606,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * $attr isStr isObj each 
+         */
+
         function exports(nodes, name, val)
         {
             var dataName = name;
@@ -2608,6 +2667,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isStr isObj camelCase kebabCase isUndef contain isNum $safeEls startWith 
+         */
+
         function exports(nodes, name, val)
         {
             nodes = $safeEls(nodes);
@@ -2637,7 +2700,8 @@ module.exports = (function ()
                 var cssText = ';';
                 each(css, function (val, key)
                 {
-                    cssText += kebabCase(key) + ':' + addPx(key, val) + ';';
+                    key = dasherize(key);
+                    cssText += key + ':' + addPx(key, val) + ';';
                 });
                 node.style.cssText += cssText;
             });
@@ -2658,6 +2722,14 @@ module.exports = (function ()
             var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
 
             return needPx ? val + 'px' : val;
+        }
+
+        function dasherize(str) 
+        {
+            // -webkit- -o- 
+            if (startWith(str, '-')) return str;
+
+            return kebabCase(str);
         }
 
         return exports;
@@ -2703,6 +2775,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * each $safeEls 
+         */
+
         exports = {
             before: insertFactory('beforebegin'),
             after: insertFactory('afterend'),
@@ -2739,6 +2815,10 @@ module.exports = (function ()
          * ```javascript
          * $offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
          * ```
+         */
+
+        /* dependencies
+         * $safeEls 
          */
 
         function exports(els)
@@ -2788,6 +2868,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isUndef each $safeEls 
+         */
+
         exports = {
             html: propFactory('innerHTML'),
             text: propFactory('textContent'),
@@ -2827,6 +2911,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * each $safeEls 
+         */
+
         function exports(els)
         {
             els = $safeEls(els);
@@ -2855,6 +2943,10 @@ module.exports = (function ()
          * ```javascript
          * $show('#test');
          * ```
+         */
+
+        /* dependencies
+         * each $safeEls 
          */
 
         function exports(els)
@@ -2927,6 +3019,10 @@ module.exports = (function ()
          * delegate.add(container, 'click', '.children', clickHandler);
          * delegate.remove(container, 'click', '.children', clickHandler);
          * ```
+         */
+
+        /* dependencies
+         * Class contain 
          */
 
         function retTrue()  { return true }
@@ -3094,6 +3190,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * delegate isUndef $safeEls 
+         */
+
         exports = {
             on: eventFactory('add'),
             off: eventFactory('remove')
@@ -3140,6 +3240,10 @@ module.exports = (function ()
          *     return val % 2 === 0;
          * }); // -> true
          * ```
+         */
+
+        /* dependencies
+         * safeCb isArrLike keys 
          */
 
         function exports(obj, predicate, ctx)
@@ -3215,6 +3319,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * toArr some $safeEls isStr 
+         */
+
         exports = {
             add: function (els, name)
             {
@@ -3280,7 +3388,7 @@ module.exports = (function ()
 
     /* ------------------------------ $ ------------------------------ */
 
-    var $ = _.$ = (function ()
+    _.$ = (function ()
     {
         /* jQuery like style dom manipulator.
          *
@@ -3300,6 +3408,10 @@ module.exports = (function ()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* dependencies
+         * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr 
          */
 
         function exports(selector)
@@ -3324,10 +3436,10 @@ module.exports = (function ()
             },
             first: function ()
             {
-                return $(this[0]);
+                return exports(this[0]);
             },
             last: function () {
-                return $(last(this));
+                return exports(last(this));
             },
             get: function (idx)
             {
@@ -3335,7 +3447,7 @@ module.exports = (function ()
             },
             eq: function (idx)
             {
-                return $(this[idx]);
+                return exports(this[idx]);
             },
             on: function (event, selector, handler)
             {
@@ -3433,7 +3545,7 @@ module.exports = (function ()
             },
             parent: function ()
             {
-                return $(this[0].parentNode);
+                return exports(this[0].parentNode);
             },
             append: function (val)
             {
@@ -3468,6 +3580,117 @@ module.exports = (function ()
 
         return exports;
     })();
+
+    /* ------------------------------ memStorage ------------------------------ */
+
+    var memStorage = _.memStorage = (function (exports)
+    {
+        /* Memory-backed implementation of the Web Storage API.
+         *
+         * A replacement for environments where localStorage or sessionStorage is not available.
+         *
+         * ```javascript
+         * var localStorage = window.localStorage || memStorage;
+         * localStorage.setItem('test', 'eris');
+         * ```
+         */
+
+        /* dependencies
+         * keys 
+         */
+
+        exports = {
+            getItem: function (key)
+            {
+                return (API_KEYS[key] ? cloak[key] : this[key]) || null;
+            },
+            setItem: function (key, val)
+            {
+                API_KEYS[key] ? cloak[key] = val : this[key] = val;
+            },
+            removeItem: function (key)
+            {
+                API_KEYS[key] ? delete cloak[key] : delete this[key];
+            },
+            key: function (i)
+            {
+                var keys = enumerableKeys();
+
+                return i >= 0 && i < keys.length ? keys[i] : null;
+            },
+            clear: function ()
+            {
+                var keys = uncloakedKeys();
+
+                /* eslint-disable no-cond-assign */
+                for (var i = 0, key; key = keys[i]; i++) delete this[key];
+
+                keys = cloakedKeys();
+
+                /* eslint-disable no-cond-assign */
+                for (i = 0; key = keys[i]; i++) delete cloak[key];
+            }
+        };
+
+        Object.defineProperty(exports, 'length', {
+            enumerable: false,
+            configurable: true,
+            get: function ()
+            {
+                return enumerableKeys().length;
+            }
+        });
+
+        var cloak = {};
+
+        var API_KEYS = {
+            getItem: 1,
+            setItem: 1,
+            removeItem: 1,
+            key: 1,
+            clear: 1,
+            length: 1
+        };
+
+        function enumerableKeys()
+        {
+            return uncloakedKeys().concat(cloakedKeys());
+        }
+
+        function uncloakedKeys()
+        {
+            return keys(exports).filter(function (key)
+            {
+                return !API_KEYS[key];
+            });
+        }
+
+        function cloakedKeys()
+        {
+            return keys(cloak);
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ now ------------------------------ */
+
+    _.now = (function (exports)
+    {
+        /* Gets the number of milliseconds that have elapsed since the Unix epoch.
+         *
+         * ```javascript
+         * now(); // -> 1468826678701
+         * ```
+         */
+
+        exports = Date.now || function ()
+        {
+            return new Date().getTime();
+        };
+
+        return exports;
+    })({});
 
     /* ------------------------------ restArgs ------------------------------ */
 
@@ -3538,6 +3761,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * restArgs toArr 
+         */
+
         exports = restArgs(function (fn, partials)
         {
             return function ()
@@ -3571,6 +3798,10 @@ module.exports = (function ()
          * initOnce();
          * initOnce(); // -> init is invoked once
          * ```
+         */
+
+        /* dependencies
+         * partial before 
          */
 
         exports = partial(before, 2);
@@ -3624,6 +3855,10 @@ module.exports = (function ()
          * event.emit('test'); // Logs out 'test'.
          * Emitter.mixin({});
          * ```
+         */
+
+        /* dependencies
+         * Class has each slice once 
          */
 
         exports = Class({
@@ -3682,8 +3917,12 @@ module.exports = (function ()
 
     /* ------------------------------ orientation ------------------------------ */
 
-    var orientation = _.orientation = (function (exports)
+    _.orientation = (function (exports)
     {
+        /* dependencies
+         * Emitter 
+         */
+
         Emitter.mixin(exports);
 
         window.addEventListener('orientationchange', function ()
@@ -3713,6 +3952,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * isNum isObj isFn isStr 
+         */
+
         exports = function (val)
         {
             if (isNum(val)) return val;
@@ -3733,8 +3976,12 @@ module.exports = (function ()
 
     /* ------------------------------ pxToNum ------------------------------ */
 
-    var pxToNum = _.pxToNum = (function ()
+    _.pxToNum = (function ()
     {
+        /* dependencies
+         * toNum 
+         */
+
         function exports(str)
         {
             return toNum(str.replace('px', ''));
@@ -3815,6 +4062,10 @@ module.exports = (function ()
          * ```
          */
 
+        /* dependencies
+         * ltrim rtrim 
+         */
+
         var regSpace = /^\s+|\s+$/g;
 
         function exports(str, chars)
@@ -3829,8 +4080,12 @@ module.exports = (function ()
 
     /* ------------------------------ getFileName ------------------------------ */
 
-    var getFileName = _.getFileName = (function ()
+    _.getFileName = (function ()
     {
+        /* dependencies
+         * last trim 
+         */
+
         function exports(url)
         {
             var ret = last(url.split('/'));
@@ -3872,6 +4127,10 @@ module.exports = (function ()
          * query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
          * query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
          * ```
+         */
+
+        /* dependencies
+         * trim each isUndef isArr map isEmpty filter isObj 
          */
 
         exports = {
@@ -3927,7 +4186,7 @@ module.exports = (function ()
 
     /* ------------------------------ Url ------------------------------ */
 
-    var Url = _.Url = (function (exports)
+    _.Url = (function (exports)
     {
         /* Simple url manipulator.
          *
@@ -3999,6 +4258,10 @@ module.exports = (function ()
          * url.rmQuery('eruda');
          * utl.toString(); // -> 'http://example.com:8080/?foo=bar'
          * ```
+         */
+
+        /* dependencies
+         * Class extend trim query isEmpty each toArr 
          */
 
         exports = Class({
@@ -4148,7 +4411,7 @@ module.exports = (function ()
 
     /* ------------------------------ ajax ------------------------------ */
 
-    var ajax = _.ajax = (function ()
+    _.ajax = (function ()
     {
         /* Perform an asynchronous HTTP request.
          *
@@ -4200,6 +4463,10 @@ module.exports = (function ()
          *     // ...
          * });
          * ```
+         */
+
+        /* dependencies
+         * isFn noop defaults isObj query 
          */
 
         function exports(options)
@@ -4316,8 +4583,12 @@ module.exports = (function ()
 
     /* ------------------------------ safeStorage ------------------------------ */
 
-    var safeStorage = _.safeStorage = (function ()
+    _.safeStorage = (function ()
     {
+        /* dependencies
+         * isUndef memStorage 
+         */
+
         function exports(type, memReplacement)
         {
             if (isUndef(memReplacement)) memReplacement = true;
@@ -4352,7 +4623,7 @@ module.exports = (function ()
 
     /* ------------------------------ stripHtmlTag ------------------------------ */
 
-    var stripHtmlTag = _.stripHtmlTag = (function ()
+    _.stripHtmlTag = (function ()
     {
         /* Strip html tags from a string.
          *
@@ -4378,7 +4649,7 @@ module.exports = (function ()
 
     /* ------------------------------ toInt ------------------------------ */
 
-    var toInt = _.toInt = (function ()
+    _.toInt = (function ()
     {
         /* Convert value to an integer.
          *
@@ -4391,6 +4662,10 @@ module.exports = (function ()
          * toInt(1.1); // -> 1
          * toInt(undefined); // -> 0
          * ```
+         */
+
+        /* dependencies
+         * toNum 
          */
 
         function exports(val)
@@ -4407,7 +4682,7 @@ module.exports = (function ()
 
     /* ------------------------------ uniqId ------------------------------ */
 
-    var uniqId = _.uniqId = (function ()
+    _.uniqId = (function ()
     {
         /* Generate a globally-unique id.
          *
@@ -4435,7 +4710,7 @@ module.exports = (function ()
 
     /* ------------------------------ unique ------------------------------ */
 
-    var unique = _.unique = (function ()
+    _.unique = (function ()
     {
         /* Create duplicate-free version of an array.
          *
@@ -4448,6 +4723,10 @@ module.exports = (function ()
          * ```javascript
          * unique([1, 2, 3, 1]); // -> [1, 2, 3]
          * ```
+         */
+
+        /* dependencies
+         * filter 
          */
 
         function exports(arr, compare)
@@ -4477,7 +4756,7 @@ module.exports = (function ()
 
     /* ------------------------------ wrap ------------------------------ */
 
-    var wrap = _.wrap = (function ()
+    _.wrap = (function ()
     {
         /* Wrap the function inside a wrapper function, passing it as the first argument.
          *
@@ -4494,6 +4773,10 @@ module.exports = (function ()
          * });
          * p('You & Me'); // -> '<p>You &amp; Me</p>'
          * ```
+         */
+
+        /* dependencies
+         * partial 
          */
 
         function exports(fn, wrapper)
