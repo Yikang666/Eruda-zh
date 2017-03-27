@@ -82,7 +82,7 @@ eruda.init({
 
 ## Demo
 
-![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode2.png)
+![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode3.png)
 
 请扫描二维码或在手机上直接访问：[http://eruda.liriliri.io/](http://eruda.liriliri.io/)
 
