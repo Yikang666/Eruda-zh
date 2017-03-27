@@ -1,4 +1,4 @@
-<a href="http://liriliri.github.io/eruda/" target="_blank">
+<a href="http://eruda.liriliri.io/" target="_blank">
     <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
 </a>
 
@@ -29,14 +29,14 @@ is a similar one on mobile side, which leads to the creation of Eruda.
 
 ## Demo
 
-![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode2.png)
+![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode3.png)
 
-Browse it on your phone: [http://liriliri.github.io/eruda/](http://liriliri.github.io/eruda/)
+Browse it on your phone: [http://eruda.liriliri.io/](http://eruda.liriliri.io/)
 
 In order to try it for different sites, execute the script below on browser address bar.
 
 ```javascript
-javascript:(function () { var script = document.createElement('script'); script.src="//liriliri.github.io/eruda/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+javascript:(function () { var script = document.createElement('script'); script.src="http://eruda.liriliri.io/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 ```
 
 ## Features
@@ -68,7 +68,7 @@ Add this script to your page.
 It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [cdnjs](https://cdnjs.com/libraries/eruda).
 
 ```html
-<script src="//cdn.jsdelivr.net/eruda/1.2.0/eruda.min.js"></script>
+<script src="//cdn.jsdelivr.net/eruda/1.2.2/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 

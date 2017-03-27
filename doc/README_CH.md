@@ -1,4 +1,4 @@
-<a href="http://liriliri.github.io/eruda/" target="_blank">
+<a href="http://eruda.liriliri.io/" target="_blank">
     <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
 </a>
 
@@ -84,10 +84,10 @@ eruda.init({
 
 ![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode2.png)
 
-请扫描二维码或在手机上直接访问：[http://liriliri.github.io/eruda/](http://liriliri.github.io/eruda/)
+请扫描二维码或在手机上直接访问：[http://eruda.liriliri.io/](http://eruda.liriliri.io/)
 
 如果想在其它页面尝试，请在浏览器地址栏上输入以下代码。
 
 ```javascript
-javascript:(function () { var script = document.createElement('script'); script.src="//liriliri.github.io/eruda/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+javascript:(function () { var script = document.createElement('script'); script.src="http://eruda.liriliri.io/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 ```
