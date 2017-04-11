@@ -67,6 +67,9 @@ module.exports = {
             contentEditable: false
         });
 
+        // http://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
+        el.setAttribute('ontouchstart', '');
+
         this._$el = util.$(el);
     },
     _initDevTools()
