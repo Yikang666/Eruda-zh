@@ -8,7 +8,7 @@ export default function stringify(obj, {
     circularMarker = false,
     getterVal = false,
     unenumerable = true
-    } = {})
+} = {})
 {
     let json = '',
         type,
@@ -56,16 +56,17 @@ export default function stringify(obj, {
             id = visitor.visit(obj);
         }
 
-        allKeys = Object.getOwnPropertyNames(obj);
-        keys = Object.keys(obj);
+        names = getKeys(obj);
+        keys = names.keys;
+        allKeys = names.allKeys;
         names = unenumerable ? allKeys : keys;
+        
         proto = Object.getPrototypeOf(obj);
         if (circularMarker && proto === Object.prototype) proto = null;
         if (proto)
         {
             proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
         }
-        names.sort(sortObjName);
         if (isFn)
         {
             // We don't need these properties to display for functions.
@@ -125,9 +126,12 @@ export default function stringify(obj, {
             });
             parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`);
             if (!circularMarker) parts.push(`"erudaId": "${id}"`);
-            allKeys = Object.getOwnPropertyNames(obj);
-            keys = Object.keys(obj);
+
+            names = getKeys(obj);
+            keys = names.keys;
+            allKeys = names.allKeys;
             names = unenumerable ? allKeys : keys;
+
             proto = Object.getPrototypeOf(obj);
             if (circularMarker && proto === Object.prototype) proto = null;
             if (proto)
@@ -140,7 +144,6 @@ export default function stringify(obj, {
                     proto = `${wrapKey('erudaProto')}: ${wrapStr(e.message)}`;
                 }
             }
-            names.sort(sortObjName);
             util.each(names, objIteratee);
             if (proto) parts.push(proto);
             json += parts.join(', ') + ' }';
@@ -185,8 +188,18 @@ export default function stringify(obj, {
     return json;
 }
 
+function getKeys(obj) 
+{
+    let allKeys = Object.getOwnPropertyNames(obj),
+        keys = Object.keys(obj).sort(sortObjName);
+
+    allKeys = keys.concat(util.filter(allKeys, val => !util.contain(keys, val)).sort(sortObjName));
+
+    return {keys, allKeys};
+}
+
 // $, upperCase, lowerCase, _
-var sortObjName = (a, b) =>
+function sortObjName(a, b)
 {
     let lenA = a.length,
         lenB = b.length,
@@ -203,8 +216,9 @@ var sortObjName = (a, b) =>
 
     if (lenA > lenB) return 1;
     if (lenA < lenB) return -1;
+    
     return 0;
-};
+}
 
 function cmpCode(a, b)
 {
@@ -218,7 +232,8 @@ function cmpCode(a, b)
 
 function transCode(code)
 {
-    if (code === 95) return 91;
+    // _ should be placed after lowercase chars.
+    if (code === 95) return 123;
     return code;
 }
 

@@ -7,7 +7,7 @@ export default function getAbstract(obj, {
     level = 0,
     getterVal = false,
     unenumerable = true
-    } = {})
+} = {})
 {
     let json = '',
         type = '',
@@ -71,7 +71,6 @@ export default function getAbstract(obj, {
                 return;
             }
         }
-        if (typeof topObj[name] === 'function') return;
         parts.push(`${key}: ${getAbstract(topObj[name], passOpts)}`);
         i++;
     }
@@ -89,6 +88,7 @@ export default function getAbstract(obj, {
         isNum = (type == '[object Number]'),
         isRegExp = (type == '[object RegExp]'),
         isSymbol = (type == '[object Symbol]'),
+        isFn = (type == '[object Function]'),
         isBool = (type == '[object Boolean]');
 
     if (circular)
@@ -100,6 +100,9 @@ export default function getAbstract(obj, {
     } else if (isRegExp)
     {
         json = wrapRegExp(util.escapeJsonStr(obj.toString()));
+    } else if (isFn) 
+    {
+        json = wrapStr('function');
     } else if (isArr)
     {
         if (doStringify)
@@ -179,7 +182,7 @@ export default function getAbstract(obj, {
     return json;
 }
 
-const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object'];
+const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'function'];
 
 function canBeProto(obj)
 {
