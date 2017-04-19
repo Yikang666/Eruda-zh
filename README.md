@@ -6,7 +6,7 @@
 
 # Eruda
 
-[![Join the chat at https://gitter.im/liriliri/eruda][gitter-image])][gitter-url]
+[![Join the chat at https://gitter.im/liriliri/eruda][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![License][license-image]][npm-url]
