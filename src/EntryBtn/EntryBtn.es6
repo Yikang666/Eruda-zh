@@ -18,18 +18,18 @@ export default class EntryBtn extends util.Emitter
     }
     _appendTpl()
     {
-        var $parent = this._$parent;
+        let $parent = this._$parent;
 
         $parent.append(require('./EntryBtn.hbs')());
         this._$el = $parent.find('.eruda-entry-btn');
     }
     _setPos(orientationChanged)
     {
-        var cfg = this.config,
+        let cfg = this.config,
             pos = cfg.get('pos'),
             defPos = getDefPos();
 
-        var outOfRange = pos.x > defPos.x + 10 ||
+        let outOfRange = pos.x > defPos.x + 10 ||
                          pos.x < 0 ||
                          pos.y < 0 ||
                          pos.y > defPos.y + 10;
@@ -47,7 +47,7 @@ export default class EntryBtn extends util.Emitter
     }
     _bindEvent()
     {
-        var draggabilly = this._draggabilly,
+        let draggabilly = this._draggabilly,
             $el = this._$el;
 
         draggabilly.on('staticClick', () => this.emit('click'))
@@ -55,7 +55,7 @@ export default class EntryBtn extends util.Emitter
 
         draggabilly.on('dragEnd', () =>
         {
-            var cfg = this.config;
+            let cfg = this.config;
 
             if (cfg.get('rememberPos'))
             {
@@ -69,6 +69,7 @@ export default class EntryBtn extends util.Emitter
         });
 
         util.orientation.on('change', () => this._setPos(true));
+        window.addEventListener('resize', () => this._setPos());
     }
     _makeDraggable()
     {
@@ -76,7 +77,7 @@ export default class EntryBtn extends util.Emitter
     }
     _initCfg()
     {
-        var cfg = this.config = util.createCfg('home-button');
+        let cfg = this.config = util.createCfg('home-button');
 
         cfg.set(util.defaults(cfg.get(), {
             rememberPos: true,
@@ -85,7 +86,7 @@ export default class EntryBtn extends util.Emitter
     }
 }
 
-var getDefPos = () =>
+let getDefPos = () =>
 {
     return {
         x: window.innerWidth - 50,
