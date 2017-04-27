@@ -127,7 +127,7 @@ export default function getAbstract(obj, {
             i = 1;
             json = '{ ';
             util.each(names, objIteratee);
-            json += parts.join(', ') + objEllipsis + ' }';
+            json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
         } else
         {
             json = util.getObjType(obj);
@@ -168,7 +168,7 @@ export default function getAbstract(obj, {
                 json = '{ ';
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
                 util.each(names, objIteratee);
-                json += parts.join(', ') + objEllipsis + ' }';
+                json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
             } else
             {
                 json = util.getObjType(obj);
@@ -190,4 +190,17 @@ function canBeProto(obj)
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
+}
+
+function moveFnToTail(parts) 
+{
+    var front = [],
+        tail = [];
+
+    util.each(parts, val => 
+    {
+        val.indexOf('function') > -1 ? tail.push(val) : front.push(val);
+    });
+
+    return front.concat(tail);
 }
