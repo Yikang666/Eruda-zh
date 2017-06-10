@@ -1,7 +1,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title">
         Local Storage
-        <div class="eruda-btn refresh-local-storage">
+        <div class="eruda-btn eruda-refresh-local-storage">
             <span class="eruda-icon-repeat"></span>
         </div>
         <div class="eruda-btn eruda-clear-storage" data-type="local">
@@ -16,7 +16,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td class="eruda-storage-val" data-key="{{key}}" data-type="local">{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="local"></span>
+                            <span class="eruda-icon-trash eruda-delete-storage" data-key="{{key}}" data-type="local"></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -31,7 +31,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title">
         Session Storage
-        <div class="eruda-btn refresh-session-storage">
+        <div class="eruda-btn eruda-refresh-session-storage">
             <span class="eruda-icon-repeat"></span>
         </div>
         <div class="eruda-btn eruda-clear-storage" data-type="session">
@@ -46,7 +46,7 @@
                     <td class="eruda-key">{{key}}</td>
                     <td class="eruda-storage-val" data-key="{{key}}" data-type="session">{{val}}</td>
                     <td class="eruda-control">
-                        <span class="eruda-icon-trash delete-storage" data-key="{{key}}" data-type="session"></span>
+                        <span class="eruda-icon-trash eruda-delete-storage" data-key="{{key}}" data-type="session"></span>
                     </td>
                 </tr>
             {{/each}}
@@ -61,7 +61,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{cookieState}}">
         Cookie
-        <div class="eruda-btn refresh-cookie">
+        <div class="eruda-btn eruda-refresh-cookie">
             <span class="eruda-icon-repeat"></span>
         </div>
         <div class="eruda-btn eruda-clear-cookie">
@@ -76,7 +76,7 @@
                         <td class="eruda-key">{{key}}</td>
                         <td>{{val}}</td>
                         <td class="eruda-control">
-                            <span class="eruda-icon-trash delete-cookie" data-key="{{key}}"></span>
+                            <span class="eruda-icon-trash eruda-delete-cookie" data-key="{{key}}"></span>
                         </td>
                     </tr>
                 {{/each}}
@@ -91,7 +91,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{scriptState}}">
         Script
-        <div class="eruda-btn refresh-script">
+        <div class="eruda-btn eruda-refresh-script">
             <span class="eruda-icon-repeat"></span>
         </div>
     </h2>
@@ -99,7 +99,7 @@
         {{#if scriptData}}
             {{#each scriptData}}
                 <li>
-                    <a href="{{this}}" target="_blank" class="js-link">{{this}}</a>
+                    <a href="{{this}}" target="_blank" class="eruda-js-link">{{this}}</a>
                 </li>
             {{/each}}
         {{else}}
@@ -110,7 +110,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{stylesheetState}}">
         Stylesheet
-        <div class="eruda-btn refresh-stylesheet">
+        <div class="eruda-btn eruda-refresh-stylesheet">
             <span class="eruda-icon-repeat"></span>
         </div>
     </h2>
@@ -118,7 +118,7 @@
         {{#if stylesheetData}}
             {{#each stylesheetData}}
                 <li>
-                    <a href="{{this}}" target="_blank" class="css-link">{{this}}</a>
+                    <a href="{{this}}" target="_blank" class="eruda-css-link">{{this}}</a>
                 </li>
             {{/each}}
         {{else}}
@@ -129,7 +129,7 @@
 <div class="eruda-section">
     <h2 class="eruda-title {{imageState}}">
         Image
-        <div class="eruda-btn refresh-image">
+        <div class="eruda-btn eruda-refresh-image">
             <span class="eruda-icon-repeat"></span>
         </div>
     </h2>
@@ -137,7 +137,7 @@
         {{#if imageData}}
             {{#each imageData}}
                 <li>
-                    <img src="{{this}}" data-exclude="true" class="img-link"/>
+                    <img src="{{this}}" data-exclude="true" class="eruda-img-link"/>
                 </li>
             {{/each}}
         {{else}}

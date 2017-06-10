@@ -154,7 +154,7 @@ export default class Elements extends Tool
             while (idx-- && el.parentNode) el = el.parentNode;
 
             !isElExist(el) ? self._render() : self.set(el);
-        }).on('click', '.toggle-all-computed-style', () => this._toggleAllComputedStyle());
+        }).on('click', '.eruda-toggle-all-computed-style', () => this._toggleAllComputedStyle());
 
         let $bottomBar = this._$el.find('.eruda-bottom-bar');
 
@@ -171,7 +171,7 @@ export default class Elements extends Tool
 
         this._render();
     }
-    _toggleObserver(flag) 
+    _toggleObserver(flag)
     {
         let observer = this._observer;
 
@@ -272,7 +272,7 @@ export default class Elements extends Tool
         this._lastHtml = html;
         this._$showArea.html(html);
     }
-    _initObserver() 
+    _initObserver()
     {
         let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
@@ -283,23 +283,23 @@ export default class Elements extends Tool
             util.each(mutations, mutation => this._handleMutation(mutation));
         });
     }
-    _handleMutation(mutation) 
+    _handleMutation(mutation)
     {
         let i, len, node;
 
         if (util.isErudaEl(mutation.target)) return;
 
-        if (mutation.type === 'attributes') 
+        if (mutation.type === 'attributes')
         {
             if (mutation.target !== this._curEl) return;
             this._render();
-        } else if (mutation.type === 'childList') 
+        } else if (mutation.type === 'childList')
         {
             if (mutation.target === this._curEl) return this._render();
 
             let addedNodes = mutation.addedNodes;
 
-            for (i = 0, len = addedNodes.length; i < len; i++) 
+            for (i = 0, len = addedNodes.length; i < len; i++)
             {
                 node = addedNodes[i];
 
@@ -308,7 +308,7 @@ export default class Elements extends Tool
 
             let removedNodes = mutation.removedNodes;
 
-            for (i = 0, len = removedNodes.length; i < len; i++) 
+            for (i = 0, len = removedNodes.length; i < len; i++)
             {
                 if (removedNodes[i] === this._curEl) return this.set(this._htmlEl);
             }
@@ -338,7 +338,7 @@ export default class Elements extends Tool
         let settings = this._parent.get('settings');
         settings.text('Elements')
                 .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
-        
+
         if (this._observer) settings.switch(cfg, 'observeElement', 'Auto Refresh');
 
         settings.separator();

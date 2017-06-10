@@ -52,11 +52,11 @@ export default class Snippets extends Tool
     }
     _bindEvent()
     {
-        var self = this;
+        let self = this;
 
-        this._$el.on('click', '.run', function I()
+        this._$el.on('click', '.eruda-run', function I()
         {
-            var idx = util.$(this).data('idx');
+            let idx = util.$(this).data('idx');
 
             self._run(idx);
         });

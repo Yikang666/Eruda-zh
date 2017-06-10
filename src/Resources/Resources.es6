@@ -166,12 +166,12 @@ export default class Resources extends Tool
             $el = this._$el,
             parent = this._parent;
 
-        $el.on('click', '.refresh-local-storage', () => this.refreshLocalStorage()._render())
-           .on('click', '.refresh-session-storage', () => this.refreshSessionStorage()._render())
-           .on('click', '.refresh-cookie', () => this.refreshCookie()._render())
-           .on('click', '.refresh-script', () => this.refreshScript()._render())
-           .on('click', '.refresh-image', () => this.refreshImage()._render())
-           .on('click', '.delete-storage', function ()
+        $el.on('click', '.eruda-refresh-local-storage', () => this.refreshLocalStorage()._render())
+           .on('click', '.eruda-refresh-session-storage', () => this.refreshSessionStorage()._render())
+           .on('click', '.eruda-refresh-cookie', () => this.refreshCookie()._render())
+           .on('click', '.eruda-refresh-script', () => this.refreshScript()._render())
+           .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
+           .on('click', '.eruda-delete-storage', function ()
            {
                let $this = util.$(this),
                    key = $this.data('key'),
@@ -187,7 +187,7 @@ export default class Resources extends Tool
                    self.refreshSessionStorage()._render();
                }
            })
-           .on('click', '.delete-cookie', function ()
+           .on('click', '.eruda-delete-cookie', function ()
            {
                let key = util.$(this).data('key');
 
@@ -229,14 +229,14 @@ export default class Resources extends Tool
                    showSources('raw', val);
                }
            })
-           .on('click', '.img-link', function ()
+           .on('click', '.eruda-img-link', function ()
            {
                let src = util.$(this).attr('src');
 
                showSources('img', src);
            })
-           .on('click', '.css-link', linkFactory('css'))
-           .on('click', '.js-link', linkFactory('js'));
+           .on('click', '.eruda-css-link', linkFactory('css'))
+           .on('click', '.eruda-js-link', linkFactory('js'));
 
         util.orientation.on('change', () => this._render());
 

@@ -92,10 +92,10 @@ export default class Console extends Tool
     }
     _initLogger()
     {
-        let $filter = this._$control.find('.filter'),
+        let $filter = this._$control.find('.eruda-filter'),
             logger = this._logger = new Logger(this._$logs, this);
 
-        logger.on('filter', (filter) => $filter.each(function ()
+        logger.on('filter', filter => $filter.each(function ()
         {
             let $this = util.$(this),
                 isMatch = $this.data('filter') === filter;
@@ -123,15 +123,15 @@ export default class Console extends Tool
             logger = this._logger,
             config = this.config;
 
-        $control.on('click', '.clear-console', () => logger.clear())
-                .on('click', '.filter', function ()
+        $control.on('click', '.eruda-clear-console', () => logger.clear())
+                .on('click', '.eruda-filter', function ()
                 {
                     logger.filter(util.$(this).data('filter'));
                 })
-                .on('click', '.help', () => logger.help());
+                .on('click', '.eruda-help', () => logger.help());
 
-        $inputBtns.on('click', '.cancel', () => this._hideInput())
-                  .on('click', '.execute', () =>
+        $inputBtns.on('click', '.eruda-cancel', () => this._hideInput())
+                  .on('click', '.eruda-execute', () =>
                   {
                       let jsInput = $input.val().trim();
                       if (jsInput === '') return;
@@ -144,19 +144,19 @@ export default class Console extends Tool
         $input.on('focusin', () => this._showInput());
 
         logger.on('viewJson', (data) =>
-           {
-               let sources = parent.get('sources');
-               if (!sources) return;
+              {
+                  let sources = parent.get('sources');
+                  if (!sources) return;
 
-               sources.set('json', data);
-               parent.showTool('sources');
-           })
-           .on('insert', (log) =>
-           {
-               let autoShow = log.type === 'error' && config.get('displayIfErr');
+                  sources.set('json', data);
+                  parent.showTool('sources');
+              })
+              .on('insert', (log) =>
+              {
+                  let autoShow = log.type === 'error' && config.get('displayIfErr');
 
-               if (autoShow) parent.showTool('console').show();
-           });
+                  if (autoShow) parent.showTool('console').show();
+              });
     }
     _hideInput()
     {

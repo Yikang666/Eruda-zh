@@ -22,7 +22,7 @@ export default class NavBar extends util.Emitter
         let $bottomBar = this._$bottomBar;
 
         this._len++;
-        this._$ul.prepend(`<li class="${name}">${name}</li>`);
+        this._$ul.prepend(`<li class="eruda-${name}">${name}</li>`);
         $bottomBar.css('left', util.pxToNum($bottomBar.css('left')) + ITEM_WIDTH);
         this._resetStyle();
     }
@@ -33,11 +33,11 @@ export default class NavBar extends util.Emitter
     }
     activeTool(name)
     {
-        var self = this;
+        let self = this;
 
         this._$ul.find('li').each(function (idx)
         {
-            var $this = util.$(this);
+            let $this = util.$(this);
 
             if ($this.text() === name)
             {
@@ -51,7 +51,7 @@ export default class NavBar extends util.Emitter
     }
     _resetStyle()
     {
-        var height = this._height;
+        let height = this._height;
 
         this._$el.css('height', height);
         this._$ul.css({width: this._len * ITEM_WIDTH});
@@ -62,7 +62,7 @@ export default class NavBar extends util.Emitter
     }
     _bindEvent()
     {
-        var self = this;
+        let self = this;
 
         this._$ul.on('click', 'li', function ()
         {
