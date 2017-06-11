@@ -22,7 +22,7 @@ export default class NavBar extends util.Emitter
         let $bottomBar = this._$bottomBar;
 
         this._len++;
-        this._$ul.prepend(`<li class="eruda-${name}">${name}</li>`);
+        this._$ul.prepend(`<li>${name}</li>`);
         $bottomBar.css('left', util.pxToNum($bottomBar.css('left')) + ITEM_WIDTH);
         this._resetStyle();
     }
