@@ -18,10 +18,7 @@ export default class Console extends Tool
 
         this._initLogger();
         this._exposeLogger();
-        this._rejectionHandler = e => 
-        {
-            this._logger.error(e.reason);
-        };
+        this._rejectionHandler = e => this._logger.error(e.reason);
 
         this._initCfg(parent);
         this._bindEvent(parent);
