@@ -245,7 +245,8 @@ function formatErr(err)
     var lines = err.stack.split('\n'),
         msg = `${err.message || lines[0]}<br/>`;
 
-    lines = lines.filter(val => !regErudaJs.test(val));
+    lines = lines.filter(val => !regErudaJs.test(val))
+                 .map(val => util.escape(val));
 
     var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 

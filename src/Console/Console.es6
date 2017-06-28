@@ -15,8 +15,14 @@ export default class Console extends Tool
         super.init($el);
 
         this._appendTpl();
+
         this._initLogger();
         this._exposeLogger();
+        this._rejectionHandler = e => 
+        {
+            this._logger.error(e.reason);
+        };
+
         this._initCfg(parent);
         this._bindEvent(parent);
     }
@@ -60,6 +66,7 @@ export default class Console extends Tool
         this._origOnerror = window.onerror;
 
         window.onerror = (errMsg, url, lineNum, column, errObj) => this._logger.error(errObj ? errObj : errMsg);
+        window.addEventListener('unhandledrejection', this._rejectionHandler);
 
         return this;
     }
@@ -70,6 +77,7 @@ export default class Console extends Tool
             window.onerror = this._origOnerror;
             delete this._origOnerror;
         }
+        window.removeEventListener('unhandledrejection', this._rejectionHandler);
 
         return this;
     }

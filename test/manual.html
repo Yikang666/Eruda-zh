@@ -18,6 +18,9 @@
         <li>
             <a href="#" id="plugin">Plugin</a>
         </li>
+        <li>
+            <a href="#" id="issue29">#29</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -55,6 +58,16 @@
                 }
             };
         });
+    });
+    addClickEvent('issue29', function () 
+    {
+        new Promise(function (resolve, reject)
+        {
+            resolve();
+        }).then(function (res)
+        {
+            var a = res.a;
+        })
     });
 </script>
 <script>boot();</script>
