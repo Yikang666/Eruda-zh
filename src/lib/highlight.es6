@@ -88,13 +88,13 @@ var language = {};
 language.js = {
     comment: {re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g, style: 'comment'},
     string: {re: /(('.*?')|(".*?"))/g, style: 'string'},
-    numbers: {re: /(\-?(\d+|\d+\.\d+|\.\d+))/g, style: 'number'},
+    numbers: {re: /(-?(\d+|\d+\.\d+|\.\d+))/g, style: 'number'},
     keywords: {re: /(?:\b)(function|for|foreach|while|if|else|elseif|switch|break|as|return|this|class|self|default|var|false|true|null|undefined)(?:\b)/gi, style: 'keyword'},
-    operators: {re: /(\+|\-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g, style: 'operators'}
+    operators: {re: /(\+|-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g, style: 'operators'}
 };
 
 language.html = {
-    comment: {re: /(&lt;!\-\-([\s\S]*?)\-\-&gt;)/g, style: 'comment'},
+    comment: {re: /(&lt;!--([\s\S]*?)--&gt;)/g, style: 'comment'},
     tag: {re: /(&lt;\/?\w(.|\n)*?\/?&gt;)/g, style: 'keyword', embed: ['string']},
     string: language.js.string,
     css: {re: /(?:&lt;style.*?&gt;)([\s\S]*)?(?:&lt;\/style&gt;)/gi, language: 'css'},
@@ -104,8 +104,8 @@ language.html = {
 language.css = {
     comment: language.js.comment,
     string: language.js.string,
-    numbers: {re: /((\-?(\d+|\d+\.\d+|\.\d+)(%|px|em|pt|in)?)|#[0-9a-fA-F]{3}[0-9a-fA-F]{3})/g, style: 'number'},
-    keywords: {re: /(@\w+|:?:\w+|[a-z\-]+:)/g, style: 'keyword'}
+    numbers: {re: /((-?(\d+|\d+\.\d+|\.\d+)(%|px|em|pt|in)?)|#[0-9a-fA-F]{3}[0-9a-fA-F]{3})/g, style: 'number'},
+    keywords: {re: /(@\w+|:?:\w+|[a-z-]+:)/g, style: 'keyword'}
 };
 
 

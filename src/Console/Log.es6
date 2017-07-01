@@ -376,7 +376,7 @@ function formatEl(val)
     return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
 }
 
-var regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
+var regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi;
 
 var recognizeUrl = str => str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
 
