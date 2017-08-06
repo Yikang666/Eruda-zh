@@ -260,7 +260,8 @@ function formatJs(code)
 
 function formatMsg(args, {htmlForEl = true} = {})
 {
-    args = substituteStr(args);
+    let needStrSubstitution = util.isStr(args[0]) && args.length !== 1;
+    if (needStrSubstitution) args = substituteStr(args);
 
     for (let i = 0, len = args.length; i < len; i++)
     {
@@ -284,7 +285,7 @@ function formatMsg(args, {htmlForEl = true} = {})
         } else
         {
             val = util.toStr(val);
-            if (i !== 0) val = util.escape(val);
+            if (i !== 0 || !needStrSubstitution) val = util.escape(val);
             args[i] = val;
         }
     }
@@ -296,9 +297,7 @@ var formatDir = args => formatMsg(args, {htmlForEl: false});
 
 function substituteStr(args)
 {
-    if (!util.isStr(args[0]) || args.length === 1) return args;
-
-    var str = util.escape(args[0]),
+    let str = util.escape(args[0]),
         isInCss = false,
         newStr = '';
 
