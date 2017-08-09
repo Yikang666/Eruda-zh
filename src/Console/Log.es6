@@ -242,7 +242,7 @@ var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
 
 function formatErr(err)
 {
-    var lines = err.stack.split('\n'),
+    var lines = err.stack ? err.stack.split('\n') : [],
         msg = `${err.message || lines[0]}<br/>`;
 
     lines = lines.filter(val => !regErudaJs.test(val))
@@ -383,7 +383,7 @@ function getFrom()
 {
     let e = new Error(),
         ret = '',
-        lines = e.stack.split('\n');
+        lines = e.stack ? e.stack.split('\n') : '';
 
     for (let i = 0, len = lines.length; i < len; i++)
     {

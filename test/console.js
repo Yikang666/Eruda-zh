@@ -8,7 +8,6 @@ beforeEach(function ()
 
 describe('log', function ()
 {
-
     it('string', function ()
     {
         var text = '<span>This is a log</span>';
@@ -34,12 +33,6 @@ describe('log', function ()
 
         tool.log(obj);
         expect($tool.find('.eruda-log')).toContainText('Object { a: 1 }');
-    });
-
-    it('dir html element', function ()
-    {
-        tool.dir(document.createElement('script'));
-        expect($tool.find('.eruda-log')).not.toContainText('<script></script>');
     });
 
     it('html', function ()
