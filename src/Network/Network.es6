@@ -17,7 +17,7 @@ export default class Network extends Tool
         this._requests = {};
         this._tpl = require('./Network.hbs');
 
-        var performance = this._performance = window.webkitPerformance || window.performance;
+        let performance = this._performance = window.webkitPerformance || window.performance;
         this._hasResourceTiming = performance && util.isFn(performance.getEntries);
     }
     init($el, parent)
@@ -36,18 +36,18 @@ export default class Network extends Tool
     }
     overrideXhr()
     {
-        var winXhrProto = window.XMLHttpRequest.prototype;
+        let winXhrProto = window.XMLHttpRequest.prototype;
 
-        var origSend = this._origSend = winXhrProto.send,
+        let origSend = this._origSend = winXhrProto.send,
             origOpen = this._origOpen = winXhrProto.open;
 
-        var self = this;
+        let self = this;
 
         winXhrProto.open = function (method, url)
         {
-            var xhr = this;
+            let xhr = this;
 
-            var req = xhr.erudaRequest = new Request(xhr, method, url);
+            let req = xhr.erudaRequest = new Request(xhr, method, url);
 
             req.on('send', (id, data) => self._addReq(id, data));
             req.on('update', (id, data) => self._updateReq(id, data));
@@ -66,7 +66,7 @@ export default class Network extends Tool
 
         winXhrProto.send = function (data)
         {
-            var req = this.erudaRequest;
+            let req = this.erudaRequest;
             if (req) req.handleSend(data);
 
             origSend.apply(this, arguments);
@@ -74,7 +74,7 @@ export default class Network extends Tool
     }
     restoreXhr()
     {
-        var winXhrProto = window.XMLHttpRequest.prototype;
+        let winXhrProto = window.XMLHttpRequest.prototype;
 
         if (this._origOpen) winXhrProto.open = this._origOpen;
         if (this._origSend) winXhrProto.send = this._origSend;
@@ -104,7 +104,7 @@ export default class Network extends Tool
     }
     _updateReq(id, data)
     {
-        var target = this._requests[id];
+        let target = this._requests[id];
 
         if (!target) return;
 
@@ -119,17 +119,17 @@ export default class Network extends Tool
     }
     _bindEvent()
     {
-        var $el = this._$el,
+        let $el = this._$el,
             parent = this._parent;
 
-        var self = this;
+        let self = this;
 
         $el.on('click', '.eruda-performance-timing', function ()
         {
             $el.find('.eruda-performance-timing-data').show();
         }).on('click', '.eruda-request', function ()
         {
-            var id = util.$(this).data('id'),
+            let id = util.$(this).data('id'),
                 data = self._requests[id];
 
             if (!data.done) return;
@@ -144,7 +144,7 @@ export default class Network extends Tool
             });
         }).on('click', '.eruda-entry', function ()
         {
-            var idx = util.$(this).data('idx'),
+            let idx = util.$(this).data('idx'),
                 data = self._resourceTimingData[Number(idx)];
 
             if (data.initiatorType === 'img')
@@ -159,7 +159,7 @@ export default class Network extends Tool
 
         function showSources(type, data)
         {
-            var sources = parent.get('sources');
+            let sources = parent.get('sources');
             if (!sources) return;
 
             sources.set(type, data);
@@ -169,16 +169,16 @@ export default class Network extends Tool
     }
     _getPerformanceTimingData()
     {
-        var performance = this._performance;
+        let performance = this._performance;
 
         if (!performance) return;
 
-        var timing = performance.timing;
+        let timing = performance.timing;
 
-        var data = [];
+        let data = [];
 
         /* eslint-disable no-unused-vars */
-        var {
+        let {
                 navigationStart,
                 unloadEventStart,
                 unloadEventEnd,
@@ -202,13 +202,13 @@ export default class Network extends Tool
                 loadEventEnd
             } = timing;
 
-        var start = navigationStart,
+        let start = navigationStart,
             end = loadEventEnd,
             total = end - start;
 
         function getData(name, startTime, endTime)
         {
-            var duration = endTime - startTime;
+            let duration = endTime - startTime;
 
             return {
                 name: name,
@@ -233,7 +233,7 @@ export default class Network extends Tool
 
         this._performanceTimingData = data;
 
-        var performanceTiming = {};
+        let performanceTiming = {};
         [
             'navigationStart',
             'unloadEventStart',
@@ -266,7 +266,7 @@ export default class Network extends Tool
     {
         if (!this._hasResourceTiming) return;
 
-        var entries = this._performance.getEntries(),
+        let entries = this._performance.getEntries(),
             hideXhr = this.config.get('hideXhrResource'),
             data = [];
 
@@ -286,7 +286,7 @@ export default class Network extends Tool
     }
     _initCfg()
     {
-        var cfg = this.config = util.createCfg('network');
+        let cfg = this.config = util.createCfg('network');
 
         cfg.set(util.defaults(cfg.get(), {
             disablePerformance: false,
@@ -304,7 +304,7 @@ export default class Network extends Tool
             }
         });
 
-        var settings = this._parent.get('settings');
+        let settings = this._parent.get('settings');
         settings.text('Network')
                 .switch(cfg, 'overrideXhr', 'Catch Xhr Requests');
 
@@ -317,11 +317,11 @@ export default class Network extends Tool
     {
         if (!this.active) return;
 
-        var cfg = this.config;
+        let cfg = this.config;
 
         this._getResourceTimingData();
 
-        var renderData = {entries: this._resourceTimingData};
+        let renderData = {entries: this._resourceTimingData};
 
         if (cfg.get('overrideXhr'))
         {

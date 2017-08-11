@@ -25,9 +25,9 @@ export default class Request extends util.Emitter
     }
     handleHeadersReceived()
     {
-        var xhr = this._xhr;
+        let xhr = this._xhr;
 
-        var type = getType(xhr.getResponseHeader('Content-Type'));
+        let type = getType(xhr.getResponseHeader('Content-Type'));
 
         this.emit('update', this._id, {
             type: type.type,
@@ -39,10 +39,10 @@ export default class Request extends util.Emitter
     }
     handleDone()
     {
-        var xhr = this._xhr,
+        let xhr = this._xhr,
             resType = xhr.responseType;
 
-        var resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
+        let resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
 
         this.emit('update', this._id, {
             status: xhr.status,
@@ -56,10 +56,10 @@ export default class Request extends util.Emitter
 
 function getHeaders(xhr)
 {
-    var raw = xhr.getAllResponseHeaders(),
+    let raw = xhr.getAllResponseHeaders(),
         lines = raw.split('\n');
 
-    var ret = {};
+    let ret = {};
 
     util.each(lines, (line) =>
     {
@@ -67,7 +67,7 @@ function getHeaders(xhr)
 
         if (line === '') return;
 
-        var [key, val] = line.split(':', 2);
+        let [key, val] = line.split(':', 2);
 
         ret[key] = util.trim(val);
     });
@@ -79,7 +79,7 @@ function getType(contentType)
 {
     if (!contentType) return 'unknown';
 
-    var type = contentType.split(';')[0].split('/');
+    let type = contentType.split(';')[0].split('/');
 
     return {
         type: type[0],
@@ -89,14 +89,14 @@ function getType(contentType)
 
 function getSize(xhr, headersOnly, url)
 {
-    var size = 0;
+    let size = 0;
 
     function getStrSize()
     {
         if (!headersOnly)
         {
-            var resType = xhr.responseType;
-            var resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
+            let resType = xhr.responseType;
+            let resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
             if (resTxt) size = lenToUtf8Bytes(resTxt);
         }
     }
@@ -116,19 +116,17 @@ function getSize(xhr, headersOnly, url)
 
     if (size === 0) getStrSize();
 
-    if (size < 1024) return size + 'B';
-
-    return (size / 1024).toFixed(1) + 'KB';
+    return `${util.fileSize(size)}B`;
 }
 
 function lenToUtf8Bytes(str)
 {
-    var m = encodeURIComponent(str).match(/%[89ABab]/g);
+    let m = encodeURIComponent(str).match(/%[89ABab]/g);
 
     return str.length + (m ? m.length : 0);
 }
 
-var origin = window.location.origin;
+let origin = window.location.origin;
 
 function fullUrl(url)
 {

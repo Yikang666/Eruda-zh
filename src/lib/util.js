@@ -698,6 +698,41 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ fileSize ------------------------------ */
+
+    _.fileSize = (function ()
+    {
+        /* Turn bytes into human readable file size.
+         * 
+         * |Name  |Type  |Desc              |
+         * |------|------|------------------|
+         * |bytes |number|File bytes        |
+         * |return|string|Readable file size|
+         * 
+         * ```javascript
+         * fileSize(5); // -> '5'
+         * fileSize(1500); // -> '1.46K'
+         * fileSize(1500000); // -> '1.43M'
+         * fileSize(1500000000); // -> '1.4G'
+         * fileSize(1500000000000); // -> '1.36T'
+         * ```
+         */
+
+        function exports(bytes) 
+        {
+            if (bytes <= 0) return '0';
+
+            var suffixIdx = Math.floor(Math.log(bytes) / Math.log(1024)),
+                val = bytes / Math.pow(2, suffixIdx * 10);
+
+            return +val.toFixed(2) + suffixList[suffixIdx];
+        }
+
+        var suffixList = ['', 'K', 'M', 'G', 'T'];
+
+        return exports;
+    })();
+
     /* ------------------------------ upperFirst ------------------------------ */
 
     var upperFirst = _.upperFirst = (function ()
@@ -821,6 +856,35 @@ module.exports = (function ()
 
         return exports;
     })();
+
+    /* ------------------------------ isArr ------------------------------ */
+
+    var isArr = _.isArr = (function (exports)
+    {
+        /* Check if value is an `Array` object.
+         *
+         * |Name  |Type   |Desc                              |
+         * |------|-------|----------------------------------|
+         * |val   |*      |The value to check                |
+         * |return|boolean|True if value is an `Array` object|
+         *
+         * ```javascript
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         * ```
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        exports = Array.isArray || function (val)
+        {
+            return objToStr(val) === '[object Array]';
+        };
+
+        return exports;
+    })({});
 
     /* ------------------------------ isDate ------------------------------ */
 
@@ -1316,6 +1380,43 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ isEmpty ------------------------------ */
+
+    var isEmpty = _.isEmpty = (function ()
+    {
+        /* Check if value is an empty object or array.
+         *
+         * |Name  |Type   |Desc                  |
+         * |------|-------|----------------------|
+         * |val   |*      |Value to check        |
+         * |return|boolean|True if value is empty|
+         *
+         * ```javascript
+         * isEmpty([]); // -> true
+         * isEmpty({}); // -> true
+         * isEmpty(''); // -> true
+         * ```
+         */
+
+        /* dependencies
+         * isArrLike isArr isStr isArgs keys 
+         */
+
+        function exports(val)
+        {
+            if (val == null) return true;
+
+            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
+            {
+                return val.length === 0;
+            }
+
+            return keys(val).length === 0;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ safeGet ------------------------------ */
 
     var safeGet = _.safeGet = (function ()
@@ -1354,72 +1455,6 @@ module.exports = (function ()
             }
 
             return obj;
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ isArr ------------------------------ */
-
-    var isArr = _.isArr = (function (exports)
-    {
-        /* Check if value is an `Array` object.
-         *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |The value to check                |
-         * |return|boolean|True if value is an `Array` object|
-         *
-         * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
-         * ```
-         */
-
-        /* dependencies
-         * objToStr 
-         */
-
-        exports = Array.isArray || function (val)
-        {
-            return objToStr(val) === '[object Array]';
-        };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ isEmpty ------------------------------ */
-
-    var isEmpty = _.isEmpty = (function ()
-    {
-        /* Check if value is an empty object or array.
-         *
-         * |Name  |Type   |Desc                  |
-         * |------|-------|----------------------|
-         * |val   |*      |Value to check        |
-         * |return|boolean|True if value is empty|
-         *
-         * ```javascript
-         * isEmpty([]); // -> true
-         * isEmpty({}); // -> true
-         * isEmpty(''); // -> true
-         * ```
-         */
-
-        /* dependencies
-         * isArrLike isArr isStr isArgs keys 
-         */
-
-        function exports(val)
-        {
-            if (val == null) return true;
-
-            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
-            {
-                return val.length === 0;
-            }
-
-            return keys(val).length === 0;
         }
 
         return exports;
@@ -1668,7 +1703,7 @@ module.exports = (function ()
          */
 
         var regMobileAll = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i,
-            regMobileFour = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i;
+            regMobileFour = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i;
 
         exports = memoize(function (ua)
         {
@@ -1829,11 +1864,13 @@ module.exports = (function ()
          */
 
         /* dependencies
-         * repeat 
+         * repeat toStr 
          */
 
         function exports(str, len, chars)
         {
+            str = toStr(str);
+
             var strLen = str.length;
 
             chars = chars || ' ';
@@ -2277,7 +2314,7 @@ module.exports = (function ()
          *     },
          *     introduce: function ()
          *     {
-         *         return 'I am ' + this.name + ', ' + this.age + ' years old.'.
+         *         return 'I am ' + this.name + ', ' + this.age + ' years old.';
          *     }
          * });
          *
@@ -2290,7 +2327,7 @@ module.exports = (function ()
          *     },
          *     introduce: function ()
          *     {
-         *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.'.
+         *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.';
          *     }
          * }, {
          *     is: function (obj)
@@ -2690,7 +2727,7 @@ module.exports = (function ()
 
         function getCss(node, name)
         {
-            return node.style[camelCase(name)];
+            return node.style[camelCase(name)] || getComputedStyle(node, '').getPropertyValue(name);
         }
 
         function setCss(nodes, css)
@@ -3034,7 +3071,7 @@ module.exports = (function ()
                 handler,
                 handlerQueue = formatHandlers.call(this, e, handlers);
 
-            e = new delegate.Event(e);
+            e = new exports.Event(e);
 
             var i = 0, j, matched, ret;
 
@@ -3058,7 +3095,7 @@ module.exports = (function ()
         function formatHandlers(e, handlers)
         {
             var current = e.target,
-                ret     = [],
+                ret = [],
                 delegateCount = handlers.delegateCount,
                 selector, matches, handler, i;
 
@@ -3097,7 +3134,7 @@ module.exports = (function ()
             {
                 var handler = {
                         selector: selector,
-                        handler : fn
+                        handler: fn
                     },
                     handlers;
 
@@ -3380,7 +3417,7 @@ module.exports = (function ()
 
         function safeName(name)
         {
-            return isStr(name) ? name.split(/\s/) : toArr(name);
+            return isStr(name) ? name.split(/\s+/) : toArr(name);
         }
 
         return exports;
@@ -3749,11 +3786,11 @@ module.exports = (function ()
     {
         /* Partially apply a function by filling in given arguments.
          *
-         * |Name    |Type    |Desc                                    |
-         * |--------|--------|----------------------------------------|
-         * |fn      |function|Function to partially apply arguments to|
-         * |partials|...*    |Arguments to be partially applied       |
-         * |return  |function|New partially applied function          |
+         * |Name       |Type    |Desc                                    |
+         * |-----------|--------|----------------------------------------|
+         * |fn         |function|Function to partially apply arguments to|
+         * |...partials|*       |Arguments to be partially applied       |
+         * |return     |function|New partially applied function          |
          *
          * ```javascript
          * var sub5 = partial(function (a, b) { return b - a }, 5);
@@ -3905,7 +3942,7 @@ module.exports = (function ()
             {
                 each(['on', 'off', 'once', 'emit'], function (val)
                 {
-                    obj[val] = Emitter.prototype[val];
+                    obj[val] = exports.prototype[val];
                 });
 
                 obj._events = obj._events || {};
@@ -4261,7 +4298,7 @@ module.exports = (function ()
          */
 
         /* dependencies
-         * Class extend trim query isEmpty each toArr 
+         * Class extend trim query isEmpty each isArr toArr 
          */
 
         exports = Class({

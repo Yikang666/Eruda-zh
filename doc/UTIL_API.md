@@ -301,7 +301,7 @@ var People = Class({
     },
     introduce: function ()
     {
-        return 'I am ' + this.name + ', ' + this.age + ' years old.'.
+        return 'I am ' + this.name + ', ' + this.age + ' years old.';
     }
 });
 
@@ -314,7 +314,7 @@ var Student = People.extend({
     },
     introduce: function ()
     {
-        return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.'.
+        return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.';
     }
 }, {
     is: function (obj)
@@ -828,6 +828,23 @@ Like extend, but only copies own properties over to the destination object.
 extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
 ```
 
+## fileSize 
+
+Turn bytes into human readable file size.
+
+|Name  |Type  |Desc              |
+|------|------|------------------|
+|bytes |number|File bytes        |
+|return|string|Readable file size|
+
+```javascript
+fileSize(5); // -> '5'
+fileSize(1500); // -> '1.46K'
+fileSize(1500000); // -> '1.43M'
+fileSize(1500000000); // -> '1.4G'
+fileSize(1500000000000); // -> '1.36T'
+```
+
 ## filter 
 
 Iterates over elements of collection, returning an array of all the values that pass a truth test.
@@ -848,11 +865,13 @@ filter([1, 2, 3, 4, 5], function (val)
 
 ## getFileName 
 
-No documentation.
+dependencies
+last trim
 
 ## getObjType 
 
-No documentation.
+dependencies
+upperFirst
 
 ## has 
 
@@ -995,7 +1014,8 @@ console.log(isBrowser); // -> true if running in a browser
 
 ## isCrossOrig 
 
-No documentation.
+dependencies
+startWith
 
 ## isDate 
 
@@ -1379,17 +1399,18 @@ Used for function context binding.
 
 ## orientation 
 
-No documentation.
+dependencies
+Emitter
 
 ## partial 
 
 Partially apply a function by filling in given arguments.
 
-|Name    |Type    |Desc                                    |
-|--------|--------|----------------------------------------|
-|fn      |function|Function to partially apply arguments to|
-|partials|...*    |Arguments to be partially applied       |
-|return  |function|New partially applied function          |
+|Name       |Type    |Desc                                    |
+|-----------|--------|----------------------------------------|
+|fn         |function|Function to partially apply arguments to|
+|...partials|*       |Arguments to be partially applied       |
+|return     |function|New partially applied function          |
 
 ```javascript
 var sub5 = partial(function (a, b) { return b - a }, 5);
@@ -1398,7 +1419,8 @@ sub(20); // -> 15
 
 ## pxToNum 
 
-No documentation.
+dependencies
+toNum
 
 ## query 
 
@@ -1498,7 +1520,8 @@ safeGet(obj, 'a.b'); // -> undefined
 
 ## safeStorage 
 
-No documentation.
+dependencies
+isUndef memStorage
 
 ## slice 
 
