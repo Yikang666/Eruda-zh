@@ -498,7 +498,7 @@ var needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
 
 function addEvent(el, type, listener, useCapture = false)
 {
-    if (!util.isFn(listener) || !util.isBool(useCapture)) return;
+    if (!util.isEl(el) || !util.isFn(listener) || !util.isBool(useCapture)) return;
 
     let events = el.erudaEvents = el.erudaEvents || {};
 
@@ -512,7 +512,7 @@ function addEvent(el, type, listener, useCapture = false)
 
 function rmEvent(el, type, listener, useCapture = false)
 {
-    if (!util.isFn(listener) || !util.isBool(useCapture)) return;
+    if (!util.isEl(el) || !util.isFn(listener) || !util.isBool(useCapture)) return;
 
     let events = el.erudaEvents;
 
