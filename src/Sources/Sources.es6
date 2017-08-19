@@ -218,7 +218,7 @@ export default class Sources extends Tool
             switch (data.type)
             {
                 case 'html':
-                    code = beautify.html(code);
+                    code = beautify.html(code, {unformatted: []});
                     break;
                 case 'css':
                     code = beautify.css(code);

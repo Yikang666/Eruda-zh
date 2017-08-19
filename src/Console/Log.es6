@@ -372,7 +372,7 @@ function formatFn(val)
 
 function formatEl(val)
 {
-    return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
+    return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML, {unformatted: []}), 'html')}</pre>`;
 }
 
 let regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi;
