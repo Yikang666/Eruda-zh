@@ -2,9 +2,9 @@ import Tool from '../DevTools/Tool.es6'
 import util from '../lib/util'
 import modernizr from './modernizr'
 
-var featureList = require('./featureList.json');
+let featureList = require('./featureList.json');
 
-var featureNames = featureList['feature-detects'],
+let featureNames = featureList['feature-detects'],
     specialNames = featureList['special-names'];
 
 export default class Features extends Tool

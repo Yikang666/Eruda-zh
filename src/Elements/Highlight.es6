@@ -29,15 +29,15 @@ export default class Highlight
     }
     render()
     {
-        var {left, width, top, height} = this._$target.offset();
+        let {left, width, top, height} = this._$target.offset();
 
         this._$el.css({left, top: top - window.scrollY, width, height});
 
-        var computedStyle = getComputedStyle(this._target, '');
+        let computedStyle = getComputedStyle(this._target, '');
 
-        var getNumStyle = name => util.pxToNum(computedStyle.getPropertyValue(name));
+        let getNumStyle = name => util.pxToNum(computedStyle.getPropertyValue(name));
 
-        var ml = getNumStyle('margin-left'),
+        let ml = getNumStyle('margin-left'),
             mr = getNumStyle('margin-right'),
             mt = getNumStyle('margin-top'),
             mb = getNumStyle('margin-bottom');
@@ -49,12 +49,12 @@ export default class Highlight
             height: height + mt + mb
         });
 
-        var bl = getNumStyle('border-left-width'),
+        let bl = getNumStyle('border-left-width'),
             br = getNumStyle('border-right-width'),
             bt = getNumStyle('border-top-width'),
             bb = getNumStyle('border-bottom-width');
 
-        var bw = width - bl - br,
+        let bw = width - bl - br,
             bh = height - bt - bb;
 
         this._$padding.css({
@@ -64,7 +64,7 @@ export default class Highlight
             height: bh
         });
 
-        var pl = getNumStyle('padding-left'),
+        let pl = getNumStyle('padding-left'),
             pr = getNumStyle('padding-right'),
             pt = getNumStyle('padding-top'),
             pb = getNumStyle('padding-bottom');
@@ -93,7 +93,7 @@ export default class Highlight
     {
         $parent.append(require('./Highlight.hbs')());
 
-        var $el = this._$el = util.$('.eruda-elements-highlight');
+        let $el = this._$el = util.$('.eruda-elements-highlight');
         this._$margin = $el.find('.eruda-margin');
         this._$padding = $el.find('.eruda-padding');
         this._$content = $el.find('.eruda-content');
@@ -103,13 +103,13 @@ export default class Highlight
 
 function formatElName(el)
 {
-    var {id, className} = el;
+    let {id, className} = el;
 
-    var ret = `<span style="color:#ee78e6">${el.tagName.toLowerCase()}</span>`;
+    let ret = `<span style="color:#ee78e6">${el.tagName.toLowerCase()}</span>`;
 
     if (id !== '') ret += `<span style="color:#ffab66">#${id}</span>`;
 
-    var classes = '';
+    let classes = '';
     if (util.isStr(className))
     {
         util.each(className.split(/\s+/g), (val) =>

@@ -26,7 +26,7 @@ export default class Logger extends util.Emitter
     }
     maxNum(val)
     {
-        var logs = this._logs;
+        let logs = this._logs;
 
         this._maxNum = val;
         if (util.isNum(val) && logs.length > val)
@@ -106,7 +106,7 @@ export default class Logger extends util.Emitter
     }
     timeEnd(name)
     {
-        var startTime = this._timer[name];
+        let startTime = this._timer[name];
 
         if (!startTime) return;
         delete this._timer[name];
@@ -243,13 +243,13 @@ export default class Logger extends util.Emitter
     }
     scrollToBottom()
     {
-        var el = this._$el.get(0);
+        let el = this._$el.get(0);
 
         el.scrollTop = el.scrollHeight;
     }
     _filterLogs(logs)
     {
-        var filter = this._filter;
+        let filter = this._filter;
 
         if (filter === 'all') return logs;
 
@@ -300,7 +300,7 @@ export default class Logger extends util.Emitter
     }
     _bindEvent()
     {
-        var self = this;
+        let self = this;
 
         this._$el.on('click', '.eruda-log-item', function ()
         {
@@ -329,13 +329,13 @@ export default class Logger extends util.Emitter
     }
 }
 
-var cmdList = require('./cmdList.json'),
+let cmdList = require('./cmdList.json'),
     helpMsg = require('./help.hbs')({commands: cmdList}),
     libraries = require('./libraries.json');
 
-var evalJs = jsInput =>
+let evalJs = jsInput =>
 {
-    var ret;
+    let ret;
 
     try {
         ret = eval.call(window, `(${jsInput})`);

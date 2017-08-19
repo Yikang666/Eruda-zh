@@ -30,7 +30,7 @@ export default function stringify(obj, {
 
     type = getType(obj);
 
-    var isFn = (type == '[object Function]'),
+    let isFn = (type == '[object Function]'),
         isStr = (type == '[object String]'),
         isArr = (type == '[object Array]'),
         isObj = (type == '[object Object]'),
@@ -60,7 +60,7 @@ export default function stringify(obj, {
         keys = names.keys;
         allKeys = names.allKeys;
         names = unenumerable ? allKeys : keys;
-        
+
         proto = Object.getPrototypeOf(obj);
         if (circularMarker && proto === Object.prototype) proto = null;
         if (proto)
@@ -188,7 +188,7 @@ export default function stringify(obj, {
     return json;
 }
 
-function getKeys(obj) 
+function getKeys(obj)
 {
     let allKeys = Object.getOwnPropertyNames(obj),
         keys = Object.keys(obj).sort(sortObjName);
@@ -216,7 +216,7 @@ function sortObjName(a, b)
 
     if (lenA > lenB) return 1;
     if (lenA < lenB) return -1;
-    
+
     return 0;
 }
 

@@ -80,7 +80,7 @@ export default class Elements extends Tool
     {
         if (this._curEl === this._htmlEl) return;
 
-        var parentQueue = this._curParentQueue,
+        let parentQueue = this._curParentQueue,
             parent = parentQueue.shift();
 
         while (!isElExist(parent)) parent = parentQueue.shift();
@@ -95,7 +95,7 @@ export default class Elements extends Tool
 
         this._$el.on('click', '.eruda-child', function ()
         {
-            var idx = util.$(this).data('idx'),
+            let idx = util.$(this).data('idx'),
                 curEl = self._curEl,
                 el = curEl.childNodes[idx];
 
@@ -382,7 +382,7 @@ function formatElName(data, {noAttr = false} = {})
     {
         util.each(attributes, (attr) =>
         {
-            var name = attr.name;
+            let name = attr.name;
             if (name === 'id' || name === 'class' || name === 'style') return;
             ret += ` ${name}="${attr.value}"`;
         });
@@ -391,7 +391,7 @@ function formatElName(data, {noAttr = false} = {})
     return ret;
 }
 
-var formatAttr = attributes => util.map(attributes, attr =>
+let formatAttr = attributes => util.map(attributes, attr =>
 {
     let {name, value} = attr;
     value = util.escape(value);
@@ -409,12 +409,12 @@ function formatChildNodes(nodes)
 
     for (let i = 0, len = nodes.length; i < len; i++)
     {
-        var child = nodes[i],
+        let child = nodes[i],
             nodeType = child.nodeType;
 
         if (nodeType === 3 || nodeType === 8)
         {
-            var val = child.nodeValue.trim();
+            let val = child.nodeValue.trim();
             if (val !== '') ret.push({
                 text: val,
                 isCmt: nodeType === 8,
@@ -423,7 +423,7 @@ function formatChildNodes(nodes)
             continue;
         }
 
-        var isSvg = !util.isStr(child.className);
+        let isSvg = !util.isStr(child.className);
 
         if (nodeType === 1 &&
             child.id !== 'eruda' &&
@@ -476,7 +476,7 @@ function getInlineStyle(style)
     return ret;
 }
 
-var defComputedStyle = require('./defComputedStyle.json');
+let defComputedStyle = require('./defComputedStyle.json');
 
 function rmDefComputedStyle(computedStyle)
 {
@@ -492,9 +492,9 @@ function rmDefComputedStyle(computedStyle)
     return ret;
 }
 
-var NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
+let NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
-var needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
+let needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
 
 function addEvent(el, type, listener, useCapture = false)
 {
@@ -533,6 +533,6 @@ function rmEvent(el, type, listener, useCapture = false)
     if (util.keys(events).length === 0) delete el.erudaEvents;
 }
 
-var getWinEventProto = () => util.safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
+let getWinEventProto = () => util.safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
 
-var wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;
+let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;

@@ -158,4 +158,4 @@ function createEl(key, val, map, firstLevel = false)
 
 const LIGHTER_KEY = ['__proto__'];
 
-var encode = str => util.escape(util.toStr(str));
+let encode = str => util.escape(util.toStr(str));

@@ -177,7 +177,7 @@ Log.showGetterVal = false;
 Log.showUnenumerable = true;
 Log.showSrcInSources = false;
 
-var getAbstract = util.wrap(origGetAbstract, function (fn, obj)
+let getAbstract = util.wrap(origGetAbstract, function (fn, obj)
 {
     return fn(obj, {
         getterVal: Log.showGetterVal,
@@ -237,18 +237,18 @@ function formatTable(args)
     return ret;
 }
 
-var regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
+let regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
     regErudaJs = /eruda(\.min)?\.js/;
 
 function formatErr(err)
 {
-    var lines = err.stack ? err.stack.split('\n') : [],
+    let lines = err.stack ? err.stack.split('\n') : [],
         msg = `${err.message || lines[0]}<br/>`;
 
     lines = lines.filter(val => !regErudaJs.test(val))
                  .map(val => util.escape(val));
 
-    var stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
+    let stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
     return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
 }
@@ -293,7 +293,7 @@ function formatMsg(args, {htmlForEl = true} = {})
     return args.join(' ') + '<div class="eruda-json eruda-hidden"></div>';
 }
 
-var formatDir = args => formatMsg(args, {htmlForEl: false});
+let formatDir = args => formatMsg(args, {htmlForEl: false});
 
 function substituteStr(args)
 {
@@ -375,9 +375,9 @@ function formatEl(val)
     return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML), 'html')}</pre>`;
 }
 
-var regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi;
+let regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi;
 
-var recognizeUrl = str => str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
+let recognizeUrl = str => str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
 
 function getFrom()
 {
@@ -398,10 +398,10 @@ function getFrom()
     return ret;
 }
 
-var getCurTime = () => util.dateFormat('HH:MM:ss');
+let getCurTime = () => util.dateFormat('HH:MM:ss');
 
-var tpl = require('./Log.hbs');
-var render = data => tpl(data);
+let tpl = require('./Log.hbs');
+let render = data => tpl(data);
 
 function extractObj(obj, options = {})
 {

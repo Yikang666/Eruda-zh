@@ -6,7 +6,7 @@ export default class Select extends util.Emitter
     {
         super();
 
-        var self = this;
+        let self = this;
 
         this._startListener = function (e)
         {

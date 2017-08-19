@@ -100,7 +100,7 @@ export default function getAbstract(obj, {
     } else if (isRegExp)
     {
         json = wrapRegExp(util.escapeJsonStr(obj.toString()));
-    } else if (isFn) 
+    } else if (isFn)
     {
         json = wrapStr('function');
     } else if (isArr)
@@ -192,12 +192,12 @@ function canBeProto(obj)
     return emptyObj && proto && proto !== Object.prototype;
 }
 
-function moveFnToTail(parts) 
+function moveFnToTail(parts)
 {
-    var front = [],
+    let front = [],
         tail = [];
 
-    util.each(parts, val => 
+    util.each(parts, val =>
     {
         val.indexOf('function') > -1 ? tail.push(val) : front.push(val);
     });

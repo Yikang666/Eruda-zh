@@ -365,7 +365,7 @@ function getState(type, len)
     return 'eruda-ok';
 }
 
-var {hostname, pathname} = window.location;
+let {hostname, pathname} = window.location;
 
 function delCookie(key)
 {
@@ -407,4 +407,4 @@ function delCookie(key)
     }
 }
 
-var sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';
+let sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';

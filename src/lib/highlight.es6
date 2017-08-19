@@ -10,7 +10,7 @@ export default function highlight(str, lang)
 
     lang = language[lang];
 
-    var subLangSi = 0,
+    let subLangSi = 0,
         subLangs = [];
 
     util.each(lang, (val) =>
@@ -31,11 +31,11 @@ export default function highlight(str, lang)
         str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
     });
 
-    var levels = [];
+    let levels = [];
 
     str = str.replace(/___(?!subtmpl)\w+?___/g, function($0)
     {
-        var end = $0.substr(3, 3) === 'end',
+        let end = $0.substr(3, 3) === 'end',
             tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g,''),
             lastTag = levels.length > 0 ? levels[levels.length - 1] : null;
 
@@ -66,7 +66,7 @@ export default function highlight(str, lang)
 
         str = str.replace(/___subtmpl\d+___/g, function($tmpl)
         {
-            var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
+            let i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
 
             return subLangs[i];
         });
@@ -75,7 +75,7 @@ export default function highlight(str, lang)
     return str;
 }
 
-var style = {
+let style = {
     comment: 'color:#63a35c;',
     string: 'color:#183691;',
     number: 'color:#0086b3;',
@@ -83,7 +83,7 @@ var style = {
     operators: 'color:#a71d5d;'
 };
 
-var language = {};
+let language = {};
 
 language.js = {
     comment: {re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g, style: 'comment'},

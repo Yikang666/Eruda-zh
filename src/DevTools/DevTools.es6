@@ -64,7 +64,7 @@ export default class DevTools extends util.Emitter
     }
     get(name)
     {
-        var tool = this._tools[name];
+        let tool = this._tools[name];
 
         if (tool) return tool;
     }
@@ -73,12 +73,12 @@ export default class DevTools extends util.Emitter
         if (this._curTool === name) return this;
         this._curTool = name;
 
-        var tools = this._tools;
+        let tools = this._tools;
 
-        var tool = tools[name];
+        let tool = tools[name];
         if (!tool) return;
 
-        var lastTool = {};
+        let lastTool = {};
 
         util.each(tools, (tool) =>
         {
@@ -101,7 +101,7 @@ export default class DevTools extends util.Emitter
     }
     _initCfg()
     {
-        var cfg = this.config = util.createCfg('dev-tools');
+        let cfg = this.config = util.createCfg('dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
             transparency: '95%',
@@ -142,7 +142,7 @@ export default class DevTools extends util.Emitter
     }
     _appendTpl()
     {
-        var $parent = this.$parent;
+        let $parent = this.$parent;
 
         $parent.append(require('./DevTools.hbs')());
 
@@ -156,7 +156,7 @@ export default class DevTools extends util.Emitter
     }
 }
 
-var localStore = util.safeStorage('local');
+let localStore = util.safeStorage('local');
 
-var activeEruda = flag => localStore.setItem('active-eruda', flag);
+let activeEruda = flag => localStore.setItem('active-eruda', flag);
 

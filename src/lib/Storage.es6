@@ -1,10 +1,10 @@
 import util from './util';
 
-var localStore = {
+let localStore = {
     _storage: util.safeStorage('local'),
     get(key)
     {
-        var val = this._storage.getItem(key);
+        let val = this._storage.getItem(key);
 
         try {
             val = JSON.parse(val);
@@ -52,7 +52,7 @@ export default class Storage extends util.Emitter
     }
     set(key, val)
     {
-        var kv;
+        let kv;
 
         if (util.isObj(key))
         {
@@ -65,7 +65,7 @@ export default class Storage extends util.Emitter
 
         util.each(kv, (val, key) =>
         {
-            var preVal = this._val[key];
+            let preVal = this._val[key];
             this._val[key] = val;
             if (preVal !== val) this.emit('change', key, val);
         });

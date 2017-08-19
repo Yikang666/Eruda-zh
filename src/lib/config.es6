@@ -1,8 +1,8 @@
 import Storage from './Storage.es6'
 
-var configs = {};
+let configs = {};
 
-var config = {
+let config = {
     create(name)
     {
         if (!configs[name]) configs[name] = new Storage(name);

@@ -2,11 +2,11 @@ import util from '../lib/util'
 
 function formatStyle(style)
 {
-    var ret = {};
+    let ret = {};
 
     for (let i = 0, len = style.length; i < len; i++)
     {
-        var name = style[i];
+        let name = style[i];
 
         if (style[name] === 'initial') continue;
 
@@ -16,9 +16,9 @@ function formatStyle(style)
     return ret;
 }
 
-var elProto = Element.prototype;
+let elProto = Element.prototype;
 
-var matchesSel = function () { return false };
+let matchesSel = function () { return false };
 
 if (elProto.webkitMatchesSelector)
 {
@@ -36,13 +36,13 @@ export default class CssStore
     }
     getComputedStyle()
     {
-        var computedStyle = window.getComputedStyle(this._el);
+        let computedStyle = window.getComputedStyle(this._el);
 
         return formatStyle(computedStyle);
     }
     getMatchedCSSRules()
     {
-        var ret = [];
+        let ret = [];
 
         util.each(document.styleSheets, (styleSheet) =>
         {
@@ -50,7 +50,7 @@ export default class CssStore
 
             util.each(styleSheet.cssRules, (cssRule) =>
             {
-                var matchesEl = false;
+                let matchesEl = false;
 
                 // Mobile safari will throw DOM Exception 12 error, need to try catch it.
                 try {
