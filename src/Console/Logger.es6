@@ -203,7 +203,10 @@ export default class Logger extends util.Emitter
     insert(type, args)
     {
         let logs = this._logs,
-            $el = this._$el;
+            $el = this._$el,
+            el = $el.get(0);
+
+        let isAtBottom = (el.scrollTop === el.scrollHeight - el.offsetHeight);
 
         let options = util.isStr(type) ? {type, args} : type;
         util.extend(options, {
@@ -237,7 +240,8 @@ export default class Logger extends util.Emitter
         if (this._filterLog(log) && this._parent.active) $el.append(log.formattedMsg);
 
         this.emit('insert', log);
-        this.scrollToBottom();
+
+        if (isAtBottom) this.scrollToBottom();
 
         return this;
     }
@@ -245,7 +249,7 @@ export default class Logger extends util.Emitter
     {
         let el = this._$el.get(0);
 
-        el.scrollTop = el.scrollHeight;
+        el.scrollTop = el.scrollHeight - el.offsetHeight;
     }
     _filterLogs(logs)
     {
