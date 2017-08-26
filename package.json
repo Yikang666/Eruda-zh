@@ -45,6 +45,7 @@
     "copy": "^0.3.0",
     "css-loader": "^0.28.0",
     "draggabilly": "^2.1.0",
+    "eslint": "^4.5.0",
     "handlebars": "^4.0.5",
     "handlebars-loader": "^1.1.4",
     "jasmine-core": "^2.4.1",
@@ -62,6 +63,7 @@
     "postcss-class-prefix": "^0.3.0",
     "postcss-loader": "^2.0.6",
     "sass-loader": "^6.0.3",
-    "webpack": "^3.5.4"
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
   }
 }
