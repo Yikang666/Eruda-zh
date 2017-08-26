@@ -6,10 +6,10 @@ module.exports = function (config)
         files: [
             'eruda.js',
             'test/init.js',
-            'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+            'test/lib/jasmine.js',
             'node_modules/karma-jasmine/lib/boot.js',
             'node_modules/karma-jasmine/lib/adapter.js',
-            'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+            'test/lib/jasmine-jquery.js',
             'test/console.js',
             'test/elements.js',
             'test/features.js',

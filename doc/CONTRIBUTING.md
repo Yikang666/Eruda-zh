@@ -10,16 +10,18 @@ After cloning the repo, run:
 # install npm dependencies.
 npm install
 # copy jasmine lib from node_modules to test folder.
-npm run cpTestLib
+npm run setup
 ```
 
 ## Commonly used NPM scripts
 
 ```bash
-# watch and auto re-build, webpack-dev-server is required.
+# watch and auto re-build.
 npm run dev
 # build eruda.js and eruda.min.js
 npm run build
+# lint, build and test.
+npm run ci
 ```
 
 ## Project Structure

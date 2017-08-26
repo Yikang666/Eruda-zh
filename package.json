@@ -8,7 +8,7 @@
     "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
-    "cpTestLib": "node script/cpTestLib",
+    "setup": "node script/cpTestLib",
     "genScriptUtil": "eustia build script/*.js -o script/util.js",
     "lint": "eslint --ext .es6 src",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
