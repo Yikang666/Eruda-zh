@@ -52,6 +52,7 @@ describe('log', function ()
     {
         tool.error(new Error('error test'));
         expect($tool.find('.eruda-error')).toContainElement('.eruda-stack');
+        expect($tool.find('.eruda-error')).toContainText('error test');
     });
 
     it('assert', function ()

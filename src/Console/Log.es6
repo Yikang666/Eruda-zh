@@ -104,7 +104,7 @@ export default class Log
                 msg = formatMsg(args);
                 break;
             case 'error':
-                args = substituteStr(args);
+                if (util.isStr(args[0]) && args.length !== 1) args = substituteStr(args);
                 err = args[0];
                 icon = 'times-circle';
                 err = util.isErr(err) ? err : new Error(formatMsg(args));
