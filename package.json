@@ -1,6 +1,6 @@
 {
   "name": "eruda",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
   "scripts": {
