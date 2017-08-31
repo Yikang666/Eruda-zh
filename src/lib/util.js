@@ -3956,18 +3956,56 @@ module.exports = (function ()
 
     _.orientation = (function (exports)
     {
-        /* dependencies
-         * Emitter 
+        /* Screen orientation helper.
+         *
+         * ### on
+         *
+         * Bind change event.
+         *  
+         * ### off 
+         * 
+         * Unbind change event.
+         * 
+         * ### get
+         * 
+         * Get current orientation(landscape or portrait).
+         * 
+         * ```javascript
+         * orientation.on('change', function (direction) 
+         * {
+         *     console.log(direction); // -> 'portrait'
+         * });
+         * orientation.get(); // -> 'landscape'
+         * ```
          */
+
+        /* dependencies
+         * Emitter safeGet 
+         */
+
+        var screen = window.screen;
+
+        exports = {
+            get: function () 
+            {
+                if (screen) 
+                {
+                    var orientation = safeGet(screen, 'orientation.type');
+                    if (orientation) return orientation.split('-').shift();
+                } 
+
+                return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'; 
+            }
+        };
 
         Emitter.mixin(exports);
 
-        window.addEventListener('orientationchange', function ()
+        window.addEventListener('orientationchange', function () 
         {
-            setTimeout(function ()
+            setTimeout(function () 
             {
-                exports.emit('change');
-            }, 150);
+                exports.emit('change', exports.get());
+            }, 200);
         }, false);
 
         return exports;
