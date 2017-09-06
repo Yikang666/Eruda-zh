@@ -9,7 +9,7 @@
         .header {
             @include overflow-auto(x);
             white-space: nowrap;
-            margin: 10px 0;
+            margin: 5px 0;
             padding: 0 $padding;
             font-size: $font-size-s;
             color: $gray;
@@ -17,9 +17,7 @@
         .log-item {
             @include clear-float();
             background: #fff;
-            margin: 10px 0;
             padding: $padding;
-            border-top: 1px solid $gray-light;
             border-bottom: 1px solid $gray-light;
             a {
                 color: $blue !important;
