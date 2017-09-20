@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="assets/eruda.js"></script>
     <script src="boot.js"></script>
+    <script src="util.js"></script>
 </head>
 <body>
 <header>Manual Test</header>
@@ -23,6 +24,9 @@
         </li>
         <li>
             <a href="#" id="issue31">#31</a>
+        </li>
+        <li>
+            <a href="#" id="issue33">#33</a>
         </li>
     </ul>
 </nav>
@@ -75,6 +79,10 @@
     addClickEvent('issue31', function () 
     {
         addEventListener('resize', function () {});
+    });
+    addClickEvent('issue33', function () 
+    {
+        _.evalCss(':root {--test: 10px;}');
     });
 </script>
 <script>boot();</script>

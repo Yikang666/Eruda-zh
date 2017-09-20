@@ -355,6 +355,9 @@ let regColor = /rgba?\((.*?)\)/g,
 
 function processStyleRule(val)
 {
+    // For css custom properties, val is unable to retrieved.
+    val = util.toStr(val);
+
     return val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&')
               .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`);
 }

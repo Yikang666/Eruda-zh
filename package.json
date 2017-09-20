@@ -14,13 +14,20 @@
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "eustia": {
-    "files": "src/**/*.es6",
-    "ignore": "**/Info/defInfo.es6",
-    "output": "src/lib/util.js",
-    "exclude": [
-      "createCfg"
-    ],
-    "format": "commonjs"
+    "eruda": {
+      "files": "src/**/*.es6",
+      "ignore": "**/Info/defInfo.es6",
+      "output": "src/lib/util.js",
+      "exclude": [
+        "createCfg"
+      ],
+      "format": "commonjs"
+    },
+    "test": {
+      "files": ["test/**/*.js", "test/**/*.html"],
+      "output": "test/util.js",
+      "format": "global"
+    }
   },
   "repository": {
     "type": "git",
