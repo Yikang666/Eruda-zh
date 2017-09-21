@@ -25,8 +25,17 @@ export default class DevTools extends util.Emitter
         this._isShow = true;
 
         this._$el.show();
+        /* When hidden, navBar style is not calculated correctly.
+         * Also it's needed to call twice to get things right in chrome, how odd!
+         */
+        this._navBar.resetStyle();
+        this._navBar.resetStyle();
+
         // Need a delay after show to enable transition effect.
-        setTimeout(() => this._$el.css('opacity', this._opacity), 50);
+        setTimeout(() => 
+        {
+            this._$el.css('opacity', this._opacity)
+        }, 50);
 
         return this;
     }
@@ -112,7 +121,7 @@ export default class DevTools extends util.Emitter
 
         this._setTransparency(cfg.get('transparency'));
         this._setDisplaySize(cfg.get('displaySize'));
-        this._setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55);
+        this.setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55);
 
         cfg.on('change', (key, val) =>
         {
@@ -121,11 +130,11 @@ export default class DevTools extends util.Emitter
                 case 'transparency': return this._setTransparency(val);
                 case 'displaySize': return this._setDisplaySize(val);
                 case 'activeEruda': return activeEruda(val);
-                case 'tinyNavBar': return this._setNavBarHeight(val ? 30 : 55);
+                case 'tinyNavBar': return this.setNavBarHeight(val ? 30 : 55);
             }
         });
     }
-    _setNavBarHeight(height)
+    setNavBarHeight(height)
     {
         this._$el.css('paddingTop', height);
         this._navBar.setHeight(height);

@@ -27,7 +27,7 @@ export default class EntryBtn extends util.Emitter
     {
         let cfg = this.config,
             pos = cfg.get('pos'),
-            defPos = getDefPos();
+            defPos = this._getDefPos();
 
         let outOfRange = pos.x > defPos.x + 10 ||
                          pos.x < 0 ||
@@ -81,15 +81,16 @@ export default class EntryBtn extends util.Emitter
 
         cfg.set(util.defaults(cfg.get(), {
             rememberPos: true,
-            pos: getDefPos()
+            pos: this._getDefPos()
         }));
     }
-}
+    _getDefPos() 
+    {
+        let minWidth = this._$el.get(0).offsetWidth + 10;
 
-let getDefPos = () =>
-{
-    return {
-        x: window.innerWidth - 50,
-        y: window.innerHeight - 50
-    };
-};
+        return {
+            x: window.innerWidth - minWidth,
+            y: window.innerHeight - minWidth
+        };
+    } 
+}

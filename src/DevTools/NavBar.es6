@@ -19,43 +19,65 @@ export default class NavBar extends util.Emitter
     }
     add(name)
     {
-        let $bottomBar = this._$bottomBar;
-
         this._len++;
         this._$ul.prepend(`<li>${name}</li>`);
-        $bottomBar.css('left', util.pxToNum($bottomBar.css('left')) + ITEM_WIDTH);
-        this._resetStyle();
+        this.resetStyle();
     }
     setHeight(height)
     {
         this._height = height;
-        this._resetStyle();
+        this.resetStyle();
     }
     activeTool(name)
     {
         let self = this;
 
-        this._$ul.find('li').each(function (idx)
+        this._$ul.find('li').each(function ()
         {
             let $this = util.$(this);
 
             if ($this.text() === name)
             {
                 $this.addClass('eruda-active');
-                self._$bottomBar.css('left', ITEM_WIDTH * idx);
+                self._resetBottomBar();
             } else
             {
                 $this.rmClass('eruda-active');
             }
         });
     }
-    _resetStyle()
+    _resetBottomBar() 
+    {
+        let $bottomBar = this._$bottomBar;
+
+        let li = this._$ul.find('.eruda-active').get(0);
+
+        if (!li) return;
+        
+        $bottomBar.css({
+            width: li.offsetWidth,
+            left: li.offsetLeft
+        });
+    }
+    resetStyle()
     {
         let height = this._height;
 
         this._$el.css('height', height);
-        this._$ul.css({width: this._len * ITEM_WIDTH});
-        this._$ul.find('li').css({
+        
+        let $ul = this._$ul,
+            $li = $ul.find('li');
+
+        let ulWidth = 0;
+
+        $li.each(function ()
+        {
+            ulWidth += this.offsetWidth;
+        });
+        $ul.css({width: ulWidth});
+        this._resetBottomBar();
+
+        $ul.find('li').css({
             'height': height,
             'lineHeight': height
         });
@@ -70,5 +92,3 @@ export default class NavBar extends util.Emitter
         });
     }
 }
-
-const ITEM_WIDTH = 69;

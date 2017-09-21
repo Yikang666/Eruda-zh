@@ -18,7 +18,7 @@ $item-width: 69px;
                 display: inline-block;
                 height: $height;
                 line-height: $height;
-                width: $item-width;
+                padding: 0 10px;
                 color: #fff;
                 font-size: $font-size-s;
                 text-align: center;
@@ -33,13 +33,12 @@ $item-width: 69px;
             }
         }
         .bottom-bar {
-            transition: left $anim-duration;
+            transition: left $anim-duration, width $anim-duration;
             height: 3px;
             background: #fff;
             position: absolute;
             bottom: 0;
             left: 0;
-            width: $item-width;
         }
     }
 }
