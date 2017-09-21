@@ -68,7 +68,7 @@ export default class NavBar extends util.Emitter
         let $ul = this._$ul,
             $li = $ul.find('li');
 
-        let ulWidth = 0;
+        let ulWidth = 1;
 
         $li.each(function ()
         {
