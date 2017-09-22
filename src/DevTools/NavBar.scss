@@ -7,29 +7,28 @@ $item-width: 69px;
 .dev-tools {
     .nav-bar {
         @include absolute(100%, $height);
-        @include overflow-auto(y);
+        @include overflow-auto(x);
         box-shadow: $box-shadow;
         z-index: 100;
         background: $blue;
-        ul {
-            font-size: 0;
-            li {
-                cursor: pointer;
-                display: inline-block;
-                height: $height;
-                line-height: $height;
-                padding: 0 10px;
-                color: #fff;
-                font-size: $font-size-s;
-                text-align: center;
-                text-transform: capitalize;
-                transition: background $anim-duration;
-                &:active {
-                    background: $blue-dark;
-                }
-                &.active {
-                    background: $blue-light;
-                }
+        font-size: 0;
+        white-space: nowrap;
+        .nav-bar-item {
+            cursor: pointer;
+            display: inline-block;
+            height: $height;
+            line-height: $height;
+            padding: 0 10px;
+            color: #fff;
+            font-size: $font-size-s;
+            text-align: center;
+            text-transform: capitalize;
+            transition: background $anim-duration;
+            &:active {
+                background: $blue-dark;
+            }
+            &.active {
+                background: $blue-light;
             }
         }
         .bottom-bar {

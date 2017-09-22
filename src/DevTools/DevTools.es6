@@ -25,7 +25,6 @@ export default class DevTools extends util.Emitter
         this._isShow = true;
 
         this._$el.show();
-        // When hidden, navBar style is not calculated correctly.
         this._navBar.resetStyle();
 
         // Need a delay after show to enable transition effect.

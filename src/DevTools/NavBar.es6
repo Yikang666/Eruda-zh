@@ -9,8 +9,7 @@ export default class NavBar extends util.Emitter
         util.evalCss(require('./NavBar.scss'));
 
         this._$el = $el;
-        $el.html('<ul></ul><div class="eruda-bottom-bar"></div>');
-        this._$ul = $el.find('ul');
+        $el.html('<div class="eruda-bottom-bar"></div>');
         this._$bottomBar = $el.find('.eruda-bottom-bar');
         this._len = 0;
         this._height = 55;
@@ -20,7 +19,7 @@ export default class NavBar extends util.Emitter
     add(name)
     {
         this._len++;
-        this._$ul.prepend(`<li>${name}</li>`);
+        this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`);
         this.resetStyle();
     }
     setHeight(height)
@@ -32,7 +31,7 @@ export default class NavBar extends util.Emitter
     {
         let self = this;
 
-        this._$ul.find('li').each(function ()
+        this._$el.find('.eruda-nav-bar-item').each(function ()
         {
             let $this = util.$(this);
 
@@ -50,7 +49,7 @@ export default class NavBar extends util.Emitter
     {
         let $bottomBar = this._$bottomBar;
 
-        let li = this._$ul.find('.eruda-active').get(0);
+        let li = this._$el.find('.eruda-active').get(0);
 
         if (!li) return;
         
@@ -65,19 +64,13 @@ export default class NavBar extends util.Emitter
 
         this._$el.css('height', height);
         
-        let $ul = this._$ul,
-            $li = $ul.find('li');
-
-        let ulWidth = 1;
-
-        $li.each(function ()
-        {
-            ulWidth += this.offsetWidth;
-        });
-        $ul.css({width: ulWidth});
+        let $el = this._$el;
         this._resetBottomBar();
 
-        $ul.find('li').css({
+        $el.css({
+            height: height
+        });
+        $el.find('.eruda-nav-bar-item').css({
             'height': height,
             'lineHeight': height
         });
@@ -86,7 +79,7 @@ export default class NavBar extends util.Emitter
     {
         let self = this;
 
-        this._$ul.on('click', 'li', function ()
+        this._$el.on('click', '.eruda-nav-bar-item', function ()
         {
             self.emit('showTool', util.$(this).text());
         });
