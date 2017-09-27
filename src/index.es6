@@ -11,11 +11,14 @@ import Sources from './Sources/Sources.es6'
 import Settings from './Settings/Settings.es6'
 import util from './lib/util'
 import config from './lib/config.es6'
+import logger from './lib/logger.es6'
 import extraUtil from './lib/extraUtil.es6'
 
 module.exports = {
     init({el, tool} = {})
     {
+        this._isInit = true;
+
         this._initContainer(el);
         this._initStyle();
         this._initDevTools();
@@ -23,17 +26,22 @@ module.exports = {
         this._initSettings();
         this._initTools(tool);
     },
+    _isInit: false,
     version: VERSION,
     config, util,
     Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
     get(name)
     {
+        if (!this._checkInit()) return;
+
         let devTools = this._devTools;
 
         return name ? devTools.get(name) : devTools;
     },
     add(tool)
     {
+        if (!this._checkInit()) return;
+
         if (util.isFn(tool)) tool = tool(this);
 
         this._devTools.add(tool);
@@ -42,17 +50,26 @@ module.exports = {
     },
     remove(name)
     {
+        if (!this._checkInit()) return;
+
         this._devTools.remove(name);
 
         return this;
     },
     show(name)
     {
+        if (!this._checkInit()) return;
+
         let devTools = this._devTools;
 
         name ? devTools.showTool(name) : devTools.show();
 
         return this;
+    },
+    _checkInit() 
+    {
+        if (!this._isInit) logger.error('Please call "eruda.init()" first');
+        return this._isInit;
     },
     _initContainer(el)
     {
@@ -129,4 +146,3 @@ module.exports = {
 };
 
 extraUtil(util);
-

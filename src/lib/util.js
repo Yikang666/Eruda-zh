@@ -234,6 +234,86 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ keys ------------------------------ */
+
+    var keys = _.keys = (function (exports)
+    {
+        /* Create an array of the own enumerable property names of object.
+         *
+         * |Name  |Type  |Desc                   |
+         * |------|------|-----------------------|
+         * |obj   |object|Object to query        |
+         * |return|array |Array of property names|
+         * 
+         * ```javascript
+         * keys({a: 1}); // -> ['a']
+         * ```
+         */
+
+        /* dependencies
+         * has 
+         */
+
+        exports = Object.keys || function (obj)
+        {
+            var ret = [], key;
+
+            for (key in obj)
+            {
+                if (has(obj, key)) ret.push(key);
+            }
+
+            return ret;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ freeze ------------------------------ */
+
+    var freeze = _.freeze = (function ()
+    {
+        /* Shortcut for Object.freeze.
+         *
+         * Use Object.defineProperties if Object.freeze is not supported.
+         * 
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |obj   |object|Object to freeze|
+         * |return|object|Object passed in|
+         * 
+         * ```javascript
+         * var a = {b: 1};
+         * freeze(a);
+         * a.b = 2;
+         * console.log(a); // -> {b: 1}
+         * ```
+         */
+
+        /* dependencies
+         * keys 
+         */
+
+        function exports(obj) 
+        {
+            if (Object.freeze) return Object.freeze(obj);
+
+            keys(obj).forEach(function (prop) 
+            {
+                if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
+
+                Object.defineProperty(obj, prop, {
+                    writable: false,
+                    configurable: false
+                });
+            });
+
+            return obj;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ noop ------------------------------ */
 
     var noop = _.noop = (function ()
@@ -485,41 +565,6 @@ module.exports = (function ()
 
         return exports;
     })();
-
-    /* ------------------------------ keys ------------------------------ */
-
-    var keys = _.keys = (function (exports)
-    {
-        /* Create an array of the own enumerable property names of object.
-         *
-         * |Name  |Type  |Desc                   |
-         * |------|------|-----------------------|
-         * |obj   |object|Object to query        |
-         * |return|array |Array of property names|
-         * 
-         * ```javascript
-         * keys({a: 1}); // -> ['a']
-         * ```
-         */
-
-        /* dependencies
-         * has 
-         */
-
-        exports = Object.keys || function (obj)
-        {
-            var ret = [], key;
-
-            for (key in obj)
-            {
-                if (has(obj, key)) ret.push(key);
-            }
-
-            return ret;
-        };
-
-        return exports;
-    })({});
 
     /* ------------------------------ optimizeCb ------------------------------ */
 
@@ -885,6 +930,95 @@ module.exports = (function ()
 
         return exports;
     })({});
+
+    /* ------------------------------ castPath ------------------------------ */
+
+    var castPath = _.castPath = (function ()
+    {
+        /* Cast value into a property path array.
+         *
+         * |Name  |Type  |Desc               |
+         * |------|------|-------------------|
+         * |str   |*     |Value to inspect   |
+         * |[obj] |object|Object to query    |
+         * |return|array |Property path array|
+         * 
+         * ```javascript
+         * castPath('a.b.c'); // -> ['a', 'b', 'c']
+         * castPath(['a']); // -> ['a']
+         * castPath('a[0].b'); // -> ['a', '0', 'b']
+         * castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
+         * ```
+         */
+
+        /* dependencies
+         * has isArr 
+         */
+
+        function exports(str, obj) 
+        {
+            if (isArr(str)) return str;
+            if (obj && has(obj, str)) return [str];
+
+            var ret = [];
+
+            str.replace(regPropName, function(match, number, quote, str) 
+            {
+                ret.push(quote ? str.replace(regEscapeChar, '$1') : (number || match));
+            });
+
+            return ret;
+        }
+
+        // Lodash _stringToPath
+        var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
+            regEscapeChar = /\\(\\)?/g;
+
+        return exports;
+    })();
+
+    /* ------------------------------ safeGet ------------------------------ */
+
+    var safeGet = _.safeGet = (function ()
+    {
+        /* Get object property, don't throw undefined error.
+         *
+         * |Name  |Type        |Desc                     |
+         * |------|------------|-------------------------|
+         * |obj   |object      |Object to query          |
+         * |path  |array string|Path of property to get  |
+         * |return|*           |Target value or undefined|
+         *
+         * ```javascript
+         * var obj = {a: {aa: {aaa: 1}}};
+         * safeGet(obj, 'a.aa.aaa'); // -> 1
+         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
+         * safeGet(obj, 'a.b'); // -> undefined
+         * ```
+         */
+
+        /* dependencies
+         * isUndef castPath 
+         */
+
+        function exports(obj, path)
+        {
+            path = castPath(path, obj);
+
+            var prop;
+
+            /* eslint-disable no-cond-assign */
+            while (prop = path.shift())
+            {
+                obj = obj[prop];
+                if (isUndef(obj)) return;
+            }
+
+            return obj;
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ isDate ------------------------------ */
 
@@ -1262,6 +1396,38 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ clone ------------------------------ */
+
+    var clone = _.clone = (function ()
+    {
+        /* Create a shallow-copied clone of the provided plain object.
+         *
+         * Any nested objects or arrays will be copied by reference, not duplicated.
+         *
+         * |Name  |Type|Desc          |
+         * |------|----|--------------|
+         * |val   |*   |Value to clone|
+         * |return|*   |Cloned value  |
+         *
+         * ```javascript
+         * clone({name: 'eustia'}); // -> {name: 'eustia'}
+         * ```
+         */
+
+        /* dependencies
+         * isObj isArr extend 
+         */
+
+        function exports(obj)
+        {
+            if (!isObj(obj)) return obj;
+
+            return isArr(obj) ? obj.slice() : extend({}, obj);
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ extendOwn ------------------------------ */
 
     var extendOwn = _.extendOwn = (function (exports)
@@ -1412,49 +1578,6 @@ module.exports = (function ()
             }
 
             return keys(val).length === 0;
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ safeGet ------------------------------ */
-
-    var safeGet = _.safeGet = (function ()
-    {
-        /* Get object property, don't throw undefined error.
-         *
-         * |Name  |Type        |Desc                     |
-         * |------|------------|-------------------------|
-         * |obj   |object      |Object to query          |
-         * |path  |array string|Path of property to get  |
-         * |return|*           |Target value or undefined|
-         *
-         * ```javascript
-         * var obj = {a: {aa: {aaa: 1}}};
-         * safeGet(obj, 'a.aa.aaa'); // -> 1
-         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
-         * safeGet(obj, 'a.b'); // -> undefined
-         * ```
-         */
-
-        /* dependencies
-         * isStr isUndef 
-         */
-
-        function exports(obj, path)
-        {
-            if (isStr(path)) path = path.split('.');
-
-            var prop;
-
-            /* eslint-disable no-cond-assign */
-            while (prop = path.shift())
-            {
-                obj = obj[prop];
-                if (isUndef(obj)) return;
-            }
-
-            return obj;
         }
 
         return exports;
@@ -2406,6 +2529,64 @@ module.exports = (function ()
 
         return exports;
     })();
+
+    /* ------------------------------ Enum ------------------------------ */
+
+    var Enum = _.Enum = (function (exports)
+    {
+        /* Enum type implementation.
+         *
+         * ### constructor
+         *
+         * |Name|Type |Desc            |
+         * |----|-----|----------------|
+         * |arr |array|Array of strings|
+         *
+         * |Name|Type  |Desc                  |
+         * |----|------|----------------------|
+         * |obj |object|Pairs of key and value|
+         *
+         * ```javascript
+         * var importance = new Enum([
+         *     'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
+         * ]);
+         *
+         * if (val === importance.CRITICAL)
+         * {
+         *     // Do something.
+         * }
+         * ```
+         */
+
+        /* dependencies
+         * Class freeze isArr each keys 
+         */
+
+        exports = Class({
+            initialize: function Enum(map)
+            {
+                if (isArr(map))
+                {
+                    this.size = map.length;
+                    each(map, function (member, val)
+                    {
+                        this[member] = val;
+                    }, this);
+                } else
+                {
+                    this.size = keys(map).length;
+                    each(map, function (val, member)
+                    {
+                        this[member] = val;
+                    }, this);
+                }
+
+                freeze(this);
+            }
+        });
+
+        return exports;
+    })({});
 
     /* ------------------------------ Select ------------------------------ */
 
@@ -3947,6 +4128,142 @@ module.exports = (function ()
 
                 obj._events = obj._events || {};
             }
+        });
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Logger ------------------------------ */
+
+    _.Logger = (function (exports)
+    {
+        /* Simple logger with level filter.
+         *
+         * ### constructor
+         * 
+         * |Name         |Type  |Desc        |
+         * |-------------|------|------------|
+         * |name         |string|Logger name |
+         * |[level=DEBUG]|number|Logger level|
+         * 
+         * ### setLevel
+         * 
+         * |Name |Type         |Desc        |
+         * |-----|-------------|------------|
+         * |level|number string|Logger level|
+         * 
+         * ### getLevel
+         * 
+         * Get current level.
+         * 
+         * ### trace, debug, info, warn, error
+         * 
+         * Logging methods.
+         * 
+         * ### Log Levels
+         * 
+         * TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
+         * 
+         * ```javascript
+         * var logger = new Logger('eris', logger.level.ERROR);
+         * logger.trace('test');
+         * 
+         * // Format output.
+         * logger.formatter = function (type, argList)
+         * {
+         *     argList.push(new Date().getTime());
+         * 
+         *     return argList;
+         * };
+         * 
+         * logger.on('all', function (type, argList) 
+         * {
+         *     // It's not affected by log level.
+         * });
+         * 
+         * logger.on('debug', function (argList) 
+         * {
+         *     // Affected by log level.
+         * });
+         * ```
+         */
+
+        /* dependencies
+         * Emitter Enum toArr isUndef clone isStr isNum 
+         */
+
+        exports = Emitter.extend({
+            initialize: function Logger(name, level) 
+            {
+                this.name = name;
+
+                this.setLevel(isUndef(level) ? exports.level.DEBUG : level);
+                this.callSuper(Emitter, 'initialize', arguments);
+            },
+            setLevel: function (level) 
+            {
+                if (isStr(level)) 
+                {
+                    level = exports.level[level.toUpperCase()];
+                    if (level) this._level = level;
+                    return this;
+                }
+                if (isNum(level)) this._level = level;
+
+                return this;
+            },
+            getLevel: function () 
+            {
+                return this._level;
+            },
+            formatter: function (type, argList) 
+            {
+                return argList;
+            },
+            trace: function () 
+            {
+                return this._log('trace', arguments);
+            },
+            debug: function () 
+            {
+                return this._log('debug', arguments);
+            },
+            info: function ()
+            {
+                return this._log('info', arguments);
+            },
+            warn: function () 
+            {
+                return this._log('warn', arguments);
+            },
+            error: function ()
+            {
+                return this._log('error', arguments);
+            },
+            _log: function (type, argList) 
+            {
+                argList = toArr(argList);
+                if (argList.length === 0) return this;
+
+                this.emit('all', type, clone(argList));
+
+                if (exports.level[type.toUpperCase()] < this._level) return this;
+                this.emit(type, clone(argList));
+                /* eslint-disable no-console */
+                var consoleMethod = type === 'debug' ? console.log : console[type];
+                consoleMethod.apply(console, this.formatter(type, argList));
+
+                return this;
+            }
+        }, {
+            level: new Enum({
+                TRACE: 0,
+                DEBUG: 1,
+                INFO: 2,
+                WARN: 3,
+                ERROR: 4,
+                SILENT: 5
+            })
         });
 
         return exports;
