@@ -8,6 +8,9 @@
     "parserOptions": {
         "sourceType": "module"
     },
+    "globals": {
+        "VERSION": true
+    },
     "rules": {
         "quotes": [
             "error",

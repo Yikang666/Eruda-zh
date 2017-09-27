@@ -23,6 +23,7 @@ module.exports = {
         this._initSettings();
         this._initTools(tool);
     },
+    version: VERSION,
     config, util,
     Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
     get(name)
