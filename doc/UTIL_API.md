@@ -373,6 +373,83 @@ event.emit('test'); // Logs out 'test'.
 Emitter.mixin({});
 ```
 
+## Enum 
+
+Enum type implementation.
+
+### constructor
+
+|Name|Type |Desc            |
+|----|-----|----------------|
+|arr |array|Array of strings|
+
+|Name|Type  |Desc                  |
+|----|------|----------------------|
+|obj |object|Pairs of key and value|
+
+```javascript
+var importance = new Enum([
+    'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
+]);
+
+if (val === importance.CRITICAL)
+{
+    // Do something.
+}
+```
+
+## Logger 
+
+Simple logger with level filter.
+
+### constructor
+
+|Name         |Type  |Desc        |
+|-------------|------|------------|
+|name         |string|Logger name |
+|[level=DEBUG]|number|Logger level|
+
+### setLevel
+
+|Name |Type         |Desc        |
+|-----|-------------|------------|
+|level|number string|Logger level|
+
+### getLevel
+
+Get current level.
+
+### trace, debug, info, warn, error
+
+Logging methods.
+
+### Log Levels
+
+TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
+
+```javascript
+var logger = new Logger('eris', logger.level.ERROR);
+logger.trace('test');
+
+// Format output.
+logger.formatter = function (type, argList)
+{
+    argList.push(new Date().getTime());
+
+    return argList;
+};
+
+logger.on('all', function (type, argList)
+{
+    // It's not affected by log level.
+});
+
+logger.on('debug', function (argList)
+{
+    // Affected by log level.
+});
+```
+
 ## Select 
 
 Simple wrapper of querySelectorAll to make dom selection easier.
@@ -581,6 +658,38 @@ camelCase('foo-bar'); // -> fooBar
 camelCase('foo bar'); // -> fooBar
 camelCase('foo_bar'); // -> fooBar
 camelCase('foo.bar'); // -> fooBar
+```
+
+## castPath 
+
+Cast value into a property path array.
+
+|Name  |Type  |Desc               |
+|------|------|-------------------|
+|str   |*     |Value to inspect   |
+|[obj] |object|Object to query    |
+|return|array |Property path array|
+
+```javascript
+castPath('a.b.c'); // -> ['a', 'b', 'c']
+castPath(['a']); // -> ['a']
+castPath('a[0].b'); // -> ['a', '0', 'b']
+castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
+```
+
+## clone 
+
+Create a shallow-copied clone of the provided plain object.
+
+Any nested objects or arrays will be copied by reference, not duplicated.
+
+|Name  |Type|Desc          |
+|------|----|--------------|
+|val   |*   |Value to clone|
+|return|*   |Cloned value  |
+
+```javascript
+clone({name: 'eustia'}); // -> {name: 'eustia'}
 ```
 
 ## contain 
@@ -861,6 +970,24 @@ filter([1, 2, 3, 4, 5], function (val)
 {
     return val % 2 === 0;
 }); // -> [2, 4]
+```
+
+## freeze 
+
+Shortcut for Object.freeze.
+
+Use Object.defineProperties if Object.freeze is not supported.
+
+|Name  |Type  |Desc            |
+|------|------|----------------|
+|obj   |object|Object to freeze|
+|return|object|Object passed in|
+
+```javascript
+var a = {b: 1};
+freeze(a);
+a.b = 2;
+console.log(a); // -> {b: 1}
 ```
 
 ## getFileName 
@@ -1399,8 +1526,27 @@ Used for function context binding.
 
 ## orientation 
 
-dependencies
-Emitter
+Screen orientation helper.
+
+### on
+
+Bind change event.
+
+### off
+
+Unbind change event.
+
+### get
+
+Get current orientation(landscape or portrait).
+
+```javascript
+orientation.on('change', function (direction)
+{
+    console.log(direction); // -> 'portrait'
+});
+orientation.get(); // -> 'landscape'
+```
 
 ## partial 
 
