@@ -1,7 +1,4 @@
-/* Icons(Font-awesome): times-circle, exclamation-triangle, chevron-left,
- * chevron-right, repeat, trash, cog, ban, info-circle, hand-pointer-o, eye,
- * rotate-left
- */
+// Navigate to https://icomoon.io/, import icomoon.json, download generated archive and extract it into icomoon folder.
 
 var fs = require('fs'),
     path = require('path');

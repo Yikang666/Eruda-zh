@@ -46,6 +46,7 @@ export default class Elements extends Tool
     set(e)
     {
         this._setEl(e);
+        this.scrollToTop();
         this._render();
 
         return this;
@@ -68,6 +69,12 @@ export default class Elements extends Tool
             rmEvent(this, type, listener, useCapture);
             origRmEvent.apply(this, arguments);
         };
+    }
+    scrollToTop() 
+    {
+        let el = this._$showArea.get(0);
+        
+        el.scrollTop = 0;
     }
     restoreEventTarget()
     {
@@ -249,6 +256,7 @@ export default class Elements extends Tool
 
         let computedStyle = cssStore.getComputedStyle();
         if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+        ret.rmDefComputedStyle = this._rmDefComputedStyle;
         processStyleRules(computedStyle);
         ret.computedStyle = computedStyle;
 
