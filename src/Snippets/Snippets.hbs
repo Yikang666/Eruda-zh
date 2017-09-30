@@ -1,9 +1,8 @@
 {{#each snippets}}
-    <div class="eruda-section">
+    <div class="eruda-section eruda-run" data-idx="{{@index}}">
         <h2 class="eruda-name">{{name}}</h2>
         <div class="eruda-description">
             {{desc}}
         </div>
-        <div class="eruda-btn eruda-run" data-idx="{{@index}}">Run</div>
     </div>
 {{/each}}
