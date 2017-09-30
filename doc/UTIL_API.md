@@ -847,6 +847,25 @@ delegate.add(container, 'click', '.children', clickHandler);
 delegate.remove(container, 'click', '.children', clickHandler);
 ```
 
+## detectBrowser 
+
+Detect browser info using ua.
+
+|Name                    |Type  |Desc                              |
+|------------------------|------|----------------------------------|
+|[ua=navigator.userAgent]|string|Browser userAgent                 |
+|return                  |object|Object containing name and version|
+
+Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
+
+```javascript
+var browser = detectBrowser();
+if (browser.name === 'ie' && browser.version < 9)
+{
+    // Do something about old IE...
+}
+```
+
 ## each 
 
 Iterates over elements of collection and invokes iteratee for each element.
@@ -1266,6 +1285,12 @@ Checks if value is classified as a Number primitive or object.
 |------|-------|-------------------------------------|
 |value |*      |Value to check                       |
 |return|boolean|True if value is correctly classified|
+
+```javascript
+isNum(5); // -> true
+isNum(5.1); // -> true
+isNum({}); // -> false
+```
 
 ## isObj 
 
