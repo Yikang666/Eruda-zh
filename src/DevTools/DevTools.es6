@@ -1,5 +1,6 @@
 import NavBar from './NavBar.es6'
 import util from '../lib/util'
+import logger from '../lib/logger.es6'
 import Tool from './Tool.es6'
 
 export default class DevTools extends util.Emitter
@@ -54,9 +55,9 @@ export default class DevTools extends util.Emitter
         util.defaults(tool, {init, show, hide});
 
         let name = tool.name;
-        if (!name) throw new Error('You must specify a name for a tool');
+        if (!name) return logger.error('You must specify a name for a tool');
         name = name.toLowerCase();
-        if (this._tools[name]) throw new Error('Tool ' + name + ' already exists' );
+        if (this._tools[name]) return logger.error('Tool ' + name + ' already exists' );
 
         this._$tools.prepend(`<div class="eruda-${name} eruda-tool"></div>`);
         tool.init(this._$tools.find(`.eruda-${name}`), this);
