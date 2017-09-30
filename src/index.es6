@@ -10,6 +10,7 @@ import Features from './Features/Features.es6'
 import Sources from './Sources/Sources.es6'
 import Settings from './Settings/Settings.es6'
 import util from './lib/util'
+import emitter from './lib/emitter.es6'
 import config from './lib/config.es6'
 import logger from './lib/logger.es6'
 import extraUtil from './lib/extraUtil.es6'
@@ -25,6 +26,7 @@ module.exports = {
         this._initEntryBtn();
         this._initSettings();
         this._initTools(tool);
+        this._registerListener();
     },
     _isInit: false,
     version: VERSION,
@@ -65,6 +67,11 @@ module.exports = {
         name ? devTools.showTool(name) : devTools.show();
 
         return this;
+    },
+    _registerListener() 
+    {
+        emitter.on(emitter.ADD, (...args) => this.add(...args));
+        emitter.on(emitter.SHOW, (...args) => this.show(...args));
     },
     _checkInit() 
     {

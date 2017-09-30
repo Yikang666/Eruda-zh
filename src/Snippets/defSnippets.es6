@@ -1,4 +1,5 @@
 import util from '../lib/util'
+import emitter from '../lib/emitter.es6'
 
 export default [
     {
@@ -39,6 +40,14 @@ export default [
             body.contentEditable = body.contentEditable !== 'true';
         },
         desc: 'Toggle body contentEditable'
+    },
+    {
+        name: 'Load Fps Plugin',
+        fn() 
+        {
+            loadPlugin('fps');
+        },
+        desc: 'Display page fps'
     }
 ];
 
@@ -98,4 +107,18 @@ function traverse(root, processor)
     }
 
     return processor(root);
+}
+
+function loadPlugin(name) 
+{
+    let globalName = 'eruda' + util.upperFirst(name);
+    if (window[globalName]) return;
+
+    util.loadJs('//cdn.jsdelivr.net/npm/eruda-' + name, (isLoaded) =>
+    {
+        if (!isLoaded || !window[globalName]) return emitter.emit(emitter.LOG, 'error', 'Fail to load plugin ' + name);
+
+        emitter.emit(emitter.ADD, window[globalName]); 
+        emitter.emit(emitter.SHOW, name);
+    });
 }

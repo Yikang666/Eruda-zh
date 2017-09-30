@@ -1,4 +1,5 @@
 import util from './util'
+import emitter from './emitter.es6'
 
 let logger;
 
@@ -10,3 +11,5 @@ logger.formatter = function (type, argList)
 
     return argList;
 };
+
+emitter.on(emitter.LOG, (type, ...args) => logger[type](...args));
