@@ -24,6 +24,15 @@
                 color: #fff;
                 background: $gray;
                 transition: background $anim-duration;
+                .btn {
+                    margin-left: 10px;
+                    float: right;
+                    text-align: center;
+                    width: 18px;
+                    height: 18px;
+                    line-height: 18px;
+                    font-size: 12px;
+                }
             }
             .description {
                 background: #fff;
