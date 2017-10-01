@@ -12,16 +12,16 @@
             color: $gray-dark;
             font-size: 12px;
         }
-        .select {
+        .select, .range {
             cursor: pointer;
         }
-        .select .head, .switch {
+        .select .head, .switch, .range .head {
             padding: $padding;
             background: #fff;
             font-size: $font-size;
             border-bottom: 1px solid $gray-light;
         }
-        .select .head {
+        .select .head, .range .head {
             transition: background $anim-duration, color $anim-duration;
             span {
                 float: right;
@@ -44,6 +44,34 @@
                     background: $blue;
                     color: #fff;
                 }
+            }
+        }
+        .range .input-container {
+            display: none;
+            padding: $padding;
+            background: $gray-light;
+            &.open {
+                display: block;
+            }
+            input {
+                -webkit-appearance: none;
+                background: $gray;
+                height: 4px;
+                width: 100%;
+                position: relative;
+                top: -3px;
+                margin: 0 auto;
+            }
+            input::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                position: relative;
+                top: 0px;
+                z-index: 1;
+                width: 15px;
+                height: 15px;
+                border-radius: 10px;
+                background-color: #FFF;
+                box-shadow: $box-shadow;
             }
         }
         .switch {

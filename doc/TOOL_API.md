@@ -227,7 +227,7 @@ Add switch to toggle a boolean value.
 
 ### select
 
-Add select to select a number of string values
+Add select to select a number of string values.
 
 |Name  |Type  |Desc                      |
 |------|------|--------------------------|
@@ -235,6 +235,17 @@ Add select to select a number of string values
 |name  |string|Option name               |
 |desc  |string|Option description        |
 |values|array |Array of strings to select|
+
+### range
+
+Add range to input a number.
+
+|Name  |Type  |Desc              |
+|------|------|------------------|
+|cfg   |object|Config object     |
+|name  |string|Option name       |
+|desc  |string|Option description|
+|option|object|Min, max, step  | |
 
 ### separator
 
@@ -245,11 +256,13 @@ var cfg = eruda.util.createCfg('test');
 
 cfg.set(eruda.util.defaults(cfg.get(), {
     testBool: true,
-    testSelect: 'select1'
+    testSelect: 'select1',
+    testRange: 1
 }));
 
 settings.text('Test')
         .switch(cfg, 'testBool', 'Test Bool')
         .select(cfg, 'testSelect', 'Test Select', ['select1', 'select2'])
+        .range(cfg, 'testRange', 'Test Range', {min: 0, max: 1, step: 0.1})
         .separator();
 ```

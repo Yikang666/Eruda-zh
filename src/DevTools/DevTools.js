@@ -110,8 +110,8 @@ export default class DevTools extends util.Emitter
         let cfg = this.config = util.createCfg('dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
-            transparency: '95%',
-            displaySize: '80%',
+            transparency: 0.95,
+            displaySize: 80,
             tinyNavBar: false,
             activeEruda: false
         }));
@@ -138,13 +138,12 @@ export default class DevTools extends util.Emitter
     }
     _setTransparency(opacity)
     {
-        opacity = +opacity.replace('%', '') / 100;
         this._opacity = opacity;
         if (this._isShow) this._$el.css({opacity});
     }
     _setDisplaySize(height)
     {
-        this._$el.css({height});
+        this._$el.css({height: height + '%'});
     }
     _appendTpl()
     {

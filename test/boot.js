@@ -6,7 +6,7 @@ function boot(name, cb)
         eruda.init({
             tool: name === 'settings' ? [] : name
         });
-        eruda.show().get().config.set('displaySize', '50%');
+        eruda.show().get().config.set('displaySize', '50');
 
         cb && cb();
 

@@ -132,8 +132,8 @@ module.exports = {
                 .separator()
                 .switch(devTools.config, 'activeEruda', 'Always Activated')
                 .switch(devTools.config, 'tinyNavBar', 'Tiny Navigation Bar')
-                .select(devTools.config, 'transparency', 'Transparency', ['100%', '95%', '90%', '85%', '80%', '75%', '70%'])
-                .select(devTools.config, 'displaySize', 'Display Size', ['100%', '90%', '80%', '70%', '60%', '50%'])
+                .range(devTools.config, 'transparency', 'Transparency', {min: 0.2, max: 1, step: 0.01})
+                .range(devTools.config, 'displaySize', 'Display Size', {min: 40, max: 100, step: 1})
                 .separator();
     },
     _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features'])

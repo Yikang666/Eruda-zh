@@ -12,6 +12,7 @@ export default class Settings extends Tool
         this.name = 'settings';
         this._switchTpl = require('./switch.hbs');
         this._selectTpl = require('./select.hbs');
+        this._rangeTpl = require('./range.hbs');
         this._settings = [];
     }
     init($el)
@@ -42,7 +43,19 @@ export default class Settings extends Tool
         this._settings.push({config, key});
 
         this._$el.append(this._selectTpl({
-            desc, key, selections,
+            desc, selections,
+            idx: this._settings.length - 1,
+            val: config.get(key)
+        }));
+
+        return this;
+    }
+    range(config, key, desc, {min = 0, max = 1, step = 0.1}) 
+    {
+        this._settings.push({config, key});
+
+        this._$el.append(this._rangeTpl({
+            desc, min, max, step,
             idx: this._settings.length - 1,
             val: config.get(key)
         }));
@@ -88,6 +101,24 @@ export default class Settings extends Tool
             $ul.parent().find('.eruda-head span').text(val);
 
             setting.config.set(setting.key, val);
+        }).on('click', '.eruda-range .eruda-head', function () 
+        {
+            util.$(this).parent().find('.eruda-input-container').toggleClass('eruda-open');
+        }).on('change', '.eruda-range input', function () 
+        {
+            let $this = util.$(this),
+                $container = $this.parent(),
+                idx = $container.data('idx'),
+                val = $this.val(),
+                setting = self._settings[idx];
+
+            setting.config.set(setting.key, val);
+        }).on('input', '.eruda-range input', function () 
+        {
+            let $this = util.$(this),
+                val = $this.val();
+            
+            $this.parent().parent().find('.eruda-head span').text(val);
         });
     }
 }
