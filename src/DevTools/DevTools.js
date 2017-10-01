@@ -138,11 +138,15 @@ export default class DevTools extends util.Emitter
     }
     _setTransparency(opacity)
     {
+        if (!util.isNum(opacity)) return;
+
         this._opacity = opacity;
         if (this._isShow) this._$el.css({opacity});
     }
     _setDisplaySize(height)
     {
+        if (!util.isNum(height)) return;
+        
         this._$el.css({height: height + '%'});
     }
     _appendTpl()
