@@ -1,5 +1,4 @@
 import util from './util'
-import emitter from './emitter.es6'
 
 let logger;
 
