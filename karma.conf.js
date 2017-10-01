@@ -18,7 +18,7 @@ module.exports = function (config)
             'test/resources.js',
             'test/snippets.js',
             'test/sources.js',
-            // 'test/settings.js'
+            'test/settings.js'
         ],
         plugins: [
             'karma-jasmine',

@@ -162,11 +162,11 @@ Allow you to register small functions that can be triggered multiple times.
 
 ### clear
 
-Clear Snippets.
+Clear snippets.
 
 ### add
 
-Add Snippet.
+Add snippet.
 
 |Name|Type    |Desc                    |
 |----|--------|------------------------|
@@ -202,6 +202,10 @@ related materials in [Can I Use](http://caniuse.com/) website.
 ## Settings
 
 Customization for all tools.
+
+### clear
+
+Clear settings.
 
 ### text
 

@@ -20,6 +20,11 @@ export default class Settings extends Tool
 
         this._bindEvent();
     }
+    clear() 
+    {
+        this._settings = []; 
+        this._$el.html('');
+    }
     switch(config, key, desc)
     {
         this._settings.push({config, key});
