@@ -109,14 +109,14 @@ export default class Settings extends Tool
             let $this = util.$(this),
                 $container = $this.parent(),
                 idx = $container.data('idx'),
-                val = $this.val(),
+                val = +$this.val(),
                 setting = self._settings[idx];
 
             setting.config.set(setting.key, val);
         }).on('input', '.eruda-range input', function () 
         {
             let $this = util.$(this),
-                val = $this.val();
+                val = +$this.val();
             
             $this.parent().parent().find('.eruda-head span').text(val);
         });
