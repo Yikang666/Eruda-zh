@@ -1,4 +1,5 @@
 import util from '../lib/util'
+import logger from '../lib/logger.es6'
 import emitter from '../lib/emitter.es6'
 
 export default [
@@ -116,7 +117,7 @@ function loadPlugin(name)
 
     util.loadJs('//cdn.jsdelivr.net/npm/eruda-' + name, (isLoaded) =>
     {
-        if (!isLoaded || !window[globalName]) return emitter.emit(emitter.LOG, 'error', 'Fail to load plugin ' + name);
+        if (!isLoaded || !window[globalName]) return logger.error('Fail to load plugin ' + name);
 
         emitter.emit(emitter.ADD, window[globalName]); 
         emitter.emit(emitter.SHOW, name);

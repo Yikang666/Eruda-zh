@@ -50,14 +50,6 @@ module.exports = {
 
         return this;
     },
-    remove(name)
-    {
-        if (!this._checkInit()) return;
-
-        this._devTools.remove(name);
-
-        return this;
-    },
     show(name)
     {
         if (!this._checkInit()) return;

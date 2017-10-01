@@ -11,5 +11,3 @@ logger.formatter = function (type, argList)
 
     return argList;
 };
-
-emitter.on(emitter.LOG, (type, ...args) => logger[type](...args));

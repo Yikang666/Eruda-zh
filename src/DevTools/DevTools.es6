@@ -57,7 +57,7 @@ export default class DevTools extends util.Emitter
         let name = tool.name;
         if (!name) return logger.error('You must specify a name for a tool');
         name = name.toLowerCase();
-        if (this._tools[name]) return logger.error('Tool ' + name + ' already exists' );
+        if (this._tools[name]) return logger.warn('Tool ' + name + ' already exists' );
 
         this._$tools.prepend(`<div class="eruda-${name} eruda-tool"></div>`);
         tool.init(this._$tools.find(`.eruda-${name}`), this);
