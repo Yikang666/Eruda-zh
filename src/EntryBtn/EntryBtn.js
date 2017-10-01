@@ -16,6 +16,14 @@ export default class EntryBtn extends util.Emitter
         this._setPos();
         this._bindEvent();
     }
+    hide() 
+    {
+        this._$el.hide();
+    }
+    show() 
+    {
+        this._$el.show();
+    }
     _appendTpl()
     {
         let $parent = this._$parent;

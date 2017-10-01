@@ -60,6 +60,14 @@ module.exports = {
 
         return this;
     },
+    hide() 
+    {
+        if (!this._checkInit()) return;
+
+        this._devTools.hide();
+
+        return this;
+    },
     _registerListener() 
     {
         emitter.on(emitter.ADD, (...args) => this.add(...args));
@@ -109,8 +117,8 @@ module.exports = {
     },
     _initEntryBtn()
     {
-        this._entryBtn = new EntryBtn(this._$el);
-        this._entryBtn.on('click', () => this._devTools.toggle());
+        this.entryBtn = new EntryBtn(this._$el);
+        this.entryBtn.on('click', () => this._devTools.toggle());
     },
     _initSettings()
     {
@@ -120,7 +128,7 @@ module.exports = {
         devTools.add(settings);
 
         settings.separator()
-                .switch(this._entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
+                .switch(this.entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
                 .separator()
                 .switch(devTools.config, 'activeEruda', 'Always Activated')
                 .switch(devTools.config, 'tinyNavBar', 'Tiny Navigation Bar')
