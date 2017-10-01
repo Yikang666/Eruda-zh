@@ -1,4 +1,4 @@
-import Storage from './Storage.es6'
+import Storage from './Storage'
 
 let configs = {};
 

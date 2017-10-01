@@ -1,5 +1,5 @@
-import Tool from '../DevTools/Tool.es6'
-import Request from './Request.es6'
+import Tool from '../DevTools/Tool'
+import Request from './Request'
 import util from '../lib/util'
 
 export default class Network extends Tool

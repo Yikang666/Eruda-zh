@@ -1,5 +1,5 @@
-import Logger from './Logger.es6'
-import Tool from '../DevTools/Tool.es6'
+import Logger from './Logger'
+import Tool from '../DevTools/Tool'
 import util from '../lib/util'
 
 export default class Console extends Tool

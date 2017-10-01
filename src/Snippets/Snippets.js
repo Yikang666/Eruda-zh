@@ -1,5 +1,5 @@
-import Tool from '../DevTools/Tool.es6'
-import defSnippets from './defSnippets.es6'
+import Tool from '../DevTools/Tool'
+import defSnippets from './defSnippets'
 import util from '../lib/util'
 
 export default class Snippets extends Tool

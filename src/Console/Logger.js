@@ -1,5 +1,5 @@
 import util from '../lib/util'
-import Log from './Log.es6'
+import Log from './Log'
 
 export default class Logger extends util.Emitter
 {

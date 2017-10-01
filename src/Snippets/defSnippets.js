@@ -1,6 +1,6 @@
 import util from '../lib/util'
-import logger from '../lib/logger.es6'
-import emitter from '../lib/emitter.es6'
+import logger from '../lib/logger'
+import emitter from '../lib/emitter'
 
 export default [
     {

@@ -1,8 +1,8 @@
-import Tool from '../DevTools/Tool.es6'
-import CssStore from './CssStore.es6'
-import stringify from '../lib/stringify.es6'
-import Highlight from './Highlight.es6'
-import Select from './Select.es6'
+import Tool from '../DevTools/Tool'
+import CssStore from './CssStore'
+import stringify from '../lib/stringify'
+import Highlight from './Highlight'
+import Select from './Select'
 import util from '../lib/util'
 
 export default class Elements extends Tool

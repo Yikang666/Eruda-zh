@@ -1,7 +1,7 @@
-import NavBar from './NavBar.es6'
+import NavBar from './NavBar'
 import util from '../lib/util'
-import logger from '../lib/logger.es6'
-import Tool from './Tool.es6'
+import logger from '../lib/logger'
+import Tool from './Tool'
 
 export default class DevTools extends util.Emitter
 {

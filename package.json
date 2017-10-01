@@ -10,7 +10,7 @@
     "test": "karma start",
     "setup": "node script/cpTestLib",
     "genScriptUtil": "eustia build script/*.js -o script/util.js",
-    "lint": "eslint --ext .es6 src",
+    "lint": "eslint src",
     "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "eustia": {

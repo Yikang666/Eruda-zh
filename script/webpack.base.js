@@ -17,7 +17,7 @@ var postcssLoader = {
 };   
 
 module.exports = {
-    entry: './src/index.es6',
+    entry: './src/index',
     devServer: {
         contentBase: './test',
         port: 3000
@@ -31,8 +31,9 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.es6$/,
+                test: /\.js$/,
                 loader: 'babel-loader',
+                exclude: /node_modules/,
                 options: {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']

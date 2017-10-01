@@ -1,4 +1,4 @@
-import Tool from '../DevTools/Tool.es6'
+import Tool from '../DevTools/Tool'
 import util from '../lib/util'
 
 export default class Resources extends Tool

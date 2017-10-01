@@ -1,9 +1,9 @@
 import util from '../lib/util'
-import stringify from '../lib/stringify.es6'
-import origGetAbstract from '../lib/getAbstract.es6'
-import highlight from '../lib/highlight.es6'
+import stringify from '../lib/stringify'
+import origGetAbstract from '../lib/getAbstract'
+import highlight from '../lib/highlight'
 import beautify from 'js-beautify'
-import JsonViewer from '../lib/JsonViewer.es6'
+import JsonViewer from '../lib/JsonViewer'
 
 export default class Log
 {
