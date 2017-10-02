@@ -52,12 +52,14 @@ export default class Settings extends Tool
     }
     range(config, key, desc, {min = 0, max = 1, step = 0.1}) 
     {
-        this._settings.push({config, key});
+        this._settings.push({config, key, min, max, step});
+
+        let val = config.get(key);
 
         this._$el.append(this._rangeTpl({
-            desc, min, max, step,
-            idx: this._settings.length - 1,
-            val: config.get(key)
+            desc, min, max, step, val, 
+            progress: progress(val, min, max),
+            idx: this._settings.length - 1
         }));
 
         return this;
@@ -116,9 +118,16 @@ export default class Settings extends Tool
         }).on('input', '.eruda-range input', function () 
         {
             let $this = util.$(this),
-                val = +$this.val();
-            
-            $this.parent().parent().find('.eruda-head span').text(val);
+                $container = $this.parent(),
+                idx = $container.data('idx'),
+                val = +$this.val(),
+                setting = self._settings[idx],
+                {min, max} = setting;
+
+            $container.parent().find('.eruda-head span').text(val);
+            $container.find('.eruda-range-track-progress').css('width', progress(val, min, max) + '%');
         });
     }
 }
+
+let progress = (val, min, max) => ((val - min) / (max - min) * 100).toFixed(2);
