@@ -10,3 +10,4 @@
 .npmignore
 .travis.yml
 karma.conf.js
+npm-debug.log
