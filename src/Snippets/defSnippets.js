@@ -49,6 +49,21 @@ export default [
             loadPlugin('fps');
         },
         desc: 'Display page fps'
+    },
+    {
+        name: 'Restore Settings',
+        fn() 
+        {
+            let store = util.safeStorage('local');
+
+            util.each(store, (val, key) => 
+            {
+                if (util.startWith(key, 'eruda')) store.removeItem(key);
+            });
+
+            window.location.reload();
+        },
+        desc: 'Restore defaults and reload'
     }
 ];
 
