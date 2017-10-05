@@ -78,6 +78,13 @@ export default class Console extends Tool
 
         return this;
     }
+    destroy() 
+    {
+        super.destroy();
+
+        this.ignoreGlobalErr();
+        this.restoreConsole();
+    }
     _appendTpl()
     {
         let $el = this._$el;

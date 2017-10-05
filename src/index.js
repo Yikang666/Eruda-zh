@@ -50,6 +50,12 @@ module.exports = {
 
         return this;
     },
+    remove(name) 
+    {
+        this._devTools.remove(name);
+
+        return this;
+    },
     show(name)
     {
         if (!this._checkInit()) return;
@@ -68,10 +74,28 @@ module.exports = {
 
         return this;
     },
+    destroy() 
+    {
+        this._devTools.destroy();
+        delete this._devTools;
+        this.entryBtn.destroy();
+        delete this.entryBtn;
+        this._unregisterListener();
+        this._$el.remove();
+        util.evalCss.reset();
+    },
     _registerListener() 
     {
-        emitter.on(emitter.ADD, (...args) => this.add(...args));
-        emitter.on(emitter.SHOW, (...args) => this.show(...args));
+        this._addListener = (...args) => this.add(...args);
+        this._showListener = (...args) => this.show(...args);
+
+        emitter.on(emitter.ADD, this._addListener);
+        emitter.on(emitter.SHOW, this._showListener);
+    },
+    _unregisterListener() 
+    {
+        emitter.off(emitter.ADD, this._addListener);
+        emitter.off(emitter.SHOW, this._showListener);
     },
     _checkInit() 
     {

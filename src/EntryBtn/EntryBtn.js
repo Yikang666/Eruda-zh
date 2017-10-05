@@ -22,6 +22,10 @@ export default class EntryBtn extends util.Emitter
     {
         this._$el.show();
     }
+    destroy() 
+    {
+        this._$el.remove();
+    }
     _appendTpl()
     {
         let $parent = this._$parent;

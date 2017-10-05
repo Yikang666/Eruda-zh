@@ -22,6 +22,15 @@ export default class NavBar extends util.Emitter
         this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`);
         this.resetStyle();
     }
+    remove(name) 
+    {
+        this._len--;
+        this._$el.find('.eruda-nav-bar-item').each(function () 
+        {
+            let $this = util.$(this);   
+            if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove();
+        });
+    }
     setHeight(height)
     {
         this._height = height;
@@ -48,6 +57,10 @@ export default class NavBar extends util.Emitter
                 $this.rmClass('eruda-active');
             }
         });
+    }
+    destroy() 
+    {
+        this._$el.remove();
     }
     _resetBottomBar() 
     {

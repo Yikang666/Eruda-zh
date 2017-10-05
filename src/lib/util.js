@@ -758,6 +758,11 @@ module.exports = (function ()
             container.appendChild(style);
         }
 
+        exports.reset = function () 
+        {
+            mark = [];
+        };
+
         return exports;
     })();
 

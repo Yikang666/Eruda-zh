@@ -56,7 +56,7 @@ export default class DevTools extends util.Emitter
         let name = tool.name;
         if (!name) return logger.error('You must specify a name for a tool');
         name = name.toLowerCase();
-        if (this._tools[name]) return logger.warn('Tool ' + name + ' already exists' );
+        if (this._tools[name]) return logger.warn(`Tool ${name} already exists`);
 
         this._$tools.prepend(`<div class="eruda-${name} eruda-tool"></div>`);
         tool.init(this._$tools.find(`.eruda-${name}`), this);
@@ -64,6 +64,31 @@ export default class DevTools extends util.Emitter
         this._tools[name] = tool;
 
         this._navBar.add(name);
+
+        return this;
+    }
+    remove(name) 
+    {
+        let tools = this._tools;
+
+        if (!tools[name]) return logger.warn(`Tool ${name} doesn't exist`);
+
+        this._navBar.remove(name);
+
+        let tool = tools[name];
+        delete tools[name];
+        if (tool.active) 
+        {
+            let keys = util.keys(tools);
+            if (keys.length > 0) this.showTool(tools[util.last(keys)].name);
+        }
+        tool.destroy();
+
+        return this;
+    }
+    removeAll() 
+    {
+        util.each(this._tools, tool => this.remove(tool.name));
 
         return this;
     }
@@ -145,6 +170,12 @@ export default class DevTools extends util.Emitter
     {
         this._$el.css('paddingTop', height);
         this._navBar.setHeight(height);
+    }
+    destroy() 
+    {
+        this.removeAll();
+        this._navBar.destroy();
+        this._$el.remove();
     }
     _setTransparency(opacity)
     {

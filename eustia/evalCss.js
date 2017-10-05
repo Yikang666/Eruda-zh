@@ -16,3 +16,8 @@ function exports(css)
 
     container.appendChild(style);
 }
+
+exports.reset = function () 
+{
+    mark = [];
+};

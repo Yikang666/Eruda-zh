@@ -83,6 +83,13 @@ export default class Elements extends Tool
         if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
         if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
     }
+    destroy() 
+    {
+        super.destroy();
+
+        this._select.disable();
+        this.restoreEventTarget();
+    }
     _back()
     {
         if (this._curEl === this._htmlEl) return;

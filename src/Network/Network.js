@@ -260,6 +260,12 @@ export default class Network extends Tool
         });
         this._performanceTiming = performanceTiming;
     }
+    destroy() 
+    {
+        super.destroy();
+
+        this.restoreXhr();
+    }
     _getResourceTimingData()
     {
         if (!this._hasResourceTiming) return;
