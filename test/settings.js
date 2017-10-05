@@ -5,7 +5,8 @@ var cfg = eruda.config.create('eruda-test');
 cfg.set({
     testSwitch: false,
     testSelect: '1',
-    testRange: 1
+    testRange: 1,
+    testColor: '#000'
 });
 
 beforeEach(function () 
@@ -57,5 +58,18 @@ describe('range', function ()
         var $el = $tool.find('.eruda-range');
         expect($el.find('.eruda-head')).toContainText(text);
         expect($el.find('input').length).toEqual(1);
+    });
+});
+
+describe('color', function () 
+{
+    it('ui', function () 
+    {
+        var text = 'Test Color';
+
+        tool.color(cfg, 'testColor', text, ['#000', '#fff']);
+        var $el = $tool.find('.eruda-color');
+        expect($el.find('.eruda-head')).toContainText(text);
+        expect($el.find('ul li').length).toEqual(2);
     });
 });

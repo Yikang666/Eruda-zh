@@ -19,7 +19,6 @@ export default class DevTools extends util.Emitter
 
         this._appendTpl();
         this._initNavBar();
-        this._initCfg();
     }
     show()
     {
@@ -105,20 +104,22 @@ export default class DevTools extends util.Emitter
 
         return this;
     }
-    _initCfg()
+    initCfg(settings)
     {
         let cfg = this.config = util.createCfg('dev-tools');
 
         cfg.set(util.defaults(cfg.get(), {
             transparency: 0.95,
             displaySize: 80,
-            tinyNavBar: false,
-            activeEruda: false
+            tinyNavBar: !util.isMobile(),
+            activeEruda: false,
+            navBarBgColor: '#2196f3'
         }));
 
         this._setTransparency(cfg.get('transparency'));
         this._setDisplaySize(cfg.get('displaySize'));
         this.setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55);
+        this._navBar.setBgColor(cfg.get('navBarBgColor'));
 
         cfg.on('change', (key, val) =>
         {
@@ -128,8 +129,17 @@ export default class DevTools extends util.Emitter
                 case 'displaySize': return this._setDisplaySize(val);
                 case 'activeEruda': return activeEruda(val);
                 case 'tinyNavBar': return this.setNavBarHeight(val ? 30 : 55);
+                case 'navBarBgColor': return this._navBar.setBgColor(val);
             }
         });
+
+        settings.separator()
+                .switch(cfg, 'activeEruda', 'Always Activated')
+                .switch(cfg, 'tinyNavBar', 'Tiny Navigation Bar')
+                .color(cfg, 'navBarBgColor', 'Navigation Bar Background Color')
+                .range(cfg, 'transparency', 'Transparency', {min: 0.2, max: 1, step: 0.01})
+                .range(cfg, 'displaySize', 'Display Size', {min: 40, max: 100, step: 1})
+                .separator();
     }
     setNavBarHeight(height)
     {

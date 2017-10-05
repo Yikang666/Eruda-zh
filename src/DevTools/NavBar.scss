@@ -25,10 +25,10 @@ $item-width: 69px;
             text-transform: capitalize;
             transition: background $anim-duration;
             &:active {
-                background: $blue-dark;
+                background: $gray-dark;
             }
             &.active {
-                background: $blue-light;
+                background: $gray;
             }
         }
         .bottom-bar {

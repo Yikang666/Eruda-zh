@@ -12,16 +12,16 @@
             color: $gray-dark;
             font-size: 12px;
         }
-        .select, .range {
+        .select, .range, .color {
             cursor: pointer;
         }
-        .select .head, .switch, .range .head {
+        .select .head, .switch, .range .head, .color .head {
             padding: $padding;
             background: #fff;
             font-size: $font-size;
             border-bottom: 1px solid $gray-light;
         }
-        .select .head, .range .head {
+        .select .head, .range .head, .color .head {
             transition: background $anim-duration, color $anim-duration;
             span {
                 float: right;
@@ -30,6 +30,12 @@
                 background: $blue;
                 color: #fff;
             }
+        }
+        .color .head span {
+            display: inline-block;
+            border: 1px solid $gray-dark;
+            width: 15px;
+            height: 15px;
         }
         .select ul {
             display: none;
@@ -44,6 +50,22 @@
                     background: $blue;
                     color: #fff;
                 }
+            }
+        }
+        .color ul {
+            display: none;
+            padding: $padding;
+            font-size: 0;
+            background: $gray-light;
+            &.open {
+                display: block;
+            }
+            li {
+                display: inline-block;
+                width: 20px;
+                border: 1px solid $gray-dark;
+                height: 20px;
+                margin-right: 10px;
             }
         }
         .range .input-container {

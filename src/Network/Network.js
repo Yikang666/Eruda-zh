@@ -228,8 +228,6 @@ export default class Network extends Tool
         data.push(getData('Unload', unloadEventStart, unloadEventEnd));
         data.push(getData('DOM Processing', domLoading, domComplete));
         data.push(getData('DOM Construction', domLoading, domInteractive));
-        data.push(getData('DOM Content Loaded Event', domContentLoadedEventStart, domContentLoadedEventEnd));
-        data.push(getData('Load Event', loadEventStart, loadEventEnd));
 
         this._performanceTimingData = data;
 

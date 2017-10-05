@@ -13,6 +13,7 @@ export default class Settings extends Tool
         this._switchTpl = require('./switch.hbs');
         this._selectTpl = require('./select.hbs');
         this._rangeTpl = require('./range.hbs');
+        this._colorTpl = require('./color.hbs');
         this._settings = [];
     }
     init($el)
@@ -32,6 +33,20 @@ export default class Settings extends Tool
 
         this._$el.append(this._switchTpl({
             desc, key,
+            idx: this._settings.length - 1,
+            val: config.get(key)
+        }));
+
+        return this;
+    }
+    color(config, key, desc, colors = [
+        '#2196f3', '#707d8b', '#f44336', '#009688', '#ffc107'
+    ]) 
+    {
+        this._settings.push({config, key});
+
+        this._$el.append(this._colorTpl({
+            desc, colors,
             idx: this._settings.length - 1,
             val: config.get(key)
         }));
@@ -126,6 +141,21 @@ export default class Settings extends Tool
 
             $container.parent().find('.eruda-head span').text(val);
             $container.find('.eruda-range-track-progress').css('width', progress(val, min, max) + '%');
+        }).on('click', '.eruda-color .eruda-head', function () 
+        {
+            util.$(this).parent().find('ul').toggleClass('eruda-open');
+        }).on('click', '.eruda-color li', function () 
+        {
+            let $this = util.$(this),
+                $ul = $this.parent(),
+                val = $this.css('background-color'),
+                idx = $ul.data('idx'),
+                setting = self._settings[idx];
+
+            $ul.rmClass('eruda-open');
+            $ul.parent().find('.eruda-head span').css('background-color', val);
+
+            setting.config.set(setting.key, val);
         });
     }
 }

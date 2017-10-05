@@ -126,15 +126,9 @@ module.exports = {
             settings = new Settings();
 
         devTools.add(settings);
-
-        settings.separator()
-                .switch(this.entryBtn.config, 'rememberPos', 'Remember Entry Button Position')
-                .separator()
-                .switch(devTools.config, 'activeEruda', 'Always Activated')
-                .switch(devTools.config, 'tinyNavBar', 'Tiny Navigation Bar')
-                .range(devTools.config, 'transparency', 'Transparency', {min: 0.2, max: 1, step: 0.01})
-                .range(devTools.config, 'displaySize', 'Display Size', {min: 40, max: 100, step: 1})
-                .separator();
+        
+        this.entryBtn.initCfg(settings);
+        devTools.initCfg(settings);
     },
     _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features'])
     {

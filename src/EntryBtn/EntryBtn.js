@@ -12,8 +12,6 @@ export default class EntryBtn extends util.Emitter
         this._$parent = $parent;
         this._appendTpl();
         this._makeDraggable();
-        this._initCfg();
-        this._setPos();
         this._bindEvent();
     }
     hide() 
@@ -83,7 +81,7 @@ export default class EntryBtn extends util.Emitter
     {
         this._draggabilly = new Draggabilly(this._$el.get(0), {containment: true});
     }
-    _initCfg()
+    initCfg(settings)
     {
         let cfg = this.config = util.createCfg('home-button');
 
@@ -91,6 +89,11 @@ export default class EntryBtn extends util.Emitter
             rememberPos: true,
             pos: this._getDefPos()
         }));
+
+        settings.separator()
+                .switch(cfg, 'rememberPos', 'Remember Entry Button Position');
+
+        this._setPos();
     }
     _getDefPos() 
     {

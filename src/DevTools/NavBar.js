@@ -27,6 +27,10 @@ export default class NavBar extends util.Emitter
         this._height = height;
         this.resetStyle();
     }
+    setBgColor(color) 
+    {
+        this._$el.css('background-color', color);
+    }
     activeTool(name)
     {
         let self = this;
