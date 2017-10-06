@@ -19,6 +19,7 @@
 
 @mixin breadcrumb {
     background: #fff;
+    user-select: text;
     margin-bottom: 10px;
     word-break: break-all;
     padding: $padding;

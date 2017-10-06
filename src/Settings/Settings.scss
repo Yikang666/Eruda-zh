@@ -20,6 +20,8 @@
             background: #fff;
             font-size: $font-size;
             border-bottom: 1px solid $gray-light;
+            border-top: 1px solid $gray-light;
+            margin-top: -1px;
         }
         .select .head, .range .head, .color .head {
             transition: background $anim-duration, color $anim-duration;

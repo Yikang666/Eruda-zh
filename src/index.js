@@ -19,6 +19,7 @@ module.exports = {
     init({el, tool, autoScale = true} = {})
     {
         this._isInit = true;
+        this._scale = 1;
 
         this._initContainer(el);
         this._initStyle();
@@ -86,8 +87,13 @@ module.exports = {
         this._$el.remove();
         util.evalCss.clear();
     },
+    getScale() 
+    {
+        return this._scale;
+    },
     setScale(scale) 
     {
+        this._scale = scale;
         emitter.emit(emitter.SCALE, scale);
     },
     _autoScale() 
