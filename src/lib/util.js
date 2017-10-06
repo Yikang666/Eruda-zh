@@ -514,6 +514,50 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ clamp ------------------------------ */
+
+    var clamp = _.clamp = (function ()
+    {
+        /* Clamp number within the inclusive lower and upper bounds.
+         *
+         * |Name   |Type  |Desc           |
+         * |-------|------|---------------|
+         * |n      |number|Number to clamp|
+         * |[lower]|number|Lower bound    |
+         * |upper  |number|Upper bound    |
+         * |return |number|Clamped number |
+         *
+         * ```javascript
+         * clamp(-10, -5, 5); // -> -5
+         * clamp(10, -5, 5); // -> 5
+         * clamp(2, -5, 5); // -> 2
+         * clamp(10, 5); // -> 5
+         * clamp(2, 5); // -> 2
+         * ```
+         */
+
+        /* dependencies
+         * isUndef 
+         */
+
+        function exports(n, lower, upper)
+        {
+            if (isUndef(upper))
+            {
+                upper = lower;
+                lower = undefined;
+            }
+
+            if (!isUndef(lower) && n < lower) return lower;
+
+            if (n > upper) return upper;
+
+            return n;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ idxOf ------------------------------ */
 
     var idxOf = _.idxOf = (function ()
@@ -3932,6 +3976,156 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ meta ------------------------------ */
+
+    var meta = _.meta = (function ()
+    {
+        /* Document meta manipulation, turn name and content into key value pairs.
+         *
+         * Get meta content with given name. If name is omitted, all pairs will be return.
+         * 
+         * |Name  |Type        |Desc        |
+         * |------|------------|------------|
+         * |[name]|string array|Meta name   |
+         * |return|string      |Meta content|
+         * 
+         * Set meta content.
+         * 
+         * |Name   |Type  |Desc        |
+         * |-------|------|------------|
+         * |name   |string|Meta name   |
+         * |content|string|Meta content|
+         * 
+         * |Name |Type  |Desc                        |
+         * |-----|------|----------------------------|
+         * |metas|object|Object of name content pairs|
+         * 
+         * ### remove
+         * 
+         * Remove metas.
+         * 
+         * |Name|Type        |Desc     |
+         * |----|------------|---------|
+         * |name|string array|Meta name|
+         * 
+         * ```javascript
+         * // <meta name="a" content="1"/> <meta name="b" content="2"/> <meta name="c" content="3"/>
+         * meta(); // -> {a: '1', b: '2', c: '3'}
+         * meta('a'); // -> '1'
+         * meta(['a', 'c']); // -> {a: '1', c: '3'}
+         * meta('d', '4');
+         * meta({
+         *     d: '5',
+         *     e: '6',
+         *     f: '7'
+         * });
+         * meta.remove('d');
+         * meta.remove(['e', 'f']);
+         * ```
+         */
+
+        /* dependencies
+         * each isStr isUndef contain isArr isObj toArr 
+         */
+
+        function exports(name, content) 
+        {
+            if (isUndef(name)) return getAllMeta();
+
+            var isGetter = (isStr(name) && isUndef(content))|| isArr(name);
+            if (isGetter) return getMeta(name);
+
+            var metas = name;
+            if (!isObj(metas)) 
+            {
+                metas = {};
+                metas[name] = content;
+            }
+            setMeta(metas);
+        } 
+
+        exports.remove = function (nameList)
+        {
+            nameList = toArr(nameList);
+
+            each(nameList, function (name) 
+            {
+                var meta = selectMeta(name);
+                if (meta) doc.head.removeChild(meta);
+            });
+        };
+
+        var doc = document;
+
+        function getAllMeta() 
+        {
+            var ret = {};
+
+            metaEach(function (name, content) 
+            {
+                ret[name] = content;
+            });
+
+            return ret;
+        }
+
+        function getMeta(name) 
+        {
+            if (isStr(name)) 
+            {
+                var meta = selectMeta(name);
+
+                if (meta) return meta.getAttribute('content');
+            } else 
+            {
+                var ret = {};
+
+                metaEach(function (key, val) 
+                {
+                    if(contain(name, key)) ret[key] = val;
+                });
+
+                return ret;
+            }
+        }
+
+        function setMeta(metas) 
+        {
+            each(metas, function (content, name) 
+            {
+                var meta = selectMeta(name);
+                if (meta) return meta.setAttribute('content', content);
+
+                meta = doc.createElement('meta');
+                meta.setAttribute('name', name);
+                meta.setAttribute('content', content);
+                doc.head.appendChild(meta);
+            });
+        }
+
+        function metaEach(fn) 
+        {
+            var metaList = doc.querySelectorAll('meta');
+
+            each(metaList, function (meta) 
+            {
+                var name = meta.getAttribute('name'),
+                    content = meta.getAttribute('content');
+
+                if (!name || !content) return;
+
+                fn(name, content);
+            });
+        }
+
+        function selectMeta(name) 
+        {
+            return doc.querySelector('meta[name="' + name + '"]');
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ nextTick ------------------------------ */
 
     _.nextTick = (function (exports)
@@ -5314,6 +5508,51 @@ module.exports = (function ()
         function isEqual(a, b)
         {
             return a === b;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ viewportScale ------------------------------ */
+
+    _.viewportScale = (function ()
+    {
+        /* Get viewport scale.
+         * 
+         * ```javascript
+         * viewportScale(); // -> 3
+         * ```
+         */
+
+        /* dependencies
+         * meta clamp trim each map 
+         */
+
+        function exports() 
+        {
+            let viewport = meta('viewport');
+
+            if (!viewport) return 1;
+
+            viewport = map(viewport.split(','), val => trim(val));
+
+            let minScale = 0.25,
+                maxScale = 5,
+                initialScale = 1;
+
+            each(viewport, val => 
+            {
+                val = val.split('=');
+
+                let key = val[0];
+                val = val[1];
+
+                if (key === 'initial-scale') initialScale = +val;
+                if (key === 'maximum-scale') maxScale = +val;
+                if (key === 'minimum-scale') minScale = +val;
+            });
+
+            return clamp(initialScale, minScale, maxScale);
         }
 
         return exports;

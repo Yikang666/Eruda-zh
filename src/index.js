@@ -100,7 +100,7 @@ module.exports = {
     {
         if (!util.isMobile()) return;
 
-        this.setScale(window.innerWidth / screen.width);
+        this.setScale(1 / util.viewportScale());
     },
     _registerListener() 
     {
