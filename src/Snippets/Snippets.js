@@ -8,7 +8,7 @@ export default class Snippets extends Tool
     {
         super();
 
-        util.evalCss(require('./Snippets.scss'));
+        this._style = util.evalCss(require('./Snippets.scss'));
 
         this.name = 'snippets';
 
@@ -21,6 +21,12 @@ export default class Snippets extends Tool
 
         this._bindEvent();
         this._addDefSnippets();
+    }
+    destroy() 
+    {
+        super.destroy();
+
+        util.evalCss.remove(this._style);
     }
     add(name, fn, desc)
     {

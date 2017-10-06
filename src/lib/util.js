@@ -735,37 +735,6 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ evalCss ------------------------------ */
-
-    _.evalCss = (function ()
-    {
-        var mark = [];
-
-        function exports(css)
-        {
-            for (var i = 0, len = mark.length; i < len; i++)
-            {
-                if (mark[i] === css) return;
-            }
-            mark.push(css);
-
-            var container = exports.container || document.head,
-                style = document.createElement('style');
-
-            style.type = 'text/css';
-            style.textContent = css;
-
-            container.appendChild(style);
-        }
-
-        exports.reset = function () 
-        {
-            mark = [];
-        };
-
-        return exports;
-    })();
-
     /* ------------------------------ fileSize ------------------------------ */
 
     _.fileSize = (function ()
@@ -2348,6 +2317,67 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ evalCss ------------------------------ */
+
+    _.evalCss = (function ()
+    {
+        /* dependencies
+         * toStr each filter 
+         */
+
+        var styleList = [],
+            scale = 1;
+
+        function exports(css)
+        {
+            css = toStr(css);
+
+            for (var i = 0, len = styleList.length; i < len; i++)
+            {
+                if (styleList[i].css === css) return;
+            }
+
+            let container = exports.container || document.head,
+                el = document.createElement('style');
+
+            el.type = 'text/css';
+            container.appendChild(el);
+
+            let style = {css, el, container};
+            resetStyle(style);
+            styleList.push(style);
+
+            return style;
+        }
+
+        exports.setScale = function (s) 
+        {
+            scale = s;
+            each(styleList, style => resetStyle(style));
+        };
+
+        exports.clear = function () 
+        {
+            each(styleList, ({container, el}) => container.removeChild(el));
+            styleList = [];
+        };
+
+        exports.remove = function (style) 
+        {
+            console.log(style);
+            styleList = filter(styleList, s => s !== style);
+
+            style.container.removeChild(style.el);
+        };
+
+        function resetStyle({css, el}) 
+        {
+            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ map ------------------------------ */
 
     var map = _.map = (function ()
@@ -3897,6 +3927,49 @@ module.exports = (function ()
         function cloakedKeys()
         {
             return keys(cloak);
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ nextTick ------------------------------ */
+
+    _.nextTick = (function (exports)
+    {
+        /* Next tick for both node and browser.
+         *
+         * |Name|Type    |Desc            |
+         * |----|--------|----------------|
+         * |cb  |function|Function to call|
+         *
+         * Use process.nextTick if available.
+         *
+         * Otherwise setImmediate or setTimeout is used as fallback.
+         *
+         * ```javascript
+         * nextTick(function ()
+         * {
+         *     // Do something...
+         * });
+         * ```
+         */
+
+        if (typeof process === 'object' && process.nextTick)
+        {
+            exports = process.nextTick;
+        } else if (typeof setImmediate === 'function')
+        {
+            exports = function (cb) { setImmediate(ensureCallable(cb)) }
+        } else
+        {
+            exports = function (cb) { setTimeout(ensureCallable(cb), 0) };
+        }
+
+        function ensureCallable(fn)
+        {
+            if (typeof fn !== 'function') throw new TypeError(fn + ' is not a function');
+
+            return fn;
         }
 
         return exports;

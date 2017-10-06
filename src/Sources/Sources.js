@@ -10,7 +10,7 @@ export default class Sources extends Tool
     {
         super();
 
-        util.evalCss(require('./Sources.scss'));
+        this._style = util.evalCss(require('./Sources.scss'));
 
         this.name = 'sources';
         this._showLineNum = true;
@@ -25,6 +25,12 @@ export default class Sources extends Tool
         this._parent = parent;
         this._bindEvent();
         this._initCfg();
+    }
+    destroy() 
+    {
+        super.destroy();
+
+        util.evalCss.remove(this._style);
     }
     set(type, val)
     {

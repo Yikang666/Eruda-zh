@@ -8,7 +8,7 @@ export default class Info extends Tool
     {
         super();
 
-        util.evalCss(require('./Info.scss'));
+        this._style = util.evalCss(require('./Info.scss'));
 
         this.name = 'info';
         this._tpl = require('./Info.hbs');
@@ -19,6 +19,12 @@ export default class Info extends Tool
         super.init($el);
 
         this._addDefInfo();
+    }
+    destroy() 
+    {
+        super.destroy();
+        
+        util.evalCss.remove(this._style);
     }
     add(name, val)
     {

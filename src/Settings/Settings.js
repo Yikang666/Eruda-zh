@@ -7,7 +7,7 @@ export default class Settings extends Tool
     {
         super();
 
-        util.evalCss(require('./Settings.scss'));
+        this._style = util.evalCss(require('./Settings.scss'));
 
         this.name = 'settings';
         this._switchTpl = require('./switch.hbs');
@@ -21,6 +21,12 @@ export default class Settings extends Tool
         super.init($el);
 
         this._bindEvent();
+    }
+    destroy() 
+    {
+        super.destroy();
+
+        util.evalCss.remove(this._style);
     }
     clear() 
     {

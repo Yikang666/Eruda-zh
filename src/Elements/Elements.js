@@ -11,7 +11,7 @@ export default class Elements extends Tool
     {
         super();
 
-        util.evalCss(require('./Elements.scss'));
+        this._style = util.evalCss(require('./Elements.scss'));
 
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');
@@ -87,7 +87,9 @@ export default class Elements extends Tool
     {
         super.destroy();
 
+        util.evalCss.remove(this._style);
         this._select.disable();
+        this._highlight.destroy();
         this.restoreEventTarget();
     }
     _back()

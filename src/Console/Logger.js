@@ -6,7 +6,7 @@ export default class Logger extends util.Emitter
     constructor($el, parent)
     {
         super();
-        util.evalCss(require('./Logger.scss'));
+        this._style = util.evalCss(require('./Logger.scss'));
 
         this._$el = $el;
         this._parent = parent;
@@ -46,6 +46,10 @@ export default class Logger extends util.Emitter
     viewLogInSources(flag)
     {
         Log.showSrcInSources = flag;
+    }
+    destroy() 
+    {
+        util.evalCss.remove(this._style);
     }
     filter(val)
     {

@@ -16,7 +16,7 @@ import logger from './lib/logger'
 import extraUtil from './lib/extraUtil'
 
 module.exports = {
-    init({el, tool} = {})
+    init({el, tool, autoScale = true} = {})
     {
         this._isInit = true;
 
@@ -27,6 +27,8 @@ module.exports = {
         this._initSettings();
         this._initTools(tool);
         this._registerListener();
+
+        if (autoScale) this._autoScale();
     },
     _isInit: false,
     version: VERSION,
@@ -82,7 +84,17 @@ module.exports = {
         delete this.entryBtn;
         this._unregisterListener();
         this._$el.remove();
-        util.evalCss.reset();
+        util.evalCss.clear();
+    },
+    setScale(scale) 
+    {
+        emitter.emit(emitter.SCALE, scale);
+    },
+    _autoScale() 
+    {
+        if (!util.isMobile()) return;
+
+        this.setScale(window.innerWidth / screen.width);
     },
     _registerListener() 
     {
@@ -91,11 +103,13 @@ module.exports = {
 
         emitter.on(emitter.ADD, this._addListener);
         emitter.on(emitter.SHOW, this._showListener);
+        emitter.on(emitter.SCALE, util.evalCss.setScale);
     },
     _unregisterListener() 
     {
         emitter.off(emitter.ADD, this._addListener);
         emitter.off(emitter.SHOW, this._showListener);
+        emitter.off(emitter.SCALE, util.evalCss.setScale);
     },
     _checkInit() 
     {

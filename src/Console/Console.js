@@ -1,6 +1,7 @@
 import Logger from './Logger'
 import Tool from '../DevTools/Tool'
 import util from '../lib/util'
+import emitter from '../lib/emitter'
 
 export default class Console extends Tool
 {
@@ -9,6 +10,9 @@ export default class Console extends Tool
         super();
 
         this.name = 'console';
+        this._scale = 1;
+
+        this._registerListener();
     }
     init($el, parent)
     {
@@ -80,16 +84,29 @@ export default class Console extends Tool
     }
     destroy() 
     {
+        this._logger.destroy();
         super.destroy();
 
+        util.evalCss.remove(this._style);
         this.ignoreGlobalErr();
         this.restoreConsole();
+        this._unregisterListener();
+    }
+    _registerListener() 
+    {
+        this._scaleListener = scale => this._scale = scale;
+
+        emitter.on(emitter.SCALE, this._scaleListener);
+    }
+    _unregisterListener() 
+    {
+        emitter.off(emitter.SCALE, this._scaleListener);
     }
     _appendTpl()
     {
         let $el = this._$el;
 
-        util.evalCss(require('./Console.scss'));
+        this._style = util.evalCss(require('./Console.scss'));
         $el.append(require('./Console.hbs')());
 
         let _$inputContainer = $el.find('.eruda-js-input'),
@@ -174,7 +191,7 @@ export default class Console extends Tool
     {
         this._$inputContainer.css({
             paddingTop: 0,
-            height: 40
+            height: 40 * this._scale 
         });
 
         this._$inputBtns.hide();
@@ -182,7 +199,7 @@ export default class Console extends Tool
     _showInput()
     {
         this._$inputContainer.css({
-            paddingTop: 40,
+            paddingTop: 40 * this._scale,
             height: '100%'
         });
 

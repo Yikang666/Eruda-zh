@@ -2,6 +2,7 @@ import NavBar from './NavBar'
 import util from '../lib/util'
 import logger from '../lib/logger'
 import Tool from './Tool'
+import emitter from '../lib/emitter'
 
 export default class DevTools extends util.Emitter
 {
@@ -10,15 +11,17 @@ export default class DevTools extends util.Emitter
         super();
 
         if (!util.isMobile()) util.evalCss(require('../style/scrollbar.css'));
-        util.evalCss(require('./DevTools.scss'));
+        this._style = util.evalCss(require('./DevTools.scss'));
 
         this.$parent = $parent;
         this._isShow = false;
         this._opacity = 1;
+        this._scale = 1;
         this._tools = {};
 
         this._appendTpl();
         this._initNavBar();
+        this._registerListener();
     }
     show()
     {
@@ -168,14 +171,31 @@ export default class DevTools extends util.Emitter
     }
     setNavBarHeight(height)
     {
-        this._$el.css('paddingTop', height);
-        this._navBar.setHeight(height);
+        this._navBarHeight = height;
+        this._$el.css('paddingTop', height * this._scale);
+        this._navBar.setHeight(height * this._scale);
     }
     destroy() 
     {
+        util.evalCss.remove(this._style);
+        this._unregisterListener();
         this.removeAll();
         this._navBar.destroy();
         this._$el.remove();
+    }
+    _registerListener() 
+    {
+        this._scaleListener = scale => 
+        {
+            this._scale = scale;
+            this.setNavBarHeight(this._navBarHeight);
+        }
+
+        emitter.on(emitter.SCALE, this._scaleListener);
+    }
+    _unregisterListener() 
+    {
+        emitter.off(emitter.SCALE, this._scaleListener);
     }
     _setTransparency(opacity)
     {

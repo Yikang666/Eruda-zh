@@ -6,7 +6,7 @@ export default class NavBar extends util.Emitter
     {
         super();
 
-        util.evalCss(require('./NavBar.scss'));
+        this._style = util.evalCss(require('./NavBar.scss'));
 
         this._$el = $el;
         $el.html('<div class="eruda-bottom-bar"></div>');
@@ -60,6 +60,7 @@ export default class NavBar extends util.Emitter
     }
     destroy() 
     {
+        util.evalCss.remove(this._style);
         this._$el.remove();
     }
     _resetBottomBar() 
@@ -82,7 +83,6 @@ export default class NavBar extends util.Emitter
         this._$el.css('height', height);
         
         let $el = this._$el;
-        this._resetBottomBar();
 
         $el.css({
             height: height
@@ -91,6 +91,8 @@ export default class NavBar extends util.Emitter
             'height': height,
             'lineHeight': height
         });
+
+        this._resetBottomBar();
     }
     _bindEvent()
     {

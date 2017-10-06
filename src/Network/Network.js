@@ -8,7 +8,7 @@ export default class Network extends Tool
     {
         super();
 
-        util.evalCss(require('./Network.scss'));
+        this._style = util.evalCss(require('./Network.scss'));
 
         this.name = 'network';
         this._performanceTimingData = [];
@@ -264,6 +264,7 @@ export default class Network extends Tool
     {
         super.destroy();
 
+        util.evalCss.remove(this._style);
         this.restoreXhr();
     }
     _getResourceTimingData()

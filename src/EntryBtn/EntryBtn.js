@@ -1,5 +1,6 @@
 import util from '../lib/util'
 import Draggabilly from 'draggabilly'
+import emitter from '../lib/emitter'
 
 export default class EntryBtn extends util.Emitter
 {
@@ -7,12 +8,13 @@ export default class EntryBtn extends util.Emitter
     {
         super();
 
-        util.evalCss(require('./EntryBtn.scss'));
+        this._style = util.evalCss(require('./EntryBtn.scss'));
 
         this._$parent = $parent;
         this._appendTpl();
         this._makeDraggable();
         this._bindEvent();
+        this._registerListener();
     }
     hide() 
     {
@@ -24,7 +26,32 @@ export default class EntryBtn extends util.Emitter
     }
     destroy() 
     {
+        util.evalCss.remove(this._style);
+        this._unregisterListener();
         this._$el.remove();
+    }
+    _isOutOfRange() 
+    {
+        let cfg = this.config,
+            pos = cfg.get('pos'),
+            defPos = this._getDefPos();
+
+        return pos.x > defPos.x + 10 ||
+               pos.x < 0 ||
+               pos.y < 0 ||
+               pos.y > defPos.y + 10;
+    }
+    _registerListener() 
+    {
+        this._scaleListener = () => util.nextTick(() => 
+        {
+            if (this._isOutOfRange()) this._setPos();
+        });
+        emitter.on(emitter.SCALE, this._scaleListener)
+    }
+    _unregisterListener() 
+    {
+        emitter.off(emitter.SCALE, this._scaleListener);
     }
     _appendTpl()
     {
@@ -39,12 +66,7 @@ export default class EntryBtn extends util.Emitter
             pos = cfg.get('pos'),
             defPos = this._getDefPos();
 
-        let outOfRange = pos.x > defPos.x + 10 ||
-                         pos.x < 0 ||
-                         pos.y < 0 ||
-                         pos.y > defPos.y + 10;
-
-        if (outOfRange ||
+        if (this._isOutOfRange() ||
             !cfg.get('rememberPos') ||
             orientationChanged) pos = defPos;
 

@@ -1,23 +1,51 @@
-var mark = [];
+_('toStr each filter');
+
+var styleList = [],
+    scale = 1;
 
 function exports(css)
 {
-    for (var i = 0, len = mark.length; i < len; i++)
+    css = toStr(css);
+
+    for (var i = 0, len = styleList.length; i < len; i++)
     {
-        if (mark[i] === css) return;
+        if (styleList[i].css === css) return;
     }
-    mark.push(css);
 
-    var container = exports.container || document.head,
-        style = document.createElement('style');
+    let container = exports.container || document.head,
+        el = document.createElement('style');
 
-    style.type = 'text/css';
-    style.textContent = css;
+    el.type = 'text/css';
+    container.appendChild(el);
+    
+    let style = {css, el, container};
+    resetStyle(style);
+    styleList.push(style);
 
-    container.appendChild(style);
+    return style;
 }
 
-exports.reset = function () 
+exports.setScale = function (s) 
 {
-    mark = [];
+    scale = s;
+    each(styleList, style => resetStyle(style));
 };
+
+exports.clear = function () 
+{
+    each(styleList, ({container, el}) => container.removeChild(el));
+    styleList = [];
+};
+
+exports.remove = function (style) 
+{
+    console.log(style);
+    styleList = filter(styleList, s => s !== style);
+
+    style.container.removeChild(style.el);
+};
+
+function resetStyle({css, el}) 
+{
+    el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
+}

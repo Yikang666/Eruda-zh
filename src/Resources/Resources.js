@@ -7,7 +7,7 @@ export default class Resources extends Tool
     {
         super();
 
-        util.evalCss(require('./Resources.scss'));
+        this._style = util.evalCss(require('./Resources.scss'));
 
         this.name = 'resources';
         this._localStoreData = [];
@@ -37,6 +37,12 @@ export default class Resources extends Tool
                    .refreshScript()
                    .refreshStylesheet()
                    .refreshImage()._render();
+    }
+    destroy() 
+    {
+        super.destroy();
+
+        util.evalCss.remove(this._style);
     }
     refreshScript()
     {
