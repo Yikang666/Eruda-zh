@@ -22,6 +22,8 @@ npm run dev
 npm run build
 # lint, build and test.
 npm run ci
+# check test coverage.
+npm run cov
 ```
 
 ## Project Structure

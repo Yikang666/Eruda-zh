@@ -1,4 +1,5 @@
-var webpackCfg = require('./script/webpack.release');
+var webpackCfg = require('./script/webpack.dev');
+webpackCfg.devtool = 'inline-source-map';
 
 module.exports = function (config)
 {
@@ -28,15 +29,25 @@ module.exports = function (config)
             'karma-phantomjs-launcher',
             'karma-wrap-preprocessor',
             'karma-coverage',
-            'karma-webpack'
+            'karma-webpack',
+            'karma-sourcemap-loader',
+            'karma-sourcemap-writer'
         ],
+        webpackServer: {
+            noInfo: true
+        },
         preprocessors: {
             'test/*.js': ['wrap'],
-            'src/index.js': ['webpack', 'coverage']
+            'src/index.js': ['webpack', 'sourcemap', 'sourcemap-writer', 'coverage']
         },
         webpack: webpackCfg,
         wrapPreprocessor: {
             template: '(function () { <%= contents %> })()'
+        },
+        coverageReporter: {
+            type: 'json',
+            subdir: '.',
+            file: 'coverage-final.json'
         },
         reporters: ['progress', 'coverage'],
         port: 9876,
