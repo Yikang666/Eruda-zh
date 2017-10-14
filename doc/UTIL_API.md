@@ -677,6 +677,25 @@ castPath('a[0].b'); // -> ['a', '0', 'b']
 castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
 ```
 
+## clamp 
+
+Clamp number within the inclusive lower and upper bounds.
+
+|Name   |Type  |Desc           |
+|-------|------|---------------|
+|n      |number|Number to clamp|
+|[lower]|number|Lower bound    |
+|upper  |number|Upper bound    |
+|return |number|Clamped number |
+
+```javascript
+clamp(-10, -5, 5); // -> -5
+clamp(10, -5, 5); // -> 5
+clamp(2, -5, 5); // -> 2
+clamp(10, 5); // -> 5
+clamp(2, 5); // -> 2
+```
+
 ## clone 
 
 Create a shallow-copied clone of the provided plain object.
@@ -926,7 +945,8 @@ escapeRegExp('[eris]'); // -> '\\[eris\\]'
 
 ## evalCss 
 
-No documentation.
+dependencies
+toStr each filter
 
 ## extend 
 
@@ -1500,6 +1520,70 @@ var fibonacci = memoize(function(n)
 });
 ```
 
+## meta 
+
+Document meta manipulation, turn name and content into key value pairs.
+
+Get meta content with given name. If name is omitted, all pairs will be return.
+
+|Name  |Type        |Desc        |
+|------|------------|------------|
+|[name]|string array|Meta name   |
+|return|string      |Meta content|
+
+Set meta content.
+
+|Name   |Type  |Desc        |
+|-------|------|------------|
+|name   |string|Meta name   |
+|content|string|Meta content|
+
+|Name |Type  |Desc                        |
+|-----|------|----------------------------|
+|metas|object|Object of name content pairs|
+
+### remove
+
+Remove metas.
+
+|Name|Type        |Desc     |
+|----|------------|---------|
+|name|string array|Meta name|
+
+```javascript
+// <meta name="a" content="1"/> <meta name="b" content="2"/> <meta name="c" content="3"/>
+meta(); // -> {a: '1', b: '2', c: '3'}
+meta('a'); // -> '1'
+meta(['a', 'c']); // -> {a: '1', c: '3'}
+meta('d', '4');
+meta({
+    d: '5',
+    e: '6',
+    f: '7'
+});
+meta.remove('d');
+meta.remove(['e', 'f']);
+```
+
+## nextTick 
+
+Next tick for both node and browser.
+
+|Name|Type    |Desc            |
+|----|--------|----------------|
+|cb  |function|Function to call|
+
+Use process.nextTick if available.
+
+Otherwise setImmediate or setTimeout is used as fallback.
+
+```javascript
+nextTick(function ()
+{
+    // Do something...
+});
+```
+
 ## noop 
 
 A no-operation function.
@@ -1897,6 +1981,14 @@ Create an array of the own enumerable property values of object.
 
 ```javascript
 values({one: 1, two: 2}); // -> [1, 2]
+```
+
+## viewportScale 
+
+Get viewport scale.
+
+```javascript
+viewportScale(); // -> 3
 ```
 
 ## wrap 

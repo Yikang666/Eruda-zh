@@ -2408,7 +2408,6 @@ module.exports = (function ()
 
         exports.remove = function (style) 
         {
-            console.log(style);
             styleList = filter(styleList, s => s !== style);
 
             style.container.removeChild(style.el);

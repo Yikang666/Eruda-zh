@@ -2,12 +2,21 @@ import util from '../lib/util'
 import logger from '../lib/logger'
 import emitter from '../lib/emitter'
 
+let style = null;
+
 export default [
     {
         name: 'Border All',
         fn()
         {
-            util.evalCss(borderCss);
+            if (style) 
+            {
+                util.evalCss.remove(style);
+                style = null;
+                return;
+            }
+
+            style = util.evalCss(borderCss);
         },
         desc: 'Add color borders to all elements'
     },
