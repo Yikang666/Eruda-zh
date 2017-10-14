@@ -1,10 +1,12 @@
+var webpackCfg = require('./script/webpack.release');
+
 module.exports = function (config)
 {
     config.set({
         basePath: '',
         frameworks: ['jquery-1.8.3'],
         files: [
-            'eruda.js',
+            'src/index.js',
             'test/init.js',
             'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
             'node_modules/karma-jasmine/lib/boot.js',
@@ -24,15 +26,19 @@ module.exports = function (config)
             'karma-jasmine',
             'karma-jquery',
             'karma-phantomjs-launcher',
-            'karma-wrap-preprocessor'
+            'karma-wrap-preprocessor',
+            'karma-coverage',
+            'karma-webpack'
         ],
         preprocessors: {
-            'test/*.js': ['wrap']
+            'test/*.js': ['wrap'],
+            'src/index.js': ['webpack', 'coverage']
         },
+        webpack: webpackCfg,
         wrapPreprocessor: {
             template: '(function () { <%= contents %> })()'
         },
-        reporters: ['progress'],
+        reporters: ['progress', 'coverage'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

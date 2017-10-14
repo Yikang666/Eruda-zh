@@ -1,6 +1,7 @@
 /eustia/
 /.idea/
 /src/
+/coverage/
 /test/
 /doc/
 /script/

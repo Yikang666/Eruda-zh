@@ -1,6 +1,7 @@
 /.idea/
 /node_modules/
 /test/lib/
+/coverage/
 /test/playground.html
 eruda*
 /script/icomoon/

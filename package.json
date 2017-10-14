@@ -4,7 +4,7 @@
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
   "scripts": {
-    "ci": "npm run lint && npm run build && npm run test",
+    "ci": "npm run lint && npm run test && npm run build",
     "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
@@ -24,7 +24,10 @@
       "format": "commonjs"
     },
     "test": {
-      "files": ["test/**/*.js", "test/**/*.html"],
+      "files": [
+        "test/**/*.js",
+        "test/**/*.html"
+      ],
       "output": "test/util.js",
       "format": "global"
     }
@@ -62,9 +65,11 @@
     "js-beautify": "^1.6.2",
     "json-loader": "^0.5.4",
     "karma": "^1.7.0",
+    "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.0",
     "karma-jquery": "^0.2.2",
     "karma-phantomjs-launcher": "^1.0.4",
+    "karma-webpack": "^2.0.5",
     "karma-wrap-preprocessor": "^0.1.0",
     "modernizr": "^3.3.1",
     "node-sass": "^4.5.0",
