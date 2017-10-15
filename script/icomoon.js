@@ -21,6 +21,7 @@ function genCssFile(fontData)
                           fontData + '\') format(\'woff\');');
         data = data.join('\n');
         data = data.replace(/icon-"/g, 'eruda-icon-"');
+        data = data.replace(/font-family: 'icomoon'/g, 'font-family: \'eruda-icon\'');
 
         writeCssFile(data);
     });

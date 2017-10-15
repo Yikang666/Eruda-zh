@@ -9,10 +9,11 @@
     "cov": "npm run test && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
+    "lint": "eslint src",
     "setup": "node script/cpTestLib",
     "genScriptUtil": "eustia build script/*.js -o script/util.js",
-    "lint": "eslint src",
-    "utilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
+    "genIcon": "node script/icomoon",
+    "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "eustia": {
     "eruda": {
