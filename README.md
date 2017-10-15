@@ -9,6 +9,7 @@
 [![Join the chat at https://gitter.im/liriliri/eruda][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
+[![Test coverage][codecov-image]][codecov-url]
 [![License][license-image]][npm-url]
 
 [gitter-image]: https://badges.gitter.im/liriliri/eruda.svg
@@ -17,6 +18,8 @@
 [npm-url]: https://npmjs.org/package/eruda
 [travis-image]: https://img.shields.io/travis/liriliri/eruda.svg
 [travis-url]: https://travis-ci.org/liriliri/eruda
+[codecov-image]: https://codecov.io/github/liriliri/eruda/coverage.svg?branch=master
+[codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
 [license-image]: https://img.shields.io/npm/l/eruda.svg
 
 Console for Mobile Browsers.
