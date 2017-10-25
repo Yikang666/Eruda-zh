@@ -19,6 +19,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(arr)
         {
             var len = arr ? arr.length : 0;
@@ -44,6 +49,11 @@ module.exports = (function ()
          * isUndef(void 0); // -> true
          * isUndef(null); // -> false
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(val)
@@ -73,6 +83,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             var type = typeof val;
@@ -98,6 +113,11 @@ module.exports = (function ()
          * ```javascript
          * startWith('ab', 'a'); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(str, prefix)
@@ -140,6 +160,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(Class, SuperClass)
         {
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
@@ -172,6 +197,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
         function exports(obj, key)
@@ -197,6 +227,11 @@ module.exports = (function ()
          * ```javascript
          * slice([1, 2, 3, 4], 1, 2); // -> [2]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(arr, start, end)
@@ -250,6 +285,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * has 
          */
@@ -290,6 +330,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * keys 
          */
@@ -325,6 +370,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports() {}
 
         return exports;
@@ -348,6 +398,11 @@ module.exports = (function ()
          * obj.one = 1;
          * allKeys(obj) // -> ['zero', 'one']
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(obj)
@@ -380,6 +435,11 @@ module.exports = (function ()
          * $(element).on('click', before(5, function() {}));
          * // -> allow function to be call 4 times at last.
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(n, fn)
@@ -419,6 +479,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regUpperCase = /([A-Z])/g,
             regSeparator = /[_.\- ]+/g,
             regTrim = /(^-)|(-$)/g;
@@ -453,6 +518,11 @@ module.exports = (function ()
          * camelCase('foo_bar'); // -> fooBar
          * camelCase('foo.bar'); // -> fooBar
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -502,6 +572,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * splitCase 
          */
@@ -534,6 +609,11 @@ module.exports = (function ()
          * clamp(10, 5); // -> 5
          * clamp(2, 5); // -> 2
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -575,6 +655,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(arr, val, fromIdx)
         {
             return Array.prototype.indexOf.call(arr, val, fromIdx);
@@ -602,6 +687,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             return val == null ? '' : val.toString();
@@ -621,6 +711,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         exports = typeof window === 'object' &&
                   typeof document === 'object' &&
                   document.nodeType === 9;
@@ -633,6 +728,11 @@ module.exports = (function ()
     var optimizeCb = _.optimizeCb = (function ()
     {
         /* Used for function context binding.
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -685,6 +785,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(str, suffix)
         {
             var idx = str.length - suffix.length;
@@ -709,6 +814,11 @@ module.exports = (function ()
          * ```javascript
          * escape('You & Me'); -> // -> 'You &amp; Me'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -771,6 +881,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(str)
         {
             return str.replace(/\W/g, '\\$&');
@@ -797,6 +912,11 @@ module.exports = (function ()
          * fileSize(1500000000); // -> '1.4G'
          * fileSize(1500000000000); // -> '1.36T'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(bytes) 
@@ -828,6 +948,11 @@ module.exports = (function ()
          * ```javascript
          * upperFirst('red'); // -> Red
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(str)
@@ -874,6 +999,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             return val;
@@ -896,6 +1026,11 @@ module.exports = (function ()
          * ```javascript
          * objToStr(5); // -> '[object Number]'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         var ObjToStr = Object.prototype.toString;
@@ -926,6 +1061,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -953,6 +1093,11 @@ module.exports = (function ()
          * isArr([]); // -> true
          * isArr({}); // -> false
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -985,6 +1130,11 @@ module.exports = (function ()
          * castPath('a[0].b'); // -> ['a', '0', 'b']
          * castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1033,6 +1183,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * isUndef castPath 
          */
@@ -1072,6 +1227,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -1101,6 +1261,11 @@ module.exports = (function ()
          * isFn(function() {}); // -> true
          * isFn(function*() {}); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1135,6 +1300,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -1165,6 +1335,11 @@ module.exports = (function ()
          * isArrLike(document.body.children); // -> true;
          * isArrLike([1, 2, 3]); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1200,6 +1375,11 @@ module.exports = (function ()
          * ```javascript
          * each({'a': 1, 'b': 2}, function (val, key) {});
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1241,6 +1421,11 @@ module.exports = (function ()
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
          * |return  |function|Result function, extend...    |
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1285,6 +1470,11 @@ module.exports = (function ()
          * ```javascript
          * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1337,6 +1527,11 @@ module.exports = (function ()
          * cookie.get('a'); // -> '1'
          * cookie.remove('a');
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -1429,6 +1624,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * createAssigner allKeys 
          */
@@ -1454,6 +1654,11 @@ module.exports = (function ()
          * ```javascript
          * clone({name: 'eustia'}); // -> {name: 'eustia'}
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1487,6 +1692,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * keys createAssigner 
          */
@@ -1510,6 +1720,11 @@ module.exports = (function ()
          * ```javascript
          * values({one: 1, two: 2}); // -> [1, 2]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1546,6 +1761,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * idxOf isArrLike values 
          */
@@ -1576,6 +1796,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -1604,6 +1829,11 @@ module.exports = (function ()
          * isEmpty({}); // -> true
          * isEmpty(''); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1641,6 +1871,11 @@ module.exports = (function ()
          * isBool(false); // -> true
          * isBool(1); // -> false
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(val)
@@ -1685,6 +1920,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         function exports(val)
         {
             return !!(val && val.nodeType === 1);
@@ -1707,6 +1947,11 @@ module.exports = (function ()
          * ```javascript
          * isErr(new Error()); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1760,6 +2005,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * keys 
          */
@@ -1805,6 +2055,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * has 
          */
@@ -1845,6 +2100,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * isBrowser memoize 
          */
@@ -1878,6 +2138,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             return val === null;
@@ -1900,6 +2165,11 @@ module.exports = (function ()
          * ```javascript
          * isRegExp(/a/); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1931,6 +2201,11 @@ module.exports = (function ()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         function exports(src, cb)
@@ -1968,6 +2243,11 @@ module.exports = (function ()
          * repeat('ab', 2); // -> 'abab'
          * repeat('*', 0); // -> ''
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         exports = function (str, n)
@@ -2008,6 +2288,11 @@ module.exports = (function ()
          * lpad('abc', 3, '-'); // -> 'abc'
          * lpad('abc', 5, 'ab'); // -> 'ababc'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2078,6 +2363,11 @@ module.exports = (function ()
          * dateFormat('yyyy-mm-dd HH:MM:ss'); // -> 2016-11-19 19:00:04
          * dateFormat(new Date(), 'yyyy-mm-dd'); // -> 2016-11-19
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2216,6 +2506,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regSpace = /^\s+/;
 
         function exports(str, chars)
@@ -2271,6 +2566,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * extendOwn isMatch 
          */
@@ -2293,6 +2593,11 @@ module.exports = (function ()
     var safeCb = _.safeCb = (function (exports)
     {
         /* Create callback based on input value.
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2338,6 +2643,11 @@ module.exports = (function ()
          *     return val % 2 === 0;
          * }); // -> [2, 4]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2439,6 +2749,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * safeCb keys isArrLike 
          */
@@ -2480,6 +2795,11 @@ module.exports = (function ()
          * toArr(1); // -> [1]
          * toArr(null); // -> []
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2547,6 +2867,11 @@ module.exports = (function ()
          * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
          * Student.is(a); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2642,6 +2967,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * Class freeze isArr each keys 
          */
@@ -2707,6 +3037,11 @@ module.exports = (function ()
          *     // Manipulate dom nodes
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -2784,6 +3119,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * isStr toArr Select 
          */
@@ -2841,6 +3181,11 @@ module.exports = (function ()
          *     'attr2': 'test'
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -2908,6 +3253,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * $attr isStr isObj each 
          */
@@ -2967,6 +3317,11 @@ module.exports = (function ()
          * $css('#test', 'display', 'block');
          * $css('#test', 'color'); // -> #fff
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3077,6 +3432,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * each $safeEls 
          */
@@ -3117,6 +3477,11 @@ module.exports = (function ()
          * ```javascript
          * $offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3170,6 +3535,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * isUndef each $safeEls 
          */
@@ -3213,6 +3583,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * each $safeEls 
          */
@@ -3245,6 +3620,11 @@ module.exports = (function ()
          * ```javascript
          * $show('#test');
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3321,6 +3701,11 @@ module.exports = (function ()
          * delegate.add(container, 'click', '.children', clickHandler);
          * delegate.remove(container, 'click', '.children', clickHandler);
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3492,6 +3877,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * delegate isUndef $safeEls 
          */
@@ -3542,6 +3932,11 @@ module.exports = (function ()
          *     return val % 2 === 0;
          * }); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -3619,6 +4014,11 @@ module.exports = (function ()
          * $class.toggle('#test', 'class1');
          * $class.has('#test', 'class1'); // -> true
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3710,6 +4110,11 @@ module.exports = (function ()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3897,6 +4302,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * keys 
          */
@@ -4023,6 +4433,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * each isStr isUndef contain isArr isObj toArr 
          */
@@ -4147,6 +4562,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         if (typeof process === 'object' && process.nextTick)
         {
             exports = process.nextTick;
@@ -4170,13 +4590,18 @@ module.exports = (function ()
 
     /* ------------------------------ now ------------------------------ */
 
-    _.now = (function (exports)
+    var now = _.now = (function (exports)
     {
         /* Gets the number of milliseconds that have elapsed since the Unix epoch.
          *
          * ```javascript
          * now(); // -> 1468826678701
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         exports = Date.now || function ()
@@ -4203,6 +4628,11 @@ module.exports = (function ()
          * var paramArr = _.restArgs(function (rest) { return rest });
          * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(fn, startIdx)
@@ -4256,6 +4686,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * restArgs toArr 
          */
@@ -4293,6 +4728,11 @@ module.exports = (function ()
          * initOnce();
          * initOnce(); // -> init is invoked once
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4350,6 +4790,11 @@ module.exports = (function ()
          * event.emit('test'); // Logs out 'test'.
          * Emitter.mixin({});
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4465,6 +4910,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * Emitter Enum toArr isUndef clone isStr isNum 
          */
@@ -4573,6 +5023,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * Emitter safeGet 
          */
@@ -4605,6 +5060,84 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ root ------------------------------ */
+
+    var root = _.root = (function (exports)
+    {
+        /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isBrowser 
+         */
+
+        exports = isBrowser ? window : global;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ perfNow ------------------------------ */
+
+    _.perfNow = (function (exports)
+    {
+        /* High resolution time up to microsecond precision.
+         *
+         * ```javascript
+         * var start = perfNow();
+         * 
+         * // Do something.
+         * 
+         * console.log(perfNow() - start);
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * now root 
+         */
+
+        var performance = root.performance,
+            process = root.process,
+            loadTime;
+
+        if (performance && performance.now) 
+        {
+            exports = function () 
+            {
+                return performance.now();
+            };
+        } else if (process && process.hrtime) 
+        {
+            var getNanoSeconds = function () 
+            {
+                var hr = process.hrtime();
+                return hr[0] * 1e9 + hr[1];
+            };
+            loadTime = getNanoSeconds() - process.uptime() * 1e9;
+            exports = function () 
+            {
+                return (getNanoSeconds() - loadTime) / 1e6;
+            };
+        } else 
+        {
+            loadTime = now();
+            exports = function ()
+            {
+                return now() - loadTime;
+            };
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ toNum ------------------------------ */
 
     var toNum = _.toNum = (function (exports)
@@ -4619,6 +5152,11 @@ module.exports = (function ()
          * ```javascript
          * toNum('5'); // -> 5
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4676,6 +5214,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * toNum 
          */
@@ -4712,6 +5255,11 @@ module.exports = (function ()
          *     // Do something about old IE...
          * }
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4800,6 +5348,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regSpace = /\s+$/;
 
         function exports(str, chars)
@@ -4851,6 +5404,11 @@ module.exports = (function ()
          * trim('_abc_', '_'); // -> 'abc'
          * trim('_abc_', ['a', 'c', '_']); // -> 'b'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4918,6 +5476,11 @@ module.exports = (function ()
          * query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
          * query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -5049,6 +5612,11 @@ module.exports = (function ()
          * url.rmQuery('eruda');
          * utl.toString(); // -> 'http://example.com:8080/?foo=bar'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -5256,6 +5824,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: manual
+         */
+
         /* dependencies
          * isFn noop defaults isObj query 
          */
@@ -5428,6 +6001,11 @@ module.exports = (function ()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regHtmlTag = /<[^>]*>/g;
 
         function exports(str)
@@ -5452,6 +6030,11 @@ module.exports = (function ()
          * ```javascript
          * uniqId('eusita_'); // -> 'eustia_xxx'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         var idCounter = 0;
@@ -5481,6 +6064,11 @@ module.exports = (function ()
          * ```javascript
          * unique([1, 2, 3, 1]); // -> [1, 2, 3]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -5576,6 +6164,11 @@ module.exports = (function ()
          * });
          * p('You & Me'); // -> '<p>You &amp; Me</p>'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies

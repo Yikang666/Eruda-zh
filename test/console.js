@@ -45,7 +45,7 @@ describe('log', function ()
     {
         tool.time('eruda');
         tool.timeEnd('eruda');
-        expect($tool.find('.eruda-html')).toHaveText(/eruda: \d+ms/);
+        expect($tool.find('.eruda-html')).toHaveText(/eruda: [.\d]+ms/);
     });
 
     it('error', function ()

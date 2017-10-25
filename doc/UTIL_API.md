@@ -993,24 +993,6 @@ fileSize(1500000000); // -> '1.4G'
 fileSize(1500000000000); // -> '1.36T'
 ```
 
-## filter 
-
-Iterates over elements of collection, returning an array of all the values that pass a truth test.
-
-|Name     |Type    |Desc                                   |
-|---------|--------|---------------------------------------|
-|obj      |array   |Collection to iterate over             |
-|predicate|function|Function invoked per iteration         |
-|[ctx]    |*       |Predicate context                      |
-|return   |array   |Array of all values that pass predicate|
-
-```javascript
-filter([1, 2, 3, 4, 5], function (val)
-{
-    return val % 2 === 0;
-}); // -> [2, 4]
-```
-
 ## freeze 
 
 Shortcut for Object.freeze.
@@ -1122,20 +1104,6 @@ Check if value is classified as an arguments object.
 (function () {
     isArgs(arguments); // -> true
 })();
-```
-
-## isArr 
-
-Check if value is an `Array` object.
-
-|Name  |Type   |Desc                              |
-|------|-------|----------------------------------|
-|val   |*      |The value to check                |
-|return|boolean|True if value is an `Array` object|
-
-```javascript
-isArr([]); // -> true
-isArr({}); // -> false
 ```
 
 ## isArrLike 
@@ -1271,19 +1239,6 @@ Check if keys and values in src are contained in obj.
 isMatch({a: 1, b: 2}, {a: 1}); // -> true
 ```
 
-## isMobile 
-
-Check whether client is using a mobile browser using ua.
-
-|Name                    |Type   |Desc                                 |
-|------------------------|-------|-------------------------------------|
-|[ua=navigator.userAgent]|string |User agent                           |
-|return                  |boolean|True if ua belongs to mobile browsers|
-
-```javascript
-isMobile(navigator.userAgent);
-```
-
 ## isNull 
 
 Check if value is an Null.
@@ -1295,21 +1250,6 @@ Check if value is an Null.
 
 ```javascript
 isNull(null); // -> true
-```
-
-## isNum 
-
-Checks if value is classified as a Number primitive or object.
-
-|Name  |Type   |Desc                                 |
-|------|-------|-------------------------------------|
-|value |*      |Value to check                       |
-|return|boolean|True if value is correctly classified|
-
-```javascript
-isNum(5); // -> true
-isNum(5.1); // -> true
-isNum({}); // -> false
 ```
 
 ## isObj 
@@ -1328,19 +1268,6 @@ isObj({}); // -> true
 isObj([]); // -> true
 ```
 
-## isRegExp 
-
-Check if value is a regular expression.
-
-|Name  |Type   |Desc                                 |
-|------|-------|-------------------------------------|
-|val   |*      |Value to check                       |
-|return|boolean|True if value is a regular expression|
-
-```javascript
-isRegExp(/a/); // -> true
-```
-
 ## isStr 
 
 Check if value is a string primitive.
@@ -1352,20 +1279,6 @@ Check if value is a string primitive.
 
 ```javascript
 isStr('eris'); // -> true
-```
-
-## isUndef 
-
-Check if value is undefined.
-
-|Name  |Type   |Desc                      |
-|------|-------|--------------------------|
-|val   |*      |Value to check            |
-|return|boolean|True if value is undefined|
-
-```javascript
-isUndef(void 0); // -> true
-isUndef(null); // -> false
 ```
 
 ## kebabCase 
@@ -1501,23 +1414,6 @@ A replacement for environments where localStorage or sessionStorage is not avail
 ```javascript
 var localStorage = window.localStorage || memStorage;
 localStorage.setItem('test', 'eris');
-```
-
-## memoize 
-
-Memoize a given function by caching the computed result.
-
-|Name    |Type    |Desc                                |
-|--------|--------|------------------------------------|
-|fn      |function|Function to have its output memoized|
-|[hashFn]|function|Function to create cache key        |
-|return  |function|New memoized function               |
-
-```javascript
-var fibonacci = memoize(function(n)
-{
-    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
-});
 ```
 
 ## meta 
@@ -1672,6 +1568,18 @@ var sub5 = partial(function (a, b) { return b - a }, 5);
 sub(20); // -> 15
 ```
 
+## perfNow 
+
+High resolution time up to microsecond precision.
+
+```javascript
+var start = perfNow();
+
+// Do something.
+
+console.log(perfNow() - start);
+```
+
 ## pxToNum 
 
 dependencies
@@ -1735,6 +1643,10 @@ This accumulates the arguments passed into an array, after a given index.
 var paramArr = _.restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
+
+## root 
+
+Root object reference, `global` in nodeJs, `window` in browser.
 
 ## rtrim 
 

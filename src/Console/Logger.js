@@ -104,7 +104,7 @@ export default class Logger extends util.Emitter
     }
     time(name)
     {
-        this._timer[name] = util.now();
+        this._timer[name] = util.perfNow();
 
         return this;
     }
@@ -115,7 +115,7 @@ export default class Logger extends util.Emitter
         if (!startTime) return;
         delete this._timer[name];
 
-        return this.html(`<div class="eruda-blue">${name}: ${util.now() - startTime}ms</div>`);
+        return this.html(`<div class="eruda-blue">${name}: ${util.perfNow() - startTime}ms</div>`);
     }
     clear()
     {
