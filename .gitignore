@@ -3,7 +3,10 @@
 /test/lib/
 /coverage/
 /test/playground.html
-eruda*
+eruda.js
+!/test/eruda.js
+eruda.min.js
+eruda.js.map
 /script/icomoon/
 /src/**/*.js.map
 npm-debug.log
