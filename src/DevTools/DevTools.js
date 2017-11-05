@@ -53,8 +53,8 @@ export default class DevTools extends util.Emitter
     }
     add(tool)
     {
-        let {init, show, hide} = new Tool();
-        util.defaults(tool, {init, show, hide});
+        let {init, show, hide, destroy} = new Tool();
+        util.defaults(tool, {init, show, hide, destroy});
 
         let name = tool.name;
         if (!name) return logger.error('You must specify a name for a tool');

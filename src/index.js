@@ -16,12 +16,12 @@ import logger from './lib/logger'
 import extraUtil from './lib/extraUtil'
 
 module.exports = {
-    init({el, tool, autoScale = true} = {})
+    init({container, tool, autoScale = true} = {})
     {
         this._isInit = true;
         this._scale = 1;
 
-        this._initContainer(el);
+        this._initContainer(container);
         this._initStyle();
         this._initDevTools();
         this._initEntryBtn();
@@ -81,26 +81,28 @@ module.exports = {
     {
         this._devTools.destroy();
         delete this._devTools;
-        this.entryBtn.destroy();
-        delete this.entryBtn;
+        this._entryBtn.destroy();
+        delete this._entryBtn;
         this._unregisterListener();
         this._$el.remove();
         util.evalCss.clear();
     },
-    getScale() 
+    scale(s) 
     {
+        if (util.isNum(s)) 
+        {
+            this._scale = s;
+            emitter.emit(emitter.SCALE, s);
+            return this;
+        }
+
         return this._scale;
-    },
-    setScale(scale) 
-    {
-        this._scale = scale;
-        emitter.emit(emitter.SCALE, scale);
     },
     _autoScale() 
     {
         if (!util.isMobile()) return;
 
-        this.setScale(1 / util.viewportScale());
+        this.scale(1 / util.viewportScale());
     },
     _registerListener() 
     {
@@ -161,8 +163,8 @@ module.exports = {
     },
     _initEntryBtn()
     {
-        this.entryBtn = new EntryBtn(this._$el);
-        this.entryBtn.on('click', () => this._devTools.toggle());
+        this._entryBtn = new EntryBtn(this._$el);
+        this._entryBtn.on('click', () => this._devTools.toggle());
     },
     _initSettings()
     {
@@ -171,7 +173,7 @@ module.exports = {
 
         devTools.add(settings);
         
-        this.entryBtn.initCfg(settings);
+        this._entryBtn.initCfg(settings);
         devTools.initCfg(settings);
     },
     _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features'])

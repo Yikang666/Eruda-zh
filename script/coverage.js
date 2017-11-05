@@ -9,13 +9,20 @@ var remappedJson = require('../coverage/coverage-remapped.json');
 
 var coverage = util.reduce(util.keys(remappedJson), function (result, source) 
 {
-    if (source.match(/src.*\.js$/) && source.indexOf('node_modules') < 0) 
+    if (isSrc()) 
     {
         var correctPath = source.replace(path.resolve(__dirname, '../src'), path.resolve(__dirname, '../'));
 
         var val = remappedJson[source];
         val.path = correctPath;
         result[correctPath] = val;
+    }
+
+    function isSrc(src) 
+    {
+        return source.match(/src.*\.js$/) && 
+               source.indexOf('node_modules') < 0 && 
+               source.indexOf('modernizr') < 0;
     }
 
     return result;
