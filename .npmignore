@@ -6,6 +6,7 @@
 /doc/
 /script/
 .editorconfig
+.eslintignore
 .eslintrc.json
 .gitignore
 .npmignore
