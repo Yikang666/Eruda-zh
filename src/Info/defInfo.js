@@ -26,5 +26,9 @@ export default [
                   </tbody>
               </table>`
 
+    },
+    {
+        name: 'About',
+        val: '<a href="https://github.com/liriliri/eruda" target="_blank">Eruda v' + VERSION + '</a>'
     }
 ];
