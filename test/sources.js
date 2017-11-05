@@ -1,11 +1,14 @@
-var tool = eruda.get('sources'),
-    $tool = $('.eruda-sources');
-
-describe('highlight code', function ()
+describe('sources', function () 
 {
-    it('js', function ()
+    var tool = eruda.get('sources'),
+        $tool = $('.eruda-sources');
+
+    describe('highlight code', function ()
     {
-        tool.set('js', '/* test */');
-        expect($tool.find('.eruda-content')).toContainHtml('<span style="color:#63a35c;">/* test */</span>');
+        it('js', function ()
+        {
+            tool.set('js', '/* test */');
+            expect($tool.find('.eruda-content')).toContainHtml('<span style="color:#63a35c;">/* test */</span>');
+        });
     });
 });

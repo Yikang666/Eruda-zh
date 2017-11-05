@@ -1,51 +1,53 @@
-var tool = eruda.get('snippets'),
-    $tool = $('.eruda-snippets');
-
-describe('default', function ()
+describe('snippets', function () 
 {
-    it('border all', function ()
-    {
-        expect($tool.find('.eruda-name').eq(0)).toContainText('Border All');
-    });
+    var tool = eruda.get('snippets'),
+        $tool = $('.eruda-snippets');
 
-    it('refresh page', function ()
+    describe('default', function ()
     {
-        expect($tool.find('.eruda-name').eq(1)).toContainText('Refresh Page');
-    });
-
-    it('search text', function ()
-    {
-        expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text');
-    });
-
-    it('edit page', function ()
-    {
-        expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page');
-    });
-});
-
-describe('basic', function ()
-{
-    it('clear', function ()
-    {
-        tool.clear();
-        expect($tool.find('.eruda-name')).toHaveLength(0);
-    });
-
-    it('add', function ()
-    {
-        tool.add('Test', function ()
+        it('border all', function ()
         {
-            console.log('eruda');
-        }, 'This is the description');
-        expect($tool.find('.eruda-name')).toContainText('Test');
-        expect($tool.find('.eruda-description')).toContainText('This is the description');
+            expect($tool.find('.eruda-name').eq(0)).toContainText('Border All');
+        });
+
+        it('refresh page', function ()
+        {
+            expect($tool.find('.eruda-name').eq(1)).toContainText('Refresh Page');
+        });
+
+        it('search text', function ()
+        {
+            expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text');
+        });
+
+        it('edit page', function ()
+        {
+            expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page');
+        });
     });
 
-    it('remove', function ()
+    describe('basic', function ()
     {
-        tool.remove('Test');
-        expect($tool.find('.eruda-name')).toHaveLength(0);
+        it('clear', function ()
+        {
+            tool.clear();
+            expect($tool.find('.eruda-name')).toHaveLength(0);
+        });
+
+        it('add', function ()
+        {
+            tool.add('Test', function ()
+            {
+                console.log('eruda');
+            }, 'This is the description');
+            expect($tool.find('.eruda-name')).toContainText('Test');
+            expect($tool.find('.eruda-description')).toContainText('This is the description');
+        });
+
+        it('remove', function ()
+        {
+            tool.remove('Test');
+            expect($tool.find('.eruda-name')).toHaveLength(0);
+        });
     });
 });
-
