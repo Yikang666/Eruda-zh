@@ -3,12 +3,17 @@ describe('sources', function ()
     var tool = eruda.get('sources'),
         $tool = $('.eruda-sources');
 
-    describe('highlight code', function ()
+    beforeEach(function () 
     {
-        it('js', function ()
+        eruda.show('sources');
+    });    
+
+    describe('js', function () 
+    {
+        it('highlight', function () 
         {
             tool.set('js', '/* test */');
             expect($tool.find('.eruda-content')).toContainHtml('<span style="color:#63a35c;">/* test */</span>');
-        });
-    });
+        }); 
+    });    
 });

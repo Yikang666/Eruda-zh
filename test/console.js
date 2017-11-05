@@ -1,7 +1,7 @@
 describe('console', function ()
 {
     var tool = eruda.get('console'),
-    $tool = $('.eruda-console');
+        $tool = $('.eruda-console');
 
     beforeEach(function ()
     {

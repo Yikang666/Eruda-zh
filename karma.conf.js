@@ -13,6 +13,7 @@ module.exports = function (config)
             'node_modules/karma-jasmine/lib/boot.js',
             'node_modules/karma-jasmine/lib/adapter.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+            'test/util.js',
             'test/console.js',
             'test/elements.js',
             'test/features.js',
@@ -27,8 +28,7 @@ module.exports = function (config)
         plugins: [
             'karma-jasmine',
             'karma-jquery',
-            'karma-phantomjs-launcher',
-            'karma-wrap-preprocessor',
+            'karma-chrome-launcher',
             'karma-coverage',
             'karma-webpack',
             'karma-sourcemap-loader',
@@ -38,13 +38,9 @@ module.exports = function (config)
             noInfo: true
         },
         preprocessors: {
-            'test/*.js': ['wrap'],
             'src/index.js': ['webpack', 'sourcemap', 'sourcemap-writer', 'coverage']
         },
         webpack: webpackCfg,
-        wrapPreprocessor: {
-            template: '(function () { <%= contents %> })()'
-        },
         coverageReporter: {
             type: 'json',
             subdir: '.',
@@ -54,8 +50,8 @@ module.exports = function (config)
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
-        autoWatch: true,
-        browsers: ['PhantomJS'],
+        autoWatch: false,
+        browsers: ['ChromeHeadless'],
         singleRun: true,
         concurrency: Infinity
     });
