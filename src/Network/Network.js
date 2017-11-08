@@ -170,10 +170,10 @@ export default class Network extends Tool
     _getPerformanceTimingData()
     {
         let performance = this._performance;
-
         if (!performance) return;
 
         let timing = performance.timing;
+        if (!timing) return;
 
         let data = [];
 
