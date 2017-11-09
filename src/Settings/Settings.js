@@ -97,6 +97,10 @@ export default class Settings extends Tool
 
         return this;
     }
+    _closeAll() 
+    {
+        this._$el.find('.eruda-open').rmClass('eruda-open');
+    }
     _bindEvent()
     {
         let self = this;
@@ -111,7 +115,11 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         }).on('click', '.eruda-select .eruda-head', function ()
         {
-             util.$(this).parent().find('ul').toggleClass('eruda-open');
+            let $el = util.$(this).parent().find('ul'),
+                isOpen = $el.hasClass('eruda-open');
+
+            self._closeAll();
+            isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('click', '.eruda-select li', function ()
         {
             let $this = util.$(this),
@@ -126,7 +134,11 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         }).on('click', '.eruda-range .eruda-head', function () 
         {
-            util.$(this).parent().find('.eruda-input-container').toggleClass('eruda-open');
+            let $el = util.$(this).parent().find('.eruda-input-container'),
+                isOpen = $el.hasClass('eruda-open');
+
+            self._closeAll();
+            isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('change', '.eruda-range input', function () 
         {
             let $this = util.$(this),
@@ -149,7 +161,11 @@ export default class Settings extends Tool
             $container.find('.eruda-range-track-progress').css('width', progress(val, min, max) + '%');
         }).on('click', '.eruda-color .eruda-head', function () 
         {
-            util.$(this).parent().find('ul').toggleClass('eruda-open');
+            let $el = util.$(this).parent().find('ul'),
+                isOpen = $el.hasClass('eruda-open');
+
+            self._closeAll();
+            isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('click', '.eruda-color li', function () 
         {
             let $this = util.$(this),
