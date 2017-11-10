@@ -18,8 +18,6 @@ export default class Resources extends Tool
         this._stylesheetData = [];
         this._imageData = [];
         this._tpl = require('./Resources.hbs');
-
-        this._observeScript()
     }
     init($el, parent)
     {
@@ -30,6 +28,7 @@ export default class Resources extends Tool
         this.refresh();
         this._bindEvent();
         this._initCfg();
+        this._observeScript();
     }
     refresh()
     {
@@ -45,8 +44,7 @@ export default class Resources extends Tool
         super.destroy();
 
         util.evalCss.remove(this._style);
-
-        this._unobserveScript()
+        this._unobserveScript();
     }
     refreshScript()
     {
@@ -355,20 +353,25 @@ export default class Resources extends Tool
     }
     _observeScript()
     {
-        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+        if (!MutationObserver) return;
 
         this._scriptObserver = new MutationObserver(mutations => 
         {
+            if (!this.active) return;
+
             mutations.forEach(mutation => 
             {
-                mutation.addedNodes.forEach(node => {
+                mutation.addedNodes.forEach(node => 
+                {
                     if (/^script$/i.test(node.tagName) && node.src !== '')
                     {
                         this._scriptData.push(node.src);
-                        this._scriptData = util.unique(this._scriptData);
-                        this._render();
                     }
                 });
+
+                this._scriptData = util.unique(this._scriptData);
+                this._render();
             }); 
         });
         
@@ -377,7 +380,7 @@ export default class Resources extends Tool
     }
     _unobserveScript()
     {
-        this._scriptObserver.disconnect();
+        if (this._scriptObserver) this._scriptObserver.disconnect();
     }
 }
 

@@ -46,7 +46,7 @@ describe('resources', function ()
     {
         it('show', function () 
         {
-            _.cookie.set('testKey', 'testVal');
+            util.cookie.set('testKey', 'testVal');
             $tool.find('.eruda-refresh-cookie').click();
             expect($tool.find('.eruda-cookie')).toContainText('testKey');
         });

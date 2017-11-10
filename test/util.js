@@ -1,9 +1,18 @@
 // Built by eustia.
-window._ = (function()
+(function(root, factory)
+{
+    if (typeof define === 'function' && define.amd)
+    {
+        define([], factory);
+    } else if (typeof module === 'object' && module.exports)
+    {
+        module.exports = factory();
+    } else { root.util = factory(); }
+}(this, function ()
 {
     var _ = {};
 
-    if (typeof window === 'object' && window._) _ = window._;
+    if (typeof window === 'object' && window.util) _ = window.util;
 
     /* ------------------------------ noop ------------------------------ */
 
@@ -167,38 +176,6 @@ window._ = (function()
             {
                 return fn.apply(ctx, arguments);
             };
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ toStr ------------------------------ */
-
-    var toStr = _.toStr = (function ()
-    {
-        /* Convert value to a string.
-         *
-         * |Name  |Type  |Desc            |
-         * |------|------|----------------|
-         * |val   |*     |Value to convert|
-         * |return|string|Resulted string |
-         *
-         * ```javascript
-         * toStr(null); // -> ''
-         * toStr(1); // -> '1'
-         * toStr(false); // -> 'false'
-         * toStr([1, 2, 3]); // -> '1,2,3'
-         * ```
-         */
-
-        /* module
-         * env: all
-         * test: all
-         */
-
-        function exports(val)
-        {
-            return val == null ? '' : val.toString();
         }
 
         return exports;
@@ -491,7 +468,7 @@ window._ = (function()
 
     var each = _.each = (function ()
     {
-        /* Iterates over elements of collection and invokes iteratee for each element.
+        /* Iterate over elements of collection and invokes iteratee for each element.
          *
          * |Name    |Type        |Desc                          |
          * |--------|------------|------------------------------|
@@ -1105,66 +1082,6 @@ window._ = (function()
         return exports;
     })();
 
-    /* ------------------------------ evalCss ------------------------------ */
-
-    _.evalCss = (function ()
-    {
-        /* dependencies
-         * toStr each filter 
-         */
-
-        var styleList = [],
-            scale = 1;
-
-        function exports(css)
-        {
-            css = toStr(css);
-
-            for (var i = 0, len = styleList.length; i < len; i++)
-            {
-                if (styleList[i].css === css) return;
-            }
-
-            let container = exports.container || document.head,
-                el = document.createElement('style');
-
-            el.type = 'text/css';
-            container.appendChild(el);
-
-            let style = {css, el, container};
-            resetStyle(style);
-            styleList.push(style);
-
-            return style;
-        }
-
-        exports.setScale = function (s) 
-        {
-            scale = s;
-            each(styleList, style => resetStyle(style));
-        };
-
-        exports.clear = function () 
-        {
-            each(styleList, ({container, el}) => container.removeChild(el));
-            styleList = [];
-        };
-
-        exports.remove = function (style) 
-        {
-            styleList = filter(styleList, s => s !== style);
-
-            style.container.removeChild(style.el);
-        };
-
-        function resetStyle({css, el}) 
-        {
-            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ map ------------------------------ */
 
     var map = _.map = (function ()
@@ -1579,4 +1496,4 @@ window._ = (function()
     })();
 
     return _;
-})();
+}));

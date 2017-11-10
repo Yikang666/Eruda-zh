@@ -9,6 +9,7 @@
     "cov": "npm run test && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
+    "test:sauce": "karma start karma.sauce.js",
     "lint": "eslint src",
     "setup": "node script/cpTestLib",
     "genScriptUtil": "eustia build script/*.js -o script/util.js",
@@ -27,11 +28,12 @@
     },
     "test": {
       "files": [
-        "test/**/*.js",
-        "test/**/*.html"
+        "test/*.js",
+        "test/*.html"
       ],
-      "output": "test/util.js",
-      "format": "global"
+      "exclude": ["js"],
+      "namespace": "util",
+      "output": "test/util.js"
     }
   },
   "repository": {
@@ -72,6 +74,7 @@
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.0",
     "karma-jquery": "^0.2.2",
+    "karma-sauce-launcher": "^1.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-sourcemap-writer": "^0.1.2",
     "karma-webpack": "^2.0.5",

@@ -3,6 +3,7 @@ node_js:
   - "8"
 addons:
   chrome: stable  
+  sauce_connect: true
 before_script:
   - npm install -g codecov
 script:
@@ -10,3 +11,4 @@ script:
 after_script:
   - npm run cov
   - codecov --disable=gcov 
+  - npm run test:sauce

@@ -13,7 +13,7 @@ describe('network', function ()
         it('xhr', function (done) 
         {
             $('.eruda-clear-xhr').click();
-            _.ajax.get(window.location.toString(), function () 
+            util.ajax.get(window.location.toString(), function () 
             {
                 expect($('.eruda-requests li')).toHaveLength(1);
                 done();
