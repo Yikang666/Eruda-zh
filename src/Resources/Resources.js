@@ -28,7 +28,8 @@ export default class Resources extends Tool
         this.refresh();
         this._bindEvent();
         this._initCfg();
-        this._observeScript();
+
+        util.ready(() => this._observeScript());
     }
     refresh()
     {
