@@ -359,6 +359,37 @@ module.exports = (function ()
         return exports;
     })();
 
+    /* ------------------------------ SafeMutationObserver ------------------------------ */
+
+    _.SafeMutationObserver = (function (exports)
+    {
+        /* Safe MutationObserver, does nothing if MutationObserver is not supported.
+         * 
+         * ```javascript
+         * var observer = new DomObserver(function (mutations) 
+         * {
+         *     // Do something.     
+         * });
+         * observer.observe(document.htmlElement);
+         * observer.disconnect();
+         * ```
+         */
+
+        exports = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+        if (!exports) 
+        {
+            exports = class MutationObserver {
+                constructor() {}
+                observe() {}
+                disconnect() {}
+                takeRecords() {}
+            };
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ noop ------------------------------ */
 
     var noop = _.noop = (function ()
@@ -1343,14 +1374,14 @@ module.exports = (function ()
          */
 
         /* dependencies
-         * isNum has isFn 
+         * isNum isFn 
          */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
         function exports(val)
         {
-            if (!has(val, 'length')) return false;
+            if (!val) return false;
 
             var len = val.length;
 
@@ -3913,6 +3944,47 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ concat ------------------------------ */
+
+    _.concat = (function ()
+    {
+        /* Concat multiple arrays into a single array.
+         *
+         * |Name  |Type |Desc              |
+         * |------|-----|------------------|
+         * |...arr|array|Arrays to concat  |
+         * |return|array|Concatenated array|
+         *
+         * ```javascript
+         * concat([1, 2], [3], [4, 5]); // -> [1, 2, 3, 4, 5]
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * toArr 
+         */
+
+        function exports()
+        {
+            var args = toArr(arguments),
+                ret = [];
+
+            for (var i = 0, len = args.length; i < len; i++)
+            {
+                ret = ret.concat(toArr(args[i]));
+            }
+
+            return ret;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ some ------------------------------ */
 
     var some = _.some = (function ()
@@ -5324,55 +5396,6 @@ module.exports = (function ()
             var idx = ua.indexOf(mark);
 
             if (idx > -1) return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ ready ------------------------------ */
-
-    _.ready = (function ()
-    {
-        /* Invoke callback when dom is ready, similar to jQuery ready.
-         *
-         * |Name|Type    |Desc             |
-         * |----|--------|-----------------|
-         * |fn  |function|Callback function|
-         *
-         * ```javascript
-         * ready(function ()
-         * {
-         *     // It's safe to manipulate dom here.
-         * });
-         * ```
-         */
-
-        /* module
-         * env: browser
-         * test: browser
-         */
-
-        var fns = [],
-            listener,
-            doc = document,
-            hack = doc.documentElement.doScroll,
-            domContentLoaded = 'DOMContentLoaded',
-            loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState);
-
-        if (!loaded)
-        {
-            doc.addEventListener(domContentLoaded, listener = function ()
-            {
-                doc.removeEventListener(domContentLoaded, listener);
-                loaded = 1;
-                /* eslint-disable no-cond-assign */
-                while (listener = fns.shift()) listener();
-            });
-        }
-
-        function exports(fn)
-        {
-            loaded ? setTimeout(fn, 0) : fns.push(fn)
         }
 
         return exports;

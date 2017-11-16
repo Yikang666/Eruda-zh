@@ -17,6 +17,7 @@ export default class Resources extends Tool
         this._scriptData = [];
         this._stylesheetData = [];
         this._imageData = [];
+        this._observeElement = true;
         this._tpl = require('./Resources.hbs');
     }
     init($el, parent)
@@ -27,9 +28,8 @@ export default class Resources extends Tool
 
         this.refresh();
         this._bindEvent();
+        this._initObserver();
         this._initCfg();
-
-        util.ready(() => this._observeScript());
     }
     refresh()
     {
@@ -44,8 +44,8 @@ export default class Resources extends Tool
     {
         super.destroy();
 
+        this._disableObserver();
         util.evalCss.remove(this._style);
-        this._unobserveScript();
     }
     refreshScript()
     {
@@ -173,8 +173,15 @@ export default class Resources extends Tool
     show()
     {
         super.show();
+        if (this._observeElement) this._enableObserver();
 
         return this.refresh();
+    }
+    hide() 
+    {
+        this._disableObserver();
+
+        return super.hide();
     }
     _bindEvent()
     {
@@ -299,22 +306,28 @@ export default class Resources extends Tool
         let cfg = this.config = util.createCfg('resources');
 
         cfg.set(util.defaults(cfg.get(), {
-            hideErudaSetting: true
+            hideErudaSetting: true,
+            observeElement: true
         }));
 
         if (cfg.get('hideErudaSetting')) this._hideErudaSetting = true;
+        if (!cfg.get('observeElement')) this._observeElement = false;
 
         cfg.on('change', (key, val) =>
         {
             switch (key)
             {
                 case 'hideErudaSetting': this._hideErudaSetting = val; return;
+                case 'observeElement': 
+                    this._observeElement = val;
+                    return val ? this._enableObserver() : this._disableObserver();
             }
         });
 
         let settings = this._parent.get('settings');
         settings.text('Resources')
                 .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
+                .switch(cfg, 'observeElement', 'Auto Refresh Elements')
                 .separator();
     }
     _render()
@@ -352,36 +365,63 @@ export default class Resources extends Tool
         this._lastHtml = html;
         this._$el.html(html);
     }
-    _observeScript()
+    _initObserver()
     {
-        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-        if (!MutationObserver) return;
-
-        this._scriptObserver = new MutationObserver(mutations => 
+        this._observer = new util.SafeMutationObserver(mutations =>
         {
-            if (!this.active) return;
-
-            mutations.forEach(mutation => 
+            let needToRender = false;
+            util.each(mutations, mutation => 
             {
-                mutation.addedNodes.forEach(node => 
-                {
-                    if (/^script$/i.test(node.tagName) && node.src !== '')
-                    {
-                        this._scriptData.push(node.src);
-                    }
-                });
-
-                this._scriptData = util.unique(this._scriptData);
-                this._render();
-            }); 
+                if (this._handleMutation(mutation)) needToRender = true;
+            });
+            if (needToRender) this._render();
         });
-        
-        this._scriptObserver.observe(document.head, { childList: true });
-        this._scriptObserver.observe(document.body, { childList: true });
     }
-    _unobserveScript()
+    _handleMutation(mutation) 
     {
-        if (this._scriptObserver) this._scriptObserver.disconnect();
+        if (util.isErudaEl(mutation.target)) return;
+        
+        let checkEl = el =>
+        {
+            let tagName = getLowerCaseTagName(el);
+            switch (tagName) 
+            {
+                case 'script': this.refreshScript(); return true;
+                case 'img': this.refreshImage(); return true;
+                case 'link': this.refreshStylesheet(); return true;
+            }
+            
+            return false;
+        }
+
+        if (mutation.type === 'attributes') 
+        {
+            if (checkEl(mutation.target)) return true;
+        } else if (mutation.type === 'childList') 
+        {
+            if (checkEl(mutation.target)) return true;
+            let nodes = util.toArr(mutation.addedNodes);
+            nodes = util.concat(nodes, util.toArr(mutation.removedNodes));
+
+            for (let node of nodes) 
+            {
+                if (checkEl(node)) return true;
+            }
+        }
+
+        return false;
+    }
+    _enableObserver() 
+    {
+        this._observer.observe(document.documentElement, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
+    }
+    _disableObserver() 
+    {
+        this._observer.disconnect();
     }
 }
 
@@ -445,6 +485,12 @@ function delCookie(key)
 
         return !util.cookie.get(key);
     }
+}
+
+function getLowerCaseTagName(el) 
+{
+    if (!el.tagName) return '';
+    return el.tagName.toLowerCase();
 }
 
 let sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';

@@ -18,6 +18,7 @@ export default class Elements extends Tool
         this._rmDefComputedStyle = true;
         this._highlightElement = false;
         this._selectElement = false;
+        this._observeElement = true;
     }
     init($el, parent)
     {
@@ -40,8 +41,15 @@ export default class Elements extends Tool
     {
         super.show();
 
+        if (this._observeElement) this._enableObserver();
         if (!this._curEl) this._setEl(this._htmlEl);
         this._render();
+    }
+    hide() 
+    {
+        this._disableObserver();
+        
+        return super.hide();
     }
     set(e)
     {
@@ -90,6 +98,7 @@ export default class Elements extends Tool
         util.evalCss.remove(this._style);
         this._select.disable();
         this._highlight.destroy();
+        this._disableObserver();
         this.restoreEventTarget();
     }
     _back()
@@ -187,18 +196,17 @@ export default class Elements extends Tool
 
         this._render();
     }
-    _toggleObserver(flag)
+    _enableObserver() 
     {
-        let observer = this._observer;
-
-        if (!observer) return;
-
-        flag ? observer.observe(this._htmlEl, {
+        this._observer.observe(this._htmlEl, {
             attributes: true,
             childList: true,
-            characterData: true,
             subtree: true
-        }) : observer.disconnect();
+        });
+    }
+    _disableObserver() 
+    {
+        this._observer.disconnect();
     }
     _toggleHighlight()
     {
@@ -291,11 +299,7 @@ export default class Elements extends Tool
     }
     _initObserver()
     {
-        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
-        if (!MutationObserver) return;
-
-        this._observer = new MutationObserver(mutations =>
+        this._observer = new util.SafeMutationObserver(mutations =>
         {
             util.each(mutations, mutation => this._handleMutation(mutation));
         });
@@ -341,14 +345,16 @@ export default class Elements extends Tool
         }));
 
         if (cfg.get('overrideEventTarget')) this.overrideEventTarget();
-        if (cfg.get('observeElement')) this._toggleObserver(true);
+        if (cfg.get('observeElement')) this._observeElement = false;
 
         cfg.on('change', (key, val) =>
         {
             switch (key)
             {
                 case 'overrideEventTarget': return val ? this.overrideEventTarget(): this.restoreEventTarget();
-                case 'observeElement': return this._toggleObserver(val);
+                case 'observeElement': 
+                    this._observeElement = val;
+                    return val ? this._enableObserver() :this._disableObserver();
             }
         });
 
