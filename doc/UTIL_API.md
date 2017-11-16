@@ -1743,6 +1743,21 @@ query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
 query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
 ```
 
+## ready 
+
+Invoke callback when dom is ready, similar to jQuery ready.
+
+|Name|Type    |Desc             |
+|----|--------|-----------------|
+|fn  |function|Callback function|
+
+```javascript
+ready(function ()
+{
+    // It's safe to manipulate dom here.
+});
+```
+
 ## repeat 
 
 Repeat string n-times.

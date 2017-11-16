@@ -336,7 +336,7 @@ export default class Network extends Tool
 
         if (!cfg.get('disablePerformance'))
         {
-            this._getPerformanceTimingData();
+            util.ready(() => this._getPerformanceTimingData());
             renderData.data = this._performanceTimingData;
             renderData.timing = this._performanceTiming;
         }
