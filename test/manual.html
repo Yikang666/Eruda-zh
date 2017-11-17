@@ -28,6 +28,9 @@
         <li>
             <a href="#" id="issue33">#33</a>
         </li>
+        <li>
+            <a href="#" id="trigger-error">Trigger Error</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -82,7 +85,11 @@
     });
     addClickEvent('issue33', function () 
     {
-        _.evalCss(':root {--test: 10px;}');
+        util.evalCss(':root {--test: 10px;}');
+    });
+    addClickEvent('trigger-error', function () 
+    {
+        triggerError();
     });
 </script>
 <script>boot();</script>
