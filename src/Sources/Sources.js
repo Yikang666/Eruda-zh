@@ -18,11 +18,11 @@ export default class Sources extends Tool
 
         this._loadTpl();
     }
-    init($el, parent)
+    init($el, container)
     {
         super.init($el);
 
-        this._parent = parent;
+        this._container = container;
         this._bindEvent();
         this._initCfg();
     }
@@ -112,7 +112,7 @@ export default class Sources extends Tool
     }
     _bindEvent()
     {
-        this._parent.on('showTool', (name, lastTool) =>
+        this._container.on('showTool', (name, lastTool) =>
         {
             if (name !== this.name && lastTool.name === this.name)
             {
@@ -168,7 +168,7 @@ export default class Sources extends Tool
             }
         });
 
-        let settings = this._parent.get('settings');
+        let settings = this._container.get('settings');
         settings.text('Sources')
                 .switch(cfg, 'showLineNum', 'Show Line Numbers')
                 .switch(cfg, 'formatCode', 'Beautify Code')

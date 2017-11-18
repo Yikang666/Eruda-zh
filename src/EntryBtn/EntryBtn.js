@@ -4,13 +4,13 @@ import emitter from '../lib/emitter'
 
 export default class EntryBtn extends util.Emitter
 {
-    constructor($parent)
+    constructor($container)
     {
         super();
 
         this._style = util.evalCss(require('./EntryBtn.scss'));
 
-        this._$parent = $parent;
+        this._$container = $container;
         this._appendTpl();
         this._makeDraggable();
         this._bindEvent();
@@ -55,10 +55,10 @@ export default class EntryBtn extends util.Emitter
     }
     _appendTpl()
     {
-        let $parent = this._$parent;
+        let $container = this._$container;
 
-        $parent.append(require('./EntryBtn.hbs')());
-        this._$el = $parent.find('.eruda-entry-btn');
+        $container.append(require('./EntryBtn.hbs')());
+        this._$el = $container.find('.eruda-entry-btn');
     }
     _setPos(orientationChanged)
     {

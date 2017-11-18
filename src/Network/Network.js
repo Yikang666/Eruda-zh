@@ -20,11 +20,11 @@ export default class Network extends Tool
         let performance = this._performance = window.webkitPerformance || window.performance;
         this._hasResourceTiming = performance && util.isFn(performance.getEntries);
     }
-    init($el, parent)
+    init($el, container)
     {
         super.init($el);
 
-        this._parent = parent;
+        this._container = container;
         this._bindEvent();
         this._initCfg();
     }
@@ -120,7 +120,7 @@ export default class Network extends Tool
     _bindEvent()
     {
         let $el = this._$el,
-            parent = this._parent;
+            container = this._container;
 
         let self = this;
 
@@ -159,12 +159,12 @@ export default class Network extends Tool
 
         function showSources(type, data)
         {
-            let sources = parent.get('sources');
+            let sources = container.get('sources');
             if (!sources) return;
 
             sources.set(type, data);
 
-            parent.showTool('sources');
+            container.showTool('sources');
         }
     }
     _getPerformanceTimingData()
@@ -309,7 +309,7 @@ export default class Network extends Tool
             }
         });
 
-        let settings = this._parent.get('settings');
+        let settings = this._container.get('settings');
         settings.text('Network')
                 .switch(cfg, 'overrideXhr', 'Catch Xhr Requests');
 

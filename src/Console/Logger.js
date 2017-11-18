@@ -3,13 +3,13 @@ import Log from './Log'
 
 export default class Logger extends util.Emitter
 {
-    constructor($el, parent)
+    constructor($el, container)
     {
         super();
         this._style = util.evalCss(require('./Logger.scss'));
 
         this._$el = $el;
-        this._parent = parent;
+        this._container = container;
         this._logs = [];
         this._timer = {};
         this._count = {};
@@ -241,7 +241,7 @@ export default class Logger extends util.Emitter
             logs.shift();
         }
 
-        if (this._filterLog(log) && this._parent.active) $el.append(log.formattedMsg);
+        if (this._filterLog(log) && this._container.active) $el.append(log.formattedMsg);
 
         this.emit('insert', log);
 

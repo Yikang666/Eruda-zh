@@ -20,18 +20,18 @@ export default class Elements extends Tool
         this._selectElement = false;
         this._observeElement = true;
     }
-    init($el, parent)
+    init($el, container)
     {
         super.init($el);
 
-        this._parent = parent;
+        this._container = container;
 
         $el.html('<div class="eruda-show-area"></div>');
         this._$showArea = $el.find('.eruda-show-area');
         $el.append(require('./BottomBar.hbs')());
 
         this._htmlEl = document.documentElement;
-        this._highlight = new Highlight(this._parent.$parent);
+        this._highlight = new Highlight(this._container.$container);
         this._select = new Select();
         this._bindEvent();
         this._initObserver();
@@ -115,7 +115,7 @@ export default class Elements extends Tool
     _bindEvent()
     {
         let self = this,
-            parent = this._parent,
+            container = this._container,
             select = this._select;
 
         this._$el.on('click', '.eruda-child', function ()
@@ -136,12 +136,12 @@ export default class Elements extends Tool
                     default: return;
                 }
 
-                let sources = parent.get('sources');
+                let sources = container.get('sources');
 
                 if (sources)
                 {
                     sources.set(type, el.nodeValue);
-                    parent.showTool('sources');
+                    container.showTool('sources');
                 }
 
                 return;
@@ -151,24 +151,24 @@ export default class Elements extends Tool
         }).on('click', '.eruda-listener-content', function ()
         {
             let text = util.$(this).text(),
-                sources = parent.get('sources');
+                sources = container.get('sources');
 
             if (sources)
             {
                 sources.set('js', text);
-                parent.showTool('sources');
+                container.showTool('sources');
             }
         }).on('click', '.eruda-breadcrumb', () =>
         {
             let data = this._elData || JSON.parse(stringify(this._curEl, {getterVal: true})),
-                sources = parent.get('sources');
+                sources = container.get('sources');
 
             this._elData = data;
 
             if (sources)
             {
                 sources.set('json', data);
-                parent.showTool('sources');
+                container.showTool('sources');
             }
         }).on('click', '.eruda-parent', function ()
         {
@@ -228,7 +228,7 @@ export default class Elements extends Tool
         if (this._selectElement)
         {
             select.enable();
-            this._parent.hide();
+            this._container.hide();
         } else
         {
             select.disable();
@@ -358,7 +358,7 @@ export default class Elements extends Tool
             }
         });
 
-        let settings = this._parent.get('settings');
+        let settings = this._container.get('settings');
         settings.text('Elements')
                 .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
 

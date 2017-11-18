@@ -14,7 +14,7 @@ export default class Console extends Tool
 
         this._registerListener();
     }
-    init($el, parent)
+    init($el, container)
     {
         super.init($el);
 
@@ -24,8 +24,8 @@ export default class Console extends Tool
         this._exposeLogger();
         this._rejectionHandler = e => this._logger.error(e.reason);
 
-        this._initCfg(parent);
-        this._bindEvent(parent);
+        this._initCfg(container);
+        this._bindEvent(container);
     }
     show()
     {
@@ -144,7 +144,7 @@ export default class Console extends Tool
             return this;
         });
     }
-    _bindEvent(parent)
+    _bindEvent(container)
     {
         let $input = this._$input,
             $inputBtns = this._$inputBtns,
@@ -174,17 +174,17 @@ export default class Console extends Tool
 
         logger.on('viewJson', (data) =>
               {
-                  let sources = parent.get('sources');
+                  let sources = container.get('sources');
                   if (!sources) return;
 
                   sources.set('json', data);
-                  parent.showTool('sources');
+                  container.showTool('sources');
               })
               .on('insert', (log) =>
               {
                   let autoShow = log.type === 'error' && config.get('displayIfErr');
 
-                  if (autoShow) parent.showTool('console').show();
+                  if (autoShow) container.showTool('console').show();
               });
     }
     _hideInput()
@@ -205,10 +205,10 @@ export default class Console extends Tool
 
         this._$inputBtns.show();
     }
-    _initCfg(parent)
+    _initCfg(container)
     {
         let cfg = this.config = util.createCfg('console'),
-            sources = parent.get('sources'),
+            sources = container.get('sources'),
             logger = this._logger;
 
         cfg.set(util.defaults(cfg.get(), {
@@ -247,7 +247,7 @@ export default class Console extends Tool
             }
         });
 
-        let settings = parent.get('settings');
+        let settings = container.get('settings');
 
         settings.text('Console')
                 .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')

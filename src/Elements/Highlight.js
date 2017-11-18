@@ -2,13 +2,13 @@ import util from '../lib/util'
 
 export default class Highlight
 {
-    constructor($parent)
+    constructor($container)
     {
         this._style = util.evalCss(require('./Highlight.scss'));
 
         this._isShow = false;
 
-        this._appendTpl($parent);
+        this._appendTpl($container);
         this._bindEvent();
     }
     setEl(el)
@@ -93,9 +93,9 @@ export default class Highlight
             this.render();
         }, false);
     }
-    _appendTpl($parent)
+    _appendTpl($container)
     {
-        $parent.append(require('./Highlight.hbs')());
+        $container.append(require('./Highlight.hbs')());
 
         let $el = this._$el = util.$('.eruda-elements-highlight');
         this._$margin = $el.find('.eruda-margin');

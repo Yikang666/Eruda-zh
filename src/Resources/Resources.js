@@ -20,11 +20,11 @@ export default class Resources extends Tool
         this._observeElement = true;
         this._tpl = require('./Resources.hbs');
     }
-    init($el, parent)
+    init($el, container)
     {
         super.init($el);
 
-        this._parent = parent;
+        this._container = container;
 
         this.refresh();
         this._bindEvent();
@@ -187,7 +187,7 @@ export default class Resources extends Tool
     {
         let self = this,
             $el = this._$el,
-            parent = this._parent;
+            container = this._container;
 
         $el.on('click', '.eruda-refresh-local-storage', () => this.refreshLocalStorage()._render())
            .on('click', '.eruda-refresh-session-storage', () => this.refreshSessionStorage()._render())
@@ -265,12 +265,12 @@ export default class Resources extends Tool
 
         function showSources(type, data)
         {
-            let sources = parent.get('sources');
+            let sources = container.get('sources');
             if (!sources) return;
 
             sources.set(type, data);
 
-            parent.showTool('sources');
+            container.showTool('sources');
 
             return true;
         }
@@ -279,7 +279,7 @@ export default class Resources extends Tool
         {
             return function (e)
             {
-                if (!parent.get('sources')) return;
+                if (!container.get('sources')) return;
                 e.preventDefault();
 
                 let url = util.$(this).attr('href');
@@ -324,7 +324,7 @@ export default class Resources extends Tool
             }
         });
 
-        let settings = this._parent.get('settings');
+        let settings = this._container.get('settings');
         settings.text('Resources')
                 .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
                 .switch(cfg, 'observeElement', 'Auto Refresh Elements')

@@ -6,14 +6,14 @@ import emitter from '../lib/emitter'
 
 export default class DevTools extends util.Emitter
 {
-    constructor($parent)
+    constructor($container)
     {
         super();
 
         if (!util.isMobile()) util.evalCss(require('../style/scrollbar.css'));
         this._style = util.evalCss(require('./DevTools.scss'));
 
-        this.$parent = $parent;
+        this.$container = $container;
         this._isShow = false;
         this._opacity = 1;
         this._scale = 1;
@@ -212,11 +212,11 @@ export default class DevTools extends util.Emitter
     }
     _appendTpl()
     {
-        let $parent = this.$parent;
+        let $container = this.$container;
 
-        $parent.append(require('./DevTools.hbs')());
+        $container.append(require('./DevTools.hbs')());
 
-        this._$el = $parent.find('.eruda-dev-tools');
+        this._$el = $container.find('.eruda-dev-tools');
         this._$tools = this._$el.find('.eruda-tools');
     }
     _initNavBar()
