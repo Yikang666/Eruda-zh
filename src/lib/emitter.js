@@ -1,4 +1,4 @@
-import util from './util'
+import util from './util';
 
 let emitter = new util.Emitter();
 emitter.ADD = 'ADD';

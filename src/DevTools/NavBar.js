@@ -1,4 +1,4 @@
-import util from '../lib/util'
+import util from '../lib/util';
 
 export default class NavBar extends util.Emitter
 {

@@ -1,4 +1,4 @@
-import util from './util'
+import util from './util';
 
 // Modified from: https://jsconsole.com/
 export default function stringify(obj, {
@@ -273,7 +273,7 @@ function getObjAbstract(obj)
 
     let type = getType(obj);
 
-    return type.replace(/(\[object )|]/g, '')
+    return type.replace(/(\[object )|]/g, '');
 }
 
 function getType(obj)

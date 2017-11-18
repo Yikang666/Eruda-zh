@@ -1,6 +1,6 @@
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
-import defInfo from './defInfo'
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
+import defInfo from './defInfo';
 
 export default class Info extends Tool
 {

@@ -1,9 +1,10 @@
-import Tool from '../DevTools/Tool'
-import CssStore from './CssStore'
-import stringify from '../lib/stringify'
-import Highlight from './Highlight'
-import Select from './Select'
-import util from '../lib/util'
+import Tool from '../DevTools/Tool';
+import CssStore from './CssStore';
+import stringify from '../lib/stringify';
+import Highlight from './Highlight';
+import Select from './Select';
+import util from '../lib/util';
+import Settings from '../Settings/Settings';
 
 export default class Elements extends Tool
 {
@@ -337,12 +338,10 @@ export default class Elements extends Tool
     }
     _initCfg()
     {
-        let cfg = this.config = util.createCfg('elements');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('elements', {
             overrideEventTarget: true,
             observeElement: true
-        }));
+        });
 
         if (cfg.get('overrideEventTarget')) this.overrideEventTarget();
         if (cfg.get('observeElement')) this._observeElement = false;
@@ -360,7 +359,7 @@ export default class Elements extends Tool
 
         let settings = this._container.get('settings');
         settings.text('Elements')
-                .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
+                .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners');
 
         if (this._observer) settings.switch(cfg, 'observeElement', 'Auto Refresh');
 

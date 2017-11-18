@@ -1,5 +1,6 @@
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
+import Settings from '../Settings/Settings';
 
 export default class Resources extends Tool
 {
@@ -303,12 +304,10 @@ export default class Resources extends Tool
     }
     _initCfg()
     {
-        let cfg = this.config = util.createCfg('resources');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('resources', {
             hideErudaSetting: true,
             observeElement: true
-        }));
+        });
 
         if (cfg.get('hideErudaSetting')) this._hideErudaSetting = true;
         if (!cfg.get('observeElement')) this._observeElement = false;
@@ -392,7 +391,7 @@ export default class Resources extends Tool
             }
             
             return false;
-        }
+        };
 
         if (mutation.type === 'attributes') 
         {

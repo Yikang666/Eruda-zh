@@ -1,5 +1,5 @@
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
 
 export default class Settings extends Tool
 {
@@ -179,6 +179,10 @@ export default class Settings extends Tool
 
             setting.config.set(setting.key, val);
         });
+    }
+    static createCfg(name, data) 
+    {
+        return new util.LocalStore('eruda-' + name, data);
     }
 }
 

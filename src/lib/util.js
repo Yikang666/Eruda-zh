@@ -1,6 +1,8 @@
 // Built by eustia.
 module.exports = (function ()
 {
+    "use strict";
+
     var _ = {};
 
     /* ------------------------------ last ------------------------------ */
@@ -2153,6 +2155,42 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ isNaN ------------------------------ */
+
+    var isNaN = _.isNaN = (function ()
+    {
+        /* Check if value is an NaN.
+         *
+         * |Name  |Type   |Desc                   |
+         * |------|-------|-----------------------|
+         * |val   |*      |Value to check         |
+         * |return|boolean|True if value is an NaN|
+         *
+         * Undefined is not an NaN, different from global isNaN function.
+         *
+         * ```javascript
+         * isNaN(0); // -> false
+         * isNaN(NaN); // -> true
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isNum 
+         */
+
+        function exports(val)
+        {
+            return isNum(val) && val !== +val;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ isNull ------------------------------ */
 
     _.isNull = (function ()
@@ -2184,7 +2222,7 @@ module.exports = (function ()
 
     /* ------------------------------ isRegExp ------------------------------ */
 
-    _.isRegExp = (function ()
+    var isRegExp = _.isRegExp = (function ()
     {
         /* Check if value is a regular expression.
          *
@@ -4457,6 +4495,46 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ safeStorage ------------------------------ */
+
+    var safeStorage = _.safeStorage = (function ()
+    {
+        /* dependencies
+         * isUndef memStorage 
+         */
+
+        function exports(type, memReplacement)
+        {
+            if (isUndef(memReplacement)) memReplacement = true;
+
+            var ret;
+
+            switch (type)
+            {
+                case 'local': ret = window.localStorage; break;
+                case 'session':  ret = window.sessionStorage; break;
+            }
+
+            try
+            {
+                // Safari private browsing
+                var x = 'test-localStorage-' + Date.now();
+                ret.setItem(x, x);
+                var y = ret.getItem(x);
+                ret.removeItem(x);
+                if (y !== x) throw new Error();
+            } catch (e)
+            {
+                if (memReplacement) return memStorage;
+                return;
+            }
+
+            return ret;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ meta ------------------------------ */
 
     var meta = _.meta = (function ()
@@ -5063,6 +5141,176 @@ module.exports = (function ()
                 ERROR: 4,
                 SILENT: 5
             })
+        });
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Store ------------------------------ */
+
+    var Store = _.Store = (function (exports)
+    {
+        /* Memory storage.
+         *
+         * Extend from Emitter.
+         *
+         * ### constructor
+         * 
+         * |Name|Type  |Desc        |
+         * |----|------|------------|
+         * |data|object|Initial data|
+         * 
+         * ### set
+         * 
+         * Set value.
+         * 
+         * |Name|Type  |Desc        |
+         * |----|------|------------|
+         * |key |string|Value key   |
+         * |val |*     |Value to set|
+         * 
+         * Set values.
+         * 
+         * |Name|Type  |Desc           |
+         * |----|------|---------------|
+         * |vals|object|Key value pairs|
+         * 
+         * This emit a change event whenever is called.
+         * 
+         * ### get
+         * 
+         * Get value.
+         * 
+         * |Name  |Type  |Desc              |
+         * |------|------|------------------|
+         * |key   |string|Value key         |
+         * |return|*     |Value of given key|
+         * 
+         * Get values.
+         * 
+         * |Name  |Type  |Desc           |
+         * |------|------|---------------|
+         * |keys  |array |Array of keys  |
+         * |return|object|Key value pairs|
+         * 
+         * ### remove
+         * 
+         * Remove value.
+         * 
+         * |Name|Type        |Desc         |
+         * |----|------------|-------------|
+         * |key |string array|Key to remove|
+         * 
+         * ### clear
+         * 
+         * Clear all data.
+         * 
+         * ### each
+         * 
+         * Iterate over values.
+         * 
+         * |Name|Type    |Desc                           |
+         * |----|--------|-------------------------------|
+         * |fn  |function|Function invoked per interation|
+         * 
+         * ```javascript
+         * var store = new Store('test');
+         * store.set('user', {name: 'eris'});
+         * store.get('user').name; // -> 'eris'
+         * store.clear();
+         * store.each(function (val, key) 
+         * {
+         *     // Do something.
+         * });
+         * store.on('change', function (key, newVal, oldVal) 
+         * {
+         *     // It triggers whenever set is called.
+         * });
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * Emitter isStr isObj each toArr 
+         */
+
+        exports = Emitter.extend({
+            initialize: function Store(data) 
+            {
+                this.callSuper(Emitter, 'initialize', arguments);
+                this._data = data || {};
+                this.save(this._data);
+            },
+            set: function (key, val) 
+            {
+                var data;
+
+                if (isStr(key)) 
+                {
+                    data = {};
+                    data[key] = val;
+                } else if (isObj(key)) 
+                {
+                    data = key;
+                }
+
+                var self = this;
+
+                each(data, function (val, key) 
+                {
+                    var oldVal = self._data[key];
+                    self._data[key] = val;
+                    self.emit('change', key, val, oldVal);
+                });
+
+                this.save(this._data);
+            },
+            get: function (key) 
+            {
+                var data = this._data;
+
+                if (isStr(key)) return data[key];
+
+                var ret = {};
+                each(key, function (val) 
+                {
+                    ret[val] = data[val];
+                });        
+
+                return ret;
+            },
+            remove: function (key) 
+            {
+                key = toArr(key);
+
+                var data = this._data;
+
+                each(key, function (val) 
+                {
+                    delete data[val];
+                });
+
+                this.save(data);
+            },
+            clear: function () 
+            {
+                this._data = {};
+
+                this.save(this._data);
+            },
+            each: function (fn) 
+            {
+                each(this._data, fn);
+            },
+            // This methods exists to be overwritten.
+            save: function (data) 
+            {
+                this._data = data;
+            }
         });
 
         return exports;
@@ -6066,45 +6314,196 @@ module.exports = (function ()
         return exports;
     })();
 
-    /* ------------------------------ safeStorage ------------------------------ */
+    /* ------------------------------ type ------------------------------ */
 
-    _.safeStorage = (function ()
+    var type = _.type = (function ()
     {
-        /* dependencies
-         * isUndef memStorage 
+        /* Determine the internal JavaScript [[Class]] of an object.
+         *
+         * |Name  |Type  |Desc                      |
+         * |------|------|--------------------------|
+         * |val   |*     |Value to get type         |
+         * |return|string|Type of object, lowercased|
+         *
+         * ```javascript
+         * type(5); // -> 'number'
+         * type({}); // -> 'object'
+         * type(function () {}); // -> 'function'
+         * type([]); // -> 'array'
+         * ```
          */
 
-        function exports(type, memReplacement)
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * objToStr isNaN 
+         */
+
+        function exports(val)
         {
-            if (isUndef(memReplacement)) memReplacement = true;
+            if (val === null) return 'null';
+            if (val === undefined) return 'undefined';
+            if (isNaN(val)) return 'nan';
 
-            var ret;
+            var ret = objToStr(val).match(regObj);
 
-            switch (type)
+            if (!ret) return '';
+
+            return ret[1].toLowerCase();
+        }
+
+        var regObj = /^\[object\s+(.*?)]$/;
+
+        return exports;
+    })();
+
+    /* ------------------------------ stringify ------------------------------ */
+
+    var stringify = _.stringify = (function ()
+    {
+        /* JSON stringify with support for circular object, function etc.
+         *
+         * Undefined is treated as null value.
+         *  
+         * |Name  |Type  |Desc               |
+         * |------|------|-------------------|
+         * |obj   |object|Object to stringify|
+         * |spaces|number|Indent spaces      |
+         * |return|string|Stringified object |
+         * 
+         * ```javascript
+         * stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
+         * var obj = {a: 1};
+         * obj.b = obj;
+         * stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * type upperFirst toStr isUndef isFn isRegExp 
+         */
+
+        function exports(obj, spaces) 
+        {
+            return JSON.stringify(obj, serializer(), spaces);
+        }
+
+        function serializer() 
+        {
+            var stack = [], keys = [];
+
+            return function (key, val) 
             {
-                case 'local': ret = window.localStorage; break;
-                case 'session':  ret = window.sessionStorage; break;
-            }
+                if (stack.length > 0) 
+                {
+                    var pos = stack.indexOf(this);
+                    if (pos > -1) 
+                    {
+                        stack.splice(pos + 1);
+                        keys.splice(pos, Infinity, key);
+                    } else 
+                    {
+                        stack.push(this);
+                        keys.push(key);
+                    }
 
-            try
-            {
-                // Safari private browsing
-                var x = 'test-localStorage-' + Date.now();
-                ret.setItem(x, x);
-                var y = ret.getItem(x);
-                ret.removeItem(x);
-                if (y !== x) throw new Error();
-            } catch (e)
-            {
-                if (memReplacement) return memStorage;
-                return;
-            }
+                    var valPos = stack.indexOf(val);
+                    if (valPos > -1) 
+                    {
+                        if (stack[0] === val) 
+                        {
+                            val = '[Circular ~]';
+                        } else 
+                        {
+                            val = '[Circular ~.' + keys.slice(0, valPos).join('.') + ']';
+                        }
+                    }
+                } else
+                {
+                    stack.push(val);
+                }
 
-            return ret;
+                if (isRegExp(val) || isFn(val)) 
+                {
+                    val = '[' + upperFirst(type(val)) + ' ' + toStr(val) + ']';
+                } else if (isUndef(val)) 
+                {
+                    val = null;
+                }
+
+                return val;
+            };
         }
 
         return exports;
     })();
+
+    /* ------------------------------ LocalStore ------------------------------ */
+
+    _.LocalStore = (function (exports)
+    {
+        /* LocalStorage wrapper.
+         * 
+         * Extend from Store.
+         * 
+         * ### constructor
+         * 
+         * |Name|Type  |Desc                  |
+         * |----|------|----------------------|
+         * |name|string|LocalStorage item name|
+         * |data|object|Default data          |
+         * 
+         * ```javascript
+         * var store = new LocalStore('eris');
+         * store.set('name', 'eris');
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * Store safeStorage isEmpty stringify defaults isObj 
+         */ 
+
+        var localStorage = safeStorage('local');
+
+        exports = Store.extend({
+            initialize: function LocalStore(name, data) 
+            {
+                this._name = name;
+
+                var localData = localStorage.getItem(name);
+                try 
+                {
+                    localData = JSON.parse(localData);
+                } catch (e) 
+                {
+                    localData = {};            
+                }
+                if (!isObj(localData)) localData = {};
+                data = defaults(localData, data);
+                this.callSuper(Store, 'initialize', [data]);
+            },
+            save: function (data) 
+            {
+                if (isEmpty(data)) return localStorage.removeItem(this._name);
+                localStorage.setItem(this._name, stringify(data));
+            }
+        });
+
+        return exports;
+    })({});
 
     /* ------------------------------ stripHtmlTag ------------------------------ */
 

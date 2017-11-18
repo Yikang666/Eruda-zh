@@ -398,6 +398,24 @@ if (val === importance.CRITICAL)
 }
 ```
 
+## LocalStore 
+
+LocalStorage wrapper.
+
+Extend from Store.
+
+### constructor
+
+|Name|Type  |Desc                  |
+|----|------|----------------------|
+|name|string|LocalStorage item name|
+|data|object|Default data          |
+
+```javascript
+var store = new LocalStore('eris');
+store.set('name', 'eris');
+```
+
 ## Logger 
 
 Simple logger with level filter.
@@ -494,6 +512,86 @@ var $test = new Select('#test');
 $test.find('.test').each(function (idx, element)
 {
     // Manipulate dom nodes
+});
+```
+
+## Store 
+
+Memory storage.
+
+Extend from Emitter.
+
+### constructor
+
+|Name|Type  |Desc        |
+|----|------|------------|
+|data|object|Initial data|
+
+### set
+
+Set value.
+
+|Name|Type  |Desc        |
+|----|------|------------|
+|key |string|Value key   |
+|val |*     |Value to set|
+
+Set values.
+
+|Name|Type  |Desc           |
+|----|------|---------------|
+|vals|object|Key value pairs|
+
+This emit a change event whenever is called.
+
+### get
+
+Get value.
+
+|Name  |Type  |Desc              |
+|------|------|------------------|
+|key   |string|Value key         |
+|return|*     |Value of given key|
+
+Get values.
+
+|Name  |Type  |Desc           |
+|------|------|---------------|
+|keys  |array |Array of keys  |
+|return|object|Key value pairs|
+
+### remove
+
+Remove value.
+
+|Name|Type        |Desc         |
+|----|------------|-------------|
+|key |string array|Key to remove|
+
+### clear
+
+Clear all data.
+
+### each
+
+Iterate over values.
+
+|Name|Type    |Desc                           |
+|----|--------|-------------------------------|
+|fn  |function|Function invoked per interation|
+
+```javascript
+var store = new Store('test');
+store.set('user', {name: 'eris'});
+store.get('user').name; // -> 'eris'
+store.clear();
+store.each(function (val, key)
+{
+    // Do something.
+});
+store.on('change', function (key, newVal, oldVal)
+{
+    // It triggers whenever set is called.
 });
 ```
 
@@ -1310,6 +1408,22 @@ Check whether client is using a mobile browser using ua.
 isMobile(navigator.userAgent);
 ```
 
+## isNaN 
+
+Check if value is an NaN.
+
+|Name  |Type   |Desc                   |
+|------|-------|-----------------------|
+|val   |*      |Value to check         |
+|return|boolean|True if value is an NaN|
+
+Undefined is not an NaN, different from global isNaN function.
+
+```javascript
+isNaN(0); // -> false
+isNaN(NaN); // -> true
+```
+
 ## isNull 
 
 Check if value is an Null.
@@ -1899,6 +2013,25 @@ Check if string starts with the given target string.
 startWith('ab', 'a'); // -> true
 ```
 
+## stringify 
+
+JSON stringify with support for circular object, function etc.
+
+Undefined is treated as null value.
+
+|Name  |Type  |Desc               |
+|------|------|-------------------|
+|obj   |object|Object to stringify|
+|spaces|number|Indent spaces      |
+|return|string|Stringified object |
+
+```javascript
+stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
+var obj = {a: 1};
+obj.b = obj;
+stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
+```
+
 ## stripHtmlTag 
 
 Strip html tags from a string.
@@ -1985,6 +2118,22 @@ Remove chars or white-spaces from beginning end of string.
 trim(' abc  '); // -> 'abc'
 trim('_abc_', '_'); // -> 'abc'
 trim('_abc_', ['a', 'c', '_']); // -> 'b'
+```
+
+## type 
+
+Determine the internal JavaScript [[Class]] of an object.
+
+|Name  |Type  |Desc                      |
+|------|------|--------------------------|
+|val   |*     |Value to get type         |
+|return|string|Type of object, lowercased|
+
+```javascript
+type(5); // -> 'number'
+type({}); // -> 'object'
+type(function () {}); // -> 'function'
+type([]); // -> 'array'
 ```
 
 ## uniqId 

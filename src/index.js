@@ -1,19 +1,19 @@
-import EntryBtn from './EntryBtn/EntryBtn'
-import DevTools from './DevTools/DevTools'
-import Console from './Console/Console'
-import Network from './Network/Network'
-import Elements from './Elements/Elements'
-import Snippets from './Snippets/Snippets'
-import Resources from './Resources/Resources'
-import Info from './Info/Info'
-import Features from './Features/Features'
-import Sources from './Sources/Sources'
-import Settings from './Settings/Settings'
-import util from './lib/util'
-import emitter from './lib/emitter'
-import config from './lib/config'
-import logger from './lib/logger'
-import extraUtil from './lib/extraUtil'
+import EntryBtn from './EntryBtn/EntryBtn';
+import DevTools from './DevTools/DevTools';
+import Console from './Console/Console';
+import Network from './Network/Network';
+import Elements from './Elements/Elements';
+import Snippets from './Snippets/Snippets';
+import Resources from './Resources/Resources';
+import Info from './Info/Info';
+import Features from './Features/Features';
+import Sources from './Sources/Sources';
+import Settings from './Settings/Settings';
+import util from './lib/util';
+import emitter from './lib/emitter';
+import config from './lib/config';
+import logger from './lib/logger';
+import extraUtil from './lib/extraUtil';
 
 module.exports = {
     init({container, tool, autoScale = true} = {})

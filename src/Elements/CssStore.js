@@ -1,4 +1,4 @@
-import util from '../lib/util'
+import util from '../lib/util';
 
 function formatStyle(style)
 {
@@ -18,7 +18,7 @@ function formatStyle(style)
 
 let elProto = Element.prototype;
 
-let matchesSel = function () { return false };
+let matchesSel = function () { return false; };
 
 if (elProto.webkitMatchesSelector)
 {

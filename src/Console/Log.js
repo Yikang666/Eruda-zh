@@ -1,9 +1,9 @@
-import util from '../lib/util'
-import stringify from '../lib/stringify'
-import origGetAbstract from '../lib/getAbstract'
-import highlight from '../lib/highlight'
-import beautify from 'js-beautify'
-import JsonViewer from '../lib/JsonViewer'
+import util from '../lib/util';
+import stringify from '../lib/stringify';
+import origGetAbstract from '../lib/getAbstract';
+import highlight from '../lib/highlight';
+import beautify from 'js-beautify';
+import JsonViewer from '../lib/JsonViewer';
 
 export default class Log
 {
@@ -228,7 +228,7 @@ function formatTable(args)
 
             ret += `<td>${val}</td>`;
         });
-        ret += '</tr>'
+        ret += '</tr>';
     });
 
     ret += '</tbody></table>';

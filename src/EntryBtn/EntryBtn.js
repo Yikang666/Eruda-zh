@@ -1,6 +1,7 @@
-import util from '../lib/util'
-import Draggabilly from 'draggabilly'
-import emitter from '../lib/emitter'
+import util from '../lib/util';
+import Draggabilly from 'draggabilly';
+import emitter from '../lib/emitter';
+import Settings from '../Settings/Settings';
 
 export default class EntryBtn extends util.Emitter
 {
@@ -47,7 +48,7 @@ export default class EntryBtn extends util.Emitter
         {
             if (this._isOutOfRange()) this._setPos();
         });
-        emitter.on(emitter.SCALE, this._scaleListener)
+        emitter.on(emitter.SCALE, this._scaleListener);
     }
     _unregisterListener() 
     {
@@ -109,12 +110,10 @@ export default class EntryBtn extends util.Emitter
     }
     initCfg(settings)
     {
-        let cfg = this.config = util.createCfg('home-button');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('home-button', {
             rememberPos: true,
             pos: this._getDefPos()
-        }));
+        });
 
         settings.separator()
                 .switch(cfg, 'rememberPos', 'Remember Entry Button Position');

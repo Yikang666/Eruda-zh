@@ -1,6 +1,6 @@
-import highlight from './highlight'
-import beautify from 'js-beautify'
-import config from './config'
+import highlight from './highlight';
+import beautify from 'js-beautify';
+import config from './config';
 
 export default function (util)
 {

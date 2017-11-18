@@ -1,8 +1,9 @@
-import NavBar from './NavBar'
-import util from '../lib/util'
-import logger from '../lib/logger'
-import Tool from './Tool'
-import emitter from '../lib/emitter'
+import NavBar from './NavBar';
+import util from '../lib/util';
+import logger from '../lib/logger';
+import Tool from './Tool';
+import emitter from '../lib/emitter';
+import Settings from '../Settings/Settings';
 
 export default class DevTools extends util.Emitter
 {
@@ -33,7 +34,7 @@ export default class DevTools extends util.Emitter
         // Need a delay after show to enable transition effect.
         setTimeout(() => 
         {
-            this._$el.css('opacity', this._opacity)
+            this._$el.css('opacity', this._opacity);
         }, 50);
 
         return this;
@@ -134,15 +135,13 @@ export default class DevTools extends util.Emitter
     }
     initCfg(settings)
     {
-        let cfg = this.config = util.createCfg('dev-tools');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('dev-tools', {
             transparency: 0.95,
             displaySize: 80,
             tinyNavBar: !util.isMobile(),
             activeEruda: false,
             navBarBgColor: '#2196f3'
-        }));
+        });
 
         this._setTransparency(cfg.get('transparency'));
         this._setDisplaySize(cfg.get('displaySize'));
@@ -189,7 +188,7 @@ export default class DevTools extends util.Emitter
         {
             this._scale = scale;
             this.setNavBarHeight(this._navBarHeight);
-        }
+        };
 
         emitter.on(emitter.SCALE, this._scaleListener);
     }

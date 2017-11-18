@@ -1,4 +1,4 @@
-import util from '../lib/util'
+import util from '../lib/util';
 
 // https://github.com/trentrichardson/jQuery-Litelighter
 

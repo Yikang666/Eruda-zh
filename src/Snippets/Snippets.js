@@ -1,6 +1,6 @@
-import Tool from '../DevTools/Tool'
-import defSnippets from './defSnippets'
-import util from '../lib/util'
+import Tool from '../DevTools/Tool';
+import defSnippets from './defSnippets';
+import util from '../lib/util';
 
 export default class Snippets extends Tool
 {

@@ -1,6 +1,7 @@
-import Tool from '../DevTools/Tool'
-import Request from './Request'
-import util from '../lib/util'
+import Tool from '../DevTools/Tool';
+import Request from './Request';
+import util from '../lib/util';
+import Settings from '../Settings/Settings';
 
 export default class Network extends Tool
 {
@@ -291,13 +292,11 @@ export default class Network extends Tool
     }
     _initCfg()
     {
-        let cfg = this.config = util.createCfg('network');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('network', {
             disablePerformance: false,
             hideXhrResource: true,
             overrideXhr: true
-        }));
+        });
 
         if (cfg.get('overrideXhr')) this.overrideXhr();
 

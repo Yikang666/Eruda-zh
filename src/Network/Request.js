@@ -1,4 +1,4 @@
-import util from '../lib/util'
+import util from '../lib/util';
 
 export default class Request extends util.Emitter
 {
@@ -84,7 +84,7 @@ function getType(contentType)
     return {
         type: type[0],
         subType: util.last(type)
-    }
+    };
 }
 
 function getSize(xhr, headersOnly, url)

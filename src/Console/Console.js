@@ -1,7 +1,8 @@
-import Logger from './Logger'
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
-import emitter from '../lib/emitter'
+import Logger from './Logger';
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
+import emitter from '../lib/emitter';
+import Settings from '../Settings/Settings';
 
 export default class Console extends Tool
 {
@@ -207,11 +208,10 @@ export default class Console extends Tool
     }
     _initCfg(container)
     {
-        let cfg = this.config = util.createCfg('console'),
-            sources = container.get('sources'),
+        let sources = container.get('sources'),
             logger = this._logger;
 
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('console', {
             catchGlobalErr: true,
             overrideConsole: true,
             displayExtraInfo: false,
@@ -220,7 +220,7 @@ export default class Console extends Tool
             viewLogInSources: false,
             displayIfErr: false,
             maxLogNum: 'infinite'
-        }));
+        });
 
         let maxLogNum = cfg.get('maxLogNum');
         maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum;
@@ -260,7 +260,7 @@ export default class Console extends Tool
         if (sources) settings.switch(cfg, 'viewLogInSources', 'View Log In Sources Panel');
 
         settings.select(cfg, 'maxLogNum', 'Max Log Number', ['infinite', '250', '125', '100', '50', '10'])
-                .separator()
+                .separator();
     }
 }
 

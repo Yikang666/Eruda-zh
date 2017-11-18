@@ -1,6 +1,6 @@
-import util from '../lib/util'
-import logger from '../lib/logger'
-import emitter from '../lib/emitter'
+import util from '../lib/util';
+import logger from '../lib/logger';
+import emitter from '../lib/emitter';
 
 let style = null;
 

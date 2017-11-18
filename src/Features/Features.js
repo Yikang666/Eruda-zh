@@ -1,6 +1,6 @@
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
-import modernizr from './modernizr'
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
+import modernizr from './modernizr';
 
 let featureList = require('./featureList.json');
 

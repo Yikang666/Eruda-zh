@@ -1,5 +1,5 @@
 // Simple version for stringify, used for displaying object abstract.
-import util from './util'
+import util from './util';
 
 // Modified from: https://jsconsole.com/
 export default function getAbstract(obj, {

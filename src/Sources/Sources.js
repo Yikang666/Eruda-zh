@@ -1,8 +1,9 @@
-import Tool from '../DevTools/Tool'
-import util from '../lib/util'
-import beautify from 'js-beautify'
-import highlight from '../lib/highlight'
-import JsonViewer from '../lib/JsonViewer'
+import Tool from '../DevTools/Tool';
+import util from '../lib/util';
+import beautify from 'js-beautify';
+import highlight from '../lib/highlight';
+import JsonViewer from '../lib/JsonViewer';
+import Settings from '../Settings/Settings';
 
 export default class Sources extends Tool
 {
@@ -149,12 +150,10 @@ export default class Sources extends Tool
     }
     _initCfg()
     {
-        let cfg = this.config = util.createCfg('sources');
-
-        cfg.set(util.defaults(cfg.get(), {
+        let cfg = this.config = Settings.createCfg('sources', {
             'showLineNum': true,
             'formatCode': true
-        }));
+        });
 
         if (!cfg.get('showLineNum')) this._showLineNum = false;
         if (!cfg.get('formatCode')) this._formatCode = false;
