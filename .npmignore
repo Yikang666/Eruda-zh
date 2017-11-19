@@ -12,4 +12,5 @@
 .npmignore
 .travis.yml
 karma.conf.js
+karma.sauce.js
 npm-debug.log
