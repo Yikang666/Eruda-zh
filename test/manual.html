@@ -58,7 +58,6 @@
         eruda.add({name: 'test'});
         eruda.add(function (eruda)
         {
-            console.log(eruda);
             return {
                 name: 'test2',
                 init: function ($el)
@@ -68,6 +67,15 @@
                 }
             };
         });
+        var Tool = eruda.Tool;
+        eruda.add(new (Tool.extend({
+            name: 'test3',
+            init: function ($el) 
+            {
+                this.callSuper(Tool, 'init', arguments);
+                this._$el.html('This is another new plugin');
+            }
+        })));
     });
     addClickEvent('issue29', function () 
     {

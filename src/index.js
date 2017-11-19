@@ -1,5 +1,6 @@
 import EntryBtn from './EntryBtn/EntryBtn';
 import DevTools from './DevTools/DevTools';
+import Tool from './DevTools/Tool';
 import Console from './Console/Console';
 import Network from './Network/Network';
 import Elements from './Elements/Elements';
@@ -34,7 +35,7 @@ module.exports = {
     _isInit: false,
     version: VERSION,
     config, util,
-    Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
+    Tool, Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
     get(name)
     {
         if (!this._checkInit()) return;
