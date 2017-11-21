@@ -186,7 +186,17 @@ module.exports = {
         tool.forEach(name =>
         {
             let Tool = this[util.upperFirst(name)];
-            if (Tool) devTools.add(new Tool());
+            try 
+            {
+                if (Tool) devTools.add(new Tool());
+            } catch (e) 
+            {
+                // Use nextTick to make sure it is possible to be caught by console panel.
+                util.nextTick(() => 
+                {
+                    logger.error(`Something wrong when initializing tool ${name}:`, e.message);
+                });
+            }
         });
 
         devTools.showTool(util.last(tool) || 'settings');
