@@ -7,7 +7,6 @@ import Elements from './Elements/Elements';
 import Snippets from './Snippets/Snippets';
 import Resources from './Resources/Resources';
 import Info from './Info/Info';
-import Features from './Features/Features';
 import Sources from './Sources/Sources';
 import Settings from './Settings/Settings';
 import util from './lib/util';
@@ -35,7 +34,7 @@ module.exports = {
     _isInit: false,
     version: VERSION,
     config, util,
-    Tool, Console, Elements, Network, Sources, Resources, Info, Snippets, Features,
+    Tool, Console, Elements, Network, Sources, Resources, Info, Snippets,
     get(name)
     {
         if (!this._checkInit()) return;
@@ -177,7 +176,7 @@ module.exports = {
         this._entryBtn.initCfg(settings);
         devTools.initCfg(settings);
     },
-    _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets', 'features'])
+    _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets'])
     {
         tool = util.toArr(tool).reverse();
 

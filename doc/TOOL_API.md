@@ -192,14 +192,6 @@ snippets.add('hello', function ()
 snippets.remove('hello');
 ```
 
-## Features
-
-Browser feature detections, thanks to
-[modernizr](https://github.com/Modernizr/Modernizr) project.
-
-Red means unsupported, otherwise ok. All buttons is linked directly to
-related materials in [Can I Use](http://caniuse.com/) website.
-
 ## Settings
 
 Customization for all tools.

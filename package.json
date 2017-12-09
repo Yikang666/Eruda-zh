@@ -31,7 +31,9 @@
         "test/*.js",
         "test/*.html"
       ],
-      "exclude": ["js"],
+      "exclude": [
+        "js"
+      ],
       "namespace": "util",
       "output": "test/util.js"
     }
@@ -78,7 +80,6 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-sourcemap-writer": "^0.1.2",
     "karma-webpack": "^2.0.5",
-    "modernizr": "^3.5.0",
     "node-sass": "^4.5.3",
     "postcss-class-prefix": "^0.3.0",
     "postcss-loader": "^2.0.8",

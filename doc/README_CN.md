@@ -42,8 +42,6 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 
 8. Snippets面板：页面元素添加边框；加时间戳刷新页面；支持自定义代码片段。
 
-9. Features面板：浏览器常用特性检测；提供Can I use，Html5Test快捷访问。
-
 ## 快速上手
 
 通过CDN使用：

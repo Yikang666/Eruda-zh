@@ -60,6 +60,14 @@ export default [
         desc: 'Display page fps'
     },
     {
+        name: 'Load Features Plugin',
+        fn() 
+        {
+            loadPlugin('features');
+        },
+        desc: 'Browser feature detections'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -139,7 +147,7 @@ function loadPlugin(name)
     let globalName = 'eruda' + util.upperFirst(name);
     if (window[globalName]) return;
 
-    util.loadJs('//cdn.jsdelivr.net/npm/eruda-' + name, (isLoaded) =>
+    util.loadJs(`//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`, isLoaded =>
     {
         if (!isLoaded || !window[globalName]) return logger.error('Fail to load plugin ' + name);
 
@@ -147,3 +155,8 @@ function loadPlugin(name)
         emitter.emit(emitter.SHOW, name);
     });
 }
+
+let pluginVersion = {
+    fps: '1.0.2',
+    features: '1.0.0'
+};

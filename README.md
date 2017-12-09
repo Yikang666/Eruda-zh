@@ -54,7 +54,6 @@ javascript:(function () { var script = document.createElement('script'); script.
 * [Info](doc/TOOL_API.md#info): Show url, user agent info.
 * [Snippets](doc/TOOL_API.md#snippets): Include snippets used most often.
 * [Sources](doc/TOOL_API.md#sources): Html, js, css source viewer.
-* [Features](doc/TOOL_API.md#features): Browser feature detections.
 
 ## Install
 
@@ -116,6 +115,7 @@ It is possible to enhance Eruda with more features by writing plugins. Check
 source code of plugins below to learn how to write your own custom tool panels.
 
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
+* [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
 
 When writing plugins, you can use utilities exposed by Eruda, see
 [docs](doc/UTIL_API.md) here.

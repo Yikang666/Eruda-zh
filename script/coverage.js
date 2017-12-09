@@ -22,7 +22,6 @@ var coverage = util.reduce(util.keys(remappedJson), function (result, source)
     {
         return source.match(/src.*\.js$/) && 
                source.indexOf('node_modules') < 0 && 
-               source.indexOf('modernizr') < 0 && 
                source.indexOf('util') < 0;
     }
 

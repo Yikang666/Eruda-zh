@@ -16,7 +16,6 @@ module.exports = function (config)
             'test/util.js',
             'test/console.js',
             'test/elements.js',
-            'test/features.js',
             'test/info.js',
             'test/network.js',
             'test/resources.js',
