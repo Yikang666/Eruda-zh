@@ -158,5 +158,5 @@ function loadPlugin(name)
 
 let pluginVersion = {
     fps: '1.0.2',
-    features: '1.0.0'
+    features: '1.0.2'
 };
