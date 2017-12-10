@@ -73,8 +73,12 @@ export default [
         {
             let store = util.safeStorage('local');
 
-            util.each(store, (val, key) => 
+            let data = JSON.parse(JSON.stringify(store));
+
+            util.each(data, (val, key) => 
             {
+                if (!util.isStr(val)) return;
+
                 if (util.startWith(key, 'eruda')) store.removeItem(key);
             });
 
