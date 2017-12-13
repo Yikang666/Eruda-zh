@@ -1319,7 +1319,7 @@ module.exports = (function ()
 
     var isNum = _.isNum = (function ()
     {
-        /* Checks if value is classified as a Number primitive or object.
+        /* Check if value is classified as a Number primitive or object.
          *
          * |Name  |Type   |Desc                                 |
          * |------|-------|-------------------------------------|

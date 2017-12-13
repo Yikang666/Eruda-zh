@@ -1439,7 +1439,7 @@ isNull(null); // -> true
 
 ## isNum 
 
-Checks if value is classified as a Number primitive or object.
+Check if value is classified as a Number primitive or object.
 
 |Name  |Type   |Desc                                 |
 |------|-------|-------------------------------------|
