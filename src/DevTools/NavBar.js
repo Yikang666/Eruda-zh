@@ -52,6 +52,7 @@ export default class NavBar extends util.Emitter
             {
                 $this.addClass('eruda-active');
                 self._resetBottomBar();
+                self._scrollItemToView();
             } else
             {
                 $this.rmClass('eruda-active');
@@ -62,6 +63,30 @@ export default class NavBar extends util.Emitter
     {
         util.evalCss.remove(this._style);
         this._$el.remove();
+    }
+    _scrollItemToView() 
+    {
+        let $el = this._$el,
+            li = $el.find('.eruda-active').get(0),
+            container = $el.get(0);
+        
+        let itemLeft = li.offsetLeft,
+            itemWidth = li.offsetWidth,
+            containerWidth = container.offsetWidth,
+            scrollLeft = container.scrollLeft,
+            targetScrollLeft;
+        
+        if (itemLeft < scrollLeft) 
+        {
+            targetScrollLeft = itemLeft;
+        } else if (itemLeft + itemWidth > containerWidth + scrollLeft) 
+        {
+            targetScrollLeft = itemLeft + itemWidth - containerWidth;
+        }
+
+        if (!util.isNum(targetScrollLeft)) return;
+
+        container.scrollLeft = targetScrollLeft;
     }
     _resetBottomBar() 
     {
