@@ -1,7 +1,6 @@
 import Tool from '../DevTools/Tool';
 import Request from './Request';
 import util from '../lib/util';
-import Settings from '../Settings/Settings';
 
 export default class Network extends Tool
 {
