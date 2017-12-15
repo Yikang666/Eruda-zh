@@ -20,6 +20,7 @@ export default class Network extends Tool
 
         this._container = container;
         this._bindEvent();
+        this.overrideXhr();
     }
     show()
     {
