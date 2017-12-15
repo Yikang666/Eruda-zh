@@ -89,15 +89,7 @@ elements.set(document.body);
 
 ## Network
 
-Display performance timing, resource timing and xhr requests.
-
-### Config
-
-|Name              |Type   |Desc                      |
-|------------------|-------|--------------------------|
-|disablePerformance|boolean|Disable Performance Timing|
-|hideXhrResource   |boolean|Hide Xhr Resource Timing  |
-|overrideXhr       |boolean|Catch Xhr Requests        |
+Display xhr requests.
 
 ## Resources
 

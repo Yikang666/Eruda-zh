@@ -32,7 +32,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 
 3. Elements面板：查看标签内容及属性；查看应用在Dom上的样式；支持页面元素高亮；支持屏幕直接点击选取；查看Dom上绑定的各类事件。
 
-4. Network面板：图表显示页面加载速度；查看页面各资源请求时间（Android）；捕获XHR请求，查看发送数据、返回头、返回内容等信息。
+4. Network面板：捕获XHR请求，查看发送数据、返回头、返回内容等信息。
 
 5. Resources面板：查看并清除localStorage、sessionStorage及cookie；查看页面加载脚本及样式文件；查看页面加载图片。
 

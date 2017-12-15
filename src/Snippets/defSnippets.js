@@ -68,6 +68,14 @@ export default [
         desc: 'Browser feature detections'
     },
     {
+        name: 'Load Timing Plugin',
+        fn() 
+        {
+            loadPlugin('timing');
+        },
+        desc: 'Show performance and resource timing'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -162,5 +170,6 @@ function loadPlugin(name)
 
 let pluginVersion = {
     fps: '1.0.2',
-    features: '1.0.2'
+    features: '1.0.2',
+    timing:'1.0.0'
 };

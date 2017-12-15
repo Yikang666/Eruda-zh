@@ -28,10 +28,7 @@ Console for Mobile Browsers.
 
 ## Why
 
-Logging things out on mobile browser is never an easy stuff. I used to include
-`window onerror alert` script inside pages to find out JavaScript errors, kind
-of stupid and inefficient. Desktop browser DevTools is great, and I wish there
-is a similar one on mobile side, which leads to the creation of Eruda.
+Logging things out on mobile browser is never an easy stuff. I used to include `window onerror alert` script inside pages to find out JavaScript errors, kind of stupid and inefficient. Desktop browser DevTools is great, and I wish there is a similar one on mobile side, which leads to the creation of Eruda.
 
 ## Demo
 
@@ -49,7 +46,7 @@ javascript:(function () { var script = document.createElement('script'); script.
 
 * [Console](doc/TOOL_API.md#console): Display JavaScript logs.
 * [Elements](doc/TOOL_API.md#elements): Check dom state.
-* [Network](doc/TOOL_API.md#network): Show performance timing, ajax requests status.
+* [Network](doc/TOOL_API.md#network): Show ajax requests status.
 * [Resource](/doc/TOOL_API.md#resources): Show localStorage, cookie information.
 * [Info](doc/TOOL_API.md#info): Show url, user agent info.
 * [Snippets](doc/TOOL_API.md#snippets): Include snippets used most often.
@@ -77,10 +74,7 @@ It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [c
 <script>eruda.init();</script>
 ```
 
-The JavaScript file size is quite huge(about 90kb gzipped) and therefore not
-suitable to include in mobile pages. It's recommended to make sure eruda is
-loaded only when eruda is set to true on url(http://example.com/?eruda=true),
-for example:
+The JavaScript file size is quite huge(about 90kb gzipped) and therefore not suitable to include in mobile pages. It's recommended to make sure eruda is loaded only when eruda is set to true on url(http://example.com/?eruda=true), for example:
 
 ```javascript
 ;(function () {
@@ -111,14 +105,13 @@ eruda.init({
 
 ## Plugins
 
-It is possible to enhance Eruda with more features by writing plugins. Check
-source code of plugins below to learn how to write your own custom tool panels.
+It is possible to enhance Eruda with more features by writing plugins. Check source code of plugins below to learn how to write your own custom tool panels.
 
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 * [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
+* [eruda-timing](https://github.com/liriliri/eruda-timing): Show performance and resource timing.
 
-When writing plugins, you can use utilities exposed by Eruda, see
-[docs](doc/UTIL_API.md) here.
+When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
 
 ## Contribution
 

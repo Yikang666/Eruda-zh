@@ -1,70 +1,23 @@
-{{#if timing}}
-    <div class="eruda-performance-timing">
-        <div class="eruda-inner-wrapper">
-            {{#each data}}
-                <div class="eruda-bar">
-                    <span style="position:relative;left:{{start}}%;width:{{len}}%">{{name}}({{duration}}ms)</span>
-                </div>
-            {{/each}}
-        </div>
+<div class="eruda-title">
+    Request
+    <div class="eruda-btn eruda-clear-xhr">
+        <span class="eruda-icon-ban"></span>
     </div>
-
-    <div class="eruda-performance-timing-data">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Time(ms)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each timing}}
-                    <tr>
-                        <td>{{@key}}</td>
-                        <td>{{this}}</td>
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-{{/if}}
-
-{{#if entries}}
-    <div class="eruda-title">ResourceTiming</div>
-    <ul class="eruda-entries">
-        {{#each entries}}
-            <li class="eruda-entry" data-idx="{{@index}}">
+</div>
+<ul class="eruda-requests">
+    {{#if requests}}
+        {{#each requests}}
+            <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
                 <span>{{name}}</span>
-                <span>{{initiatorType}}</span>
+                <span>{{status}}</span>
+                <span>{{method}}</span>
+                <span>{{subType}}</span>
+                <span>{{size}}</span>
                 <span>{{displayTime}}</span>
                 <span class="eruda-blue">{{url}}</span>
             </li>
         {{/each}}
-    </ul>
-{{/if}}
-
-{{#if displayReq}}
-    <div class="eruda-title">
-        XMLHttpRequest
-        <div class="eruda-btn eruda-clear-xhr">
-            <span class="eruda-icon-ban"></span>
-        </div>
-    </div>
-    <ul class="eruda-requests">
-        {{#if requests}}
-            {{#each requests}}
-                <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
-                    <span>{{name}}</span>
-                    <span>{{status}}</span>
-                    <span>{{method}}</span>
-                    <span>{{subType}}</span>
-                    <span>{{size}}</span>
-                    <span>{{displayTime}}</span>
-                    <span class="eruda-blue">{{url}}</span>
-                </li>
-            {{/each}}
-        {{else}}
-            <li><span>Empty</span></li>
-        {{/if}}
-    </ul>
-{{/if}}
+    {{else}}
+        <li><span>Empty</span></li>
+    {{/if}}
+</ul>
