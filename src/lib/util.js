@@ -756,6 +756,57 @@ module.exports = (function ()
         return exports;
     })({});
 
+    /* ------------------------------ detectOs ------------------------------ */
+
+    _.detectOs = (function ()
+    {
+        /* Detect operating system using ua.
+         * 
+         * |Name                    |Type  |Desc                 |
+         * |------------------------|------|---------------------|
+         * |[ua=navigator.userAgent]|string|Browser userAgent    |
+         * |return                  |string|Operating system name|
+         * 
+         * Supported os: windows, os x, linux, ios, android, windows phone
+         * 
+         * ```javascript
+         * if (detectOs() === 'ios') 
+         * {
+         *     // Do something about ios...
+         * }
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isBrowser 
+         */
+
+        function exports(ua) 
+        {
+            ua = ua || (isBrowser ? navigator.userAgent : '');
+
+            ua = ua.toLowerCase();
+
+            if (detect('windows phone')) return 'windows phone';
+            if (detect('win')) return 'windows';
+            if (detect('android')) return 'android';
+            if (detect('ipad') || detect('iphone') || detect('ipod')) return 'ios';
+            if (detect('mac')) return 'os x';
+            if (detect('linux')) return 'linux';
+
+            function detect(keyword) { return ua.indexOf(keyword) > -1 }
+
+            return 'unknown';
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ optimizeCb ------------------------------ */
 
     var optimizeCb = _.optimizeCb = (function ()
@@ -5644,55 +5695,6 @@ module.exports = (function ()
             var idx = ua.indexOf(mark);
 
             if (idx > -1) return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ ready ------------------------------ */
-
-    _.ready = (function ()
-    {
-        /* Invoke callback when dom is ready, similar to jQuery ready.
-         *
-         * |Name|Type    |Desc             |
-         * |----|--------|-----------------|
-         * |fn  |function|Callback function|
-         *
-         * ```javascript
-         * ready(function ()
-         * {
-         *     // It's safe to manipulate dom here.
-         * });
-         * ```
-         */
-
-        /* module
-         * env: browser
-         * test: browser
-         */
-
-        var fns = [],
-            listener,
-            doc = document,
-            hack = doc.documentElement.doScroll,
-            domContentLoaded = 'DOMContentLoaded',
-            loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState);
-
-        if (!loaded)
-        {
-            doc.addEventListener(domContentLoaded, listener = function ()
-            {
-                doc.removeEventListener(domContentLoaded, listener);
-                loaded = 1;
-                /* eslint-disable no-cond-assign */
-                while (listener = fns.shift()) listener();
-            });
-        }
-
-        function exports(fn)
-        {
-            loaded ? setTimeout(fn, 0) : fns.push(fn)
         }
 
         return exports;

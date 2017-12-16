@@ -36,6 +36,9 @@
                     color: $blue;
                 }
             }
+            .device-key, .system-key {
+                width: 100px;
+            }
         }
     }
 } }

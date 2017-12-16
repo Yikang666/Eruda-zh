@@ -1,3 +1,7 @@
+import util from '../lib/util';
+
+let browser = util.detectBrowser();
+
 export default [
     {
         name: 'Location',
@@ -12,7 +16,7 @@ export default [
         val: `<table>
                   <tbody>
                       <tr>
-                          <td>screen</td>
+                          <td class="eruda-device-key">screen</td>
                           <td>${screen.width} * ${screen.height}</td>
                       </tr>
                       <tr>
@@ -26,6 +30,21 @@ export default [
                   </tbody>
               </table>`
 
+    },
+    {
+        name: 'System',
+        val: `<table>
+                  <tbody>
+                      <tr>
+                          <td class="eruda-system-key">os</td>
+                          <td>${util.detectOs()}</td>
+                      </tr>
+                      <tr>
+                          <td>browser</td>
+                          <td>${browser.name + ' ' + browser.version}</td>
+                      </tr>
+                  </tbody>  
+              </table>`
     },
     {
         name: 'About',

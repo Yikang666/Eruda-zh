@@ -19,7 +19,6 @@
   "eustia": {
     "eruda": {
       "files": "src/**/*.js",
-      "ignore": "**/Info/defInfo.js",
       "output": "src/lib/util.js",
       "exclude": [
         "createCfg"

@@ -20,9 +20,14 @@ describe('info', function ()
             expect($tool.find('.eruda-content').eq(2)).toContainText(window.innerWidth);
         });
 
+        it('system', function ()
+        {
+            expect($tool.find('.eruda-content').eq(3)).toContainText('os');
+        });
+
         it('about', function () 
         {
-            expect($tool.find('.eruda-content').eq(3)).toHaveText(/Eruda v[\d.]+/);
+            expect($tool.find('.eruda-content').eq(4)).toHaveText(/Eruda v[\d.]+/);
         });
     });
 
