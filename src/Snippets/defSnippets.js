@@ -76,6 +76,14 @@ export default [
         desc: 'Show performance and resource timing'
     },
     {
+        name: 'Load Memory Plugin',
+        fn() 
+        {
+            loadPlugin('memory');
+        },
+        desc: 'Display memory'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -171,5 +179,6 @@ function loadPlugin(name)
 let pluginVersion = {
     fps: '1.0.2',
     features: '1.0.2',
-    timing:'1.0.1'
+    timing: '1.0.1',
+    memory: '1.0.1'
 };

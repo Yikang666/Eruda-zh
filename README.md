@@ -110,10 +110,11 @@ It is possible to enhance Eruda with more features by writing plugins. Check sou
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 * [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
 * [eruda-timing](https://github.com/liriliri/eruda-timing): Show performance and resource timing.
+* [eruda-memory](https://github.com/liriliri/eruda-memory): Display page memory info.
 
 When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
 
-## Contribution
+## Contributio
 
 Read [Contributing Guide](doc/CONTRIBUTING.md) for development setup instructions.
 
