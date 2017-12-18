@@ -1009,6 +1009,24 @@ if (browser.name === 'ie' && browser.version < 9)
 }
 ```
 
+## detectOs 
+
+Detect operating system using ua.
+
+|Name                    |Type  |Desc                 |
+|------------------------|------|---------------------|
+|[ua=navigator.userAgent]|string|Browser userAgent    |
+|return                  |string|Operating system name|
+
+Supported os: windows, os x, linux, ios, android, windows phone
+
+```javascript
+if (detectOs() === 'ios')
+{
+    // Do something about ios...
+}
+```
+
 ## each 
 
 Iterate over elements of collection and invokes iteratee for each element.
@@ -1855,21 +1873,6 @@ Stringify an object into a query string.
 query.parse('foo=bar&eruda=true'); // -> {foo: 'bar', eruda: 'true'}
 query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
 query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
-```
-
-## ready 
-
-Invoke callback when dom is ready, similar to jQuery ready.
-
-|Name|Type    |Desc             |
-|----|--------|-----------------|
-|fn  |function|Callback function|
-
-```javascript
-ready(function ()
-{
-    // It's safe to manipulate dom here.
-});
 ```
 
 ## repeat 

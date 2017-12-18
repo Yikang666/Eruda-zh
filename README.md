@@ -105,7 +105,7 @@ eruda.init({
 
 ## Plugins
 
-It is possible to enhance Eruda with more features by writing plugins. Check source code of plugins below to learn how to write your own custom tool panels.
+It is possible to enhance Eruda with more features by writing plugins. Check source code of plugins below to learn how to write your own custom tool panels. Besides, [eruda-plugin](https://github.com/liriliri/eruda-plugin) is available for plugin initialization.
 
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 * [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
@@ -114,7 +114,7 @@ It is possible to enhance Eruda with more features by writing plugins. Check sou
 
 When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
 
-## Contributio
+## Contribution
 
 Read [Contributing Guide](doc/CONTRIBUTING.md) for development setup instructions.
 
