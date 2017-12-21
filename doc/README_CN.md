@@ -20,7 +20,7 @@
 [codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
 [license-image]: https://img.shields.io/npm/l/eruda.svg
 
-Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools 的迷你版，其主要功能包括：捕获 console 日志、检查元素状态、显示性能指标、捕获XHR请求、显示本地存储和 Cookie 信息、浏览器特性检测等等。
+Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools 的迷你版，其主要功能包括：捕获 console 日志、检查元素状态、捕获XHR请求、显示本地存储和 Cookie 信息等等。
 
 ## 功能清单
 
@@ -47,7 +47,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 通过CDN使用：
 
 ```html
-<script src="//cdn.bootcss.com/eruda/1.3.0/eruda.min.js"></script>
+<script src="//cdn.bootcss.com/eruda/1.3.2/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
