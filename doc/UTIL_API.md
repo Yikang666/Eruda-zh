@@ -1087,8 +1087,7 @@ escapeRegExp('[eris]'); // -> '\\[eris\\]'
 
 ## evalCss 
 
-dependencies
-toStr each filter
+No documentation.
 
 ## extend 
 
@@ -1171,15 +1170,17 @@ a.b = 2;
 console.log(a); // -> {b: 1}
 ```
 
+## fullUrl 
+
+No documentation.
+
 ## getFileName 
 
-dependencies
-last trim
+No documentation.
 
 ## getObjType 
 
-dependencies
-upperFirst
+No documentation.
 
 ## has 
 
@@ -1322,8 +1323,7 @@ console.log(isBrowser); // -> true if running in a browser
 
 ## isCrossOrig 
 
-dependencies
-startWith
+No documentation.
 
 ## isDate 
 
@@ -1442,13 +1442,45 @@ isNaN(0); // -> false
 isNaN(NaN); // -> true
 ```
 
+## isNative 
+
+Check if value is a native function.
+
+|Name  |Type   |Desc                              |
+|------|-------|----------------------------------|
+|value |*      |Value to check                    |
+|return|boolean|True if value is a native function|
+
+```javascript
+isNative(function () {}); // -> false
+isNative(Math.min); // -> true
+```
+
+## isNil 
+
+Check if value is null or undefined, the same as value == null.
+
+|Name  |Type   |Desc                              |
+|------|-------|----------------------------------|
+|value |*      |Value to check                    |
+|return|boolean|True if value is null or undefined|
+
+```javascript
+isNil(null); // -> true
+isNil(void 0); // -> true
+isNil(undefined); // -> true
+isNil(false); // -> false
+isNil(0); // -> false
+isNil([]); // -> false
+```
+
 ## isNull 
 
 Check if value is an Null.
 
-|Name  |Type   |Desc                   |
-|------|-------|-----------------------|
-|value |*      |Value to check         |
+|Name  |Type   |Desc                    |
+|------|-------|------------------------|
+|value |*      |Value to check          |
 |return|boolean|True if value is an Null|
 
 ```javascript
@@ -1844,8 +1876,7 @@ console.log(perfNow() - start);
 
 ## pxToNum 
 
-dependencies
-toNum
+No documentation.
 
 ## query 
 
@@ -1949,8 +1980,7 @@ safeGet(obj, 'a.b'); // -> undefined
 
 ## safeStorage 
 
-dependencies
-isUndef memStorage
+No documentation.
 
 ## slice 
 
@@ -2089,6 +2119,20 @@ Convert value to a number.
 
 ```javascript
 toNum('5'); // -> 5
+```
+
+## toSrc 
+
+Convert function to its source code.
+
+|Name  |Type    |Desc               |
+|------|--------|-------------------|
+|fn    |function|Function to convert|
+|return|string  |Source code        |
+
+```javascript
+toSrc(Math.min); // -> 'function min() { [native code] }'
+toSrc(function () {}) // -> 'function () { }'
 ```
 
 ## toStr 

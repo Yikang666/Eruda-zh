@@ -23,7 +23,7 @@
       "exclude": [
         "createCfg"
       ],
-      "format": "commonjs"
+      "format": "es"
     },
     "test": {
       "files": [

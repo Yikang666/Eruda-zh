@@ -10,3 +10,4 @@ eruda.js.map
 /script/icomoon/
 /src/**/*.js.map
 npm-debug.log
+package-lock.json

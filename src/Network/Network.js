@@ -1,5 +1,6 @@
 import Tool from '../DevTools/Tool';
-import Request from './Request';
+import XhrRequest from './XhrRequest';
+import FetchRequest from './FetchRequest';
 import util from '../lib/util';
 
 export default class Network extends Tool
@@ -13,6 +14,8 @@ export default class Network extends Tool
         this.name = 'network';
         this._requests = {};
         this._tpl = require('./Network.hbs');
+        this._isFetchSupported = false;
+        if (window.fetch) this._isFetchSupported = util.isNative(window.fetch);
     }
     init($el, container)
     {
@@ -21,6 +24,7 @@ export default class Network extends Tool
         this._container = container;
         this._bindEvent();
         this.overrideXhr();
+        this.overrideFetch();
     }
     show()
     {
@@ -41,7 +45,7 @@ export default class Network extends Tool
         {
             let xhr = this;
 
-            let req = xhr.erudaRequest = new Request(xhr, method, url);
+            let req = xhr.erudaRequest = new XhrRequest(xhr, method, url);
 
             req.on('send', (id, data) => self._addReq(id, data));
             req.on('update', (id, data) => self._updateReq(id, data));
@@ -73,6 +77,32 @@ export default class Network extends Tool
         if (this._origOpen) winXhrProto.open = this._origOpen;
         if (this._origSend) winXhrProto.send = this._origSend;
     }
+    overrideFetch() 
+    {
+        if (!this._isFetchSupported) return;
+
+        let origFetch = this._origFetch = window.fetch;
+
+        let self = this;
+
+        window.fetch = function (...args) 
+        {
+            let req = new FetchRequest(...args);
+            req.on('send', (id, data) => self._addReq(id, data));
+            req.on('update', (id, data) => self._updateReq(id, data));
+
+            let fetchResult = origFetch(...args);
+            req.send(fetchResult);
+
+            return fetchResult;
+        };
+    }
+    restoreFetch() 
+    {
+        if (!this._isFetchSupported) return;
+
+        if (this._origFetch) window.fetch = this._origFetch;
+    }
     _addReq(id, data)
     {
         util.defaults(data, {
@@ -88,7 +118,6 @@ export default class Network extends Tool
             time: 0,
             resHeaders: {},
             resTxt: '',
-            xhr: {},
             done: false
         });
 
@@ -133,7 +162,7 @@ export default class Network extends Tool
                 subType: data.subType,
                 resHeaders: data.resHeaders
             });
-        }).on('click', '.eruda-clear-xhr', function ()
+        }).on('click', '.eruda-clear-request', function ()
         {
             self._requests = {};
             self._render();
@@ -155,6 +184,7 @@ export default class Network extends Tool
 
         util.evalCss.remove(this._style);
         this.restoreXhr();
+        this.restoreFetch();
     }
     _render()
     {

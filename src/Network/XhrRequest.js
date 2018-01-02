@@ -1,6 +1,7 @@
 import util from '../lib/util';
+import {getType, lenToUtf8Bytes} from './util';
 
-export default class Request extends util.Emitter
+export default class XhrRequest extends util.Emitter
 {
     constructor(xhr, method, url)
     {
@@ -8,7 +9,7 @@ export default class Request extends util.Emitter
 
         this._xhr = xhr;
         this._method = method;
-        this._url = fullUrl(url);
+        this._url = util.fullUrl(url);
         this._id = util.uniqId('request');
     }
     handleSend(data)
@@ -18,9 +19,8 @@ export default class Request extends util.Emitter
         this.emit('send', this._id, {
             name: util.getFileName(this._url),
             url: this._url,
-            data: data,
-            method: this._method,
-            xhr: this._xhr
+            data,
+            method: this._method
         });
     }
     handleHeadersReceived()
@@ -42,7 +42,7 @@ export default class Request extends util.Emitter
         let xhr = this._xhr,
             resType = xhr.responseType;
 
-        let resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
+        let resTxt = (resType === '' || resType === 'text' || resType === 'json') ? xhr.responseText : '';
 
         this.emit('update', this._id, {
             status: xhr.status,
@@ -51,6 +51,8 @@ export default class Request extends util.Emitter
             time: util.now(),
             resTxt: resTxt
         });
+
+        delete this._xhr;
     }
 }
 
@@ -75,17 +77,6 @@ function getHeaders(xhr)
     return ret;
 }
 
-function getType(contentType)
-{
-    if (!contentType) return 'unknown';
-
-    let type = contentType.split(';')[0].split('/');
-
-    return {
-        type: type[0],
-        subType: util.last(type)
-    };
-}
 
 function getSize(xhr, headersOnly, url)
 {
@@ -96,7 +87,7 @@ function getSize(xhr, headersOnly, url)
         if (!headersOnly)
         {
             let resType = xhr.responseType;
-            let resTxt = (resType === '' || resType === 'text') ? xhr.responseText : '';
+            let resTxt = (resType === '' || resType === 'text' || resType === 'json') ? xhr.responseText : '';
             if (resTxt) size = lenToUtf8Bytes(resTxt);
         }
     }
@@ -106,7 +97,8 @@ function getSize(xhr, headersOnly, url)
         getStrSize();
     } else
     {
-        try {
+        try 
+        {
             size = util.toNum(xhr.getResponseHeader('Content-Length'));
         } catch (e)
         {
@@ -117,22 +109,4 @@ function getSize(xhr, headersOnly, url)
     if (size === 0) getStrSize();
 
     return `${util.fileSize(size)}B`;
-}
-
-function lenToUtf8Bytes(str)
-{
-    let m = encodeURIComponent(str).match(/%[89ABab]/g);
-
-    return str.length + (m ? m.length : 0);
-}
-
-let origin = window.location.origin;
-
-function fullUrl(url)
-{
-    if (util.startWith(url, 'http')) return url;
-
-    if (!util.startWith(url, '/')) url = '/' + url;
-
-    return origin + url;
 }
