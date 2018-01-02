@@ -100,5 +100,5 @@ eruda.init({
 如果想在其它页面尝试，请在浏览器地址栏上输入以下代码。
 
 ```javascript
-javascript:(function () { var script = document.createElement('script'); script.src="http://eruda.liriliri.io/eruda.min.js"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 ```
