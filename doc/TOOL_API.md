@@ -4,7 +4,7 @@ Each default tool provided by eruda can be accessed by `eruda.get('Tool Name')`.
 
 ## Console
 
-Display console logs. Implementation detail follows the [console api spec](https://github.com/DeveloperToolsWG/console-object/blob/master/api.md).
+Display console logs. Implementation detail follows the [console api spec](https://console.spec.whatwg.org/).
 
 ### Config
 
