@@ -1,6 +1,6 @@
-import util from '../lib/util';
+import {detectBrowser, detectOs} from '../lib/util';
 
-let browser = util.detectBrowser();
+let browser = detectBrowser();
 
 export default [
     {
@@ -37,7 +37,7 @@ export default [
                   <tbody>
                       <tr>
                           <td class="eruda-system-key">os</td>
-                          <td>${util.detectOs()}</td>
+                          <td>${detectOs()}</td>
                       </tr>
                       <tr>
                           <td>browser</td>

@@ -1,7 +1,19 @@
-import util from '../lib/util';
 import {getType, lenToUtf8Bytes} from './util';
+import {
+    Emitter, 
+    fullUrl, 
+    uniqId, 
+    isStr, 
+    getFileName, 
+    now,
+    each,
+    trim,
+    isCrossOrig,
+    toNum,
+    fileSize
+} from '../lib/util';
 
-export default class XhrRequest extends util.Emitter
+export default class XhrRequest extends Emitter
 {
     constructor(xhr, method, url)
     {
@@ -9,15 +21,15 @@ export default class XhrRequest extends util.Emitter
 
         this._xhr = xhr;
         this._method = method;
-        this._url = util.fullUrl(url);
-        this._id = util.uniqId('request');
+        this._url = fullUrl(url);
+        this._id = uniqId('request');
     }
     handleSend(data)
     {
-        if (!util.isStr(data)) data = '';
+        if (!isStr(data)) data = '';
 
         this.emit('send', this._id, {
-            name: util.getFileName(this._url),
+            name: getFileName(this._url),
             url: this._url,
             data,
             method: this._method
@@ -33,7 +45,7 @@ export default class XhrRequest extends util.Emitter
             type: type.type,
             subType: type.subType,
             size: getSize(xhr, true, this._url),
-            time: util.now(),
+            time: now(),
             resHeaders: getHeaders(xhr)
         });
     }
@@ -48,7 +60,7 @@ export default class XhrRequest extends util.Emitter
             status: xhr.status,
             done: true,
             size: getSize(xhr, false, this._url),
-            time: util.now(),
+            time: now(),
             resTxt: resTxt
         });
 
@@ -63,15 +75,15 @@ function getHeaders(xhr)
 
     let ret = {};
 
-    util.each(lines, (line) =>
+    each(lines, (line) =>
     {
-        line = util.trim(line);
+        line = trim(line);
 
         if (line === '') return;
 
         let [key, val] = line.split(':', 2);
 
-        ret[key] = util.trim(val);
+        ret[key] = trim(val);
     });
 
     return ret;
@@ -92,14 +104,14 @@ function getSize(xhr, headersOnly, url)
         }
     }
 
-    if (util.isCrossOrig(url))
+    if (isCrossOrig(url))
     {
         getStrSize();
     } else
     {
         try 
         {
-            size = util.toNum(xhr.getResponseHeader('Content-Length'));
+            size = toNum(xhr.getResponseHeader('Content-Length'));
         } catch (e)
         {
             getStrSize();
@@ -108,5 +120,5 @@ function getSize(xhr, headersOnly, url)
 
     if (size === 0) getStrSize();
 
-    return `${util.fileSize(size)}B`;
+    return `${fileSize(size)}B`;
 }

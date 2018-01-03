@@ -1,7 +1,7 @@
 import Tool from '../DevTools/Tool';
 import XhrRequest from './XhrRequest';
 import FetchRequest from './FetchRequest';
-import util from '../lib/util';
+import {evalCss, isNative, defaults, now, extend, isEmpty, $} from '../lib/util';
 
 export default class Network extends Tool
 {
@@ -9,13 +9,13 @@ export default class Network extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Network.scss'));
+        this._style = evalCss(require('./Network.scss'));
 
         this.name = 'network';
         this._requests = {};
         this._tpl = require('./Network.hbs');
         this._isFetchSupported = false;
-        if (window.fetch) this._isFetchSupported = util.isNative(window.fetch);
+        if (window.fetch) this._isFetchSupported = isNative(window.fetch);
     }
     init($el, container)
     {
@@ -105,7 +105,7 @@ export default class Network extends Tool
     }
     _addReq(id, data)
     {
-        util.defaults(data, {
+        defaults(data, {
             name: '',
             url: '',
             status: 'pending',
@@ -114,7 +114,7 @@ export default class Network extends Tool
             size: 0,
             data: '',
             method: 'GET',
-            startTime: util.now(),
+            startTime: now(),
             time: 0,
             resHeaders: {},
             resTxt: '',
@@ -131,7 +131,7 @@ export default class Network extends Tool
 
         if (!target) return;
 
-        util.extend(target, data);
+        extend(target, data);
 
         target.time = target.time - target.startTime;
         target.displayTime = formatTime(target.time);
@@ -149,7 +149,7 @@ export default class Network extends Tool
 
         $el.on('click', '.eruda-request', function ()
         {
-            let id = util.$(this).data('id'),
+            let id = $(this).data('id'),
                 data = self._requests[id];
 
             if (!data.done) return;
@@ -182,7 +182,7 @@ export default class Network extends Tool
     {
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this.restoreXhr();
         this.restoreFetch();
     }
@@ -192,7 +192,7 @@ export default class Network extends Tool
 
         let renderData = {};
 
-        if (!util.isEmpty(this._requests)) renderData.requests = this._requests;
+        if (!isEmpty(this._requests)) renderData.requests = this._requests;
 
         this._renderHtml(this._tpl(renderData));
     }

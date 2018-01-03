@@ -1,6 +1,6 @@
-import util from '../lib/util';
+import {Class} from '../lib/util';
 
-export default util.Class({
+export default Class({
     init($el)
     {
         this._$el = $el;

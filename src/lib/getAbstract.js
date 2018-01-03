@@ -1,5 +1,15 @@
 // Simple version for stringify, used for displaying object abstract.
-import util from './util';
+import {
+    escape, 
+    toStr, 
+    contain, 
+    startWith, 
+    escapeJsonStr,
+    each,
+    getObjType,
+    endWith,
+    isEmpty
+} from './util';
 
 // Modified from: https://jsconsole.com/
 export default function getAbstract(obj, {
@@ -29,7 +39,7 @@ export default function getAbstract(obj, {
         strWrapper = '<span style="color: #183691;">',
         boolWrapper = '<span style="color: #0086b3;">',
         specialWrapper = '<span style="color: #707d8b;">',
-        strEscape = str => util.escape(str),
+        strEscape = str => escape(str),
         wrapperEnd = '</span>';
 
     let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd,
@@ -40,11 +50,11 @@ export default function getAbstract(obj, {
 
     function wrapStr(str)
     {
-        str = util.toStr(str);
+        str = toStr(str);
 
         str = str.replace(/\\/g, '');
 
-        if (util.contain(SPECIAL_VAL, str) || util.startWith(str, 'Array['))
+        if (contain(SPECIAL_VAL, str) || startWith(str, 'Array['))
         {
             return specialWrapper + strEscape(str) + wrapperEnd;
         }
@@ -59,7 +69,7 @@ export default function getAbstract(obj, {
             objEllipsis = '...';
             return;
         }
-        let key = wrapKey(util.escapeJsonStr(name));
+        let key = wrapKey(escapeJsonStr(name));
 
         if (!getterVal)
         {
@@ -96,10 +106,10 @@ export default function getAbstract(obj, {
         json = wrapStr('[circular]');
     } else if (isStr)
     {
-        json = wrapStr(util.escapeJsonStr(obj));
+        json = wrapStr(escapeJsonStr(obj));
     } else if (isRegExp)
     {
-        json = wrapRegExp(util.escapeJsonStr(obj.toString()));
+        json = wrapRegExp(escapeJsonStr(obj.toString()));
     } else if (isFn)
     {
         json = wrapStr('function');
@@ -108,7 +118,7 @@ export default function getAbstract(obj, {
         if (doStringify)
         {
             json = '[';
-            util.each(obj, val => parts.push(`${getAbstract(val, passOpts)}`));
+            each(obj, val => parts.push(`${getAbstract(val, passOpts)}`));
             json += parts.join(', ') + ']';
         } else
         {
@@ -126,16 +136,16 @@ export default function getAbstract(obj, {
         {
             i = 1;
             json = '{ ';
-            util.each(names, objIteratee);
+            each(names, objIteratee);
             json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
         } else
         {
-            json = util.getObjType(obj);
+            json = getObjType(obj);
         }
     } else if (isNum)
     {
         json = obj + '';
-        if (util.endWith(json, 'Infinity') || json === 'NaN')
+        if (endWith(json, 'Infinity') || json === 'NaN')
         {
             json = `"${json}"`;
         } else
@@ -167,11 +177,11 @@ export default function getAbstract(obj, {
                 i = 1;
                 json = '{ ';
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
-                util.each(names, objIteratee);
+                each(names, objIteratee);
                 json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
             } else
             {
-                json = util.getObjType(obj);
+                json = getObjType(obj);
             }
         } catch (e)
         {
@@ -186,7 +196,7 @@ const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'function'];
 
 function canBeProto(obj)
 {
-    let emptyObj = util.isEmpty(Object.getOwnPropertyNames(obj)),
+    let emptyObj = isEmpty(Object.getOwnPropertyNames(obj)),
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
@@ -197,7 +207,7 @@ function moveFnToTail(parts)
     let front = [],
         tail = [];
 
-    util.each(parts, val =>
+    each(parts, val =>
     {
         val.indexOf('function') > -1 ? tail.push(val) : front.push(val);
     });

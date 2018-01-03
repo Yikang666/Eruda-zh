@@ -1,15 +1,15 @@
-import util from '../lib/util';
 import Draggabilly from 'draggabilly';
 import emitter from '../lib/emitter';
 import Settings from '../Settings/Settings';
+import {Emitter, evalCss, nextTick, pxToNum, orientation} from '../lib/util';
 
-export default class EntryBtn extends util.Emitter
+export default class EntryBtn extends Emitter
 {
     constructor($container)
     {
         super();
 
-        this._style = util.evalCss(require('./EntryBtn.scss'));
+        this._style = evalCss(require('./EntryBtn.scss'));
 
         this._$container = $container;
         this._appendTpl();
@@ -27,7 +27,7 @@ export default class EntryBtn extends util.Emitter
     }
     destroy() 
     {
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this._unregisterListener();
         this._$el.remove();
     }
@@ -44,7 +44,7 @@ export default class EntryBtn extends util.Emitter
     }
     _registerListener() 
     {
-        this._scaleListener = () => util.nextTick(() => 
+        this._scaleListener = () => nextTick(() => 
         {
             if (this._isOutOfRange()) this._setPos();
         });
@@ -93,15 +93,15 @@ export default class EntryBtn extends util.Emitter
             if (cfg.get('rememberPos'))
             {
                 cfg.set('pos', {
-                    x: util.pxToNum(this._$el.css('left')),
-                    y: util.pxToNum(this._$el.css('top'))
+                    x: pxToNum(this._$el.css('left')),
+                    y: pxToNum(this._$el.css('top'))
                 });
             }
 
             $el.rmClass('eruda-active');
         });
 
-        util.orientation.on('change', () => this._setPos(true));
+        orientation.on('change', () => this._setPos(true));
         window.addEventListener('resize', () => this._setPos());
     }
     _makeDraggable()

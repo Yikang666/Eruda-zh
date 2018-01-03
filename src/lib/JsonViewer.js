@@ -1,10 +1,25 @@
-import util from './util';
+import {
+    evalCss, 
+    $, 
+    isStr, 
+    startWith, 
+    trim, 
+    isArr,
+    contain,
+    isObj,
+    uniqId,
+    upperFirst,
+    isNum,
+    isBool,
+    escape,
+    toStr
+} from './util';
 
 export default class JsonViewer
 {
     constructor(data, $el)
     {
-        util.evalCss(require('./json.scss'));
+        evalCss(require('./json.scss'));
 
         this._data = [data];
         this._$el = $el;
@@ -23,9 +38,9 @@ export default class JsonViewer
 
         this._$el.on('click', 'li', function (e)
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 circularId = $this.data('object-id'),
-                $firstSpan = util.$(this).find('span').eq(0);
+                $firstSpan = $(this).find('span').eq(0);
 
             if ($this.data('first-level')) return;
             if (circularId)
@@ -63,7 +78,7 @@ function jsonToHtml(data, map, firstLevel)
         if (key === 'erudaObjAbstract' ||
             key === 'erudaCircular' ||
             key === 'erudaId' ||
-            (util.isStr(val) && util.startWith(val, 'erudaJson'))) continue;
+            (isStr(val) && startWith(val, 'erudaJson'))) continue;
 
         if (Object.hasOwnProperty.call(data, key)) ret += createEl(key, val, map, firstLevel);
     }
@@ -78,20 +93,20 @@ function createEl(key, val, map, firstLevel = false)
         id;
 
     if (key === 'erudaProto') key = '__proto__';
-    if (util.startWith(key, 'erudaUnenumerable'))
+    if (startWith(key, 'erudaUnenumerable'))
     {
-        key = util.trim(key.replace('erudaUnenumerable', ''));
+        key = trim(key.replace('erudaUnenumerable', ''));
         isUnenumerable = true;
     }
 
-    if (util.isArr(val)) type = 'array';
+    if (isArr(val)) type = 'array';
 
     function wrapKey(key)
     {
         if (firstLevel) return '';
 
         let keyClass = 'eruda-key';
-        if (isUnenumerable || util.contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
+        if (isUnenumerable || contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
 
         return `<span class="${keyClass}">${encode(key)}</span>: `;
     }
@@ -103,19 +118,19 @@ function createEl(key, val, map, firstLevel = false)
                    <span class="eruda-null">null</span>
                </li>`;
     }
-    if (util.isObj(val))
+    if (isObj(val))
     {
         if (val.erudaId)
         {
             id = val.erudaId;
         } else
         {
-            id = util.uniqId('erudaJson');
+            id = uniqId('erudaJson');
             val.erudaId = id;
         }
         let circularId = val.erudaCircular;
         if (id) map[id] = val;
-        let objAbstract = val['erudaObjAbstract'] || util.upperFirst(type);
+        let objAbstract = val['erudaObjAbstract'] || upperFirst(type);
 
         let obj = `<li ${firstLevel ? 'data-first-level="true"' : ''} ${'data-object-id="' + (circularId ? circularId : id) + '"'}>
                        <span class="${firstLevel ? '' : 'eruda-expanded eruda-collapsed'}"></span>
@@ -128,14 +143,14 @@ function createEl(key, val, map, firstLevel = false)
 
         return obj + '</ul><span class="eruda-close"></span></li>';
     }
-    if (util.isNum(val) || util.isBool(val))
+    if (isNum(val) || isBool(val))
     {
         return `<li>
                    ${wrapKey(key)}
                    <span class="eruda-${typeof val}">${encode(val)}</span>
                 </li>`;
     }
-    if (util.isStr(val) && util.startWith(val, 'function'))
+    if (isStr(val) && startWith(val, 'function'))
     {
         return `<li>
                    ${wrapKey(key)}
@@ -158,4 +173,4 @@ function createEl(key, val, map, firstLevel = false)
 
 const LIGHTER_KEY = ['__proto__'];
 
-let encode = str => util.escape(util.toStr(str));
+let encode = str => escape(toStr(str));

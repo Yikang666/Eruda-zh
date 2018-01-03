@@ -1,4 +1,18 @@
-import util from './util';
+import {
+    escapeJsonStr, 
+    toStr, 
+    each, 
+    endWith,
+    contain,
+    filter,
+    isEmpty,
+    isArr,
+    isFn,
+    isRegExp,
+    uniqId,
+    last,
+    extend
+} from './util';
 
 // Modified from: https://jsconsole.com/
 export default function stringify(obj, {
@@ -25,8 +39,8 @@ export default function stringify(obj, {
     let passOpts = {visitor, getterVal, unenumerable, level: level + 1},
         passProtoOpts = {visitor, getterVal, topObj, unenumerable, level: level + 1};
 
-    let wrapKey = key => `"${util.escapeJsonStr(key)}"`,
-        wrapStr = str => `"${util.escapeJsonStr(util.toStr(str))}"`;
+    let wrapKey = key => `"${escapeJsonStr(key)}"`,
+        wrapStr = str => `"${escapeJsonStr(toStr(str))}"`;
 
     type = getType(obj);
 
@@ -80,13 +94,13 @@ export default function stringify(obj, {
         });
         parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`);
         if (!circularMarker) parts.push(`"erudaId": "${id}"`);
-        util.each(names, objIteratee);
+        each(names, objIteratee);
         if (proto) parts.push(proto);
         json += parts.join(', ') + ' }';
     } else if (isNum)
     {
         json = obj + '';
-        if (util.endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
+        if (endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
     } else if (isBool)
     {
         json = obj ? 'true' : 'false';
@@ -144,7 +158,7 @@ export default function stringify(obj, {
                     proto = `${wrapKey('erudaProto')}: ${wrapStr(e.message)}`;
                 }
             }
-            util.each(names, objIteratee);
+            each(names, objIteratee);
             if (proto) parts.push(proto);
             json += parts.join(', ') + ' }';
         } catch (e)
@@ -155,7 +169,7 @@ export default function stringify(obj, {
 
     function objIteratee(name)
     {
-        let unenumerable = !util.contain(keys, name) ? 'erudaUnenumerable ' : '',
+        let unenumerable = !contain(keys, name) ? 'erudaUnenumerable ' : '',
             key = wrapKey(unenumerable + name),
             getKey = wrapKey(unenumerable + 'get ' + name),
             setKey = wrapKey(unenumerable + 'set ' + name);
@@ -193,7 +207,7 @@ function getKeys(obj)
     let allKeys = Object.getOwnPropertyNames(obj),
         keys = Object.keys(obj).sort(sortObjName);
 
-    allKeys = keys.concat(util.filter(allKeys, val => !util.contain(keys, val)).sort(sortObjName));
+    allKeys = keys.concat(filter(allKeys, val => !contain(keys, val)).sort(sortObjName));
 
     return {keys, allKeys};
 }
@@ -259,7 +273,7 @@ function getFnAbstract(fn)
 
 function canBeProto(obj)
 {
-    let emptyObj = util.isEmpty(Object.getOwnPropertyNames(obj)),
+    let emptyObj = isEmpty(Object.getOwnPropertyNames(obj)),
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
@@ -267,9 +281,9 @@ function canBeProto(obj)
 
 function getObjAbstract(obj)
 {
-    if (util.isArr(obj)) return `Array[${obj.length}]`;
-    if (util.isFn(obj)) return getFnAbstract(obj);
-    if (util.isRegExp(obj)) return obj.toString();
+    if (isArr(obj)) return `Array[${obj.length}]`;
+    if (isFn(obj)) return getFnAbstract(obj);
+    if (isRegExp(obj)) return obj.toString();
 
     let type = getType(obj);
 
@@ -299,10 +313,10 @@ class Visitor
     }
     visit(val)
     {
-        let id = util.uniqId('erudaJson');
+        let id = uniqId('erudaJson');
 
         this._visited.push({id, val, abstract: {}});
-        this._map[id] = util.last(this._visited);
+        this._map[id] = last(this._visited);
 
         return id;
     }
@@ -319,7 +333,7 @@ class Visitor
     }
     update(id, data)
     {
-        util.extend(this._map[id], data);
+        extend(this._map[id], data);
     }
     updateAbstract(id, abstract)
     {

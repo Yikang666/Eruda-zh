@@ -1,6 +1,6 @@
 import Logger from './Logger';
 import Tool from '../DevTools/Tool';
-import util from '../lib/util';
+import {noop, evalCss, $} from '../lib/util';
 import emitter from '../lib/emitter';
 import Settings from '../Settings/Settings';
 
@@ -42,7 +42,7 @@ export default class Console extends Tool
 
         CONSOLE_METHOD.forEach(name =>
         {
-            let origin = origConsole[name] = util.noop;
+            let origin = origConsole[name] = noop;
             if (winConsole[name]) origin = origConsole[name] = winConsole[name].bind(winConsole);
 
             winConsole[name] = (...args) =>
@@ -88,7 +88,7 @@ export default class Console extends Tool
         this._logger.destroy();
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this.ignoreGlobalErr();
         this.restoreConsole();
         this._unregisterListener();
@@ -107,7 +107,7 @@ export default class Console extends Tool
     {
         let $el = this._$el;
 
-        this._style = util.evalCss(require('./Console.scss'));
+        this._style = evalCss(require('./Console.scss'));
         $el.append(require('./Console.hbs')());
 
         let _$inputContainer = $el.find('.eruda-js-input'),
@@ -127,7 +127,7 @@ export default class Console extends Tool
 
         logger.on('filter', filter => $filter.each(function ()
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 isMatch = $this.data('filter') === filter;
 
             $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
@@ -156,7 +156,7 @@ export default class Console extends Tool
         $control.on('click', '.eruda-clear-console', () => logger.clear())
                 .on('click', '.eruda-filter', function ()
                 {
-                    logger.filter(util.$(this).data('filter'));
+                    logger.filter($(this).data('filter'));
                 })
                 .on('click', '.eruda-help', () => logger.help());
 

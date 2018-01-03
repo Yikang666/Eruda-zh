@@ -1,14 +1,23 @@
-import util from '../lib/util';
 import {getType, lenToUtf8Bytes} from './util';
+import {
+    Emitter, 
+    fullUrl, 
+    uniqId, 
+    isStr, 
+    getFileName, 
+    now,
+    toNum,
+    fileSize
+} from '../lib/util';
 
-export default class FetchRequest extends util.Emitter 
+export default class FetchRequest extends Emitter 
 {
     constructor(url, options = {}) 
     {
         super();
 
-        this._url = util.fullUrl(url);
-        this._id = util.uniqId('request');
+        this._url = fullUrl(url);
+        this._id = uniqId('request');
         this._options = options;
         this._method = options.method || 'GET';
     }
@@ -16,11 +25,11 @@ export default class FetchRequest extends util.Emitter
     {
         let options = this._options;
 
-        let data = util.isStr(options.body) ? options.body : '';
+        let data = isStr(options.body) ? options.body : '';
 
         this._fetch = fetchResult;
         this.emit('send', this._id, {
-            name: util.getFileName(this._url),
+            name: getFileName(this._url),
             url: this._url,
             data,
             method: this._method
@@ -37,7 +46,7 @@ export default class FetchRequest extends util.Emitter
                 this.emit('update', this._id, {
                     type: type.type,
                     subType: type.subType,
-                    time: util.now(),
+                    time: now(),
                     size: getSize(res, resTxt),
                     resTxt: resTxt,
                     resHeaders: getHeaders(res),
@@ -59,13 +68,13 @@ function getSize(res, resTxt)
 
     if (contentLen) 
     {
-        size = util.toNum(contentLen); 
+        size = toNum(contentLen); 
     } else 
     {
         size = lenToUtf8Bytes(resTxt);
     }
 
-    return `${util.fileSize(size)}B`;
+    return `${fileSize(size)}B`;
 }
 
 function getHeaders(res) 

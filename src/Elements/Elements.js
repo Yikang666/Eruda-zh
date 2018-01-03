@@ -3,8 +3,24 @@ import CssStore from './CssStore';
 import stringify from '../lib/stringify';
 import Highlight from './Highlight';
 import Select from './Select';
-import util from '../lib/util';
 import Settings from '../Settings/Settings';
+import {
+    evalCss, 
+    $, 
+    keys, 
+    SafeMutationObserver, 
+    each,
+    isErudaEl,
+    toStr,
+    isEl,
+    isStr,
+    map,
+    escape,
+    startWith,
+    isFn,
+    isBool,
+    safeGet
+} from '../lib/util';
 
 export default class Elements extends Tool
 {
@@ -12,7 +28,7 @@ export default class Elements extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Elements.scss'));
+        this._style = evalCss(require('./Elements.scss'));
 
         this.name = 'elements';
         this._tpl = require('./Elements.hbs');
@@ -96,7 +112,7 @@ export default class Elements extends Tool
     {
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this._select.disable();
         this._highlight.destroy();
         this._disableObserver();
@@ -121,7 +137,7 @@ export default class Elements extends Tool
 
         this._$el.on('click', '.eruda-child', function ()
         {
-            let idx = util.$(this).data('idx'),
+            let idx = $(this).data('idx'),
                 curEl = self._curEl,
                 el = curEl.childNodes[idx];
 
@@ -151,7 +167,7 @@ export default class Elements extends Tool
             !isElExist(el) ? self._render() : self.set(el);
         }).on('click', '.eruda-listener-content', function ()
         {
-            let text = util.$(this).text(),
+            let text = $(this).text(),
                 sources = container.get('sources');
 
             if (sources)
@@ -173,7 +189,7 @@ export default class Elements extends Tool
             }
         }).on('click', '.eruda-parent', function ()
         {
-            let idx = util.$(this).data('idx'),
+            let idx = $(this).data('idx'),
                 curEl = self._curEl,
                 el = curEl.parentNode;
 
@@ -268,7 +284,7 @@ export default class Elements extends Tool
         ret.name = formatElName({tagName, id, className, attributes});
 
         let events = el.erudaEvents;
-        if (events && util.keys(events).length !== 0) ret.listeners = events;
+        if (events && keys(events).length !== 0) ret.listeners = events;
 
         if (needNoStyle(tagName)) return ret;
 
@@ -300,16 +316,16 @@ export default class Elements extends Tool
     }
     _initObserver()
     {
-        this._observer = new util.SafeMutationObserver(mutations =>
+        this._observer = new SafeMutationObserver(mutations =>
         {
-            util.each(mutations, mutation => this._handleMutation(mutation));
+            each(mutations, mutation => this._handleMutation(mutation));
         });
     }
     _handleMutation(mutation)
     {
         let i, len, node;
 
-        if (util.isErudaEl(mutation.target)) return;
+        if (isErudaEl(mutation.target)) return;
 
         if (mutation.type === 'attributes')
         {
@@ -369,7 +385,7 @@ export default class Elements extends Tool
 
 function processStyleRules(style)
 {
-    util.each(style, (val, key) => style[key] = processStyleRule(val));
+    each(style, (val, key) => style[key] = processStyleRule(val));
 }
 
 let regColor = /rgba?\((.*?)\)/g,
@@ -378,13 +394,13 @@ let regColor = /rgba?\((.*?)\)/g,
 function processStyleRule(val)
 {
     // For css custom properties, val is unable to retrieved.
-    val = util.toStr(val);
+    val = toStr(val);
 
     return val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&')
               .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`);
 }
 
-const isElExist = val => util.isEl(val) && val.parentNode;
+const isElExist = val => isEl(val) && val.parentNode;
 
 function formatElName(data, {noAttr = false} = {})
 {
@@ -394,9 +410,9 @@ function formatElName(data, {noAttr = false} = {})
 
     if (id !== '') ret += `#${id}`;
 
-    if (util.isStr(className))
+    if (isStr(className))
     {
-        util.each(className.split(/\s+/g), (val) =>
+        each(className.split(/\s+/g), (val) =>
         {
             if (val.trim() === '') return;
             ret += `.${val}`;
@@ -405,7 +421,7 @@ function formatElName(data, {noAttr = false} = {})
 
     if (!noAttr)
     {
-        util.each(attributes, (attr) =>
+        each(attributes, (attr) =>
         {
             let name = attr.name;
             if (name === 'id' || name === 'class' || name === 'style') return;
@@ -416,12 +432,12 @@ function formatElName(data, {noAttr = false} = {})
     return ret;
 }
 
-let formatAttr = attributes => util.map(attributes, attr =>
+let formatAttr = attributes => map(attributes, attr =>
 {
     let {name, value} = attr;
-    value = util.escape(value);
+    value = escape(value);
 
-    let isLink = (name === 'src' || name === 'href') && !util.startWith(value, 'data');
+    let isLink = (name === 'src' || name === 'href') && !startWith(value, 'data');
     if (isLink) value = wrapLink(value);
     if (name === 'style') value = processStyleRule(value);
 
@@ -448,7 +464,7 @@ function formatChildNodes(nodes)
             continue;
         }
 
-        let isSvg = !util.isStr(child.className);
+        let isSvg = !isStr(child.className);
 
         if (nodeType === 1 &&
             child.id !== 'eruda' &&
@@ -507,7 +523,7 @@ function rmDefComputedStyle(computedStyle)
 {
     let ret = {};
 
-    util.each(computedStyle, (val, key) =>
+    each(computedStyle, (val, key) =>
     {
         if (val === defComputedStyle[key]) return;
 
@@ -523,7 +539,7 @@ let needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
 
 function addEvent(el, type, listener, useCapture = false)
 {
-    if (!util.isEl(el) || !util.isFn(listener) || !util.isBool(useCapture)) return;
+    if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return;
 
     let events = el.erudaEvents = el.erudaEvents || {};
 
@@ -537,7 +553,7 @@ function addEvent(el, type, listener, useCapture = false)
 
 function rmEvent(el, type, listener, useCapture = false)
 {
-    if (!util.isEl(el) || !util.isFn(listener) || !util.isBool(useCapture)) return;
+    if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return;
 
     let events = el.erudaEvents;
 
@@ -555,9 +571,9 @@ function rmEvent(el, type, listener, useCapture = false)
     }
 
     if (listeners.length === 0) delete events[type];
-    if (util.keys(events).length === 0) delete el.erudaEvents;
+    if (keys(events).length === 0) delete el.erudaEvents;
 }
 
-let getWinEventProto = () => util.safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
+let getWinEventProto = () => safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
 
 let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;

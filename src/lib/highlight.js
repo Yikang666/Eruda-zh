@@ -1,7 +1,6 @@
-import util from '../lib/util';
+import {each} from '../lib/util';
 
 // https://github.com/trentrichardson/jQuery-Litelighter
-
 export default function highlight(str, lang)
 {
     lang = lang || 'js';
@@ -13,7 +12,7 @@ export default function highlight(str, lang)
     let subLangSi = 0,
         subLangs = [];
 
-    util.each(lang, (val) =>
+    each(lang, (val) =>
     {
         if (!val.language) return;
 
@@ -24,7 +23,7 @@ export default function highlight(str, lang)
         });
     });
 
-    util.each(lang, (val, key) =>
+    each(lang, (val, key) =>
     {
         if (language[val.language]) return;
 
@@ -54,13 +53,13 @@ export default function highlight(str, lang)
         return '';
     });
 
-    util.each(lang, (val, key) =>
+    each(lang, (val, key) =>
     {
         str = str.replace(new RegExp('___end' + key + '___', 'g'), '</span>')
                  .replace(new RegExp('___' + key + '___', 'g'), '<span style="' + style[val.style] + '">');
     });
 
-    util.each(lang, (val) =>
+    each(lang, (val) =>
     {
         if (!val.language) return;
 

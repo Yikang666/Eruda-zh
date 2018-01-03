@@ -1,10 +1,10 @@
-import util from '../lib/util';
+import {evalCss, $, pxToNum, isStr, each, trim} from '../lib/util';
 
 export default class Highlight
 {
     constructor($container)
     {
-        this._style = util.evalCss(require('./Highlight.scss'));
+        this._style = evalCss(require('./Highlight.scss'));
 
         this._isShow = false;
 
@@ -13,7 +13,7 @@ export default class Highlight
     }
     setEl(el)
     {
-        this._$target = util.$(el);
+        this._$target = $(el);
         this._target = el;
     }
     show()
@@ -24,7 +24,7 @@ export default class Highlight
     }
     destroy() 
     {
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     hide()
     {
@@ -39,7 +39,7 @@ export default class Highlight
 
         let computedStyle = getComputedStyle(this._target, '');
 
-        let getNumStyle = name => util.pxToNum(computedStyle.getPropertyValue(name));
+        let getNumStyle = name => pxToNum(computedStyle.getPropertyValue(name));
 
         let ml = getNumStyle('margin-left'),
             mr = getNumStyle('margin-right'),
@@ -97,7 +97,7 @@ export default class Highlight
     {
         $container.append(require('./Highlight.hbs')());
 
-        let $el = this._$el = util.$('.eruda-elements-highlight');
+        let $el = this._$el = $('.eruda-elements-highlight');
         this._$margin = $el.find('.eruda-margin');
         this._$padding = $el.find('.eruda-padding');
         this._$content = $el.find('.eruda-content');
@@ -114,11 +114,11 @@ function formatElName(el)
     if (id !== '') ret += `<span style="color:#ffab66">#${id}</span>`;
 
     let classes = '';
-    if (util.isStr(className))
+    if (isStr(className))
     {
-        util.each(className.split(/\s+/g), (val) =>
+        each(className.split(/\s+/g), (val) =>
         {
-            if (util.trim(val) === '') return;
+            if (trim(val) === '') return;
 
             classes += `.${val}`;
         });

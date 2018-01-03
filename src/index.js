@@ -9,11 +9,24 @@ import Resources from './Resources/Resources';
 import Info from './Info/Info';
 import Sources from './Sources/Sources';
 import Settings from './Settings/Settings';
-import util from './lib/util';
 import emitter from './lib/emitter';
 import config from './lib/config';
 import logger from './lib/logger';
 import extraUtil from './lib/extraUtil';
+import util from './lib/util';
+import {
+    isFn, 
+    evalCss, 
+    isNum, 
+    isMobile, 
+    viewportScale, 
+    detectBrowser,
+    $,
+    toArr,
+    upperFirst,
+    nextTick,
+    last
+} from './lib/util';
 
 module.exports = {
     init({container, tool, autoScale = true} = {})
@@ -47,7 +60,7 @@ module.exports = {
     {
         if (!this._checkInit()) return;
 
-        if (util.isFn(tool)) tool = tool(this);
+        if (isFn(tool)) tool = tool(this);
 
         this._devTools.add(tool);
 
@@ -85,11 +98,11 @@ module.exports = {
         delete this._entryBtn;
         this._unregisterListener();
         this._$el.remove();
-        util.evalCss.clear();
+        evalCss.clear();
     },
     scale(s) 
     {
-        if (util.isNum(s)) 
+        if (isNum(s)) 
         {
             this._scale = s;
             emitter.emit(emitter.SCALE, s);
@@ -100,9 +113,9 @@ module.exports = {
     },
     _autoScale() 
     {
-        if (!util.isMobile()) return;
+        if (!isMobile()) return;
 
-        this.scale(1 / util.viewportScale());
+        this.scale(1 / viewportScale());
     },
     _registerListener() 
     {
@@ -111,13 +124,13 @@ module.exports = {
 
         emitter.on(emitter.ADD, this._addListener);
         emitter.on(emitter.SHOW, this._showListener);
-        emitter.on(emitter.SCALE, util.evalCss.setScale);
+        emitter.on(emitter.SCALE, evalCss.setScale);
     },
     _unregisterListener() 
     {
         emitter.off(emitter.ADD, this._addListener);
         emitter.off(emitter.SHOW, this._showListener);
-        emitter.off(emitter.SCALE, util.evalCss.setScale);
+        emitter.off(emitter.SCALE, evalCss.setScale);
     },
     _checkInit() 
     {
@@ -139,9 +152,9 @@ module.exports = {
         });
 
         // http://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
-        if (util.detectBrowser().name === 'ios') el.setAttribute('ontouchstart', '');
+        if (detectBrowser().name === 'ios') el.setAttribute('ontouchstart', '');
 
-        this._$el = util.$(el);
+        this._$el = $(el);
     },
     _initDevTools()
     {
@@ -154,8 +167,8 @@ module.exports = {
 
         $el.append(`<div class="${className}"></div>`);
 
-        util.evalCss.container = $el.find(`.${className}`).get(0);
-        util.evalCss(
+        evalCss.container = $el.find(`.${className}`).get(0);
+        evalCss(
             require('./style/style.scss') +
             require('./style/reset.scss') +
             require('./style/icon.css')
@@ -178,27 +191,27 @@ module.exports = {
     },
     _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets'])
     {
-        tool = util.toArr(tool).reverse();
+        tool = toArr(tool).reverse();
 
         let devTools = this._devTools;
 
         tool.forEach(name =>
         {
-            let Tool = this[util.upperFirst(name)];
+            let Tool = this[upperFirst(name)];
             try 
             {
                 if (Tool) devTools.add(new Tool());
             } catch (e) 
             {
                 // Use nextTick to make sure it is possible to be caught by console panel.
-                util.nextTick(() => 
+                nextTick(() => 
                 {
                     logger.error(`Something wrong when initializing tool ${name}:`, e.message);
                 });
             }
         });
 
-        devTools.showTool(util.last(tool) || 'settings');
+        devTools.showTool(last(tool) || 'settings');
     }
 };
 

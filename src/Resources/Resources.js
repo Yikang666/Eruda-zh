@@ -1,6 +1,23 @@
 import Tool from '../DevTools/Tool';
-import util from '../lib/util';
 import Settings from '../Settings/Settings';
+import {
+    evalCss, 
+    $, 
+    unique, 
+    safeStorage, 
+    each,
+    isStr,
+    startWith,
+    trim,
+    orientation,
+    isCrossOrig,
+    ajax,
+    SafeMutationObserver,
+    isErudaEl,
+    toArr,
+    concat,
+    cookie
+} from '../lib/util';
 
 export default class Resources extends Tool
 {
@@ -8,7 +25,7 @@ export default class Resources extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Resources.scss'));
+        this._style = evalCss(require('./Resources.scss'));
 
         this.name = 'resources';
         this._localStoreData = [];
@@ -46,20 +63,20 @@ export default class Resources extends Tool
         super.destroy();
 
         this._disableObserver();
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     refreshScript()
     {
         let scriptData = [];
 
-        util.$('script').each(function ()
+        $('script').each(function ()
         {
             let src = this.src;
 
             if (src !== '') scriptData.push(src);
         });
 
-        scriptData = util.unique(scriptData);
+        scriptData = unique(scriptData);
 
         this._scriptData = scriptData;
 
@@ -69,14 +86,14 @@ export default class Resources extends Tool
     {
         let stylesheetData = [];
 
-        util.$('link').each(function ()
+        $('link').each(function ()
         {
             if (this.rel !== 'stylesheet') return;
 
             stylesheetData.push(this.href);
         });
 
-        stylesheetData = util.unique(stylesheetData);
+        stylesheetData = unique(stylesheetData);
 
         this._stylesheetData = stylesheetData;
 
@@ -96,7 +113,7 @@ export default class Resources extends Tool
     }
     _refreshStorage(type)
     {
-        let store = util.safeStorage(type, false);
+        let store = safeStorage(type, false);
 
         if (!store) return;
 
@@ -105,14 +122,14 @@ export default class Resources extends Tool
         // Mobile safari is not able to loop through localStorage directly.
         store = JSON.parse(JSON.stringify(store));
 
-        util.each(store, (val, key) =>
+        each(store, (val, key) =>
         {
             // According to issue 20, not all values are guaranteed to be string.
-            if (!util.isStr(val)) return;
+            if (!isStr(val)) return;
 
             if (this._hideErudaSetting)
             {
-                if (util.startWith(key, 'eruda') || key === 'active-eruda') return;
+                if (startWith(key, 'eruda') || key === 'active-eruda') return;
             }
 
             storeData.push({
@@ -128,9 +145,9 @@ export default class Resources extends Tool
         let cookieData = [];
 
         let cookie = document.cookie;
-        if (util.trim(cookie) !== '')
+        if (trim(cookie) !== '')
         {
-            util.each(document.cookie.split(';'), function (val, t)
+            each(document.cookie.split(';'), function (val, t)
             {
                 val = val.split('=');
                 try
@@ -141,7 +158,7 @@ export default class Resources extends Tool
                     t = val[1];
                 }
                 cookieData.push({
-                    key: util.trim(val[0]),
+                    key: trim(val[0]),
                     val: t
                 });
             });
@@ -155,9 +172,9 @@ export default class Resources extends Tool
     {
         let imageData = [];
 
-        util.$('img').each(function ()
+        $('img').each(function ()
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 src = $this.attr('src');
 
             if ($this.data('exclude') === 'true') return;
@@ -165,7 +182,7 @@ export default class Resources extends Tool
             imageData.push(src);
         });
 
-        imageData = util.unique(imageData);
+        imageData = unique(imageData);
         imageData.sort();
         this._imageData = imageData;
 
@@ -197,7 +214,7 @@ export default class Resources extends Tool
            .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
            .on('click', '.eruda-delete-storage', function ()
            {
-               let $this = util.$(this),
+               let $this = $(this),
                    key = $this.data('key'),
                    type = $this.data('type');
 
@@ -213,33 +230,33 @@ export default class Resources extends Tool
            })
            .on('click', '.eruda-delete-cookie', function ()
            {
-               let key = util.$(this).data('key');
+               let key = $(this).data('key');
 
                delCookie(key);
                self.refreshCookie()._render();
            })
            .on('click', '.eruda-clear-storage', function ()
            {
-               let type = util.$(this).data('type');
+               let type = $(this).data('type');
 
                if (type === 'local')
                {
-                   util.each(self._localStoreData, val => localStorage.removeItem(val.key));
+                   each(self._localStoreData, val => localStorage.removeItem(val.key));
                    self.refreshLocalStorage()._render();
                } else
                {
-                   util.each(self._sessionStoreData, val => sessionStorage.removeItem(val.key));
+                   each(self._sessionStoreData, val => sessionStorage.removeItem(val.key));
                    self.refreshSessionStorage()._render();
                }
            })
            .on('click', '.eruda-clear-cookie', () =>
            {
-               util.each(this._cookieData, val => delCookie(val.key));
+               each(this._cookieData, val => delCookie(val.key));
                this.refreshCookie()._render();
            })
            .on('click', '.eruda-storage-val', function ()
            {
-               let $this = util.$(this),
+               let $this = $(this),
                    key = $this.data('key'),
                    type = $this.data('type');
 
@@ -255,14 +272,14 @@ export default class Resources extends Tool
            })
            .on('click', '.eruda-img-link', function ()
            {
-               let src = util.$(this).attr('src');
+               let src = $(this).attr('src');
 
                showSources('img', src);
            })
            .on('click', '.eruda-css-link', linkFactory('css'))
            .on('click', '.eruda-js-link', linkFactory('js'));
 
-        util.orientation.on('change', () => this._render());
+        orientation.on('change', () => this._render());
 
         function showSources(type, data)
         {
@@ -283,11 +300,11 @@ export default class Resources extends Tool
                 if (!container.get('sources')) return;
                 e.preventDefault();
 
-                let url = util.$(this).attr('href');
+                let url = $(this).attr('href');
 
-                if (!util.isCrossOrig(url))
+                if (!isCrossOrig(url))
                 {
-                    return util.ajax({
+                    return ajax({
                         url,
                         success: data =>
                         {
@@ -366,10 +383,10 @@ export default class Resources extends Tool
     }
     _initObserver()
     {
-        this._observer = new util.SafeMutationObserver(mutations =>
+        this._observer = new SafeMutationObserver(mutations =>
         {
             let needToRender = false;
-            util.each(mutations, mutation => 
+            each(mutations, mutation => 
             {
                 if (this._handleMutation(mutation)) needToRender = true;
             });
@@ -378,7 +395,7 @@ export default class Resources extends Tool
     }
     _handleMutation(mutation) 
     {
-        if (util.isErudaEl(mutation.target)) return;
+        if (isErudaEl(mutation.target)) return;
         
         let checkEl = el =>
         {
@@ -399,8 +416,8 @@ export default class Resources extends Tool
         } else if (mutation.type === 'childList') 
         {
             if (checkEl(mutation.target)) return true;
-            let nodes = util.toArr(mutation.addedNodes);
-            nodes = util.concat(nodes, util.toArr(mutation.removedNodes));
+            let nodes = toArr(mutation.addedNodes);
+            nodes = concat(nodes, toArr(mutation.removedNodes));
 
             for (let node of nodes) 
             {
@@ -480,9 +497,9 @@ function delCookie(key)
 
     function del(options = {})
     {
-        util.cookie.remove(key, options);
+        cookie.remove(key, options);
 
-        return !util.cookie.get(key);
+        return !cookie.get(key);
     }
 }
 

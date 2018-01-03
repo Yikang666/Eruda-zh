@@ -1,12 +1,28 @@
-import util from '../lib/util';
 import Log from './Log';
+import {
+    Emitter, 
+    evalCss, 
+    isNum, 
+    isUndef,
+    perfNow,
+    startWith,
+    escapeRegExp,
+    isStr,
+    extend,
+    uniqId,
+    isRegExp,
+    isFn,
+    stripHtmlTag,
+    loadJs,
+    $
+} from '../lib/util';
 
-export default class Logger extends util.Emitter
+export default class Logger extends Emitter
 {
     constructor($el, container)
     {
         super();
-        this._style = util.evalCss(require('./Logger.scss'));
+        this._style = evalCss(require('./Logger.scss'));
 
         this._$el = $el;
         this._container = container;
@@ -29,7 +45,7 @@ export default class Logger extends util.Emitter
         let logs = this._logs;
 
         this._maxNum = val;
-        if (util.isNum(val) && logs.length > val)
+        if (isNum(val) && logs.length > val)
         {
             this._logs = logs.slice(logs.length - val);
             this.render();
@@ -49,7 +65,7 @@ export default class Logger extends util.Emitter
     }
     destroy() 
     {
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     filter(val)
     {
@@ -62,7 +78,7 @@ export default class Logger extends util.Emitter
     {
         let count = this._count;
 
-        !util.isUndef(count[label]) ? count[label]++ : count[label] = 1;
+        !isUndef(count[label]) ? count[label]++ : count[label] = 1;
 
         return this.html(`<div class="eruda-blue">${label}: ${count[label]}</div>`);
     }
@@ -104,7 +120,7 @@ export default class Logger extends util.Emitter
     }
     time(name)
     {
-        this._timer[name] = util.perfNow();
+        this._timer[name] = perfNow();
 
         return this;
     }
@@ -115,7 +131,7 @@ export default class Logger extends util.Emitter
         if (!startTime) return;
         delete this._timer[name];
 
-        return this.html(`<div class="eruda-blue">${name}: ${util.perfNow() - startTime}ms</div>`);
+        return this.html(`<div class="eruda-blue">${name}: ${perfNow() - startTime}ms</div>`);
     }
     clear()
     {
@@ -138,14 +154,14 @@ export default class Logger extends util.Emitter
     }
     input(jsCode)
     {
-        if (util.startWith(jsCode, ':'))
+        if (startWith(jsCode, ':'))
         {
             this._runCmd(jsCode.slice(1));
 
             return this;
-        } else if (util.startWith(jsCode, '/'))
+        } else if (startWith(jsCode, '/'))
         {
-            return this.filter(new RegExp(util.escapeRegExp(jsCode.slice(1))));
+            return this.filter(new RegExp(escapeRegExp(jsCode.slice(1))));
         }
 
         this.insert({
@@ -212,9 +228,9 @@ export default class Logger extends util.Emitter
 
         let isAtBottom = (el.scrollTop === el.scrollHeight - el.offsetHeight);
 
-        let options = util.isStr(type) ? {type, args} : type;
-        util.extend(options, {
-            id: util.uniqId('log'),
+        let options = isStr(type) ? {type, args} : type;
+        extend(options, {
+            id: uniqId('log'),
             displayHeader: this._displayHeader
         });
 
@@ -261,14 +277,14 @@ export default class Logger extends util.Emitter
 
         if (filter === 'all') return logs;
 
-        let isRegExp = util.isRegExp(filter),
-            isFn = util.isFn(filter);
+        let isFilterRegExp = isRegExp(filter),
+            isFilterFn = isFn(filter);
 
         return logs.filter(log =>
         {
             if (log.ignoreFilter) return true;
-            if (isFn) return filter(log);
-            if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
+            if (isFilterFn) return filter(log);
+            if (isFilterRegExp) return filter.test(stripHtmlTag(log.formattedMsg));
             return log.type === filter;
         });
     }
@@ -278,18 +294,18 @@ export default class Logger extends util.Emitter
 
         if (filter === 'all') return true;
 
-        let isRegExp = util.isRegExp(filter),
-            isFn = util.isFn(filter);
+        let isFilterRegExp = isRegExp(filter),
+            isFilterFn = isFn(filter);
 
         if (log.ignoreFilter) return true;
-        if (isFn) return filter(log);
-        if (isRegExp) return filter.test(util.stripHtmlTag(log.formattedMsg));
+        if (isFilterFn) return filter(log);
+        if (isFilterRegExp) return filter.test(stripHtmlTag(log.formattedMsg));
 
         return log.type === filter;
     }
     _loadJs(name)
     {
-        util.loadJs(libraries[name], (result) =>
+        loadJs(libraries[name], (result) =>
         {
             if (result) return this.log(`${name} is loaded`);
 
@@ -312,7 +328,7 @@ export default class Logger extends util.Emitter
 
         this._$el.on('click', '.eruda-log-item', function ()
         {
-            let $el = util.$(this),
+            let $el = $(this),
                 id = $el.data('id'),
                 type = $el.data('type'),
                 logs = self._logs,

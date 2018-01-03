@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool';
 import defSnippets from './defSnippets';
-import util from '../lib/util';
+import {evalCss, $, each} from '../lib/util';
 
 export default class Snippets extends Tool
 {
@@ -8,7 +8,7 @@ export default class Snippets extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Snippets.scss'));
+        this._style = evalCss(require('./Snippets.scss'));
 
         this.name = 'snippets';
 
@@ -26,7 +26,7 @@ export default class Snippets extends Tool
     {
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     add(name, fn, desc)
     {
@@ -62,7 +62,7 @@ export default class Snippets extends Tool
 
         this._$el.on('click', '.eruda-run', function I()
         {
-            let idx = util.$(this).data('idx');
+            let idx = $(this).data('idx');
 
             self._run(idx);
         });
@@ -73,7 +73,7 @@ export default class Snippets extends Tool
     }
     _addDefSnippets()
     {
-        util.each(defSnippets, (snippet) =>
+        each(defSnippets, (snippet) =>
         {
             this.add(snippet.name, snippet.fn, snippet.desc);
         });

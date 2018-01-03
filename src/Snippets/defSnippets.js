@@ -1,6 +1,19 @@
-import util from '../lib/util';
 import logger from '../lib/logger';
 import emitter from '../lib/emitter';
+import {
+    evalCss, 
+    Url, 
+    now, 
+    safeStorage, 
+    each, 
+    isStr, 
+    startWith,
+    has,
+    $,
+    isErudaEl,
+    upperFirst,
+    loadJs
+} from '../lib/util';
 
 let style = null;
 
@@ -11,12 +24,12 @@ export default [
         {
             if (style) 
             {
-                util.evalCss.remove(style);
+                evalCss.remove(style);
                 style = null;
                 return;
             }
 
-            style = util.evalCss(borderCss);
+            style = evalCss(borderCss);
         },
         desc: 'Add color borders to all elements'
     },
@@ -24,8 +37,8 @@ export default [
         name: 'Refresh Page',
         fn()
         {
-            let url = new util.Url();
-            url.setQuery('timestamp', util.now());
+            let url = new Url();
+            url.setQuery('timestamp', now());
 
             window.location.replace(url.toString());
         },
@@ -87,15 +100,15 @@ export default [
         name: 'Restore Settings',
         fn() 
         {
-            let store = util.safeStorage('local');
+            let store = safeStorage('local');
 
             let data = JSON.parse(JSON.stringify(store));
 
-            util.each(data, (val, key) => 
+            each(data, (val, key) => 
             {
-                if (!util.isStr(val)) return;
+                if (!isStr(val)) return;
 
-                if (util.startWith(key, 'eruda')) store.removeItem(key);
+                if (startWith(key, 'eruda')) store.removeItem(key);
             });
 
             window.location.reload();
@@ -105,11 +118,11 @@ export default [
 ];
 
 let borderCss = '',
-    styleName = util.has(document.documentElement.style, 'outline') ? 'outline' : 'border',
+    styleName = has(document.documentElement.style, 'outline') ? 'outline' : 'border',
     selector = 'html',
     colors = ['f5f5f5', 'dabb3a', 'abc1c7', '472936', 'c84941', '296dd1', '67adb4', '1ea061'];
 
-util.each(colors, (color, idx) =>
+each(colors, (color, idx) =>
 {
     selector += (idx === 0) ? '>*:not([class^="eruda-"])' : '>*';
 
@@ -123,7 +136,7 @@ function search(text)
 
     traverse(root, node =>
     {
-        let $node = util.$(node);
+        let $node = $(node);
 
         if (!$node.hasClass('eruda-search-highlight-block')) return;
 
@@ -138,7 +151,7 @@ function search(text)
         val = val.replace(regText, match => `<span class="eruda-keyword">${match}</span>`);
         if (val === node.nodeValue) return;
 
-        let $ret = util.$(document.createElement('div'));
+        let $ret = $(document.createElement('div'));
 
         $ret.html(val);
         $ret.addClass('eruda-search-highlight-block');
@@ -151,7 +164,7 @@ function traverse(root, processor)
 {
     let childNodes = root.childNodes;
 
-    if (util.isErudaEl(root)) return;
+    if (isErudaEl(root)) return;
 
     for (let i = 0, len = childNodes.length; i < len; i++)
     {
@@ -164,10 +177,10 @@ function traverse(root, processor)
 
 function loadPlugin(name) 
 {
-    let globalName = 'eruda' + util.upperFirst(name);
+    let globalName = 'eruda' + upperFirst(name);
     if (window[globalName]) return;
 
-    util.loadJs(`//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`, isLoaded =>
+    loadJs(`//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`, isLoaded =>
     {
         if (!isLoaded || !window[globalName]) return logger.error('Fail to load plugin ' + name);
 

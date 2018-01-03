@@ -1,4 +1,4 @@
-import util from '../lib/util';
+import {each} from '../lib/util';
 
 function formatStyle(style)
 {
@@ -44,11 +44,11 @@ export default class CssStore
     {
         let ret = [];
 
-        util.each(document.styleSheets, (styleSheet) =>
+        each(document.styleSheets, (styleSheet) =>
         {
             if (!styleSheet.cssRules) return;
 
-            util.each(styleSheet.cssRules, (cssRule) =>
+            each(styleSheet.cssRules, (cssRule) =>
             {
                 let matchesEl = false;
 

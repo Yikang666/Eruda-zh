@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool';
-import util from '../lib/util';
 import defInfo from './defInfo';
+import {evalCss, each} from '../lib/util';
 
 export default class Info extends Tool
 {
@@ -8,7 +8,7 @@ export default class Info extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Info.scss'));
+        this._style = evalCss(require('./Info.scss'));
 
         this.name = 'info';
         this._tpl = require('./Info.hbs');
@@ -24,7 +24,7 @@ export default class Info extends Tool
     {
         super.destroy();
         
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     add(name, val)
     {
@@ -57,7 +57,7 @@ export default class Info extends Tool
     }
     _addDefInfo()
     {
-        util.each(defInfo, info => this.add(info.name, info.val));
+        each(defInfo, info => this.add(info.name, info.val));
     }
     _render()
     {

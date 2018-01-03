@@ -1,7 +1,7 @@
-import util from './util';
+import {safeStorage, isObj, Emitter, isUndef, each} from './util';
 
 let localStore = {
-    _storage: util.safeStorage('local'),
+    _storage: safeStorage('local'),
     get(key)
     {
         let val = this._storage.getItem(key);
@@ -15,7 +15,7 @@ let localStore = {
     },
     set(key, val)
     {
-        if (util.isObj(val)) val = JSON.stringify(val);
+        if (isObj(val)) val = JSON.stringify(val);
 
         this._storage.setItem(key, val);
 
@@ -29,14 +29,14 @@ let localStore = {
     }
 };
 
-export default class Storage extends util.Emitter
+export default class Storage extends Emitter
 {
     constructor(name)
     {
         super();
         this._name = name;
         this._val = localStore.get(name);
-        if (!this._val || !util.isObj(this._val)) this._val = {};
+        if (!this._val || !isObj(this._val)) this._val = {};
     }
     save()
     {
@@ -46,7 +46,7 @@ export default class Storage extends util.Emitter
     }
     get(key)
     {
-        if (util.isUndef(key)) return this._val;
+        if (isUndef(key)) return this._val;
 
         return this._val[key];
     }
@@ -54,7 +54,7 @@ export default class Storage extends util.Emitter
     {
         let kv;
 
-        if (util.isObj(key))
+        if (isObj(key))
         {
             kv = key;
         } else
@@ -63,7 +63,7 @@ export default class Storage extends util.Emitter
             kv[key] = val;
         }
 
-        util.each(kv, (val, key) =>
+        each(kv, (val, key) =>
         {
             let preVal = this._val[key];
             this._val[key] = val;

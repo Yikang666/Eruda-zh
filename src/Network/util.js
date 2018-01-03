@@ -1,4 +1,4 @@
-import util from '../lib/util';
+import {last} from '../lib/util';
 
 export function getType(contentType)
 {
@@ -8,7 +8,7 @@ export function getType(contentType)
 
     return {
         type: type[0],
-        subType: util.last(type)
+        subType: last(type)
     };
 }
 

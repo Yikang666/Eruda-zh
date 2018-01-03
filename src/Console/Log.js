@@ -1,9 +1,30 @@
-import util from '../lib/util';
 import stringify from '../lib/stringify';
 import origGetAbstract from '../lib/getAbstract';
 import highlight from '../lib/highlight';
 import beautify from 'js-beautify';
 import JsonViewer from '../lib/JsonViewer';
+import {
+    isObj, 
+    isStr, 
+    isErr, 
+    wrap, 
+    defaults, 
+    dateFormat, 
+    getObjType,
+    isEl,
+    toStr,
+    toNum,
+    toInt,
+    escape,
+    isNull,
+    isUndef,
+    isFn,
+    toArr,
+    isArr,
+    unique,
+    contain,
+    isEmpty
+} from '../lib/util';
 
 export default class Log
 {
@@ -62,7 +83,7 @@ export default class Log
 
         for (let i = 0, len = args.length; i < len; i++)
         {
-            if (util.isObj(args[i])) return true;
+            if (isObj(args[i])) return true;
         }
 
         return false;
@@ -78,7 +99,7 @@ export default class Log
                 this.src = extractObj(args[0]);
             } else
             {
-                this.src = extractObj(args.length === 1 && util.isObj(args[0]) ? args[0] : args);
+                this.src = extractObj(args.length === 1 && isObj(args[0]) ? args[0] : args);
             }
         }
 
@@ -104,10 +125,10 @@ export default class Log
                 msg = formatMsg(args);
                 break;
             case 'error':
-                if (util.isStr(args[0]) && args.length !== 1) args = substituteStr(args);
+                if (isStr(args[0]) && args.length !== 1) args = substituteStr(args);
                 err = args[0];
                 icon = 'times-circle';
-                err = util.isErr(err) ? err : new Error(formatMsg(args));
+                err = isErr(err) ? err : new Error(formatMsg(args));
                 this.src = err;
                 msg = formatErr(err);
                 break;
@@ -177,7 +198,7 @@ Log.showGetterVal = false;
 Log.showUnenumerable = true;
 Log.showSrcInSources = false;
 
-let getAbstract = util.wrap(origGetAbstract, function (fn, obj)
+let getAbstract = wrap(origGetAbstract, function (fn, obj)
 {
     return fn(obj, {
         getterVal: Log.showGetterVal,
@@ -192,20 +213,20 @@ function formatTable(args)
         filter = args[1],
         columns = [];
 
-    if (util.isStr(filter)) filter = util.toArr(filter);
-    if (!util.isArr(filter)) filter = null;
+    if (isStr(filter)) filter = toArr(filter);
+    if (!isArr(filter)) filter = null;
 
-    if (!util.isArr(table)) return formatMsg(args);
+    if (!isArr(table)) return formatMsg(args);
 
     table.forEach(val =>
     {
-        if (!util.isObj(val)) return;
+        if (!isObj(val)) return;
         columns = columns.concat(Object.getOwnPropertyNames(val));
     });
-    columns = util.unique(columns);
+    columns = unique(columns);
     columns.sort();
-    if (filter) columns = columns.filter(val => util.contain(filter, val));
-    if (util.isEmpty(columns)) return formatMsg(args);
+    if (filter) columns = columns.filter(val => contain(filter, val));
+    if (isEmpty(columns)) return formatMsg(args);
 
     ret += '<table><thead><tr><th>(index)</th>';
     columns.forEach(val => ret += `<th>${val}</th>`);
@@ -213,17 +234,17 @@ function formatTable(args)
 
     table.forEach((obj, idx) =>
     {
-        if (!util.isObj(obj)) return;
+        if (!isObj(obj)) return;
         ret += `<tr><td>${idx}</td>`;
         columns.forEach(column =>
         {
             let val = obj[column];
-            if (util.isUndef(val))
+            if (isUndef(val))
             {
                 val = '';
-            } else if (util.isObj(val))
+            } else if (isObj(val))
             {
-                val = util.getObjType(val);
+                val = getObjType(val);
             }
 
             ret += `<td>${val}</td>`;
@@ -246,7 +267,7 @@ function formatErr(err)
         msg = `${err.message || lines[0]}<br/>`;
 
     lines = lines.filter(val => !regErudaJs.test(val))
-                 .map(val => util.escape(val));
+                 .map(val => escape(val));
 
     let stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
 
@@ -260,32 +281,32 @@ function formatJs(code)
 
 function formatMsg(args, {htmlForEl = true} = {})
 {
-    let needStrSubstitution = util.isStr(args[0]) && args.length !== 1;
+    let needStrSubstitution = isStr(args[0]) && args.length !== 1;
     if (needStrSubstitution) args = substituteStr(args);
 
     for (let i = 0, len = args.length; i < len; i++)
     {
         let val = args[i];
 
-        if (util.isEl(val) && htmlForEl)
+        if (isEl(val) && htmlForEl)
         {
             args[i] = formatEl(val);
-        } else if (util.isFn(val))
+        } else if (isFn(val))
         {
             args[i] = formatFn(val);
-        } else if (util.isObj(val))
+        } else if (isObj(val))
         {
             args[i] = formatObj(val);
-        }else if (util.isUndef(val))
+        }else if (isUndef(val))
         {
             args[i] = 'undefined';
-        } else if (util.isNull(val))
+        } else if (isNull(val))
         {
             args[i] = 'null';
         } else
         {
-            val = util.toStr(val);
-            if (i !== 0 || !needStrSubstitution) val = util.escape(val);
+            val = toStr(val);
+            if (i !== 0 || !needStrSubstitution) val = escape(val);
             args[i] = val;
         }
     }
@@ -297,7 +318,7 @@ let formatDir = args => formatMsg(args, {htmlForEl: false});
 
 function substituteStr(args)
 {
-    let str = util.escape(args[0]),
+    let str = escape(args[0]),
         isInCss = false,
         newStr = '';
 
@@ -315,25 +336,25 @@ function substituteStr(args)
             {
                 case 'i':
                 case 'd':
-                    newStr += util.toInt(arg);
+                    newStr += toInt(arg);
                     break;
                 case 'f':
-                    newStr += util.toNum(arg);
+                    newStr += toNum(arg);
                     break;
                 case 's':
-                    newStr += util.toStr(arg);
+                    newStr += toStr(arg);
                     break;
                 case 'O':
-                    if (util.isObj(arg))
+                    if (isObj(arg))
                     {
                         newStr += getAbstract(arg);
                     }
                     break;
                 case 'o':
-                    if (util.isEl(arg))
+                    if (isEl(arg))
                     {
                         newStr += formatEl(arg);
-                    } else if (util.isObj(arg))
+                    } else if (isObj(arg))
                     {
                         newStr += getAbstract(arg);
                     }
@@ -362,7 +383,7 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${util.getObjType(val)} ${getAbstract(val)}`;
+    return `${getObjType(val)} ${getAbstract(val)}`;
 }
 
 function formatFn(val)
@@ -398,14 +419,14 @@ function getFrom()
     return ret;
 }
 
-let getCurTime = () => util.dateFormat('HH:MM:ss');
+let getCurTime = () => dateFormat('HH:MM:ss');
 
 let tpl = require('./Log.hbs');
 let render = data => tpl(data);
 
 function extractObj(obj, options = {})
 {
-    util.defaults(options, {
+    defaults(options, {
         getterVal: Log.showGetterVal,
         unenumerable: Log.showUnenumerable
     });

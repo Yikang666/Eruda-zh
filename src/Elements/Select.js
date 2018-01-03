@@ -1,6 +1,6 @@
-import util from '../lib/util';
+import {Emitter, isErudaEl} from '../lib/util';
 
-export default class Select extends util.Emitter
+export default class Select extends Emitter
 {
     constructor()
     {
@@ -10,7 +10,7 @@ export default class Select extends util.Emitter
 
         this._startListener = function (e)
         {
-            if (util.isErudaEl(e.target)) return;
+            if (isErudaEl(e.target)) return;
 
             self._timer = setTimeout(function ()
             {
@@ -27,7 +27,7 @@ export default class Select extends util.Emitter
 
         this._clickListener = function (e)
         {
-            if (util.isErudaEl(e.target)) return;
+            if (isErudaEl(e.target)) return;
 
             e.preventDefault();
             e.stopImmediatePropagation();

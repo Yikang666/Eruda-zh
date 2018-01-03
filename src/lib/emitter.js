@@ -1,6 +1,6 @@
-import util from './util';
+import {Emitter} from './util';
 
-let emitter = new util.Emitter();
+let emitter = new Emitter();
 emitter.ADD = 'ADD';
 emitter.SHOW = 'SHOW';
 emitter.SCALE = 'SCALE';

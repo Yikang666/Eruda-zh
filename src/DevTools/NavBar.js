@@ -1,12 +1,12 @@
-import util from '../lib/util';
+import {Emitter, evalCss, $, isNum} from '../lib/util';
 
-export default class NavBar extends util.Emitter
+export default class NavBar extends Emitter
 {
     constructor($el)
     {
         super();
 
-        this._style = util.evalCss(require('./NavBar.scss'));
+        this._style = evalCss(require('./NavBar.scss'));
 
         this._$el = $el;
         $el.html('<div class="eruda-bottom-bar"></div>');
@@ -27,7 +27,7 @@ export default class NavBar extends util.Emitter
         this._len--;
         this._$el.find('.eruda-nav-bar-item').each(function () 
         {
-            let $this = util.$(this);   
+            let $this = $(this);   
             if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove();
         });
     }
@@ -46,7 +46,7 @@ export default class NavBar extends util.Emitter
 
         this._$el.find('.eruda-nav-bar-item').each(function ()
         {
-            let $this = util.$(this);
+            let $this = $(this);
 
             if ($this.text() === name)
             {
@@ -61,7 +61,7 @@ export default class NavBar extends util.Emitter
     }
     destroy() 
     {
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this._$el.remove();
     }
     _scrollItemToView() 
@@ -84,7 +84,7 @@ export default class NavBar extends util.Emitter
             targetScrollLeft = itemLeft + itemWidth - containerWidth;
         }
 
-        if (!util.isNum(targetScrollLeft)) return;
+        if (!isNum(targetScrollLeft)) return;
 
         container.scrollLeft = targetScrollLeft;
     }
@@ -125,7 +125,7 @@ export default class NavBar extends util.Emitter
 
         this._$el.on('click', '.eruda-nav-bar-item', function ()
         {
-            self.emit('showTool', util.$(this).text());
+            self.emit('showTool', $(this).text());
         });
     }
 }

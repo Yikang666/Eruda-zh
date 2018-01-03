@@ -1,5 +1,5 @@
 import Tool from '../DevTools/Tool';
-import util from '../lib/util';
+import {evalCss, $, LocalStore} from '../lib/util';
 
 export default class Settings extends Tool
 {
@@ -7,7 +7,7 @@ export default class Settings extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Settings.scss'));
+        this._style = evalCss(require('./Settings.scss'));
 
         this.name = 'settings';
         this._switchTpl = require('./switch.hbs');
@@ -26,7 +26,7 @@ export default class Settings extends Tool
     {
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     clear() 
     {
@@ -107,7 +107,7 @@ export default class Settings extends Tool
 
         this._$el.on('click', '.eruda-checkbox', function ()
         {
-            let $input = util.$(this).find('input'),
+            let $input = $(this).find('input'),
                 idx = $input.data('idx'),
                 val = $input.get(0).checked;
 
@@ -115,14 +115,14 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         }).on('click', '.eruda-select .eruda-head', function ()
         {
-            let $el = util.$(this).parent().find('ul'),
+            let $el = $(this).parent().find('ul'),
                 isOpen = $el.hasClass('eruda-open');
 
             self._closeAll();
             isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('click', '.eruda-select li', function ()
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 $ul = $this.parent(),
                 val = $this.text(),
                 idx = $ul.data('idx'),
@@ -134,14 +134,14 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         }).on('click', '.eruda-range .eruda-head', function () 
         {
-            let $el = util.$(this).parent().find('.eruda-input-container'),
+            let $el = $(this).parent().find('.eruda-input-container'),
                 isOpen = $el.hasClass('eruda-open');
 
             self._closeAll();
             isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('change', '.eruda-range input', function () 
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 $container = $this.parent(),
                 idx = $container.data('idx'),
                 val = +$this.val(),
@@ -150,7 +150,7 @@ export default class Settings extends Tool
             setting.config.set(setting.key, val);
         }).on('input', '.eruda-range input', function () 
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 $container = $this.parent(),
                 idx = $container.data('idx'),
                 val = +$this.val(),
@@ -161,14 +161,14 @@ export default class Settings extends Tool
             $container.find('.eruda-range-track-progress').css('width', progress(val, min, max) + '%');
         }).on('click', '.eruda-color .eruda-head', function () 
         {
-            let $el = util.$(this).parent().find('ul'),
+            let $el = $(this).parent().find('ul'),
                 isOpen = $el.hasClass('eruda-open');
 
             self._closeAll();
             isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open');
         }).on('click', '.eruda-color li', function () 
         {
-            let $this = util.$(this),
+            let $this = $(this),
                 $ul = $this.parent(),
                 val = $this.css('background-color'),
                 idx = $ul.data('idx'),
@@ -182,7 +182,7 @@ export default class Settings extends Tool
     }
     static createCfg(name, data) 
     {
-        return new util.LocalStore('eruda-' + name, data);
+        return new LocalStore('eruda-' + name, data);
     }
 }
 

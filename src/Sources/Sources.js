@@ -1,9 +1,9 @@
 import Tool from '../DevTools/Tool';
-import util from '../lib/util';
 import beautify from 'js-beautify';
 import highlight from '../lib/highlight';
 import JsonViewer from '../lib/JsonViewer';
 import Settings from '../Settings/Settings';
+import {evalCss, ajax, isEmpty, escape, trim, isStr} from '../lib/util';
 
 export default class Sources extends Tool
 {
@@ -11,7 +11,7 @@ export default class Sources extends Tool
     {
         super();
 
-        this._style = util.evalCss(require('./Sources.scss'));
+        this._style = evalCss(require('./Sources.scss'));
 
         this.name = 'sources';
         this._showLineNum = true;
@@ -31,7 +31,7 @@ export default class Sources extends Tool
     {
         super.destroy();
 
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
     }
     set(type, val)
     {
@@ -99,7 +99,7 @@ export default class Sources extends Tool
         if (this._isGettingHtml) return;
         this._isGettingHtml = true;
 
-        util.ajax({
+        ajax({
             url: location.href,
             success: data => this._html = data,
             error: () => this._html = 'Sorry, unable to fetch source code:(',
@@ -206,7 +206,7 @@ export default class Sources extends Tool
         let val = this._data.val;
 
         if (val.resTxt.trim() === '') delete val.resTxt;
-        if (util.isEmpty(val.resHeaders)) delete val.resHeaders;
+        if (isEmpty(val.resHeaders)) delete val.resHeaders;
 
         this._renderHtml(this._httpTpl(this._data.val));
     }
@@ -236,14 +236,14 @@ export default class Sources extends Tool
             code = highlight(code, data.type);
         } else
         {
-            code = util.escape(code);
+            code = escape(code);
         }
 
         if (len < MAX_LINE_NUM_LEN && this._showLineNum)
         {
             code = code.split('\n').map((line, idx) =>
             {
-                if (util.trim(line) === '') line = '&nbsp;';
+                if (trim(line) === '') line = '&nbsp;';
 
                 return {
                     idx: idx + 1,
@@ -266,7 +266,7 @@ export default class Sources extends Tool
 
         try
         {
-            if (util.isStr(val)) val = JSON.parse(val);
+            if (isStr(val)) val = JSON.parse(val);
         /* eslint-disable no-empty */
         } catch (e) {}
 

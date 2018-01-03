@@ -1,18 +1,28 @@
 import NavBar from './NavBar';
-import util from '../lib/util';
 import logger from '../lib/logger';
 import Tool from './Tool';
 import emitter from '../lib/emitter';
 import Settings from '../Settings/Settings';
+import {
+    Emitter, 
+    isMobile, 
+    evalCss, 
+    defaults,
+    keys,
+    last,
+    each,
+    isNum,
+    safeStorage
+} from '../lib/util';
 
-export default class DevTools extends util.Emitter
+export default class DevTools extends Emitter
 {
     constructor($container)
     {
         super();
 
-        if (!util.isMobile()) util.evalCss(require('../style/scrollbar.css'));
-        this._style = util.evalCss(require('./DevTools.scss'));
+        if (!isMobile()) evalCss(require('../style/scrollbar.css'));
+        this._style = evalCss(require('./DevTools.scss'));
 
         this.$container = $container;
         this._isShow = false;
@@ -57,7 +67,7 @@ export default class DevTools extends util.Emitter
         if (!(tool instanceof Tool)) 
         {
             let {init, show, hide, destroy} = new Tool();
-            util.defaults(tool, {init, show, hide, destroy});
+            defaults(tool, {init, show, hide, destroy});
         }
 
         let name = tool.name;
@@ -86,8 +96,8 @@ export default class DevTools extends util.Emitter
         delete tools[name];
         if (tool.active) 
         {
-            let keys = util.keys(tools);
-            if (keys.length > 0) this.showTool(tools[util.last(keys)].name);
+            let toolKeys = keys(tools);
+            if (toolKeys.length > 0) this.showTool(tools[last(toolKeys)].name);
         }
         tool.destroy();
 
@@ -95,7 +105,7 @@ export default class DevTools extends util.Emitter
     }
     removeAll() 
     {
-        util.each(this._tools, tool => this.remove(tool.name));
+        each(this._tools, tool => this.remove(tool.name));
 
         return this;
     }
@@ -117,7 +127,7 @@ export default class DevTools extends util.Emitter
 
         let lastTool = {};
 
-        util.each(tools, (tool) =>
+        each(tools, (tool) =>
         {
             if (tool.active)
             {
@@ -141,7 +151,7 @@ export default class DevTools extends util.Emitter
         let cfg = this.config = Settings.createCfg('dev-tools', {
             transparency: 0.95,
             displaySize: 80,
-            tinyNavBar: !util.isMobile(),
+            tinyNavBar: !isMobile(),
             activeEruda: false,
             navBarBgColor: '#2196f3'
         });
@@ -179,7 +189,7 @@ export default class DevTools extends util.Emitter
     }
     destroy() 
     {
-        util.evalCss.remove(this._style);
+        evalCss.remove(this._style);
         this._unregisterListener();
         this.removeAll();
         this._navBar.destroy();
@@ -201,14 +211,14 @@ export default class DevTools extends util.Emitter
     }
     _setTransparency(opacity)
     {
-        if (!util.isNum(opacity)) return;
+        if (!isNum(opacity)) return;
 
         this._opacity = opacity;
         if (this._isShow) this._$el.css({opacity});
     }
     _setDisplaySize(height)
     {
-        if (!util.isNum(height)) return;
+        if (!isNum(height)) return;
         
         this._$el.css({height: height + '%'});
     }
@@ -228,7 +238,7 @@ export default class DevTools extends util.Emitter
     }
 }
 
-let localStore = util.safeStorage('local');
+let localStore = safeStorage('local');
 
 let activeEruda = flag => localStore.setItem('active-eruda', flag);
 
