@@ -32,12 +32,17 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
                 exclude: /node_modules/,
-                options: {
-                    presets: ['env'],
-                    plugins: ['transform-runtime']
-                }
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['env'],
+                            plugins: ['transform-runtime']
+                        }
+                    },
+                    'eslint-loader'
+                ]
             },
             {
                 test: /\.scss$/,
