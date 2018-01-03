@@ -89,7 +89,21 @@ elements.set(document.body);
 
 ## Network
 
-Display xhr requests.
+Display requests.
+
+### Config
+
+|Name         |Type   |Desc                |
+|-------------|-------|--------------------|
+|overrideFetch|boolean|Catch Fetch Requests|
+
+### clear
+
+Clear requests.
+
+```javascript
+network.clear();
+```
 
 ## Resources
 

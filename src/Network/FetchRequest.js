@@ -16,6 +16,8 @@ export default class FetchRequest extends Emitter
     {
         super();
 
+        if (url instanceof window.Request) url = url.url;
+
         this._url = fullUrl(url);
         this._id = uniqId('request');
         this._options = options;

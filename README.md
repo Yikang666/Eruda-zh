@@ -46,7 +46,7 @@ javascript:(function () { var script = document.createElement('script'); script.
 
 * [Console](doc/TOOL_API.md#console): Display JavaScript logs.
 * [Elements](doc/TOOL_API.md#elements): Check dom state.
-* [Network](doc/TOOL_API.md#network): Show ajax requests status.
+* [Network](doc/TOOL_API.md#network): Show requests status.
 * [Resource](/doc/TOOL_API.md#resources): Show localStorage, cookie information.
 * [Info](doc/TOOL_API.md#info): Show url, user agent info.
 * [Snippets](doc/TOOL_API.md#snippets): Include snippets used most often.

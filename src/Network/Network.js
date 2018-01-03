@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool';
 import XhrRequest from './XhrRequest';
 import FetchRequest from './FetchRequest';
+import Settings from '../Settings/Settings';
 import {evalCss, isNative, defaults, now, extend, isEmpty, $} from '../lib/util';
 
 export default class Network extends Tool
@@ -23,13 +24,18 @@ export default class Network extends Tool
 
         this._container = container;
         this._bindEvent();
+        this._initCfg();
         this.overrideXhr();
-        this.overrideFetch();
     }
     show()
     {
         super.show();
 
+        this._render();
+    }
+    clear() 
+    {
+        this._requests = {};
         this._render();
     }
     overrideXhr()
@@ -162,11 +168,7 @@ export default class Network extends Tool
                 subType: data.subType,
                 resHeaders: data.resHeaders
             });
-        }).on('click', '.eruda-clear-request', function ()
-        {
-            self._requests = {};
-            self._render();
-        });
+        }).on('click', '.eruda-clear-request', () => this.clear());
 
         function showSources(type, data)
         {
@@ -185,6 +187,27 @@ export default class Network extends Tool
         evalCss.remove(this._style);
         this.restoreXhr();
         this.restoreFetch();
+    }
+    _initCfg() 
+    {
+        let cfg = this.config = Settings.createCfg('network', {
+            overrideFetch: true
+        });
+
+        if (cfg.get('overrideFetch')) this.overrideFetch();
+
+        cfg.on('change', (key, val) =>
+        {
+            switch (key)
+            {
+                case 'overrideFetch': return val ? this.overrideFetch() : this.restoreFetch();
+            }
+        });
+
+        let settings = this._container.get('settings');
+        settings.text('Network')
+                .switch(cfg, 'overrideFetch', 'Catch Fetch Requests')
+                .separator();
     }
     _render()
     {
