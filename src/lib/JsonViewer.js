@@ -48,10 +48,10 @@ export default class JsonViewer
                 $this.find('ul').html(jsonToHtml(map[circularId], map, false));
                 $this.rmAttr('data-object-id');
             }
+            
+            e.stopImmediatePropagation();
 
             if (!$firstSpan.hasClass('eruda-expanded')) return;
-
-            e.stopImmediatePropagation();
 
             let $ul = $this.find('ul').eq(0);
             if ($firstSpan.hasClass('eruda-collapsed'))
