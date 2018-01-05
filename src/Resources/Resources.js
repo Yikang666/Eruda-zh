@@ -178,7 +178,10 @@ export default class Resources extends Tool
             let entries = this._performance.getEntries();
             entries.forEach(entry =>
             {
-                if (isImg(entry.name)) imageData.push(entry.name); 
+                if (entry.initiatorType === 'img' || isImg(entry.name)) 
+                {
+                    imageData.push(entry.name);
+                } 
             });
         } else 
         {
