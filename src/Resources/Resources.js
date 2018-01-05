@@ -172,15 +172,27 @@ export default class Resources extends Tool
     {
         let imageData = [];
 
-        $('img').each(function ()
+        let performance = this._performance = window.webkitPerformance || window.performance;
+        if (performance && performance.getEntries) 
         {
-            let $this = $(this),
-                src = $this.attr('src');
+            let entries = this._performance.getEntries();
+            entries.forEach(entry =>
+            {
+                if (isImg(entry.name)) imageData.push(entry.name); 
+            });
+        } else 
+        {
+            $('img').each(function ()
+            {
+                let $this = $(this),
+                    src = $this.attr('src');
 
-            if ($this.data('exclude') === 'true') return;
+                if ($this.data('exclude') === 'true') return;
 
-            imageData.push(src);
-        });
+                imageData.push(src);
+            });
+        }
+
 
         imageData = unique(imageData);
         imageData.sort();
@@ -510,3 +522,7 @@ function getLowerCaseTagName(el)
 }
 
 let sliceStr = (str, len) => str.length < len ? str : str.slice(0, len) + '...';
+
+let regImg = /\.(jpeg|jpg|gif|png)$/;
+
+let isImg = url => regImg.test(url);
