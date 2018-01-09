@@ -21,7 +21,6 @@ export default class DevTools extends Emitter
     {
         super();
 
-        if (!isMobile()) evalCss(require('../style/scrollbar.css'));
         this._style = evalCss(require('./DevTools.scss'));
 
         this.$container = $container;
