@@ -49,6 +49,15 @@ export default class Snippets extends Tool
 
         return this;
     }
+    run(name) 
+    {
+        let snippets = this._snippets;
+
+        for (let i = 0, len = snippets.length; i < len; i++)
+        {
+            if (snippets[i].name === name) this._run(i);
+        }
+    }
     clear()
     {
         this._snippets = [];

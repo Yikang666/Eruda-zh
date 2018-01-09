@@ -189,12 +189,21 @@ Remove specified snippet.
 |----|------|-----------------|
 |name|string|Snippet to remove|
 
+### run
+
+Run specified snippet.
+
+|Name|Type  |Desc          |
+|----|------|--------------|
+|name|string|Snippet to run|
+
 ```javascript
 snippets.add('hello', function ()
 {
     console.log('Hello World!');
 }, 'Display hello on console');
 
+snippets.run('hello');
 snippets.remove('hello');
 ```
 
