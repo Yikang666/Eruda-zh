@@ -97,6 +97,14 @@ export default [
         desc: 'Display memory'
     },
     {
+        name: 'Load Code Plugin',
+        fn() 
+        {
+            loadPlugin('code');
+        },
+        desc: 'Edit and Run JavaScript'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -193,5 +201,6 @@ let pluginVersion = {
     fps: '1.0.2',
     features: '1.0.2',
     timing: '1.0.1',
-    memory: '1.0.1'
+    memory: '1.0.1',
+    code: '1.0.0'
 };

@@ -361,9 +361,11 @@ let evalJs = jsInput =>
 {
     let ret;
 
-    try {
+    try 
+    {
         ret = eval.call(window, `(${jsInput})`);
-    } catch (e) {
+    } catch (e) 
+    {
         ret = eval.call(window, jsInput);
     }
 
