@@ -66,7 +66,7 @@ export default function getAbstract(obj, {
     {
         if (i > keyNum)
         {
-            objEllipsis = '...';
+            objEllipsis = ', ...';
             return;
         }
         let key = wrapKey(escapeJsonStr(name));
@@ -118,8 +118,19 @@ export default function getAbstract(obj, {
         if (doStringify)
         {
             json = '[';
-            each(obj, val => parts.push(`${getAbstract(val, passOpts)}`));
-            json += parts.join(', ') + ']';
+            let len = obj.length,
+                arrEllipsis = '';
+
+            if (len > 100) 
+            {
+                len = 100;
+                arrEllipsis = ', ...';
+            }
+            for (let i = 0; i < len; i++) 
+            {
+                parts.push(`${getAbstract(obj[i], passOpts)}`);
+            }
+            json += parts.join(', ') + arrEllipsis + ']';
         } else
         {
             json = wrapStr(`Array[${obj.length}]`);

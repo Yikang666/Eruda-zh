@@ -31,6 +31,9 @@
         <li>
             <a href="#" id="trigger-error">Trigger Error</a>
         </li>
+        <li>
+            <a href="#" id="big-array">Big Array</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -98,6 +101,14 @@
     addClickEvent('trigger-error', function () 
     {
         triggerError();
+    });
+    addClickEvent('big-array', function () 
+    {
+        var arr = [];
+        for (var i = 0; i < 10000; i++) {
+            arr.push(i);
+        }
+        console.log(arr);
     });
 </script>
 <script>boot();</script>
