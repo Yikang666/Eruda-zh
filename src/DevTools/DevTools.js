@@ -75,7 +75,7 @@ export default class DevTools extends Emitter
         if (this._tools[name]) return logger.warn(`Tool ${name} already exists`);
 
         this._$tools.prepend(`<div class="eruda-${name} eruda-tool"></div>`);
-        tool.init(this._$tools.find(`.eruda-${name}`), this);
+        tool.init(this._$tools.find(`.eruda-${name}.eruda-tool`), this);
         tool.active = false;
         this._tools[name] = tool;
 
