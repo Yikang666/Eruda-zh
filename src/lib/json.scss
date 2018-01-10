@@ -20,6 +20,8 @@
     li {
         position: relative;
         white-space: nowrap;
+        line-height: 16px;
+        min-height: 16px;
     }
     & > li > .key {
         display: none;
@@ -59,14 +61,14 @@
         position: absolute;
         border-top-color: $gray;
         left: -12px;
-        top: 5px;
+        top: 6px;
     }
     .collapsed:before {
         content: "";
         border-left-color: $gray;
         border-top-color: transparent;
         left: -10px;
-        top: 3px;
+        top: 4px;
     }
     li .collapsed ~ .close:before {
         color: #999;

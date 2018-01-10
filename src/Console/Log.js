@@ -383,7 +383,10 @@ function substituteStr(args)
 
 function formatObj(val)
 {
-    return `${getObjType(val)} ${getAbstract(val)}`;
+    let type = getObjType(val);
+    if (type === 'Array' && val.length > 1) type = `(${val.length})`; 
+
+    return `${type} ${getAbstract(val)}`;
 }
 
 function formatFn(val)

@@ -66,7 +66,7 @@ export default function getAbstract(obj, {
     {
         if (i > keyNum)
         {
-            objEllipsis = ', ...';
+            objEllipsis = ', …';
             return;
         }
         let key = wrapKey(escapeJsonStr(name));
@@ -124,7 +124,7 @@ export default function getAbstract(obj, {
             if (len > 100) 
             {
                 len = 100;
-                arrEllipsis = ', ...';
+                arrEllipsis = ', …';
             }
             for (let i = 0; i < len; i++) 
             {
@@ -133,7 +133,7 @@ export default function getAbstract(obj, {
             json += parts.join(', ') + arrEllipsis + ']';
         } else
         {
-            json = wrapStr(`Array[${obj.length}]`);
+            json = wrapStr(`Array(${obj.length})`);
         }
     } else if (isObj)
     {
@@ -148,10 +148,11 @@ export default function getAbstract(obj, {
             i = 1;
             json = '{ ';
             each(names, objIteratee);
-            json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
+            json += parts.join(', ') + objEllipsis + ' }';
         } else
         {
             json = getObjType(obj);
+            if (json === 'Object') json = '{…}';
         }
     } else if (isNum)
     {
@@ -189,10 +190,11 @@ export default function getAbstract(obj, {
                 json = '{ ';
                 names = unenumerable ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
                 each(names, objIteratee);
-                json += moveFnToTail(parts).join(', ') + objEllipsis + ' }';
+                json += parts.join(', ') + objEllipsis + ' }';
             } else
             {
                 json = getObjType(obj);
+                if (json === 'Object') json = '{…}';
             }
         } catch (e)
         {
@@ -211,17 +213,4 @@ function canBeProto(obj)
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
-}
-
-function moveFnToTail(parts)
-{
-    let front = [],
-        tail = [];
-
-    each(parts, val =>
-    {
-        val.indexOf('function') > -1 ? tail.push(val) : front.push(val);
-    });
-
-    return front.concat(tail);
 }
