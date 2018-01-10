@@ -71,7 +71,8 @@ export default class JsonViewer
 
         function wrapKey(key)
         {
-            if (firstLevel || val.erudaSplitArr) return '';
+            if (firstLevel) return '';
+            if (isObj(val) && val.erudaSplitArr) return '';
 
             let keyClass = 'eruda-key';
             if (isUnenumerable || contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
