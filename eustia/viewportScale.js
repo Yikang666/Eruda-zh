@@ -5,7 +5,7 @@
  * ```
  */
 
-_('meta clamp trim each map');
+_('meta clamp trim each map isNaN');
 
 function exports() 
 {
@@ -31,5 +31,10 @@ function exports()
         if (key === 'minimum-scale') minScale = +val;
     });
 
-    return clamp(initialScale, minScale, maxScale);
+    let ret = clamp(initialScale, minScale, maxScale);
+
+    // Some will use ';' to be the separator, need to avoid the wrong result.
+    if (isNaN(ret)) return 1;
+
+    return ret;
 }

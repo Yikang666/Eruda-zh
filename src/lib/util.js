@@ -6829,7 +6829,7 @@ export var viewportScale = _.viewportScale = (function ()
      */
 
     /* dependencies
-     * meta clamp trim each map 
+     * meta clamp trim each map isNaN 
      */
 
     function exports() 
@@ -6856,7 +6856,12 @@ export var viewportScale = _.viewportScale = (function ()
             if (key === 'minimum-scale') minScale = +val;
         });
 
-        return clamp(initialScale, minScale, maxScale);
+        let ret = clamp(initialScale, minScale, maxScale);
+
+        // Some will use ';' to be the separator, need to avoid the wrong result.
+        if (isNaN(ret)) return 1;
+
+        return ret;
     }
 
     return exports;
