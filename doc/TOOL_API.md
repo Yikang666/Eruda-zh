@@ -17,6 +17,7 @@ Display console logs. Implementation detail follows the [console api spec](https
 |displayGetterVal   |boolean|Access getter value            |
 |viewLogInSources   |boolean|View log in sources panel      |
 |displayIfErr       |boolean|Auto display if error occurs   |
+|useWorker          |boolean|Use web worker                 |
 |maxLogNum          |string |Max log number                 |
 
 ```javascript
