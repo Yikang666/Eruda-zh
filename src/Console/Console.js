@@ -3,6 +3,7 @@ import Tool from '../DevTools/Tool';
 import {noop, evalCss, $} from '../lib/util';
 import emitter from '../lib/emitter';
 import Settings from '../Settings/Settings';
+import stringify from './stringify';
 
 export default class Console extends Tool
 {
@@ -219,14 +220,18 @@ export default class Console extends Tool
             displayGetterVal: false,
             viewLogInSources: false,
             displayIfErr: false,
+            useWorker: true,
             maxLogNum: 'infinite'
         });
+
+        let isWorkerSupported = !!window.Worker;
 
         let maxLogNum = cfg.get('maxLogNum');
         maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum;
 
         if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
         if (cfg.get('overrideConsole')) this.overrideConsole();
+        if (cfg.get('useWorker') && isWorkerSupported) stringify.useWorker = true;
         logger.displayHeader(cfg.get('displayExtraInfo'));
         logger.displayUnenumerable(cfg.get('displayUnenumerable'));
         logger.displayGetterVal(cfg.get('displayGetterVal'));
@@ -244,6 +249,7 @@ export default class Console extends Tool
                 case 'displayUnenumerable': return logger.displayUnenumerable(val);
                 case 'displayGetterVal': return logger.displayGetterVal(val);
                 case 'viewLogInSources': return logger.viewLogInSources(val);
+                case 'useWorker': stringify.useWorker = val; return;
             }
         });
 
@@ -257,6 +263,7 @@ export default class Console extends Tool
                 .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
                 .switch(cfg, 'displayGetterVal', 'Access Getter Value');
 
+        if (isWorkerSupported) settings.switch(cfg, 'useWorker', 'Use Web Worker');
         if (sources) settings.switch(cfg, 'viewLogInSources', 'View Log In Sources Panel');
 
         settings.select(cfg, 'maxLogNum', 'Max Log Number', ['infinite', '250', '125', '100', '50', '10'])

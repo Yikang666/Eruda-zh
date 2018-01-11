@@ -31,6 +31,17 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /Worker\.js$/,
+                use: {
+                    loader: 'worker-loader',
+                    options: {
+                        inline: true,
+                        fallback: true,
+                        name: '[name].js'
+                    }
+                }
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: [

@@ -7,6 +7,9 @@ eruda.js
 !/test/eruda.js
 eruda.min.js
 eruda.js.map
+stringifyWorker.js
+!/src/lib/stringifyWorker.js
+stringifyWorker.js.map
 /script/icomoon/
 /src/**/*.js.map
 npm-debug.log

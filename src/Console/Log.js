@@ -1,4 +1,4 @@
-import stringify from '../lib/stringify';
+import stringify from './stringify';
 import origGetAbstract from '../lib/getAbstract';
 import highlight from '../lib/highlight';
 import beautify from 'js-beautify';
@@ -94,12 +94,13 @@ export default class Log
 
         if (this._needSrc())
         {
+            let setSrc = result => this.src = result;
             if (type === 'table')
             {
-                this.src = extractObj(args[0]);
+                extractObj(args[0], {}, setSrc);
             } else
             {
-                this.src = extractObj(args.length === 1 && isObj(args[0]) ? args[0] : args);
+                extractObj(args.length === 1 && isObj(args[0]) ? args[0] : args, {}, setSrc);
             }
         }
 
@@ -427,12 +428,12 @@ let getCurTime = () => dateFormat('HH:MM:ss');
 let tpl = require('./Log.hbs');
 let render = data => tpl(data);
 
-function extractObj(obj, options = {})
+function extractObj(obj, options = {}, cb)
 {
     defaults(options, {
         getterVal: Log.showGetterVal,
         unenumerable: Log.showUnenumerable
     });
 
-    return JSON.parse(stringify(obj, options));
+    stringify(obj, options, result => cb(JSON.parse(result)));
 }

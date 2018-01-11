@@ -12,7 +12,7 @@ import {
     uniqId,
     last,
     extend
-} from './util';
+} from './stringifyUtil';
 
 // Modified from: https://jsconsole.com/
 export default function stringify(obj, {
@@ -313,7 +313,10 @@ class Visitor
     }
     visit(val)
     {
-        let id = uniqId('erudaJson');
+        /* Add 0 to distinguish stringify generated id from JsonViewer id.
+         * When used in web worker, they are not calling the same uniqId method, thus result may be repeated.
+         */
+        let id = uniqId('erudaJson0');
 
         this._visited.push({id, val, abstract: {}});
         this._map[id] = last(this._visited);
