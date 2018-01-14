@@ -102,7 +102,7 @@ export default [
         {
             loadPlugin('code');
         },
-        desc: 'Edit and Run JavaScript'
+        desc: 'Edit and run JavaScript'
     },
     {
         name: 'Restore Settings',
