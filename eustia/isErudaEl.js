@@ -1,3 +1,6 @@
+/* See if an element is within eruda.
+ */
+
 function exports(el)
 {
     var parentNode = el.parentNode;

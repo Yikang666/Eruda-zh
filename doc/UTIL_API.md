@@ -788,6 +788,21 @@ castPath('a[0].b'); // -> ['a', '0', 'b']
 castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
 ```
 
+## chunk 
+
+Split array into groups the length of given size.
+
+|Name    |Type  |Desc                |
+|--------|------|--------------------|
+|arr     |array |Array to process    |
+|[size=1]|number|Length of each chunk|
+
+```javascript
+chunk([1, 2, 3, 4], 2); // -> [[1, 2], [3, 4]]
+chunk([1, 2, 3, 4], 3); // -> [[1, 2, 3], [4]]
+chunk([1, 2, 3, 4]); // -> [[1], [2], [3], [4]]
+```
+
 ## clamp 
 
 Clamp number within the inclusive lower and upper bounds.
@@ -1070,7 +1085,7 @@ escape('You & Me'); -> // -> 'You &amp; Me'
 
 ## escapeJsonStr 
 
-No documentation.
+Escape json string.
 
 ## escapeRegExp 
 
@@ -1087,7 +1102,7 @@ escapeRegExp('[eris]'); // -> '\\[eris\\]'
 
 ## evalCss 
 
-No documentation.
+Eval css.
 
 ## extend 
 
@@ -1172,15 +1187,15 @@ console.log(a); // -> {b: 1}
 
 ## fullUrl 
 
-No documentation.
+Add origin to url if needed.
 
 ## getFileName 
 
-No documentation.
+Extract file name from url.
 
 ## getObjType 
 
-No documentation.
+Get object type.
 
 ## has 
 
@@ -1258,7 +1273,7 @@ Check if value is classified as an arguments object.
 
 |Name  |Type   |Desc                                |
 |------|-------|------------------------------------|
-|value |*      |Value to check                      |
+|val   |*      |Value to check                      |
 |return|boolean|True if value is an arguments object|
 
 ```javascript
@@ -1287,7 +1302,7 @@ Check if value is array-like.
 
 |Name  |Type   |Desc                       |
 |------|-------|---------------------------|
-|value |*      |Value to check             |
+|val   |*      |Value to check             |
 |return|boolean|True if value is array like|
 
 > Function returns false.
@@ -1323,7 +1338,7 @@ console.log(isBrowser); // -> true if running in a browser
 
 ## isCrossOrig 
 
-No documentation.
+Check if a url is cross origin.
 
 ## isDate 
 
@@ -1381,7 +1396,7 @@ isErr(new Error()); // -> true
 
 ## isErudaEl 
 
-No documentation.
+See if an element is within eruda.
 
 ## isFn 
 
@@ -1448,7 +1463,7 @@ Check if value is a native function.
 
 |Name  |Type   |Desc                              |
 |------|-------|----------------------------------|
-|value |*      |Value to check                    |
+|val   |*      |Value to check                    |
 |return|boolean|True if value is a native function|
 
 ```javascript
@@ -1462,7 +1477,7 @@ Check if value is null or undefined, the same as value == null.
 
 |Name  |Type   |Desc                              |
 |------|-------|----------------------------------|
-|value |*      |Value to check                    |
+|val   |*      |Value to check                    |
 |return|boolean|True if value is null or undefined|
 
 ```javascript
@@ -1480,7 +1495,7 @@ Check if value is an Null.
 
 |Name  |Type   |Desc                    |
 |------|-------|------------------------|
-|value |*      |Value to check          |
+|val   |*      |Value to check          |
 |return|boolean|True if value is an Null|
 
 ```javascript
@@ -1493,7 +1508,7 @@ Check if value is classified as a Number primitive or object.
 
 |Name  |Type   |Desc                                 |
 |------|-------|-------------------------------------|
-|value |*      |Value to check                       |
+|val   |*      |Value to check                       |
 |return|boolean|True if value is correctly classified|
 
 ```javascript
@@ -1876,7 +1891,7 @@ console.log(perfNow() - start);
 
 ## pxToNum 
 
-No documentation.
+Turn string like '0px' to number.
 
 ## query 
 
@@ -1980,7 +1995,7 @@ safeGet(obj, 'a.b'); // -> undefined
 
 ## safeStorage 
 
-No documentation.
+Safe localStorage and sessionStorage.
 
 ## slice 
 

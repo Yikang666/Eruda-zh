@@ -1,3 +1,6 @@
+/* Escape json string.
+ */
+
 function exports(str)
 {
     return str.replace(/\\/g, '\\\\')

@@ -10,6 +10,8 @@
     } else { root.util = factory(); }
 }(this, function ()
 {
+    "use strict";
+
     var _ = {};
 
     if (typeof window === 'object' && window.util) _ = window.util;
@@ -181,6 +183,38 @@
         return exports;
     })();
 
+    /* ------------------------------ toStr ------------------------------ */
+
+    var toStr = _.toStr = (function ()
+    {
+        /* Convert value to a string.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |val   |*     |Value to convert|
+         * |return|string|Resulted string |
+         *
+         * ```javascript
+         * toStr(null); // -> ''
+         * toStr(1); // -> '1'
+         * toStr(false); // -> 'false'
+         * toStr([1, 2, 3]); // -> '1,2,3'
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        function exports(val)
+        {
+            return val == null ? '' : val.toString();
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ has ------------------------------ */
 
     var has = _.has = (function ()
@@ -321,7 +355,7 @@
          *
          * |Name  |Type   |Desc                                |
          * |------|-------|------------------------------------|
-         * |value |*      |Value to check                      |
+         * |val   |*      |Value to check                      |
          * |return|boolean|True if value is an arguments object|
          *
          * ```javascript
@@ -390,11 +424,11 @@
 
     var isNum = _.isNum = (function ()
     {
-        /* Checks if value is classified as a Number primitive or object.
+        /* Check if value is classified as a Number primitive or object.
          *
          * |Name  |Type   |Desc                                 |
          * |------|-------|-------------------------------------|
-         * |value |*      |Value to check                       |
+         * |val   |*      |Value to check                       |
          * |return|boolean|True if value is correctly classified|
          * 
          * ```javascript
@@ -429,7 +463,7 @@
          *
          * |Name  |Type   |Desc                       |
          * |------|-------|---------------------------|
-         * |value |*      |Value to check             |
+         * |val   |*      |Value to check             |
          * |return|boolean|True if value is array like|
          *
          * > Function returns false.
@@ -447,14 +481,14 @@
          */
 
         /* dependencies
-         * isNum has isFn 
+         * isNum isFn 
          */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
         function exports(val)
         {
-            if (!has(val, 'length')) return false;
+            if (!val) return false;
 
             var len = val.length;
 
@@ -1077,6 +1111,69 @@
             });
 
             return ret;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ evalCss ------------------------------ */
+
+    _.evalCss = (function ()
+    {
+        /* Eval css.
+         */
+
+        /* dependencies
+         * toStr each filter 
+         */
+
+        var styleList = [],
+            scale = 1;
+
+        function exports(css)
+        {
+            css = toStr(css);
+
+            for (var i = 0, len = styleList.length; i < len; i++)
+            {
+                if (styleList[i].css === css) return;
+            }
+
+            let container = exports.container || document.head,
+                el = document.createElement('style');
+
+            el.type = 'text/css';
+            container.appendChild(el);
+
+            let style = {css, el, container};
+            resetStyle(style);
+            styleList.push(style);
+
+            return style;
+        }
+
+        exports.setScale = function (s) 
+        {
+            scale = s;
+            each(styleList, style => resetStyle(style));
+        };
+
+        exports.clear = function () 
+        {
+            each(styleList, ({container, el}) => container.removeChild(el));
+            styleList = [];
+        };
+
+        exports.remove = function (style) 
+        {
+            styleList = filter(styleList, s => s !== style);
+
+            style.container.removeChild(style.el);
+        };
+
+        function resetStyle({css, el}) 
+        {
+            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
         }
 
         return exports;

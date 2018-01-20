@@ -181,6 +181,9 @@ export var endWith = _.endWith = (function ()
 
 export var escapeJsonStr = _.escapeJsonStr = (function ()
 {
+    /* Escape json string.
+     */
+
     function exports(str)
     {
         return str.replace(/\\/g, '\\\\')
@@ -331,7 +334,7 @@ export var isArgs = _.isArgs = (function ()
      *
      * |Name  |Type   |Desc                                |
      * |------|-------|------------------------------------|
-     * |value |*      |Value to check                      |
+     * |val   |*      |Value to check                      |
      * |return|boolean|True if value is an arguments object|
      *
      * ```javascript
@@ -400,7 +403,7 @@ export var isNum = _.isNum = (function ()
      *
      * |Name  |Type   |Desc                                 |
      * |------|-------|-------------------------------------|
-     * |value |*      |Value to check                       |
+     * |val   |*      |Value to check                       |
      * |return|boolean|True if value is correctly classified|
      * 
      * ```javascript
@@ -473,7 +476,7 @@ export var isArrLike = _.isArrLike = (function ()
      *
      * |Name  |Type   |Desc                       |
      * |------|-------|---------------------------|
-     * |value |*      |Value to check             |
+     * |val   |*      |Value to check             |
      * |return|boolean|True if value is array like|
      *
      * > Function returns false.

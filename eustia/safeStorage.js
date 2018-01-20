@@ -1,3 +1,6 @@
+/* Safe localStorage and sessionStorage.
+ */
+
 _('isUndef memStorage');
 
 function exports(type, memReplacement)

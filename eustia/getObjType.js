@@ -1,3 +1,6 @@
+/* Get object type.
+ */
+
 _('upperFirst');
 
 function exports(obj)

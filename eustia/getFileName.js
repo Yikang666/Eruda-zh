@@ -1,3 +1,6 @@
+/* Extract file name from url.
+ */
+
 _('last trim');
 
 function exports(url)

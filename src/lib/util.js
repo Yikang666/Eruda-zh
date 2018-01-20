@@ -980,6 +980,9 @@ export var escape = _.escape = (function ()
 
 export var escapeJsonStr = _.escapeJsonStr = (function ()
 {
+    /* Escape json string.
+     */
+
     function exports(str)
     {
         return str.replace(/\\/g, '\\\\')
@@ -1063,6 +1066,9 @@ export var fileSize = _.fileSize = (function ()
 
 export var fullUrl = _.fullUrl = (function ()
 {
+    /* Add origin to url if needed.
+     */
+
     /* dependencies
      * startWith 
      */
@@ -1116,6 +1122,9 @@ export var upperFirst = _.upperFirst = (function ()
 
 export var getObjType = _.getObjType = (function ()
 {
+    /* Get object type.
+     */
+
     /* dependencies
      * upperFirst 
      */
@@ -1198,7 +1207,7 @@ export var isArgs = _.isArgs = (function ()
      *
      * |Name  |Type   |Desc                                |
      * |------|-------|------------------------------------|
-     * |value |*      |Value to check                      |
+     * |val   |*      |Value to check                      |
      * |return|boolean|True if value is an arguments object|
      *
      * ```javascript
@@ -1437,7 +1446,7 @@ export var isNum = _.isNum = (function ()
      *
      * |Name  |Type   |Desc                                 |
      * |------|-------|-------------------------------------|
-     * |value |*      |Value to check                       |
+     * |val   |*      |Value to check                       |
      * |return|boolean|True if value is correctly classified|
      * 
      * ```javascript
@@ -1472,7 +1481,7 @@ export var isArrLike = _.isArrLike = (function ()
      *
      * |Name  |Type   |Desc                       |
      * |------|-------|---------------------------|
-     * |value |*      |Value to check             |
+     * |val   |*      |Value to check             |
      * |return|boolean|True if value is array like|
      *
      * > Function returns false.
@@ -2037,6 +2046,9 @@ export var isBool = _.isBool = (function ()
 
 export var isCrossOrig = _.isCrossOrig = (function ()
 {
+    /* Check if a url is cross origin.
+     */
+
     /* dependencies
      * startWith 
      */
@@ -2117,6 +2129,9 @@ export var isErr = _.isErr = (function ()
 
 export var isErudaEl = _.isErudaEl = (function ()
 {
+    /* See if an element is within eruda.
+     */
+
     function exports(el)
     {
         var parentNode = el.parentNode;
@@ -2313,7 +2328,7 @@ export var isNil = _.isNil = (function ()
      * 
      * |Name  |Type   |Desc                              |
      * |------|-------|----------------------------------|
-     * |value |*      |Value to check                    |
+     * |val   |*      |Value to check                    |
      * |return|boolean|True if value is null or undefined|
      * 
      * ```javascript
@@ -2397,7 +2412,7 @@ export var isNative = _.isNative = (function ()
      * 
      * |Name  |Type   |Desc                              |
      * |------|-------|----------------------------------|
-     * |value |*      |Value to check                    |
+     * |val   |*      |Value to check                    |
      * |return|boolean|True if value is a native function|
      * 
      * ```javascript
@@ -2445,7 +2460,7 @@ export var isNull = _.isNull = (function ()
      *
      * |Name  |Type   |Desc                    |
      * |------|-------|------------------------|
-     * |value |*      |Value to check          |
+     * |val   |*      |Value to check          |
      * |return|boolean|True if value is an Null|
      *
      * ```javascript
@@ -2990,6 +3005,9 @@ export var filter = _.filter = (function ()
 
 export var evalCss = _.evalCss = (function ()
 {
+    /* Eval css.
+     */
+
     /* dependencies
      * toStr each filter 
      */
@@ -4745,6 +4763,9 @@ export var memStorage = _.memStorage = (function (exports)
 
 export var safeStorage = _.safeStorage = (function ()
 {
+    /* Safe localStorage and sessionStorage.
+     */
+
     /* dependencies
      * isUndef memStorage 
      */
@@ -5751,6 +5772,9 @@ export var toNum = _.toNum = (function (exports)
 
 export var pxToNum = _.pxToNum = (function ()
 {
+    /* Turn string like '0px' to number.
+     */
+
     /* dependencies
      * toNum 
      */
@@ -5997,6 +6021,9 @@ export var trim = _.trim = (function ()
 
 export var getFileName = _.getFileName = (function ()
 {
+    /* Extract file name from url.
+     */
+
     /* dependencies
      * last trim 
      */

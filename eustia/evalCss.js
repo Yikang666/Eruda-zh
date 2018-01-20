@@ -1,3 +1,6 @@
+/* Eval css.
+ */
+
 _('toStr each filter');
 
 var styleList = [],

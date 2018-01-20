@@ -1,3 +1,6 @@
+/* Add origin to url if needed.
+ */
+
 _('startWith');
 
 let origin = window.location.origin;
