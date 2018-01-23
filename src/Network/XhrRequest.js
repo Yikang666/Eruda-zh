@@ -51,6 +51,8 @@ export default class XhrRequest extends Emitter
     }
     handleDone()
     {
+        if (!this._xhr) return;
+
         let xhr = this._xhr,
             resType = xhr.responseType;
 
