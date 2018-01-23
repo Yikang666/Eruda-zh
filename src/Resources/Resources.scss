@@ -45,7 +45,9 @@
             padding: $padding !important;
             li {
                 cursor: pointer;
-                font-size: 0;
+                &.image {
+                    font-size: 0;
+                }
                 overflow-y: hidden;
                 img {
                     width: 100%;
