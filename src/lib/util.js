@@ -6855,27 +6855,35 @@ export var viewportScale = _.viewportScale = (function ()
      * ```
      */
 
+    /* module
+     * env: browser
+     * test: browser
+     */
+
     /* dependencies
      * meta clamp trim each map isNaN 
      */
 
     function exports() 
     {
-        let viewport = meta('viewport');
+        var viewport = meta('viewport');
 
         if (!viewport) return 1;
 
-        viewport = map(viewport.split(','), val => trim(val));
+        viewport = map(viewport.split(','), function (val) 
+        { 
+            return trim(val); 
+        });
 
-        let minScale = 0.25,
+        var minScale = 0.25,
             maxScale = 5,
             initialScale = 1;
 
-        each(viewport, val => 
+        each(viewport, function (val)
         {
             val = val.split('=');
 
-            let key = val[0];
+            var key = val[0];
             val = val[1];
 
             if (key === 'initial-scale') initialScale = +val;
@@ -6883,7 +6891,7 @@ export var viewportScale = _.viewportScale = (function ()
             if (key === 'minimum-scale') minScale = +val;
         });
 
-        let ret = clamp(initialScale, minScale, maxScale);
+        var ret = clamp(initialScale, minScale, maxScale);
 
         // Some will use ';' to be the separator, need to avoid the wrong result.
         if (isNaN(ret)) return 1;
