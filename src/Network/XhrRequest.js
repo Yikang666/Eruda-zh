@@ -51,8 +51,6 @@ export default class XhrRequest extends Emitter
     }
     handleDone()
     {
-        if (!this._xhr) return;
-
         let xhr = this._xhr,
             resType = xhr.responseType;
 
@@ -65,8 +63,6 @@ export default class XhrRequest extends Emitter
             time: now(),
             resTxt: resTxt
         });
-
-        delete this._xhr;
     }
 }
 
