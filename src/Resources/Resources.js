@@ -1,6 +1,5 @@
 import Tool from '../DevTools/Tool';
 import Settings from '../Settings/Settings';
-import Masonry from 'masonry-layout';
 import {
     evalCss, 
     $, 
@@ -381,34 +380,6 @@ export default class Resources extends Tool
             imageData: imageData,
             imageState: getState('image', imageData.length)
         }));
-
-        if (this._imageData.length === 0) return;
-
-        let $imgList = this._$el.find('.eruda-image-list');
-
-        let columnWidth = ($imgList.offset().width - 20) / 80,
-            maxItemWidth = columnWidth * 20;
-
-        $imgList.find('li').each(function ()
-        {
-            let $this = $(this),
-                img = $this.find('img').get(0);
-
-            let itemWidth = columnWidth,
-                imgWidth = img.naturalWidth || 0;
-
-            while (imgWidth > itemWidth && itemWidth < maxItemWidth) 
-            {
-                itemWidth += columnWidth;
-            }
-
-            $this.css('width', itemWidth);
-        });
-
-        new Masonry($imgList.get(0), {
-            itemSelector: 'li',
-            columnWidth
-        });
     }
     _renderHtml(html)
     {
