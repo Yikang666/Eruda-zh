@@ -36,6 +36,7 @@ export default class DevTools extends Emitter
     show()
     {
         this._isShow = true;
+        this.emit('show');
 
         this._$el.show();
         this._navBar.resetStyle();
@@ -51,6 +52,7 @@ export default class DevTools extends Emitter
     hide()
     {
         this._isShow = false;
+        this.emit('hide');
 
         this._$el.css({opacity: 0});
         setTimeout(() => this._$el.hide(), 300);
