@@ -5,7 +5,10 @@ let browser = detectBrowser();
 export default [
     {
         name: 'Location',
-        val: location.href
+        val() 
+        { 
+            return location.href;
+        }
     },
     {
         name: 'User Agent',

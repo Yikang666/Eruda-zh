@@ -143,13 +143,14 @@ Clear infos.
 
 Add info.
 
-|Name   |Type  |Desc        |
-|-------|------|------------|
-|name   |string|Info name   |
-|content|string|Info content|
+|Name   |Type           |Desc        |
+|-------|---------------|------------|
+|name   |string         |Info name   |
+|content|string function|Info content|
 
 ```javascript
 info.add('title', 'content');
+info.add('location', () => location.href);
 ```
 
 ### remove

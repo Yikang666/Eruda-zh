@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool';
 import defInfo from './defInfo';
-import {evalCss, each} from '../lib/util';
+import {evalCss, each, isFn} from '../lib/util';
 
 export default class Info extends Tool
 {
@@ -19,6 +19,12 @@ export default class Info extends Tool
         super.init($el);
 
         this._addDefInfo();
+    }
+    show() 
+    {
+        this._render();
+        
+        super.show();
     }
     destroy() 
     {
@@ -61,7 +67,16 @@ export default class Info extends Tool
     }
     _render()
     {
-        this._renderHtml(this._tpl({messages: this._msgs}));
+        let messages = [];
+
+        each(this._msgs, ({name, val}) => 
+        {
+            if (isFn(val)) val = val();
+            
+            messages.push({name, val});
+        });
+
+        this._renderHtml(this._tpl({messages}));
     }
     _renderHtml(html)
     {
