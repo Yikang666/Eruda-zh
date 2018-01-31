@@ -12,7 +12,7 @@ export default class Info extends Tool
 
         this.name = 'info';
         this._tpl = require('./Info.hbs');
-        this._msgs = [];
+        this._infos = [];
     }
     init($el)
     {
@@ -34,7 +34,18 @@ export default class Info extends Tool
     }
     add(name, val)
     {
-        this._msgs.push({name, val});
+        let infos = this._infos,
+            isUpdate = false;
+
+        each(infos, info => 
+        {
+            if (name !== info.name) return;
+
+            info.val = val;
+            isUpdate = true;
+        });
+
+        if (!isUpdate) infos.push({name, val});
 
         this._render();
 
@@ -42,11 +53,11 @@ export default class Info extends Tool
     }
     remove(name)
     {
-        let msgs = this._msgs;
+        let infos = this._infos;
 
-        for (let i = 0, len = msgs.length; i < len; i++)
+        for (let i = infos.length - 1; i >= 0; i--)
         {
-            if (msgs[i].name === name) msgs.splice(i, 1);
+            if (infos[i].name === name) infos.splice(i, 1);
         }
 
         this._render();
@@ -55,7 +66,7 @@ export default class Info extends Tool
     }
     clear()
     {
-        this._msgs = [];
+        this._infos = [];
 
         this._render();
 
@@ -67,16 +78,16 @@ export default class Info extends Tool
     }
     _render()
     {
-        let messages = [];
+        let infos = [];
 
-        each(this._msgs, ({name, val}) => 
+        each(this._infos, ({name, val}) => 
         {
             if (isFn(val)) val = val();
             
-            messages.push({name, val});
+            infos.push({name, val});
         });
 
-        this._renderHtml(this._tpl({messages}));
+        this._renderHtml(this._tpl({infos}));
     }
     _renderHtml(html)
     {
