@@ -49,6 +49,7 @@
         padding-bottom: 40px;
         .js-input {
             position: absolute;
+            z-index: 100;
             left: 0;
             bottom: 0;
             width: 100%;
