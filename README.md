@@ -74,7 +74,7 @@ It's also available on [jsDelivr](http://www.jsdelivr.com/projects/eruda) and [c
 <script>eruda.init();</script>
 ```
 
-The JavaScript file size is quite huge(about 90kb gzipped) and therefore not suitable to include in mobile pages. It's recommended to make sure eruda is loaded only when eruda is set to true on url(http://example.com/?eruda=true), for example:
+The JavaScript file size is quite huge(about 100kb gzipped) and therefore not suitable to include in mobile pages. It's recommended to make sure eruda is loaded only when eruda is set to true on url(http://example.com/?eruda=true), for example:
 
 ```javascript
 ;(function () {
@@ -118,8 +118,3 @@ When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTI
 ## Contribution
 
 Read [Contributing Guide](doc/CONTRIBUTING.md) for development setup instructions.
-
-## Related Projects
-
-* [eustia](https://github.com/liriliri/eustia): Generator of eruda's utility library.
-* [freego](https://github.com/surunzi/freego): Http redirect proxy injecting eruda on every page.

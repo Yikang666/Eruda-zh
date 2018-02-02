@@ -47,7 +47,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 通过CDN使用：
 
 ```html
-<script src="//cdn.bootcss.com/eruda/1.4.0/eruda.min.js"></script>
+<script src="//cdn.bootcss.com/eruda/1.4.2/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
@@ -64,7 +64,7 @@ npm install eruda --save
 <script>eruda.init();</script>
 ```
 
-Js文件对于移动端来说略重（gzip后大概80kb）。建议通过url参数来控制是否加载调试器，比如：
+Js文件对于移动端来说略重（gzip后大概100kb）。建议通过url参数来控制是否加载调试器，比如：
 
 ```javascript
 ;(function () {
