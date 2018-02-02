@@ -19,7 +19,10 @@ import {
     startWith,
     isFn,
     isBool,
-    safeGet
+    safeGet,
+    pxToNum,
+    isNaN,
+    isNum
 } from '../lib/util';
 
 export default class Elements extends Tool
@@ -289,6 +292,37 @@ export default class Elements extends Tool
         if (needNoStyle(tagName)) return ret;
 
         let computedStyle = cssStore.getComputedStyle();
+
+        function getBoxModelValue(type) 
+        {
+            let keys = ['top', 'left', 'right', 'bottom'];
+            if (type !== 'position') keys = map(keys, key => `${type}-${key}`);
+            if (type === 'border') keys = map(keys, key => `${key}-width`);
+
+            return {
+                top: boxModelValue(computedStyle[keys[0]], type),
+                left: boxModelValue(computedStyle[keys[1]], type),
+                right: boxModelValue(computedStyle[keys[2]], type),
+                bottom: boxModelValue(computedStyle[keys[3]], type)
+            };
+        }
+
+        let boxModel = {
+            margin: getBoxModelValue('margin'),
+            border: getBoxModelValue('border'),
+            padding: getBoxModelValue('padding'),
+            content: {
+                width: boxModelValue(computedStyle['width']),
+                height: boxModelValue(computedStyle['height'])
+            }
+        };
+
+        if (computedStyle['position'] !== 'static') 
+        {
+            boxModel.position = getBoxModelValue('position');
+        }
+        ret.boxModel = boxModel;
+
         if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
         ret.rmDefComputedStyle = this._rmDefComputedStyle;
         processStyleRules(computedStyle);
@@ -577,3 +611,17 @@ function rmEvent(el, type, listener, useCapture = false)
 let getWinEventProto = () => safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
 
 let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;
+
+function boxModelValue(val, type) 
+{
+    if (isNum(val)) return val;
+
+    if (!isStr(val)) return '‒';
+
+    let ret = pxToNum(val);
+    if (isNaN(ret)) return val;
+
+    if (type === 'position') return ret;
+
+    return ret === 0 ? '‒' : ret;
+}
