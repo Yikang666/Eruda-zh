@@ -34,6 +34,7 @@ export default class Resources extends Tool
         this._cookieData = [];
         this._scriptData = [];
         this._stylesheetData = [];
+        this._iframeData = [];
         this._imageData = [];
         this._observeElement = true;
         this._tpl = require('./Resources.hbs');
@@ -56,6 +57,7 @@ export default class Resources extends Tool
                    .refreshCookie()
                    .refreshScript()
                    .refreshStylesheet()
+                   .refreshIframe()
                    .refreshImage()._render();
     }
     destroy() 
@@ -96,6 +98,24 @@ export default class Resources extends Tool
         stylesheetData = unique(stylesheetData);
 
         this._stylesheetData = stylesheetData;
+
+        return this;
+    }
+    refreshIframe() 
+    {
+        let iframeData = [];
+
+        $('iframe').each(function () 
+        {
+            let $this = $(this),
+                src = $this.attr('src');
+
+            if (src) iframeData.push(src);
+        });
+
+        iframeData = unique(iframeData);
+
+        this._iframeData = iframeData;
 
         return this;
     }
@@ -226,6 +246,8 @@ export default class Resources extends Tool
            .on('click', '.eruda-refresh-session-storage', () => this.refreshSessionStorage()._render())
            .on('click', '.eruda-refresh-cookie', () => this.refreshCookie()._render())
            .on('click', '.eruda-refresh-script', () => this.refreshScript()._render())
+           .on('click', '.eruda-refresh-stylesheet', () => this.refreshStylesheet()._render())
+           .on('click', '.eruda-refresh-iframe', () => this.refreshIframe()._render())
            .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
            .on('click', '.eruda-delete-storage', function ()
            {
@@ -292,7 +314,8 @@ export default class Resources extends Tool
                showSources('img', src);
            })
            .on('click', '.eruda-css-link', linkFactory('css'))
-           .on('click', '.eruda-js-link', linkFactory('js'));
+           .on('click', '.eruda-js-link', linkFactory('js'))
+           .on('click', '.eruda-iframe-link', linkFactory('iframe'));
 
         orientation.on('change', () => this._render());
 
@@ -317,9 +340,12 @@ export default class Resources extends Tool
 
                 let url = $(this).attr('href');
 
-                if (!isCrossOrig(url))
+                if (type === 'iframe' || isCrossOrig(url)) 
                 {
-                    return ajax({
+                    showSources('iframe', url);
+                } else 
+                {
+                    ajax({
                         url,
                         success: data =>
                         {
@@ -327,10 +353,7 @@ export default class Resources extends Tool
                         },
                         dataType: 'raw'
                     });
-                } else
-                {
-                    showSources('iframe', url);
-                }
+                } 
             };
         }
     }
@@ -371,13 +394,14 @@ export default class Resources extends Tool
         this._renderHtml(this._tpl({
             localStoreData: this._localStoreData,
             sessionStoreData: this._sessionStoreData,
-            cookieData: cookieData,
+            cookieData,
             cookieState: getState('cookie', cookieData.length),
-            scriptData: scriptData,
+            scriptData,
             scriptState: getState('script', scriptData.length),
-            stylesheetData: stylesheetData,
+            stylesheetData,
             stylesheetState: getState('stylesheet', stylesheetData.length),
-            imageData: imageData,
+            iframeData: this._iframeData,
+            imageData,
             imageState: getState('image', imageData.length)
         }));
     }

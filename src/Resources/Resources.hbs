@@ -126,6 +126,25 @@
         {{/if}}
     </ul>
 </div>
+<div class="eruda-section eruda-iframe">
+    <h2 class="eruda-title">
+        Iframe
+        <div class="eruda-btn eruda-refresh-iframe">
+            <span class="eruda-icon-repeat"></span>
+        </div>
+    </h2>
+    <ul class="eruda-link-list">
+        {{#if iframeData}}
+            {{#each iframeData}}
+                <li>
+                    <a href="{{this}}" target="_blank" class="eruda-iframe-link">{{this}}</a>
+                </li>
+            {{/each}}
+        {{else}}
+            <li>Empty</li>
+        {{/if}}
+    </ul>
+</div>
 <div class="eruda-section eruda-image">
     <h2 class="eruda-title {{imageState}}">
         Image
