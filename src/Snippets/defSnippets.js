@@ -105,6 +105,14 @@ export default [
         desc: 'Edit and run JavaScript'
     },
     {
+        name: 'Load Benchmark Plugin',
+        fn() 
+        {
+            loadPlugin('benchmark');
+        },
+        desc: 'Run JavaScript benchmarks'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -202,5 +210,6 @@ let pluginVersion = {
     features: '1.0.2',
     timing: '1.1.1',
     memory: '1.0.1',
-    code: '1.0.0'
+    code: '1.0.0',
+    benchmark: '1.0.0'
 };
