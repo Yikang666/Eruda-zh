@@ -57,6 +57,8 @@ export default class Snippets extends Tool
         {
             if (snippets[i].name === name) this._run(i);
         }
+
+        return this;
     }
     clear()
     {
@@ -69,7 +71,7 @@ export default class Snippets extends Tool
     {
         let self = this;
 
-        this._$el.on('click', '.eruda-run', function I()
+        this._$el.on('click', '.eruda-run', function ()
         {
             let idx = $(this).data('idx');
 
