@@ -118,4 +118,4 @@ When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTI
 
 ## Contribution
 
-Read [Contributing Guide](doc/CONTRIBUTING.md) for development setup instructions.
+Read [Contributing Guide](.github/CONTRIBUTING.md) for development setup instructions.
