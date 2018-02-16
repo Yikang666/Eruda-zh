@@ -177,6 +177,90 @@ export var endWith = _.endWith = (function ()
     return exports;
 })();
 
+/* ------------------------------ toStr ------------------------------ */
+
+export var toStr = _.toStr = (function ()
+{
+    /* Convert value to a string.
+     *
+     * |Name  |Type  |Desc            |
+     * |------|------|----------------|
+     * |val   |*     |Value to convert|
+     * |return|string|Resulted string |
+     *
+     * ```javascript
+     * toStr(null); // -> ''
+     * toStr(1); // -> '1'
+     * toStr(false); // -> 'false'
+     * toStr([1, 2, 3]); // -> '1,2,3'
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    function exports(val)
+    {
+        return val == null ? '' : val.toString();
+    }
+
+    return exports;
+})();
+
+/* ------------------------------ escapeJsStr ------------------------------ */
+
+export var escapeJsStr = _.escapeJsStr = (function ()
+{
+    /* Escape string to be a valid JavaScript string literal between quotes.
+     *
+     * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
+     *
+     * |Name  |Type  |Desc            |
+     * |------|------|----------------|
+     * |str   |string|String to escape|
+     * |return|string|Escaped string  |
+     * 
+     * ```javascript
+     * escapeJsStr('\"\n'); // -> '\\"\\\\n'
+     * ```
+     */ 
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * toStr 
+     */ 
+
+    function exports(str) 
+    {
+        return toStr(str).replace(regEscapeChars, function (char) 
+        {
+            switch (char) 
+            {
+                case '"':
+                case '\'':
+                case '\\':
+                    return '\\' + char;
+                case '\n': return '\\n';
+                case '\r': return '\\r';
+                // Line separator
+                case '\u2028': return '\\u2028';
+                // Paragraph separator
+                case '\u2029': return '\\u2029';
+            }
+        });
+    }
+
+    var regEscapeChars = /["'\\\n\r\u2028\u2029]/g;
+
+    return exports;
+})();
+
 /* ------------------------------ escapeJsonStr ------------------------------ */
 
 export var escapeJsonStr = _.escapeJsonStr = (function ()
@@ -184,11 +268,13 @@ export var escapeJsonStr = _.escapeJsonStr = (function ()
     /* Escape json string.
      */
 
+    /* dependencies
+     * escapeJsStr 
+     */
+
     function exports(str)
     {
-        return str.replace(/\\/g, '\\\\')
-                  .replace(/"/g, '\\"')
-                  .replace(/\f|\n|\r|\t/g, '');
+        return escapeJsStr(str).replace(/\\'/g, '\'');
     }
 
     return exports;
@@ -369,7 +455,7 @@ export var isArr = _.isArr = (function (exports)
      *
      * |Name  |Type   |Desc                              |
      * |------|-------|----------------------------------|
-     * |val   |*      |The value to check                |
+     * |val   |*      |Value to check                    |
      * |return|boolean|True if value is an `Array` object|
      *
      * ```javascript
@@ -1082,38 +1168,6 @@ export var filter = _.filter = (function ()
         });
 
         return ret;
-    }
-
-    return exports;
-})();
-
-/* ------------------------------ toStr ------------------------------ */
-
-export var toStr = _.toStr = (function ()
-{
-    /* Convert value to a string.
-     *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |val   |*     |Value to convert|
-     * |return|string|Resulted string |
-     *
-     * ```javascript
-     * toStr(null); // -> ''
-     * toStr(1); // -> '1'
-     * toStr(false); // -> 'false'
-     * toStr([1, 2, 3]); // -> '1,2,3'
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    function exports(val)
-    {
-        return val == null ? '' : val.toString();
     }
 
     return exports;

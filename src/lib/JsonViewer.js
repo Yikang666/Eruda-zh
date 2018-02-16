@@ -258,4 +258,4 @@ function objToArr(val)
 
 const LIGHTER_KEY = ['__proto__'];
 
-let encode = str => escape(toStr(str));
+let encode = str => escape(toStr(str)).replace(/\n/g, '↵').replace(/\f|\r|\t/g, '');

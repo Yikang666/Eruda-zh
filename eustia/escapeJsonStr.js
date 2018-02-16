@@ -1,9 +1,9 @@
 /* Escape json string.
  */
 
+_('escapeJsStr');
+
 function exports(str)
 {
-    return str.replace(/\\/g, '\\\\')
-              .replace(/"/g, '\\"')
-              .replace(/\f|\n|\r|\t/g, '');
+    return escapeJsStr(str).replace(/\\'/g, '\'');
 }

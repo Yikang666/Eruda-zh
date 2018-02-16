@@ -39,7 +39,7 @@ export default function getAbstract(obj, {
         strWrapper = '<span style="color: #183691;">',
         boolWrapper = '<span style="color: #0086b3;">',
         specialWrapper = '<span style="color: #707d8b;">',
-        strEscape = str => escape(str),
+        strEscape = str => escape(str).replace(/\\n/g, '↵').replace(/\\f|\\r|\\t/g, '').replace(/\\/g, ''),
         wrapperEnd = '</span>';
 
     let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd,
@@ -51,8 +51,6 @@ export default function getAbstract(obj, {
     function wrapStr(str)
     {
         str = toStr(str);
-
-        str = str.replace(/\\/g, '');
 
         if (contain(SPECIAL_VAL, str) || startWith(str, 'Array['))
         {
