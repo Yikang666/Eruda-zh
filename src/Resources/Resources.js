@@ -16,7 +16,7 @@ import {
     isErudaEl,
     toArr,
     concat,
-    cookie
+    rmCookie
 } from '../lib/util';
 
 export default class Resources extends Tool
@@ -269,7 +269,7 @@ export default class Resources extends Tool
            {
                let key = $(this).data('key');
 
-               delCookie(key);
+               rmCookie(key);
                self.refreshCookie()._render();
            })
            .on('click', '.eruda-clear-storage', function ()
@@ -288,7 +288,7 @@ export default class Resources extends Tool
            })
            .on('click', '.eruda-clear-cookie', () =>
            {
-               each(this._cookieData, val => delCookie(val.key));
+               each(this._cookieData, val => rmCookie(val.key));
                this.refreshCookie()._render();
            })
            .on('click', '.eruda-storage-val', function ()
@@ -489,48 +489,6 @@ function getState(type, len)
     if (len >= warn) return 'eruda-warn';
 
     return 'eruda-ok';
-}
-
-let {hostname, pathname} = window.location;
-
-function delCookie(key)
-{
-    let hostNames = hostname.split('.'),
-        pathNames = pathname.split('/'),
-        domain = '',
-        pathLen = pathNames.length,
-        path;
-
-    if (del()) return;
-
-    for (let i = hostNames.length - 1; i >= 0; i--)
-    {
-        let hostName = hostNames[i];
-        if (hostName === '') continue;
-        domain = (domain === '') ? hostName : hostName + '.' + domain ;
-
-        path = '/';
-        if (del({domain, path}) || del({domain})) return;
-
-        for (let j = 0; j < pathLen; j++)
-        {
-            let pathName = pathNames[j];
-            if (pathName === '') continue;
-
-            path += pathName;
-            if (del({domain, path}) || del({path})) return;
-
-            path += '/';
-            if (del({domain, path}) || del({path})) return;
-        }
-    }
-
-    function del(options = {})
-    {
-        cookie.remove(key, options);
-
-        return !cookie.get(key);
-    }
 }
 
 function getLowerCaseTagName(el) 

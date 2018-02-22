@@ -1967,6 +1967,18 @@ var paramArr = _.restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
 
+## rmCookie 
+
+Loop through all possible path and domain to remove cookie.
+
+|Name|Type  |Desc      |
+|----|------|----------|
+|key |string|Cookie key|
+
+```javascript
+rmCookie('test');
+```
+
 ## root 
 
 Root object reference, `global` in nodeJs, `window` in browser.
