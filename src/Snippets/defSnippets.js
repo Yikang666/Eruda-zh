@@ -113,6 +113,14 @@ export default [
         desc: 'Run JavaScript benchmarks'
     },
     {
+        name: 'Load Geolocation Plugin',
+        fn() 
+        {
+            loadPlugin('geolocation');
+        },
+        desc: 'Test geolocation'
+    },
+    {
         name: 'Restore Settings',
         fn() 
         {
@@ -211,5 +219,6 @@ let pluginVersion = {
     timing: '1.1.1',
     memory: '1.0.1',
     code: '1.0.0',
-    benchmark: '1.0.0'
+    benchmark: '1.0.0',
+    geolocation: '1.0.0'
 };
