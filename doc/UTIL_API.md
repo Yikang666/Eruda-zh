@@ -1640,7 +1640,7 @@ Inject script tag into page with given src value.
 |cb  |function|Onload callback|
 
 ```javascript
-loadJs('main.js', function ()
+loadJs('main.js', function (isLoaded)
 {
     // Do something...
 });
@@ -1902,6 +1902,25 @@ var start = perfNow();
 // Do something.
 
 console.log(perfNow() - start);
+```
+
+## prefix 
+
+Add vendor prefixes to a CSS attribute.
+
+|Name  |Type  |Desc                  |
+|------|------|----------------------|
+|name  |string|Property name         |
+|return|string|Prefixed property name|
+
+### dash
+
+Create a dasherize version.
+
+```javascript
+prefix('text-emphasis'); // -> 'WebkitTextEmphasis'
+prefix.dash('text-emphasis'); // -> '-webkit-text-emphasis'
+prefix('color'); // -> 'color'
 ```
 
 ## pxToNum 

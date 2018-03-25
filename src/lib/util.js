@@ -2338,6 +2338,68 @@ export var isMobile = _.isMobile = (function (exports)
     return exports;
 })({});
 
+/* ------------------------------ prefix ------------------------------ */
+
+export var prefix = _.prefix = (function (exports)
+{
+    /* Add vendor prefixes to a CSS attribute.
+     *
+     * |Name  |Type  |Desc                  |
+     * |------|------|----------------------|
+     * |name  |string|Property name         |
+     * |return|string|Prefixed property name|
+     * 
+     * ### dash
+     * 
+     * Create a dasherize version.
+     * 
+     * ```javascript
+     * prefix('text-emphasis'); // -> 'WebkitTextEmphasis'
+     * prefix.dash('text-emphasis'); // -> '-webkit-text-emphasis'
+     * prefix('color'); // -> 'color'
+     * ```
+     */
+
+    /* module
+     * env: browser
+     * test: browser
+     */
+
+    /* dependencies
+     * memoize camelCase upperFirst has kebabCase 
+     */ 
+
+    exports = memoize(function (name) 
+    {
+        name = name.replace(regPrefixes, '');
+        name = camelCase(name);
+
+        if (has(style, name)) return name;
+
+        var i = prefixes.length;
+        while (i--) 
+        {
+            var prefixName = prefixes[i] + upperFirst(name);
+            if (has(style, prefixName)) return prefixName;
+        }
+
+        return name;
+    });
+
+    exports.dash = memoize(function (name) 
+    {
+        var camelCaseResult = exports(name);
+
+        return (regPrefixes.test(camelCaseResult) ? '-' : '') + kebabCase(camelCaseResult);
+    });
+
+    var prefixes = ['O', 'ms', 'Moz', 'Webkit'],
+        regPrefixes = /^(O)|(ms)|(Moz)|(Webkit)|(-o-)|(-ms-)|(-moz-)|(-webkit-)/g,
+        style = document.createElement('p').style;
+
+    return exports;
+})({});
+
 /* ------------------------------ isNaN ------------------------------ */
 
 export var isNaN = _.isNaN = (function ()
@@ -2580,7 +2642,7 @@ export var loadJs = _.loadJs = (function ()
      * |cb  |function|Onload callback|
      *
      * ```javascript
-     * loadJs('main.js', function ()
+     * loadJs('main.js', function (isLoaded)
      * {
      *     // Do something...
      * });
@@ -3712,7 +3774,7 @@ export var $css = _.$css = (function ()
      */
 
     /* dependencies
-     * isStr isObj camelCase kebabCase isUndef contain isNum $safeEls startWith 
+     * isStr isObj kebabCase isUndef contain isNum $safeEls startWith prefix 
      */
 
     function exports(nodes, name, val)
@@ -3734,7 +3796,7 @@ export var $css = _.$css = (function ()
 
     function getCss(node, name)
     {
-        return node.style[camelCase(name)] || getComputedStyle(node, '').getPropertyValue(name);
+        return node.style[prefix(name)] || getComputedStyle(node, '').getPropertyValue(name);
     }
 
     function setCss(nodes, css)
@@ -3744,7 +3806,7 @@ export var $css = _.$css = (function ()
             var cssText = ';';
             each(css, function (val, key)
             {
-                key = dasherize(key);
+                key = prefix.dash(key);
                 cssText += key + ':' + addPx(key, val) + ';';
             });
             node.style.cssText += cssText;
@@ -3766,14 +3828,6 @@ export var $css = _.$css = (function ()
         var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
 
         return needPx ? val + 'px' : val;
-    }
-
-    function dasherize(str) 
-    {
-        // -webkit- -o- 
-        if (startWith(str, '-')) return str;
-
-        return kebabCase(str);
     }
 
     return exports;
