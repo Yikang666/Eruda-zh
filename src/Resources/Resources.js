@@ -16,7 +16,8 @@ import {
     isErudaEl,
     toArr,
     concat,
-    rmCookie
+    rmCookie,
+    decodeUriComponent
 } from '../lib/util';
 
 export default class Resources extends Tool
@@ -170,13 +171,7 @@ export default class Resources extends Tool
             each(document.cookie.split(';'), function (val, t)
             {
                 val = val.split('=');
-                try
-                {
-                    t = decodeURIComponent(val[1]);
-                } catch(e)
-                {
-                    t = val[1];
-                }
+                t = decodeUriComponent(val[1]);
                 cookieData.push({
                     key: trim(val[0]),
                     val: t

@@ -138,6 +138,313 @@
         return exports;
     })();
 
+    /* ------------------------------ ucs2 ------------------------------ */
+
+    var ucs2 = _.ucs2 = (function (exports)
+    {
+        /* UCS-2 encoding and decoding.
+         *
+         * ### encode
+         * 
+         * Create a string using an array of code point values.
+         * 
+         * |Name  |Type  |Desc                |
+         * |------|------|--------------------|
+         * |arr   |array |Array of code points|
+         * |return|string|Encoded string      |
+         * 
+         * ### decode
+         * 
+         * Create an array of code point values using a string.
+         * 
+         * |Name  |Type  |Desc                |
+         * |------|------|--------------------|
+         * |str   |string|Input string        |
+         * |return|array |Array of code points|
+         * 
+         * ```javascript
+         * ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
+         * ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
+         * '𝌆'.length; // -> 2
+         * ucs2.decode('𝌆').length; // -> 1
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */ 
+
+        // https://mathiasbynens.be/notes/javascript-encoding 
+        exports = {
+            encode: function (arr) 
+            {
+                return String.fromCodePoint.apply(String, arr);
+            },
+            decode: function (str) 
+            {
+                var ret = [];
+
+                var i = 0, 
+                    len = str.length;
+
+                while(i < len) 
+                {
+                    var c = str.charCodeAt(i++);
+
+                    // A high surrogate
+                    if (c >= 0xD800 && c <= 0xDBFF && i < len) 
+                    {
+                        var tail = str.charCodeAt(i++);
+                        // nextC >= 0xDC00 && nextC <= 0xDFFF
+                        if ((tail & 0xFC00) === 0xDC00) 
+                        {
+                            // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
+                            ret.push(((c & 0x3FF) << 10) + (tail & 0x3FF) + 0x10000);
+                        } else 
+                        {
+                            ret.push(c);
+                            i--;
+                        }
+                    } else 
+                    {
+                        ret.push(c);
+                    }
+                }
+
+                return ret;
+            }
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ utf8 ------------------------------ */
+
+    var utf8 = _.utf8 = (function (exports)
+    {
+        /* UTF-8 encoding and decoding.
+         *
+         * ### encode
+         * 
+         * Turn any UTF-8 decoded string into UTF-8 encoded string.
+         * 
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |str   |string|String to encode|
+         * |return|string|Encoded string  |
+         * 
+         * ### decode
+         * 
+         * |Name        |Type   |Desc                  |
+         * |------------|-------|----------------------|
+         * |str         |string |String to decode      |
+         * |[safe=false]|boolean|Suppress error if true|
+         * |return      |string |Decoded string        |
+         * 
+         * Turn any UTF-8 encoded string into UTF-8 decoded string.
+         * 
+         * ```javascript
+         * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
+         * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * ucs2 
+         */
+
+        // https://encoding.spec.whatwg.org/#utf-8
+        exports = {
+            encode: function (str) 
+            {
+                var codePoints = ucs2.decode(str);
+
+                var byteArr = '';
+
+                for (var i = 0, len = codePoints.length; i < len; i++) 
+                {
+                    byteArr += encodeCodePoint(codePoints[i]);
+                }
+
+                return byteArr;
+            },
+            decode: function decode(str, safe)
+            {
+                byteArr = ucs2.decode(str);
+                byteIdx = 0; 
+                byteCount = byteArr.length;
+                codePoint = 0;
+                bytesSeen = 0;
+                bytesNeeded = 0;
+                lowerBoundary = 0x80;
+                upperBoundary = 0xBF;
+
+                var codePoints = [];
+
+                var tmp;
+
+                while((tmp = decodeCodePoint(safe)) !== false) 
+                {
+                    codePoints.push(tmp);
+                }
+
+                return ucs2.encode(codePoints);
+            }
+        };
+
+        var fromCharCode = String.fromCharCode;
+
+        function encodeCodePoint(codePoint) 
+        {
+            // U+0000 to U+0080, ASCII code point
+            if ((codePoint & 0xFFFFFF80) === 0) 
+            {
+                return fromCharCode(codePoint);
+            }
+
+            var ret = '',
+                count,
+                offset;
+
+            // U+0080 to U+07FF, inclusive
+            if ((codePoint & 0xFFFFF800) === 0) 
+            {
+                count = 1;
+                offset = 0xC0;
+            } else if ((codePoint & 0xFFFF0000) === 0)
+            {
+                // U+0800 to U+FFFF, inclusive
+                count = 2;
+                offset = 0xE0;
+            } else if ((codePoint & 0xFFE00000) == 0) 
+            {
+                // U+10000 to U+10FFFF, inclusive
+                count = 3;
+                offset = 0xF0;
+            }
+
+            ret += fromCharCode((codePoint >> (6 * count)) + offset);
+
+            while (count > 0) 
+            {
+                var tmp = codePoint >> (6 * (count - 1));
+                ret += fromCharCode(0x80 | tmp & 0x3F);
+                count--;
+            }
+
+            return ret;
+        }
+
+        var byteArr,
+            byteIdx, 
+            byteCount, 
+            codePoint,
+            bytesSeen,
+            bytesNeeded,
+            lowerBoundary,
+            upperBoundary;
+
+        function decodeCodePoint(safe) 
+        {
+            /* eslint-disable no-constant-condition */
+            while (true) 
+            {
+                if (byteIdx >= byteCount && bytesNeeded) 
+                {
+                    if (safe) return goBack();
+                    throw new Error('Invalid byte index');
+                }
+
+                if (byteIdx === byteCount) return false;
+
+                var byte = byteArr[byteIdx];
+                byteIdx++;
+
+                if (!bytesNeeded) 
+                {
+                    // 0x00 to 0x7F
+                    if ((byte & 0x80) === 0) 
+                    {
+                        return byte;
+                    }
+                    // 0xC2 to 0xDF
+                    if ((byte & 0xE0) === 0xC0) 
+                    {
+                        bytesNeeded = 1;
+                        codePoint = byte & 0x1F;
+                    } else if ((byte & 0xF0) === 0xE0) 
+                    {
+                        // 0xE0 to 0xEF
+                        if (byte === 0xE0) lowerBoundary = 0xA0;
+                        if (byte === 0xED) upperBoundary = 0x9F;
+                        bytesNeeded = 2;
+                        codePoint = byte & 0xF;
+                    } else if ((byte & 0xF8) === 0xF0) 
+                    {
+                        // 0xF0 to 0xF4
+                        if (byte === 0xF0) lowerBoundary = 0x90;
+                        if (byte === 0xF4) upperBoundary = 0x8F;
+                        bytesNeeded = 3;
+                        codePoint = byte & 0x7;
+                    } else 
+                    {
+                        if (safe) return goBack();
+                        throw new Error('Invalid UTF-8 detected');
+                    }
+
+                    continue;
+                }
+
+                if (byte < lowerBoundary || byte > upperBoundary) 
+                {
+                    if (safe) {
+                        byteIdx--;
+                        return goBack();
+                    }
+                    throw new Error('Invalid continuation byte');
+                }
+
+                lowerBoundary = 0x80;
+                upperBoundary = 0xBF;
+
+                codePoint = (codePoint << 6) | (byte & 0x3F);
+
+                bytesSeen++;
+
+                if (bytesSeen !== bytesNeeded) continue;
+
+                var tmp = codePoint;
+
+                codePoint = 0;
+                bytesNeeded = 0;
+                bytesSeen = 0;
+
+                return tmp;
+            }
+        }
+
+        function goBack() 
+        {
+            var start = byteIdx - bytesSeen - 1;
+            byteIdx = start + 1;
+            codePoint = 0;
+            bytesNeeded = 0;
+            bytesSeen = 0;
+            lowerBoundary = 0x80;
+            upperBoundary = 0xBF;
+
+            return byteArr[start];
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ optimizeCb ------------------------------ */
 
     var optimizeCb = _.optimizeCb = (function ()
@@ -624,127 +931,6 @@
         return exports;
     })({});
 
-    /* ------------------------------ cookie ------------------------------ */
-
-    _.cookie = (function (exports)
-    {
-        /* Simple api for handling browser cookies.
-         *
-         * ### get
-         *
-         * Get cookie value.
-         *
-         * |Name  |Type  |Desc                      |
-         * |------|------|--------------------------|
-         * |key   |string|Cookie key                |
-         * |return|string|Corresponding cookie value|
-         *
-         * ### set
-         *
-         * Set cookie value.
-         *
-         * |Name     |Type   |Desc          |
-         * |---------|-------|--------------|
-         * |key      |string |Cookie key    |
-         * |val      |string |Cookie value  |
-         * |[options]|object |Cookie options|
-         * |return   |exports|Module cookie |
-         *
-         * ### remove
-         *
-         * Remove cookie value.
-         *
-         * |Name     |Type   |Desc          |
-         * |---------|-------|--------------|
-         * |key      |string |Cookie key    |
-         * |[options]|object |Cookie options|
-         * |return   |exports|Module cookie |
-         *
-         * ```javascript
-         * cookie.set('a', '1', {path: '/'});
-         * cookie.get('a'); // -> '1'
-         * cookie.remove('a');
-         * ```
-         */
-
-        /* module
-         * env: browser
-         * test: browser
-         */
-
-        /* dependencies
-         * defaults isNum isUndef 
-         */
-
-        var defOpts = { path: '/' };
-
-        function setCookie(key, val, options)
-        {
-            if (!isUndef(val))
-            {
-                options = options || {};
-                options = defaults(options, defOpts);
-
-                if (isNum(options.expires))
-                {
-                    var expires = new Date();
-                    expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
-                    options.expires = expires;
-                }
-
-                val = encodeURIComponent(val);
-                key = encodeURIComponent(key);
-
-                document.cookie = [
-                    key, '=', val,
-                    options.expires && '; expires=' + options.expires.toUTCString(),
-                    options.path && '; path=' + options.path,
-                    options.domain  && '; domain=' + options.domain,
-                    options.secure ? '; secure' : ''
-                ].join('');
-
-                return exports;
-            }
-
-            var cookies = document.cookie ? document.cookie.split('; ') : [],
-                result = key ? undefined : {};
-
-            for (var i = 0, len = cookies.length; i < len; i++)
-            {
-                var c = cookies[i],
-                    parts = c.split('='),
-                    name = decodeURIComponent(parts.shift());
-
-                c = parts.join('=');
-                c = decodeURIComponent(c);
-
-                if (key === name)
-                {
-                    result = c;
-                    break;
-                }
-
-                if (!key) result[name] = c;
-            }
-
-            return result;
-        }
-
-        exports = {
-            get: setCookie,
-            set: setCookie,
-            remove: function (key, options)
-            {
-                options = options || {};
-                options.expires = -1;
-
-                return setCookie(key, '', options);
-            }
-        };
-
-        return exports;
-    })({});
-
     /* ------------------------------ extendOwn ------------------------------ */
 
     var extendOwn = _.extendOwn = (function (exports)
@@ -1225,6 +1411,195 @@
 
         return exports;
     })();
+
+    /* ------------------------------ decodeUriComponent ------------------------------ */
+
+    var decodeUriComponent = _.decodeUriComponent = (function ()
+    {
+        /* Better decodeURIComponent that does not throw if input is invalid.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |str   |string|String to decode|
+         * |return|string|Decoded string  |
+         * 
+         * ```javascript
+         * decodeUriComponent('%%25%'); // -> '%%%'
+         * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
+         * ```
+         */ 
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * each ucs2 map utf8 
+         */
+
+        function exports(str) 
+        {
+            try 
+            {
+                return decodeURIComponent(str);
+            } catch (e) 
+            {
+                var replaceMap = {};
+
+                var matches = str.match(regMatcher);
+
+                each(matches, function (match) 
+                {
+                    str = str.replace(match, decode(match));
+                });
+
+                return str;
+            }
+        } 
+
+        function decode(str) 
+        {
+            str = str.split('%').slice(1);
+
+            var bytes = map(str, hexToInt);
+
+            str = ucs2.encode(bytes);
+            str = utf8.decode(str, true);
+
+            return str;
+        }
+
+        function hexToInt(numStr) 
+        {
+            return +('0x' + numStr);
+        }
+
+        var regMatcher = /(%[a-f0-9]{2})+/gi;
+
+        return exports;
+    })();
+
+    /* ------------------------------ cookie ------------------------------ */
+
+    _.cookie = (function (exports)
+    {
+        /* Simple api for handling browser cookies.
+         *
+         * ### get
+         *
+         * Get cookie value.
+         *
+         * |Name  |Type  |Desc                      |
+         * |------|------|--------------------------|
+         * |key   |string|Cookie key                |
+         * |return|string|Corresponding cookie value|
+         *
+         * ### set
+         *
+         * Set cookie value.
+         *
+         * |Name     |Type   |Desc          |
+         * |---------|-------|--------------|
+         * |key      |string |Cookie key    |
+         * |val      |string |Cookie value  |
+         * |[options]|object |Cookie options|
+         * |return   |exports|Module cookie |
+         *
+         * ### remove
+         *
+         * Remove cookie value.
+         *
+         * |Name     |Type   |Desc          |
+         * |---------|-------|--------------|
+         * |key      |string |Cookie key    |
+         * |[options]|object |Cookie options|
+         * |return   |exports|Module cookie |
+         *
+         * ```javascript
+         * cookie.set('a', '1', {path: '/'});
+         * cookie.get('a'); // -> '1'
+         * cookie.remove('a');
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * defaults isNum isUndef decodeUriComponent 
+         */
+
+        var defOpts = { path: '/' };
+
+        function setCookie(key, val, options)
+        {
+            if (!isUndef(val))
+            {
+                options = options || {};
+                options = defaults(options, defOpts);
+
+                if (isNum(options.expires))
+                {
+                    var expires = new Date();
+                    expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
+                    options.expires = expires;
+                }
+
+                val = encodeURIComponent(val);
+                key = encodeURIComponent(key);
+
+                document.cookie = [
+                    key, '=', val,
+                    options.expires && '; expires=' + options.expires.toUTCString(),
+                    options.path && '; path=' + options.path,
+                    options.domain  && '; domain=' + options.domain,
+                    options.secure ? '; secure' : ''
+                ].join('');
+
+                return exports;
+            }
+
+            var cookies = document.cookie ? document.cookie.split('; ') : [],
+                result = key ? undefined : {};
+
+            for (var i = 0, len = cookies.length; i < len; i++)
+            {
+                var c = cookies[i],
+                    parts = c.split('='),
+                    name = decodeUriComponent(parts.shift());
+
+                c = parts.join('=');
+                c = decodeUriComponent(c);
+
+                if (key === name)
+                {
+                    result = c;
+                    break;
+                }
+
+                if (!key) result[name] = c;
+            }
+
+            return result;
+        }
+
+        exports = {
+            get: setCookie,
+            set: setCookie,
+            remove: function (key, options)
+            {
+                options = options || {};
+                options.expires = -1;
+
+                return setCookie(key, '', options);
+            }
+        };
+
+        return exports;
+    })({});
 
     /* ------------------------------ rtrim ------------------------------ */
 

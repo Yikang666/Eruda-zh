@@ -962,6 +962,20 @@ dateFormat('yyyy-mm-dd HH:MM:ss'); // -> 2016-11-19 19:00:04
 dateFormat(new Date(), 'yyyy-mm-dd'); // -> 2016-11-19
 ```
 
+## decodeUriComponent 
+
+Better decodeURIComponent that does not throw if input is invalid.
+
+|Name  |Type  |Desc            |
+|------|------|----------------|
+|str   |string|String to decode|
+|return|string|Decoded string  |
+
+```javascript
+decodeUriComponent('%%25%'); // -> '%%%'
+decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
+```
+
 ## defaults 
 
 Fill in undefined properties in object with the first value present in the following list of defaults objects.
@@ -2244,6 +2258,35 @@ type(function () {}); // -> 'function'
 type([]); // -> 'array'
 ```
 
+## ucs2 
+
+UCS-2 encoding and decoding.
+
+### encode
+
+Create a string using an array of code point values.
+
+|Name  |Type  |Desc                |
+|------|------|--------------------|
+|arr   |array |Array of code points|
+|return|string|Encoded string      |
+
+### decode
+
+Create an array of code point values using a string.
+
+|Name  |Type  |Desc                |
+|------|------|--------------------|
+|str   |string|Input string        |
+|return|array |Array of code points|
+
+```javascript
+ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
+ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
+'𝌆'.length; // -> 2
+ucs2.decode('𝌆').length; // -> 1
+```
+
 ## uniqId 
 
 Generate a globally-unique id.
@@ -2282,6 +2325,34 @@ Convert the first character of string to upper case.
 
 ```javascript
 upperFirst('red'); // -> Red
+```
+
+## utf8 
+
+UTF-8 encoding and decoding.
+
+### encode
+
+Turn any UTF-8 decoded string into UTF-8 encoded string.
+
+|Name  |Type  |Desc            |
+|------|------|----------------|
+|str   |string|String to encode|
+|return|string|Encoded string  |
+
+### decode
+
+|Name        |Type   |Desc                  |
+|------------|-------|----------------------|
+|str         |string |String to decode      |
+|[safe=false]|boolean|Suppress error if true|
+|return      |string |Decoded string        |
+
+Turn any UTF-8 encoded string into UTF-8 decoded string.
+
+```javascript
+utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
+utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
 ```
 
 ## values 
