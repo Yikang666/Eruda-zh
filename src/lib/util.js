@@ -359,37 +359,6 @@ export var freeze = _.freeze = (function ()
     return exports;
 })();
 
-/* ------------------------------ SafeMutationObserver ------------------------------ */
-
-export var SafeMutationObserver = _.SafeMutationObserver = (function (exports)
-{
-    /* Safe MutationObserver, does nothing if MutationObserver is not supported.
-     * 
-     * ```javascript
-     * var observer = new DomObserver(function (mutations) 
-     * {
-     *     // Do something.     
-     * });
-     * observer.observe(document.htmlElement);
-     * observer.disconnect();
-     * ```
-     */
-
-    exports = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-
-    if (!exports) 
-    {
-        exports = class MutationObserver {
-            constructor() {}
-            observe() {}
-            disconnect() {}
-            takeRecords() {}
-        };
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ noop ------------------------------ */
 
 export var noop = _.noop = (function ()
@@ -626,10 +595,10 @@ export var chunk = _.chunk = (function ()
 {
     /* Split array into groups the length of given size.
      *
-     * |Name    |Type  |Desc                |
-     * |--------|------|--------------------|
-     * |arr     |array |Array to process    |
-     * |[size=1]|number|Length of each chunk|
+     * |Name  |Type  |Desc                |
+     * |------|------|--------------------|
+     * |arr   |array |Array to process    |
+     * |size=1|number|Length of each chunk|
      * 
      * ```javascript
      * chunk([1, 2, 3, 4], 2); // -> [[1, 2], [3, 4]]
@@ -718,11 +687,11 @@ export var idxOf = _.idxOf = (function ()
 {
     /* Get the index at which the first occurrence of value.
      *
-     * |Name       |Type  |Desc                |
-     * |-----------|------|--------------------|
-     * |arr        |array |Array to search     |
-     * |val        |*     |Value to search for |
-     * |[fromIdx=0]|number|Index to search from|
+     * |Name     |Type  |Desc                |
+     * |---------|------|--------------------|
+     * |arr      |array |Array to search     |
+     * |val      |*     |Value to search for |
+     * |fromIdx=0|number|Index to search from|
      *
      * ```javascript
      * idxOf([1, 2, 1, 2], 2, 2); // -> 3
@@ -3826,6 +3795,46 @@ export var Enum = _.Enum = (function (exports)
     return exports;
 })({});
 
+/* ------------------------------ MutationObserver ------------------------------ */
+
+export var MutationObserver = _.MutationObserver = (function (exports)
+{
+    /* Safe MutationObserver, does nothing if MutationObserver is not supported.
+     * 
+     * ```javascript
+     * var observer = new MutationObserver(function (mutations) 
+     * {
+     *     // Do something.     
+     * });
+     * observer.observe(document.htmlElement);
+     * observer.disconnect();
+     * ```
+     */
+
+    /* module
+     * env: browser
+     * test: browser
+     */
+
+    /* dependencies
+     * Class 
+     */
+
+    exports = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+    if (!exports) 
+    {
+        exports = Class({
+            initialize: function MutationObserver() {},
+            observe: function () {},
+            disconnect: function () {},
+            takeRecords: function () {}
+        });
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ Select ------------------------------ */
 
 export var Select = _.Select = (function (exports)
@@ -5525,7 +5534,7 @@ export var restArgs = _.restArgs = (function ()
      * |return    |function|Generated function with rest parameters|
      *
      * ```javascript
-     * var paramArr = _.restArgs(function (rest) { return rest });
+     * var paramArr = restArgs(function (rest) { return rest });
      * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
      * ```
      */
@@ -5787,7 +5796,7 @@ export var Logger = _.Logger = (function (exports)
      * TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
      * 
      * ```javascript
-     * var logger = new Logger('eris', logger.level.ERROR);
+     * var logger = new Logger('eris', Logger.level.ERROR);
      * logger.trace('test');
      * 
      * // Format output.
@@ -6928,15 +6937,16 @@ export var ajax = _.ajax = (function ()
      *
      * Available options:
      *
-     * |Name         |Type         |Desc                    |
-     * |-------------|-------------|------------------------|
-     * |url          |string       |Request url             |
-     * |data         |string object|Request data            |
-     * |dataType=json|string       |Response type(json, xml)|
-     * |success      |function     |Success callback        |
-     * |error        |function     |Error callback          |
-     * |complete     |function     |Callback after request  |
-     * |timeout      |number       |Request timeout         |
+     * |Name                                         |Type         |Desc                      |
+     * |---------------------------------------------|-------------|---------------------------|
+     * |url                                          |string       |Request url                |
+     * |data                                         |string object|Request data               |
+     * |dataType=json                                |string       |Response type(json, xml)   |
+     * |contentType=application/x-www-form-urlencoded|string       |Request header Content-Type|
+     * |success                                      |function     |Success callback           |
+     * |error                                        |function     |Error callback             |
+     * |complete                                     |function     |Callback after request     |
+     * |timeout                                      |number       |Request timeout            |
      *
      * ### get
      *
@@ -7026,17 +7036,19 @@ export var ajax = _.ajax = (function ()
         {
             data = query.stringify(data);
             url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
-        } else
+        } else if (options.contentType === 'application/x-www-form-urlencoded')
         {
             if(isObj(data)) data = query.stringify(data);
+        } else if (options.contentType === 'application/json') {
+            if(isObj(data)) data = JSON.stringify(data);
         }
 
         xhr.open(type, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', options.contentType);
 
-        if (timeout > 0) 
+        if (timeout > 0)
         {
-            abortTimeout = setTimeout(function () 
+            abortTimeout = setTimeout(function ()
             {
                 xhr.onreadystatechange = noop;
                 xhr.abort();
@@ -7055,6 +7067,7 @@ export var ajax = _.ajax = (function ()
         error: noop,
         complete: noop,
         dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
         data: {},
         xhr: function () { return new XMLHttpRequest() },
         timeout: 0

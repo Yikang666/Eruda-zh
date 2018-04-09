@@ -12,7 +12,7 @@ import {
     orientation,
     isCrossOrig,
     ajax,
-    SafeMutationObserver,
+    MutationObserver,
     isErudaEl,
     toArr,
     concat,
@@ -408,7 +408,7 @@ export default class Resources extends Tool
     }
     _initObserver()
     {
-        this._observer = new SafeMutationObserver(mutations =>
+        this._observer = new MutationObserver(mutations =>
         {
             let needToRender = false;
             each(mutations, mutation => 

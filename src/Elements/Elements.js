@@ -8,7 +8,7 @@ import {
     evalCss, 
     $, 
     keys, 
-    SafeMutationObserver, 
+    MutationObserver, 
     each,
     isErudaEl,
     toStr,
@@ -350,7 +350,7 @@ export default class Elements extends Tool
     }
     _initObserver()
     {
-        this._observer = new SafeMutationObserver(mutations =>
+        this._observer = new MutationObserver(mutations =>
         {
             each(mutations, mutation => this._handleMutation(mutation));
         });

@@ -446,7 +446,7 @@ Logging methods.
 TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
 
 ```javascript
-var logger = new Logger('eris', logger.level.ERROR);
+var logger = new Logger('eris', Logger.level.ERROR);
 logger.trace('test');
 
 // Format output.
@@ -468,12 +468,12 @@ logger.on('debug', function (argList)
 });
 ```
 
-## SafeMutationObserver 
+## MutationObserver 
 
 Safe MutationObserver, does nothing if MutationObserver is not supported.
 
 ```javascript
-var observer = new DomObserver(function (mutations)
+var observer = new MutationObserver(function (mutations)
 {
     // Do something.
 });
@@ -678,15 +678,16 @@ Perform an asynchronous HTTP request.
 
 Available options:
 
-|Name         |Type         |Desc                    |
-|-------------|-------------|------------------------|
-|url          |string       |Request url             |
-|data         |string object|Request data            |
-|dataType=json|string       |Response type(json, xml)|
-|success      |function     |Success callback        |
-|error        |function     |Error callback          |
-|complete     |function     |Callback after request  |
-|timeout      |number       |Request timeout         |
+|Name                                         |Type         |Desc                      |
+|---------------------------------------------|-------------|---------------------------|
+|url                                          |string       |Request url                |
+|data                                         |string object|Request data               |
+|dataType=json                                |string       |Response type(json, xml)   |
+|contentType=application/x-www-form-urlencoded|string       |Request header Content-Type|
+|success                                      |function     |Success callback           |
+|error                                        |function     |Error callback             |
+|complete                                     |function     |Callback after request     |
+|timeout                                      |number       |Request timeout            |
 
 ### get
 
@@ -792,10 +793,10 @@ castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
 
 Split array into groups the length of given size.
 
-|Name    |Type  |Desc                |
-|--------|------|--------------------|
-|arr     |array |Array to process    |
-|[size=1]|number|Length of each chunk|
+|Name  |Type  |Desc                |
+|------|------|--------------------|
+|arr   |array |Array to process    |
+|size=1|number|Length of each chunk|
 
 ```javascript
 chunk([1, 2, 3, 4], 2); // -> [[1, 2], [3, 4]]
@@ -1257,11 +1258,11 @@ identity('a'); // -> 'a'
 
 Get the index at which the first occurrence of value.
 
-|Name       |Type  |Desc                |
-|-----------|------|--------------------|
-|arr        |array |Array to search     |
-|val        |*     |Value to search for |
-|[fromIdx=0]|number|Index to search from|
+|Name     |Type  |Desc                |
+|---------|------|--------------------|
+|arr      |array |Array to search     |
+|val      |*     |Value to search for |
+|fromIdx=0|number|Index to search from|
 
 ```javascript
 idxOf([1, 2, 1, 2], 2, 2); // -> 3
@@ -1996,7 +1997,7 @@ This accumulates the arguments passed into an array, after a given index.
 |return    |function|Generated function with rest parameters|
 
 ```javascript
-var paramArr = _.restArgs(function (rest) { return rest });
+var paramArr = restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
 
