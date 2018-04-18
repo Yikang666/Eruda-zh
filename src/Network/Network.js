@@ -2,7 +2,7 @@ import Tool from '../DevTools/Tool';
 import XhrRequest from './XhrRequest';
 import FetchRequest from './FetchRequest';
 import Settings from '../Settings/Settings';
-import {evalCss, isNative, defaults, now, extend, isEmpty, $} from '../lib/util';
+import {evalCss, isNative, defaults, now, extend, isEmpty, $, ms} from '../lib/util';
 
 export default class Network extends Tool
 {
@@ -140,7 +140,7 @@ export default class Network extends Tool
         extend(target, data);
 
         target.time = target.time - target.startTime;
-        target.displayTime = formatTime(target.time);
+        target.displayTime = ms(target.time);
 
         if (target.done && (target.status < 200 || target >= 300)) target.hasErr = true;
 
@@ -225,13 +225,4 @@ export default class Network extends Tool
         this._lastHtml = html;
         this._$el.html(html);
     }
-}
-
-function formatTime(time)
-{
-    time = Math.round(time);
-
-    if (time < 1000) return time + 'ms';
-
-    return (time / 1000).toFixed(1) + 's';
 }
