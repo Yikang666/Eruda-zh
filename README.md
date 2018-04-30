@@ -1,4 +1,4 @@
-<a href="http://eruda.liriliri.io/" target="_blank">
+<a href="https://eruda.liriliri.io/" target="_blank">
     <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
 </a>
 
@@ -34,7 +34,7 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 ![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode3.png)
 
-Browse it on your phone: [http://eruda.liriliri.io/](http://eruda.liriliri.io/)
+Browse it on your phone: [https://eruda.liriliri.io/](https://eruda.liriliri.io/)
 
 In order to try it for different sites, execute the script below on browser address bar.
 

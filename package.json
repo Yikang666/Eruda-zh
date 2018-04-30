@@ -57,7 +57,7 @@
   "bugs": {
     "url": "https://github.com/liriliri/eruda/issues"
   },
-  "homepage": "http://eruda.liriliri.io/",
+  "homepage": "https://eruda.liriliri.io/",
   "devDependencies": {
     "autoprefixer": "^7.2.2",
     "babel-core": "^6.26.0",

@@ -1,4 +1,4 @@
-<a href="http://eruda.liriliri.io/" target="_blank">
+<a href="https://eruda.liriliri.io/" target="_blank">
     <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
 </a>
 
@@ -95,7 +95,7 @@ eruda.init({
 
 ![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode3.png)
 
-请扫描二维码或在手机上直接访问：[http://eruda.liriliri.io/](http://eruda.liriliri.io/)
+请扫描二维码或在手机上直接访问：[https://eruda.liriliri.io/](https://eruda.liriliri.io/)
 
 如果想在其它页面尝试，请在浏览器地址栏上输入以下代码。
 

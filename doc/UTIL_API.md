@@ -1800,6 +1800,35 @@ meta.remove('d');
 meta.remove(['e', 'f']);
 ```
 
+## ms 
+
+Convert time string formats to milliseconds.
+
+Turn time string into milliseconds.
+
+|Name  |Type  |Desc         |
+|------|------|-------------|
+|str   |string|String format|
+|return|number|Milliseconds |
+
+Turn milliseconds into time string.
+
+|Name  |Type  |Desc         |
+|------|------|-------------|
+|num   |number|Milliseconds |
+|return|string|String format|
+
+```javascript
+ms('1s'); // -> 1000
+ms('1m'); // -> 60000
+ms('1.5h'); // -> 5400000
+ms('1d'); // -> 86400000
+ms('1y'); // -> 31557600000
+ms('1000'); // -> 1000
+ms(1500); // -> '1.5s'
+ms(60000); // -> '1m'
+```
+
 ## nextTick 
 
 Next tick for both node and browser.
