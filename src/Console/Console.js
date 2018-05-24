@@ -1,6 +1,6 @@
 import Logger from './Logger';
 import Tool from '../DevTools/Tool';
-import {noop, evalCss, $} from '../lib/util';
+import {noop, evalCss, $, Emitter} from '../lib/util';
 import emitter from '../lib/emitter';
 import Settings from '../Settings/Settings';
 import stringify from './stringify';
@@ -10,6 +10,8 @@ export default class Console extends Tool
     constructor()
     {
         super();
+
+        Emitter.mixin(this);
 
         this.name = 'console';
         this._scale = 1;
@@ -37,8 +39,7 @@ export default class Console extends Tool
     }
     overrideConsole()
     {
-        let logger = this._logger,
-            origConsole = this._origConsole = {},
+        let origConsole = this._origConsole = {},
             winConsole = window.console;
 
         CONSOLE_METHOD.forEach(name =>
@@ -48,7 +49,7 @@ export default class Console extends Tool
 
             winConsole[name] = (...args) =>
             {
-                logger[name](...args);
+                this[name](...args);
                 origin(...args);
             };
         });
@@ -142,6 +143,7 @@ export default class Console extends Tool
         methods.forEach(name => this[name] = (...args) =>
         {
             logger[name](...args);
+            this.emit(name, ...args);
 
             return this;
         });

@@ -27,13 +27,19 @@ console.config.set('catchGlobalErr', true);
 
 ### log, error, info, warn, dir, time/timeEnd, clear, count, assert, table
 
-All these methods can be used in the same way as window.console object.
+All these methods can be used in the same way as window.console object. 
+
+Note: When called, a corresponding event is triggered.
 
 ```javascript
 var console = eruda.get('console');
 console.log('eruda is a console for %s.', 'mobile browsers');
 console.table([{test: 1}, {test: 2}, {test2: 3}], 'test');
 console.error(new Error('eruda'));
+console.on('log', function () 
+{
+    // Do whatever you want, send to server or save on local storage.
+});
 ```
 
 ### filter

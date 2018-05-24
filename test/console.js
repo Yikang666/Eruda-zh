@@ -278,4 +278,21 @@ describe('console', function ()
             expect($tool.find('.eruda-logs li')).toHaveLength(1);
         });
     });
+
+    describe('events', function () 
+    {
+        it('log', function () 
+        {
+            var sum = 0;
+            function add(num) { sum += num; }
+            tool.on('log', add);
+            tool.log(5);
+            expect(sum).toBe(5);
+            tool.log(6);
+            expect(sum).toBe(11);
+            tool.off('log', add);
+            tool.log(1);
+            expect(sum).toBe(11);
+        });
+    });
 });
