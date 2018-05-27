@@ -46,11 +46,11 @@ export var idxOf = _.idxOf = (function ()
 {
     /* Get the index at which the first occurrence of value.
      *
-     * |Name       |Type  |Desc                |
-     * |-----------|------|--------------------|
-     * |arr        |array |Array to search     |
-     * |val        |*     |Value to search for |
-     * |[fromIdx=0]|number|Index to search from|
+     * |Name     |Type  |Desc                |
+     * |---------|------|--------------------|
+     * |arr      |array |Array to search     |
+     * |val      |*     |Value to search for |
+     * |fromIdx=0|number|Index to search from|
      *
      * ```javascript
      * idxOf([1, 2, 1, 2], 2, 2); // -> 3
@@ -133,7 +133,7 @@ export var optimizeCb = _.optimizeCb = (function ()
             case 4: return function (accumulator, val, idx, collection)
             {
                 return fn.call(ctx, accumulator, val, idx, collection);
-            }
+            };
         }
 
         return function ()
@@ -311,46 +311,6 @@ export var has = _.has = (function ()
 
     return exports;
 })();
-
-/* ------------------------------ keys ------------------------------ */
-
-export var keys = _.keys = (function (exports)
-{
-    /* Create an array of the own enumerable property names of object.
-     *
-     * |Name  |Type  |Desc                   |
-     * |------|------|-----------------------|
-     * |obj   |object|Object to query        |
-     * |return|array |Array of property names|
-     * 
-     * ```javascript
-     * keys({a: 1}); // -> ['a']
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    /* dependencies
-     * has 
-     */
-
-    exports = Object.keys || function (obj)
-    {
-        var ret = [], key;
-
-        for (key in obj)
-        {
-            if (has(obj, key)) ret.push(key);
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
 
 /* ------------------------------ identity ------------------------------ */
 
@@ -597,6 +557,132 @@ export var isArrLike = _.isArrLike = (function ()
     return exports;
 })();
 
+/* ------------------------------ isBrowser ------------------------------ */
+
+export var isBrowser = _.isBrowser = (function (exports)
+{
+    /* Check if running in a browser.
+     *
+     * ```javascript
+     * console.log(isBrowser); // -> true if running in a browser
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    exports = typeof window === 'object' &&
+              typeof document === 'object' &&
+              document.nodeType === 9;
+
+    return exports;
+})({});
+
+/* ------------------------------ root ------------------------------ */
+
+export var root = _.root = (function (exports)
+{
+    /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * isBrowser 
+     */
+
+    exports = isBrowser ? window : global;
+
+    return exports;
+})({});
+
+/* ------------------------------ detectMocha ------------------------------ */
+
+export var detectMocha = _.detectMocha = (function ()
+{
+    /* Detect if mocha is running.
+     *
+     * ```javascript
+     * detectMocha(); // -> True if mocha is running.
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * root 
+     */ 
+
+    function exports() 
+    {
+        for (var i = 0, len = methods.length; i < len; i++) 
+        {
+            var method = methods[i];
+
+            if (typeof root[method] !== 'function') return false;
+        }
+
+        return true;
+    }
+
+    var methods = ['afterEach','after','beforeEach','before','describe','it'];
+
+    return exports;
+})();
+
+/* ------------------------------ keys ------------------------------ */
+
+export var keys = _.keys = (function (exports)
+{
+    /* Create an array of the own enumerable property names of object.
+     *
+     * |Name  |Type  |Desc                   |
+     * |------|------|-----------------------|
+     * |obj   |object|Object to query        |
+     * |return|array |Array of property names|
+     * 
+     * ```javascript
+     * keys({a: 1}); // -> ['a']
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * has detectMocha 
+     */
+
+    if (Object.keys && !detectMocha()) 
+    {
+        exports = Object.keys;
+    } else 
+    {
+        exports = function (obj)
+        {
+            var ret = [], key;
+
+            for (key in obj)
+            {
+                if (has(obj, key)) ret.push(key);
+            }
+
+            return ret;
+        };
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ each ------------------------------ */
 
 export var each = _.each = (function ()
@@ -723,37 +809,6 @@ export var extend = _.extend = (function (exports)
     return exports;
 })({});
 
-/* ------------------------------ extendOwn ------------------------------ */
-
-export var extendOwn = _.extendOwn = (function (exports)
-{
-    /* Like extend, but only copies own properties over to the destination object.
-     *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |obj   |object|Destination object|
-     * |*src  |object|Sources objects   |
-     * |return|object|Destination object|
-     *
-     * ```javascript
-     * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    /* dependencies
-     * keys createAssigner 
-     */
-
-    exports = createAssigner(keys);
-
-    return exports;
-})({});
-
 /* ------------------------------ values ------------------------------ */
 
 export var values = _.values = (function ()
@@ -783,7 +838,7 @@ export var values = _.values = (function ()
     {
         var ret = [];
 
-        each(obj, function (val) { ret.push(val) });
+        each(obj, function (val) { ret.push(val); });
 
         return ret;
     }
@@ -828,6 +883,37 @@ export var contain = _.contain = (function ()
     return exports;
 })();
 
+/* ------------------------------ extendOwn ------------------------------ */
+
+export var extendOwn = _.extendOwn = (function (exports)
+{
+    /* Like extend, but only copies own properties over to the destination object.
+     *
+     * |Name  |Type  |Desc              |
+     * |------|------|------------------|
+     * |obj   |object|Destination object|
+     * |*src  |object|Sources objects   |
+     * |return|object|Destination object|
+     *
+     * ```javascript
+     * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * keys createAssigner 
+     */
+
+    exports = createAssigner(keys);
+
+    return exports;
+})({});
+
 /* ------------------------------ isStr ------------------------------ */
 
 export var isStr = _.isStr = (function ()
@@ -840,7 +926,7 @@ export var isStr = _.isStr = (function ()
      * |return|boolean|True if value is a string primitive|
      *
      * ```javascript
-     * isStr('eris'); // -> true
+     * isStr('licia'); // -> true
      * ```
      */
 
@@ -1119,7 +1205,7 @@ export var safeCb = _.safeCb = (function (exports)
             return function (obj)
             {
                 return obj == null ? undefined : obj[key];
-            }
+            };
         };
     };
 

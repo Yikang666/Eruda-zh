@@ -1,6 +1,6 @@
 import stringify from '../lib/stringify';
 import StringifyWorker from '../lib/stringifyWorker';
-import {nextTick, uniqId} from '../lib/util';
+import {nextTick, uniqId, tryIt} from '../lib/util';
 
 let isWorkerSupported = !!window.Worker;
 
@@ -9,21 +9,27 @@ let callbacks = {},
 
 if (isWorkerSupported) 
 {
-    worker = new StringifyWorker();
-    worker.onmessage = function (e) 
+    tryIt(function () 
     {
-        let [id, result] = e.data;
-        if (callbacks[id]) 
+        /* Some browsers like uc mobile doesn't destroy worker properly after refreshing.
+         * After a few times of visiting, it reaches the maximum number of workers per site. 
+         */
+        worker = new StringifyWorker();
+        worker.onmessage = function (e) 
         {
-            callbacks[id](result);
-            delete callbacks[id];
-        }
-    };
+            let [id, result] = e.data;
+            if (callbacks[id]) 
+            {
+                callbacks[id](result);
+                delete callbacks[id];
+            }
+        };
+    });
 }
 
 function exports(obj, options, cb) 
 {
-    let useWorker = exports.useWorker && isWorkerSupported;
+    let useWorker = exports.useWorker && isWorkerSupported && worker;
 
     if (useWorker) 
     {

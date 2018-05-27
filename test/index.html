@@ -48,7 +48,13 @@
         var el = document.createElement('div');
         document.body.appendChild(el);
         setTimeout(function () {
-            eruda.init({container: el});
+            try 
+            {
+                eruda.init({container: el});
+            } catch (e) 
+            {
+                alert(e);
+            }
             eruda.show().get().config.set('displaySize', 50);
         }, 1000);
     })();

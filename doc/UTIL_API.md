@@ -198,14 +198,14 @@ Insert content to the end of elements.
 
 ```javascript
 // <div id="test"><div class="mark"></div></div>
-$insert.before('#test', '<div>eris</div>');
-// -> <div>eris</div><div id="test"><div class="mark"></div></div>
-$insert.after('#test', '<div>eris</div>');
-// -> <div id="test"><div class="mark"></div></div><div>eris</div>
-$insert.prepend('#test', '<div>eris</div>');
-// -> <div id="test"><div>eris</div><div class="mark"></div></div>
-$insert.append('#test', '<div>eris</div>');
-// -> <div id="test"><div class="mark"></div><div>eris</div></div>
+$insert.before('#test', '<div>licia</div>');
+// -> <div>licia</div><div id="test"><div class="mark"></div></div>
+$insert.after('#test', '<div>licia</div>');
+// -> <div id="test"><div class="mark"></div></div><div>licia</div>
+$insert.prepend('#test', '<div>licia</div>');
+// -> <div id="test"><div>licia</div><div class="mark"></div></div>
+$insert.append('#test', '<div>licia</div>');
+// -> <div id="test"><div class="mark"></div><div>licia</div></div>
 ```
 
 ## $offset 
@@ -241,8 +241,8 @@ Get the current value of the first element in the set of matched elements or
 set the value of every matched element.
 
 ```javascript
-$property.html('#test', 'eris');
-$property.html('#test'); // -> eris
+$property.html('#test', 'licia');
+$property.html('#test'); // -> licia
 ```
 
 ## $remove 
@@ -412,8 +412,8 @@ Extend from Store.
 |data|object|Default data          |
 
 ```javascript
-var store = new LocalStore('eris');
-store.set('name', 'eris');
+var store = new LocalStore('licia');
+store.set('name', 'licia');
 ```
 
 ## Logger 
@@ -446,7 +446,7 @@ Logging methods.
 TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
 
 ```javascript
-var logger = new Logger('eris', Logger.level.ERROR);
+var logger = new Logger('licia', Logger.level.ERROR);
 logger.trace('test');
 
 // Format output.
@@ -582,8 +582,8 @@ Iterate over values.
 
 ```javascript
 var store = new Store('test');
-store.set('user', {name: 'eris'});
-store.get('user').name; // -> 'eris'
+store.set('user', {name: 'licia'});
+store.get('user').name; // -> 'licia'
 store.clear();
 store.each(function (val, key)
 {
@@ -601,9 +601,9 @@ Simple url manipulator.
 
 ### constructor
 
-|Name                 |Type  |Desc      |
-|---------------------|------|----------|
-|[url=window.location]|string|Url string|
+|Name        |Type  |Desc      |
+|------------|------|----------|
+|url=location|string|Url string|
 
 ### setQuery
 
@@ -1039,6 +1039,14 @@ if (browser.name === 'ie' && browser.version < 9)
 }
 ```
 
+## detectMocha 
+
+Detect if mocha is running.
+
+```javascript
+detectMocha(); // -> True if mocha is running.
+```
+
 ## detectOs 
 
 Detect operating system using ua.
@@ -1127,7 +1135,7 @@ Escape special chars to be used as literals in RegExp constructors.
 |return|string|Escaped string  |
 
 ```javascript
-escapeRegExp('[eris]'); // -> '\\[eris\\]'
+escapeRegExp('[licia]'); // -> '\\[licia\\]'
 ```
 
 ## evalCss 
@@ -1458,6 +1466,14 @@ Check if keys and values in src are contained in obj.
 isMatch({a: 1, b: 2}, {a: 1}); // -> true
 ```
 
+## isMiniProgram 
+
+Check if running in wechat mini program.
+
+```javascript
+console.log(isMiniProgram); // -> true if running in mini program.
+```
+
 ## isMobile 
 
 Check whether client is using a mobile browser using ua.
@@ -1586,7 +1602,7 @@ Check if value is a string primitive.
 |return|boolean|True if value is a string primitive|
 
 ```javascript
-isStr('eris'); // -> true
+isStr('licia'); // -> true
 ```
 
 ## isUndef 
@@ -1735,7 +1751,7 @@ A replacement for environments where localStorage or sessionStorage is not avail
 
 ```javascript
 var localStorage = window.localStorage || memStorage;
-localStorage.setItem('test', 'eris');
+localStorage.setItem('test', 'licia');
 ```
 
 ## memoize 
@@ -2270,6 +2286,25 @@ Remove chars or white-spaces from beginning end of string.
 trim(' abc  '); // -> 'abc'
 trim('_abc_', '_'); // -> 'abc'
 trim('_abc_', ['a', 'c', '_']); // -> 'b'
+```
+
+## tryIt 
+
+Run function in a try catch.
+
+|Name|Type    |Desc                 |
+|----|--------|---------------------|
+|fn  |function|Function to try catch|
+|[cb]|function|Callback             |
+
+```javascript
+tryIt(function ()
+{
+    // Do something that might cause an error.
+}, function (err, result)
+{
+    if (err) console.log(err);
+});
 ```
 
 ## type 

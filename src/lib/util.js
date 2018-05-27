@@ -269,19 +269,14 @@ export var slice = _.slice = (function ()
     return exports;
 })();
 
-/* ------------------------------ keys ------------------------------ */
+/* ------------------------------ isBrowser ------------------------------ */
 
-export var keys = _.keys = (function (exports)
+export var isBrowser = _.isBrowser = (function (exports)
 {
-    /* Create an array of the own enumerable property names of object.
+    /* Check if running in a browser.
      *
-     * |Name  |Type  |Desc                   |
-     * |------|------|-----------------------|
-     * |obj   |object|Object to query        |
-     * |return|array |Array of property names|
-     * 
      * ```javascript
-     * keys({a: 1}); // -> ['a']
+     * console.log(isBrowser); // -> true if running in a browser
      * ```
      */
 
@@ -290,74 +285,12 @@ export var keys = _.keys = (function (exports)
      * test: all
      */
 
-    /* dependencies
-     * has 
-     */
-
-    exports = Object.keys || function (obj)
-    {
-        var ret = [], key;
-
-        for (key in obj)
-        {
-            if (has(obj, key)) ret.push(key);
-        }
-
-        return ret;
-    };
+    exports = typeof window === 'object' &&
+              typeof document === 'object' &&
+              document.nodeType === 9;
 
     return exports;
 })({});
-
-/* ------------------------------ freeze ------------------------------ */
-
-export var freeze = _.freeze = (function ()
-{
-    /* Shortcut for Object.freeze.
-     *
-     * Use Object.defineProperties if Object.freeze is not supported.
-     * 
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |obj   |object|Object to freeze|
-     * |return|object|Object passed in|
-     * 
-     * ```javascript
-     * var a = {b: 1};
-     * freeze(a);
-     * a.b = 2;
-     * console.log(a); // -> {b: 1}
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    /* dependencies
-     * keys 
-     */
-
-    function exports(obj) 
-    {
-        if (Object.freeze) return Object.freeze(obj);
-
-        keys(obj).forEach(function (prop) 
-        {
-            if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
-
-            Object.defineProperty(obj, prop, {
-                writable: false,
-                configurable: false
-            });
-        });
-
-        return obj;
-    }
-
-    return exports;
-})();
 
 /* ------------------------------ noop ------------------------------ */
 
@@ -1050,14 +983,34 @@ export var utf8 = _.utf8 = (function (exports)
     return exports;
 })({});
 
-/* ------------------------------ isBrowser ------------------------------ */
+/* ------------------------------ root ------------------------------ */
 
-export var isBrowser = _.isBrowser = (function (exports)
+export var root = _.root = (function (exports)
 {
-    /* Check if running in a browser.
+    /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * isBrowser 
+     */
+
+    exports = isBrowser ? window : global;
+
+    return exports;
+})({});
+
+/* ------------------------------ detectMocha ------------------------------ */
+
+export var detectMocha = _.detectMocha = (function ()
+{
+    /* Detect if mocha is running.
      *
      * ```javascript
-     * console.log(isBrowser); // -> true if running in a browser
+     * detectMocha(); // -> True if mocha is running.
      * ```
      */
 
@@ -1066,12 +1019,122 @@ export var isBrowser = _.isBrowser = (function (exports)
      * test: all
      */
 
-    exports = typeof window === 'object' &&
-              typeof document === 'object' &&
-              document.nodeType === 9;
+    /* dependencies
+     * root 
+     */ 
+
+    function exports() 
+    {
+        for (var i = 0, len = methods.length; i < len; i++) 
+        {
+            var method = methods[i];
+
+            if (typeof root[method] !== 'function') return false;
+        }
+
+        return true;
+    }
+
+    var methods = ['afterEach','after','beforeEach','before','describe','it'];
+
+    return exports;
+})();
+
+/* ------------------------------ keys ------------------------------ */
+
+export var keys = _.keys = (function (exports)
+{
+    /* Create an array of the own enumerable property names of object.
+     *
+     * |Name  |Type  |Desc                   |
+     * |------|------|-----------------------|
+     * |obj   |object|Object to query        |
+     * |return|array |Array of property names|
+     * 
+     * ```javascript
+     * keys({a: 1}); // -> ['a']
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * has detectMocha 
+     */
+
+    if (Object.keys && !detectMocha()) 
+    {
+        exports = Object.keys;
+    } else 
+    {
+        exports = function (obj)
+        {
+            var ret = [], key;
+
+            for (key in obj)
+            {
+                if (has(obj, key)) ret.push(key);
+            }
+
+            return ret;
+        };
+    }
 
     return exports;
 })({});
+
+/* ------------------------------ freeze ------------------------------ */
+
+export var freeze = _.freeze = (function ()
+{
+    /* Shortcut for Object.freeze.
+     *
+     * Use Object.defineProperties if Object.freeze is not supported.
+     * 
+     * |Name  |Type  |Desc            |
+     * |------|------|----------------|
+     * |obj   |object|Object to freeze|
+     * |return|object|Object passed in|
+     * 
+     * ```javascript
+     * var a = {b: 1};
+     * freeze(a);
+     * a.b = 2;
+     * console.log(a); // -> {b: 1}
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * keys 
+     */
+
+    function exports(obj) 
+    {
+        if (Object.freeze) return Object.freeze(obj);
+
+        keys(obj).forEach(function (prop) 
+        {
+            if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
+
+            Object.defineProperty(obj, prop, {
+                writable: false,
+                configurable: false
+            });
+        });
+
+        return obj;
+    }
+
+    return exports;
+})();
 
 /* ------------------------------ detectOs ------------------------------ */
 
@@ -1116,7 +1179,7 @@ export var detectOs = _.detectOs = (function ()
         if (detect('mac')) return 'os x';
         if (detect('linux')) return 'linux';
 
-        function detect(keyword) { return ua.indexOf(keyword) > -1 }
+        function detect(keyword) { return ua.indexOf(keyword) > -1; }
 
         return 'unknown';
     }
@@ -1157,7 +1220,7 @@ export var optimizeCb = _.optimizeCb = (function ()
             case 4: return function (accumulator, val, idx, collection)
             {
                 return fn.call(ctx, accumulator, val, idx, collection);
-            }
+            };
         }
 
         return function ()
@@ -1335,7 +1398,7 @@ export var escapeRegExp = _.escapeRegExp = (function ()
      * |return|string|Escaped string  |
      *
      * ```javascript
-     * escapeRegExp('[eris]'); // -> '\\[eris\\]'
+     * escapeRegExp('[licia]'); // -> '\\[licia\\]'
      * ```
      */
 
@@ -1684,11 +1747,12 @@ export var safeGet = _.safeGet = (function ()
 
         var prop;
 
-        /* eslint-disable no-cond-assign */
-        while (prop = path.shift())
+        prop = path.shift();
+        while (!isUndef(prop))
         {
             obj = obj[prop];
             if (isUndef(obj)) return;
+            prop = path.shift();
         }
 
         return obj;
@@ -1767,6 +1831,32 @@ export var isFn = _.isFn = (function ()
 
     return exports;
 })();
+
+/* ------------------------------ isMiniProgram ------------------------------ */
+
+export var isMiniProgram = _.isMiniProgram = (function (exports)
+{
+    /* Check if running in wechat mini program.
+     *
+     * ```javascript
+     * console.log(isMiniProgram); // -> true if running in mini program.
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * isFn 
+     */ 
+
+    /* eslint-disable no-undef */
+    exports = typeof wx !== 'undefined' && isFn(wx.openLocation);
+
+    return exports;
+})({});
 
 /* ------------------------------ isNum ------------------------------ */
 
@@ -2100,7 +2190,7 @@ export var values = _.values = (function ()
     {
         var ret = [];
 
-        each(obj, function (val) { ret.push(val) });
+        each(obj, function (val) { ret.push(val); });
 
         return ret;
     }
@@ -2157,7 +2247,7 @@ export var isStr = _.isStr = (function ()
      * |return|boolean|True if value is a string primitive|
      *
      * ```javascript
-     * isStr('eris'); // -> true
+     * isStr('licia'); // -> true
      * ```
      */
 
@@ -2667,7 +2757,7 @@ export var toSrc = _.toSrc = (function ()
         /* eslint-disable no-empty */    
         } catch (e) {}
 
-        return ''
+        return '';
     }
 
     var fnToStr = Function.prototype.toString;
@@ -3218,7 +3308,7 @@ export var safeCb = _.safeCb = (function (exports)
             return function (obj)
             {
                 return obj == null ? undefined : obj[key];
-            }
+            };
         };
     };
 
@@ -3668,7 +3758,7 @@ export var Class = _.Class = (function ()
      */
 
     /* dependencies
-     * extend toArr inherits has safeGet 
+     * extend toArr inherits has safeGet isMiniProgram 
      */
 
     function exports(methods, statics)
@@ -3682,11 +3772,22 @@ export var Class = _.Class = (function ()
         var className = methods.className || safeGet(methods, 'initialize.name') || '';
         delete methods.className;
 
-        var ctor = new Function('toArr', 'return function ' + className + '()' + 
-        '{' +
-            'var args = toArr(arguments);' +
-            'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
-        '};')(toArr);
+        var ctor;
+        if (isMiniProgram) 
+        {
+            ctor = function () 
+            {
+                var args = toArr(arguments);
+                return this.initialize ? this.initialize.apply(this, args) || this : this;
+            };
+        } else 
+        {
+            ctor = new Function('toArr', 'return function ' + className + '()' + 
+            '{' +
+                'var args = toArr(arguments);' +
+                'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+            '};')(toArr);
+        }
 
         inherits(ctor, parent);
         ctor.prototype.constructor = ctor;
@@ -4069,7 +4170,7 @@ export var $attr = _.$attr = (function ()
             {
                 el.setAttribute(name, val);
             });
-        })
+        });
     }
 
     return exports;
@@ -4246,14 +4347,14 @@ export var $insert = _.$insert = (function (exports)
      *
      * ```javascript
      * // <div id="test"><div class="mark"></div></div>
-     * $insert.before('#test', '<div>eris</div>');
-     * // -> <div>eris</div><div id="test"><div class="mark"></div></div>
-     * $insert.after('#test', '<div>eris</div>');
-     * // -> <div id="test"><div class="mark"></div></div><div>eris</div>
-     * $insert.prepend('#test', '<div>eris</div>');
-     * // -> <div id="test"><div>eris</div><div class="mark"></div></div>
-     * $insert.append('#test', '<div>eris</div>');
-     * // -> <div id="test"><div class="mark"></div><div>eris</div></div>
+     * $insert.before('#test', '<div>licia</div>');
+     * // -> <div>licia</div><div id="test"><div class="mark"></div></div>
+     * $insert.after('#test', '<div>licia</div>');
+     * // -> <div id="test"><div class="mark"></div></div><div>licia</div>
+     * $insert.prepend('#test', '<div>licia</div>');
+     * // -> <div id="test"><div>licia</div><div class="mark"></div></div>
+     * $insert.append('#test', '<div>licia</div>');
+     * // -> <div id="test"><div class="mark"></div><div>licia</div></div>
      * ```
      */
 
@@ -4355,8 +4456,8 @@ export var $property = _.$property = (function (exports)
      * set the value of every matched element.
      *
      * ```javascript
-     * $property.html('#test', 'eris');
-     * $property.html('#test'); // -> eris
+     * $property.html('#test', 'licia');
+     * $property.html('#test'); // -> licia
      * ```
      */
 
@@ -4537,8 +4638,8 @@ export var delegate = _.delegate = (function (exports)
      * Class contain 
      */
 
-    function retTrue()  { return true }
-    function retFalse() { return false }
+    function retTrue()  { return true; }
+    function retFalse() { return false; }
 
     function trigger(e)
     {
@@ -4654,7 +4755,7 @@ export var delegate = _.delegate = (function (exports)
         },
         Event: Class({
             className: 'Event',
-            initialize: function Event(e) { this.origEvent = e },
+            initialize: function Event(e) { this.origEvent = e; },
             isDefaultPrevented: retFalse,
             isPropagationStopped: retFalse,
             isImmediatePropagationStopped: retFalse,
@@ -5164,7 +5265,7 @@ export var memStorage = _.memStorage = (function (exports)
      *
      * ```javascript
      * var localStorage = window.localStorage || memStorage;
-     * localStorage.setItem('test', 'eris');
+     * localStorage.setItem('test', 'licia');
      * ```
      */
 
@@ -5740,10 +5841,10 @@ export var nextTick = _.nextTick = (function (exports)
         exports = process.nextTick;
     } else if (typeof setImmediate === 'function')
     {
-        exports = function (cb) { setImmediate(ensureCallable(cb)) }
+        exports = function (cb) { setImmediate(ensureCallable(cb)); };
     } else
     {
-        exports = function (cb) { setTimeout(ensureCallable(cb), 0) };
+        exports = function (cb) { setTimeout(ensureCallable(cb), 0); };
     }
 
     function ensureCallable(fn)
@@ -6055,7 +6156,7 @@ export var Logger = _.Logger = (function (exports)
      * TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
      * 
      * ```javascript
-     * var logger = new Logger('eris', Logger.level.ERROR);
+     * var logger = new Logger('licia', Logger.level.ERROR);
      * logger.trace('test');
      * 
      * // Format output.
@@ -6233,8 +6334,8 @@ export var Store = _.Store = (function (exports)
      * 
      * ```javascript
      * var store = new Store('test');
-     * store.set('user', {name: 'eris'});
-     * store.get('user').name; // -> 'eris'
+     * store.set('user', {name: 'licia'});
+     * store.get('user').name; // -> 'licia'
      * store.clear();
      * store.each(function (val, key) 
      * {
@@ -6394,26 +6495,6 @@ export var orientation = _.orientation = (function (exports)
             exports.emit('change', exports.get());
         }, 200);
     }, false);
-
-    return exports;
-})({});
-
-/* ------------------------------ root ------------------------------ */
-
-export var root = _.root = (function (exports)
-{
-    /* Root object reference, `global` in nodeJs, `window` in browser. */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    /* dependencies
-     * isBrowser 
-     */
-
-    exports = isBrowser ? window : global;
 
     return exports;
 })({});
@@ -6787,9 +6868,9 @@ export var Url = _.Url = (function (exports)
      *
      * ### constructor
      *
-     * |Name                 |Type  |Desc      |
-     * |---------------------|------|----------|
-     * |[url=window.location]|string|Url string|
+     * |Name        |Type  |Desc      |
+     * |------------|------|----------|
+     * |url=location|string|Url string|
      *
      * ### setQuery
      *
@@ -6861,14 +6942,15 @@ export var Url = _.Url = (function (exports)
      */
 
     /* dependencies
-     * Class extend trim query isEmpty each isArr toArr 
+     * Class extend trim query isEmpty each isArr toArr isBrowser 
      */
 
     exports = Class({
         className: 'Url',
         initialize: function (url)
         {
-            extend(this, exports.parse(url || window.location.href));
+            if (!url && isBrowser) url = window.location.href;
+            extend(this, exports.parse(url || ''));
         },
         setQuery: function (name, val)
         {
@@ -7153,7 +7235,7 @@ export var ajax = _.ajax = (function ()
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         data: {},
-        xhr: function () { return new XMLHttpRequest() },
+        xhr: function () { return new XMLHttpRequest(); },
         timeout: 0
     };
 
@@ -7338,8 +7420,8 @@ export var LocalStore = _.LocalStore = (function (exports)
      * |data|object|Default data          |
      * 
      * ```javascript
-     * var store = new LocalStore('eris');
-     * store.set('name', 'eris');
+     * var store = new LocalStore('licia');
+     * store.set('name', 'licia');
      * ```
      */
 
@@ -7407,6 +7489,54 @@ export var stripHtmlTag = _.stripHtmlTag = (function ()
     function exports(str)
     {
         return str.replace(regHtmlTag, '');
+    }
+
+    return exports;
+})();
+
+/* ------------------------------ tryIt ------------------------------ */
+
+export var tryIt = _.tryIt = (function ()
+{
+    /* Run function in a try catch.
+     * 
+     * |Name|Type    |Desc                 |
+     * |----|--------|---------------------|
+     * |fn  |function|Function to try catch|
+     * |[cb]|function|Callback             |
+     * 
+     * ```javascript
+     * tryIt(function () 
+     * {
+     *     // Do something that might cause an error.
+     * }, function (err, result) 
+     * {
+     *     if (err) console.log(err);
+     * });
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * noop 
+     */ 
+
+    function exports(fn, cb) 
+    {
+        cb = cb || noop;
+
+        try 
+        {
+            cb(null, fn());
+        } catch(e) 
+        {
+            cb(e);
+            return;
+        }
     }
 
     return exports;

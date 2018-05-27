@@ -9,7 +9,13 @@ function boot(name, cb)
             options.tool = name === 'settings' ? [] : name;
         }
 
-        eruda.init(options);
+        try 
+        {
+            eruda.init(options);
+        } catch (e) 
+        {
+            alert(e);
+        }
         eruda.show().get().config.set('displaySize', 50);
 
         cb && cb();

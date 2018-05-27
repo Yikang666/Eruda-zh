@@ -478,7 +478,7 @@
                 case 4: return function (accumulator, val, idx, collection)
                 {
                     return fn.call(ctx, accumulator, val, idx, collection);
-                }
+                };
             }
 
             return function ()
@@ -553,46 +553,6 @@
 
         return exports;
     })();
-
-    /* ------------------------------ keys ------------------------------ */
-
-    var keys = _.keys = (function (exports)
-    {
-        /* Create an array of the own enumerable property names of object.
-         *
-         * |Name  |Type  |Desc                   |
-         * |------|------|-----------------------|
-         * |obj   |object|Object to query        |
-         * |return|array |Array of property names|
-         * 
-         * ```javascript
-         * keys({a: 1}); // -> ['a']
-         * ```
-         */
-
-        /* module
-         * env: all
-         * test: all
-         */
-
-        /* dependencies
-         * has 
-         */
-
-        exports = Object.keys || function (obj)
-        {
-            var ret = [], key;
-
-            for (key in obj)
-            {
-                if (has(obj, key)) ret.push(key);
-            }
-
-            return ret;
-        };
-
-        return exports;
-    })({});
 
     /* ------------------------------ identity ------------------------------ */
 
@@ -805,6 +765,166 @@
         return exports;
     })();
 
+    /* ------------------------------ isArr ------------------------------ */
+
+    var isArr = _.isArr = (function (exports)
+    {
+        /* Check if value is an `Array` object.
+         *
+         * |Name  |Type   |Desc                              |
+         * |------|-------|----------------------------------|
+         * |val   |*      |Value to check                    |
+         * |return|boolean|True if value is an `Array` object|
+         *
+         * ```javascript
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        exports = Array.isArray || function (val)
+        {
+            return objToStr(val) === '[object Array]';
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ isBrowser ------------------------------ */
+
+    var isBrowser = _.isBrowser = (function (exports)
+    {
+        /* Check if running in a browser.
+         *
+         * ```javascript
+         * console.log(isBrowser); // -> true if running in a browser
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        exports = typeof window === 'object' &&
+                  typeof document === 'object' &&
+                  document.nodeType === 9;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ root ------------------------------ */
+
+    var root = _.root = (function (exports)
+    {
+        /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isBrowser 
+         */
+
+        exports = isBrowser ? window : global;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ detectMocha ------------------------------ */
+
+    var detectMocha = _.detectMocha = (function ()
+    {
+        /* Detect if mocha is running.
+         *
+         * ```javascript
+         * detectMocha(); // -> True if mocha is running.
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * root 
+         */ 
+
+        function exports() 
+        {
+            for (var i = 0, len = methods.length; i < len; i++) 
+            {
+                var method = methods[i];
+
+                if (typeof root[method] !== 'function') return false;
+            }
+
+            return true;
+        }
+
+        var methods = ['afterEach','after','beforeEach','before','describe','it'];
+
+        return exports;
+    })();
+
+    /* ------------------------------ keys ------------------------------ */
+
+    var keys = _.keys = (function (exports)
+    {
+        /* Create an array of the own enumerable property names of object.
+         *
+         * |Name  |Type  |Desc                   |
+         * |------|------|-----------------------|
+         * |obj   |object|Object to query        |
+         * |return|array |Array of property names|
+         * 
+         * ```javascript
+         * keys({a: 1}); // -> ['a']
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * has detectMocha 
+         */
+
+        if (Object.keys && !detectMocha()) 
+        {
+            exports = Object.keys;
+        } else 
+        {
+            exports = function (obj)
+            {
+                var ret = [], key;
+
+                for (key in obj)
+                {
+                    if (has(obj, key)) ret.push(key);
+                }
+
+                return ret;
+            };
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ each ------------------------------ */
 
     var each = _.each = (function ()
@@ -962,40 +1082,6 @@
         return exports;
     })({});
 
-    /* ------------------------------ isArr ------------------------------ */
-
-    var isArr = _.isArr = (function (exports)
-    {
-        /* Check if value is an `Array` object.
-         *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |Value to check                    |
-         * |return|boolean|True if value is an `Array` object|
-         *
-         * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
-         * ```
-         */
-
-        /* module
-         * env: all
-         * test: all
-         */
-
-        /* dependencies
-         * objToStr 
-         */
-
-        exports = Array.isArray || function (val)
-        {
-            return objToStr(val) === '[object Array]';
-        };
-
-        return exports;
-    })({});
-
     /* ------------------------------ isStr ------------------------------ */
 
     var isStr = _.isStr = (function ()
@@ -1008,7 +1094,7 @@
          * |return|boolean|True if value is a string primitive|
          *
          * ```javascript
-         * isStr('eris'); // -> true
+         * isStr('licia'); // -> true
          * ```
          */
 
@@ -1248,7 +1334,7 @@
                 return function (obj)
                 {
                     return obj == null ? undefined : obj[key];
-                }
+                };
             };
         };
 
@@ -1302,9 +1388,7 @@
         return exports;
     })();
 
-    /* ------------------------------ evalCss ------------------------------ */
-
-    _.evalCss = (function ()
+    /* ------------------------------ evalCss ------------------------------ */    _.evalCss = (function ()
     {
         /* Eval css.
          */
@@ -1480,9 +1564,7 @@
         return exports;
     })();
 
-    /* ------------------------------ cookie ------------------------------ */
-
-    _.cookie = (function (exports)
+    /* ------------------------------ cookie ------------------------------ */    _.cookie = (function (exports)
     {
         /* Simple api for handling browser cookies.
          *
@@ -1790,9 +1872,7 @@
         return exports;
     })({});
 
-    /* ------------------------------ ajax ------------------------------ */
-
-    _.ajax = (function ()
+    /* ------------------------------ ajax ------------------------------ */    _.ajax = (function ()
     {
         /* Perform an asynchronous HTTP request.
          *
@@ -1934,7 +2014,7 @@
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded',
             data: {},
-            xhr: function () { return new XMLHttpRequest() },
+            xhr: function () { return new XMLHttpRequest(); },
             timeout: 0
         };
 
