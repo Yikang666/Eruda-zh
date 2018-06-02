@@ -6,7 +6,6 @@
     <title>Manual</title>
     <link rel="stylesheet" href="style.css">
     <script src="assets/eruda.js"></script>
-    <script src="boot.js"></script>
     <script src="util.js"></script>
 </head>
 <body>
@@ -33,6 +32,9 @@
         </li>
         <li>
             <a href="#" id="big-array">Big Array</a>
+        </li>
+        <li>
+            <a href="#" id="override-style">Override Style</a>
         </li>
     </ul>
 </nav>
@@ -110,7 +112,14 @@
         }
         console.log(arr);
     });
+    addClickEvent('override-style', function () 
+    {
+        util.evalCss('.eruda-nav-bar {background: red !important;}');
+    });
 </script>
-<script>boot();</script>
+<script>
+    eruda.init();
+    eruda.show();
+</script>
 </body>
 </html>

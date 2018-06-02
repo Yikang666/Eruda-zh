@@ -85,7 +85,8 @@ document.body.appendChild(el);
 
 eruda.init({
     container: el,
-    tool: ['console', 'elements']
+    tool: ['console', 'elements'],
+    useShadowDom: true
 });
 ```
 

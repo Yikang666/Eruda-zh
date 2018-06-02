@@ -29,12 +29,12 @@ import {
 } from './lib/util';
 
 module.exports = {
-    init({container, tool, autoScale = true} = {})
+    init({container, tool, autoScale = true, useShadowDom = true} = {})
     {
         this._isInit = true;
         this._scale = 1;
 
-        this._initContainer(container);
+        this._initContainer(container, useShadowDom);
         this._initStyle();
         this._initDevTools();
         this._initEntryBtn();
@@ -137,12 +137,34 @@ module.exports = {
         if (!this._isInit) logger.error('Please call "eruda.init()" first');
         return this._isInit;
     },
-    _initContainer(el)
+    _initContainer(el, useShadowDom)
     {
         if (!el)
         {
             el = document.createElement('div');
             document.documentElement.appendChild(el);
+        }
+
+        let shadowRoot;
+        if (useShadowDom) 
+        {
+            if (el.attachShadow)
+            {
+                shadowRoot = el.attachShadow({mode: 'open'});
+            } else if (el.createShadowRoot) 
+            {
+                shadowRoot = el.createShadowRoot();
+            }
+            if (shadowRoot) 
+            {
+                // font-face doesn't work inside shadow dom.
+                evalCss.container = document.head;
+                evalCss(require('./style/icon.css'));
+
+                el = document.createElement('div');
+                shadowRoot.appendChild(el);
+                this._shadowRoot = shadowRoot;
+            }
         }
 
         Object.assign(el, {
@@ -165,9 +187,16 @@ module.exports = {
         let className = 'eruda-style-container',
             $el = this._$el;
 
-        $el.append(`<div class="${className}"></div>`);
+        if (this._shadowRoot) 
+        {
+            evalCss.container = this._shadowRoot;
+            evalCss(':host { all: initial }');
+        } else 
+        {
+            $el.append(`<div class="${className}"></div>`);
+            evalCss.container = $el.find(`.${className}`).get(0);
+        }
 
-        evalCss.container = $el.find(`.${className}`).get(0);
         evalCss(
             require('./style/style.scss') +
             require('./style/reset.scss') +

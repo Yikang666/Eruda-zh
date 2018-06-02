@@ -99,7 +99,8 @@ document.body.appendChild(el);
 
 eruda.init({
     container: el,
-    tool: ['console', 'elements']
+    tool: ['console', 'elements'],
+    useShadowDom: true // Use shadow dom to prevent page css affecting eruda.
 });
 ```
 

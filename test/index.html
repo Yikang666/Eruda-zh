@@ -50,7 +50,10 @@
         setTimeout(function () {
             try 
             {
-                eruda.init({container: el});
+                eruda.init({
+                    container: el,
+                    useShadowDom: false
+                });
             } catch (e) 
             {
                 alert(e);

@@ -1,1 +1,3 @@
-eruda.init();
+eruda.init({ 
+    useShadowDom: false 
+});

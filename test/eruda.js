@@ -17,7 +17,8 @@ describe('devTools', function ()
 
             eruda.init({
                 container: container,
-                tool: []
+                tool: [],
+                useShadowDom: false
             });
 
             var $eruda = $('#eruda');
