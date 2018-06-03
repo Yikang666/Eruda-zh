@@ -11,11 +11,15 @@
             min-height: 100%;
         }
         .raw {
+            user-select: text;
             padding: $padding;
         }
         .code {
             font-family: $font-family-code;
             font-size: $font-size-s;
+            .content * {
+                user-select: text;
+            }
         }
         pre.code {
             padding: $padding;
@@ -56,6 +60,9 @@
         .json {
             background: #fff;
             padding: $padding;
+            * {
+                user-select: text;
+            }
         }
         .http {
             .breadcrumb {
@@ -71,6 +78,9 @@
                 }
                 margin-bottom: 10px;
                 table {
+                    * {
+                        user-select: text;
+                    }
                     td {
                         font-size: $font-size-s;
                         padding: 5px 10px;
@@ -81,6 +91,7 @@
                 }
             }
             .response, .data {
+                user-select: text;
                 @include overflow-auto(x);
                 background: #fff;
                 padding: $padding;
