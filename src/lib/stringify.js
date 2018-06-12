@@ -1,7 +1,7 @@
 import {
-    escapeJsonStr, 
-    toStr, 
-    each, 
+    escapeJsonStr,
+    toStr,
+    each,
     endWith,
     contain,
     filter,
@@ -15,15 +15,17 @@ import {
 } from './stringifyUtil';
 
 // Modified from: https://jsconsole.com/
-export default function stringify(obj, {
-    visitor = new Visitor(),
-    topObj,
-    level = 0,
-    circularMarker = false,
-    getterVal = false,
-    unenumerable = true
-} = {})
-{
+export default function stringify(
+    obj,
+    {
+        visitor = new Visitor(),
+        topObj,
+        level = 0,
+        circularMarker = false,
+        getterVal = false,
+        unenumerable = true
+    } = {}
+) {
     let json = '',
         type,
         parts = [],
@@ -31,41 +33,44 @@ export default function stringify(obj, {
         proto,
         objAbstract,
         circularObj,
-        allKeys, keys,
+        allKeys,
+        keys,
         id = '';
 
     topObj = topObj || obj;
 
-    let passOpts = {visitor, getterVal, unenumerable, level: level + 1},
-        passProtoOpts = {visitor, getterVal, topObj, unenumerable, level: level + 1};
+    let passOpts = { visitor, getterVal, unenumerable, level: level + 1 },
+        passProtoOpts = {
+            visitor,
+            getterVal,
+            topObj,
+            unenumerable,
+            level: level + 1
+        };
 
     let wrapKey = key => `"${escapeJsonStr(key)}"`,
         wrapStr = str => `"${escapeJsonStr(toStr(str))}"`;
 
     type = getType(obj);
 
-    let isFn = (type == '[object Function]'),
-        isStr = (type == '[object String]'),
-        isArr = (type == '[object Array]'),
-        isObj = (type == '[object Object]'),
-        isNum = (type == '[object Number]'),
-        isSymbol = (type == '[object Symbol]'),
-        isBool = (type == '[object Boolean]');
+    let isFn = type == '[object Function]',
+        isStr = type == '[object String]',
+        isArr = type == '[object Array]',
+        isObj = type == '[object Object]',
+        isNum = type == '[object Number]',
+        isSymbol = type == '[object Symbol]',
+        isBool = type == '[object Boolean]';
 
     circularObj = visitor.check(obj);
 
-    if (circularObj)
-    {
-        json = stringify(circularObj.abstract, {circularMarker: true});
-    } else if (isStr)
-    {
+    if (circularObj) {
+        json = stringify(circularObj.abstract, { circularMarker: true });
+    } else if (isStr) {
         json = wrapStr(obj);
-    } else if (isArr || isObj || isFn)
-    {
+    } else if (isArr || isObj || isFn) {
         id = visitor.visit(obj);
 
-        if (canBeProto(obj))
-        {
+        if (canBeProto(obj)) {
             obj = Object.getPrototypeOf(obj);
             id = visitor.visit(obj);
         }
@@ -77,14 +82,17 @@ export default function stringify(obj, {
 
         proto = Object.getPrototypeOf(obj);
         if (circularMarker && proto === Object.prototype) proto = null;
-        if (proto)
-        {
-            proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
+        if (proto) {
+            proto = `${wrapKey('erudaProto')}: ${stringify(
+                proto,
+                passProtoOpts
+            )}`;
         }
-        if (isFn)
-        {
+        if (isFn) {
             // We don't need these properties to display for functions.
-            names = names.filter(val => ['arguments', 'caller'].indexOf(val) < 0);
+            names = names.filter(
+                val => ['arguments', 'caller'].indexOf(val) < 0
+            );
         }
         json = '{ ';
         objAbstract = getObjAbstract(obj);
@@ -97,37 +105,28 @@ export default function stringify(obj, {
         each(names, objIteratee);
         if (proto) parts.push(proto);
         json += parts.join(', ') + ' }';
-    } else if (isNum)
-    {
+    } else if (isNum) {
         json = obj + '';
         if (endWith(json, 'Infinity') || json === 'NaN') json = `"${json}"`;
-    } else if (isBool)
-    {
+    } else if (isBool) {
         json = obj ? 'true' : 'false';
-    } else if (obj === null)
-    {
+    } else if (obj === null) {
         json = 'null';
-    } else if (isSymbol)
-    {
+    } else if (isSymbol) {
         json = wrapStr('Symbol');
-    } else if (obj === undefined)
-    {
+    } else if (obj === undefined) {
         json = wrapStr('undefined');
-    } else if (type === '[object HTMLAllCollection]')
-    {
+    } else if (type === '[object HTMLAllCollection]') {
         // https://docs.webplatform.org/wiki/dom/HTMLAllCollection
         // Might cause a performance issue when stringify a dom element.
         json = wrapStr('[object HTMLAllCollection]');
-    } else if (type === '[object HTMLDocument]' && level > 1)
-    {
+    } else if (type === '[object HTMLDocument]' && level > 1) {
         // Same as reason above.
         json = wrapStr('[object HTMLDocument]');
     } else {
-        try
-        {
+        try {
             id = visitor.visit(obj);
-            if (canBeProto(obj))
-            {
+            if (canBeProto(obj)) {
                 obj = Object.getPrototypeOf(obj);
                 id = visitor.visit(obj);
             }
@@ -138,7 +137,9 @@ export default function stringify(obj, {
                 erudaObjAbstract: objAbstract,
                 erudaCircular: id
             });
-            parts.push(`${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`);
+            parts.push(
+                `${wrapKey('erudaObjAbstract')}: ${wrapStr(objAbstract)}`
+            );
             if (!circularMarker) parts.push(`"erudaId": "${id}"`);
 
             names = getKeys(obj);
@@ -148,27 +149,25 @@ export default function stringify(obj, {
 
             proto = Object.getPrototypeOf(obj);
             if (circularMarker && proto === Object.prototype) proto = null;
-            if (proto)
-            {
-                try
-                {
-                    proto = `${wrapKey('erudaProto')}: ${stringify(proto, passProtoOpts)}`;
-                } catch(e)
-                {
+            if (proto) {
+                try {
+                    proto = `${wrapKey('erudaProto')}: ${stringify(
+                        proto,
+                        passProtoOpts
+                    )}`;
+                } catch (e) {
                     proto = `${wrapKey('erudaProto')}: ${wrapStr(e.message)}`;
                 }
             }
             each(names, objIteratee);
             if (proto) parts.push(proto);
             json += parts.join(', ') + ' }';
-        } catch (e)
-        {
+        } catch (e) {
             json = wrapStr(obj);
         }
     }
 
-    function objIteratee(name)
-    {
+    function objIteratee(name) {
         let unenumerable = !contain(keys, name) ? 'erudaUnenumerable ' : '',
             key = wrapKey(unenumerable + name),
             getKey = wrapKey(unenumerable + 'get ' + name),
@@ -178,23 +177,19 @@ export default function stringify(obj, {
             hasGetter = descriptor && descriptor.get,
             hasSetter = descriptor && descriptor.set;
 
-        if (!getterVal && hasGetter)
-        {
+        if (!getterVal && hasGetter) {
             parts.push(`${key}: "(...)"`);
             parts.push(`${getKey}: ${stringify(descriptor.get, passOpts)}`);
-        } else
-        {
+        } else {
             let val;
             try {
                 val = topObj[name];
-            } catch(e)
-            {
+            } catch (e) {
                 val = e.message;
             }
             parts.push(`${key}: ${stringify(val, passOpts)}`);
         }
-        if (hasSetter)
-        {
+        if (hasSetter) {
             parts.push(`${setKey}: ${stringify(descriptor.set, passOpts)}`);
         }
     }
@@ -202,25 +197,24 @@ export default function stringify(obj, {
     return json;
 }
 
-function getKeys(obj)
-{
+function getKeys(obj) {
     let allKeys = Object.getOwnPropertyNames(obj),
         keys = Object.keys(obj).sort(sortObjName);
 
-    allKeys = keys.concat(filter(allKeys, val => !contain(keys, val)).sort(sortObjName));
+    allKeys = keys.concat(
+        filter(allKeys, val => !contain(keys, val)).sort(sortObjName)
+    );
 
-    return {keys, allKeys};
+    return { keys, allKeys };
 }
 
 // $, upperCase, lowerCase, _
-function sortObjName(a, b)
-{
+function sortObjName(a, b) {
     let lenA = a.length,
         lenB = b.length,
         len = lenA > lenB ? lenB : lenA;
 
-    for (let i = 0; i < len; i++)
-    {
+    for (let i = 0; i < len; i++) {
         let codeA = a.charCodeAt(i),
             codeB = b.charCodeAt(i),
             cmpResult = cmpCode(codeA, codeB);
@@ -234,8 +228,7 @@ function sortObjName(a, b)
     return 0;
 }
 
-function cmpCode(a, b)
-{
+function cmpCode(a, b) {
     a = transCode(a);
     b = transCode(b);
 
@@ -244,8 +237,7 @@ function cmpCode(a, b)
     return 0;
 }
 
-function transCode(code)
-{
+function transCode(code) {
     // _ should be placed after lowercase chars.
     if (code === 95) return 123;
     return code;
@@ -253,8 +245,7 @@ function transCode(code)
 
 let regFnHead = /function(.*?)\((.*?)\)/;
 
-function extractFnHead(fn)
-{
+function extractFnHead(fn) {
     let str = fn.toString(),
         fnHead = str.match(regFnHead);
 
@@ -263,24 +254,21 @@ function extractFnHead(fn)
     return str;
 }
 
-function getFnAbstract(fn)
-{
+function getFnAbstract(fn) {
     let fnStr = fn.toString();
     if (fnStr.length > 500) fnStr = fnStr.slice(0, 500) + '...';
 
     return extractFnHead(fnStr).replace('function', '');
 }
 
-function canBeProto(obj)
-{
+function canBeProto(obj) {
     let emptyObj = isEmpty(Object.getOwnPropertyNames(obj)),
         proto = Object.getPrototypeOf(obj);
 
     return emptyObj && proto && proto !== Object.prototype;
 }
 
-function getObjAbstract(obj)
-{
+function getObjAbstract(obj) {
     if (isArr(obj)) return `Array(${obj.length})`;
     if (isFn(obj)) return getFnAbstract(obj);
     if (isRegExp(obj)) return obj.toString();
@@ -290,56 +278,47 @@ function getObjAbstract(obj)
     return type.replace(/(\[object )|]/g, '');
 }
 
-function getType(obj)
-{
+function getType(obj) {
     let type;
 
     try {
-        type = ({}).toString.call(obj);
-    } catch (e)
-    {
+        type = {}.toString.call(obj);
+    } catch (e) {
         type = '[object Object]';
     }
 
     return type;
 }
 
-class Visitor
-{
-    constructor()
-    {
+class Visitor {
+    constructor() {
         this._visited = [];
         this._map = {};
     }
-    visit(val)
-    {
+    visit(val) {
         /* Add 0 to distinguish stringify generated id from JsonViewer id.
          * When used in web worker, they are not calling the same uniqId method, thus result may be repeated.
          */
         let id = uniqId('erudaJson0');
 
-        this._visited.push({id, val, abstract: {}});
+        this._visited.push({ id, val, abstract: {} });
         this._map[id] = last(this._visited);
 
         return id;
     }
-    check(val)
-    {
+    check(val) {
         let visited = this._visited;
 
-        for (let i = 0, len = visited.length; i < len; i++)
-        {
+        for (let i = 0, len = visited.length; i < len; i++) {
             if (val === visited[i].val) return visited[i];
         }
 
         return false;
     }
-    update(id, data)
-    {
+    update(id, data) {
         extend(this._map[id], data);
     }
-    updateAbstract(id, abstract)
-    {
-        this.update(id, {abstract});
+    updateAbstract(id, abstract) {
+        this.update(id, { abstract });
     }
 }

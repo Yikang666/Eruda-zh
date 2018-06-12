@@ -1,10 +1,10 @@
-import {getType, lenToUtf8Bytes} from './util';
+import { getType, lenToUtf8Bytes } from './util';
 import {
-    Emitter, 
-    fullUrl, 
-    uniqId, 
-    isStr, 
-    getFileName, 
+    Emitter,
+    fullUrl,
+    uniqId,
+    isStr,
+    getFileName,
     now,
     each,
     trim,
@@ -13,10 +13,8 @@ import {
     fileSize
 } from '../lib/util';
 
-export default class XhrRequest extends Emitter
-{
-    constructor(xhr, method, url)
-    {
+export default class XhrRequest extends Emitter {
+    constructor(xhr, method, url) {
         super();
 
         this._xhr = xhr;
@@ -24,8 +22,7 @@ export default class XhrRequest extends Emitter
         this._url = fullUrl(url);
         this._id = uniqId('request');
     }
-    handleSend(data)
-    {
+    handleSend(data) {
         if (!isStr(data)) data = '';
 
         this.emit('send', this._id, {
@@ -35,8 +32,7 @@ export default class XhrRequest extends Emitter
             method: this._method
         });
     }
-    handleHeadersReceived()
-    {
+    handleHeadersReceived() {
         let xhr = this._xhr;
 
         let type = getType(xhr.getResponseHeader('Content-Type'));
@@ -49,12 +45,14 @@ export default class XhrRequest extends Emitter
             resHeaders: getHeaders(xhr)
         });
     }
-    handleDone()
-    {
+    handleDone() {
         let xhr = this._xhr,
             resType = xhr.responseType;
 
-        let resTxt = (resType === '' || resType === 'text' || resType === 'json') ? xhr.responseText : '';
+        let resTxt =
+            resType === '' || resType === 'text' || resType === 'json'
+                ? xhr.responseText
+                : '';
 
         this.emit('update', this._id, {
             status: xhr.status,
@@ -66,15 +64,13 @@ export default class XhrRequest extends Emitter
     }
 }
 
-function getHeaders(xhr)
-{
+function getHeaders(xhr) {
     let raw = xhr.getAllResponseHeaders(),
         lines = raw.split('\n');
 
     let ret = {};
 
-    each(lines, (line) =>
-    {
+    each(lines, line => {
         line = trim(line);
 
         if (line === '') return;
@@ -87,31 +83,26 @@ function getHeaders(xhr)
     return ret;
 }
 
-
-function getSize(xhr, headersOnly, url)
-{
+function getSize(xhr, headersOnly, url) {
     let size = 0;
 
-    function getStrSize()
-    {
-        if (!headersOnly)
-        {
+    function getStrSize() {
+        if (!headersOnly) {
             let resType = xhr.responseType;
-            let resTxt = (resType === '' || resType === 'text' || resType === 'json') ? xhr.responseText : '';
+            let resTxt =
+                resType === '' || resType === 'text' || resType === 'json'
+                    ? xhr.responseText
+                    : '';
             if (resTxt) size = lenToUtf8Bytes(resTxt);
         }
     }
 
-    if (isCrossOrig(url))
-    {
+    if (isCrossOrig(url)) {
         getStrSize();
-    } else
-    {
-        try 
-        {
+    } else {
+        try {
             size = toNum(xhr.getResponseHeader('Content-Length'));
-        } catch (e)
-        {
+        } catch (e) {
             getStrSize();
         }
     }

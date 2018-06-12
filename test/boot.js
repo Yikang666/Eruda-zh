@@ -1,36 +1,31 @@
-function boot(name, cb)
-{
+function boot(name, cb) {
     // Need a little delay to make sure width and height of webpack dev server iframe are initialized.
-    setTimeout(function ()
-    {
+    setTimeout(function() {
         var options = {
             useShadowDom: false
         };
-        if (name) 
-        {
+        if (name) {
             options.tool = name === 'settings' ? [] : name;
         }
 
-        try 
-        {
+        try {
             eruda.init(options);
-        } catch (e) 
-        {
+        } catch (e) {
             alert(e);
         }
-        eruda.show().get().config.set('displaySize', 50);
+        eruda
+            .show()
+            .get()
+            .config.set('displaySize', 50);
 
         cb && cb();
 
         if (name == null) return;
 
-        loadJs('lib/boot', function ()
-        {
-            loadJs('lib/jasmine-jquery', function ()
-            {
+        loadJs('lib/boot', function() {
+            loadJs('lib/jasmine-jquery', function() {
                 // This is needed to trigger jasmine initialization.
-                loadJs(name, function ()
-                {
+                loadJs(name, function() {
                     window.onload();
                 });
             });
@@ -38,8 +33,7 @@ function boot(name, cb)
     }, 500);
 }
 
-function loadJs(src, cb)
-{
+function loadJs(src, cb) {
     var script = document.createElement('script');
     script.src = src + '.js';
     script.onload = cb;

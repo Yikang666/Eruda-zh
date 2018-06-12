@@ -1,12 +1,11 @@
-import {detectBrowser, detectOs} from '../lib/util';
+import { detectBrowser, detectOs } from '../lib/util';
 
 let browser = detectBrowser();
 
 export default [
     {
         name: 'Location',
-        val() 
-        { 
+        val() {
             return location.href;
         }
     },
@@ -32,7 +31,6 @@ export default [
                       </tr>
                   </tbody>
               </table>`
-
     },
     {
         name: 'System',
@@ -51,6 +49,9 @@ export default [
     },
     {
         name: 'About',
-        val: '<a href="https://github.com/liriliri/eruda" target="_blank">Eruda v' + VERSION + '</a>'
+        val:
+            '<a href="https://github.com/liriliri/eruda" target="_blank">Eruda v' +
+            VERSION +
+            '</a>'
     }
 ];

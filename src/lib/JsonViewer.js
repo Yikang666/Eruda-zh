@@ -1,9 +1,9 @@
 import {
-    evalCss, 
-    $, 
-    isStr, 
-    startWith, 
-    trim, 
+    evalCss,
+    $,
+    isStr,
+    startWith,
+    trim,
     isArr,
     contain,
     isObj,
@@ -20,10 +20,8 @@ import {
     isNaN
 } from './util';
 
-export default class JsonViewer
-{
-    constructor(data, $el)
-    {
+export default class JsonViewer {
+    constructor(data, $el) {
         evalCss(require('./json.scss'));
 
         this._data = [data];
@@ -35,91 +33,99 @@ export default class JsonViewer
         this._appendTpl();
         this._bindEvent();
     }
-    jsonToHtml(data, firstLevel)
-    {
+    jsonToHtml(data, firstLevel) {
         let ret = '';
 
-        for (let key in data)
-        {
+        for (let key in data) {
             let val = data[key];
 
-            if (key === 'erudaObjAbstract' ||
+            if (
+                key === 'erudaObjAbstract' ||
                 key === 'erudaCircular' ||
                 key === 'erudaId' ||
                 key === 'erudaSplitArr' ||
-                (isStr(val) && startWith(val, 'erudaJson'))) continue;
+                (isStr(val) && startWith(val, 'erudaJson'))
+            )
+                continue;
 
-            if (Object.hasOwnProperty.call(data, key)) ret += this.createEl(key, val, firstLevel);
+            if (Object.hasOwnProperty.call(data, key))
+                ret += this.createEl(key, val, firstLevel);
         }
 
         return ret;
     }
-    createEl(key, val, firstLevel = false)
-    {
+    createEl(key, val, firstLevel = false) {
         let type = 'object',
             isUnenumerable = false,
             id;
 
         if (key === 'erudaProto') key = '__proto__';
-        if (startWith(key, 'erudaUnenumerable'))
-        {
+        if (startWith(key, 'erudaUnenumerable')) {
             key = trim(key.replace('erudaUnenumerable', ''));
             isUnenumerable = true;
         }
 
         if (isArr(val)) type = 'array';
 
-        function wrapKey(key)
-        {
+        function wrapKey(key) {
             if (firstLevel) return '';
             if (isObj(val) && val.erudaSplitArr) return '';
 
             let keyClass = 'eruda-key';
-            if (isUnenumerable || contain(LIGHTER_KEY, key)) keyClass = 'eruda-key-lighter';
+            if (isUnenumerable || contain(LIGHTER_KEY, key))
+                keyClass = 'eruda-key-lighter';
 
             return `<span class="${keyClass}">${encode(key)}</span>: `;
         }
 
-        if (val === null)
-        {
+        if (val === null) {
             return `<li>
                         ${wrapKey(key)}
                         <span class="eruda-null">null</span>
                     </li>`;
         }
 
-        if (isObj(val))
-        {
+        if (isObj(val)) {
             id = val.erudaId;
             let circularId = val.erudaCircular;
             let objAbstract = val['erudaObjAbstract'] || upperFirst(type);
 
-            let obj = `<li ${firstLevel ? 'data-first-level="true"' : ''} ${'data-object-id="' + (circularId ? circularId : id) + '"'}>
-                            <span class="${firstLevel ? '' : 'eruda-expanded eruda-collapsed'}"></span>
+            let obj = `<li ${
+                firstLevel ? 'data-first-level="true"' : ''
+            } ${'data-object-id="' + (circularId ? circularId : id) + '"'}>
+                            <span class="${
+                                firstLevel
+                                    ? ''
+                                    : 'eruda-expanded eruda-collapsed'
+                            }"></span>
                             ${wrapKey(key)}
-                            <span class="eruda-open">${firstLevel ? '' : objAbstract}</span>
-                            <ul class="eruda-${type}" ${firstLevel ? '' : 'style="display:none"'}>`;
+                            <span class="eruda-open">${
+                                firstLevel ? '' : objAbstract
+                            }</span>
+                            <ul class="eruda-${type}" ${
+                firstLevel ? '' : 'style="display:none"'
+            }>`;
 
             if (firstLevel) obj += this.jsonToHtml(this._map[id]);
 
             return obj + '</ul><span class="eruda-close"></span></li>';
         }
-        if (isNum(val) || isBool(val))
-        {
+        if (isNum(val) || isBool(val)) {
             return `<li>
                     ${wrapKey(key)}
                     <span class="eruda-${typeof val}">${encode(val)}</span>
                     </li>`;
         }
-        if (isStr(val) && startWith(val, 'function'))
-        {
+        if (isStr(val) && startWith(val, 'function')) {
             return `<li>
                     ${wrapKey(key)}
-                    <span class="eruda-function">${encode(val).replace('function', '')}</span>
+                    <span class="eruda-function">${encode(val).replace(
+                        'function',
+                        ''
+                    )}</span>
                     </li>`;
         }
-        if (val === 'undefined' || val === 'Symbol' || val === '(...)')
-        {
+        if (val === 'undefined' || val === 'Symbol' || val === '(...)') {
             return `<li>
                     ${wrapKey(key)}
                     <span class="eruda-special">${val}</span>
@@ -131,42 +137,38 @@ export default class JsonViewer
                     <span class="eruda-${typeof val}">"${encode(val)}"</span>
                 </li>`;
     }
-    _appendTpl()
-    {
+    _appendTpl() {
         let data = this._map[this._data.erudaId];
 
         this._$el.html(this.jsonToHtml(data, true));
     }
-    _bindEvent()
-    {
+    _bindEvent() {
         let map = this._map;
 
         let self = this;
 
-        this._$el.on('click', 'li', function (e)
-        {
+        this._$el.on('click', 'li', function(e) {
             let $this = $(this),
                 circularId = $this.data('object-id'),
-                $firstSpan = $(this).find('span').eq(0);
+                $firstSpan = $(this)
+                    .find('span')
+                    .eq(0);
 
             if ($this.data('first-level')) return;
-            if (circularId)
-            {
+            if (circularId) {
                 $this.find('ul').html(self.jsonToHtml(map[circularId], false));
                 $this.rmAttr('data-object-id');
             }
-            
+
             e.stopImmediatePropagation();
 
             if (!$firstSpan.hasClass('eruda-expanded')) return;
 
             let $ul = $this.find('ul').eq(0);
-            if ($firstSpan.hasClass('eruda-collapsed'))
-            {
+            if ($firstSpan.hasClass('eruda-collapsed')) {
                 $firstSpan.rmClass('eruda-collapsed');
                 $ul.show();
-            } else
-            {
+            } else {
                 $firstSpan.addClass('eruda-collapsed');
                 $ul.hide();
             }
@@ -174,79 +176,67 @@ export default class JsonViewer
     }
 }
 
-function createMap(map, data) 
-{
+function createMap(map, data) {
     let id;
 
-    if (data.erudaId)
-    {
+    if (data.erudaId) {
         id = data.erudaId;
-    } else
-    {
+    } else {
         id = uniqId('erudaJson');
         data.erudaId = id;
     }
 
-    if (id) 
-    {
+    if (id) {
         let objAbstract = data.erudaObjAbstract;
 
         let isArr = objAbstract && startWith(objAbstract, 'Array');
-        if (isArr) 
-        {
+        if (isArr) {
             let arr = objToArr(data);
             if (arr.length > 100) data = splitBigArr(objToArr(data), id);
         }
         map[id] = data;
     }
 
-    for (let key in data) 
-    {
+    for (let key in data) {
         let val = data[key];
         if (isObj(val)) createMap(map, val);
     }
 }
 
-function splitBigArr(val, id) 
-{
+function splitBigArr(val, id) {
     let ret = chunk(val, 100);
     let idx = 0;
-    ret = map(ret, val => 
-    {
+    ret = map(ret, val => {
         let obj = {};
         let startIdx = idx;
         obj.erudaObjAbstract = '[' + startIdx;
-        each(val, val => 
-        {
+        each(val, val => {
             obj[idx] = val;
             idx += 1;
         });
         let endIdx = idx - 1;
-        obj.erudaObjAbstract += ((endIdx - startIdx) > 0 ? (' … ' + endIdx) : '') + ']';
+        obj.erudaObjAbstract +=
+            (endIdx - startIdx > 0 ? ' … ' + endIdx : '') + ']';
         obj.erudaId = uniqId('erudaJson');
         obj.erudaSplitArr = true;
         return obj;
     });
-    each(val.erudaStrKeys, (val, key) => ret[key] = val);
+    each(val.erudaStrKeys, (val, key) => (ret[key] = val));
     ret.erudaId = id;
 
     return ret;
 }
 
-function objToArr(val) 
-{
+function objToArr(val) {
     let ret = [];
 
     let strKeys = {};
 
-    each(val, (val, key) => 
-    {
-        let idx = toNum(key); 
-        if (!isNaN(idx)) 
-        {
+    each(val, (val, key) => {
+        let idx = toNum(key);
+        if (!isNaN(idx)) {
             ret[idx] = val;
-        } else 
-        {
+        } else {
             strKeys[key] = val;
         }
     });
@@ -258,4 +248,7 @@ function objToArr(val)
 
 const LIGHTER_KEY = ['__proto__'];
 
-let encode = str => escape(toStr(str)).replace(/\n/g, '↵').replace(/\f|\r|\t/g, '');
+let encode = str =>
+    escape(toStr(str))
+        .replace(/\n/g, '↵')
+        .replace(/\f|\r|\t/g, '');

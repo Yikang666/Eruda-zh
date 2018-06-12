@@ -18,8 +18,7 @@
 
     /* ------------------------------ noop ------------------------------ */
 
-    var noop = _.noop = (function ()
-    {
+    var noop = _.noop = (function () {
         /* A no-operation function.
          *
          * ```javascript
@@ -39,8 +38,7 @@
 
     /* ------------------------------ isObj ------------------------------ */
 
-    var isObj = _.isObj = (function ()
-    {
+    var isObj = _.isObj = (function () {
         /* Check if value is the language type of Object.
          *
          * |Name  |Type   |Desc                      |
@@ -61,8 +59,7 @@
          * test: all
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             var type = typeof val;
 
             return !!val && (type === 'function' || type === 'object');
@@ -73,8 +70,7 @@
 
     /* ------------------------------ allKeys ------------------------------ */
 
-    var allKeys = _.allKeys = (function ()
-    {
+    var allKeys = _.allKeys = (function () {
         /* Retrieve all the names of object's own and inherited properties.
          *
          * |Name  |Type  |Desc                       |
@@ -96,9 +92,9 @@
          * test: all
          */
 
-        function exports(obj)
-        {
-            var ret = [], key;
+        function exports(obj) {
+            var ret = [],
+                key;
 
             for (key in obj) ret.push(key);
 
@@ -110,8 +106,7 @@
 
     /* ------------------------------ isUndef ------------------------------ */
 
-    var isUndef = _.isUndef = (function ()
-    {
+    var isUndef = _.isUndef = (function () {
         /* Check if value is undefined.
          *
          * |Name  |Type   |Desc                      |
@@ -130,8 +125,7 @@
          * test: all
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return val === void 0;
         }
 
@@ -140,8 +134,7 @@
 
     /* ------------------------------ ucs2 ------------------------------ */
 
-    var ucs2 = _.ucs2 = (function (exports)
-    {
+    var ucs2 = _.ucs2 = (function (exports) {
         /* UCS-2 encoding and decoding.
          *
          * ### encode
@@ -173,41 +166,34 @@
         /* module
          * env: all
          * test: all
-         */ 
+         */
 
-        // https://mathiasbynens.be/notes/javascript-encoding 
+        // https://mathiasbynens.be/notes/javascript-encoding
         exports = {
-            encode: function (arr) 
-            {
+            encode: function(arr) {
                 return String.fromCodePoint.apply(String, arr);
             },
-            decode: function (str) 
-            {
+            decode: function(str) {
                 var ret = [];
 
-                var i = 0, 
+                var i = 0,
                     len = str.length;
 
-                while(i < len) 
-                {
+                while (i < len) {
                     var c = str.charCodeAt(i++);
 
                     // A high surrogate
-                    if (c >= 0xD800 && c <= 0xDBFF && i < len) 
-                    {
+                    if (c >= 0xd800 && c <= 0xdbff && i < len) {
                         var tail = str.charCodeAt(i++);
                         // nextC >= 0xDC00 && nextC <= 0xDFFF
-                        if ((tail & 0xFC00) === 0xDC00) 
-                        {
+                        if ((tail & 0xfc00) === 0xdc00) {
                             // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
-                            ret.push(((c & 0x3FF) << 10) + (tail & 0x3FF) + 0x10000);
-                        } else 
-                        {
+                            ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
+                        } else {
                             ret.push(c);
                             i--;
                         }
-                    } else 
-                    {
+                    } else {
                         ret.push(c);
                     }
                 }
@@ -221,8 +207,7 @@
 
     /* ------------------------------ utf8 ------------------------------ */
 
-    var utf8 = _.utf8 = (function (exports)
-    {
+    var utf8 = _.utf8 = (function (exports) {
         /* UTF-8 encoding and decoding.
          *
          * ### encode
@@ -261,36 +246,32 @@
 
         // https://encoding.spec.whatwg.org/#utf-8
         exports = {
-            encode: function (str) 
-            {
+            encode: function(str) {
                 var codePoints = ucs2.decode(str);
 
                 var byteArr = '';
 
-                for (var i = 0, len = codePoints.length; i < len; i++) 
-                {
+                for (var i = 0, len = codePoints.length; i < len; i++) {
                     byteArr += encodeCodePoint(codePoints[i]);
                 }
 
                 return byteArr;
             },
-            decode: function decode(str, safe)
-            {
+            decode: function decode(str, safe) {
                 byteArr = ucs2.decode(str);
-                byteIdx = 0; 
+                byteIdx = 0;
                 byteCount = byteArr.length;
                 codePoint = 0;
                 bytesSeen = 0;
                 bytesNeeded = 0;
                 lowerBoundary = 0x80;
-                upperBoundary = 0xBF;
+                upperBoundary = 0xbf;
 
                 var codePoints = [];
 
                 var tmp;
 
-                while((tmp = decodeCodePoint(safe)) !== false) 
-                {
+                while ((tmp = decodeCodePoint(safe)) !== false) {
                     codePoints.push(tmp);
                 }
 
@@ -300,11 +281,9 @@
 
         var fromCharCode = String.fromCharCode;
 
-        function encodeCodePoint(codePoint) 
-        {
+        function encodeCodePoint(codePoint) {
             // U+0000 to U+0080, ASCII code point
-            if ((codePoint & 0xFFFFFF80) === 0) 
-            {
+            if ((codePoint & 0xffffff80) === 0) {
                 return fromCharCode(codePoint);
             }
 
@@ -313,28 +292,24 @@
                 offset;
 
             // U+0080 to U+07FF, inclusive
-            if ((codePoint & 0xFFFFF800) === 0) 
-            {
+            if ((codePoint & 0xfffff800) === 0) {
                 count = 1;
-                offset = 0xC0;
-            } else if ((codePoint & 0xFFFF0000) === 0)
-            {
+                offset = 0xc0;
+            } else if ((codePoint & 0xffff0000) === 0) {
                 // U+0800 to U+FFFF, inclusive
                 count = 2;
-                offset = 0xE0;
-            } else if ((codePoint & 0xFFE00000) == 0) 
-            {
+                offset = 0xe0;
+            } else if ((codePoint & 0xffe00000) == 0) {
                 // U+10000 to U+10FFFF, inclusive
                 count = 3;
-                offset = 0xF0;
+                offset = 0xf0;
             }
 
             ret += fromCharCode((codePoint >> (6 * count)) + offset);
 
-            while (count > 0) 
-            {
+            while (count > 0) {
                 var tmp = codePoint >> (6 * (count - 1));
-                ret += fromCharCode(0x80 | tmp & 0x3F);
+                ret += fromCharCode(0x80 | (tmp & 0x3f));
                 count--;
             }
 
@@ -342,21 +317,18 @@
         }
 
         var byteArr,
-            byteIdx, 
-            byteCount, 
+            byteIdx,
+            byteCount,
             codePoint,
             bytesSeen,
             bytesNeeded,
             lowerBoundary,
             upperBoundary;
 
-        function decodeCodePoint(safe) 
-        {
+        function decodeCodePoint(safe) {
             /* eslint-disable no-constant-condition */
-            while (true) 
-            {
-                if (byteIdx >= byteCount && bytesNeeded) 
-                {
+            while (true) {
+                if (byteIdx >= byteCount && bytesNeeded) {
                     if (safe) return goBack();
                     throw new Error('Invalid byte index');
                 }
@@ -366,34 +338,28 @@
                 var byte = byteArr[byteIdx];
                 byteIdx++;
 
-                if (!bytesNeeded) 
-                {
+                if (!bytesNeeded) {
                     // 0x00 to 0x7F
-                    if ((byte & 0x80) === 0) 
-                    {
+                    if ((byte & 0x80) === 0) {
                         return byte;
                     }
                     // 0xC2 to 0xDF
-                    if ((byte & 0xE0) === 0xC0) 
-                    {
+                    if ((byte & 0xe0) === 0xc0) {
                         bytesNeeded = 1;
-                        codePoint = byte & 0x1F;
-                    } else if ((byte & 0xF0) === 0xE0) 
-                    {
+                        codePoint = byte & 0x1f;
+                    } else if ((byte & 0xf0) === 0xe0) {
                         // 0xE0 to 0xEF
-                        if (byte === 0xE0) lowerBoundary = 0xA0;
-                        if (byte === 0xED) upperBoundary = 0x9F;
+                        if (byte === 0xe0) lowerBoundary = 0xa0;
+                        if (byte === 0xed) upperBoundary = 0x9f;
                         bytesNeeded = 2;
-                        codePoint = byte & 0xF;
-                    } else if ((byte & 0xF8) === 0xF0) 
-                    {
+                        codePoint = byte & 0xf;
+                    } else if ((byte & 0xf8) === 0xf0) {
                         // 0xF0 to 0xF4
-                        if (byte === 0xF0) lowerBoundary = 0x90;
-                        if (byte === 0xF4) upperBoundary = 0x8F;
+                        if (byte === 0xf0) lowerBoundary = 0x90;
+                        if (byte === 0xf4) upperBoundary = 0x8f;
                         bytesNeeded = 3;
                         codePoint = byte & 0x7;
-                    } else 
-                    {
+                    } else {
                         if (safe) return goBack();
                         throw new Error('Invalid UTF-8 detected');
                     }
@@ -401,8 +367,7 @@
                     continue;
                 }
 
-                if (byte < lowerBoundary || byte > upperBoundary) 
-                {
+                if (byte < lowerBoundary || byte > upperBoundary) {
                     if (safe) {
                         byteIdx--;
                         return goBack();
@@ -411,9 +376,9 @@
                 }
 
                 lowerBoundary = 0x80;
-                upperBoundary = 0xBF;
+                upperBoundary = 0xbf;
 
-                codePoint = (codePoint << 6) | (byte & 0x3F);
+                codePoint = (codePoint << 6) | (byte & 0x3f);
 
                 bytesSeen++;
 
@@ -429,15 +394,14 @@
             }
         }
 
-        function goBack() 
-        {
+        function goBack() {
             var start = byteIdx - bytesSeen - 1;
             byteIdx = start + 1;
             codePoint = 0;
             bytesNeeded = 0;
             bytesSeen = 0;
             lowerBoundary = 0x80;
-            upperBoundary = 0xBF;
+            upperBoundary = 0xbf;
 
             return byteArr[start];
         }
@@ -447,8 +411,7 @@
 
     /* ------------------------------ optimizeCb ------------------------------ */
 
-    var optimizeCb = _.optimizeCb = (function ()
-    {
+    var optimizeCb = _.optimizeCb = (function () {
         /* Used for function context binding.
          */
 
@@ -461,28 +424,25 @@
          * isUndef 
          */
 
-        function exports(fn, ctx, argCount)
-        {
+        function exports(fn, ctx, argCount) {
             if (isUndef(ctx)) return fn;
 
-            switch (argCount == null ? 3 : argCount)
-            {
-                case 1: return function (val)
-                {
-                    return fn.call(ctx, val);
-                };
-                case 3: return function (val, idx, collection)
-                {
-                    return fn.call(ctx, val, idx, collection);
-                };
-                case 4: return function (accumulator, val, idx, collection)
-                {
-                    return fn.call(ctx, accumulator, val, idx, collection);
-                };
+            switch (argCount == null ? 3 : argCount) {
+                case 1:
+                    return function(val) {
+                        return fn.call(ctx, val);
+                    };
+                case 3:
+                    return function(val, idx, collection) {
+                        return fn.call(ctx, val, idx, collection);
+                    };
+                case 4:
+                    return function(accumulator, val, idx, collection) {
+                        return fn.call(ctx, accumulator, val, idx, collection);
+                    };
             }
 
-            return function ()
-            {
+            return function() {
                 return fn.apply(ctx, arguments);
             };
         }
@@ -492,8 +452,7 @@
 
     /* ------------------------------ toStr ------------------------------ */
 
-    var toStr = _.toStr = (function ()
-    {
+    var toStr = _.toStr = (function () {
         /* Convert value to a string.
          *
          * |Name  |Type  |Desc            |
@@ -514,8 +473,7 @@
          * test: all
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return val == null ? '' : val.toString();
         }
 
@@ -524,8 +482,7 @@
 
     /* ------------------------------ has ------------------------------ */
 
-    var has = _.has = (function ()
-    {
+    var has = _.has = (function () {
         /* Checks if key is a direct property.
          *
          * |Name  |Type   |Desc                            |
@@ -546,8 +503,7 @@
 
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
-        function exports(obj, key)
-        {
+        function exports(obj, key) {
             return hasOwnProp.call(obj, key);
         }
 
@@ -556,8 +512,7 @@
 
     /* ------------------------------ identity ------------------------------ */
 
-    var identity = _.identity = (function ()
-    {
+    var identity = _.identity = (function () {
         /* Return the first argument given.
          *
          * |Name  |Type|Desc       |
@@ -575,8 +530,7 @@
          * test: all
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return val;
         }
 
@@ -585,8 +539,7 @@
 
     /* ------------------------------ objToStr ------------------------------ */
 
-    var objToStr = _.objToStr = (function ()
-    {
+    var objToStr = _.objToStr = (function () {
         /* Alias of Object.prototype.toString.
          *
          * |Name  |Type  |Desc                                |
@@ -606,8 +559,7 @@
 
         var ObjToStr = Object.prototype.toString;
 
-        function exports(val)
-        {
+        function exports(val) {
             return ObjToStr.call(val);
         }
 
@@ -616,8 +568,7 @@
 
     /* ------------------------------ isArgs ------------------------------ */
 
-    var isArgs = _.isArgs = (function ()
-    {
+    var isArgs = _.isArgs = (function () {
         /* Check if value is classified as an arguments object.
          *
          * |Name  |Type   |Desc                                |
@@ -641,8 +592,7 @@
          * objToStr 
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return objToStr(val) === '[object Arguments]';
         }
 
@@ -651,8 +601,7 @@
 
     /* ------------------------------ isFn ------------------------------ */
 
-    var isFn = _.isFn = (function ()
-    {
+    var isFn = _.isFn = (function () {
         /* Check if value is a function.
          *
          * |Name  |Type   |Desc                       |
@@ -677,11 +626,13 @@
          * objToStr 
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             var objStr = objToStr(val);
 
-            return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+            return (
+                objStr === '[object Function]' ||
+                objStr === '[object GeneratorFunction]'
+            );
         }
 
         return exports;
@@ -689,8 +640,7 @@
 
     /* ------------------------------ isNum ------------------------------ */
 
-    var isNum = _.isNum = (function ()
-    {
+    var isNum = _.isNum = (function () {
         /* Check if value is classified as a Number primitive or object.
          *
          * |Name  |Type   |Desc                                 |
@@ -714,8 +664,7 @@
          * objToStr 
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return objToStr(val) === '[object Number]';
         }
 
@@ -724,8 +673,7 @@
 
     /* ------------------------------ isArrLike ------------------------------ */
 
-    var isArrLike = _.isArrLike = (function ()
-    {
+    var isArrLike = _.isArrLike = (function () {
         /* Check if value is array-like.
          *
          * |Name  |Type   |Desc                       |
@@ -753,8 +701,7 @@
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-        function exports(val)
-        {
+        function exports(val) {
             if (!val) return false;
 
             var len = val.length;
@@ -767,8 +714,7 @@
 
     /* ------------------------------ isArr ------------------------------ */
 
-    var isArr = _.isArr = (function (exports)
-    {
+    var isArr = _.isArr = (function (exports) {
         /* Check if value is an `Array` object.
          *
          * |Name  |Type   |Desc                              |
@@ -791,18 +737,18 @@
          * objToStr 
          */
 
-        exports = Array.isArray || function (val)
-        {
-            return objToStr(val) === '[object Array]';
-        };
+        exports =
+            Array.isArray ||
+            function(val) {
+                return objToStr(val) === '[object Array]';
+            };
 
         return exports;
     })({});
 
     /* ------------------------------ isBrowser ------------------------------ */
 
-    var isBrowser = _.isBrowser = (function (exports)
-    {
+    var isBrowser = _.isBrowser = (function (exports) {
         /* Check if running in a browser.
          *
          * ```javascript
@@ -815,17 +761,17 @@
          * test: all
          */
 
-        exports = typeof window === 'object' &&
-                  typeof document === 'object' &&
-                  document.nodeType === 9;
+        exports =
+            typeof window === 'object' &&
+            typeof document === 'object' &&
+            document.nodeType === 9;
 
         return exports;
     })({});
 
     /* ------------------------------ root ------------------------------ */
 
-    var root = _.root = (function (exports)
-    {
+    var root = _.root = (function (exports) {
         /* Root object reference, `global` in nodeJs, `window` in browser. */
 
         /* module
@@ -844,8 +790,7 @@
 
     /* ------------------------------ detectMocha ------------------------------ */
 
-    var detectMocha = _.detectMocha = (function ()
-    {
+    var detectMocha = _.detectMocha = (function () {
         /* Detect if mocha is running.
          *
          * ```javascript
@@ -860,12 +805,10 @@
 
         /* dependencies
          * root 
-         */ 
+         */
 
-        function exports() 
-        {
-            for (var i = 0, len = methods.length; i < len; i++) 
-            {
+        function exports() {
+            for (var i = 0, len = methods.length; i < len; i++) {
                 var method = methods[i];
 
                 if (typeof root[method] !== 'function') return false;
@@ -874,15 +817,14 @@
             return true;
         }
 
-        var methods = ['afterEach','after','beforeEach','before','describe','it'];
+        var methods = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it'];
 
         return exports;
     })();
 
     /* ------------------------------ keys ------------------------------ */
 
-    var keys = _.keys = (function (exports)
-    {
+    var keys = _.keys = (function (exports) {
         /* Create an array of the own enumerable property names of object.
          *
          * |Name  |Type  |Desc                   |
@@ -904,17 +846,14 @@
          * has detectMocha 
          */
 
-        if (Object.keys && !detectMocha()) 
-        {
+        if (Object.keys && !detectMocha()) {
             exports = Object.keys;
-        } else 
-        {
-            exports = function (obj)
-            {
-                var ret = [], key;
+        } else {
+            exports = function(obj) {
+                var ret = [],
+                    key;
 
-                for (key in obj)
-                {
+                for (key in obj) {
                     if (has(obj, key)) ret.push(key);
                 }
 
@@ -927,8 +866,7 @@
 
     /* ------------------------------ each ------------------------------ */
 
-    var each = _.each = (function ()
-    {
+    var each = _.each = (function () {
         /* Iterate over elements of collection and invokes iteratee for each element.
          *
          * |Name    |Type        |Desc                          |
@@ -951,20 +889,16 @@
          * isArrLike keys optimizeCb 
          */
 
-        function exports(obj, iteratee, ctx)
-        {
+        function exports(obj, iteratee, ctx) {
             iteratee = optimizeCb(iteratee, ctx);
 
             var i, len;
 
-            if (isArrLike(obj))
-            {
+            if (isArrLike(obj)) {
                 for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
-            } else
-            {
+            } else {
                 var _keys = keys(obj);
-                for (i = 0, len = _keys.length; i < len; i++)
-                {
+                for (i = 0, len = _keys.length; i < len; i++) {
                     iteratee(obj[_keys[i]], _keys[i], obj);
                 }
             }
@@ -977,8 +911,7 @@
 
     /* ------------------------------ createAssigner ------------------------------ */
 
-    var createAssigner = _.createAssigner = (function ()
-    {
+    var createAssigner = _.createAssigner = (function () {
         /* Used to create extend, extendOwn and defaults.
          *
          * |Name    |Type    |Desc                          |
@@ -997,18 +930,14 @@
          * isUndef each 
          */
 
-        function exports(keysFn, defaults)
-        {
-            return function (obj)
-            {
-                each(arguments, function (src, idx)
-                {
+        function exports(keysFn, defaults) {
+            return function(obj) {
+                each(arguments, function(src, idx) {
                     if (idx === 0) return;
 
                     var keys = keysFn(src);
 
-                    each(keys, function (key)
-                    {
+                    each(keys, function(key) {
                         if (!defaults || isUndef(obj[key])) obj[key] = src[key];
                     });
                 });
@@ -1022,8 +951,7 @@
 
     /* ------------------------------ defaults ------------------------------ */
 
-    var defaults = _.defaults = (function (exports)
-    {
+    var defaults = _.defaults = (function (exports) {
         /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
          *
          * |Name  |Type  |Desc              |
@@ -1053,8 +981,7 @@
 
     /* ------------------------------ extendOwn ------------------------------ */
 
-    var extendOwn = _.extendOwn = (function (exports)
-    {
+    var extendOwn = _.extendOwn = (function (exports) {
         /* Like extend, but only copies own properties over to the destination object.
          *
          * |Name  |Type  |Desc              |
@@ -1084,8 +1011,7 @@
 
     /* ------------------------------ isStr ------------------------------ */
 
-    var isStr = _.isStr = (function ()
-    {
+    var isStr = _.isStr = (function () {
         /* Check if value is a string primitive.
          *
          * |Name  |Type   |Desc                               |
@@ -1107,8 +1033,7 @@
          * objToStr 
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             return objToStr(val) === '[object String]';
         }
 
@@ -1117,8 +1042,7 @@
 
     /* ------------------------------ isEmpty ------------------------------ */
 
-    var isEmpty = _.isEmpty = (function ()
-    {
+    var isEmpty = _.isEmpty = (function () {
         /* Check if value is an empty object or array.
          *
          * |Name  |Type   |Desc                  |
@@ -1142,12 +1066,10 @@
          * isArrLike isArr isStr isArgs keys 
          */
 
-        function exports(val)
-        {
+        function exports(val) {
             if (val == null) return true;
 
-            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
-            {
+            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
                 return val.length === 0;
             }
 
@@ -1159,8 +1081,7 @@
 
     /* ------------------------------ isMatch ------------------------------ */
 
-    var isMatch = _.isMatch = (function ()
-    {
+    var isMatch = _.isMatch = (function () {
         /* Check if keys and values in src are contained in obj.
          *
          * |Name  |Type   |Desc                              |
@@ -1183,8 +1104,7 @@
          * keys 
          */
 
-        function exports(obj, src)
-        {
+        function exports(obj, src) {
             var _keys = keys(src),
                 len = _keys.length;
 
@@ -1192,8 +1112,7 @@
 
             obj = Object(obj);
 
-            for (var i = 0; i < len; i++)
-            {
+            for (var i = 0; i < len; i++) {
                 var key = _keys[i];
                 if (src[key] !== obj[key] || !(key in obj)) return false;
             }
@@ -1206,8 +1125,7 @@
 
     /* ------------------------------ ltrim ------------------------------ */
 
-    var ltrim = _.ltrim = (function ()
-    {
+    var ltrim = _.ltrim = (function () {
         /* Remove chars or white-spaces from beginning of string.
          *
          * |Name  |Type        |Desc              |
@@ -1230,26 +1148,23 @@
 
         var regSpace = /^\s+/;
 
-        function exports(str, chars)
-        {
+        function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
 
             var start = 0,
                 len = str.length,
                 charLen = chars.length,
                 found = true,
-                i, c;
+                i,
+                c;
 
-            while (found && start < len)
-            {
+            while (found && start < len) {
                 found = false;
                 i = -1;
                 c = str.charAt(start);
 
-                while (++i < charLen)
-                {
-                    if (c === chars[i])
-                    {
+                while (++i < charLen) {
+                    if (c === chars[i]) {
                         found = true;
                         start++;
                         break;
@@ -1265,8 +1180,7 @@
 
     /* ------------------------------ matcher ------------------------------ */
 
-    var matcher = _.matcher = (function ()
-    {
+    var matcher = _.matcher = (function () {
         /* Return a predicate function that checks if attrs are contained in an object.
          *
          * |Name  |Type    |Desc                              |
@@ -1292,12 +1206,10 @@
          * extendOwn isMatch 
          */
 
-        function exports(attrs)
-        {
+        function exports(attrs) {
             attrs = extendOwn({}, attrs);
 
-            return function (obj)
-            {
+            return function(obj) {
                 return isMatch(obj, attrs);
             };
         }
@@ -1307,8 +1219,7 @@
 
     /* ------------------------------ safeCb ------------------------------ */
 
-    var safeCb = _.safeCb = (function (exports)
-    {
+    var safeCb = _.safeCb = (function (exports) {
         /* Create callback based on input value.
          */
 
@@ -1321,18 +1232,15 @@
          * isFn isObj optimizeCb matcher identity 
          */
 
-        exports = function (val, ctx, argCount)
-        {
+        exports = function(val, ctx, argCount) {
             if (val == null) return identity;
 
             if (isFn(val)) return optimizeCb(val, ctx, argCount);
 
             if (isObj(val)) return matcher(val);
 
-            return function (key)
-            {
-                return function (obj)
-                {
+            return function(key) {
+                return function(obj) {
                     return obj == null ? undefined : obj[key];
                 };
             };
@@ -1343,8 +1251,7 @@
 
     /* ------------------------------ filter ------------------------------ */
 
-    var filter = _.filter = (function ()
-    {
+    var filter = _.filter = (function () {
         /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
          *
          * |Name     |Type    |Desc                                   |
@@ -1371,14 +1278,12 @@
          * safeCb each 
          */
 
-        function exports(obj, predicate, ctx)
-        {
+        function exports(obj, predicate, ctx) {
             var ret = [];
 
             predicate = safeCb(predicate, ctx);
 
-            each(obj, function (val, idx, list)
-            {
+            each(obj, function(val, idx, list) {
                 if (predicate(val, idx, list)) ret.push(val);
             });
 
@@ -1388,8 +1293,8 @@
         return exports;
     })();
 
-    /* ------------------------------ evalCss ------------------------------ */    _.evalCss = (function ()
-    {
+    /* ------------------------------ evalCss ------------------------------ */
+    _.evalCss = (function () {
         /* Eval css.
          */
 
@@ -1400,12 +1305,10 @@
         var styleList = [],
             scale = 1;
 
-        function exports(css)
-        {
+        function exports(css) {
             css = toStr(css);
 
-            for (var i = 0, len = styleList.length; i < len; i++)
-            {
+            for (var i = 0, len = styleList.length; i < len; i++) {
                 if (styleList[i].css === css) return;
             }
 
@@ -1415,35 +1318,31 @@
             el.type = 'text/css';
             container.appendChild(el);
 
-            let style = {css, el, container};
+            let style = { css, el, container };
             resetStyle(style);
             styleList.push(style);
 
             return style;
         }
 
-        exports.setScale = function (s) 
-        {
+        exports.setScale = function(s) {
             scale = s;
             each(styleList, style => resetStyle(style));
         };
 
-        exports.clear = function () 
-        {
-            each(styleList, ({container, el}) => container.removeChild(el));
+        exports.clear = function() {
+            each(styleList, ({ container, el }) => container.removeChild(el));
             styleList = [];
         };
 
-        exports.remove = function (style) 
-        {
+        exports.remove = function(style) {
             styleList = filter(styleList, s => s !== style);
 
             style.container.removeChild(style.el);
         };
 
-        function resetStyle({css, el}) 
-        {
-            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
+        function resetStyle({ css, el }) {
+            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px');
         }
 
         return exports;
@@ -1451,8 +1350,7 @@
 
     /* ------------------------------ map ------------------------------ */
 
-    var map = _.map = (function ()
-    {
+    var map = _.map = (function () {
         /* Create an array of values by running each element in collection through iteratee.
          *
          * |Name    |Type        |Desc                          |
@@ -1476,16 +1374,14 @@
          * safeCb keys isArrLike 
          */
 
-        function exports(obj, iteratee, ctx)
-        {
+        function exports(obj, iteratee, ctx) {
             iteratee = safeCb(iteratee, ctx);
 
             var _keys = !isArrLike(obj) && keys(obj),
                 len = (_keys || obj).length,
                 results = Array(len);
 
-            for (var i = 0; i < len; i++)
-            {
+            for (var i = 0; i < len; i++) {
                 var curKey = _keys ? _keys[i] : i;
                 results[i] = iteratee(obj[curKey], curKey, obj);
             }
@@ -1498,8 +1394,7 @@
 
     /* ------------------------------ decodeUriComponent ------------------------------ */
 
-    var decodeUriComponent = _.decodeUriComponent = (function ()
-    {
+    var decodeUriComponent = _.decodeUriComponent = (function () {
         /* Better decodeURIComponent that does not throw if input is invalid.
          *
          * |Name  |Type  |Desc            |
@@ -1511,7 +1406,7 @@
          * decodeUriComponent('%%25%'); // -> '%%%'
          * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
          * ```
-         */ 
+         */
 
         /* module
          * env: all
@@ -1522,28 +1417,23 @@
          * each ucs2 map utf8 
          */
 
-        function exports(str) 
-        {
-            try 
-            {
+        function exports(str) {
+            try {
                 return decodeURIComponent(str);
-            } catch (e) 
-            {
+            } catch (e) {
                 var replaceMap = {};
 
                 var matches = str.match(regMatcher);
 
-                each(matches, function (match) 
-                {
+                each(matches, function(match) {
                     str = str.replace(match, decode(match));
                 });
 
                 return str;
             }
-        } 
+        }
 
-        function decode(str) 
-        {
+        function decode(str) {
             str = str.split('%').slice(1);
 
             var bytes = map(str, hexToInt);
@@ -1554,8 +1444,7 @@
             return str;
         }
 
-        function hexToInt(numStr) 
-        {
+        function hexToInt(numStr) {
             return +('0x' + numStr);
         }
 
@@ -1564,8 +1453,8 @@
         return exports;
     })();
 
-    /* ------------------------------ cookie ------------------------------ */    _.cookie = (function (exports)
-    {
+    /* ------------------------------ cookie ------------------------------ */
+    _.cookie = (function (exports) {
         /* Simple api for handling browser cookies.
          *
          * ### get
@@ -1616,17 +1505,16 @@
 
         var defOpts = { path: '/' };
 
-        function setCookie(key, val, options)
-        {
-            if (!isUndef(val))
-            {
+        function setCookie(key, val, options) {
+            if (!isUndef(val)) {
                 options = options || {};
                 options = defaults(options, defOpts);
 
-                if (isNum(options.expires))
-                {
+                if (isNum(options.expires)) {
                     var expires = new Date();
-                    expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
+                    expires.setMilliseconds(
+                        expires.getMilliseconds() + options.expires * 864e5
+                    );
                     options.expires = expires;
                 }
 
@@ -1634,10 +1522,12 @@
                 key = encodeURIComponent(key);
 
                 document.cookie = [
-                    key, '=', val,
+                    key,
+                    '=',
+                    val,
                     options.expires && '; expires=' + options.expires.toUTCString(),
                     options.path && '; path=' + options.path,
-                    options.domain  && '; domain=' + options.domain,
+                    options.domain && '; domain=' + options.domain,
                     options.secure ? '; secure' : ''
                 ].join('');
 
@@ -1647,8 +1537,7 @@
             var cookies = document.cookie ? document.cookie.split('; ') : [],
                 result = key ? undefined : {};
 
-            for (var i = 0, len = cookies.length; i < len; i++)
-            {
+            for (var i = 0, len = cookies.length; i < len; i++) {
                 var c = cookies[i],
                     parts = c.split('='),
                     name = decodeUriComponent(parts.shift());
@@ -1656,8 +1545,7 @@
                 c = parts.join('=');
                 c = decodeUriComponent(c);
 
-                if (key === name)
-                {
+                if (key === name) {
                     result = c;
                     break;
                 }
@@ -1671,8 +1559,7 @@
         exports = {
             get: setCookie,
             set: setCookie,
-            remove: function (key, options)
-            {
+            remove: function(key, options) {
                 options = options || {};
                 options.expires = -1;
 
@@ -1685,8 +1572,7 @@
 
     /* ------------------------------ rtrim ------------------------------ */
 
-    var rtrim = _.rtrim = (function ()
-    {
+    var rtrim = _.rtrim = (function () {
         /* Remove chars or white-spaces from end of string.
          *
          * |Name  |Type        |Desc              |
@@ -1709,25 +1595,22 @@
 
         var regSpace = /\s+$/;
 
-        function exports(str, chars)
-        {
+        function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
 
             var end = str.length - 1,
                 charLen = chars.length,
                 found = true,
-                i, c;
+                i,
+                c;
 
-            while (found && end >= 0)
-            {
+            while (found && end >= 0) {
                 found = false;
                 i = -1;
                 c = str.charAt(end);
 
-                while (++i < charLen)
-                {
-                    if (c === chars[i])
-                    {
+                while (++i < charLen) {
+                    if (c === chars[i]) {
                         found = true;
                         end--;
                         break;
@@ -1735,7 +1618,7 @@
                 }
             }
 
-            return (end >= 0) ? str.substring(0, end + 1) : '';
+            return end >= 0 ? str.substring(0, end + 1) : '';
         }
 
         return exports;
@@ -1743,8 +1626,7 @@
 
     /* ------------------------------ trim ------------------------------ */
 
-    var trim = _.trim = (function ()
-    {
+    var trim = _.trim = (function () {
         /* Remove chars or white-spaces from beginning end of string.
          *
          * |Name  |Type        |Desc              |
@@ -1771,8 +1653,7 @@
 
         var regSpace = /^\s+|\s+$/g;
 
-        function exports(str, chars)
-        {
+        function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
 
             return ltrim(rtrim(str, chars), chars);
@@ -1783,8 +1664,7 @@
 
     /* ------------------------------ query ------------------------------ */
 
-    var query = _.query = (function (exports)
-    {
+    var query = _.query = (function (exports) {
         /* Parse and stringify url query strings.
          *
          * ### parse
@@ -1822,14 +1702,12 @@
          */
 
         exports = {
-            parse: function (str)
-            {
+            parse: function(str) {
                 var ret = {};
 
                 str = trim(str).replace(regIllegalChars, '');
 
-                each(str.split('&'), function (param)
-                {
+                each(str.split('&'), function(param) {
                     var parts = param.split('=');
 
                     var key = parts.shift(),
@@ -1838,32 +1716,35 @@
                     key = decodeURIComponent(key);
                     val = decodeURIComponent(val);
 
-                    if (isUndef(ret[key]))
-                    {
+                    if (isUndef(ret[key])) {
                         ret[key] = val;
-                    } else if (isArr(ret[key]))
-                    {
+                    } else if (isArr(ret[key])) {
                         ret[key].push(val);
-                    } else
-                    {
+                    } else {
                         ret[key] = [ret[key], val];
                     }
                 });
 
                 return ret;
             },
-            stringify: function (obj, arrKey)
-            {
-                return filter(map(obj, function (val, key)
-                {
-                    if (isObj(val) && isEmpty(val)) return '';
-                    if (isArr(val)) return exports.stringify(val, key);
+            stringify: function(obj, arrKey) {
+                return filter(
+                    map(obj, function(val, key) {
+                        if (isObj(val) && isEmpty(val)) return '';
+                        if (isArr(val)) return exports.stringify(val, key);
 
-                    return (arrKey ? encodeURIComponent(arrKey) : encodeURIComponent(key)) + '=' + encodeURIComponent(val);
-                }), function (str)
-                {
-                    return str.length > 0;
-                }).join('&');
+                        return (
+                            (arrKey
+                                ? encodeURIComponent(arrKey)
+                                : encodeURIComponent(key)) +
+                            '=' +
+                            encodeURIComponent(val)
+                        );
+                    }),
+                    function(str) {
+                        return str.length > 0;
+                    }
+                ).join('&');
             }
         };
 
@@ -1872,8 +1753,8 @@
         return exports;
     })({});
 
-    /* ------------------------------ ajax ------------------------------ */    _.ajax = (function ()
-    {
+    /* ------------------------------ ajax ------------------------------ */
+    _.ajax = (function () {
         /* Perform an asynchronous HTTP request.
          *
          * |Name   |Type  |Desc        |
@@ -1936,8 +1817,7 @@
          * isFn noop defaults isObj query 
          */
 
-        function exports(options)
-        {
+        function exports(options) {
             defaults(options, exports.setting);
 
             var type = options.type,
@@ -1951,8 +1831,7 @@
                 xhr = options.xhr(),
                 abortTimeout;
 
-            xhr.onreadystatechange = function ()
-            {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState !== 4) return;
 
                 clearTimeout(abortTimeout);
@@ -1960,41 +1839,35 @@
                 var result;
 
                 var status = xhr.status;
-                if ((status >= 200 && status < 300) || status === 304)
-                {
+                if ((status >= 200 && status < 300) || status === 304) {
                     result = xhr.responseText;
                     if (dataType === 'xml') result = xhr.responseXML;
                     try {
                         if (dataType === 'json') result = JSON.parse(result);
-                    /* eslint-disable no-empty */
+                        /* eslint-disable no-empty */
                     } catch (e) {}
                     success(result, xhr);
-                } else
-                {
+                } else {
                     error(xhr);
                 }
 
                 complete(xhr);
             };
 
-            if (type === 'GET')
-            {
+            if (type === 'GET') {
                 data = query.stringify(data);
                 url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
-            } else if (options.contentType === 'application/x-www-form-urlencoded')
-            {
-                if(isObj(data)) data = query.stringify(data);
+            } else if (options.contentType === 'application/x-www-form-urlencoded') {
+                if (isObj(data)) data = query.stringify(data);
             } else if (options.contentType === 'application/json') {
-                if(isObj(data)) data = JSON.stringify(data);
+                if (isObj(data)) data = JSON.stringify(data);
             }
 
             xhr.open(type, url, true);
             xhr.setRequestHeader('Content-Type', options.contentType);
 
-            if (timeout > 0)
-            {
-                abortTimeout = setTimeout(function ()
-                {
+            if (timeout > 0) {
+                abortTimeout = setTimeout(function() {
                     xhr.onreadystatechange = noop;
                     xhr.abort();
                     error(xhr, 'timeout');
@@ -2014,27 +1887,25 @@
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded',
             data: {},
-            xhr: function () { return new XMLHttpRequest(); },
+            xhr: function() {
+                return new XMLHttpRequest();
+            },
             timeout: 0
         };
 
-        exports.get = function ()
-        {
+        exports.get = function() {
             return exports(parseArgs.apply(null, arguments));
         };
 
-        exports.post = function ()
-        {
+        exports.post = function() {
             var options = parseArgs.apply(null, arguments);
             options.type = 'POST';
 
             return exports(options);
         };
 
-        function parseArgs(url, data, success, dataType)
-        {
-            if (isFn(data))
-            {
+        function parseArgs(url, data, success, dataType) {
+            if (isFn(data)) {
                 dataType = success;
                 success = data;
                 data = {};

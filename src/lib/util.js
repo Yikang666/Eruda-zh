@@ -5,8 +5,7 @@ var _ = {};
 
 /* ------------------------------ last ------------------------------ */
 
-export var last = _.last = (function ()
-{
+export var last = _.last = (function () {
     /* Get the last element of array.
      *
      * |Name  |Type |Desc                     |
@@ -24,8 +23,7 @@ export var last = _.last = (function ()
      * test: all
      */
 
-    function exports(arr)
-    {
+    function exports(arr) {
         var len = arr ? arr.length : 0;
 
         if (len) return arr[len - 1];
@@ -36,8 +34,7 @@ export var last = _.last = (function ()
 
 /* ------------------------------ isUndef ------------------------------ */
 
-export var isUndef = _.isUndef = (function ()
-{
+export var isUndef = _.isUndef = (function () {
     /* Check if value is undefined.
      *
      * |Name  |Type   |Desc                      |
@@ -56,8 +53,7 @@ export var isUndef = _.isUndef = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val === void 0;
     }
 
@@ -66,8 +62,7 @@ export var isUndef = _.isUndef = (function ()
 
 /* ------------------------------ isObj ------------------------------ */
 
-export var isObj = _.isObj = (function ()
-{
+export var isObj = _.isObj = (function () {
     /* Check if value is the language type of Object.
      *
      * |Name  |Type   |Desc                      |
@@ -88,8 +83,7 @@ export var isObj = _.isObj = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         var type = typeof val;
 
         return !!val && (type === 'function' || type === 'object');
@@ -100,8 +94,7 @@ export var isObj = _.isObj = (function ()
 
 /* ------------------------------ startWith ------------------------------ */
 
-export var startWith = _.startWith = (function ()
-{
+export var startWith = _.startWith = (function () {
     /* Check if string starts with the given target string.
      *
      * |Name  |Type   |Desc                             |
@@ -120,8 +113,7 @@ export var startWith = _.startWith = (function ()
      * test: all
      */
 
-    function exports(str, prefix)
-    {
+    function exports(str, prefix) {
         return str.indexOf(prefix) === 0;
     }
 
@@ -130,8 +122,7 @@ export var startWith = _.startWith = (function ()
 
 /* ------------------------------ inherits ------------------------------ */
 
-export var inherits = _.inherits = (function ()
-{
+export var inherits = _.inherits = (function () {
     /* Inherit the prototype methods from one constructor into another.
      *
      * |Name      |Type    |Desc       |
@@ -165,9 +156,8 @@ export var inherits = _.inherits = (function ()
      * test: all
      */
 
-    function exports(Class, SuperClass)
-    {
-        if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
+    function exports(Class, SuperClass) {
+        if (objCreate) return (Class.prototype = objCreate(SuperClass.prototype));
 
         noop.prototype = SuperClass.prototype;
         Class.prototype = new noop();
@@ -182,8 +172,7 @@ export var inherits = _.inherits = (function ()
 
 /* ------------------------------ has ------------------------------ */
 
-export var has = _.has = (function ()
-{
+export var has = _.has = (function () {
     /* Checks if key is a direct property.
      *
      * |Name  |Type   |Desc                            |
@@ -204,8 +193,7 @@ export var has = _.has = (function ()
 
     var hasOwnProp = Object.prototype.hasOwnProperty;
 
-    function exports(obj, key)
-    {
+    function exports(obj, key) {
         return hasOwnProp.call(obj, key);
     }
 
@@ -214,8 +202,7 @@ export var has = _.has = (function ()
 
 /* ------------------------------ slice ------------------------------ */
 
-export var slice = _.slice = (function ()
-{
+export var slice = _.slice = (function () {
     /* Create slice of source array or array-like object.
      *
      * |Name              |Type  |Desc                      |
@@ -234,29 +221,22 @@ export var slice = _.slice = (function ()
      * test: all
      */
 
-    function exports(arr, start, end)
-    {
+    function exports(arr, start, end) {
         var len = arr.length;
 
-        if (start == null)
-        {
+        if (start == null) {
             start = 0;
-        } else if (start < 0)
-        {
+        } else if (start < 0) {
             start = Math.max(len + start, 0);
-        } else
-        {
+        } else {
             start = Math.min(start, len);
         }
 
-        if (end == null)
-        {
+        if (end == null) {
             end = len;
-        } else if (end < 0)
-        {
+        } else if (end < 0) {
             end = Math.max(len + end, 0);
-        } else
-        {
+        } else {
             end = Math.min(end, len);
         }
 
@@ -271,8 +251,7 @@ export var slice = _.slice = (function ()
 
 /* ------------------------------ isBrowser ------------------------------ */
 
-export var isBrowser = _.isBrowser = (function (exports)
-{
+export var isBrowser = _.isBrowser = (function (exports) {
     /* Check if running in a browser.
      *
      * ```javascript
@@ -285,17 +264,17 @@ export var isBrowser = _.isBrowser = (function (exports)
      * test: all
      */
 
-    exports = typeof window === 'object' &&
-              typeof document === 'object' &&
-              document.nodeType === 9;
+    exports =
+        typeof window === 'object' &&
+        typeof document === 'object' &&
+        document.nodeType === 9;
 
     return exports;
 })({});
 
 /* ------------------------------ noop ------------------------------ */
 
-export var noop = _.noop = (function ()
-{
+export var noop = _.noop = (function () {
     /* A no-operation function.
      *
      * ```javascript
@@ -315,8 +294,7 @@ export var noop = _.noop = (function ()
 
 /* ------------------------------ allKeys ------------------------------ */
 
-export var allKeys = _.allKeys = (function ()
-{
+export var allKeys = _.allKeys = (function () {
     /* Retrieve all the names of object's own and inherited properties.
      *
      * |Name  |Type  |Desc                       |
@@ -338,9 +316,9 @@ export var allKeys = _.allKeys = (function ()
      * test: all
      */
 
-    function exports(obj)
-    {
-        var ret = [], key;
+    function exports(obj) {
+        var ret = [],
+            key;
 
         for (key in obj) ret.push(key);
 
@@ -352,8 +330,7 @@ export var allKeys = _.allKeys = (function ()
 
 /* ------------------------------ before ------------------------------ */
 
-export var before = _.before = (function ()
-{
+export var before = _.before = (function () {
     /* Create a function that invokes less than n times.
      *
      * |Name  |Type    |Desc                                            |
@@ -375,12 +352,10 @@ export var before = _.before = (function ()
      * test: all
      */
 
-    function exports(n, fn)
-    {
+    function exports(n, fn) {
         var memo;
 
-        return function ()
-        {
+        return function() {
             if (--n > 0) memo = fn.apply(this, arguments);
             if (n <= 1) fn = null;
 
@@ -393,8 +368,7 @@ export var before = _.before = (function ()
 
 /* ------------------------------ splitCase ------------------------------ */
 
-export var splitCase = _.splitCase = (function ()
-{
+export var splitCase = _.splitCase = (function () {
     /* Split different string case to an array.
      *
      * |Name  |Type  |Desc           |
@@ -421,12 +395,12 @@ export var splitCase = _.splitCase = (function ()
         regSeparator = /[_.\- ]+/g,
         regTrim = /(^-)|(-$)/g;
 
-    function exports(str)
-    {
-        str = str.replace(regUpperCase, '-$1')
-                 .toLowerCase()
-                 .replace(regSeparator, '-')
-                 .replace(regTrim, '');
+    function exports(str) {
+        str = str
+            .replace(regUpperCase, '-$1')
+            .toLowerCase()
+            .replace(regSeparator, '-')
+            .replace(regTrim, '');
 
         return str.split('-');
     }
@@ -436,8 +410,7 @@ export var splitCase = _.splitCase = (function ()
 
 /* ------------------------------ camelCase ------------------------------ */
 
-export var camelCase = _.camelCase = (function ()
-{
+export var camelCase = _.camelCase = (function () {
     /* Convert string to "camelCase".
      *
      * |Name  |Type  |Desc              |
@@ -462,8 +435,7 @@ export var camelCase = _.camelCase = (function ()
      * splitCase 
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         var arr = splitCase(str);
 
         var ret = arr[0];
@@ -475,10 +447,8 @@ export var camelCase = _.camelCase = (function ()
         return ret;
     }
 
-    function capitalize(val, idx)
-    {
-        this[idx] = val.replace(/\w/, function (match)
-        {
+    function capitalize(val, idx) {
+        this[idx] = val.replace(/\w/, function(match) {
             return match.toUpperCase();
         });
     }
@@ -488,8 +458,7 @@ export var camelCase = _.camelCase = (function ()
 
 /* ------------------------------ kebabCase ------------------------------ */
 
-export var kebabCase = _.kebabCase = (function ()
-{
+export var kebabCase = _.kebabCase = (function () {
     /* Convert string to "kebabCase".
      *
      * |Name  |Type  |Desc              |
@@ -514,8 +483,7 @@ export var kebabCase = _.kebabCase = (function ()
      * splitCase 
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         return splitCase(str).join('-');
     }
 
@@ -524,8 +492,7 @@ export var kebabCase = _.kebabCase = (function ()
 
 /* ------------------------------ chunk ------------------------------ */
 
-export var chunk = _.chunk = (function ()
-{
+export var chunk = _.chunk = (function () {
     /* Split array into groups the length of given size.
      *
      * |Name  |Type  |Desc                |
@@ -545,14 +512,12 @@ export var chunk = _.chunk = (function ()
      * test: all
      */
 
-    function exports(arr, size) 
-    {
+    function exports(arr, size) {
         var ret = [];
 
         size = size || 1;
 
-        for (var i = 0, len = Math.ceil(arr.length / size); i < len; i++) 
-        {
+        for (var i = 0, len = Math.ceil(arr.length / size); i < len; i++) {
             var start = i * size,
                 end = start + size;
 
@@ -567,8 +532,7 @@ export var chunk = _.chunk = (function ()
 
 /* ------------------------------ clamp ------------------------------ */
 
-export var clamp = _.clamp = (function ()
-{
+export var clamp = _.clamp = (function () {
     /* Clamp number within the inclusive lower and upper bounds.
      *
      * |Name   |Type  |Desc           |
@@ -596,10 +560,8 @@ export var clamp = _.clamp = (function ()
      * isUndef 
      */
 
-    function exports(n, lower, upper)
-    {
-        if (isUndef(upper))
-        {
+    function exports(n, lower, upper) {
+        if (isUndef(upper)) {
             upper = lower;
             lower = undefined;
         }
@@ -616,8 +578,7 @@ export var clamp = _.clamp = (function ()
 
 /* ------------------------------ idxOf ------------------------------ */
 
-export var idxOf = _.idxOf = (function ()
-{
+export var idxOf = _.idxOf = (function () {
     /* Get the index at which the first occurrence of value.
      *
      * |Name     |Type  |Desc                |
@@ -636,8 +597,7 @@ export var idxOf = _.idxOf = (function ()
      * test: all
      */
 
-    function exports(arr, val, fromIdx)
-    {
+    function exports(arr, val, fromIdx) {
         return Array.prototype.indexOf.call(arr, val, fromIdx);
     }
 
@@ -646,8 +606,7 @@ export var idxOf = _.idxOf = (function ()
 
 /* ------------------------------ toStr ------------------------------ */
 
-export var toStr = _.toStr = (function ()
-{
+export var toStr = _.toStr = (function () {
     /* Convert value to a string.
      *
      * |Name  |Type  |Desc            |
@@ -668,8 +627,7 @@ export var toStr = _.toStr = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val == null ? '' : val.toString();
     }
 
@@ -678,8 +636,7 @@ export var toStr = _.toStr = (function ()
 
 /* ------------------------------ ucs2 ------------------------------ */
 
-export var ucs2 = _.ucs2 = (function (exports)
-{
+export var ucs2 = _.ucs2 = (function (exports) {
     /* UCS-2 encoding and decoding.
      *
      * ### encode
@@ -711,41 +668,34 @@ export var ucs2 = _.ucs2 = (function (exports)
     /* module
      * env: all
      * test: all
-     */ 
+     */
 
-    // https://mathiasbynens.be/notes/javascript-encoding 
+    // https://mathiasbynens.be/notes/javascript-encoding
     exports = {
-        encode: function (arr) 
-        {
+        encode: function(arr) {
             return String.fromCodePoint.apply(String, arr);
         },
-        decode: function (str) 
-        {
+        decode: function(str) {
             var ret = [];
 
-            var i = 0, 
+            var i = 0,
                 len = str.length;
 
-            while(i < len) 
-            {
+            while (i < len) {
                 var c = str.charCodeAt(i++);
 
                 // A high surrogate
-                if (c >= 0xD800 && c <= 0xDBFF && i < len) 
-                {
+                if (c >= 0xd800 && c <= 0xdbff && i < len) {
                     var tail = str.charCodeAt(i++);
                     // nextC >= 0xDC00 && nextC <= 0xDFFF
-                    if ((tail & 0xFC00) === 0xDC00) 
-                    {
+                    if ((tail & 0xfc00) === 0xdc00) {
                         // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
-                        ret.push(((c & 0x3FF) << 10) + (tail & 0x3FF) + 0x10000);
-                    } else 
-                    {
+                        ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
+                    } else {
                         ret.push(c);
                         i--;
                     }
-                } else 
-                {
+                } else {
                     ret.push(c);
                 }
             }
@@ -759,8 +709,7 @@ export var ucs2 = _.ucs2 = (function (exports)
 
 /* ------------------------------ utf8 ------------------------------ */
 
-export var utf8 = _.utf8 = (function (exports)
-{
+export var utf8 = _.utf8 = (function (exports) {
     /* UTF-8 encoding and decoding.
      *
      * ### encode
@@ -799,36 +748,32 @@ export var utf8 = _.utf8 = (function (exports)
 
     // https://encoding.spec.whatwg.org/#utf-8
     exports = {
-        encode: function (str) 
-        {
+        encode: function(str) {
             var codePoints = ucs2.decode(str);
 
             var byteArr = '';
 
-            for (var i = 0, len = codePoints.length; i < len; i++) 
-            {
+            for (var i = 0, len = codePoints.length; i < len; i++) {
                 byteArr += encodeCodePoint(codePoints[i]);
             }
 
             return byteArr;
         },
-        decode: function decode(str, safe)
-        {
+        decode: function decode(str, safe) {
             byteArr = ucs2.decode(str);
-            byteIdx = 0; 
+            byteIdx = 0;
             byteCount = byteArr.length;
             codePoint = 0;
             bytesSeen = 0;
             bytesNeeded = 0;
             lowerBoundary = 0x80;
-            upperBoundary = 0xBF;
+            upperBoundary = 0xbf;
 
             var codePoints = [];
 
             var tmp;
 
-            while((tmp = decodeCodePoint(safe)) !== false) 
-            {
+            while ((tmp = decodeCodePoint(safe)) !== false) {
                 codePoints.push(tmp);
             }
 
@@ -838,11 +783,9 @@ export var utf8 = _.utf8 = (function (exports)
 
     var fromCharCode = String.fromCharCode;
 
-    function encodeCodePoint(codePoint) 
-    {
+    function encodeCodePoint(codePoint) {
         // U+0000 to U+0080, ASCII code point
-        if ((codePoint & 0xFFFFFF80) === 0) 
-        {
+        if ((codePoint & 0xffffff80) === 0) {
             return fromCharCode(codePoint);
         }
 
@@ -851,28 +794,24 @@ export var utf8 = _.utf8 = (function (exports)
             offset;
 
         // U+0080 to U+07FF, inclusive
-        if ((codePoint & 0xFFFFF800) === 0) 
-        {
+        if ((codePoint & 0xfffff800) === 0) {
             count = 1;
-            offset = 0xC0;
-        } else if ((codePoint & 0xFFFF0000) === 0)
-        {
+            offset = 0xc0;
+        } else if ((codePoint & 0xffff0000) === 0) {
             // U+0800 to U+FFFF, inclusive
             count = 2;
-            offset = 0xE0;
-        } else if ((codePoint & 0xFFE00000) == 0) 
-        {
+            offset = 0xe0;
+        } else if ((codePoint & 0xffe00000) == 0) {
             // U+10000 to U+10FFFF, inclusive
             count = 3;
-            offset = 0xF0;
+            offset = 0xf0;
         }
 
         ret += fromCharCode((codePoint >> (6 * count)) + offset);
 
-        while (count > 0) 
-        {
+        while (count > 0) {
             var tmp = codePoint >> (6 * (count - 1));
-            ret += fromCharCode(0x80 | tmp & 0x3F);
+            ret += fromCharCode(0x80 | (tmp & 0x3f));
             count--;
         }
 
@@ -880,21 +819,18 @@ export var utf8 = _.utf8 = (function (exports)
     }
 
     var byteArr,
-        byteIdx, 
-        byteCount, 
+        byteIdx,
+        byteCount,
         codePoint,
         bytesSeen,
         bytesNeeded,
         lowerBoundary,
         upperBoundary;
 
-    function decodeCodePoint(safe) 
-    {
+    function decodeCodePoint(safe) {
         /* eslint-disable no-constant-condition */
-        while (true) 
-        {
-            if (byteIdx >= byteCount && bytesNeeded) 
-            {
+        while (true) {
+            if (byteIdx >= byteCount && bytesNeeded) {
                 if (safe) return goBack();
                 throw new Error('Invalid byte index');
             }
@@ -904,34 +840,28 @@ export var utf8 = _.utf8 = (function (exports)
             var byte = byteArr[byteIdx];
             byteIdx++;
 
-            if (!bytesNeeded) 
-            {
+            if (!bytesNeeded) {
                 // 0x00 to 0x7F
-                if ((byte & 0x80) === 0) 
-                {
+                if ((byte & 0x80) === 0) {
                     return byte;
                 }
                 // 0xC2 to 0xDF
-                if ((byte & 0xE0) === 0xC0) 
-                {
+                if ((byte & 0xe0) === 0xc0) {
                     bytesNeeded = 1;
-                    codePoint = byte & 0x1F;
-                } else if ((byte & 0xF0) === 0xE0) 
-                {
+                    codePoint = byte & 0x1f;
+                } else if ((byte & 0xf0) === 0xe0) {
                     // 0xE0 to 0xEF
-                    if (byte === 0xE0) lowerBoundary = 0xA0;
-                    if (byte === 0xED) upperBoundary = 0x9F;
+                    if (byte === 0xe0) lowerBoundary = 0xa0;
+                    if (byte === 0xed) upperBoundary = 0x9f;
                     bytesNeeded = 2;
-                    codePoint = byte & 0xF;
-                } else if ((byte & 0xF8) === 0xF0) 
-                {
+                    codePoint = byte & 0xf;
+                } else if ((byte & 0xf8) === 0xf0) {
                     // 0xF0 to 0xF4
-                    if (byte === 0xF0) lowerBoundary = 0x90;
-                    if (byte === 0xF4) upperBoundary = 0x8F;
+                    if (byte === 0xf0) lowerBoundary = 0x90;
+                    if (byte === 0xf4) upperBoundary = 0x8f;
                     bytesNeeded = 3;
                     codePoint = byte & 0x7;
-                } else 
-                {
+                } else {
                     if (safe) return goBack();
                     throw new Error('Invalid UTF-8 detected');
                 }
@@ -939,8 +869,7 @@ export var utf8 = _.utf8 = (function (exports)
                 continue;
             }
 
-            if (byte < lowerBoundary || byte > upperBoundary) 
-            {
+            if (byte < lowerBoundary || byte > upperBoundary) {
                 if (safe) {
                     byteIdx--;
                     return goBack();
@@ -949,9 +878,9 @@ export var utf8 = _.utf8 = (function (exports)
             }
 
             lowerBoundary = 0x80;
-            upperBoundary = 0xBF;
+            upperBoundary = 0xbf;
 
-            codePoint = (codePoint << 6) | (byte & 0x3F);
+            codePoint = (codePoint << 6) | (byte & 0x3f);
 
             bytesSeen++;
 
@@ -967,15 +896,14 @@ export var utf8 = _.utf8 = (function (exports)
         }
     }
 
-    function goBack() 
-    {
+    function goBack() {
         var start = byteIdx - bytesSeen - 1;
         byteIdx = start + 1;
         codePoint = 0;
         bytesNeeded = 0;
         bytesSeen = 0;
         lowerBoundary = 0x80;
-        upperBoundary = 0xBF;
+        upperBoundary = 0xbf;
 
         return byteArr[start];
     }
@@ -985,8 +913,7 @@ export var utf8 = _.utf8 = (function (exports)
 
 /* ------------------------------ root ------------------------------ */
 
-export var root = _.root = (function (exports)
-{
+export var root = _.root = (function (exports) {
     /* Root object reference, `global` in nodeJs, `window` in browser. */
 
     /* module
@@ -1005,8 +932,7 @@ export var root = _.root = (function (exports)
 
 /* ------------------------------ detectMocha ------------------------------ */
 
-export var detectMocha = _.detectMocha = (function ()
-{
+export var detectMocha = _.detectMocha = (function () {
     /* Detect if mocha is running.
      *
      * ```javascript
@@ -1021,12 +947,10 @@ export var detectMocha = _.detectMocha = (function ()
 
     /* dependencies
      * root 
-     */ 
+     */
 
-    function exports() 
-    {
-        for (var i = 0, len = methods.length; i < len; i++) 
-        {
+    function exports() {
+        for (var i = 0, len = methods.length; i < len; i++) {
             var method = methods[i];
 
             if (typeof root[method] !== 'function') return false;
@@ -1035,15 +959,14 @@ export var detectMocha = _.detectMocha = (function ()
         return true;
     }
 
-    var methods = ['afterEach','after','beforeEach','before','describe','it'];
+    var methods = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it'];
 
     return exports;
 })();
 
 /* ------------------------------ keys ------------------------------ */
 
-export var keys = _.keys = (function (exports)
-{
+export var keys = _.keys = (function (exports) {
     /* Create an array of the own enumerable property names of object.
      *
      * |Name  |Type  |Desc                   |
@@ -1065,17 +988,14 @@ export var keys = _.keys = (function (exports)
      * has detectMocha 
      */
 
-    if (Object.keys && !detectMocha()) 
-    {
+    if (Object.keys && !detectMocha()) {
         exports = Object.keys;
-    } else 
-    {
-        exports = function (obj)
-        {
-            var ret = [], key;
+    } else {
+        exports = function(obj) {
+            var ret = [],
+                key;
 
-            for (key in obj)
-            {
+            for (key in obj) {
                 if (has(obj, key)) ret.push(key);
             }
 
@@ -1088,8 +1008,7 @@ export var keys = _.keys = (function (exports)
 
 /* ------------------------------ freeze ------------------------------ */
 
-export var freeze = _.freeze = (function ()
-{
+export var freeze = _.freeze = (function () {
     /* Shortcut for Object.freeze.
      *
      * Use Object.defineProperties if Object.freeze is not supported.
@@ -1116,12 +1035,10 @@ export var freeze = _.freeze = (function ()
      * keys 
      */
 
-    function exports(obj) 
-    {
+    function exports(obj) {
         if (Object.freeze) return Object.freeze(obj);
 
-        keys(obj).forEach(function (prop) 
-        {
+        keys(obj).forEach(function(prop) {
             if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
 
             Object.defineProperty(obj, prop, {
@@ -1138,8 +1055,7 @@ export var freeze = _.freeze = (function ()
 
 /* ------------------------------ detectOs ------------------------------ */
 
-export var detectOs = _.detectOs = (function ()
-{
+export var detectOs = _.detectOs = (function () {
     /* Detect operating system using ua.
      * 
      * |Name                    |Type  |Desc                 |
@@ -1166,8 +1082,7 @@ export var detectOs = _.detectOs = (function ()
      * isBrowser 
      */
 
-    function exports(ua) 
-    {
+    function exports(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
 
         ua = ua.toLowerCase();
@@ -1179,7 +1094,9 @@ export var detectOs = _.detectOs = (function ()
         if (detect('mac')) return 'os x';
         if (detect('linux')) return 'linux';
 
-        function detect(keyword) { return ua.indexOf(keyword) > -1; }
+        function detect(keyword) {
+            return ua.indexOf(keyword) > -1;
+        }
 
         return 'unknown';
     }
@@ -1189,8 +1106,7 @@ export var detectOs = _.detectOs = (function ()
 
 /* ------------------------------ optimizeCb ------------------------------ */
 
-export var optimizeCb = _.optimizeCb = (function ()
-{
+export var optimizeCb = _.optimizeCb = (function () {
     /* Used for function context binding.
      */
 
@@ -1203,28 +1119,25 @@ export var optimizeCb = _.optimizeCb = (function ()
      * isUndef 
      */
 
-    function exports(fn, ctx, argCount)
-    {
+    function exports(fn, ctx, argCount) {
         if (isUndef(ctx)) return fn;
 
-        switch (argCount == null ? 3 : argCount)
-        {
-            case 1: return function (val)
-            {
-                return fn.call(ctx, val);
-            };
-            case 3: return function (val, idx, collection)
-            {
-                return fn.call(ctx, val, idx, collection);
-            };
-            case 4: return function (accumulator, val, idx, collection)
-            {
-                return fn.call(ctx, accumulator, val, idx, collection);
-            };
+        switch (argCount == null ? 3 : argCount) {
+            case 1:
+                return function(val) {
+                    return fn.call(ctx, val);
+                };
+            case 3:
+                return function(val, idx, collection) {
+                    return fn.call(ctx, val, idx, collection);
+                };
+            case 4:
+                return function(accumulator, val, idx, collection) {
+                    return fn.call(ctx, accumulator, val, idx, collection);
+                };
         }
 
-        return function ()
-        {
+        return function() {
             return fn.apply(ctx, arguments);
         };
     }
@@ -1234,8 +1147,7 @@ export var optimizeCb = _.optimizeCb = (function ()
 
 /* ------------------------------ endWith ------------------------------ */
 
-export var endWith = _.endWith = (function ()
-{
+export var endWith = _.endWith = (function () {
     /* Check if string ends with the given target string.
      *
      * |Name  |Type   |Desc                           |
@@ -1254,8 +1166,7 @@ export var endWith = _.endWith = (function ()
      * test: all
      */
 
-    function exports(str, suffix)
-    {
+    function exports(str, suffix) {
         var idx = str.length - suffix.length;
 
         return idx >= 0 && str.indexOf(suffix, idx) === idx;
@@ -1266,8 +1177,7 @@ export var endWith = _.endWith = (function ()
 
 /* ------------------------------ escape ------------------------------ */
 
-export var escape = _.escape = (function ()
-{
+export var escape = _.escape = (function () {
     /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
      *
      * |Name  |Type  |Desc            |
@@ -1289,26 +1199,24 @@ export var escape = _.escape = (function ()
      * keys 
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         return regTest.test(str) ? str.replace(regReplace, replaceFn) : str;
     }
 
-    var map = exports.map = {
+    var map = (exports.map = {
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        '\'': '&#x27;',
+        "'": '&#x27;',
         '`': '&#x60;'
-    };
+    });
 
     var regSrc = '(?:' + keys(map).join('|') + ')',
         regTest = new RegExp(regSrc),
         regReplace = new RegExp(regSrc, 'g');
 
-    function replaceFn(match)
-    {
+    function replaceFn(match) {
         return map[match];
     }
 
@@ -1317,8 +1225,7 @@ export var escape = _.escape = (function ()
 
 /* ------------------------------ escapeJsStr ------------------------------ */
 
-export var escapeJsStr = _.escapeJsStr = (function ()
-{
+export var escapeJsStr = _.escapeJsStr = (function () {
     /* Escape string to be a valid JavaScript string literal between quotes.
      *
      * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
@@ -1331,7 +1238,7 @@ export var escapeJsStr = _.escapeJsStr = (function ()
      * ```javascript
      * escapeJsStr('\"\n'); // -> '\\"\\\\n'
      * ```
-     */ 
+     */
 
     /* module
      * env: all
@@ -1340,24 +1247,25 @@ export var escapeJsStr = _.escapeJsStr = (function ()
 
     /* dependencies
      * toStr 
-     */ 
+     */
 
-    function exports(str) 
-    {
-        return toStr(str).replace(regEscapeChars, function (char) 
-        {
-            switch (char) 
-            {
+    function exports(str) {
+        return toStr(str).replace(regEscapeChars, function(char) {
+            switch (char) {
                 case '"':
-                case '\'':
+                case "'":
                 case '\\':
                     return '\\' + char;
-                case '\n': return '\\n';
-                case '\r': return '\\r';
+                case '\n':
+                    return '\\n';
+                case '\r':
+                    return '\\r';
                 // Line separator
-                case '\u2028': return '\\u2028';
+                case '\u2028':
+                    return '\\u2028';
                 // Paragraph separator
-                case '\u2029': return '\\u2029';
+                case '\u2029':
+                    return '\\u2029';
             }
         });
     }
@@ -1369,8 +1277,7 @@ export var escapeJsStr = _.escapeJsStr = (function ()
 
 /* ------------------------------ escapeJsonStr ------------------------------ */
 
-export var escapeJsonStr = _.escapeJsonStr = (function ()
-{
+export var escapeJsonStr = _.escapeJsonStr = (function () {
     /* Escape json string.
      */
 
@@ -1378,9 +1285,8 @@ export var escapeJsonStr = _.escapeJsonStr = (function ()
      * escapeJsStr 
      */
 
-    function exports(str)
-    {
-        return escapeJsStr(str).replace(/\\'/g, '\'');
+    function exports(str) {
+        return escapeJsStr(str).replace(/\\'/g, "'");
     }
 
     return exports;
@@ -1388,8 +1294,7 @@ export var escapeJsonStr = _.escapeJsonStr = (function ()
 
 /* ------------------------------ escapeRegExp ------------------------------ */
 
-export var escapeRegExp = _.escapeRegExp = (function ()
-{
+export var escapeRegExp = _.escapeRegExp = (function () {
     /* Escape special chars to be used as literals in RegExp constructors.
      *
      * |Name  |Type  |Desc            |
@@ -1407,8 +1312,7 @@ export var escapeRegExp = _.escapeRegExp = (function ()
      * test: all
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         return str.replace(/\W/g, '\\$&');
     }
 
@@ -1417,8 +1321,7 @@ export var escapeRegExp = _.escapeRegExp = (function ()
 
 /* ------------------------------ fileSize ------------------------------ */
 
-export var fileSize = _.fileSize = (function ()
-{
+export var fileSize = _.fileSize = (function () {
     /* Turn bytes into human readable file size.
      * 
      * |Name  |Type  |Desc              |
@@ -1440,8 +1343,7 @@ export var fileSize = _.fileSize = (function ()
      * test: all
      */
 
-    function exports(bytes) 
-    {
+    function exports(bytes) {
         if (bytes <= 0) return '0';
 
         var suffixIdx = Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -1457,8 +1359,7 @@ export var fileSize = _.fileSize = (function ()
 
 /* ------------------------------ fullUrl ------------------------------ */
 
-export var fullUrl = _.fullUrl = (function ()
-{
+export var fullUrl = _.fullUrl = (function () {
     /* Add origin to url if needed.
      */
 
@@ -1468,8 +1369,7 @@ export var fullUrl = _.fullUrl = (function ()
 
     let origin = window.location.origin;
 
-    function exports(url)
-    {
+    function exports(url) {
         if (startWith(url, 'http')) return url;
 
         if (!startWith(url, '/')) url = '/' + url;
@@ -1482,8 +1382,7 @@ export var fullUrl = _.fullUrl = (function ()
 
 /* ------------------------------ upperFirst ------------------------------ */
 
-export var upperFirst = _.upperFirst = (function ()
-{
+export var upperFirst = _.upperFirst = (function () {
     /* Convert the first character of string to upper case.
      *
      * |Name  |Type  |Desc             |
@@ -1501,8 +1400,7 @@ export var upperFirst = _.upperFirst = (function ()
      * test: all
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         if (str.length < 1) return str;
 
         return str[0].toUpperCase() + str.slice(1);
@@ -1513,8 +1411,7 @@ export var upperFirst = _.upperFirst = (function ()
 
 /* ------------------------------ getObjType ------------------------------ */
 
-export var getObjType = _.getObjType = (function ()
-{
+export var getObjType = _.getObjType = (function () {
     /* Get object type.
      */
 
@@ -1522,11 +1419,10 @@ export var getObjType = _.getObjType = (function ()
      * upperFirst 
      */
 
-    function exports(obj)
-    {
+    function exports(obj) {
         if (obj.constructor && obj.constructor.name) return obj.constructor.name;
 
-        return upperFirst(({}).toString.call(obj).replace(/(\[object )|]/g, ''));
+        return upperFirst({}.toString.call(obj).replace(/(\[object )|]/g, ''));
     }
 
     return exports;
@@ -1534,8 +1430,7 @@ export var getObjType = _.getObjType = (function ()
 
 /* ------------------------------ identity ------------------------------ */
 
-export var identity = _.identity = (function ()
-{
+export var identity = _.identity = (function () {
     /* Return the first argument given.
      *
      * |Name  |Type|Desc       |
@@ -1553,8 +1448,7 @@ export var identity = _.identity = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val;
     }
 
@@ -1563,8 +1457,7 @@ export var identity = _.identity = (function ()
 
 /* ------------------------------ objToStr ------------------------------ */
 
-export var objToStr = _.objToStr = (function ()
-{
+export var objToStr = _.objToStr = (function () {
     /* Alias of Object.prototype.toString.
      *
      * |Name  |Type  |Desc                                |
@@ -1584,8 +1477,7 @@ export var objToStr = _.objToStr = (function ()
 
     var ObjToStr = Object.prototype.toString;
 
-    function exports(val)
-    {
+    function exports(val) {
         return ObjToStr.call(val);
     }
 
@@ -1594,8 +1486,7 @@ export var objToStr = _.objToStr = (function ()
 
 /* ------------------------------ isArgs ------------------------------ */
 
-export var isArgs = _.isArgs = (function ()
-{
+export var isArgs = _.isArgs = (function () {
     /* Check if value is classified as an arguments object.
      *
      * |Name  |Type   |Desc                                |
@@ -1619,8 +1510,7 @@ export var isArgs = _.isArgs = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Arguments]';
     }
 
@@ -1629,8 +1519,7 @@ export var isArgs = _.isArgs = (function ()
 
 /* ------------------------------ isArr ------------------------------ */
 
-export var isArr = _.isArr = (function (exports)
-{
+export var isArr = _.isArr = (function (exports) {
     /* Check if value is an `Array` object.
      *
      * |Name  |Type   |Desc                              |
@@ -1653,18 +1542,18 @@ export var isArr = _.isArr = (function (exports)
      * objToStr 
      */
 
-    exports = Array.isArray || function (val)
-    {
-        return objToStr(val) === '[object Array]';
-    };
+    exports =
+        Array.isArray ||
+        function(val) {
+            return objToStr(val) === '[object Array]';
+        };
 
     return exports;
 })({});
 
 /* ------------------------------ castPath ------------------------------ */
 
-export var castPath = _.castPath = (function ()
-{
+export var castPath = _.castPath = (function () {
     /* Cast value into a property path array.
      *
      * |Name  |Type  |Desc               |
@@ -1690,16 +1579,14 @@ export var castPath = _.castPath = (function ()
      * has isArr 
      */
 
-    function exports(str, obj) 
-    {
+    function exports(str, obj) {
         if (isArr(str)) return str;
         if (obj && has(obj, str)) return [str];
 
         var ret = [];
 
-        str.replace(regPropName, function(match, number, quote, str) 
-        {
-            ret.push(quote ? str.replace(regEscapeChar, '$1') : (number || match));
+        str.replace(regPropName, function(match, number, quote, str) {
+            ret.push(quote ? str.replace(regEscapeChar, '$1') : number || match);
         });
 
         return ret;
@@ -1714,8 +1601,7 @@ export var castPath = _.castPath = (function ()
 
 /* ------------------------------ safeGet ------------------------------ */
 
-export var safeGet = _.safeGet = (function ()
-{
+export var safeGet = _.safeGet = (function () {
     /* Get object property, don't throw undefined error.
      *
      * |Name  |Type        |Desc                     |
@@ -1741,17 +1627,15 @@ export var safeGet = _.safeGet = (function ()
      * isUndef castPath 
      */
 
-    function exports(obj, path)
-    {
+    function exports(obj, path) {
         path = castPath(path, obj);
 
         var prop;
 
         prop = path.shift();
-        while (!isUndef(prop))
-        {
+        while (!isUndef(prop)) {
             obj = obj[prop];
-            if (isUndef(obj)) return;
+            if (obj == null) return;
             prop = path.shift();
         }
 
@@ -1763,8 +1647,7 @@ export var safeGet = _.safeGet = (function ()
 
 /* ------------------------------ isDate ------------------------------ */
 
-export var isDate = _.isDate = (function ()
-{
+export var isDate = _.isDate = (function () {
     /* Check if value is classified as a Date object.
      *
      * |Name  |Type   |Desc                          |
@@ -1786,8 +1669,7 @@ export var isDate = _.isDate = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Date]';
     }
 
@@ -1796,8 +1678,7 @@ export var isDate = _.isDate = (function ()
 
 /* ------------------------------ isFn ------------------------------ */
 
-export var isFn = _.isFn = (function ()
-{
+export var isFn = _.isFn = (function () {
     /* Check if value is a function.
      *
      * |Name  |Type   |Desc                       |
@@ -1822,11 +1703,13 @@ export var isFn = _.isFn = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         var objStr = objToStr(val);
 
-        return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+        return (
+            objStr === '[object Function]' ||
+            objStr === '[object GeneratorFunction]'
+        );
     }
 
     return exports;
@@ -1834,8 +1717,7 @@ export var isFn = _.isFn = (function ()
 
 /* ------------------------------ isMiniProgram ------------------------------ */
 
-export var isMiniProgram = _.isMiniProgram = (function (exports)
-{
+export var isMiniProgram = _.isMiniProgram = (function (exports) {
     /* Check if running in wechat mini program.
      *
      * ```javascript
@@ -1850,7 +1732,7 @@ export var isMiniProgram = _.isMiniProgram = (function (exports)
 
     /* dependencies
      * isFn 
-     */ 
+     */
 
     /* eslint-disable no-undef */
     exports = typeof wx !== 'undefined' && isFn(wx.openLocation);
@@ -1860,8 +1742,7 @@ export var isMiniProgram = _.isMiniProgram = (function (exports)
 
 /* ------------------------------ isNum ------------------------------ */
 
-export var isNum = _.isNum = (function ()
-{
+export var isNum = _.isNum = (function () {
     /* Check if value is classified as a Number primitive or object.
      *
      * |Name  |Type   |Desc                                 |
@@ -1885,8 +1766,7 @@ export var isNum = _.isNum = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Number]';
     }
 
@@ -1895,8 +1775,7 @@ export var isNum = _.isNum = (function ()
 
 /* ------------------------------ isArrLike ------------------------------ */
 
-export var isArrLike = _.isArrLike = (function ()
-{
+export var isArrLike = _.isArrLike = (function () {
     /* Check if value is array-like.
      *
      * |Name  |Type   |Desc                       |
@@ -1924,8 +1803,7 @@ export var isArrLike = _.isArrLike = (function ()
 
     var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-    function exports(val)
-    {
+    function exports(val) {
         if (!val) return false;
 
         var len = val.length;
@@ -1938,8 +1816,7 @@ export var isArrLike = _.isArrLike = (function ()
 
 /* ------------------------------ each ------------------------------ */
 
-export var each = _.each = (function ()
-{
+export var each = _.each = (function () {
     /* Iterate over elements of collection and invokes iteratee for each element.
      *
      * |Name    |Type        |Desc                          |
@@ -1962,20 +1839,16 @@ export var each = _.each = (function ()
      * isArrLike keys optimizeCb 
      */
 
-    function exports(obj, iteratee, ctx)
-    {
+    function exports(obj, iteratee, ctx) {
         iteratee = optimizeCb(iteratee, ctx);
 
         var i, len;
 
-        if (isArrLike(obj))
-        {
+        if (isArrLike(obj)) {
             for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
-        } else
-        {
+        } else {
             var _keys = keys(obj);
-            for (i = 0, len = _keys.length; i < len; i++)
-            {
+            for (i = 0, len = _keys.length; i < len; i++) {
                 iteratee(obj[_keys[i]], _keys[i], obj);
             }
         }
@@ -1988,8 +1861,7 @@ export var each = _.each = (function ()
 
 /* ------------------------------ createAssigner ------------------------------ */
 
-export var createAssigner = _.createAssigner = (function ()
-{
+export var createAssigner = _.createAssigner = (function () {
     /* Used to create extend, extendOwn and defaults.
      *
      * |Name    |Type    |Desc                          |
@@ -2008,18 +1880,14 @@ export var createAssigner = _.createAssigner = (function ()
      * isUndef each 
      */
 
-    function exports(keysFn, defaults)
-    {
-        return function (obj)
-        {
-            each(arguments, function (src, idx)
-            {
+    function exports(keysFn, defaults) {
+        return function(obj) {
+            each(arguments, function(src, idx) {
                 if (idx === 0) return;
 
                 var keys = keysFn(src);
 
-                each(keys, function (key)
-                {
+                each(keys, function(key) {
                     if (!defaults || isUndef(obj[key])) obj[key] = src[key];
                 });
             });
@@ -2033,8 +1901,7 @@ export var createAssigner = _.createAssigner = (function ()
 
 /* ------------------------------ defaults ------------------------------ */
 
-export var defaults = _.defaults = (function (exports)
-{
+export var defaults = _.defaults = (function (exports) {
     /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
      *
      * |Name  |Type  |Desc              |
@@ -2064,8 +1931,7 @@ export var defaults = _.defaults = (function (exports)
 
 /* ------------------------------ extend ------------------------------ */
 
-export var extend = _.extend = (function (exports)
-{
+export var extend = _.extend = (function (exports) {
     /* Copy all of the properties in the source objects over to the destination object.
      *
      * |Name  |Type  |Desc              |
@@ -2095,8 +1961,7 @@ export var extend = _.extend = (function (exports)
 
 /* ------------------------------ clone ------------------------------ */
 
-export var clone = _.clone = (function ()
-{
+export var clone = _.clone = (function () {
     /* Create a shallow-copied clone of the provided plain object.
      *
      * Any nested objects or arrays will be copied by reference, not duplicated.
@@ -2120,8 +1985,7 @@ export var clone = _.clone = (function ()
      * isObj isArr extend 
      */
 
-    function exports(obj)
-    {
+    function exports(obj) {
         if (!isObj(obj)) return obj;
 
         return isArr(obj) ? obj.slice() : extend({}, obj);
@@ -2132,8 +1996,7 @@ export var clone = _.clone = (function ()
 
 /* ------------------------------ extendOwn ------------------------------ */
 
-export var extendOwn = _.extendOwn = (function (exports)
-{
+export var extendOwn = _.extendOwn = (function (exports) {
     /* Like extend, but only copies own properties over to the destination object.
      *
      * |Name  |Type  |Desc              |
@@ -2163,8 +2026,7 @@ export var extendOwn = _.extendOwn = (function (exports)
 
 /* ------------------------------ values ------------------------------ */
 
-export var values = _.values = (function ()
-{
+export var values = _.values = (function () {
     /* Create an array of the own enumerable property values of object.
      *
      * |Name  |Type  |Desc                    |
@@ -2186,11 +2048,12 @@ export var values = _.values = (function ()
      * each 
      */
 
-    function exports(obj)
-    {
+    function exports(obj) {
         var ret = [];
 
-        each(obj, function (val) { ret.push(val); });
+        each(obj, function(val) {
+            ret.push(val);
+        });
 
         return ret;
     }
@@ -2200,8 +2063,7 @@ export var values = _.values = (function ()
 
 /* ------------------------------ contain ------------------------------ */
 
-export var contain = _.contain = (function ()
-{
+export var contain = _.contain = (function () {
     /* Check if the value is present in the list.
      *
      * |Name  |Type        |Desc                                |
@@ -2225,8 +2087,7 @@ export var contain = _.contain = (function ()
      * idxOf isArrLike values 
      */
 
-    function exports(arr, val)
-    {
+    function exports(arr, val) {
         if (!isArrLike(arr)) arr = values(arr);
 
         return idxOf(arr, val) >= 0;
@@ -2237,8 +2098,7 @@ export var contain = _.contain = (function ()
 
 /* ------------------------------ isStr ------------------------------ */
 
-export var isStr = _.isStr = (function ()
-{
+export var isStr = _.isStr = (function () {
     /* Check if value is a string primitive.
      *
      * |Name  |Type   |Desc                               |
@@ -2260,8 +2120,7 @@ export var isStr = _.isStr = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object String]';
     }
 
@@ -2270,8 +2129,7 @@ export var isStr = _.isStr = (function ()
 
 /* ------------------------------ isEmpty ------------------------------ */
 
-export var isEmpty = _.isEmpty = (function ()
-{
+export var isEmpty = _.isEmpty = (function () {
     /* Check if value is an empty object or array.
      *
      * |Name  |Type   |Desc                  |
@@ -2295,12 +2153,10 @@ export var isEmpty = _.isEmpty = (function ()
      * isArrLike isArr isStr isArgs keys 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         if (val == null) return true;
 
-        if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
-        {
+        if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
             return val.length === 0;
         }
 
@@ -2312,8 +2168,7 @@ export var isEmpty = _.isEmpty = (function ()
 
 /* ------------------------------ isBool ------------------------------ */
 
-export var isBool = _.isBool = (function ()
-{
+export var isBool = _.isBool = (function () {
     /* Check if value is a boolean primitive.
      *
      * |Name  |Type   |Desc                      |
@@ -2333,8 +2188,7 @@ export var isBool = _.isBool = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val === true || val === false;
     }
 
@@ -2343,8 +2197,7 @@ export var isBool = _.isBool = (function ()
 
 /* ------------------------------ isCrossOrig ------------------------------ */
 
-export var isCrossOrig = _.isCrossOrig = (function ()
-{
+export var isCrossOrig = _.isCrossOrig = (function () {
     /* Check if a url is cross origin.
      */
 
@@ -2354,8 +2207,7 @@ export var isCrossOrig = _.isCrossOrig = (function ()
 
     var origin = window.location.origin;
 
-    function exports(url)
-    {
+    function exports(url) {
         return !startWith(url, origin);
     }
 
@@ -2364,8 +2216,7 @@ export var isCrossOrig = _.isCrossOrig = (function ()
 
 /* ------------------------------ isEl ------------------------------ */
 
-export var isEl = _.isEl = (function ()
-{
+export var isEl = _.isEl = (function () {
     /* Check if value is a DOM element.
      *
      * |Name  |Type   |Desc                          |
@@ -2383,8 +2234,7 @@ export var isEl = _.isEl = (function ()
      * test: browser
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return !!(val && val.nodeType === 1);
     }
 
@@ -2393,8 +2243,7 @@ export var isEl = _.isEl = (function ()
 
 /* ------------------------------ isErr ------------------------------ */
 
-export var isErr = _.isErr = (function ()
-{
+export var isErr = _.isErr = (function () {
     /* Check if value is an error.
      *
      * |Name  |Type   |Desc                     |
@@ -2416,8 +2265,7 @@ export var isErr = _.isErr = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Error]';
     }
 
@@ -2426,19 +2274,16 @@ export var isErr = _.isErr = (function ()
 
 /* ------------------------------ isErudaEl ------------------------------ */
 
-export var isErudaEl = _.isErudaEl = (function ()
-{
+export var isErudaEl = _.isErudaEl = (function () {
     /* See if an element is within eruda.
      */
 
-    function exports(el)
-    {
+    function exports(el) {
         var parentNode = el.parentNode;
 
         if (!parentNode) return false;
 
-        while (parentNode)
-        {
+        while (parentNode) {
             parentNode = parentNode.parentNode;
             if (parentNode && parentNode.id === 'eruda') return true;
         }
@@ -2451,8 +2296,7 @@ export var isErudaEl = _.isErudaEl = (function ()
 
 /* ------------------------------ isMatch ------------------------------ */
 
-export var isMatch = _.isMatch = (function ()
-{
+export var isMatch = _.isMatch = (function () {
     /* Check if keys and values in src are contained in obj.
      *
      * |Name  |Type   |Desc                              |
@@ -2475,8 +2319,7 @@ export var isMatch = _.isMatch = (function ()
      * keys 
      */
 
-    function exports(obj, src)
-    {
+    function exports(obj, src) {
         var _keys = keys(src),
             len = _keys.length;
 
@@ -2484,8 +2327,7 @@ export var isMatch = _.isMatch = (function ()
 
         obj = Object(obj);
 
-        for (var i = 0; i < len; i++)
-        {
+        for (var i = 0; i < len; i++) {
             var key = _keys[i];
             if (src[key] !== obj[key] || !(key in obj)) return false;
         }
@@ -2498,8 +2340,7 @@ export var isMatch = _.isMatch = (function ()
 
 /* ------------------------------ memoize ------------------------------ */
 
-export var memoize = _.memoize = (function ()
-{
+export var memoize = _.memoize = (function () {
     /* Memoize a given function by caching the computed result.
      *
      * |Name    |Type    |Desc                                |
@@ -2525,10 +2366,8 @@ export var memoize = _.memoize = (function ()
      * has 
      */
 
-    function exports(fn, hashFn)
-    {
-        var memoize = function (key)
-        {
+    function exports(fn, hashFn) {
+        var memoize = function(key) {
             var cache = memoize.cache,
                 address = '' + (hashFn ? hashFn.apply(this, arguments) : key);
 
@@ -2547,8 +2386,7 @@ export var memoize = _.memoize = (function ()
 
 /* ------------------------------ isMobile ------------------------------ */
 
-export var isMobile = _.isMobile = (function (exports)
-{
+export var isMobile = _.isMobile = (function (exports) {
     /* Check whether client is using a mobile browser using ua.
      *
      * |Name                    |Type   |Desc                                 |
@@ -2573,8 +2411,7 @@ export var isMobile = _.isMobile = (function (exports)
     var regMobileAll = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i,
         regMobileFour = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i;
 
-    exports = memoize(function (ua)
-    {
+    exports = memoize(function(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
 
         return regMobileAll.test(ua) || regMobileFour.test(ua.substr(0, 4));
@@ -2585,8 +2422,7 @@ export var isMobile = _.isMobile = (function (exports)
 
 /* ------------------------------ prefix ------------------------------ */
 
-export var prefix = _.prefix = (function (exports)
-{
+export var prefix = _.prefix = (function (exports) {
     /* Add vendor prefixes to a CSS attribute.
      *
      * |Name  |Type  |Desc                  |
@@ -2612,18 +2448,16 @@ export var prefix = _.prefix = (function (exports)
 
     /* dependencies
      * memoize camelCase upperFirst has kebabCase 
-     */ 
+     */
 
-    exports = memoize(function (name) 
-    {
+    exports = memoize(function(name) {
         name = name.replace(regPrefixes, '');
         name = camelCase(name);
 
         if (has(style, name)) return name;
 
         var i = prefixes.length;
-        while (i--) 
-        {
+        while (i--) {
             var prefixName = prefixes[i] + upperFirst(name);
             if (has(style, prefixName)) return prefixName;
         }
@@ -2631,11 +2465,13 @@ export var prefix = _.prefix = (function (exports)
         return name;
     });
 
-    exports.dash = memoize(function (name) 
-    {
+    exports.dash = memoize(function(name) {
         var camelCaseResult = exports(name);
 
-        return (regPrefixes.test(camelCaseResult) ? '-' : '') + kebabCase(camelCaseResult);
+        return (
+            (regPrefixes.test(camelCaseResult) ? '-' : '') +
+            kebabCase(camelCaseResult)
+        );
     });
 
     var prefixes = ['O', 'ms', 'Moz', 'Webkit'],
@@ -2647,8 +2483,7 @@ export var prefix = _.prefix = (function (exports)
 
 /* ------------------------------ isNaN ------------------------------ */
 
-export var isNaN = _.isNaN = (function ()
-{
+export var isNaN = _.isNaN = (function () {
     /* Check if value is an NaN.
      *
      * |Name  |Type   |Desc                   |
@@ -2673,8 +2508,7 @@ export var isNaN = _.isNaN = (function ()
      * isNum 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return isNum(val) && val !== +val;
     }
 
@@ -2683,8 +2517,7 @@ export var isNaN = _.isNaN = (function ()
 
 /* ------------------------------ isNil ------------------------------ */
 
-export var isNil = _.isNil = (function ()
-{
+export var isNil = _.isNil = (function () {
     /* Check if value is null or undefined, the same as value == null.
      * 
      * |Name  |Type   |Desc                              |
@@ -2707,8 +2540,7 @@ export var isNil = _.isNil = (function ()
      * test: all
      */
 
-    function exports(val) 
-    {
+    function exports(val) {
         return val == null;
     }
 
@@ -2717,8 +2549,7 @@ export var isNil = _.isNil = (function ()
 
 /* ------------------------------ toSrc ------------------------------ */
 
-export var toSrc = _.toSrc = (function ()
-{
+export var toSrc = _.toSrc = (function () {
     /* Convert function to its source code.
      * 
      * |Name  |Type    |Desc               |
@@ -2741,20 +2572,17 @@ export var toSrc = _.toSrc = (function ()
      * isNil 
      */
 
-    function exports(fn) 
-    {
+    function exports(fn) {
         if (isNil(fn)) return '';
 
-        try 
-        {
+        try {
             return fnToStr.call(fn);
-        /* eslint-disable no-empty */    
+            /* eslint-disable no-empty */
         } catch (e) {}
 
-        try 
-        {
+        try {
             return fn + '';
-        /* eslint-disable no-empty */    
+            /* eslint-disable no-empty */
         } catch (e) {}
 
         return '';
@@ -2767,8 +2595,7 @@ export var toSrc = _.toSrc = (function ()
 
 /* ------------------------------ isNative ------------------------------ */
 
-export var isNative = _.isNative = (function ()
-{
+export var isNative = _.isNative = (function () {
     /* Check if value is a native function.
      * 
      * |Name  |Type   |Desc                              |
@@ -2791,8 +2618,7 @@ export var isNative = _.isNative = (function ()
      * isObj isFn has toSrc 
      */
 
-    function exports(val) 
-    {
+    function exports(val) {
         if (!isObj(val)) return false;
 
         if (isFn(val)) return regIsNative.test(toSrc(val));
@@ -2803,9 +2629,15 @@ export var isNative = _.isNative = (function ()
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    var regIsNative = new RegExp('^' +
-        toSrc(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
-                             .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+    var regIsNative = new RegExp(
+        '^' +
+            toSrc(hasOwnProperty)
+                .replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+                .replace(
+                    /hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,
+                    '$1.*?'
+                ) +
+            '$'
     );
 
     var regIsHostCtor = /^\[object .+?Constructor\]$/;
@@ -2815,8 +2647,7 @@ export var isNative = _.isNative = (function ()
 
 /* ------------------------------ isNull ------------------------------ */
 
-export var isNull = _.isNull = (function ()
-{
+export var isNull = _.isNull = (function () {
     /* Check if value is an Null.
      *
      * |Name  |Type   |Desc                    |
@@ -2834,8 +2665,7 @@ export var isNull = _.isNull = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val === null;
     }
 
@@ -2844,8 +2674,7 @@ export var isNull = _.isNull = (function ()
 
 /* ------------------------------ isRegExp ------------------------------ */
 
-export var isRegExp = _.isRegExp = (function ()
-{
+export var isRegExp = _.isRegExp = (function () {
     /* Check if value is a regular expression.
      *
      * |Name  |Type   |Desc                                 |
@@ -2867,8 +2696,7 @@ export var isRegExp = _.isRegExp = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object RegExp]';
     }
 
@@ -2877,8 +2705,7 @@ export var isRegExp = _.isRegExp = (function ()
 
 /* ------------------------------ loadJs ------------------------------ */
 
-export var loadJs = _.loadJs = (function ()
-{
+export var loadJs = _.loadJs = (function () {
     /* Inject script tag into page with given src value.
      *
      * |Name|Type    |Desc           |
@@ -2899,13 +2726,12 @@ export var loadJs = _.loadJs = (function ()
      * test: browser
      */
 
-    function exports(src, cb)
-    {
+    function exports(src, cb) {
         var script = document.createElement('script');
         script.src = src;
-        script.onload = function ()
-        {
-            var isNotLoaded = script.readyState &&
+        script.onload = function() {
+            var isNotLoaded =
+                script.readyState &&
                 script.readyState != 'complete' &&
                 script.readyState != 'loaded';
 
@@ -2919,8 +2745,7 @@ export var loadJs = _.loadJs = (function ()
 
 /* ------------------------------ repeat ------------------------------ */
 
-export var repeat = _.repeat = (function (exports)
-{
+export var repeat = _.repeat = (function (exports) {
     /* Repeat string n-times.
      *
      * |Name  |Type  |Desc            |
@@ -2941,14 +2766,12 @@ export var repeat = _.repeat = (function (exports)
      * test: all
      */
 
-    exports = function (str, n)
-    {
+    exports = function(str, n) {
         var ret = '';
 
         if (n < 1) return '';
 
-        while (n > 0)
-        {
+        while (n > 0) {
             if (n & 1) ret += str;
             n >>= 1;
             str += str;
@@ -2962,8 +2785,7 @@ export var repeat = _.repeat = (function (exports)
 
 /* ------------------------------ lpad ------------------------------ */
 
-export var lpad = _.lpad = (function ()
-{
+export var lpad = _.lpad = (function () {
     /* Pad string on the left side if it's shorter than length.
      *
      * |Name   |Type  |Desc                  |
@@ -2990,8 +2812,7 @@ export var lpad = _.lpad = (function ()
      * repeat toStr 
      */
 
-    function exports(str, len, chars)
-    {
+    function exports(str, len, chars) {
         str = toStr(str);
 
         var strLen = str.length;
@@ -3008,8 +2829,7 @@ export var lpad = _.lpad = (function ()
 
 /* ------------------------------ dateFormat ------------------------------ */
 
-export var dateFormat = _.dateFormat = (function ()
-{
+export var dateFormat = _.dateFormat = (function () {
     /* Simple but extremely useful date format function.
      *
      * |Name           |Type   |Desc                 |
@@ -3065,17 +2885,13 @@ export var dateFormat = _.dateFormat = (function ()
      * isStr isDate toStr lpad 
      */
 
-    function exports(date, mask, utc, gmt)
-    {
-        if (arguments.length === 1 &&
-            isStr(date) &&
-            !regNum.test(date))
-        {
+    function exports(date, mask, utc, gmt) {
+        if (arguments.length === 1 && isStr(date) && !regNum.test(date)) {
             mask = date;
             date = undefined;
         }
 
-        date = date || new Date;
+        date = date || new Date();
 
         if (!isDate(date)) date = new Date(date);
 
@@ -3083,8 +2899,7 @@ export var dateFormat = _.dateFormat = (function ()
 
         var maskSlice = mask.slice(0, 4);
 
-        if (maskSlice === 'UTC:' || maskSlice === 'GMT:')
-        {
+        if (maskSlice === 'UTC:' || maskSlice === 'GMT:') {
             mask = mask.slice(4);
             utc = true;
             if (maskSlice === 'GMT:') gmt = true;
@@ -3121,25 +2936,36 @@ export var dateFormat = _.dateFormat = (function ()
                 ss: padZero(s),
                 l: padZero(L, 3),
                 L: padZero(Math.round(L / 10)),
-                t: H < 12 ? 'a'  : 'p',
+                t: H < 12 ? 'a' : 'p',
                 tt: H < 12 ? 'am' : 'pm',
-                T: H < 12 ? 'A'  : 'P',
+                T: H < 12 ? 'A' : 'P',
                 TT: H < 12 ? 'AM' : 'PM',
-                Z: gmt ? 'GMT' : utc ? 'UTC' : (toStr(date).match(regTimezone) || ['']).pop().replace(regTimezoneClip, ''),
-                o: (o > 0 ? '-' : '+') + padZero(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-                S: ['th', 'st', 'nd', 'rd'][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+                Z: gmt
+                    ? 'GMT'
+                    : utc
+                        ? 'UTC'
+                        : (toStr(date).match(regTimezone) || [''])
+                              .pop()
+                              .replace(regTimezoneClip, ''),
+                o:
+                    (o > 0 ? '-' : '+') +
+                    padZero(
+                        Math.floor(Math.abs(o) / 60) * 100 + (Math.abs(o) % 60),
+                        4
+                    ),
+                S: ['th', 'st', 'nd', 'rd'][
+                    d % 10 > 3 ? 0 : (((d % 100) - (d % 10) != 10) * d) % 10
+                ]
             };
 
-        return mask.replace(regToken, function (match)
-        {
+        return mask.replace(regToken, function(match) {
             if (match in flags) return flags[match];
 
             return match.slice(1, match.length - 1);
         });
     }
 
-    function padZero(str, len)
-    {
+    function padZero(str, len) {
         return lpad(toStr(str), len || 2, '0');
     }
 
@@ -3149,29 +2975,63 @@ export var dateFormat = _.dateFormat = (function ()
         regTimezoneClip = /[^-+\dA-Z]/g;
 
     exports.masks = {
-        'default': 'ddd mmm dd yyyy HH:MM:ss',
-        'shortDate': 'm/d/yy',
-        'mediumDate': 'mmm d, yyyy',
-        'longDate': 'mmmm d, yyyy',
-        'fullDate': 'dddd, mmmm d, yyyy',
-        'shortTime': 'h:MM TT',
-        'mediumTime': 'h:MM:ss TT',
-        'longTime': 'h:MM:ss TT Z',
-        'isoDate': 'yyyy-mm-dd',
-        'isoTime': 'HH:MM:ss',
-        'isoDateTime': 'yyyy-mm-dd\'T\'HH:MM:sso',
-        'isoUtcDateTime': 'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\'',
-        'expiresHeaderFormat': 'ddd, dd mmm yyyy HH:MM:ss Z'
+        default: 'ddd mmm dd yyyy HH:MM:ss',
+        shortDate: 'm/d/yy',
+        mediumDate: 'mmm d, yyyy',
+        longDate: 'mmmm d, yyyy',
+        fullDate: 'dddd, mmmm d, yyyy',
+        shortTime: 'h:MM TT',
+        mediumTime: 'h:MM:ss TT',
+        longTime: 'h:MM:ss TT Z',
+        isoDate: 'yyyy-mm-dd',
+        isoTime: 'HH:MM:ss',
+        isoDateTime: "yyyy-mm-dd'T'HH:MM:sso",
+        isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'",
+        expiresHeaderFormat: 'ddd, dd mmm yyyy HH:MM:ss Z'
     };
 
     exports.i18n = {
         dayNames: [
-            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+            'Sun',
+            'Mon',
+            'Tue',
+            'Wed',
+            'Thu',
+            'Fri',
+            'Sat',
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday'
         ],
         monthNames: [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
         ]
     };
 
@@ -3180,8 +3040,7 @@ export var dateFormat = _.dateFormat = (function ()
 
 /* ------------------------------ ltrim ------------------------------ */
 
-export var ltrim = _.ltrim = (function ()
-{
+export var ltrim = _.ltrim = (function () {
     /* Remove chars or white-spaces from beginning of string.
      *
      * |Name  |Type        |Desc              |
@@ -3204,26 +3063,23 @@ export var ltrim = _.ltrim = (function ()
 
     var regSpace = /^\s+/;
 
-    function exports(str, chars)
-    {
+    function exports(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
 
         var start = 0,
             len = str.length,
             charLen = chars.length,
             found = true,
-            i, c;
+            i,
+            c;
 
-        while (found && start < len)
-        {
+        while (found && start < len) {
             found = false;
             i = -1;
             c = str.charAt(start);
 
-            while (++i < charLen)
-            {
-                if (c === chars[i])
-                {
+            while (++i < charLen) {
+                if (c === chars[i]) {
                     found = true;
                     start++;
                     break;
@@ -3239,8 +3095,7 @@ export var ltrim = _.ltrim = (function ()
 
 /* ------------------------------ matcher ------------------------------ */
 
-export var matcher = _.matcher = (function ()
-{
+export var matcher = _.matcher = (function () {
     /* Return a predicate function that checks if attrs are contained in an object.
      *
      * |Name  |Type    |Desc                              |
@@ -3266,12 +3121,10 @@ export var matcher = _.matcher = (function ()
      * extendOwn isMatch 
      */
 
-    function exports(attrs)
-    {
+    function exports(attrs) {
         attrs = extendOwn({}, attrs);
 
-        return function (obj)
-        {
+        return function(obj) {
             return isMatch(obj, attrs);
         };
     }
@@ -3281,8 +3134,7 @@ export var matcher = _.matcher = (function ()
 
 /* ------------------------------ safeCb ------------------------------ */
 
-export var safeCb = _.safeCb = (function (exports)
-{
+export var safeCb = _.safeCb = (function (exports) {
     /* Create callback based on input value.
      */
 
@@ -3295,18 +3147,15 @@ export var safeCb = _.safeCb = (function (exports)
      * isFn isObj optimizeCb matcher identity 
      */
 
-    exports = function (val, ctx, argCount)
-    {
+    exports = function(val, ctx, argCount) {
         if (val == null) return identity;
 
         if (isFn(val)) return optimizeCb(val, ctx, argCount);
 
         if (isObj(val)) return matcher(val);
 
-        return function (key)
-        {
-            return function (obj)
-            {
+        return function(key) {
+            return function(obj) {
                 return obj == null ? undefined : obj[key];
             };
         };
@@ -3317,8 +3166,7 @@ export var safeCb = _.safeCb = (function (exports)
 
 /* ------------------------------ filter ------------------------------ */
 
-export var filter = _.filter = (function ()
-{
+export var filter = _.filter = (function () {
     /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
      *
      * |Name     |Type    |Desc                                   |
@@ -3345,14 +3193,12 @@ export var filter = _.filter = (function ()
      * safeCb each 
      */
 
-    function exports(obj, predicate, ctx)
-    {
+    function exports(obj, predicate, ctx) {
         var ret = [];
 
         predicate = safeCb(predicate, ctx);
 
-        each(obj, function (val, idx, list)
-        {
+        each(obj, function(val, idx, list) {
             if (predicate(val, idx, list)) ret.push(val);
         });
 
@@ -3364,8 +3210,7 @@ export var filter = _.filter = (function ()
 
 /* ------------------------------ evalCss ------------------------------ */
 
-export var evalCss = _.evalCss = (function ()
-{
+export var evalCss = _.evalCss = (function () {
     /* Eval css.
      */
 
@@ -3376,12 +3221,10 @@ export var evalCss = _.evalCss = (function ()
     var styleList = [],
         scale = 1;
 
-    function exports(css)
-    {
+    function exports(css) {
         css = toStr(css);
 
-        for (var i = 0, len = styleList.length; i < len; i++)
-        {
+        for (var i = 0, len = styleList.length; i < len; i++) {
             if (styleList[i].css === css) return;
         }
 
@@ -3391,35 +3234,31 @@ export var evalCss = _.evalCss = (function ()
         el.type = 'text/css';
         container.appendChild(el);
 
-        let style = {css, el, container};
+        let style = { css, el, container };
         resetStyle(style);
         styleList.push(style);
 
         return style;
     }
 
-    exports.setScale = function (s) 
-    {
+    exports.setScale = function(s) {
         scale = s;
         each(styleList, style => resetStyle(style));
     };
 
-    exports.clear = function () 
-    {
-        each(styleList, ({container, el}) => container.removeChild(el));
+    exports.clear = function() {
+        each(styleList, ({ container, el }) => container.removeChild(el));
         styleList = [];
     };
 
-    exports.remove = function (style) 
-    {
+    exports.remove = function(style) {
         styleList = filter(styleList, s => s !== style);
 
         style.container.removeChild(style.el);
     };
 
-    function resetStyle({css, el}) 
-    {
-        el.innerText = css.replace(/(\d+)px/g, ($0, $1) => (+$1 * scale) + 'px');
+    function resetStyle({ css, el }) {
+        el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px');
     }
 
     return exports;
@@ -3427,8 +3266,7 @@ export var evalCss = _.evalCss = (function ()
 
 /* ------------------------------ map ------------------------------ */
 
-export var map = _.map = (function ()
-{
+export var map = _.map = (function () {
     /* Create an array of values by running each element in collection through iteratee.
      *
      * |Name    |Type        |Desc                          |
@@ -3452,16 +3290,14 @@ export var map = _.map = (function ()
      * safeCb keys isArrLike 
      */
 
-    function exports(obj, iteratee, ctx)
-    {
+    function exports(obj, iteratee, ctx) {
         iteratee = safeCb(iteratee, ctx);
 
         var _keys = !isArrLike(obj) && keys(obj),
             len = (_keys || obj).length,
             results = Array(len);
 
-        for (var i = 0; i < len; i++)
-        {
+        for (var i = 0; i < len; i++) {
             var curKey = _keys ? _keys[i] : i;
             results[i] = iteratee(obj[curKey], curKey, obj);
         }
@@ -3474,8 +3310,7 @@ export var map = _.map = (function ()
 
 /* ------------------------------ decodeUriComponent ------------------------------ */
 
-export var decodeUriComponent = _.decodeUriComponent = (function ()
-{
+export var decodeUriComponent = _.decodeUriComponent = (function () {
     /* Better decodeURIComponent that does not throw if input is invalid.
      *
      * |Name  |Type  |Desc            |
@@ -3487,7 +3322,7 @@ export var decodeUriComponent = _.decodeUriComponent = (function ()
      * decodeUriComponent('%%25%'); // -> '%%%'
      * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
      * ```
-     */ 
+     */
 
     /* module
      * env: all
@@ -3498,28 +3333,23 @@ export var decodeUriComponent = _.decodeUriComponent = (function ()
      * each ucs2 map utf8 
      */
 
-    function exports(str) 
-    {
-        try 
-        {
+    function exports(str) {
+        try {
             return decodeURIComponent(str);
-        } catch (e) 
-        {
+        } catch (e) {
             var replaceMap = {};
 
             var matches = str.match(regMatcher);
 
-            each(matches, function (match) 
-            {
+            each(matches, function(match) {
                 str = str.replace(match, decode(match));
             });
 
             return str;
         }
-    } 
+    }
 
-    function decode(str) 
-    {
+    function decode(str) {
         str = str.split('%').slice(1);
 
         var bytes = map(str, hexToInt);
@@ -3530,8 +3360,7 @@ export var decodeUriComponent = _.decodeUriComponent = (function ()
         return str;
     }
 
-    function hexToInt(numStr) 
-    {
+    function hexToInt(numStr) {
         return +('0x' + numStr);
     }
 
@@ -3542,8 +3371,7 @@ export var decodeUriComponent = _.decodeUriComponent = (function ()
 
 /* ------------------------------ cookie ------------------------------ */
 
-export var cookie = _.cookie = (function (exports)
-{
+export var cookie = _.cookie = (function (exports) {
     /* Simple api for handling browser cookies.
      *
      * ### get
@@ -3594,17 +3422,16 @@ export var cookie = _.cookie = (function (exports)
 
     var defOpts = { path: '/' };
 
-    function setCookie(key, val, options)
-    {
-        if (!isUndef(val))
-        {
+    function setCookie(key, val, options) {
+        if (!isUndef(val)) {
             options = options || {};
             options = defaults(options, defOpts);
 
-            if (isNum(options.expires))
-            {
+            if (isNum(options.expires)) {
                 var expires = new Date();
-                expires.setMilliseconds(expires.getMilliseconds() + options.expires * 864e+5);
+                expires.setMilliseconds(
+                    expires.getMilliseconds() + options.expires * 864e5
+                );
                 options.expires = expires;
             }
 
@@ -3612,10 +3439,12 @@ export var cookie = _.cookie = (function (exports)
             key = encodeURIComponent(key);
 
             document.cookie = [
-                key, '=', val,
+                key,
+                '=',
+                val,
                 options.expires && '; expires=' + options.expires.toUTCString(),
                 options.path && '; path=' + options.path,
-                options.domain  && '; domain=' + options.domain,
+                options.domain && '; domain=' + options.domain,
                 options.secure ? '; secure' : ''
             ].join('');
 
@@ -3625,8 +3454,7 @@ export var cookie = _.cookie = (function (exports)
         var cookies = document.cookie ? document.cookie.split('; ') : [],
             result = key ? undefined : {};
 
-        for (var i = 0, len = cookies.length; i < len; i++)
-        {
+        for (var i = 0, len = cookies.length; i < len; i++) {
             var c = cookies[i],
                 parts = c.split('='),
                 name = decodeUriComponent(parts.shift());
@@ -3634,8 +3462,7 @@ export var cookie = _.cookie = (function (exports)
             c = parts.join('=');
             c = decodeUriComponent(c);
 
-            if (key === name)
-            {
+            if (key === name) {
                 result = c;
                 break;
             }
@@ -3649,8 +3476,7 @@ export var cookie = _.cookie = (function (exports)
     exports = {
         get: setCookie,
         set: setCookie,
-        remove: function (key, options)
-        {
+        remove: function(key, options) {
             options = options || {};
             options.expires = -1;
 
@@ -3663,8 +3489,7 @@ export var cookie = _.cookie = (function (exports)
 
 /* ------------------------------ toArr ------------------------------ */
 
-export var toArr = _.toArr = (function ()
-{
+export var toArr = _.toArr = (function () {
     /* Convert value to an array.
      *
      * |Name  |Type |Desc            |
@@ -3689,8 +3514,7 @@ export var toArr = _.toArr = (function ()
      * isArrLike map isArr isStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         if (!val) return [];
 
         if (isArr(val)) return val;
@@ -3705,8 +3529,7 @@ export var toArr = _.toArr = (function ()
 
 /* ------------------------------ Class ------------------------------ */
 
-export var Class = _.Class = (function ()
-{
+export var Class = _.Class = (function () {
     /* Create JavaScript class.
      *
      * |Name     |Type    |Desc                             |
@@ -3761,52 +3584,51 @@ export var Class = _.Class = (function ()
      * extend toArr inherits has safeGet isMiniProgram 
      */
 
-    function exports(methods, statics)
-    {
+    function exports(methods, statics) {
         return Base.extend(methods, statics);
     }
 
-    function makeClass(parent, methods, statics)
-    {
+    function makeClass(parent, methods, statics) {
         statics = statics || {};
-        var className = methods.className || safeGet(methods, 'initialize.name') || '';
+        var className =
+            methods.className || safeGet(methods, 'initialize.name') || '';
         delete methods.className;
 
         var ctor;
-        if (isMiniProgram) 
-        {
-            ctor = function () 
-            {
+        if (isMiniProgram) {
+            ctor = function() {
                 var args = toArr(arguments);
-                return this.initialize ? this.initialize.apply(this, args) || this : this;
+                return this.initialize
+                    ? this.initialize.apply(this, args) || this
+                    : this;
             };
-        } else 
-        {
-            ctor = new Function('toArr', 'return function ' + className + '()' + 
-            '{' +
-                'var args = toArr(arguments);' +
-                'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
-            '};')(toArr);
+        } else {
+            ctor = new Function(
+                'toArr',
+                'return function ' +
+                    className +
+                    '()' +
+                    '{' +
+                    'var args = toArr(arguments);' +
+                    'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+                    '};'
+            )(toArr);
         }
 
         inherits(ctor, parent);
         ctor.prototype.constructor = ctor;
 
-        ctor.extend = function (methods, statics)
-        {
+        ctor.extend = function(methods, statics) {
             return makeClass(ctor, methods, statics);
         };
-        ctor.inherits = function (Class)
-        {
+        ctor.inherits = function(Class) {
             inherits(ctor, Class);
         };
-        ctor.methods = function (methods)
-        {
+        ctor.methods = function(methods) {
             extend(ctor.prototype, methods);
             return ctor;
         };
-        ctor.statics = function (statics)
-        {
+        ctor.statics = function(statics) {
             extend(ctor, statics);
             return ctor;
         };
@@ -3816,27 +3638,24 @@ export var Class = _.Class = (function ()
         return ctor;
     }
 
-    var Base = exports.Base = makeClass(Object, {
+    var Base = (exports.Base = makeClass(Object, {
         className: 'Base',
-        callSuper: function (parent, name, args)
-        {
+        callSuper: function(parent, name, args) {
             var superMethod = parent.prototype[name];
 
             return superMethod.apply(this, args);
         },
-        toString: function ()
-        {
+        toString: function() {
             return this.constructor.name;
         }
-    });
+    }));
 
     return exports;
 })();
 
 /* ------------------------------ Enum ------------------------------ */
 
-export var Enum = _.Enum = (function (exports)
-{
+export var Enum = _.Enum = (function (exports) {
     /* Enum type implementation.
      *
      * ### constructor
@@ -3871,22 +3690,25 @@ export var Enum = _.Enum = (function (exports)
      */
 
     exports = Class({
-        initialize: function Enum(map)
-        {
-            if (isArr(map))
-            {
+        initialize: function Enum(map) {
+            if (isArr(map)) {
                 this.size = map.length;
-                each(map, function (member, val)
-                {
-                    this[member] = val;
-                }, this);
-            } else
-            {
+                each(
+                    map,
+                    function(member, val) {
+                        this[member] = val;
+                    },
+                    this
+                );
+            } else {
                 this.size = keys(map).length;
-                each(map, function (val, member)
-                {
-                    this[member] = val;
-                }, this);
+                each(
+                    map,
+                    function(val, member) {
+                        this[member] = val;
+                    },
+                    this
+                );
             }
 
             freeze(this);
@@ -3898,8 +3720,7 @@ export var Enum = _.Enum = (function (exports)
 
 /* ------------------------------ MutationObserver ------------------------------ */
 
-export var MutationObserver = _.MutationObserver = (function (exports)
-{
+export var MutationObserver = _.MutationObserver = (function (exports) {
     /* Safe MutationObserver, does nothing if MutationObserver is not supported.
      * 
      * ```javascript
@@ -3921,15 +3742,17 @@ export var MutationObserver = _.MutationObserver = (function (exports)
      * Class 
      */
 
-    exports = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+    exports =
+        window.MutationObserver ||
+        window.WebKitMutationObserver ||
+        window.MozMutationObserver;
 
-    if (!exports) 
-    {
+    if (!exports) {
         exports = Class({
             initialize: function MutationObserver() {},
-            observe: function () {},
-            disconnect: function () {},
-            takeRecords: function () {}
+            observe: function() {},
+            disconnect: function() {},
+            takeRecords: function() {}
         });
     }
 
@@ -3938,8 +3761,7 @@ export var MutationObserver = _.MutationObserver = (function (exports)
 
 /* ------------------------------ Select ------------------------------ */
 
-export var Select = _.Select = (function (exports)
-{
+export var Select = _.Select = (function (exports) {
     /* Simple wrapper of querySelectorAll to make dom selection easier.
      *
      * ### constructor
@@ -3984,35 +3806,29 @@ export var Select = _.Select = (function (exports)
 
     exports = Class({
         className: 'Select',
-        initialize: function (selector)
-        {
+        initialize: function(selector) {
             this.length = 0;
 
             if (!selector) return this;
 
             if (isStr(selector)) return rootSelect.find(selector);
 
-            if (selector.nodeType)
-            {
+            if (selector.nodeType) {
                 this[0] = selector;
                 this.length = 1;
             }
         },
-        find: function (selector)
-        {
-            var ret = new Select;
+        find: function(selector) {
+            var ret = new Select();
 
-            this.each(function ()
-            {
+            this.each(function() {
                 mergeArr(ret, this.querySelectorAll(selector));
             });
 
             return ret;
         },
-        each: function (fn)
-        {
-            each(this, function (element, idx)
-            {
+        each: function(fn) {
+            each(this, function(element, idx) {
                 fn.call(element, idx, element);
             });
 
@@ -4022,8 +3838,7 @@ export var Select = _.Select = (function (exports)
 
     var rootSelect = new exports(document);
 
-    function mergeArr(first, second)
-    {
+    function mergeArr(first, second) {
         var len = second.length,
             i = first.length;
 
@@ -4039,8 +3854,7 @@ export var Select = _.Select = (function (exports)
 
 /* ------------------------------ $safeEls ------------------------------ */
 
-export var $safeEls = _.$safeEls = (function ()
-{
+export var $safeEls = _.$safeEls = (function () {
     /* Convert value into an array, if it's a string, do querySelector.
      *
      * |Name  |Type                |Desc             |
@@ -4062,8 +3876,7 @@ export var $safeEls = _.$safeEls = (function ()
      * isStr toArr Select 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return toArr(isStr(val) ? new Select(val) : val);
     }
 
@@ -4072,8 +3885,7 @@ export var $safeEls = _.$safeEls = (function ()
 
 /* ------------------------------ $attr ------------------------------ */
 
-export var $attr = _.$attr = (function ()
-{
+export var $attr = _.$attr = (function () {
     /* Element attribute manipulation.
      *
      * Get the value of an attribute for the first element in the set of matched elements.
@@ -4126,16 +3938,14 @@ export var $attr = _.$attr = (function ()
      * toArr isObj isStr each isUndef $safeEls 
      */
 
-    function exports(els, name, val)
-    {
+    function exports(els, name, val) {
         els = $safeEls(els);
 
         var isGetter = isUndef(val) && isStr(name);
         if (isGetter) return getAttr(els[0], name);
 
         var attrs = name;
-        if (!isObj(attrs))
-        {
+        if (!isObj(attrs)) {
             attrs = {};
             attrs[name] = val;
         }
@@ -4143,31 +3953,24 @@ export var $attr = _.$attr = (function ()
         setAttr(els, attrs);
     }
 
-    exports.remove = function (els, names)
-    {
+    exports.remove = function(els, names) {
         els = $safeEls(els);
         names = toArr(names);
 
-        each(els, function (node)
-        {
-            each(names, function (name)
-            {
+        each(els, function(node) {
+            each(names, function(name) {
                 node.removeAttribute(name);
             });
         });
     };
 
-    function getAttr(el, name)
-    {
+    function getAttr(el, name) {
         return el.getAttribute(name);
     }
 
-    function setAttr(els, attrs)
-    {
-        each(els, function (el)
-        {
-            each(attrs, function (val, name)
-            {
+    function setAttr(els, attrs) {
+        each(els, function(el) {
+            each(attrs, function(val, name) {
                 el.setAttribute(name, val);
             });
         });
@@ -4178,8 +3981,7 @@ export var $attr = _.$attr = (function ()
 
 /* ------------------------------ $data ------------------------------ */
 
-export var $data = _.$data = (function ()
-{
+export var $data = _.$data = (function () {
     /* Wrapper of $attr, adds data- prefix to keys.
      *
      * ```javascript
@@ -4196,16 +3998,13 @@ export var $data = _.$data = (function ()
      * $attr isStr isObj each 
      */
 
-    function exports(nodes, name, val)
-    {
+    function exports(nodes, name, val) {
         var dataName = name;
 
         if (isStr(name)) dataName = 'data-' + name;
-        if (isObj(name))
-        {
+        if (isObj(name)) {
             dataName = {};
-            each(name, function (val, key)
-            {
+            each(name, function(val, key) {
                 dataName['data-' + key] = val;
             });
         }
@@ -4218,8 +4017,7 @@ export var $data = _.$data = (function ()
 
 /* ------------------------------ $css ------------------------------ */
 
-export var $css = _.$css = (function ()
-{
+export var $css = _.$css = (function () {
     /* Element css manipulation.
      *
      * Get the computed style properties for the first element in the set of matched elements.
@@ -4262,16 +4060,14 @@ export var $css = _.$css = (function ()
      * isStr isObj kebabCase isUndef contain isNum $safeEls startWith prefix 
      */
 
-    function exports(nodes, name, val)
-    {
+    function exports(nodes, name, val) {
         nodes = $safeEls(nodes);
 
         var isGetter = isUndef(val) && isStr(name);
         if (isGetter) return getCss(nodes[0], name);
 
         var css = name;
-        if (!isObj(css))
-        {
+        if (!isObj(css)) {
             css = {};
             css[name] = val;
         }
@@ -4279,18 +4075,17 @@ export var $css = _.$css = (function ()
         setCss(nodes, css);
     }
 
-    function getCss(node, name)
-    {
-        return node.style[prefix(name)] || getComputedStyle(node, '').getPropertyValue(name);
+    function getCss(node, name) {
+        return (
+            node.style[prefix(name)] ||
+            getComputedStyle(node, '').getPropertyValue(name)
+        );
     }
 
-    function setCss(nodes, css)
-    {
-        each(nodes, function (node)
-        {
+    function setCss(nodes, css) {
+        each(nodes, function(node) {
             var cssText = ';';
-            each(css, function (val, key)
-            {
+            each(css, function(val, key) {
                 key = prefix.dash(key);
                 cssText += key + ':' + addPx(key, val) + ';';
             });
@@ -4308,8 +4103,7 @@ export var $css = _.$css = (function ()
         'zoom'
     ];
 
-    function addPx(key, val)
-    {
+    function addPx(key, val) {
         var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
 
         return needPx ? val + 'px' : val;
@@ -4320,8 +4114,7 @@ export var $css = _.$css = (function ()
 
 /* ------------------------------ $insert ------------------------------ */
 
-export var $insert = _.$insert = (function (exports)
-{
+export var $insert = _.$insert = (function (exports) {
     /* Insert html on different position.
      *
      * ### before
@@ -4374,14 +4167,11 @@ export var $insert = _.$insert = (function (exports)
         prepend: insertFactory('afterbegin')
     };
 
-    function insertFactory(type)
-    {
-        return function (nodes, val)
-        {
+    function insertFactory(type) {
+        return function(nodes, val) {
             nodes = $safeEls(nodes);
 
-            each(nodes, function (node)
-            {
+            each(nodes, function(node) {
                 node.insertAdjacentHTML(type, val);
             });
         };
@@ -4392,8 +4182,7 @@ export var $insert = _.$insert = (function (exports)
 
 /* ------------------------------ $offset ------------------------------ */
 
-export var $offset = _.$offset = (function ()
-{
+export var $offset = _.$offset = (function () {
     /* Get the position of the element in document.
      *
      * |Name   |Type                |Desc                  |
@@ -4414,8 +4203,7 @@ export var $offset = _.$offset = (function ()
      * $safeEls 
      */
 
-    function exports(els)
-    {
+    function exports(els) {
         els = $safeEls(els);
 
         var el = els[0];
@@ -4435,8 +4223,7 @@ export var $offset = _.$offset = (function ()
 
 /* ------------------------------ $property ------------------------------ */
 
-export var $property = _.$property = (function (exports)
-{
+export var $property = _.$property = (function (exports) {
     /* Element property html, text, val getter and setter.
      *
      * ### html
@@ -4476,16 +4263,13 @@ export var $property = _.$property = (function (exports)
         val: propFactory('value')
     };
 
-    function propFactory(name)
-    {
-        return function (nodes, val)
-        {
+    function propFactory(name) {
+        return function(nodes, val) {
             nodes = $safeEls(nodes);
 
             if (isUndef(val)) return nodes[0][name];
 
-            each(nodes, function (node)
-            {
+            each(nodes, function(node) {
                 node[name] = val;
             });
         };
@@ -4496,8 +4280,7 @@ export var $property = _.$property = (function (exports)
 
 /* ------------------------------ $remove ------------------------------ */
 
-export var $remove = _.$remove = (function ()
-{
+export var $remove = _.$remove = (function () {
     /* Remove the set of matched elements from the DOM.
      *
      * |Name   |Type                |Desc              |
@@ -4518,12 +4301,10 @@ export var $remove = _.$remove = (function ()
      * each $safeEls 
      */
 
-    function exports(els)
-    {
+    function exports(els) {
         els = $safeEls(els);
 
-        each(els, function (el)
-        {
+        each(els, function(el) {
             var parent = el.parentNode;
 
             if (parent) parent.removeChild(el);
@@ -4535,8 +4316,7 @@ export var $remove = _.$remove = (function ()
 
 /* ------------------------------ $show ------------------------------ */
 
-export var $show = _.$show = (function ()
-{
+export var $show = _.$show = (function () {
     /* Show elements.
      *
      * |Name   |Type                |Desc            |
@@ -4557,32 +4337,26 @@ export var $show = _.$show = (function ()
      * each $safeEls 
      */
 
-    function exports(els)
-    {
+    function exports(els) {
         els = $safeEls(els);
 
-        each(els, function (el)
-        {
-            if (isHidden(el))
-            {
+        each(els, function(el) {
+            if (isHidden(el)) {
                 el.style.display = getDefDisplay(el.nodeName);
             }
         });
     }
 
-    function isHidden(el)
-    {
+    function isHidden(el) {
         return getComputedStyle(el, '').getPropertyValue('display') == 'none';
     }
 
     var elDisplay = {};
 
-    function getDefDisplay(elName)
-    {
+    function getDefDisplay(elName) {
         var el, display;
 
-        if (!elDisplay[elName])
-        {
+        if (!elDisplay[elName]) {
             el = document.createElement(elName);
             document.documentElement.appendChild(el);
             display = getComputedStyle(el, '').getPropertyValue('display');
@@ -4599,8 +4373,7 @@ export var $show = _.$show = (function ()
 
 /* ------------------------------ delegate ------------------------------ */
 
-export var delegate = _.delegate = (function (exports)
-{
+export var delegate = _.delegate = (function (exports) {
     /* Event delegation.
      *
      * ### add
@@ -4638,29 +4411,35 @@ export var delegate = _.delegate = (function (exports)
      * Class contain 
      */
 
-    function retTrue()  { return true; }
-    function retFalse() { return false; }
+    function retTrue() {
+        return true;
+    }
+    function retFalse() {
+        return false;
+    }
 
-    function trigger(e)
-    {
+    function trigger(e) {
         var handlers = this.events[e.type],
             handler,
             handlerQueue = formatHandlers.call(this, e, handlers);
 
         e = new exports.Event(e);
 
-        var i = 0, j, matched, ret;
+        var i = 0,
+            j,
+            matched,
+            ret;
 
-        while ((matched = handlerQueue[i++]) && !e.isPropagationStopped())
-        {
+        while ((matched = handlerQueue[i++]) && !e.isPropagationStopped()) {
             e.curTarget = matched.el;
             j = 0;
-            while ((handler = matched.handlers[j++]) && !e.isImmediatePropagationStopped())
-            {
+            while (
+                (handler = matched.handlers[j++]) &&
+                !e.isImmediatePropagationStopped()
+            ) {
                 ret = handler.handler.apply(matched.el, [e]);
 
-                if (ret === false)
-                {
+                if (ret === false) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
@@ -4668,34 +4447,34 @@ export var delegate = _.delegate = (function (exports)
         }
     }
 
-    function formatHandlers(e, handlers)
-    {
+    function formatHandlers(e, handlers) {
         var current = e.target,
             ret = [],
             delegateCount = handlers.delegateCount,
-            selector, matches, handler, i;
+            selector,
+            matches,
+            handler,
+            i;
 
-        if (current.nodeType)
-        {
-            for (; current !== this; current = current.parentNode || this)
-            {
+        if (current.nodeType) {
+            for (; current !== this; current = current.parentNode || this) {
                 matches = [];
-                for (i = 0; i < delegateCount; i++)
-                {
+                for (i = 0; i < delegateCount; i++) {
                     handler = handlers[i];
                     selector = handler.selector + ' ';
-                    if (matches[selector] === undefined)
-                    {
-                        matches[selector] = contain(this.querySelectorAll(selector), current);
+                    if (matches[selector] === undefined) {
+                        matches[selector] = contain(
+                            this.querySelectorAll(selector),
+                            current
+                        );
                     }
                     if (matches[selector]) matches.push(handler);
                 }
-                if (matches.length) ret.push({ el: current, handlers: matches});
+                if (matches.length) ret.push({ el: current, handlers: matches });
             }
         }
 
-        if (delegateCount < handlers.length)
-        {
+        if (delegateCount < handlers.length) {
             ret.push({
                 el: this,
                 handlers: handlers.slice(delegateCount)
@@ -4706,8 +4485,7 @@ export var delegate = _.delegate = (function (exports)
     }
 
     exports = {
-        add: function (el, type, selector, fn)
-        {
+        add: function(el, type, selector, fn) {
             var handler = {
                     selector: selector,
                     handler: fn
@@ -4716,21 +4494,23 @@ export var delegate = _.delegate = (function (exports)
 
             if (!el.events) el.events = {};
 
-            if (!(handlers = el.events[type]))
-            {
+            if (!(handlers = el.events[type])) {
                 handlers = el.events[type] = [];
                 handlers.delegateCount = 0;
-                el.addEventListener(type, function (e)
-                {
-                    trigger.apply(el, arguments);
-                }, false);
+                el.addEventListener(
+                    type,
+                    function(e) {
+                        trigger.apply(el, arguments);
+                    },
+                    false
+                );
             }
 
-            selector ? handlers.splice(handlers.delegateCount++, 0, handler)
-                     : handlers.push(handler);
+            selector
+                ? handlers.splice(handlers.delegateCount++, 0, handler)
+                : handlers.push(handler);
         },
-        remove: function (el, type, selector, fn)
-        {
+        remove: function(el, type, selector, fn) {
             var events = el.events;
 
             if (!events || !events[type]) return;
@@ -4739,15 +4519,15 @@ export var delegate = _.delegate = (function (exports)
                 i = handlers.length,
                 handler;
 
-            while (i--)
-            {
+            while (i--) {
                 handler = handlers[i];
 
-                if ((!selector || handler.selector == selector) && handler.handler == fn)
-                {
+                if (
+                    (!selector || handler.selector == selector) &&
+                    handler.handler == fn
+                ) {
                     handlers.splice(i, 1);
-                    if (handler.selector)
-                    {
+                    if (handler.selector) {
                         handlers.delegateCount--;
                     }
                 }
@@ -4755,26 +4535,25 @@ export var delegate = _.delegate = (function (exports)
         },
         Event: Class({
             className: 'Event',
-            initialize: function Event(e) { this.origEvent = e; },
+            initialize: function Event(e) {
+                this.origEvent = e;
+            },
             isDefaultPrevented: retFalse,
             isPropagationStopped: retFalse,
             isImmediatePropagationStopped: retFalse,
-            preventDefault: function ()
-            {
+            preventDefault: function() {
                 var e = this.origEvent;
 
                 this.isDefaultPrevented = retTrue;
                 if (e && e.preventDefault) e.preventDefault();
             },
-            stopPropagation: function ()
-            {
+            stopPropagation: function() {
                 var e = this.origEvent;
 
                 this.isPropagationStopped = retTrue;
                 if (e && e.stopPropagation) e.stopPropagation();
             },
-            stopImmediatePropagation: function ()
-            {
+            stopImmediatePropagation: function() {
                 var e = this.origEvent;
 
                 this.isImmediatePropagationStopped = retTrue;
@@ -4789,8 +4568,7 @@ export var delegate = _.delegate = (function (exports)
 
 /* ------------------------------ $event ------------------------------ */
 
-export var $event = _.$event = (function (exports)
-{
+export var $event = _.$event = (function (exports) {
     /* bind events to certain dom elements.
      *
      * ```javascript
@@ -4817,20 +4595,16 @@ export var $event = _.$event = (function (exports)
         off: eventFactory('remove')
     };
 
-    function eventFactory(type)
-    {
-        return function (nodes, event, selector, handler)
-        {
+    function eventFactory(type) {
+        return function(nodes, event, selector, handler) {
             nodes = $safeEls(nodes);
 
-            if (isUndef(handler))
-            {
+            if (isUndef(handler)) {
                 handler = selector;
                 selector = undefined;
             }
 
-            each(nodes, function (node)
-            {
+            each(nodes, function(node) {
                 delegate[type](node, event, selector, handler);
             });
         };
@@ -4841,8 +4615,7 @@ export var $event = _.$event = (function (exports)
 
 /* ------------------------------ concat ------------------------------ */
 
-export var concat = _.concat = (function ()
-{
+export var concat = _.concat = (function () {
     /* Concat multiple arrays into a single array.
      *
      * |Name  |Type |Desc              |
@@ -4864,13 +4637,11 @@ export var concat = _.concat = (function ()
      * toArr 
      */
 
-    function exports()
-    {
+    function exports() {
         var args = toArr(arguments),
             ret = [];
 
-        for (var i = 0, len = args.length; i < len; i++)
-        {
+        for (var i = 0, len = args.length; i < len; i++) {
             ret = ret.concat(toArr(args[i]));
         }
 
@@ -4882,8 +4653,7 @@ export var concat = _.concat = (function ()
 
 /* ------------------------------ some ------------------------------ */
 
-export var some = _.some = (function ()
-{
+export var some = _.some = (function () {
     /* Check if predicate return truthy for any element.
      *
      * |Name     |Type        |Desc                                          |
@@ -4910,15 +4680,13 @@ export var some = _.some = (function ()
      * safeCb isArrLike keys 
      */
 
-    function exports(obj, predicate, ctx)
-    {
+    function exports(obj, predicate, ctx) {
         predicate = safeCb(predicate, ctx);
 
         var _keys = !isArrLike(obj) && keys(obj),
-            len   = (_keys || obj).length;
+            len = (_keys || obj).length;
 
-        for (var i = 0; i < len; i++)
-        {
+        for (var i = 0; i < len; i++) {
             var key = _keys ? _keys[i] : i;
             if (predicate(obj[key], key, obj)) return true;
         }
@@ -4931,8 +4699,7 @@ export var some = _.some = (function ()
 
 /* ------------------------------ $class ------------------------------ */
 
-export var $class = _.$class = (function (exports)
-{
+export var $class = _.$class = (function (exports) {
     /* Element class manipulations.
      *
      * ### add
@@ -4993,62 +4760,52 @@ export var $class = _.$class = (function (exports)
      */
 
     exports = {
-        add: function (els, name)
-        {
+        add: function(els, name) {
             els = $safeEls(els);
             var names = safeName(name);
 
-            each(els, function (el)
-            {
+            each(els, function(el) {
                 var classList = [];
 
-                each(names, function (name)
-                {
+                each(names, function(name) {
                     if (!exports.has(el, name)) classList.push(name);
                 });
 
-                if (classList.length !== 0) el.className += ' ' + classList.join(' ');
+                if (classList.length !== 0)
+                    el.className += ' ' + classList.join(' ');
             });
         },
-        has: function (els, name)
-        {
+        has: function(els, name) {
             els = $safeEls(els);
 
             var regName = new RegExp('(^|\\s)' + name + '(\\s|$)');
 
-            return some(els, function (el)
-            {
+            return some(els, function(el) {
                 return regName.test(el.className);
             });
         },
-        toggle: function (els, name)
-        {
+        toggle: function(els, name) {
             els = $safeEls(els);
 
-            each(els, function (el)
-            {
+            each(els, function(el) {
                 if (!exports.has(el, name)) return exports.add(el, name);
 
                 exports.remove(el, name);
             });
         },
-        remove: function (els, name)
-        {
+        remove: function(els, name) {
             els = $safeEls(els);
             var names = safeName(name);
 
-            each(els, function (el)
-            {
-                each(names, function (name)
-                {
+            each(els, function(el) {
+                each(names, function(name) {
                     el.classList.remove(name);
                 });
             });
         }
     };
 
-    function safeName(name)
-    {
+    function safeName(name) {
         return isStr(name) ? name.split(/\s+/) : toArr(name);
     }
 
@@ -5057,8 +4814,7 @@ export var $class = _.$class = (function (exports)
 
 /* ------------------------------ $ ------------------------------ */
 
-export var $ = _.$ = (function ()
-{
+export var $ = _.$ = (function () {
     /* jQuery like style dom manipulator.
      *
      * ### Available methods
@@ -5088,167 +4844,140 @@ export var $ = _.$ = (function ()
      * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr 
      */
 
-    function exports(selector)
-    {
+    function exports(selector) {
         return new Select(selector);
     }
 
     Select.methods({
-        offset: function ()
-        {
+        offset: function() {
             return $offset(this);
         },
-        hide: function ()
-        {
+        hide: function() {
             return this.css('display', 'none');
         },
-        show: function ()
-        {
+        show: function() {
             $show(this);
 
             return this;
         },
-        first: function ()
-        {
+        first: function() {
             return exports(this[0]);
         },
-        last: function () {
+        last: function() {
             return exports(last(this));
         },
-        get: function (idx)
-        {
+        get: function(idx) {
             return this[idx];
         },
-        eq: function (idx)
-        {
+        eq: function(idx) {
             return exports(this[idx]);
         },
-        on: function (event, selector, handler)
-        {
+        on: function(event, selector, handler) {
             $event.on(this, event, selector, handler);
 
             return this;
         },
-        off: function (event, selector, handler)
-        {
+        off: function(event, selector, handler) {
             $event.off(this, event, selector, handler);
 
             return this;
         },
-        html: function (val)
-        {
+        html: function(val) {
             var result = $property.html(this, val);
 
             if (isUndef(val)) return result;
 
             return this;
         },
-        text: function (val)
-        {
+        text: function(val) {
             var result = $property.text(this, val);
 
             if (isUndef(val)) return result;
 
             return this;
         },
-        val: function (val)
-        {
+        val: function(val) {
             var result = $property.val(this, val);
 
             if (isUndef(val)) return result;
 
             return this;
         },
-        css: function (name, val)
-        {
+        css: function(name, val) {
             var result = $css(this, name, val);
 
             if (isGetter(name, val)) return result;
 
             return this;
         },
-        attr: function (name, val)
-        {
+        attr: function(name, val) {
             var result = $attr(this, name, val);
 
             if (isGetter(name, val)) return result;
 
             return this;
         },
-        data: function (name, val)
-        {
+        data: function(name, val) {
             var result = $data(this, name, val);
 
             if (isGetter(name, val)) return result;
 
             return this;
         },
-        rmAttr: function (name)
-        {
+        rmAttr: function(name) {
             $attr.remove(this, name);
 
             return this;
         },
-        remove: function ()
-        {
+        remove: function() {
             $remove(this);
 
             return this;
         },
-        addClass: function (name)
-        {
+        addClass: function(name) {
             $class.add(this, name);
 
             return this;
         },
-        rmClass: function (name)
-        {
+        rmClass: function(name) {
             $class.remove(this, name);
 
             return this;
         },
-        toggleClass: function (name)
-        {
+        toggleClass: function(name) {
             $class.toggle(this, name);
 
             return this;
         },
-        hasClass: function (name)
-        {
+        hasClass: function(name) {
             return $class.has(this, name);
         },
-        parent: function ()
-        {
+        parent: function() {
             return exports(this[0].parentNode);
         },
-        append: function (val)
-        {
+        append: function(val) {
             $insert.append(this, val);
 
             return this;
         },
-        prepend: function (val)
-        {
+        prepend: function(val) {
             $insert.prepend(this, val);
 
             return this;
         },
-        before: function (val)
-        {
+        before: function(val) {
             $insert.before(this, val);
 
             return this;
         },
-        after: function (val)
-        {
+        after: function(val) {
             $insert.after(this, val);
 
             return this;
         }
     });
 
-    function isGetter(name, val)
-    {
+    function isGetter(name, val) {
         return isUndef(val) && isStr(name);
     }
 
@@ -5257,8 +4986,7 @@ export var $ = _.$ = (function ()
 
 /* ------------------------------ memStorage ------------------------------ */
 
-export var memStorage = _.memStorage = (function (exports)
-{
+export var memStorage = _.memStorage = (function (exports) {
     /* Memory-backed implementation of the Web Storage API.
      *
      * A replacement for environments where localStorage or sessionStorage is not available.
@@ -5279,43 +5007,37 @@ export var memStorage = _.memStorage = (function (exports)
      */
 
     exports = {
-        getItem: function (key)
-        {
+        getItem: function(key) {
             return (API_KEYS[key] ? cloak[key] : this[key]) || null;
         },
-        setItem: function (key, val)
-        {
-            API_KEYS[key] ? cloak[key] = val : this[key] = val;
+        setItem: function(key, val) {
+            API_KEYS[key] ? (cloak[key] = val) : (this[key] = val);
         },
-        removeItem: function (key)
-        {
+        removeItem: function(key) {
             API_KEYS[key] ? delete cloak[key] : delete this[key];
         },
-        key: function (i)
-        {
+        key: function(i) {
             var keys = enumerableKeys();
 
             return i >= 0 && i < keys.length ? keys[i] : null;
         },
-        clear: function ()
-        {
+        clear: function() {
             var keys = uncloakedKeys();
 
             /* eslint-disable no-cond-assign */
-            for (var i = 0, key; key = keys[i]; i++) delete this[key];
+            for (var i = 0, key; (key = keys[i]); i++) delete this[key];
 
             keys = cloakedKeys();
 
             /* eslint-disable no-cond-assign */
-            for (i = 0; key = keys[i]; i++) delete cloak[key];
+            for (i = 0; (key = keys[i]); i++) delete cloak[key];
         }
     };
 
     Object.defineProperty(exports, 'length', {
         enumerable: false,
         configurable: true,
-        get: function ()
-        {
+        get: function() {
             return enumerableKeys().length;
         }
     });
@@ -5331,21 +5053,17 @@ export var memStorage = _.memStorage = (function (exports)
         length: 1
     };
 
-    function enumerableKeys()
-    {
+    function enumerableKeys() {
         return uncloakedKeys().concat(cloakedKeys());
     }
 
-    function uncloakedKeys()
-    {
-        return keys(exports).filter(function (key)
-        {
+    function uncloakedKeys() {
+        return keys(exports).filter(function(key) {
             return !API_KEYS[key];
         });
     }
 
-    function cloakedKeys()
-    {
+    function cloakedKeys() {
         return keys(cloak);
     }
 
@@ -5354,8 +5072,7 @@ export var memStorage = _.memStorage = (function (exports)
 
 /* ------------------------------ safeStorage ------------------------------ */
 
-export var safeStorage = _.safeStorage = (function ()
-{
+export var safeStorage = _.safeStorage = (function () {
     /* Safe localStorage and sessionStorage.
      */
 
@@ -5363,28 +5080,28 @@ export var safeStorage = _.safeStorage = (function ()
      * isUndef memStorage 
      */
 
-    function exports(type, memReplacement)
-    {
+    function exports(type, memReplacement) {
         if (isUndef(memReplacement)) memReplacement = true;
 
         var ret;
 
-        switch (type)
-        {
-            case 'local': ret = window.localStorage; break;
-            case 'session':  ret = window.sessionStorage; break;
+        switch (type) {
+            case 'local':
+                ret = window.localStorage;
+                break;
+            case 'session':
+                ret = window.sessionStorage;
+                break;
         }
 
-        try
-        {
+        try {
             // Safari private browsing
             var x = 'test-localStorage-' + Date.now();
             ret.setItem(x, x);
             var y = ret.getItem(x);
             ret.removeItem(x);
             if (y !== x) throw new Error();
-        } catch (e)
-        {
+        } catch (e) {
             if (memReplacement) return memStorage;
             return;
         }
@@ -5397,8 +5114,7 @@ export var safeStorage = _.safeStorage = (function ()
 
 /* ------------------------------ meta ------------------------------ */
 
-export var meta = _.meta = (function ()
-{
+export var meta = _.meta = (function () {
     /* Document meta manipulation, turn name and content into key value pairs.
      *
      * Get meta content with given name. If name is omitted, all pairs will be return.
@@ -5452,28 +5168,24 @@ export var meta = _.meta = (function ()
      * each isStr isUndef contain isArr isObj toArr 
      */
 
-    function exports(name, content) 
-    {
+    function exports(name, content) {
         if (isUndef(name)) return getAllMeta();
 
-        var isGetter = (isStr(name) && isUndef(content))|| isArr(name);
+        var isGetter = (isStr(name) && isUndef(content)) || isArr(name);
         if (isGetter) return getMeta(name);
 
         var metas = name;
-        if (!isObj(metas)) 
-        {
+        if (!isObj(metas)) {
             metas = {};
             metas[name] = content;
         }
         setMeta(metas);
-    } 
+    }
 
-    exports.remove = function (nameList)
-    {
+    exports.remove = function(nameList) {
         nameList = toArr(nameList);
 
-        each(nameList, function (name) 
-        {
+        each(nameList, function(name) {
             var meta = selectMeta(name);
             if (meta) doc.head.removeChild(meta);
         });
@@ -5481,42 +5193,34 @@ export var meta = _.meta = (function ()
 
     var doc = document;
 
-    function getAllMeta() 
-    {
+    function getAllMeta() {
         var ret = {};
 
-        metaEach(function (name, content) 
-        {
+        metaEach(function(name, content) {
             ret[name] = content;
         });
 
         return ret;
     }
 
-    function getMeta(name) 
-    {
-        if (isStr(name)) 
-        {
+    function getMeta(name) {
+        if (isStr(name)) {
             var meta = selectMeta(name);
 
             if (meta) return meta.getAttribute('content');
-        } else 
-        {
+        } else {
             var ret = {};
 
-            metaEach(function (key, val) 
-            {
-                if(contain(name, key)) ret[key] = val;
+            metaEach(function(key, val) {
+                if (contain(name, key)) ret[key] = val;
             });
 
             return ret;
         }
     }
 
-    function setMeta(metas) 
-    {
-        each(metas, function (content, name) 
-        {
+    function setMeta(metas) {
+        each(metas, function(content, name) {
             var meta = selectMeta(name);
             if (meta) return meta.setAttribute('content', content);
 
@@ -5527,12 +5231,10 @@ export var meta = _.meta = (function ()
         });
     }
 
-    function metaEach(fn) 
-    {
+    function metaEach(fn) {
         var metaList = doc.querySelectorAll('meta');
 
-        each(metaList, function (meta) 
-        {
+        each(metaList, function(meta) {
             var name = meta.getAttribute('name'),
                 content = meta.getAttribute('content');
 
@@ -5542,8 +5244,7 @@ export var meta = _.meta = (function ()
         });
     }
 
-    function selectMeta(name) 
-    {
+    function selectMeta(name) {
         return doc.querySelector('meta[name="' + name + '"]');
     }
 
@@ -5552,8 +5253,7 @@ export var meta = _.meta = (function ()
 
 /* ------------------------------ toNum ------------------------------ */
 
-export var toNum = _.toNum = (function (exports)
-{
+export var toNum = _.toNum = (function (exports) {
     /* Convert value to a number.
      *
      * |Name  |Type  |Desc            |
@@ -5575,14 +5275,12 @@ export var toNum = _.toNum = (function (exports)
      * isNum isObj isFn isStr 
      */
 
-    exports = function (val)
-    {
+    exports = function(val) {
         if (isNum(val)) return val;
 
-        if (isObj(val))
-        {
+        if (isObj(val)) {
             var temp = isFn(val.valueOf) ? val.valueOf() : val;
-            val = isObj(temp) ? (temp + '') : temp;
+            val = isObj(temp) ? temp + '' : temp;
         }
 
         if (!isStr(val)) return val === 0 ? val : +val;
@@ -5595,8 +5293,7 @@ export var toNum = _.toNum = (function (exports)
 
 /* ------------------------------ ms ------------------------------ */
 
-export var ms = _.ms = (function ()
-{
+export var ms = _.ms = (function () {
     /* Convert time string formats to milliseconds.
      *
      * Turn time string into milliseconds.
@@ -5634,30 +5331,25 @@ export var ms = _.ms = (function ()
      * toNum isStr 
      */
 
-    function exports(str) 
-    {
-        if (isStr(str)) 
-        {
+    function exports(str) {
+        if (isStr(str)) {
             var match = str.match(regStrTime);
 
             if (!match) return 0;
 
             return toNum(match[1]) * factor[match[2] || 'ms'];
-        } else 
-        {
+        } else {
             var num = str,
                 suffix = 'ms';
 
-            for (var i = 0, len = suffixList.length; i < len; i++) 
-            {
-                if (num >= factor[suffixList[i]]) 
-                {
+            for (var i = 0, len = suffixList.length; i < len; i++) {
+                if (num >= factor[suffixList[i]]) {
                     suffix = suffixList[i];
                     break;
                 }
-            }    
+            }
 
-            return +((num / factor[suffix]).toFixed(2)) + suffix;
+            return +(num / factor[suffix]).toFixed(2) + suffix;
         }
     }
 
@@ -5679,8 +5371,7 @@ export var ms = _.ms = (function ()
 
 /* ------------------------------ toInt ------------------------------ */
 
-export var toInt = _.toInt = (function ()
-{
+export var toInt = _.toInt = (function () {
     /* Convert value to an integer.
      *
      * |Name  |Type  |Desc             |
@@ -5703,13 +5394,12 @@ export var toInt = _.toInt = (function ()
      * toNum 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         if (!val) return val === 0 ? val : 0;
 
         val = toNum(val);
 
-        return val - val % 1;
+        return val - (val % 1);
     }
 
     return exports;
@@ -5717,8 +5407,7 @@ export var toInt = _.toInt = (function ()
 
 /* ------------------------------ detectBrowser ------------------------------ */
 
-export var detectBrowser = _.detectBrowser = (function ()
-{
+export var detectBrowser = _.detectBrowser = (function () {
     /* Detect browser info using ua.
      *
      * |Name                    |Type  |Desc                              |
@@ -5746,25 +5435,25 @@ export var detectBrowser = _.detectBrowser = (function ()
      * isBrowser toInt keys 
      */
 
-    function exports(ua) 
-    {
+    function exports(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
         ua = ua.toLowerCase();
 
         var ieVer = getVer(ua, 'msie ');
 
-        if (ieVer) return {
-            version: ieVer,
-            name: 'ie'
-        };
+        if (ieVer)
+            return {
+                version: ieVer,
+                name: 'ie'
+            };
 
-        if (regIe11.test(ua)) return {
-            version: 11,
-            name: 'ie'
-        };
+        if (regIe11.test(ua))
+            return {
+                version: 11,
+                name: 'ie'
+            };
 
-        for (var i = 0, len = browsers.length; i < len; i++) 
-        {
+        for (var i = 0, len = browsers.length; i < len; i++) {
             var name = browsers[i],
                 match = ua.match(regBrowsers[name]);
 
@@ -5787,23 +5476,23 @@ export var detectBrowser = _.detectBrowser = (function ()
     }
 
     var regBrowsers = {
-        'edge': /edge\/([0-9._]+)/,
-        'firefox': /firefox\/([0-9.]+)(?:\s|$)/,
-        'opera': /opera\/([0-9.]+)(?:\s|$)/,
-        'android': /android\s([0-9.]+)/,
-        'ios': /version\/([0-9._]+).*mobile.*safari.*/,
-        'safari': /version\/([0-9._]+).*safari/,
-        'chrome': /(?!chrom.*opr)chrom(?:e|ium)\/([0-9.]+)(:?\s|$)/
+        edge: /edge\/([0-9._]+)/,
+        firefox: /firefox\/([0-9.]+)(?:\s|$)/,
+        opera: /opera\/([0-9.]+)(?:\s|$)/,
+        android: /android\s([0-9.]+)/,
+        ios: /version\/([0-9._]+).*mobile.*safari.*/,
+        safari: /version\/([0-9._]+).*safari/,
+        chrome: /(?!chrom.*opr)chrom(?:e|ium)\/([0-9.]+)(:?\s|$)/
     };
 
     var regIe11 = /trident\/7\./,
         browsers = keys(regBrowsers);
 
-    function getVer(ua, mark) 
-    {
+    function getVer(ua, mark) {
         var idx = ua.indexOf(mark);
 
-        if (idx > -1) return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
+        if (idx > -1)
+            return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
     }
 
     return exports;
@@ -5811,8 +5500,7 @@ export var detectBrowser = _.detectBrowser = (function ()
 
 /* ------------------------------ nextTick ------------------------------ */
 
-export var nextTick = _.nextTick = (function (exports)
-{
+export var nextTick = _.nextTick = (function (exports) {
     /* Next tick for both node and browser.
      *
      * |Name|Type    |Desc            |
@@ -5836,20 +5524,21 @@ export var nextTick = _.nextTick = (function (exports)
      * test: all
      */
 
-    if (typeof process === 'object' && process.nextTick)
-    {
+    if (typeof process === 'object' && process.nextTick) {
         exports = process.nextTick;
-    } else if (typeof setImmediate === 'function')
-    {
-        exports = function (cb) { setImmediate(ensureCallable(cb)); };
-    } else
-    {
-        exports = function (cb) { setTimeout(ensureCallable(cb), 0); };
+    } else if (typeof setImmediate === 'function') {
+        exports = function(cb) {
+            setImmediate(ensureCallable(cb));
+        };
+    } else {
+        exports = function(cb) {
+            setTimeout(ensureCallable(cb), 0);
+        };
     }
 
-    function ensureCallable(fn)
-    {
-        if (typeof fn !== 'function') throw new TypeError(fn + ' is not a function');
+    function ensureCallable(fn) {
+        if (typeof fn !== 'function')
+            throw new TypeError(fn + ' is not a function');
 
         return fn;
     }
@@ -5859,8 +5548,7 @@ export var nextTick = _.nextTick = (function (exports)
 
 /* ------------------------------ now ------------------------------ */
 
-export var now = _.now = (function (exports)
-{
+export var now = _.now = (function (exports) {
     /* Gets the number of milliseconds that have elapsed since the Unix epoch.
      *
      * ```javascript
@@ -5873,18 +5561,18 @@ export var now = _.now = (function (exports)
      * test: all
      */
 
-    exports = Date.now || function ()
-    {
-        return new Date().getTime();
-    };
+    exports =
+        Date.now ||
+        function() {
+            return new Date().getTime();
+        };
 
     return exports;
 })({});
 
 /* ------------------------------ restArgs ------------------------------ */
 
-export var restArgs = _.restArgs = (function ()
-{
+export var restArgs = _.restArgs = (function () {
     /* This accumulates the arguments passed into an array, after a given index.
      *
      * |Name      |Type    |Desc                                   |
@@ -5904,12 +5592,10 @@ export var restArgs = _.restArgs = (function ()
      * test: all
      */
 
-    function exports(fn, startIdx)
-    {
+    function exports(fn, startIdx) {
         startIdx = startIdx == null ? fn.length - 1 : +startIdx;
 
-        return function ()
-        {
+        return function() {
             var len = Math.max(arguments.length - startIdx, 0),
                 rest = new Array(len),
                 i;
@@ -5917,11 +5603,13 @@ export var restArgs = _.restArgs = (function ()
             for (i = 0; i < len; i++) rest[i] = arguments[i + startIdx];
 
             // Call runs faster than apply.
-            switch (startIdx)
-            {
-                case 0: return fn.call(this, rest);
-                case 1: return fn.call(this, arguments[0], rest);
-                case 2: return fn.call(this, arguments[0], arguments[1], rest);
+            switch (startIdx) {
+                case 0:
+                    return fn.call(this, rest);
+                case 1:
+                    return fn.call(this, arguments[0], rest);
+                case 2:
+                    return fn.call(this, arguments[0], arguments[1], rest);
             }
 
             var args = new Array(startIdx + 1);
@@ -5939,8 +5627,7 @@ export var restArgs = _.restArgs = (function ()
 
 /* ------------------------------ partial ------------------------------ */
 
-export var partial = _.partial = (function (exports)
-{
+export var partial = _.partial = (function (exports) {
     /* Partially apply a function by filling in given arguments.
      *
      * |Name       |Type    |Desc                                    |
@@ -5964,10 +5651,8 @@ export var partial = _.partial = (function (exports)
      * restArgs toArr 
      */
 
-    exports = restArgs(function (fn, partials)
-    {
-        return function ()
-        {
+    exports = restArgs(function(fn, partials) {
+        return function() {
             var args = [];
 
             args = args.concat(partials);
@@ -5982,8 +5667,7 @@ export var partial = _.partial = (function (exports)
 
 /* ------------------------------ once ------------------------------ */
 
-export var once = _.once = (function (exports)
-{
+export var once = _.once = (function (exports) {
     /* Create a function that invokes once.
      *
      * |Name  |Type    |Desc                   |
@@ -6015,8 +5699,7 @@ export var once = _.once = (function (exports)
 
 /* ------------------------------ Emitter ------------------------------ */
 
-export var Emitter = _.Emitter = (function (exports)
-{
+export var Emitter = _.Emitter = (function (exports) {
     /* Event emitter class which provides observer pattern.
      *
      * ### on
@@ -6070,64 +5753,65 @@ export var Emitter = _.Emitter = (function (exports)
      * Class has each slice once 
      */
 
-    exports = Class({
-        initialize: function Emitter()
+    exports = Class(
         {
-            this._events = this._events || {};
+            initialize: function Emitter() {
+                this._events = this._events || {};
+            },
+            on: function(event, listener) {
+                this._events[event] = this._events[event] || [];
+                this._events[event].push(listener);
+
+                return this;
+            },
+            off: function(event, listener) {
+                if (!has(this._events, event)) return;
+
+                this._events[event].splice(
+                    this._events[event].indexOf(listener),
+                    1
+                );
+
+                return this;
+            },
+            once: function(event, listener) {
+                this.on(event, once(listener));
+
+                return this;
+            },
+            emit: function(event) {
+                if (!has(this._events, event)) return;
+
+                var args = slice(arguments, 1);
+
+                each(
+                    this._events[event],
+                    function(val) {
+                        val.apply(this, args);
+                    },
+                    this
+                );
+
+                return this;
+            }
         },
-        on: function (event, listener)
         {
-            this._events[event] = this._events[event] || [];
-            this._events[event].push(listener);
+            mixin: function(obj) {
+                each(['on', 'off', 'once', 'emit'], function(val) {
+                    obj[val] = exports.prototype[val];
+                });
 
-            return this;
-        },
-        off: function (event, listener)
-        {
-            if (!has(this._events, event)) return;
-
-            this._events[event].splice(this._events[event].indexOf(listener), 1);
-
-            return this;
-        },
-        once: function (event, listener)
-        {
-            this.on(event, once(listener));
-
-            return this;
-        },
-        emit: function (event)
-        {
-            if (!has(this._events, event)) return;
-
-            var args = slice(arguments, 1);
-
-            each(this._events[event], function (val)
-            {
-                val.apply(this, args);
-            }, this);
-
-            return this;
+                obj._events = obj._events || {};
+            }
         }
-    }, {
-        mixin: function (obj)
-        {
-            each(['on', 'off', 'once', 'emit'], function (val)
-            {
-                obj[val] = exports.prototype[val];
-            });
-
-            obj._events = obj._events || {};
-        }
-    });
+    );
 
     return exports;
 })({});
 
 /* ------------------------------ Logger ------------------------------ */
 
-export var Logger = _.Logger = (function (exports)
-{
+export var Logger = _.Logger = (function (exports) {
     /* Simple logger with level filter.
      *
      * ### constructor
@@ -6188,87 +5872,78 @@ export var Logger = _.Logger = (function (exports)
      * Emitter Enum toArr isUndef clone isStr isNum 
      */
 
-    exports = Emitter.extend({
-        initialize: function Logger(name, level) 
+    exports = Emitter.extend(
         {
-            this.name = name;
+            initialize: function Logger(name, level) {
+                this.name = name;
 
-            this.setLevel(isUndef(level) ? exports.level.DEBUG : level);
-            this.callSuper(Emitter, 'initialize', arguments);
-        },
-        setLevel: function (level) 
-        {
-            if (isStr(level)) 
-            {
-                level = exports.level[level.toUpperCase()];
-                if (level) this._level = level;
+                this.setLevel(isUndef(level) ? exports.level.DEBUG : level);
+                this.callSuper(Emitter, 'initialize', arguments);
+            },
+            setLevel: function(level) {
+                if (isStr(level)) {
+                    level = exports.level[level.toUpperCase()];
+                    if (level) this._level = level;
+                    return this;
+                }
+                if (isNum(level)) this._level = level;
+
+                return this;
+            },
+            getLevel: function() {
+                return this._level;
+            },
+            formatter: function(type, argList) {
+                return argList;
+            },
+            trace: function() {
+                return this._log('trace', arguments);
+            },
+            debug: function() {
+                return this._log('debug', arguments);
+            },
+            info: function() {
+                return this._log('info', arguments);
+            },
+            warn: function() {
+                return this._log('warn', arguments);
+            },
+            error: function() {
+                return this._log('error', arguments);
+            },
+            _log: function(type, argList) {
+                argList = toArr(argList);
+                if (argList.length === 0) return this;
+
+                this.emit('all', type, clone(argList));
+
+                if (exports.level[type.toUpperCase()] < this._level) return this;
+                this.emit(type, clone(argList));
+                /* eslint-disable no-console */
+                var consoleMethod = type === 'debug' ? console.log : console[type];
+                consoleMethod.apply(console, this.formatter(type, argList));
+
                 return this;
             }
-            if (isNum(level)) this._level = level;
-
-            return this;
         },
-        getLevel: function () 
         {
-            return this._level;
-        },
-        formatter: function (type, argList) 
-        {
-            return argList;
-        },
-        trace: function () 
-        {
-            return this._log('trace', arguments);
-        },
-        debug: function () 
-        {
-            return this._log('debug', arguments);
-        },
-        info: function ()
-        {
-            return this._log('info', arguments);
-        },
-        warn: function () 
-        {
-            return this._log('warn', arguments);
-        },
-        error: function ()
-        {
-            return this._log('error', arguments);
-        },
-        _log: function (type, argList) 
-        {
-            argList = toArr(argList);
-            if (argList.length === 0) return this;
-
-            this.emit('all', type, clone(argList));
-
-            if (exports.level[type.toUpperCase()] < this._level) return this;
-            this.emit(type, clone(argList));
-            /* eslint-disable no-console */
-            var consoleMethod = type === 'debug' ? console.log : console[type];
-            consoleMethod.apply(console, this.formatter(type, argList));
-
-            return this;
+            level: new Enum({
+                TRACE: 0,
+                DEBUG: 1,
+                INFO: 2,
+                WARN: 3,
+                ERROR: 4,
+                SILENT: 5
+            })
         }
-    }, {
-        level: new Enum({
-            TRACE: 0,
-            DEBUG: 1,
-            INFO: 2,
-            WARN: 3,
-            ERROR: 4,
-            SILENT: 5
-        })
-    });
+    );
 
     return exports;
 })({});
 
 /* ------------------------------ Store ------------------------------ */
 
-export var Store = _.Store = (function (exports)
-{
+export var Store = _.Store = (function (exports) {
     /* Memory storage.
      *
      * Extend from Emitter.
@@ -6358,29 +6033,24 @@ export var Store = _.Store = (function (exports)
      */
 
     exports = Emitter.extend({
-        initialize: function Store(data) 
-        {
+        initialize: function Store(data) {
             this.callSuper(Emitter, 'initialize', arguments);
             this._data = data || {};
             this.save(this._data);
         },
-        set: function (key, val) 
-        {
+        set: function(key, val) {
             var data;
 
-            if (isStr(key)) 
-            {
+            if (isStr(key)) {
                 data = {};
                 data[key] = val;
-            } else if (isObj(key)) 
-            {
+            } else if (isObj(key)) {
                 data = key;
             }
 
             var self = this;
 
-            each(data, function (val, key) 
-            {
+            each(data, function(val, key) {
                 var oldVal = self._data[key];
                 self._data[key] = val;
                 self.emit('change', key, val, oldVal);
@@ -6388,46 +6058,39 @@ export var Store = _.Store = (function (exports)
 
             this.save(this._data);
         },
-        get: function (key) 
-        {
+        get: function(key) {
             var data = this._data;
 
             if (isStr(key)) return data[key];
 
             var ret = {};
-            each(key, function (val) 
-            {
+            each(key, function(val) {
                 ret[val] = data[val];
-            });        
+            });
 
             return ret;
         },
-        remove: function (key) 
-        {
+        remove: function(key) {
             key = toArr(key);
 
             var data = this._data;
 
-            each(key, function (val) 
-            {
+            each(key, function(val) {
                 delete data[val];
             });
 
             this.save(data);
         },
-        clear: function () 
-        {
+        clear: function() {
             this._data = {};
 
             this.save(this._data);
         },
-        each: function (fn) 
-        {
+        each: function(fn) {
             each(this._data, fn);
         },
         // This methods exists to be overwritten.
-        save: function (data) 
-        {
+        save: function(data) {
             this._data = data;
         }
     });
@@ -6437,8 +6100,7 @@ export var Store = _.Store = (function (exports)
 
 /* ------------------------------ orientation ------------------------------ */
 
-export var orientation = _.orientation = (function (exports)
-{
+export var orientation = _.orientation = (function (exports) {
     /* Screen orientation helper.
      *
      * ### on
@@ -6474,35 +6136,36 @@ export var orientation = _.orientation = (function (exports)
     var screen = window.screen;
 
     exports = {
-        get: function () 
-        {
-            if (screen) 
-            {
+        get: function() {
+            if (screen) {
                 var orientation = safeGet(screen, 'orientation.type');
                 if (orientation) return orientation.split('-').shift();
-            } 
+            }
 
-            return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'; 
+            return window.innerWidth > window.innerHeight
+                ? 'landscape'
+                : 'portrait';
         }
     };
 
     Emitter.mixin(exports);
 
-    window.addEventListener('orientationchange', function () 
-    {
-        setTimeout(function () 
-        {
-            exports.emit('change', exports.get());
-        }, 200);
-    }, false);
+    window.addEventListener(
+        'orientationchange',
+        function() {
+            setTimeout(function() {
+                exports.emit('change', exports.get());
+            }, 200);
+        },
+        false
+    );
 
     return exports;
 })({});
 
 /* ------------------------------ perfNow ------------------------------ */
 
-export var perfNow = _.perfNow = (function (exports)
-{
+export var perfNow = _.perfNow = (function (exports) {
     /* High resolution time up to microsecond precision.
      *
      * ```javascript
@@ -6527,29 +6190,22 @@ export var perfNow = _.perfNow = (function (exports)
         process = root.process,
         loadTime;
 
-    if (performance && performance.now) 
-    {
-        exports = function () 
-        {
+    if (performance && performance.now) {
+        exports = function() {
             return performance.now();
         };
-    } else if (process && process.hrtime) 
-    {
-        var getNanoSeconds = function () 
-        {
+    } else if (process && process.hrtime) {
+        var getNanoSeconds = function() {
             var hr = process.hrtime();
             return hr[0] * 1e9 + hr[1];
         };
         loadTime = getNanoSeconds() - process.uptime() * 1e9;
-        exports = function () 
-        {
+        exports = function() {
             return (getNanoSeconds() - loadTime) / 1e6;
         };
-    } else 
-    {
+    } else {
         loadTime = now();
-        exports = function ()
-        {
+        exports = function() {
             return now() - loadTime;
         };
     }
@@ -6559,8 +6215,7 @@ export var perfNow = _.perfNow = (function (exports)
 
 /* ------------------------------ pxToNum ------------------------------ */
 
-export var pxToNum = _.pxToNum = (function ()
-{
+export var pxToNum = _.pxToNum = (function () {
     /* Turn string like '0px' to number.
      */
 
@@ -6568,8 +6223,7 @@ export var pxToNum = _.pxToNum = (function ()
      * toNum 
      */
 
-    function exports(str)
-    {
+    function exports(str) {
         return toNum(str.replace('px', ''));
     }
 
@@ -6578,8 +6232,7 @@ export var pxToNum = _.pxToNum = (function ()
 
 /* ------------------------------ rmCookie ------------------------------ */
 
-export var rmCookie = _.rmCookie = (function ()
-{
+export var rmCookie = _.rmCookie = (function () {
     /* Loop through all possible path and domain to remove cookie.
      *
      * |Name|Type  |Desc      |
@@ -6598,12 +6251,11 @@ export var rmCookie = _.rmCookie = (function ()
 
     /* dependencies
      * cookie 
-     */ 
+     */
 
-    function exports(key) 
-    {
+    function exports(key) {
         var location = window.location,
-            hostname = location.hostname, 
+            hostname = location.hostname,
             pathname = location.pathname,
             hostNames = hostname.split('.'),
             pathNames = pathname.split('/'),
@@ -6613,30 +6265,30 @@ export var rmCookie = _.rmCookie = (function ()
 
         if (del()) return;
 
-        for (var i = hostNames.length - 1; i >= 0; i--)
-        {
+        for (var i = hostNames.length - 1; i >= 0; i--) {
             var hostName = hostNames[i];
             if (hostName === '') continue;
-            domain = (domain === '') ? hostName : hostName + '.' + domain ;
+            domain = domain === '' ? hostName : hostName + '.' + domain;
 
             path = '/';
-            if (del({domain: domain, path: path}) || del({domain: domain})) return;
+            if (del({ domain: domain, path: path }) || del({ domain: domain }))
+                return;
 
-            for (var j = 0; j < pathLen; j++)
-            {
+            for (var j = 0; j < pathLen; j++) {
                 var pathName = pathNames[j];
                 if (pathName === '') continue;
 
                 path += pathName;
-                if (del({domain: domain, path: path}) || del({path: path})) return;
+                if (del({ domain: domain, path: path }) || del({ path: path }))
+                    return;
 
                 path += '/';
-                if (del({domain: domain, path: path}) || del({path: path})) return;
+                if (del({ domain: domain, path: path }) || del({ path: path }))
+                    return;
             }
         }
 
-        function del(options)
-        {
+        function del(options) {
             options = options || {};
 
             cookie.remove(key, options);
@@ -6650,8 +6302,7 @@ export var rmCookie = _.rmCookie = (function ()
 
 /* ------------------------------ rtrim ------------------------------ */
 
-export var rtrim = _.rtrim = (function ()
-{
+export var rtrim = _.rtrim = (function () {
     /* Remove chars or white-spaces from end of string.
      *
      * |Name  |Type        |Desc              |
@@ -6674,25 +6325,22 @@ export var rtrim = _.rtrim = (function ()
 
     var regSpace = /\s+$/;
 
-    function exports(str, chars)
-    {
+    function exports(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
 
         var end = str.length - 1,
             charLen = chars.length,
             found = true,
-            i, c;
+            i,
+            c;
 
-        while (found && end >= 0)
-        {
+        while (found && end >= 0) {
             found = false;
             i = -1;
             c = str.charAt(end);
 
-            while (++i < charLen)
-            {
-                if (c === chars[i])
-                {
+            while (++i < charLen) {
+                if (c === chars[i]) {
                     found = true;
                     end--;
                     break;
@@ -6700,7 +6348,7 @@ export var rtrim = _.rtrim = (function ()
             }
         }
 
-        return (end >= 0) ? str.substring(0, end + 1) : '';
+        return end >= 0 ? str.substring(0, end + 1) : '';
     }
 
     return exports;
@@ -6708,8 +6356,7 @@ export var rtrim = _.rtrim = (function ()
 
 /* ------------------------------ trim ------------------------------ */
 
-export var trim = _.trim = (function ()
-{
+export var trim = _.trim = (function () {
     /* Remove chars or white-spaces from beginning end of string.
      *
      * |Name  |Type        |Desc              |
@@ -6736,8 +6383,7 @@ export var trim = _.trim = (function ()
 
     var regSpace = /^\s+|\s+$/g;
 
-    function exports(str, chars)
-    {
+    function exports(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
 
         return ltrim(rtrim(str, chars), chars);
@@ -6748,8 +6394,7 @@ export var trim = _.trim = (function ()
 
 /* ------------------------------ getFileName ------------------------------ */
 
-export var getFileName = _.getFileName = (function ()
-{
+export var getFileName = _.getFileName = (function () {
     /* Extract file name from url.
      */
 
@@ -6757,8 +6402,7 @@ export var getFileName = _.getFileName = (function ()
      * last trim 
      */
 
-    function exports(url)
-    {
+    function exports(url) {
         var ret = last(url.split('/'));
 
         if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0]);
@@ -6771,8 +6415,7 @@ export var getFileName = _.getFileName = (function ()
 
 /* ------------------------------ query ------------------------------ */
 
-export var query = _.query = (function (exports)
-{
+export var query = _.query = (function (exports) {
     /* Parse and stringify url query strings.
      *
      * ### parse
@@ -6810,14 +6453,12 @@ export var query = _.query = (function (exports)
      */
 
     exports = {
-        parse: function (str)
-        {
+        parse: function(str) {
             var ret = {};
 
             str = trim(str).replace(regIllegalChars, '');
 
-            each(str.split('&'), function (param)
-            {
+            each(str.split('&'), function(param) {
                 var parts = param.split('=');
 
                 var key = parts.shift(),
@@ -6826,32 +6467,35 @@ export var query = _.query = (function (exports)
                 key = decodeURIComponent(key);
                 val = decodeURIComponent(val);
 
-                if (isUndef(ret[key]))
-                {
+                if (isUndef(ret[key])) {
                     ret[key] = val;
-                } else if (isArr(ret[key]))
-                {
+                } else if (isArr(ret[key])) {
                     ret[key].push(val);
-                } else
-                {
+                } else {
                     ret[key] = [ret[key], val];
                 }
             });
 
             return ret;
         },
-        stringify: function (obj, arrKey)
-        {
-            return filter(map(obj, function (val, key)
-            {
-                if (isObj(val) && isEmpty(val)) return '';
-                if (isArr(val)) return exports.stringify(val, key);
+        stringify: function(obj, arrKey) {
+            return filter(
+                map(obj, function(val, key) {
+                    if (isObj(val) && isEmpty(val)) return '';
+                    if (isArr(val)) return exports.stringify(val, key);
 
-                return (arrKey ? encodeURIComponent(arrKey) : encodeURIComponent(key)) + '=' + encodeURIComponent(val);
-            }), function (str)
-            {
-                return str.length > 0;
-            }).join('&');
+                    return (
+                        (arrKey
+                            ? encodeURIComponent(arrKey)
+                            : encodeURIComponent(key)) +
+                        '=' +
+                        encodeURIComponent(val)
+                    );
+                }),
+                function(str) {
+                    return str.length > 0;
+                }
+            ).join('&');
         }
     };
 
@@ -6862,8 +6506,7 @@ export var query = _.query = (function (exports)
 
 /* ------------------------------ Url ------------------------------ */
 
-export var Url = _.Url = (function (exports)
-{
+export var Url = _.Url = (function (exports) {
     /* Simple url manipulator.
      *
      * ### constructor
@@ -6945,144 +6588,130 @@ export var Url = _.Url = (function (exports)
      * Class extend trim query isEmpty each isArr toArr isBrowser 
      */
 
-    exports = Class({
-        className: 'Url',
-        initialize: function (url)
+    exports = Class(
         {
-            if (!url && isBrowser) url = window.location.href;
-            extend(this, exports.parse(url || ''));
-        },
-        setQuery: function (name, val)
-        {
-            var query = this.query;
+            className: 'Url',
+            initialize: function(url) {
+                if (!url && isBrowser) url = window.location.href;
+                extend(this, exports.parse(url || ''));
+            },
+            setQuery: function(name, val) {
+                var query = this.query;
 
-            if (isObj(name))
-            {
-                each(name, function (val, key)
-                {
-                    query[key] = val;
+                if (isObj(name)) {
+                    each(name, function(val, key) {
+                        query[key] = val;
+                    });
+                } else {
+                    query[name] = val;
+                }
+
+                return this;
+            },
+            rmQuery: function(name) {
+                var query = this.query;
+
+                if (!isArr(name)) name = toArr(name);
+                each(name, function(key) {
+                    delete query[key];
                 });
-            } else
-            {
-                query[name] = val;
+
+                return this;
+            },
+            toString: function() {
+                return exports.stringify(this);
             }
-
-            return this;
         },
-        rmQuery: function (name)
         {
-            var query = this.query;
+            parse: function(url) {
+                var ret = {
+                        protocol: '',
+                        auth: '',
+                        hostname: '',
+                        hash: '',
+                        query: {},
+                        port: '',
+                        pathname: '',
+                        slashes: false
+                    },
+                    rest = trim(url);
 
-            if (!isArr(name)) name = toArr(name);
-            each(name, function (key)
-            {
-                delete query[key];
-            });
+                var proto = rest.match(regProto);
+                if (proto) {
+                    proto = proto[0];
+                    ret.protocol = proto.toLowerCase();
+                    rest = rest.substr(proto.length);
+                }
 
-            return this;
-        },
-        toString: function ()
-        {
-            return exports.stringify(this);
+                if (proto) {
+                    var slashes = rest.substr(0, 2) === '//';
+                    if (slashes) {
+                        rest = rest.slice(2);
+                        ret.slashes = true;
+                    }
+                }
+
+                if (slashes) {
+                    var hostEnd = -1;
+                    for (var i = 0, len = hostEndingChars.length; i < len; i++) {
+                        var pos = rest.indexOf(hostEndingChars[i]);
+                        if (pos !== -1 && (hostEnd === -1 || pos < hostEnd))
+                            hostEnd = pos;
+                    }
+
+                    var host = rest.slice(0, hostEnd);
+                    rest = rest.slice(hostEnd);
+
+                    var atSign = host.lastIndexOf('@');
+
+                    if (atSign !== -1) {
+                        ret.auth = decodeURIComponent(host.slice(0, atSign));
+                        host = host.slice(atSign + 1);
+                    }
+
+                    ret.hostname = host;
+                    var port = host.match(regPort);
+                    if (port) {
+                        port = port[0];
+                        if (port !== ':') ret.port = port.substr(1);
+                        ret.hostname = host.substr(0, host.length - port.length);
+                    }
+                }
+
+                var hash = rest.indexOf('#');
+
+                if (hash !== -1) {
+                    ret.hash = rest.substr(hash);
+                    rest = rest.slice(0, hash);
+                }
+
+                var queryMark = rest.indexOf('?');
+
+                if (queryMark !== -1) {
+                    ret.query = query.parse(rest.substr(queryMark + 1));
+                    rest = rest.slice(0, queryMark);
+                }
+
+                ret.pathname = rest || '/';
+
+                return ret;
+            },
+            stringify: function(obj) {
+                var ret =
+                    obj.protocol +
+                    (obj.slashes ? '//' : '') +
+                    (obj.auth ? encodeURIComponent(obj.auth) + '@' : '') +
+                    obj.hostname +
+                    (obj.port ? ':' + obj.port : '') +
+                    obj.pathname;
+
+                if (!isEmpty(obj.query)) ret += '?' + query.stringify(obj.query);
+                if (obj.hash) ret += obj.hash;
+
+                return ret;
+            }
         }
-    }, {
-        parse: function (url)
-        {
-            var ret = {
-                    protocol: '',
-                    auth: '',
-                    hostname: '',
-                    hash: '',
-                    query: {},
-                    port: '',
-                    pathname: '',
-                    slashes: false
-                },
-                rest = trim(url);
-
-            var proto = rest.match(regProto);
-            if (proto)
-            {
-                proto = proto[0];
-                ret.protocol = proto.toLowerCase();
-                rest = rest.substr(proto.length);
-            }
-
-            if (proto)
-            {
-                var slashes = rest.substr(0, 2) === '//';
-                if (slashes)
-                {
-                    rest = rest.slice(2);
-                    ret.slashes = true;
-                }
-            }
-
-            if (slashes)
-            {
-                var hostEnd = -1;
-                for (var i = 0, len = hostEndingChars.length; i < len; i++)
-                {
-                    var pos = rest.indexOf(hostEndingChars[i]);
-                    if (pos !== -1 && (hostEnd === -1 || pos < hostEnd)) hostEnd = pos;
-                }
-
-                var host = rest.slice(0, hostEnd);
-                rest = rest.slice(hostEnd);
-
-                var atSign = host.lastIndexOf('@');
-
-                if (atSign !== -1)
-                {
-                    ret.auth = decodeURIComponent(host.slice(0, atSign));
-                    host = host.slice(atSign + 1);
-                }
-
-                ret.hostname = host;
-                var port = host.match(regPort);
-                if (port)
-                {
-                    port = port[0];
-                    if (port !== ':') ret.port = port.substr(1);
-                    ret.hostname = host.substr(0, host.length - port.length);
-                }
-            }
-
-            var hash = rest.indexOf('#');
-
-            if (hash !== -1)
-            {
-                ret.hash = rest.substr(hash);
-                rest = rest.slice(0, hash);
-            }
-
-            var queryMark = rest.indexOf('?');
-
-            if (queryMark !== -1)
-            {
-                ret.query = query.parse(rest.substr(queryMark + 1));
-                rest = rest.slice(0, queryMark);
-            }
-
-            ret.pathname = rest || '/';
-
-            return ret;
-        },
-        stringify: function (obj)
-        {
-            var ret = obj.protocol +
-                      (obj.slashes ? '//' : '') +
-                      (obj.auth ? encodeURIComponent(obj.auth) + '@' : '') +
-                      obj.hostname +
-                      (obj.port ? (':' + obj.port) : '') +
-                      obj.pathname;
-
-            if (!isEmpty(obj.query)) ret += '?' + query.stringify(obj.query);
-            if (obj.hash) ret += obj.hash;
-
-            return ret;
-        }
-    });
+    );
 
     var regProto = /^([a-z0-9.+-]+:)/i,
         regPort = /:[0-9]*$/,
@@ -7093,8 +6722,7 @@ export var Url = _.Url = (function (exports)
 
 /* ------------------------------ ajax ------------------------------ */
 
-export var ajax = _.ajax = (function ()
-{
+export var ajax = _.ajax = (function () {
     /* Perform an asynchronous HTTP request.
      *
      * |Name   |Type  |Desc        |
@@ -7157,8 +6785,7 @@ export var ajax = _.ajax = (function ()
      * isFn noop defaults isObj query 
      */
 
-    function exports(options)
-    {
+    function exports(options) {
         defaults(options, exports.setting);
 
         var type = options.type,
@@ -7172,8 +6799,7 @@ export var ajax = _.ajax = (function ()
             xhr = options.xhr(),
             abortTimeout;
 
-        xhr.onreadystatechange = function ()
-        {
+        xhr.onreadystatechange = function() {
             if (xhr.readyState !== 4) return;
 
             clearTimeout(abortTimeout);
@@ -7181,41 +6807,35 @@ export var ajax = _.ajax = (function ()
             var result;
 
             var status = xhr.status;
-            if ((status >= 200 && status < 300) || status === 304)
-            {
+            if ((status >= 200 && status < 300) || status === 304) {
                 result = xhr.responseText;
                 if (dataType === 'xml') result = xhr.responseXML;
                 try {
                     if (dataType === 'json') result = JSON.parse(result);
-                /* eslint-disable no-empty */
+                    /* eslint-disable no-empty */
                 } catch (e) {}
                 success(result, xhr);
-            } else
-            {
+            } else {
                 error(xhr);
             }
 
             complete(xhr);
         };
 
-        if (type === 'GET')
-        {
+        if (type === 'GET') {
             data = query.stringify(data);
             url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
-        } else if (options.contentType === 'application/x-www-form-urlencoded')
-        {
-            if(isObj(data)) data = query.stringify(data);
+        } else if (options.contentType === 'application/x-www-form-urlencoded') {
+            if (isObj(data)) data = query.stringify(data);
         } else if (options.contentType === 'application/json') {
-            if(isObj(data)) data = JSON.stringify(data);
+            if (isObj(data)) data = JSON.stringify(data);
         }
 
         xhr.open(type, url, true);
         xhr.setRequestHeader('Content-Type', options.contentType);
 
-        if (timeout > 0)
-        {
-            abortTimeout = setTimeout(function ()
-            {
+        if (timeout > 0) {
+            abortTimeout = setTimeout(function() {
                 xhr.onreadystatechange = noop;
                 xhr.abort();
                 error(xhr, 'timeout');
@@ -7235,27 +6855,25 @@ export var ajax = _.ajax = (function ()
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         data: {},
-        xhr: function () { return new XMLHttpRequest(); },
+        xhr: function() {
+            return new XMLHttpRequest();
+        },
         timeout: 0
     };
 
-    exports.get = function ()
-    {
+    exports.get = function() {
         return exports(parseArgs.apply(null, arguments));
     };
 
-    exports.post = function ()
-    {
+    exports.post = function() {
         var options = parseArgs.apply(null, arguments);
         options.type = 'POST';
 
         return exports(options);
     };
 
-    function parseArgs(url, data, success, dataType)
-    {
-        if (isFn(data))
-        {
+    function parseArgs(url, data, success, dataType) {
+        if (isFn(data)) {
             dataType = success;
             success = data;
             data = {};
@@ -7274,8 +6892,7 @@ export var ajax = _.ajax = (function ()
 
 /* ------------------------------ type ------------------------------ */
 
-export var type = _.type = (function ()
-{
+export var type = _.type = (function () {
     /* Determine the internal JavaScript [[Class]] of an object.
      *
      * |Name  |Type  |Desc                      |
@@ -7300,8 +6917,7 @@ export var type = _.type = (function ()
      * objToStr isNaN 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         if (val === null) return 'null';
         if (val === undefined) return 'undefined';
         if (isNaN(val)) return 'nan';
@@ -7320,8 +6936,7 @@ export var type = _.type = (function ()
 
 /* ------------------------------ stringify ------------------------------ */
 
-export var stringify = _.stringify = (function ()
-{
+export var stringify = _.stringify = (function () {
     /* JSON stringify with support for circular object, function etc.
      *
      * Undefined is treated as null value.
@@ -7349,51 +6964,41 @@ export var stringify = _.stringify = (function ()
      * type upperFirst toStr isUndef isFn isRegExp 
      */
 
-    function exports(obj, spaces) 
-    {
+    function exports(obj, spaces) {
         return JSON.stringify(obj, serializer(), spaces);
     }
 
-    function serializer() 
-    {
-        var stack = [], keys = [];
+    function serializer() {
+        var stack = [],
+            keys = [];
 
-        return function (key, val) 
-        {
-            if (stack.length > 0) 
-            {
+        return function(key, val) {
+            if (stack.length > 0) {
                 var pos = stack.indexOf(this);
-                if (pos > -1) 
-                {
+                if (pos > -1) {
                     stack.splice(pos + 1);
                     keys.splice(pos, Infinity, key);
-                } else 
-                {
+                } else {
                     stack.push(this);
                     keys.push(key);
                 }
 
                 var valPos = stack.indexOf(val);
-                if (valPos > -1) 
-                {
-                    if (stack[0] === val) 
-                    {
+                if (valPos > -1) {
+                    if (stack[0] === val) {
                         val = '[Circular ~]';
-                    } else 
-                    {
-                        val = '[Circular ~.' + keys.slice(0, valPos).join('.') + ']';
+                    } else {
+                        val =
+                            '[Circular ~.' + keys.slice(0, valPos).join('.') + ']';
                     }
                 }
-            } else
-            {
+            } else {
                 stack.push(val);
             }
 
-            if (isRegExp(val) || isFn(val)) 
-            {
+            if (isRegExp(val) || isFn(val)) {
                 val = '[' + upperFirst(type(val)) + ' ' + toStr(val) + ']';
-            } else if (isUndef(val)) 
-            {
+            } else if (isUndef(val)) {
                 val = null;
             }
 
@@ -7406,8 +7011,7 @@ export var stringify = _.stringify = (function ()
 
 /* ------------------------------ LocalStore ------------------------------ */
 
-export var LocalStore = _.LocalStore = (function (exports)
-{
+export var LocalStore = _.LocalStore = (function (exports) {
     /* LocalStorage wrapper.
      * 
      * Extend from Store.
@@ -7432,29 +7036,25 @@ export var LocalStore = _.LocalStore = (function (exports)
 
     /* dependencies
      * Store safeStorage isEmpty stringify defaults isObj 
-     */ 
+     */
 
     var localStorage = safeStorage('local');
 
     exports = Store.extend({
-        initialize: function LocalStore(name, data) 
-        {
+        initialize: function LocalStore(name, data) {
             this._name = name;
 
             var localData = localStorage.getItem(name);
-            try 
-            {
+            try {
                 localData = JSON.parse(localData);
-            } catch (e) 
-            {
-                localData = {};            
+            } catch (e) {
+                localData = {};
             }
             if (!isObj(localData)) localData = {};
             data = defaults(localData, data);
             this.callSuper(Store, 'initialize', [data]);
         },
-        save: function (data) 
-        {
+        save: function(data) {
             if (isEmpty(data)) return localStorage.removeItem(this._name);
             localStorage.setItem(this._name, stringify(data));
         }
@@ -7465,8 +7065,7 @@ export var LocalStore = _.LocalStore = (function (exports)
 
 /* ------------------------------ stripHtmlTag ------------------------------ */
 
-export var stripHtmlTag = _.stripHtmlTag = (function ()
-{
+export var stripHtmlTag = _.stripHtmlTag = (function () {
     /* Strip html tags from a string.
      *
      * |Name  |Type  |Desc           |
@@ -7486,8 +7085,7 @@ export var stripHtmlTag = _.stripHtmlTag = (function ()
 
     var regHtmlTag = /<[^>]*>/g;
 
-    function exports(str)
-    {
+    function exports(str) {
         return str.replace(regHtmlTag, '');
     }
 
@@ -7496,8 +7094,7 @@ export var stripHtmlTag = _.stripHtmlTag = (function ()
 
 /* ------------------------------ tryIt ------------------------------ */
 
-export var tryIt = _.tryIt = (function ()
-{
+export var tryIt = _.tryIt = (function () {
     /* Run function in a try catch.
      * 
      * |Name|Type    |Desc                 |
@@ -7523,17 +7120,14 @@ export var tryIt = _.tryIt = (function ()
 
     /* dependencies
      * noop 
-     */ 
+     */
 
-    function exports(fn, cb) 
-    {
+    function exports(fn, cb) {
         cb = cb || noop;
 
-        try 
-        {
+        try {
             cb(null, fn());
-        } catch(e) 
-        {
+        } catch (e) {
             cb(e);
             return;
         }
@@ -7544,8 +7138,7 @@ export var tryIt = _.tryIt = (function ()
 
 /* ------------------------------ uniqId ------------------------------ */
 
-export var uniqId = _.uniqId = (function ()
-{
+export var uniqId = _.uniqId = (function () {
     /* Generate a globally-unique id.
      *
      * |Name  |Type  |Desc              |
@@ -7565,8 +7158,7 @@ export var uniqId = _.uniqId = (function ()
 
     var idCounter = 0;
 
-    function exports(prefix)
-    {
+    function exports(prefix) {
         var id = ++idCounter + '';
 
         return prefix ? prefix + id : id;
@@ -7577,8 +7169,7 @@ export var uniqId = _.uniqId = (function ()
 
 /* ------------------------------ unique ------------------------------ */
 
-export var unique = _.unique = (function ()
-{
+export var unique = _.unique = (function () {
     /* Create duplicate-free version of an array.
      *
      * |Name     |Type    |Desc                         |
@@ -7601,16 +7192,13 @@ export var unique = _.unique = (function ()
      * filter 
      */
 
-    function exports(arr, compare)
-    {
+    function exports(arr, compare) {
         compare = compare || isEqual;
 
-        return filter(arr, function (item, idx, arr)
-        {
+        return filter(arr, function(item, idx, arr) {
             var len = arr.length;
 
-            while (++idx < len)
-            {
+            while (++idx < len) {
                 if (compare(item, arr[idx])) return false;
             }
 
@@ -7618,8 +7206,7 @@ export var unique = _.unique = (function ()
         });
     }
 
-    function isEqual(a, b)
-    {
+    function isEqual(a, b) {
         return a === b;
     }
 
@@ -7628,8 +7215,7 @@ export var unique = _.unique = (function ()
 
 /* ------------------------------ viewportScale ------------------------------ */
 
-export var viewportScale = _.viewportScale = (function ()
-{
+export var viewportScale = _.viewportScale = (function () {
     /* Get viewport scale.
      * 
      * ```javascript
@@ -7646,23 +7232,20 @@ export var viewportScale = _.viewportScale = (function ()
      * meta clamp trim each map isNaN 
      */
 
-    function exports() 
-    {
+    function exports() {
         var viewport = meta('viewport');
 
         if (!viewport) return 1;
 
-        viewport = map(viewport.split(','), function (val) 
-        { 
-            return trim(val); 
+        viewport = map(viewport.split(','), function(val) {
+            return trim(val);
         });
 
         var minScale = 0.25,
             maxScale = 5,
             initialScale = 1;
 
-        each(viewport, function (val)
-        {
+        each(viewport, function(val) {
             val = val.split('=');
 
             var key = val[0];
@@ -7686,8 +7269,7 @@ export var viewportScale = _.viewportScale = (function ()
 
 /* ------------------------------ wrap ------------------------------ */
 
-export var wrap = _.wrap = (function ()
-{
+export var wrap = _.wrap = (function () {
     /* Wrap the function inside a wrapper function, passing it as the first argument.
      *
      * |Name   |Type    |Desc            |
@@ -7714,8 +7296,7 @@ export var wrap = _.wrap = (function ()
      * partial 
      */
 
-    function exports(fn, wrapper)
-    {
+    function exports(fn, wrapper) {
         return partial(wrapper, fn);
     }
 

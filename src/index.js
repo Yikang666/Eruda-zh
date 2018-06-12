@@ -15,11 +15,11 @@ import logger from './lib/logger';
 import extraUtil from './lib/extraUtil';
 import util from './lib/util';
 import {
-    isFn, 
-    evalCss, 
-    isNum, 
-    isMobile, 
-    viewportScale, 
+    isFn,
+    evalCss,
+    isNum,
+    isMobile,
+    viewportScale,
     detectBrowser,
     $,
     toArr,
@@ -29,8 +29,7 @@ import {
 } from './lib/util';
 
 module.exports = {
-    init({container, tool, autoScale = true, useShadowDom = true} = {})
-    {
+    init({ container, tool, autoScale = true, useShadowDom = true } = {}) {
         this._isInit = true;
         this._scale = 1;
 
@@ -46,18 +45,24 @@ module.exports = {
     },
     _isInit: false,
     version: VERSION,
-    config, util,
-    Tool, Console, Elements, Network, Sources, Resources, Info, Snippets,
-    get(name)
-    {
+    config,
+    util,
+    Tool,
+    Console,
+    Elements,
+    Network,
+    Sources,
+    Resources,
+    Info,
+    Snippets,
+    get(name) {
         if (!this._checkInit()) return;
 
         let devTools = this._devTools;
 
         return name ? devTools.get(name) : devTools;
     },
-    add(tool)
-    {
+    add(tool) {
         if (!this._checkInit()) return;
 
         if (isFn(tool)) tool = tool(this);
@@ -66,14 +71,12 @@ module.exports = {
 
         return this;
     },
-    remove(name) 
-    {
+    remove(name) {
         this._devTools.remove(name);
 
         return this;
     },
-    show(name)
-    {
+    show(name) {
         if (!this._checkInit()) return;
 
         let devTools = this._devTools;
@@ -82,16 +85,14 @@ module.exports = {
 
         return this;
     },
-    hide() 
-    {
+    hide() {
         if (!this._checkInit()) return;
 
         this._devTools.hide();
 
         return this;
     },
-    destroy() 
-    {
+    destroy() {
         this._devTools.destroy();
         delete this._devTools;
         this._entryBtn.destroy();
@@ -100,10 +101,8 @@ module.exports = {
         this._$el.remove();
         evalCss.clear();
     },
-    scale(s) 
-    {
-        if (isNum(s)) 
-        {
+    scale(s) {
+        if (isNum(s)) {
             this._scale = s;
             emitter.emit(emitter.SCALE, s);
             return this;
@@ -111,14 +110,12 @@ module.exports = {
 
         return this._scale;
     },
-    _autoScale() 
-    {
+    _autoScale() {
         if (!isMobile()) return;
 
         this.scale(1 / viewportScale());
     },
-    _registerListener() 
-    {
+    _registerListener() {
         this._addListener = (...args) => this.add(...args);
         this._showListener = (...args) => this.show(...args);
 
@@ -126,37 +123,29 @@ module.exports = {
         emitter.on(emitter.SHOW, this._showListener);
         emitter.on(emitter.SCALE, evalCss.setScale);
     },
-    _unregisterListener() 
-    {
+    _unregisterListener() {
         emitter.off(emitter.ADD, this._addListener);
         emitter.off(emitter.SHOW, this._showListener);
         emitter.off(emitter.SCALE, evalCss.setScale);
     },
-    _checkInit() 
-    {
+    _checkInit() {
         if (!this._isInit) logger.error('Please call "eruda.init()" first');
         return this._isInit;
     },
-    _initContainer(el, useShadowDom)
-    {
-        if (!el)
-        {
+    _initContainer(el, useShadowDom) {
+        if (!el) {
             el = document.createElement('div');
             document.documentElement.appendChild(el);
         }
 
         let shadowRoot;
-        if (useShadowDom) 
-        {
-            if (el.attachShadow)
-            {
-                shadowRoot = el.attachShadow({mode: 'open'});
-            } else if (el.createShadowRoot) 
-            {
+        if (useShadowDom) {
+            if (el.attachShadow) {
+                shadowRoot = el.attachShadow({ mode: 'open' });
+            } else if (el.createShadowRoot) {
                 shadowRoot = el.createShadowRoot();
             }
-            if (shadowRoot) 
-            {
+            if (shadowRoot) {
                 // font-face doesn't work inside shadow dom.
                 evalCss.container = document.head;
                 evalCss(require('./style/icon.css'));
@@ -178,64 +167,66 @@ module.exports = {
 
         this._$el = $(el);
     },
-    _initDevTools()
-    {
+    _initDevTools() {
         this._devTools = new DevTools(this._$el);
     },
-    _initStyle()
-    {
+    _initStyle() {
         let className = 'eruda-style-container',
             $el = this._$el;
 
-        if (this._shadowRoot) 
-        {
+        if (this._shadowRoot) {
             evalCss.container = this._shadowRoot;
             evalCss(':host { all: initial }');
-        } else 
-        {
+        } else {
             $el.append(`<div class="${className}"></div>`);
             evalCss.container = $el.find(`.${className}`).get(0);
         }
 
         evalCss(
             require('./style/style.scss') +
-            require('./style/reset.scss') +
-            require('./style/icon.css')
+                require('./style/reset.scss') +
+                require('./style/icon.css')
         );
     },
-    _initEntryBtn()
-    {
+    _initEntryBtn() {
         this._entryBtn = new EntryBtn(this._$el);
         this._entryBtn.on('click', () => this._devTools.toggle());
     },
-    _initSettings()
-    {
+    _initSettings() {
         let devTools = this._devTools,
             settings = new Settings();
 
         devTools.add(settings);
-        
+
         this._entryBtn.initCfg(settings);
         devTools.initCfg(settings);
     },
-    _initTools(tool = ['console', 'elements', 'network', 'resources', 'sources', 'info', 'snippets'])
-    {
+    _initTools(
+        tool = [
+            'console',
+            'elements',
+            'network',
+            'resources',
+            'sources',
+            'info',
+            'snippets'
+        ]
+    ) {
         tool = toArr(tool).reverse();
 
         let devTools = this._devTools;
 
-        tool.forEach(name =>
-        {
+        tool.forEach(name => {
             let Tool = this[upperFirst(name)];
-            try 
-            {
+            try {
                 if (Tool) devTools.add(new Tool());
-            } catch (e) 
-            {
+            } catch (e) {
                 // Use nextTick to make sure it is possible to be caught by console panel.
-                nextTick(() => 
-                {
-                    logger.error(`Something wrong when initializing tool ${name}:`, e.message);
+                nextTick(() => {
+                    logger.error(
+                        `Something wrong when initializing tool ${name}:`,
+                        e.message
+                    );
                 });
             }
         });

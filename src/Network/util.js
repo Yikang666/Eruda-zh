@@ -1,7 +1,6 @@
-import {last} from '../lib/util';
+import { last } from '../lib/util';
 
-export function getType(contentType)
-{
+export function getType(contentType) {
     if (!contentType) return 'unknown';
 
     let type = contentType.split(';')[0].split('/');
@@ -12,8 +11,7 @@ export function getType(contentType)
     };
 }
 
-export function lenToUtf8Bytes(str)
-{
+export function lenToUtf8Bytes(str) {
     let m = encodeURIComponent(str).match(/%[89ABab]/g);
 
     return str.length + (m ? m.length : 0);

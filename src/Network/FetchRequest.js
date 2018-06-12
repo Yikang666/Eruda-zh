@@ -1,19 +1,17 @@
-import {getType, lenToUtf8Bytes} from './util';
+import { getType, lenToUtf8Bytes } from './util';
 import {
-    Emitter, 
-    fullUrl, 
-    uniqId, 
-    isStr, 
-    getFileName, 
+    Emitter,
+    fullUrl,
+    uniqId,
+    isStr,
+    getFileName,
     now,
     toNum,
     fileSize
 } from '../lib/util';
 
-export default class FetchRequest extends Emitter 
-{
-    constructor(url, options = {}) 
-    {
+export default class FetchRequest extends Emitter {
+    constructor(url, options = {}) {
         super();
 
         if (url instanceof window.Request) url = url.url;
@@ -23,8 +21,7 @@ export default class FetchRequest extends Emitter
         this._options = options;
         this._method = options.method || 'GET';
     }
-    send(fetchResult) 
-    {
+    send(fetchResult) {
         let options = this._options;
 
         let data = isStr(options.body) ? options.body : '';
@@ -37,14 +34,12 @@ export default class FetchRequest extends Emitter
             method: this._method
         });
 
-        fetchResult.then(res => 
-        {
+        fetchResult.then(res => {
             res = res.clone();
 
             let type = getType(res.headers.get('Content-Type'));
-            
-            res.text().then(resTxt => 
-            {
+
+            res.text().then(resTxt => {
                 this.emit('update', this._id, {
                     type: type.type,
                     subType: type.subType,
@@ -62,28 +57,24 @@ export default class FetchRequest extends Emitter
     }
 }
 
-function getSize(res, resTxt) 
-{
+function getSize(res, resTxt) {
     let size = 0;
 
     let contentLen = res.headers.get('Content-length');
 
-    if (contentLen) 
-    {
-        size = toNum(contentLen); 
-    } else 
-    {
+    if (contentLen) {
+        size = toNum(contentLen);
+    } else {
         size = lenToUtf8Bytes(resTxt);
     }
 
     return `${fileSize(size)}B`;
 }
 
-function getHeaders(res) 
-{
+function getHeaders(res) {
     let ret = {};
 
-    res.headers.forEach((val, key) => ret[key] = val);
+    res.headers.forEach((val, key) => (ret[key] = val));
 
     return ret;
 }

@@ -12,7 +12,7 @@ exports.plugins = exports.plugins.concat([
         comments: /eruda/
     }),
     new webpack.DefinePlugin({
-        ENV: '"production"',
+        ENV: '"production"'
     })
 ]);
 

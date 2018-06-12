@@ -1,25 +1,21 @@
 import stringify from '../lib/stringify';
 import StringifyWorker from '../lib/stringifyWorker';
-import {nextTick, uniqId, tryIt} from '../lib/util';
+import { nextTick, uniqId, tryIt } from '../lib/util';
 
 let isWorkerSupported = !!window.Worker;
 
 let callbacks = {},
     worker;
 
-if (isWorkerSupported) 
-{
-    tryIt(function () 
-    {
+if (isWorkerSupported) {
+    tryIt(function() {
         /* Some browsers like uc mobile doesn't destroy worker properly after refreshing.
          * After a few times of visiting, it reaches the maximum number of workers per site. 
          */
         worker = new StringifyWorker();
-        worker.onmessage = function (e) 
-        {
+        worker.onmessage = function(e) {
             let [id, result] = e.data;
-            if (callbacks[id]) 
-            {
+            if (callbacks[id]) {
                 callbacks[id](result);
                 delete callbacks[id];
             }
@@ -27,21 +23,17 @@ if (isWorkerSupported)
     });
 }
 
-function exports(obj, options, cb) 
-{
+function exports(obj, options, cb) {
     let useWorker = exports.useWorker && isWorkerSupported && worker;
 
-    if (useWorker) 
-    {
+    if (useWorker) {
         let id = uniqId('stringifyWorker');
         callbacks[id] = cb;
         // Some native object can't be cloned, such as window.location.
-        try 
-        {
+        try {
             worker.postMessage([id, obj, options]);
             return;
-        } catch (e) 
-        {
+        } catch (e) {
             delete callbacks[id];
         }
     }

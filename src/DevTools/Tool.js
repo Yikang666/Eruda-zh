@@ -1,24 +1,20 @@
-import {Class} from '../lib/util';
+import { Class } from '../lib/util';
 
 export default Class({
-    init($el)
-    {
+    init($el) {
         this._$el = $el;
     },
-    show()
-    {
+    show() {
         this._$el.show();
 
         return this;
     },
-    hide()
-    {
+    hide() {
         this._$el.hide();
 
         return this;
     },
-    destroy() 
-    {
+    destroy() {
         this._$el.remove();
     }
 });

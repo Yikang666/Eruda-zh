@@ -1,43 +1,35 @@
-import {Emitter, isErudaEl} from '../lib/util';
+import { Emitter, isErudaEl } from '../lib/util';
 
-export default class Select extends Emitter
-{
-    constructor()
-    {
+export default class Select extends Emitter {
+    constructor() {
         super();
 
         let self = this;
 
-        this._startListener = function (e)
-        {
+        this._startListener = function(e) {
             if (isErudaEl(e.target)) return;
 
-            self._timer = setTimeout(function ()
-            {
+            self._timer = setTimeout(function() {
                 self.emit('select', e.target);
             }, 200);
 
             return false;
         };
 
-        this._moveListener = function ()
-        {
+        this._moveListener = function() {
             clearTimeout(self._timer);
         };
 
-        this._clickListener = function (e)
-        {
+        this._clickListener = function(e) {
             if (isErudaEl(e.target)) return;
 
             e.preventDefault();
             e.stopImmediatePropagation();
         };
     }
-    enable()
-    {
+    enable() {
         this.disable();
-        function addEvent(type, listener)
-        {
+        function addEvent(type, listener) {
             document.body.addEventListener(type, listener, true);
         }
         addEvent('touchstart', this._startListener);
@@ -46,10 +38,8 @@ export default class Select extends Emitter
 
         return this;
     }
-    disable()
-    {
-        function rmEvent(type, listener)
-        {
+    disable() {
+        function rmEvent(type, listener) {
             document.body.removeEventListener(type, listener, true);
         }
         rmEvent('touchstart', this._startListener);

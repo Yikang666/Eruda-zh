@@ -1,9 +1,7 @@
-import {Emitter, evalCss, $, isNum} from '../lib/util';
+import { Emitter, evalCss, $, isNum } from '../lib/util';
 
-export default class NavBar extends Emitter
-{
-    constructor($el)
-    {
+export default class NavBar extends Emitter {
+    constructor($el) {
         super();
 
         this._style = evalCss(require('./NavBar.scss'));
@@ -16,71 +14,59 @@ export default class NavBar extends Emitter
 
         this._bindEvent();
     }
-    add(name)
-    {
+    add(name) {
         this._len++;
         this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`);
         this.resetStyle();
     }
-    remove(name) 
-    {
+    remove(name) {
         this._len--;
-        this._$el.find('.eruda-nav-bar-item').each(function () 
-        {
-            let $this = $(this);   
-            if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove();
+        this._$el.find('.eruda-nav-bar-item').each(function() {
+            let $this = $(this);
+            if ($this.text().toLowerCase() === name.toLowerCase())
+                $this.remove();
         });
     }
-    setHeight(height)
-    {
+    setHeight(height) {
         this._height = height;
         this.resetStyle();
     }
-    setBgColor(color) 
-    {
+    setBgColor(color) {
         this._$el.css('background-color', color);
     }
-    activeTool(name)
-    {
+    activeTool(name) {
         let self = this;
 
-        this._$el.find('.eruda-nav-bar-item').each(function ()
-        {
+        this._$el.find('.eruda-nav-bar-item').each(function() {
             let $this = $(this);
 
-            if ($this.text() === name)
-            {
+            if ($this.text() === name) {
                 $this.addClass('eruda-active');
                 self._resetBottomBar();
                 self._scrollItemToView();
-            } else
-            {
+            } else {
                 $this.rmClass('eruda-active');
             }
         });
     }
-    destroy() 
-    {
+    destroy() {
         evalCss.remove(this._style);
         this._$el.remove();
     }
-    _scrollItemToView() 
-    {
+    _scrollItemToView() {
         let $el = this._$el,
             li = $el.find('.eruda-active').get(0),
             container = $el.get(0);
-        
+
         let itemLeft = li.offsetLeft,
             itemWidth = li.offsetWidth,
             containerWidth = container.offsetWidth,
             scrollLeft = container.scrollLeft,
             targetScrollLeft;
-        
-        if (itemLeft < scrollLeft) 
-        {
+
+        if (itemLeft < scrollLeft) {
             targetScrollLeft = itemLeft;
-        } else if (itemLeft + itemWidth > containerWidth + scrollLeft) 
-        {
+        } else if (itemLeft + itemWidth > containerWidth + scrollLeft) {
             targetScrollLeft = itemLeft + itemWidth - containerWidth;
         }
 
@@ -88,43 +74,39 @@ export default class NavBar extends Emitter
 
         container.scrollLeft = targetScrollLeft;
     }
-    _resetBottomBar() 
-    {
+    _resetBottomBar() {
         let $bottomBar = this._$bottomBar;
 
         let li = this._$el.find('.eruda-active').get(0);
 
         if (!li) return;
-        
+
         $bottomBar.css({
             width: li.offsetWidth,
             left: li.offsetLeft
         });
     }
-    resetStyle()
-    {
+    resetStyle() {
         let height = this._height;
 
         this._$el.css('height', height);
-        
+
         let $el = this._$el;
 
         $el.css({
             height: height
         });
         $el.find('.eruda-nav-bar-item').css({
-            'height': height,
-            'lineHeight': height
+            height: height,
+            lineHeight: height
         });
 
         this._resetBottomBar();
     }
-    _bindEvent()
-    {
+    _bindEvent() {
         let self = this;
 
-        this._$el.on('click', '.eruda-nav-bar-item', function ()
-        {
+        this._$el.on('click', '.eruda-nav-bar-item', function() {
             self.emit('showTool', $(this).text());
         });
     }

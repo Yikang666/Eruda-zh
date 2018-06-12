@@ -1,9 +1,7 @@
-import {evalCss, $, pxToNum, isStr, each, trim} from '../lib/util';
+import { evalCss, $, pxToNum, isStr, each, trim } from '../lib/util';
 
-export default class Highlight
-{
-    constructor($container)
-    {
+export default class Highlight {
+    constructor($container) {
         this._style = evalCss(require('./Highlight.scss'));
 
         this._isShow = false;
@@ -11,31 +9,26 @@ export default class Highlight
         this._appendTpl($container);
         this._bindEvent();
     }
-    setEl(el)
-    {
+    setEl(el) {
         this._$target = $(el);
         this._target = el;
     }
-    show()
-    {
+    show() {
         this._isShow = true;
         this.render();
         this._$el.show();
     }
-    destroy() 
-    {
+    destroy() {
         evalCss.remove(this._style);
     }
-    hide()
-    {
+    hide() {
         this._isShow = false;
         this._$el.hide();
     }
-    render()
-    {
-        let {left, width, top, height} = this._$target.offset();
+    render() {
+        let { left, width, top, height } = this._$target.offset();
 
-        this._$el.css({left, top: top - window.scrollY, width, height});
+        this._$el.css({ left, top: top - window.scrollY, width, height });
 
         let computedStyle = getComputedStyle(this._target, '');
 
@@ -80,24 +73,27 @@ export default class Highlight
             height: bh - pt - pb
         });
 
-        this._$size.css({
-            top: -mt - (top - mt < 25 ? 0 : 25),
-            left: -ml
-        }).html(`${formatElName(this._target)} | ${width} × ${height}`);
+        this._$size
+            .css({
+                top: -mt - (top - mt < 25 ? 0 : 25),
+                left: -ml
+            })
+            .html(`${formatElName(this._target)} | ${width} × ${height}`);
     }
-    _bindEvent()
-    {
-        window.addEventListener('scroll', () =>
-        {
-            if (!this._isShow) return;
-            this.render();
-        }, false);
+    _bindEvent() {
+        window.addEventListener(
+            'scroll',
+            () => {
+                if (!this._isShow) return;
+                this.render();
+            },
+            false
+        );
     }
-    _appendTpl($container)
-    {
+    _appendTpl($container) {
         $container.append(require('./Highlight.hbs')());
 
-        let $el = this._$el = $('.eruda-elements-highlight');
+        let $el = (this._$el = $('.eruda-elements-highlight'));
         this._$margin = $el.find('.eruda-margin');
         this._$padding = $el.find('.eruda-padding');
         this._$content = $el.find('.eruda-content');
@@ -105,19 +101,16 @@ export default class Highlight
     }
 }
 
-function formatElName(el)
-{
-    let {id, className} = el;
+function formatElName(el) {
+    let { id, className } = el;
 
     let ret = `<span style="color:#ee78e6">${el.tagName.toLowerCase()}</span>`;
 
     if (id !== '') ret += `<span style="color:#ffab66">#${id}</span>`;
 
     let classes = '';
-    if (isStr(className))
-    {
-        each(className.split(/\s+/g), (val) =>
-        {
+    if (isStr(className)) {
+        each(className.split(/\s+/g), val => {
             if (trim(val) === '') return;
 
             classes += `.${val}`;

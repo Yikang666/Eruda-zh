@@ -4,12 +4,12 @@ import highlight from '../lib/highlight';
 import beautify from 'js-beautify';
 import JsonViewer from '../lib/JsonViewer';
 import {
-    isObj, 
-    isStr, 
-    isErr, 
-    wrap, 
-    defaults, 
-    dateFormat, 
+    isObj,
+    isStr,
+    isErr,
+    wrap,
+    defaults,
+    dateFormat,
     getObjType,
     isEl,
     toStr,
@@ -26,15 +26,14 @@ import {
     isEmpty
 } from '../lib/util';
 
-export default class Log
-{
+export default class Log {
     constructor({
         type = 'log',
         args = [],
         id,
         displayHeader = false,
-        ignoreFilter = false})
-    {
+        ignoreFilter = false
+    }) {
         this.type = type;
         this.args = args;
         this.count = 1;
@@ -42,72 +41,74 @@ export default class Log
         this.displayHeader = displayHeader;
         this.ignoreFilter = ignoreFilter;
 
-        if (displayHeader)
-        {
+        if (displayHeader) {
             this.time = getCurTime();
             this.from = getFrom();
         }
 
         this._formatMsg();
     }
-    addCount()
-    {
+    addCount() {
         this.count++;
         let count = this.count,
             msg = this.formattedMsg;
-        if (count === 2) msg = msg.replace('eruda-count eruda-hidden', 'eruda-count');
-        msg = msg.replace(/data-mark="count">\d*/, 'data-mark="count">' + count);
+        if (count === 2)
+            msg = msg.replace('eruda-count eruda-hidden', 'eruda-count');
+        msg = msg.replace(
+            /data-mark="count">\d*/,
+            'data-mark="count">' + count
+        );
 
         this.formattedMsg = msg;
 
         return this;
     }
-    updateTime(time)
-    {
+    updateTime(time) {
         let msg = this.formattedMsg;
 
-        if (this.time)
-        {
-            msg = msg.replace(/data-mark="time">(.*?)</, `data-mark="time">${time}<`);
+        if (this.time) {
+            msg = msg.replace(
+                /data-mark="time">(.*?)</,
+                `data-mark="time">${time}<`
+            );
             this.time = time;
             this.formattedMsg = msg;
         }
 
         return this;
     }
-    _needSrc()
-    {
-        let {type, args} = this;
+    _needSrc() {
+        let { type, args } = this;
 
         if (type === 'html') return false;
 
-        for (let i = 0, len = args.length; i < len; i++)
-        {
+        for (let i = 0, len = args.length; i < len; i++) {
             if (isObj(args[i])) return true;
         }
 
         return false;
     }
-    _formatMsg()
-    {
-        let {type, id, displayHeader, time, from, args} = this;
+    _formatMsg() {
+        let { type, id, displayHeader, time, from, args } = this;
 
-        if (this._needSrc())
-        {
-            let setSrc = result => this.src = result;
-            if (type === 'table')
-            {
+        if (this._needSrc()) {
+            let setSrc = result => (this.src = result);
+            if (type === 'table') {
                 extractObj(args[0], {}, setSrc);
-            } else
-            {
-                extractObj(args.length === 1 && isObj(args[0]) ? args[0] : args, {}, setSrc);
+            } else {
+                extractObj(
+                    args.length === 1 && isObj(args[0]) ? args[0] : args,
+                    {},
+                    setSrc
+                );
             }
         }
 
-        let msg = '', icon, err;
+        let msg = '',
+            icon,
+            err;
 
-        switch (type)
-        {
+        switch (type) {
             case 'log':
                 msg = formatMsg(args);
                 break;
@@ -126,7 +127,8 @@ export default class Log
                 msg = formatMsg(args);
                 break;
             case 'error':
-                if (isStr(args[0]) && args.length !== 1) args = substituteStr(args);
+                if (isStr(args[0]) && args.length !== 1)
+                    args = substituteStr(args);
                 err = args[0];
                 icon = 'times-circle';
                 err = isErr(err) ? err : new Error(formatMsg(args));
@@ -151,15 +153,13 @@ export default class Log
 
         if (type !== 'error') msg = recognizeUrl(msg);
         this.value = msg;
-        msg = render({msg, type, icon, id, displayHeader, time, from});
+        msg = render({ msg, type, icon, id, displayHeader, time, from });
 
         delete this.args;
         this.formattedMsg = msg;
     }
-    static click(type, log, $el)
-    {
-        switch (type)
-        {
+    static click(type, log, $el) {
+        switch (type) {
             case 'log':
             case 'warn':
             case 'info':
@@ -167,20 +167,16 @@ export default class Log
             case 'output':
             case 'table':
             case 'dir':
-                if (log.src)
-                {
+                if (log.src) {
                     if (Log.showSrcInSources) return 'viewSrc';
                     let $json = $el.find('.eruda-json');
-                    if ($json.hasClass('eruda-hidden'))
-                    {
-                        if ($json.data('init') !== 'true')
-                        {
+                    if ($json.hasClass('eruda-hidden')) {
+                        if ($json.data('init') !== 'true') {
                             new JsonViewer(log.src, $json);
                             $json.data('init', 'true');
                         }
                         $json.rmClass('eruda-hidden');
-                    } else
-                    {
+                    } else {
                         $json.addClass('eruda-hidden');
                     }
                 }
@@ -199,16 +195,14 @@ Log.showGetterVal = false;
 Log.showUnenumerable = true;
 Log.showSrcInSources = false;
 
-let getAbstract = wrap(origGetAbstract, function (fn, obj)
-{
+let getAbstract = wrap(origGetAbstract, function(fn, obj) {
     return fn(obj, {
         getterVal: Log.showGetterVal,
         unenumerable: false
     });
 });
 
-function formatTable(args)
-{
+function formatTable(args) {
     let table = args[0],
         ret = '',
         filter = args[1],
@@ -219,8 +213,7 @@ function formatTable(args)
 
     if (!isArr(table)) return formatMsg(args);
 
-    table.forEach(val =>
-    {
+    table.forEach(val => {
         if (!isObj(val)) return;
         columns = columns.concat(Object.getOwnPropertyNames(val));
     });
@@ -230,21 +223,17 @@ function formatTable(args)
     if (isEmpty(columns)) return formatMsg(args);
 
     ret += '<table><thead><tr><th>(index)</th>';
-    columns.forEach(val => ret += `<th>${val}</th>`);
+    columns.forEach(val => (ret += `<th>${val}</th>`));
     ret += '</tr></thead><tbody>';
 
-    table.forEach((obj, idx) =>
-    {
+    table.forEach((obj, idx) => {
         if (!isObj(obj)) return;
         ret += `<tr><td>${idx}</td>`;
-        columns.forEach(column =>
-        {
+        columns.forEach(column => {
             let val = obj[column];
-            if (isUndef(val))
-            {
+            if (isUndef(val)) {
                 val = '';
-            } else if (isObj(val))
-            {
+            } else if (isObj(val)) {
                 val = getObjType(val);
             }
 
@@ -262,50 +251,47 @@ function formatTable(args)
 let regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g,
     regErudaJs = /eruda(\.min)?\.js/;
 
-function formatErr(err)
-{
+function formatErr(err) {
     let lines = err.stack ? err.stack.split('\n') : [],
         msg = `${err.message || lines[0]}<br/>`;
 
-    lines = lines.filter(val => !regErudaJs.test(val))
-                 .map(val => escape(val));
+    lines = lines.filter(val => !regErudaJs.test(val)).map(val => escape(val));
 
-    let stack = `<div class="eruda-stack eruda-hidden">${lines.slice(1).join('<br/>')}</div>`;
+    let stack = `<div class="eruda-stack eruda-hidden">${lines
+        .slice(1)
+        .join('<br/>')}</div>`;
 
-    return msg + stack.replace(regJsUrl, match => `<a href="${match}" target="_blank">${match}</a>`);
+    return (
+        msg +
+        stack.replace(
+            regJsUrl,
+            match => `<a href="${match}" target="_blank">${match}</a>`
+        )
+    );
 }
 
-function formatJs(code)
-{
+function formatJs(code) {
     return highlight(beautify(code), 'js');
 }
 
-function formatMsg(args, {htmlForEl = true} = {})
-{
+function formatMsg(args, { htmlForEl = true } = {}) {
     let needStrSubstitution = isStr(args[0]) && args.length !== 1;
     if (needStrSubstitution) args = substituteStr(args);
 
-    for (let i = 0, len = args.length; i < len; i++)
-    {
+    for (let i = 0, len = args.length; i < len; i++) {
         let val = args[i];
 
-        if (isEl(val) && htmlForEl)
-        {
+        if (isEl(val) && htmlForEl) {
             args[i] = formatEl(val);
-        } else if (isFn(val))
-        {
+        } else if (isFn(val)) {
             args[i] = formatFn(val);
-        } else if (isObj(val))
-        {
+        } else if (isObj(val)) {
             args[i] = formatObj(val);
-        }else if (isUndef(val))
-        {
+        } else if (isUndef(val)) {
             args[i] = 'undefined';
-        } else if (isNull(val))
-        {
+        } else if (isNull(val)) {
             args[i] = 'null';
-        } else
-        {
+        } else {
             val = toStr(val);
             if (i !== 0 || !needStrSubstitution) val = escape(val);
             args[i] = val;
@@ -315,26 +301,22 @@ function formatMsg(args, {htmlForEl = true} = {})
     return args.join(' ') + '<div class="eruda-json eruda-hidden"></div>';
 }
 
-let formatDir = args => formatMsg(args, {htmlForEl: false});
+let formatDir = args => formatMsg(args, { htmlForEl: false });
 
-function substituteStr(args)
-{
+function substituteStr(args) {
     let str = escape(args[0]),
         isInCss = false,
         newStr = '';
 
     args.shift();
 
-    for (let i = 0, len = str.length; i < len; i++)
-    {
+    for (let i = 0, len = str.length; i < len; i++) {
         let c = str[i];
 
-        if (c === '%' && args.length !== 0)
-        {
+        if (c === '%' && args.length !== 0) {
             i++;
             let arg = args.shift();
-            switch (str[i])
-            {
+            switch (str[i]) {
                 case 'i':
                 case 'd':
                     newStr += toInt(arg);
@@ -346,17 +328,14 @@ function substituteStr(args)
                     newStr += toStr(arg);
                     break;
                 case 'O':
-                    if (isObj(arg))
-                    {
+                    if (isObj(arg)) {
                         newStr += getAbstract(arg);
                     }
                     break;
                 case 'o':
-                    if (isEl(arg))
-                    {
+                    if (isEl(arg)) {
                         newStr += formatEl(arg);
-                    } else if (isObj(arg))
-                    {
+                    } else if (isObj(arg)) {
                         newStr += getAbstract(arg);
                     }
                     break;
@@ -370,8 +349,7 @@ function substituteStr(args)
                     args.unshift(arg);
                     newStr += c;
             }
-        } else
-        {
+        } else {
             newStr += c;
         }
     }
@@ -382,40 +360,41 @@ function substituteStr(args)
     return args;
 }
 
-function formatObj(val)
-{
+function formatObj(val) {
     let type = getObjType(val);
-    if (type === 'Array' && val.length > 1) type = `(${val.length})`; 
+    if (type === 'Array' && val.length > 1) type = `(${val.length})`;
 
     return `${type} ${getAbstract(val)}`;
 }
 
-function formatFn(val)
-{
-    return `<pre style="display:inline">${highlight(beautify.js(val.toString()), 'js')}</pre>`;
+function formatFn(val) {
+    return `<pre style="display:inline">${highlight(
+        beautify.js(val.toString()),
+        'js'
+    )}</pre>`;
 }
 
-function formatEl(val)
-{
-    return `<pre style="display:inline">${highlight(beautify.html(val.outerHTML, {unformatted: []}), 'html')}</pre>`;
+function formatEl(val) {
+    return `<pre style="display:inline">${highlight(
+        beautify.html(val.outerHTML, { unformatted: [] }),
+        'html'
+    )}</pre>`;
 }
 
 let regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi;
 
-let recognizeUrl = str => str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
+let recognizeUrl = str =>
+    str.replace(regUrl, '<a href="$2" target="_blank">$2</a>');
 
-function getFrom()
-{
+function getFrom() {
     let e = new Error(),
         ret = '',
         lines = e.stack ? e.stack.split('\n') : '';
 
-    for (let i = 0, len = lines.length; i < len; i++)
-    {
+    for (let i = 0, len = lines.length; i < len; i++) {
         ret = lines[i];
-        if (ret.indexOf('winConsole') > -1 && i < len - 1)
-        {
-            ret = lines[i+1];
+        if (ret.indexOf('winConsole') > -1 && i < len - 1) {
+            ret = lines[i + 1];
             break;
         }
     }
@@ -428,8 +407,7 @@ let getCurTime = () => dateFormat('HH:MM:ss');
 let tpl = require('./Log.hbs');
 let render = data => tpl(data);
 
-function extractObj(obj, options = {}, cb)
-{
+function extractObj(obj, options = {}, cb) {
     defaults(options, {
         getterVal: Log.showGetterVal,
         unenumerable: Log.showUnenumerable

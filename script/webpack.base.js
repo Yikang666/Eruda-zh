@@ -4,7 +4,7 @@ var autoprefixer = require('autoprefixer'),
     pkg = require('../package.json'),
     path = require('path');
 
-process.traceDeprecation = true; 
+process.traceDeprecation = true;
 
 var nodeModDir = path.resolve('./node_modules/') + '/',
     banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage;
@@ -12,9 +12,9 @@ var nodeModDir = path.resolve('./node_modules/') + '/',
 var postcssLoader = {
     loader: 'postcss-loader',
     options: {
-        plugins:  [classPrefix('eruda-'), autoprefixer]
+        plugins: [classPrefix('eruda-'), autoprefixer]
     }
-};   
+};
 
 module.exports = {
     entry: './src/index',
@@ -24,7 +24,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, '../'),
-        publicPath: "/assets/",
+        publicPath: '/assets/',
         library: ['eruda'],
         libraryTarget: 'umd'
     },
@@ -68,7 +68,8 @@ module.exports = {
                 test: /\.hbs$/,
                 loader: nodeModDir + 'handlebars-loader/index.js',
                 options: {
-                    runtime: nodeModDir + 'handlebars/dist/handlebars.runtime.js'
+                    runtime:
+                        nodeModDir + 'handlebars/dist/handlebars.runtime.js'
                 }
             },
             {

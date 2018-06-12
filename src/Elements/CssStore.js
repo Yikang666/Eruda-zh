@@ -1,11 +1,9 @@
-import {each} from '../lib/util';
+import { each } from '../lib/util';
 
-function formatStyle(style)
-{
+function formatStyle(style) {
     let ret = {};
 
-    for (let i = 0, len = style.length; i < len; i++)
-    {
+    for (let i = 0, len = style.length; i < len; i++) {
         let name = style[i];
 
         if (style[name] === 'initial') continue;
@@ -18,51 +16,43 @@ function formatStyle(style)
 
 let elProto = Element.prototype;
 
-let matchesSel = function () { return false; };
+let matchesSel = function() {
+    return false;
+};
 
-if (elProto.webkitMatchesSelector)
-{
+if (elProto.webkitMatchesSelector) {
     matchesSel = (el, selText) => el.webkitMatchesSelector(selText);
-} else if (elProto.mozMatchesSelector)
-{
+} else if (elProto.mozMatchesSelector) {
     matchesSel = (el, selText) => el.mozMatchesSelector(selText);
 }
 
-export default class CssStore
-{
-    constructor(el)
-    {
+export default class CssStore {
+    constructor(el) {
         this._el = el;
     }
-    getComputedStyle()
-    {
+    getComputedStyle() {
         let computedStyle = window.getComputedStyle(this._el);
 
         return formatStyle(computedStyle);
     }
-    getMatchedCSSRules()
-    {
+    getMatchedCSSRules() {
         let ret = [];
 
-        each(document.styleSheets, (styleSheet) =>
-        {
-            try
-            {
-                // Started with version 64, Chrome does not allow cross origin script to access this property.	
-                if (!styleSheet.cssRules) return;	
-            } catch (e) 
-            {
-                return;	
+        each(document.styleSheets, styleSheet => {
+            try {
+                // Started with version 64, Chrome does not allow cross origin script to access this property.
+                if (!styleSheet.cssRules) return;
+            } catch (e) {
+                return;
             }
 
-            each(styleSheet.cssRules, (cssRule) =>
-            {
+            each(styleSheet.cssRules, cssRule => {
                 let matchesEl = false;
 
                 // Mobile safari will throw DOM Exception 12 error, need to try catch it.
                 try {
                     matchesEl = this._elMatchesSel(cssRule.selectorText);
-                /* eslint-disable no-empty */
+                    /* eslint-disable no-empty */
                 } catch (e) {}
 
                 if (!matchesEl) return;
@@ -76,8 +66,7 @@ export default class CssStore
 
         return ret;
     }
-    _elMatchesSel(selText)
-    {
+    _elMatchesSel(selText) {
         return matchesSel(this._el, selText);
     }
 }

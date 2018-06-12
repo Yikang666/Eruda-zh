@@ -1,14 +1,12 @@
 /* See if an element is within eruda.
  */
 
-function exports(el)
-{
+function exports(el) {
     var parentNode = el.parentNode;
 
     if (!parentNode) return false;
 
-    while (parentNode)
-    {
+    while (parentNode) {
         parentNode = parentNode.parentNode;
         if (parentNode && parentNode.id === 'eruda') return true;
     }

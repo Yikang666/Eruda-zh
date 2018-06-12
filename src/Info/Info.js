@@ -1,11 +1,9 @@
 import Tool from '../DevTools/Tool';
 import defInfo from './defInfo';
-import {evalCss, each, isFn} from '../lib/util';
+import { evalCss, each, isFn } from '../lib/util';
 
-export default class Info extends Tool
-{
-    constructor()
-    {
+export default class Info extends Tool {
+    constructor() {
         super();
 
         this._style = evalCss(require('./Info.scss'));
@@ -14,49 +12,42 @@ export default class Info extends Tool
         this._tpl = require('./Info.hbs');
         this._infos = [];
     }
-    init($el)
-    {
+    init($el) {
         super.init($el);
 
         this._addDefInfo();
     }
-    show() 
-    {
+    show() {
         this._render();
-        
+
         super.show();
     }
-    destroy() 
-    {
+    destroy() {
         super.destroy();
-        
+
         evalCss.remove(this._style);
     }
-    add(name, val)
-    {
+    add(name, val) {
         let infos = this._infos,
             isUpdate = false;
 
-        each(infos, info => 
-        {
+        each(infos, info => {
             if (name !== info.name) return;
 
             info.val = val;
             isUpdate = true;
         });
 
-        if (!isUpdate) infos.push({name, val});
+        if (!isUpdate) infos.push({ name, val });
 
         this._render();
 
         return this;
     }
-    remove(name)
-    {
+    remove(name) {
         let infos = this._infos;
 
-        for (let i = infos.length - 1; i >= 0; i--)
-        {
+        for (let i = infos.length - 1; i >= 0; i--) {
             if (infos[i].name === name) infos.splice(i, 1);
         }
 
@@ -64,33 +55,28 @@ export default class Info extends Tool
 
         return this;
     }
-    clear()
-    {
+    clear() {
         this._infos = [];
 
         this._render();
 
         return this;
     }
-    _addDefInfo()
-    {
+    _addDefInfo() {
         each(defInfo, info => this.add(info.name, info.val));
     }
-    _render()
-    {
+    _render() {
         let infos = [];
 
-        each(this._infos, ({name, val}) => 
-        {
+        each(this._infos, ({ name, val }) => {
             if (isFn(val)) val = val();
-            
-            infos.push({name, val});
+
+            infos.push({ name, val });
         });
 
-        this._renderHtml(this._tpl({infos}));
+        this._renderHtml(this._tpl({ infos }));
     }
-    _renderHtml(html)
-    {
+    _renderHtml(html) {
         if (html === this._lastHtml) return;
         this._lastHtml = html;
         this._$el.html(html);

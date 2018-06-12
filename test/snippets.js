@@ -1,35 +1,33 @@
-describe('snippets', function () 
-{
+describe('snippets', function() {
     var tool = eruda.get('snippets'),
         $tool = $('.eruda-snippets');
 
-    describe('default', function ()
-    {
-        it('border all', function ()
-        {
+    describe('default', function() {
+        it('border all', function() {
             expect($tool.find('.eruda-name').eq(0)).toContainText('Border All');
 
             var $body = $('body'),
                 $btn = $tool.find('.eruda-run').eq(0);
 
             $btn.click();
-            expect($body).toHaveCss({outlineWidth: '2px'});
+            expect($body).toHaveCss({ outlineWidth: '2px' });
             $btn.click();
-            expect($body).toHaveCss({outlineWidth: '0px'});
+            expect($body).toHaveCss({ outlineWidth: '0px' });
         });
 
-        it('refresh page', function ()
-        {
-            expect($tool.find('.eruda-name').eq(1)).toContainText('Refresh Page');
+        it('refresh page', function() {
+            expect($tool.find('.eruda-name').eq(1)).toContainText(
+                'Refresh Page'
+            );
         });
 
-        it('search text', function ()
-        {
-            expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text');
+        it('search text', function() {
+            expect($tool.find('.eruda-name').eq(2)).toContainText(
+                'Search Text'
+            );
         });
 
-        it('edit page', function ()
-        {
+        it('edit page', function() {
             expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page');
 
             var $body = $('body'),
@@ -42,24 +40,26 @@ describe('snippets', function ()
         });
     });
 
-    it('clear', function ()
-    {
+    it('clear', function() {
         tool.clear();
         expect($tool.find('.eruda-name')).toHaveLength(0);
     });
 
-    it('add', function ()
-    {
-        tool.add('Test', function ()
-        {
-            console.log('eruda');
-        }, 'This is the description');
+    it('add', function() {
+        tool.add(
+            'Test',
+            function() {
+                console.log('eruda');
+            },
+            'This is the description'
+        );
         expect($tool.find('.eruda-name')).toContainText('Test');
-        expect($tool.find('.eruda-description')).toContainText('This is the description');
+        expect($tool.find('.eruda-description')).toContainText(
+            'This is the description'
+        );
     });
 
-    it('remove', function ()
-    {
+    it('remove', function() {
         tool.remove('Test');
         expect($tool.find('.eruda-name')).toHaveLength(0);
     });

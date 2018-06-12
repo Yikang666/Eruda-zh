@@ -5,8 +5,7 @@ var _ = {};
 
 /* ------------------------------ allKeys ------------------------------ */
 
-export var allKeys = _.allKeys = (function ()
-{
+export var allKeys = _.allKeys = (function () {
     /* Retrieve all the names of object's own and inherited properties.
      *
      * |Name  |Type  |Desc                       |
@@ -28,9 +27,9 @@ export var allKeys = _.allKeys = (function ()
      * test: all
      */
 
-    function exports(obj)
-    {
-        var ret = [], key;
+    function exports(obj) {
+        var ret = [],
+            key;
 
         for (key in obj) ret.push(key);
 
@@ -42,8 +41,7 @@ export var allKeys = _.allKeys = (function ()
 
 /* ------------------------------ idxOf ------------------------------ */
 
-export var idxOf = _.idxOf = (function ()
-{
+export var idxOf = _.idxOf = (function () {
     /* Get the index at which the first occurrence of value.
      *
      * |Name     |Type  |Desc                |
@@ -62,8 +60,7 @@ export var idxOf = _.idxOf = (function ()
      * test: all
      */
 
-    function exports(arr, val, fromIdx)
-    {
+    function exports(arr, val, fromIdx) {
         return Array.prototype.indexOf.call(arr, val, fromIdx);
     }
 
@@ -72,8 +69,7 @@ export var idxOf = _.idxOf = (function ()
 
 /* ------------------------------ isUndef ------------------------------ */
 
-export var isUndef = _.isUndef = (function ()
-{
+export var isUndef = _.isUndef = (function () {
     /* Check if value is undefined.
      *
      * |Name  |Type   |Desc                      |
@@ -92,8 +88,7 @@ export var isUndef = _.isUndef = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val === void 0;
     }
 
@@ -102,8 +97,7 @@ export var isUndef = _.isUndef = (function ()
 
 /* ------------------------------ optimizeCb ------------------------------ */
 
-export var optimizeCb = _.optimizeCb = (function ()
-{
+export var optimizeCb = _.optimizeCb = (function () {
     /* Used for function context binding.
      */
 
@@ -116,28 +110,25 @@ export var optimizeCb = _.optimizeCb = (function ()
      * isUndef 
      */
 
-    function exports(fn, ctx, argCount)
-    {
+    function exports(fn, ctx, argCount) {
         if (isUndef(ctx)) return fn;
 
-        switch (argCount == null ? 3 : argCount)
-        {
-            case 1: return function (val)
-            {
-                return fn.call(ctx, val);
-            };
-            case 3: return function (val, idx, collection)
-            {
-                return fn.call(ctx, val, idx, collection);
-            };
-            case 4: return function (accumulator, val, idx, collection)
-            {
-                return fn.call(ctx, accumulator, val, idx, collection);
-            };
+        switch (argCount == null ? 3 : argCount) {
+            case 1:
+                return function(val) {
+                    return fn.call(ctx, val);
+                };
+            case 3:
+                return function(val, idx, collection) {
+                    return fn.call(ctx, val, idx, collection);
+                };
+            case 4:
+                return function(accumulator, val, idx, collection) {
+                    return fn.call(ctx, accumulator, val, idx, collection);
+                };
         }
 
-        return function ()
-        {
+        return function() {
             return fn.apply(ctx, arguments);
         };
     }
@@ -147,8 +138,7 @@ export var optimizeCb = _.optimizeCb = (function ()
 
 /* ------------------------------ endWith ------------------------------ */
 
-export var endWith = _.endWith = (function ()
-{
+export var endWith = _.endWith = (function () {
     /* Check if string ends with the given target string.
      *
      * |Name  |Type   |Desc                           |
@@ -167,8 +157,7 @@ export var endWith = _.endWith = (function ()
      * test: all
      */
 
-    function exports(str, suffix)
-    {
+    function exports(str, suffix) {
         var idx = str.length - suffix.length;
 
         return idx >= 0 && str.indexOf(suffix, idx) === idx;
@@ -179,8 +168,7 @@ export var endWith = _.endWith = (function ()
 
 /* ------------------------------ toStr ------------------------------ */
 
-export var toStr = _.toStr = (function ()
-{
+export var toStr = _.toStr = (function () {
     /* Convert value to a string.
      *
      * |Name  |Type  |Desc            |
@@ -201,8 +189,7 @@ export var toStr = _.toStr = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val == null ? '' : val.toString();
     }
 
@@ -211,8 +198,7 @@ export var toStr = _.toStr = (function ()
 
 /* ------------------------------ escapeJsStr ------------------------------ */
 
-export var escapeJsStr = _.escapeJsStr = (function ()
-{
+export var escapeJsStr = _.escapeJsStr = (function () {
     /* Escape string to be a valid JavaScript string literal between quotes.
      *
      * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
@@ -225,7 +211,7 @@ export var escapeJsStr = _.escapeJsStr = (function ()
      * ```javascript
      * escapeJsStr('\"\n'); // -> '\\"\\\\n'
      * ```
-     */ 
+     */
 
     /* module
      * env: all
@@ -234,24 +220,25 @@ export var escapeJsStr = _.escapeJsStr = (function ()
 
     /* dependencies
      * toStr 
-     */ 
+     */
 
-    function exports(str) 
-    {
-        return toStr(str).replace(regEscapeChars, function (char) 
-        {
-            switch (char) 
-            {
+    function exports(str) {
+        return toStr(str).replace(regEscapeChars, function(char) {
+            switch (char) {
                 case '"':
-                case '\'':
+                case "'":
                 case '\\':
                     return '\\' + char;
-                case '\n': return '\\n';
-                case '\r': return '\\r';
+                case '\n':
+                    return '\\n';
+                case '\r':
+                    return '\\r';
                 // Line separator
-                case '\u2028': return '\\u2028';
+                case '\u2028':
+                    return '\\u2028';
                 // Paragraph separator
-                case '\u2029': return '\\u2029';
+                case '\u2029':
+                    return '\\u2029';
             }
         });
     }
@@ -263,8 +250,7 @@ export var escapeJsStr = _.escapeJsStr = (function ()
 
 /* ------------------------------ escapeJsonStr ------------------------------ */
 
-export var escapeJsonStr = _.escapeJsonStr = (function ()
-{
+export var escapeJsonStr = _.escapeJsonStr = (function () {
     /* Escape json string.
      */
 
@@ -272,9 +258,8 @@ export var escapeJsonStr = _.escapeJsonStr = (function ()
      * escapeJsStr 
      */
 
-    function exports(str)
-    {
-        return escapeJsStr(str).replace(/\\'/g, '\'');
+    function exports(str) {
+        return escapeJsStr(str).replace(/\\'/g, "'");
     }
 
     return exports;
@@ -282,8 +267,7 @@ export var escapeJsonStr = _.escapeJsonStr = (function ()
 
 /* ------------------------------ has ------------------------------ */
 
-export var has = _.has = (function ()
-{
+export var has = _.has = (function () {
     /* Checks if key is a direct property.
      *
      * |Name  |Type   |Desc                            |
@@ -304,8 +288,7 @@ export var has = _.has = (function ()
 
     var hasOwnProp = Object.prototype.hasOwnProperty;
 
-    function exports(obj, key)
-    {
+    function exports(obj, key) {
         return hasOwnProp.call(obj, key);
     }
 
@@ -314,8 +297,7 @@ export var has = _.has = (function ()
 
 /* ------------------------------ identity ------------------------------ */
 
-export var identity = _.identity = (function ()
-{
+export var identity = _.identity = (function () {
     /* Return the first argument given.
      *
      * |Name  |Type|Desc       |
@@ -333,8 +315,7 @@ export var identity = _.identity = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return val;
     }
 
@@ -343,8 +324,7 @@ export var identity = _.identity = (function ()
 
 /* ------------------------------ objToStr ------------------------------ */
 
-export var objToStr = _.objToStr = (function ()
-{
+export var objToStr = _.objToStr = (function () {
     /* Alias of Object.prototype.toString.
      *
      * |Name  |Type  |Desc                                |
@@ -364,8 +344,7 @@ export var objToStr = _.objToStr = (function ()
 
     var ObjToStr = Object.prototype.toString;
 
-    function exports(val)
-    {
+    function exports(val) {
         return ObjToStr.call(val);
     }
 
@@ -374,8 +353,7 @@ export var objToStr = _.objToStr = (function ()
 
 /* ------------------------------ isArgs ------------------------------ */
 
-export var isArgs = _.isArgs = (function ()
-{
+export var isArgs = _.isArgs = (function () {
     /* Check if value is classified as an arguments object.
      *
      * |Name  |Type   |Desc                                |
@@ -399,8 +377,7 @@ export var isArgs = _.isArgs = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Arguments]';
     }
 
@@ -409,8 +386,7 @@ export var isArgs = _.isArgs = (function ()
 
 /* ------------------------------ isArr ------------------------------ */
 
-export var isArr = _.isArr = (function (exports)
-{
+export var isArr = _.isArr = (function (exports) {
     /* Check if value is an `Array` object.
      *
      * |Name  |Type   |Desc                              |
@@ -433,18 +409,18 @@ export var isArr = _.isArr = (function (exports)
      * objToStr 
      */
 
-    exports = Array.isArray || function (val)
-    {
-        return objToStr(val) === '[object Array]';
-    };
+    exports =
+        Array.isArray ||
+        function(val) {
+            return objToStr(val) === '[object Array]';
+        };
 
     return exports;
 })({});
 
 /* ------------------------------ isNum ------------------------------ */
 
-export var isNum = _.isNum = (function ()
-{
+export var isNum = _.isNum = (function () {
     /* Check if value is classified as a Number primitive or object.
      *
      * |Name  |Type   |Desc                                 |
@@ -468,8 +444,7 @@ export var isNum = _.isNum = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object Number]';
     }
 
@@ -478,8 +453,7 @@ export var isNum = _.isNum = (function ()
 
 /* ------------------------------ isFn ------------------------------ */
 
-export var isFn = _.isFn = (function ()
-{
+export var isFn = _.isFn = (function () {
     /* Check if value is a function.
      *
      * |Name  |Type   |Desc                       |
@@ -504,11 +478,13 @@ export var isFn = _.isFn = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         var objStr = objToStr(val);
 
-        return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+        return (
+            objStr === '[object Function]' ||
+            objStr === '[object GeneratorFunction]'
+        );
     }
 
     return exports;
@@ -516,8 +492,7 @@ export var isFn = _.isFn = (function ()
 
 /* ------------------------------ isArrLike ------------------------------ */
 
-export var isArrLike = _.isArrLike = (function ()
-{
+export var isArrLike = _.isArrLike = (function () {
     /* Check if value is array-like.
      *
      * |Name  |Type   |Desc                       |
@@ -545,8 +520,7 @@ export var isArrLike = _.isArrLike = (function ()
 
     var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-    function exports(val)
-    {
+    function exports(val) {
         if (!val) return false;
 
         var len = val.length;
@@ -559,8 +533,7 @@ export var isArrLike = _.isArrLike = (function ()
 
 /* ------------------------------ isBrowser ------------------------------ */
 
-export var isBrowser = _.isBrowser = (function (exports)
-{
+export var isBrowser = _.isBrowser = (function (exports) {
     /* Check if running in a browser.
      *
      * ```javascript
@@ -573,17 +546,17 @@ export var isBrowser = _.isBrowser = (function (exports)
      * test: all
      */
 
-    exports = typeof window === 'object' &&
-              typeof document === 'object' &&
-              document.nodeType === 9;
+    exports =
+        typeof window === 'object' &&
+        typeof document === 'object' &&
+        document.nodeType === 9;
 
     return exports;
 })({});
 
 /* ------------------------------ root ------------------------------ */
 
-export var root = _.root = (function (exports)
-{
+export var root = _.root = (function (exports) {
     /* Root object reference, `global` in nodeJs, `window` in browser. */
 
     /* module
@@ -602,8 +575,7 @@ export var root = _.root = (function (exports)
 
 /* ------------------------------ detectMocha ------------------------------ */
 
-export var detectMocha = _.detectMocha = (function ()
-{
+export var detectMocha = _.detectMocha = (function () {
     /* Detect if mocha is running.
      *
      * ```javascript
@@ -618,12 +590,10 @@ export var detectMocha = _.detectMocha = (function ()
 
     /* dependencies
      * root 
-     */ 
+     */
 
-    function exports() 
-    {
-        for (var i = 0, len = methods.length; i < len; i++) 
-        {
+    function exports() {
+        for (var i = 0, len = methods.length; i < len; i++) {
             var method = methods[i];
 
             if (typeof root[method] !== 'function') return false;
@@ -632,15 +602,14 @@ export var detectMocha = _.detectMocha = (function ()
         return true;
     }
 
-    var methods = ['afterEach','after','beforeEach','before','describe','it'];
+    var methods = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it'];
 
     return exports;
 })();
 
 /* ------------------------------ keys ------------------------------ */
 
-export var keys = _.keys = (function (exports)
-{
+export var keys = _.keys = (function (exports) {
     /* Create an array of the own enumerable property names of object.
      *
      * |Name  |Type  |Desc                   |
@@ -662,17 +631,14 @@ export var keys = _.keys = (function (exports)
      * has detectMocha 
      */
 
-    if (Object.keys && !detectMocha()) 
-    {
+    if (Object.keys && !detectMocha()) {
         exports = Object.keys;
-    } else 
-    {
-        exports = function (obj)
-        {
-            var ret = [], key;
+    } else {
+        exports = function(obj) {
+            var ret = [],
+                key;
 
-            for (key in obj)
-            {
+            for (key in obj) {
                 if (has(obj, key)) ret.push(key);
             }
 
@@ -685,8 +651,7 @@ export var keys = _.keys = (function (exports)
 
 /* ------------------------------ each ------------------------------ */
 
-export var each = _.each = (function ()
-{
+export var each = _.each = (function () {
     /* Iterate over elements of collection and invokes iteratee for each element.
      *
      * |Name    |Type        |Desc                          |
@@ -709,20 +674,16 @@ export var each = _.each = (function ()
      * isArrLike keys optimizeCb 
      */
 
-    function exports(obj, iteratee, ctx)
-    {
+    function exports(obj, iteratee, ctx) {
         iteratee = optimizeCb(iteratee, ctx);
 
         var i, len;
 
-        if (isArrLike(obj))
-        {
+        if (isArrLike(obj)) {
             for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
-        } else
-        {
+        } else {
             var _keys = keys(obj);
-            for (i = 0, len = _keys.length; i < len; i++)
-            {
+            for (i = 0, len = _keys.length; i < len; i++) {
                 iteratee(obj[_keys[i]], _keys[i], obj);
             }
         }
@@ -735,8 +696,7 @@ export var each = _.each = (function ()
 
 /* ------------------------------ createAssigner ------------------------------ */
 
-export var createAssigner = _.createAssigner = (function ()
-{
+export var createAssigner = _.createAssigner = (function () {
     /* Used to create extend, extendOwn and defaults.
      *
      * |Name    |Type    |Desc                          |
@@ -755,18 +715,14 @@ export var createAssigner = _.createAssigner = (function ()
      * isUndef each 
      */
 
-    function exports(keysFn, defaults)
-    {
-        return function (obj)
-        {
-            each(arguments, function (src, idx)
-            {
+    function exports(keysFn, defaults) {
+        return function(obj) {
+            each(arguments, function(src, idx) {
                 if (idx === 0) return;
 
                 var keys = keysFn(src);
 
-                each(keys, function (key)
-                {
+                each(keys, function(key) {
                     if (!defaults || isUndef(obj[key])) obj[key] = src[key];
                 });
             });
@@ -780,8 +736,7 @@ export var createAssigner = _.createAssigner = (function ()
 
 /* ------------------------------ extend ------------------------------ */
 
-export var extend = _.extend = (function (exports)
-{
+export var extend = _.extend = (function (exports) {
     /* Copy all of the properties in the source objects over to the destination object.
      *
      * |Name  |Type  |Desc              |
@@ -811,8 +766,7 @@ export var extend = _.extend = (function (exports)
 
 /* ------------------------------ values ------------------------------ */
 
-export var values = _.values = (function ()
-{
+export var values = _.values = (function () {
     /* Create an array of the own enumerable property values of object.
      *
      * |Name  |Type  |Desc                    |
@@ -834,11 +788,12 @@ export var values = _.values = (function ()
      * each 
      */
 
-    function exports(obj)
-    {
+    function exports(obj) {
         var ret = [];
 
-        each(obj, function (val) { ret.push(val); });
+        each(obj, function(val) {
+            ret.push(val);
+        });
 
         return ret;
     }
@@ -848,8 +803,7 @@ export var values = _.values = (function ()
 
 /* ------------------------------ contain ------------------------------ */
 
-export var contain = _.contain = (function ()
-{
+export var contain = _.contain = (function () {
     /* Check if the value is present in the list.
      *
      * |Name  |Type        |Desc                                |
@@ -873,8 +827,7 @@ export var contain = _.contain = (function ()
      * idxOf isArrLike values 
      */
 
-    function exports(arr, val)
-    {
+    function exports(arr, val) {
         if (!isArrLike(arr)) arr = values(arr);
 
         return idxOf(arr, val) >= 0;
@@ -885,8 +838,7 @@ export var contain = _.contain = (function ()
 
 /* ------------------------------ extendOwn ------------------------------ */
 
-export var extendOwn = _.extendOwn = (function (exports)
-{
+export var extendOwn = _.extendOwn = (function (exports) {
     /* Like extend, but only copies own properties over to the destination object.
      *
      * |Name  |Type  |Desc              |
@@ -916,8 +868,7 @@ export var extendOwn = _.extendOwn = (function (exports)
 
 /* ------------------------------ isStr ------------------------------ */
 
-export var isStr = _.isStr = (function ()
-{
+export var isStr = _.isStr = (function () {
     /* Check if value is a string primitive.
      *
      * |Name  |Type   |Desc                               |
@@ -939,8 +890,7 @@ export var isStr = _.isStr = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object String]';
     }
 
@@ -949,8 +899,7 @@ export var isStr = _.isStr = (function ()
 
 /* ------------------------------ isEmpty ------------------------------ */
 
-export var isEmpty = _.isEmpty = (function ()
-{
+export var isEmpty = _.isEmpty = (function () {
     /* Check if value is an empty object or array.
      *
      * |Name  |Type   |Desc                  |
@@ -974,12 +923,10 @@ export var isEmpty = _.isEmpty = (function ()
      * isArrLike isArr isStr isArgs keys 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         if (val == null) return true;
 
-        if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
-        {
+        if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
             return val.length === 0;
         }
 
@@ -991,8 +938,7 @@ export var isEmpty = _.isEmpty = (function ()
 
 /* ------------------------------ isMatch ------------------------------ */
 
-export var isMatch = _.isMatch = (function ()
-{
+export var isMatch = _.isMatch = (function () {
     /* Check if keys and values in src are contained in obj.
      *
      * |Name  |Type   |Desc                              |
@@ -1015,8 +961,7 @@ export var isMatch = _.isMatch = (function ()
      * keys 
      */
 
-    function exports(obj, src)
-    {
+    function exports(obj, src) {
         var _keys = keys(src),
             len = _keys.length;
 
@@ -1024,8 +969,7 @@ export var isMatch = _.isMatch = (function ()
 
         obj = Object(obj);
 
-        for (var i = 0; i < len; i++)
-        {
+        for (var i = 0; i < len; i++) {
             var key = _keys[i];
             if (src[key] !== obj[key] || !(key in obj)) return false;
         }
@@ -1038,8 +982,7 @@ export var isMatch = _.isMatch = (function ()
 
 /* ------------------------------ isObj ------------------------------ */
 
-export var isObj = _.isObj = (function ()
-{
+export var isObj = _.isObj = (function () {
     /* Check if value is the language type of Object.
      *
      * |Name  |Type   |Desc                      |
@@ -1060,8 +1003,7 @@ export var isObj = _.isObj = (function ()
      * test: all
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         var type = typeof val;
 
         return !!val && (type === 'function' || type === 'object');
@@ -1072,8 +1014,7 @@ export var isObj = _.isObj = (function ()
 
 /* ------------------------------ isRegExp ------------------------------ */
 
-export var isRegExp = _.isRegExp = (function ()
-{
+export var isRegExp = _.isRegExp = (function () {
     /* Check if value is a regular expression.
      *
      * |Name  |Type   |Desc                                 |
@@ -1095,8 +1036,7 @@ export var isRegExp = _.isRegExp = (function ()
      * objToStr 
      */
 
-    function exports(val)
-    {
+    function exports(val) {
         return objToStr(val) === '[object RegExp]';
     }
 
@@ -1105,8 +1045,7 @@ export var isRegExp = _.isRegExp = (function ()
 
 /* ------------------------------ last ------------------------------ */
 
-export var last = _.last = (function ()
-{
+export var last = _.last = (function () {
     /* Get the last element of array.
      *
      * |Name  |Type |Desc                     |
@@ -1124,8 +1063,7 @@ export var last = _.last = (function ()
      * test: all
      */
 
-    function exports(arr)
-    {
+    function exports(arr) {
         var len = arr ? arr.length : 0;
 
         if (len) return arr[len - 1];
@@ -1136,8 +1074,7 @@ export var last = _.last = (function ()
 
 /* ------------------------------ matcher ------------------------------ */
 
-export var matcher = _.matcher = (function ()
-{
+export var matcher = _.matcher = (function () {
     /* Return a predicate function that checks if attrs are contained in an object.
      *
      * |Name  |Type    |Desc                              |
@@ -1163,12 +1100,10 @@ export var matcher = _.matcher = (function ()
      * extendOwn isMatch 
      */
 
-    function exports(attrs)
-    {
+    function exports(attrs) {
         attrs = extendOwn({}, attrs);
 
-        return function (obj)
-        {
+        return function(obj) {
             return isMatch(obj, attrs);
         };
     }
@@ -1178,8 +1113,7 @@ export var matcher = _.matcher = (function ()
 
 /* ------------------------------ safeCb ------------------------------ */
 
-export var safeCb = _.safeCb = (function (exports)
-{
+export var safeCb = _.safeCb = (function (exports) {
     /* Create callback based on input value.
      */
 
@@ -1192,18 +1126,15 @@ export var safeCb = _.safeCb = (function (exports)
      * isFn isObj optimizeCb matcher identity 
      */
 
-    exports = function (val, ctx, argCount)
-    {
+    exports = function(val, ctx, argCount) {
         if (val == null) return identity;
 
         if (isFn(val)) return optimizeCb(val, ctx, argCount);
 
         if (isObj(val)) return matcher(val);
 
-        return function (key)
-        {
-            return function (obj)
-            {
+        return function(key) {
+            return function(obj) {
                 return obj == null ? undefined : obj[key];
             };
         };
@@ -1214,8 +1145,7 @@ export var safeCb = _.safeCb = (function (exports)
 
 /* ------------------------------ filter ------------------------------ */
 
-export var filter = _.filter = (function ()
-{
+export var filter = _.filter = (function () {
     /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
      *
      * |Name     |Type    |Desc                                   |
@@ -1242,14 +1172,12 @@ export var filter = _.filter = (function ()
      * safeCb each 
      */
 
-    function exports(obj, predicate, ctx)
-    {
+    function exports(obj, predicate, ctx) {
         var ret = [];
 
         predicate = safeCb(predicate, ctx);
 
-        each(obj, function (val, idx, list)
-        {
+        each(obj, function(val, idx, list) {
             if (predicate(val, idx, list)) ret.push(val);
         });
 
@@ -1261,8 +1189,7 @@ export var filter = _.filter = (function ()
 
 /* ------------------------------ uniqId ------------------------------ */
 
-export var uniqId = _.uniqId = (function ()
-{
+export var uniqId = _.uniqId = (function () {
     /* Generate a globally-unique id.
      *
      * |Name  |Type  |Desc              |
@@ -1282,8 +1209,7 @@ export var uniqId = _.uniqId = (function ()
 
     var idCounter = 0;
 
-    function exports(prefix)
-    {
+    function exports(prefix) {
         var id = ++idCounter + '';
 
         return prefix ? prefix + id : id;

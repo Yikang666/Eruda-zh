@@ -1,4 +1,4 @@
-import {Emitter} from './util';
+import { Emitter } from './util';
 
 let emitter = new Emitter();
 emitter.ADD = 'ADD';

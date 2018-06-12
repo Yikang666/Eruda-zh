@@ -4,19 +4,24 @@
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
   "scripts": {
-    "ci": "npm run lint && npm run test && npm run build",
+    "ci": "npm run prettier && npm run lint && npm run test && npm run build",
     "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
     "cov": "npm run test && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
     "test:sauce": "karma start karma.sauce.js",
+    "prettier": "prettier eustia/*.js src/**/*.js src/*.js script/*.js test/*.js --write",
     "lint": "eslint src",
     "setup": "node script/cpTestLib",
-    "genScriptUtil": "eustia build script/*.js -o script/util.js",
     "genIcon": "node script/icomoon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "eustia": {
+    "script": {
+      "files": "script/*.js",
+      "output": "script/util.js",
+      "format": "commonjs"
+    },
     "eruda": {
       "files": "src/**/*.js",
       "ignore": "src/**/stringify.js",
@@ -89,6 +94,7 @@
     "node-sass": "^4.7.2",
     "postcss-class-prefix": "^0.3.0",
     "postcss-loader": "^2.0.9",
+    "prettier": "^1.13.5",
     "remap-istanbul": "^0.9.5",
     "sass-loader": "^6.0.6",
     "webpack": "^3.10.0",

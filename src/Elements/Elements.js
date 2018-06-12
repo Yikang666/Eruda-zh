@@ -5,10 +5,10 @@ import Highlight from './Highlight';
 import Select from './Select';
 import Settings from '../Settings/Settings';
 import {
-    evalCss, 
-    $, 
-    keys, 
-    MutationObserver, 
+    evalCss,
+    $,
+    keys,
+    MutationObserver,
     each,
     isErudaEl,
     toStr,
@@ -25,10 +25,8 @@ import {
     isNum
 } from '../lib/util';
 
-export default class Elements extends Tool
-{
-    constructor()
-    {
+export default class Elements extends Tool {
+    constructor() {
         super();
 
         this._style = evalCss(require('./Elements.scss'));
@@ -40,8 +38,7 @@ export default class Elements extends Tool
         this._selectElement = false;
         this._observeElement = true;
     }
-    init($el, container)
-    {
+    init($el, container) {
         super.init($el);
 
         this._container = container;
@@ -57,62 +54,61 @@ export default class Elements extends Tool
         this._initObserver();
         this._initCfg();
     }
-    show()
-    {
+    show() {
         super.show();
 
         if (this._observeElement) this._enableObserver();
         if (!this._curEl) this._setEl(this._htmlEl);
         this._render();
     }
-    hide() 
-    {
+    hide() {
         this._disableObserver();
-        
+
         return super.hide();
     }
-    set(e)
-    {
+    set(e) {
         this._setEl(e);
         this.scrollToTop();
         this._render();
 
         return this;
     }
-    overrideEventTarget()
-    {
+    overrideEventTarget() {
         let winEventProto = getWinEventProto();
 
-        let origAddEvent = this._origAddEvent = winEventProto.addEventListener,
-            origRmEvent = this._origRmEvent = winEventProto.removeEventListener;
+        let origAddEvent = (this._origAddEvent =
+                winEventProto.addEventListener),
+            origRmEvent = (this._origRmEvent =
+                winEventProto.removeEventListener);
 
-        winEventProto.addEventListener = function (type, listener, useCapture)
-        {
+        winEventProto.addEventListener = function(type, listener, useCapture) {
             addEvent(this, type, listener, useCapture);
             origAddEvent.apply(this, arguments);
         };
 
-        winEventProto.removeEventListener = function (type, listener, useCapture)
-        {
+        winEventProto.removeEventListener = function(
+            type,
+            listener,
+            useCapture
+        ) {
             rmEvent(this, type, listener, useCapture);
             origRmEvent.apply(this, arguments);
         };
     }
-    scrollToTop() 
-    {
+    scrollToTop() {
         let el = this._$showArea.get(0);
-        
+
         el.scrollTop = 0;
     }
-    restoreEventTarget()
-    {
+    restoreEventTarget() {
         let winEventProto = getWinEventProto();
 
-        if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent;
-        if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent;
+        if (this._origAddEvent)
+            winEventProto.addEventListener = this._origAddEvent;
+        if (this._origRmEvent)
+            winEventProto.removeEventListener = this._origRmEvent;
     }
-    destroy() 
-    {
+    destroy() {
         super.destroy();
 
         evalCss.remove(this._style);
@@ -121,8 +117,7 @@ export default class Elements extends Tool
         this._disableObserver();
         this.restoreEventTarget();
     }
-    _back()
-    {
+    _back() {
         if (this._curEl === this._htmlEl) return;
 
         let parentQueue = this._curParentQueue,
@@ -132,104 +127,105 @@ export default class Elements extends Tool
 
         this.set(parent);
     }
-    _bindEvent()
-    {
+    _bindEvent() {
         let self = this,
             container = this._container,
             select = this._select;
 
-        this._$el.on('click', '.eruda-child', function ()
-        {
-            let idx = $(this).data('idx'),
-                curEl = self._curEl,
-                el = curEl.childNodes[idx];
+        this._$el
+            .on('click', '.eruda-child', function() {
+                let idx = $(this).data('idx'),
+                    curEl = self._curEl,
+                    el = curEl.childNodes[idx];
 
-            if (el && el.nodeType === 3)
-            {
-                let curTagName = curEl.tagName,
-                    type;
+                if (el && el.nodeType === 3) {
+                    let curTagName = curEl.tagName,
+                        type;
 
-                switch (curTagName)
-                {
-                    case 'SCRIPT': type = 'js'; break;
-                    case 'STYLE': type = 'css'; break;
-                    default: return;
+                    switch (curTagName) {
+                        case 'SCRIPT':
+                            type = 'js';
+                            break;
+                        case 'STYLE':
+                            type = 'css';
+                            break;
+                        default:
+                            return;
+                    }
+
+                    let sources = container.get('sources');
+
+                    if (sources) {
+                        sources.set(type, el.nodeValue);
+                        container.showTool('sources');
+                    }
+
+                    return;
                 }
 
-                let sources = container.get('sources');
+                !isElExist(el) ? self._render() : self.set(el);
+            })
+            .on('click', '.eruda-listener-content', function() {
+                let text = $(this).text(),
+                    sources = container.get('sources');
 
-                if (sources)
-                {
-                    sources.set(type, el.nodeValue);
+                if (sources) {
+                    sources.set('js', text);
                     container.showTool('sources');
                 }
+            })
+            .on('click', '.eruda-breadcrumb', () => {
+                let data =
+                        this._elData ||
+                        JSON.parse(stringify(this._curEl, { getterVal: true })),
+                    sources = container.get('sources');
 
-                return;
-            }
+                this._elData = data;
 
-            !isElExist(el) ? self._render() : self.set(el);
-        }).on('click', '.eruda-listener-content', function ()
-        {
-            let text = $(this).text(),
-                sources = container.get('sources');
+                if (sources) {
+                    sources.set('json', data);
+                    container.showTool('sources');
+                }
+            })
+            .on('click', '.eruda-parent', function() {
+                let idx = $(this).data('idx'),
+                    curEl = self._curEl,
+                    el = curEl.parentNode;
 
-            if (sources)
-            {
-                sources.set('js', text);
-                container.showTool('sources');
-            }
-        }).on('click', '.eruda-breadcrumb', () =>
-        {
-            let data = this._elData || JSON.parse(stringify(this._curEl, {getterVal: true})),
-                sources = container.get('sources');
+                while (idx-- && el.parentNode) el = el.parentNode;
 
-            this._elData = data;
-
-            if (sources)
-            {
-                sources.set('json', data);
-                container.showTool('sources');
-            }
-        }).on('click', '.eruda-parent', function ()
-        {
-            let idx = $(this).data('idx'),
-                curEl = self._curEl,
-                el = curEl.parentNode;
-
-            while (idx-- && el.parentNode) el = el.parentNode;
-
-            !isElExist(el) ? self._render() : self.set(el);
-        }).on('click', '.eruda-toggle-all-computed-style', () => this._toggleAllComputedStyle());
+                !isElExist(el) ? self._render() : self.set(el);
+            })
+            .on('click', '.eruda-toggle-all-computed-style', () =>
+                this._toggleAllComputedStyle()
+            );
 
         let $bottomBar = this._$el.find('.eruda-bottom-bar');
 
-        $bottomBar.on('click', '.eruda-refresh', () => this._render())
-                  .on('click', '.eruda-highlight', () => this._toggleHighlight())
-                  .on('click', '.eruda-select', () => this._toggleSelect())
-                  .on('click', '.eruda-reset', () => this.set(this._htmlEl));
+        $bottomBar
+            .on('click', '.eruda-refresh', () => this._render())
+            .on('click', '.eruda-highlight', () => this._toggleHighlight())
+            .on('click', '.eruda-select', () => this._toggleSelect())
+            .on('click', '.eruda-reset', () => this.set(this._htmlEl));
 
         select.on('select', target => this.set(target));
     }
-    _toggleAllComputedStyle()
-    {
+    _toggleAllComputedStyle() {
         this._rmDefComputedStyle = !this._rmDefComputedStyle;
 
         this._render();
     }
-    _enableObserver() 
-    {
+    _enableObserver() {
         this._observer.observe(this._htmlEl, {
             attributes: true,
             childList: true,
             subtree: true
         });
     }
-    _disableObserver() 
-    {
+    _disableObserver() {
         this._observer.disconnect();
     }
-    _toggleHighlight()
-    {
+    _toggleHighlight() {
         if (this._selectElement) return;
 
         this._$el.find('.eruda-highlight').toggleClass('eruda-active');
@@ -237,25 +233,22 @@ export default class Elements extends Tool
 
         this._render();
     }
-    _toggleSelect()
-    {
+    _toggleSelect() {
         let select = this._select;
 
         this._$el.find('.eruda-select').toggleClass('eruda-active');
-        if (!this._selectElement && !this._highlightElement) this._toggleHighlight();
+        if (!this._selectElement && !this._highlightElement)
+            this._toggleHighlight();
         this._selectElement = !this._selectElement;
 
-        if (this._selectElement)
-        {
+        if (this._selectElement) {
             select.enable();
             this._container.hide();
-        } else
-        {
+        } else {
             select.disable();
         }
     }
-    _setEl(el)
-    {
+    _setEl(el) {
         this._curEl = el;
         this._elData = null;
         this._curCssStore = new CssStore(el);
@@ -265,26 +258,24 @@ export default class Elements extends Tool
         let parentQueue = [];
 
         let parent = el.parentNode;
-        while (parent)
-        {
+        while (parent) {
             parentQueue.push(parent);
             parent = parent.parentNode;
         }
         this._curParentQueue = parentQueue;
     }
-    _getData()
-    {
+    _getData() {
         let ret = {};
 
         let el = this._curEl,
             cssStore = this._curCssStore;
 
-        let {className, id, attributes, tagName} = el;
+        let { className, id, attributes, tagName } = el;
 
         ret.parents = getParents(el);
         ret.children = formatChildNodes(el.childNodes);
         ret.attributes = formatAttr(attributes);
-        ret.name = formatElName({tagName, id, className, attributes});
+        ret.name = formatElName({ tagName, id, className, attributes });
 
         let events = el.erudaEvents;
         if (events && keys(events).length !== 0) ret.listeners = events;
@@ -293,8 +284,7 @@ export default class Elements extends Tool
 
         let computedStyle = cssStore.getComputedStyle();
 
-        function getBoxModelValue(type) 
-        {
+        function getBoxModelValue(type) {
             let keys = ['top', 'left', 'right', 'bottom'];
             if (type !== 'position') keys = map(keys, key => `${type}-${key}`);
             if (type === 'border') keys = map(keys, key => `${key}-width`);
@@ -317,13 +307,13 @@ export default class Elements extends Tool
             }
         };
 
-        if (computedStyle['position'] !== 'static') 
-        {
+        if (computedStyle['position'] !== 'static') {
             boxModel.position = getBoxModelValue('position');
         }
         ret.boxModel = boxModel;
 
-        if (this._rmDefComputedStyle) computedStyle = rmDefComputedStyle(computedStyle);
+        if (this._rmDefComputedStyle)
+            computedStyle = rmDefComputedStyle(computedStyle);
         ret.rmDefComputedStyle = this._rmDefComputedStyle;
         processStyleRules(computedStyle);
         ret.computedStyle = computedStyle;
@@ -335,44 +325,36 @@ export default class Elements extends Tool
 
         return ret;
     }
-    _render()
-    {
+    _render() {
         if (!isElExist(this._curEl)) return this._back();
 
         this._highlight[this._highlightElement ? 'show' : 'hide']();
         this._renderHtml(this._tpl(this._getData()));
     }
-    _renderHtml(html)
-    {
+    _renderHtml(html) {
         if (html === this._lastHtml) return;
         this._lastHtml = html;
         this._$showArea.html(html);
     }
-    _initObserver()
-    {
-        this._observer = new MutationObserver(mutations =>
-        {
+    _initObserver() {
+        this._observer = new MutationObserver(mutations => {
             each(mutations, mutation => this._handleMutation(mutation));
         });
     }
-    _handleMutation(mutation)
-    {
+    _handleMutation(mutation) {
         let i, len, node;
 
         if (isErudaEl(mutation.target)) return;
 
-        if (mutation.type === 'attributes')
-        {
+        if (mutation.type === 'attributes') {
             if (mutation.target !== this._curEl) return;
             this._render();
-        } else if (mutation.type === 'childList')
-        {
+        } else if (mutation.type === 'childList') {
             if (mutation.target === this._curEl) return this._render();
 
             let addedNodes = mutation.addedNodes;
 
-            for (i = 0, len = addedNodes.length; i < len; i++)
-            {
+            for (i = 0, len = addedNodes.length; i < len; i++) {
                 node = addedNodes[i];
 
                 if (node.parentNode === this._curEl) return this._render();
@@ -380,83 +362,84 @@ export default class Elements extends Tool
 
             let removedNodes = mutation.removedNodes;
 
-            for (i = 0, len = removedNodes.length; i < len; i++)
-            {
-                if (removedNodes[i] === this._curEl) return this.set(this._htmlEl);
+            for (i = 0, len = removedNodes.length; i < len; i++) {
+                if (removedNodes[i] === this._curEl)
+                    return this.set(this._htmlEl);
             }
         }
     }
-    _initCfg()
-    {
-        let cfg = this.config = Settings.createCfg('elements', {
+    _initCfg() {
+        let cfg = (this.config = Settings.createCfg('elements', {
             overrideEventTarget: true,
             observeElement: true
-        });
+        }));
 
         if (cfg.get('overrideEventTarget')) this.overrideEventTarget();
         if (cfg.get('observeElement')) this._observeElement = false;
 
-        cfg.on('change', (key, val) =>
-        {
-            switch (key)
-            {
-                case 'overrideEventTarget': return val ? this.overrideEventTarget(): this.restoreEventTarget();
-                case 'observeElement': 
+        cfg.on('change', (key, val) => {
+            switch (key) {
+                case 'overrideEventTarget':
+                    return val
+                        ? this.overrideEventTarget()
+                        : this.restoreEventTarget();
+                case 'observeElement':
                     this._observeElement = val;
-                    return val ? this._enableObserver() :this._disableObserver();
+                    return val
+                        ? this._enableObserver()
+                        : this._disableObserver();
             }
         });
 
         let settings = this._container.get('settings');
-        settings.text('Elements')
-                .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners');
+        settings
+            .text('Elements')
+            .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners');
 
-        if (this._observer) settings.switch(cfg, 'observeElement', 'Auto Refresh');
+        if (this._observer)
+            settings.switch(cfg, 'observeElement', 'Auto Refresh');
 
         settings.separator();
     }
 }
 
-function processStyleRules(style)
-{
-    each(style, (val, key) => style[key] = processStyleRule(val));
+function processStyleRules(style) {
+    each(style, (val, key) => (style[key] = processStyleRule(val)));
 }
 
 let regColor = /rgba?\((.*?)\)/g,
     regCssUrl = /url\("?(.*?)"?\)/g;
 
-function processStyleRule(val)
-{
+function processStyleRule(val) {
     // For css custom properties, val is unable to retrieved.
     val = toStr(val);
 
-    return val.replace(regColor, '<span class="eruda-style-color" style="background-color: $&"></span>$&')
-              .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`);
+    return val
+        .replace(
+            regColor,
+            '<span class="eruda-style-color" style="background-color: $&"></span>$&'
+        )
+        .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`);
 }
 
 const isElExist = val => isEl(val) && val.parentNode;
 
-function formatElName(data, {noAttr = false} = {})
-{
-    let {id, className, attributes} = data;
+function formatElName(data, { noAttr = false } = {}) {
+    let { id, className, attributes } = data;
 
     let ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`;
 
     if (id !== '') ret += `#${id}`;
 
-    if (isStr(className))
-    {
-        each(className.split(/\s+/g), (val) =>
-        {
+    if (isStr(className)) {
+        each(className.split(/\s+/g), val => {
             if (val.trim() === '') return;
             ret += `.${val}`;
         });
     }
 
-    if (!noAttr)
-    {
-        each(attributes, (attr) =>
-        {
+    if (!noAttr) {
+        each(attributes, attr => {
             let name = attr.name;
             if (name === 'id' || name === 'class' || name === 'style') return;
             ret += ` ${name}="${attr.value}"`;
@@ -466,44 +449,44 @@ function formatElName(data, {noAttr = false} = {})
     return ret;
 }
 
-let formatAttr = attributes => map(attributes, attr =>
-{
-    let {name, value} = attr;
-    value = escape(value);
+let formatAttr = attributes =>
+    map(attributes, attr => {
+        let { name, value } = attr;
+        value = escape(value);
 
-    let isLink = (name === 'src' || name === 'href') && !startWith(value, 'data');
-    if (isLink) value = wrapLink(value);
-    if (name === 'style') value = processStyleRule(value);
+        let isLink =
+            (name === 'src' || name === 'href') && !startWith(value, 'data');
+        if (isLink) value = wrapLink(value);
+        if (name === 'style') value = processStyleRule(value);
 
-    return {name, value};
-});
+        return { name, value };
+    });
 
-function formatChildNodes(nodes)
-{
+function formatChildNodes(nodes) {
     let ret = [];
 
-    for (let i = 0, len = nodes.length; i < len; i++)
-    {
+    for (let i = 0, len = nodes.length; i < len; i++) {
         let child = nodes[i],
             nodeType = child.nodeType;
 
-        if (nodeType === 3 || nodeType === 8)
-        {
+        if (nodeType === 3 || nodeType === 8) {
             let val = child.nodeValue.trim();
-            if (val !== '') ret.push({
-                text: val,
-                isCmt: nodeType === 8,
-                idx: i
-            });
+            if (val !== '')
+                ret.push({
+                    text: val,
+                    isCmt: nodeType === 8,
+                    idx: i
+                });
             continue;
         }
 
         let isSvg = !isStr(child.className);
 
-        if (nodeType === 1 &&
+        if (
+            nodeType === 1 &&
             child.id !== 'eruda' &&
-            (isSvg || child.className.indexOf('eruda') < 0))
-        {
+            (isSvg || child.className.indexOf('eruda') < 0)
+        ) {
             ret.push({
                 text: formatElName(child),
                 isEl: true,
@@ -515,16 +498,14 @@ function formatChildNodes(nodes)
     return ret;
 }
 
-function getParents(el)
-{
+function getParents(el) {
     let ret = [],
         i = 0,
         parent = el.parentNode;
 
-    while (parent && parent.nodeType === 1)
-    {
+    while (parent && parent.nodeType === 1) {
         ret.push({
-            text: formatElName(parent, {noAttr: true}),
+            text: formatElName(parent, { noAttr: true }),
             idx: i++
         });
 
@@ -534,15 +515,13 @@ function getParents(el)
     return ret.reverse();
 }
 
-function getInlineStyle(style)
-{
+function getInlineStyle(style) {
     let ret = {
         selectorText: 'element.style',
         style: {}
     };
 
-    for (let i = 0, len = style.length; i < len; i++)
-    {
+    for (let i = 0, len = style.length; i < len; i++) {
         let s = style[i];
 
         ret.style[s] = style[s];
@@ -553,12 +532,10 @@ function getInlineStyle(style)
 
 let defComputedStyle = require('./defComputedStyle.json');
 
-function rmDefComputedStyle(computedStyle)
-{
+function rmDefComputedStyle(computedStyle) {
     let ret = {};
 
-    each(computedStyle, (val, key) =>
-    {
+    each(computedStyle, (val, key) => {
         if (val === defComputedStyle[key]) return;
 
         ret[key] = val;
@@ -571,11 +548,10 @@ let NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head'];
 
 let needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1;
 
-function addEvent(el, type, listener, useCapture = false)
-{
+function addEvent(el, type, listener, useCapture = false) {
     if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return;
 
-    let events = el.erudaEvents = el.erudaEvents || {};
+    let events = (el.erudaEvents = el.erudaEvents || {});
 
     events[type] = events[type] || [];
     events[type].push({
@@ -585,8 +561,7 @@ function addEvent(el, type, listener, useCapture = false)
     });
 }
 
-function rmEvent(el, type, listener, useCapture = false)
-{
+function rmEvent(el, type, listener, useCapture = false) {
     if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return;
 
     let events = el.erudaEvents;
@@ -595,10 +570,8 @@ function rmEvent(el, type, listener, useCapture = false)
 
     let listeners = events[type];
 
-    for (let i = 0, len = listeners.length; i < len; i++)
-    {
-        if (listeners[i].listener === listener)
-        {
+    for (let i = 0, len = listeners.length; i < len; i++) {
+        if (listeners[i].listener === listener) {
             listeners.splice(i, 1);
             break;
         }
@@ -608,12 +581,12 @@ function rmEvent(el, type, listener, useCapture = false)
     if (keys(events).length === 0) delete el.erudaEvents;
 }
 
-let getWinEventProto = () => safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
+let getWinEventProto = () =>
+    safeGet(window, 'EventTarget.prototype') || window.Node.prototype;
 
 let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`;
 
-function boxModelValue(val, type) 
-{
+function boxModelValue(val, type) {
     if (isNum(val)) return val;
 
     if (!isStr(val)) return '‒';

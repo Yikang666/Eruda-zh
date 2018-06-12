@@ -1,16 +1,12 @@
-describe('devTools', function () 
-{
-    describe('init', function () 
-    {
-        it('destroy', function () 
-        {
+describe('devTools', function() {
+    describe('init', function() {
+        it('destroy', function() {
             eruda.destroy();
-            
+
             expect($('#eruda')).toHaveLength(0);
         });
 
-        it('init', function () 
-        {
+        it('init', function() {
             var container = document.createElement('div');
             container.id = 'eruda';
             document.body.appendChild(container);
@@ -26,14 +22,11 @@ describe('devTools', function ()
         });
     });
 
-    describe('tool', function () 
-    {
-        it('add', function () 
-        {
+    describe('tool', function() {
+        it('add', function() {
             eruda.add({
                 name: 'test',
-                init: function ($el) 
-                {
+                init: function($el) {
                     this._$el = $el;
                     $el.html('Test Plugin');
                 }
@@ -42,44 +35,36 @@ describe('devTools', function ()
             expect($('.eruda-test')).toContainText('Test Plugin');
         });
 
-        it('show', function () 
-        {
+        it('show', function() {
             var $tool = $('.eruda-test');
             expect($tool).toBeHidden();
             eruda.show('test');
-            expect($tool).toHaveCss({display: 'block'});
+            expect($tool).toHaveCss({ display: 'block' });
         });
 
-        it('remove', function () 
-        {
+        it('remove', function() {
             eruda.remove('test');
             expect($('.eruda-test')).toHaveLength(0);
         });
     });
 
-    describe('display', function () 
-    {
-        it('show', function () 
-        {
+    describe('display', function() {
+        it('show', function() {
             eruda.show();
-            expect($('.eruda-dev-tools')).toHaveCss({display: 'block'});
+            expect($('.eruda-dev-tools')).toHaveCss({ display: 'block' });
         });
 
-        it('hide', function (done) 
-        {
+        it('hide', function(done) {
             eruda.hide();
-            setTimeout(function ()
-            {
+            setTimeout(function() {
                 expect($('.eruda-dev-tools')).toBeHidden();
                 done();
             }, 500);
         });
     });
 
-    describe('scale', function () 
-    {
-        it('get', function () 
-        {
+    describe('scale', function() {
+        it('get', function() {
             eruda.scale(1);
             expect(eruda.scale()).toBe(1);
         });
