@@ -27,7 +27,7 @@ export default [
                 return;
             }
 
-            style = evalCss(borderCss);
+            style = evalCss(borderCss, document.head);
         },
         desc: 'Add color borders to all elements'
     },

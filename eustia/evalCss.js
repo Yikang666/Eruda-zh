@@ -6,15 +6,15 @@ _('toStr each filter');
 var styleList = [],
     scale = 1;
 
-function exports(css) {
+function exports(css, container) {
     css = toStr(css);
 
     for (var i = 0, len = styleList.length; i < len; i++) {
         if (styleList[i].css === css) return;
     }
 
-    let container = exports.container || document.head,
-        el = document.createElement('style');
+    container = container || exports.container || document.head;
+    const el = document.createElement('style');
 
     el.type = 'text/css';
     container.appendChild(el);
