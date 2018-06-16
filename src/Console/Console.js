@@ -1,310 +1,296 @@
-import Logger from './Logger';
-import Tool from '../DevTools/Tool';
-import { noop, evalCss, $, Emitter } from '../lib/util';
-import emitter from '../lib/emitter';
-import Settings from '../Settings/Settings';
-import stringify from './stringify';
+import Logger from './Logger'
+import Tool from '../DevTools/Tool'
+import { noop, evalCss, $, Emitter } from '../lib/util'
+import emitter from '../lib/emitter'
+import Settings from '../Settings/Settings'
+import stringify from './stringify'
 
 export default class Console extends Tool {
-    constructor() {
-        super();
+  constructor() {
+    super()
 
-        Emitter.mixin(this);
+    Emitter.mixin(this)
 
-        this.name = 'console';
-        this._scale = 1;
+    this.name = 'console'
+    this._scale = 1
 
-        this._registerListener();
+    this._registerListener()
+  }
+  init($el, container) {
+    super.init($el)
+
+    this._appendTpl()
+
+    this._initLogger()
+    this._exposeLogger()
+    this._rejectionHandler = e => this._logger.error(e.reason)
+
+    this._initCfg(container)
+    this._bindEvent(container)
+  }
+  show() {
+    super.show()
+
+    this._logger.render()
+  }
+  overrideConsole() {
+    let origConsole = (this._origConsole = {}),
+      winConsole = window.console
+
+    CONSOLE_METHOD.forEach(name => {
+      let origin = (origConsole[name] = noop)
+      if (winConsole[name])
+        origin = origConsole[name] = winConsole[name].bind(winConsole)
+
+      winConsole[name] = (...args) => {
+        this[name](...args)
+        origin(...args)
+      }
+    })
+
+    return this
+  }
+  restoreConsole() {
+    if (!this._origConsole) return this
+
+    CONSOLE_METHOD.forEach(
+      name => (window.console[name] = this._origConsole[name])
+    )
+    delete this._origConsole
+
+    return this
+  }
+  catchGlobalErr() {
+    this._origOnerror = window.onerror
+
+    window.onerror = (errMsg, url, lineNum, column, errObj) =>
+      this._logger.error(errObj ? errObj : errMsg)
+    window.addEventListener('unhandledrejection', this._rejectionHandler)
+
+    return this
+  }
+  ignoreGlobalErr() {
+    if (this._origOnerror) {
+      window.onerror = this._origOnerror
+      delete this._origOnerror
     }
-    init($el, container) {
-        super.init($el);
+    window.removeEventListener('unhandledrejection', this._rejectionHandler)
 
-        this._appendTpl();
+    return this
+  }
+  destroy() {
+    this._logger.destroy()
+    super.destroy()
 
-        this._initLogger();
-        this._exposeLogger();
-        this._rejectionHandler = e => this._logger.error(e.reason);
+    evalCss.remove(this._style)
+    this.ignoreGlobalErr()
+    this.restoreConsole()
+    this._unregisterListener()
+  }
+  _registerListener() {
+    this._scaleListener = scale => (this._scale = scale)
 
-        this._initCfg(container);
-        this._bindEvent(container);
-    }
-    show() {
-        super.show();
+    emitter.on(emitter.SCALE, this._scaleListener)
+  }
+  _unregisterListener() {
+    emitter.off(emitter.SCALE, this._scaleListener)
+  }
+  _appendTpl() {
+    let $el = this._$el
 
-        this._logger.render();
-    }
-    overrideConsole() {
-        let origConsole = (this._origConsole = {}),
-            winConsole = window.console;
+    this._style = evalCss(require('./Console.scss'))
+    $el.append(require('./Console.hbs')())
 
-        CONSOLE_METHOD.forEach(name => {
-            let origin = (origConsole[name] = noop);
-            if (winConsole[name])
-                origin = origConsole[name] = winConsole[name].bind(winConsole);
+    let _$inputContainer = $el.find('.eruda-js-input'),
+      _$input = _$inputContainer.find('textarea'),
+      _$inputBtns = _$inputContainer.find('.eruda-buttons')
 
-            winConsole[name] = (...args) => {
-                this[name](...args);
-                origin(...args);
-            };
-        });
+    Object.assign(this, {
+      _$control: $el.find('.eruda-control'),
+      _$logs: $el.find('.eruda-logs'),
+      _$inputContainer,
+      _$input,
+      _$inputBtns
+    })
+  }
+  _initLogger() {
+    let $filter = this._$control.find('.eruda-filter'),
+      logger = (this._logger = new Logger(this._$logs, this))
 
-        return this;
-    }
-    restoreConsole() {
-        if (!this._origConsole) return this;
+    logger.on('filter', filter =>
+      $filter.each(function() {
+        let $this = $(this),
+          isMatch = $this.data('filter') === filter
 
-        CONSOLE_METHOD.forEach(
-            name => (window.console[name] = this._origConsole[name])
-        );
-        delete this._origConsole;
+        $this[isMatch ? 'addClass' : 'rmClass']('eruda-active')
+      })
+    )
+  }
+  _exposeLogger() {
+    let logger = this._logger,
+      methods = ['filter', 'html'].concat(CONSOLE_METHOD)
 
-        return this;
-    }
-    catchGlobalErr() {
-        this._origOnerror = window.onerror;
+    methods.forEach(
+      name =>
+        (this[name] = (...args) => {
+          logger[name](...args)
+          this.emit(name, ...args)
 
-        window.onerror = (errMsg, url, lineNum, column, errObj) =>
-            this._logger.error(errObj ? errObj : errMsg);
-        window.addEventListener('unhandledrejection', this._rejectionHandler);
+          return this
+        })
+    )
+  }
+  _bindEvent(container) {
+    let $input = this._$input,
+      $inputBtns = this._$inputBtns,
+      $control = this._$control,
+      logger = this._logger,
+      config = this.config
 
-        return this;
-    }
-    ignoreGlobalErr() {
-        if (this._origOnerror) {
-            window.onerror = this._origOnerror;
-            delete this._origOnerror;
-        }
-        window.removeEventListener(
-            'unhandledrejection',
-            this._rejectionHandler
-        );
+    $control
+      .on('click', '.eruda-clear-console', () => logger.clear())
+      .on('click', '.eruda-filter', function() {
+        logger.filter($(this).data('filter'))
+      })
+      .on('click', '.eruda-help', () => logger.help())
 
-        return this;
-    }
-    destroy() {
-        this._logger.destroy();
-        super.destroy();
+    $inputBtns
+      .on('click', '.eruda-cancel', () => this._hideInput())
+      .on('click', '.eruda-execute', () => {
+        let jsInput = $input.val().trim()
+        if (jsInput === '') return
 
-        evalCss.remove(this._style);
-        this.ignoreGlobalErr();
-        this.restoreConsole();
-        this._unregisterListener();
-    }
-    _registerListener() {
-        this._scaleListener = scale => (this._scale = scale);
+        logger.input(jsInput)
+        $input
+          .val('')
+          .get(0)
+          .blur()
+        this._hideInput()
+      })
 
-        emitter.on(emitter.SCALE, this._scaleListener);
-    }
-    _unregisterListener() {
-        emitter.off(emitter.SCALE, this._scaleListener);
-    }
-    _appendTpl() {
-        let $el = this._$el;
+    $input.on('focusin', () => this._showInput())
 
-        this._style = evalCss(require('./Console.scss'));
-        $el.append(require('./Console.hbs')());
+    logger
+      .on('viewJson', data => {
+        let sources = container.get('sources')
+        if (!sources) return
 
-        let _$inputContainer = $el.find('.eruda-js-input'),
-            _$input = _$inputContainer.find('textarea'),
-            _$inputBtns = _$inputContainer.find('.eruda-buttons');
+        sources.set('json', data)
+        container.showTool('sources')
+      })
+      .on('insert', log => {
+        let autoShow = log.type === 'error' && config.get('displayIfErr')
 
-        Object.assign(this, {
-            _$control: $el.find('.eruda-control'),
-            _$logs: $el.find('.eruda-logs'),
-            _$inputContainer,
-            _$input,
-            _$inputBtns
-        });
-    }
-    _initLogger() {
-        let $filter = this._$control.find('.eruda-filter'),
-            logger = (this._logger = new Logger(this._$logs, this));
+        if (autoShow) container.showTool('console').show()
+      })
+  }
+  _hideInput() {
+    this._$inputContainer.css({
+      paddingTop: 0,
+      height: 40 * this._scale
+    })
 
-        logger.on('filter', filter =>
-            $filter.each(function() {
-                let $this = $(this),
-                    isMatch = $this.data('filter') === filter;
+    this._$inputBtns.hide()
+  }
+  _showInput() {
+    this._$inputContainer.css({
+      paddingTop: 40 * this._scale,
+      height: '100%'
+    })
 
-                $this[isMatch ? 'addClass' : 'rmClass']('eruda-active');
-            })
-        );
-    }
-    _exposeLogger() {
-        let logger = this._logger,
-            methods = ['filter', 'html'].concat(CONSOLE_METHOD);
+    this._$inputBtns.show()
+  }
+  _initCfg(container) {
+    let sources = container.get('sources'),
+      logger = this._logger
 
-        methods.forEach(
-            name =>
-                (this[name] = (...args) => {
-                    logger[name](...args);
-                    this.emit(name, ...args);
+    let cfg = (this.config = Settings.createCfg('console', {
+      catchGlobalErr: true,
+      overrideConsole: true,
+      displayExtraInfo: false,
+      displayUnenumerable: true,
+      displayGetterVal: false,
+      viewLogInSources: false,
+      displayIfErr: false,
+      useWorker: true,
+      maxLogNum: 'infinite'
+    }))
 
-                    return this;
-                })
-        );
-    }
-    _bindEvent(container) {
-        let $input = this._$input,
-            $inputBtns = this._$inputBtns,
-            $control = this._$control,
-            logger = this._logger,
-            config = this.config;
+    let isWorkerSupported = !!window.Worker
 
-        $control
-            .on('click', '.eruda-clear-console', () => logger.clear())
-            .on('click', '.eruda-filter', function() {
-                logger.filter($(this).data('filter'));
-            })
-            .on('click', '.eruda-help', () => logger.help());
+    let maxLogNum = cfg.get('maxLogNum')
+    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
 
-        $inputBtns
-            .on('click', '.eruda-cancel', () => this._hideInput())
-            .on('click', '.eruda-execute', () => {
-                let jsInput = $input.val().trim();
-                if (jsInput === '') return;
+    if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
+    if (cfg.get('overrideConsole')) this.overrideConsole()
+    if (cfg.get('useWorker') && isWorkerSupported) stringify.useWorker = true
+    logger.displayHeader(cfg.get('displayExtraInfo'))
+    logger.displayUnenumerable(cfg.get('displayUnenumerable'))
+    logger.displayGetterVal(cfg.get('displayGetterVal'))
+    if (sources) logger.viewLogInSources(cfg.get('viewLogInSources'))
+    logger.maxNum(maxLogNum)
 
-                logger.input(jsInput);
-                $input
-                    .val('')
-                    .get(0)
-                    .blur();
-                this._hideInput();
-            });
+    cfg.on('change', (key, val) => {
+      switch (key) {
+        case 'catchGlobalErr':
+          return val ? this.catchGlobalErr() : this.ignoreGlobalErr()
+        case 'overrideConsole':
+          return val ? this.overrideConsole() : this.restoreConsole()
+        case 'maxLogNum':
+          return logger.maxNum(val === 'infinite' ? val : +val)
+        case 'displayExtraInfo':
+          return logger.displayHeader(val)
+        case 'displayUnenumerable':
+          return logger.displayUnenumerable(val)
+        case 'displayGetterVal':
+          return logger.displayGetterVal(val)
+        case 'viewLogInSources':
+          return logger.viewLogInSources(val)
+        case 'useWorker':
+          stringify.useWorker = val
+          return
+      }
+    })
 
-        $input.on('focusin', () => this._showInput());
+    let settings = container.get('settings')
 
-        logger
-            .on('viewJson', data => {
-                let sources = container.get('sources');
-                if (!sources) return;
+    settings
+      .text('Console')
+      .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
+      .switch(cfg, 'overrideConsole', 'Override Console')
+      .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
+      .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
+      .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
+      .switch(cfg, 'displayGetterVal', 'Access Getter Value')
 
-                sources.set('json', data);
-                container.showTool('sources');
-            })
-            .on('insert', log => {
-                let autoShow =
-                    log.type === 'error' && config.get('displayIfErr');
+    if (isWorkerSupported) settings.switch(cfg, 'useWorker', 'Use Web Worker')
+    if (sources)
+      settings.switch(cfg, 'viewLogInSources', 'View Log In Sources Panel')
 
-                if (autoShow) container.showTool('console').show();
-            });
-    }
-    _hideInput() {
-        this._$inputContainer.css({
-            paddingTop: 0,
-            height: 40 * this._scale
-        });
-
-        this._$inputBtns.hide();
-    }
-    _showInput() {
-        this._$inputContainer.css({
-            paddingTop: 40 * this._scale,
-            height: '100%'
-        });
-
-        this._$inputBtns.show();
-    }
-    _initCfg(container) {
-        let sources = container.get('sources'),
-            logger = this._logger;
-
-        let cfg = (this.config = Settings.createCfg('console', {
-            catchGlobalErr: true,
-            overrideConsole: true,
-            displayExtraInfo: false,
-            displayUnenumerable: true,
-            displayGetterVal: false,
-            viewLogInSources: false,
-            displayIfErr: false,
-            useWorker: true,
-            maxLogNum: 'infinite'
-        }));
-
-        let isWorkerSupported = !!window.Worker;
-
-        let maxLogNum = cfg.get('maxLogNum');
-        maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum;
-
-        if (cfg.get('catchGlobalErr')) this.catchGlobalErr();
-        if (cfg.get('overrideConsole')) this.overrideConsole();
-        if (cfg.get('useWorker') && isWorkerSupported)
-            stringify.useWorker = true;
-        logger.displayHeader(cfg.get('displayExtraInfo'));
-        logger.displayUnenumerable(cfg.get('displayUnenumerable'));
-        logger.displayGetterVal(cfg.get('displayGetterVal'));
-        if (sources) logger.viewLogInSources(cfg.get('viewLogInSources'));
-        logger.maxNum(maxLogNum);
-
-        cfg.on('change', (key, val) => {
-            switch (key) {
-                case 'catchGlobalErr':
-                    return val ? this.catchGlobalErr() : this.ignoreGlobalErr();
-                case 'overrideConsole':
-                    return val ? this.overrideConsole() : this.restoreConsole();
-                case 'maxLogNum':
-                    return logger.maxNum(val === 'infinite' ? val : +val);
-                case 'displayExtraInfo':
-                    return logger.displayHeader(val);
-                case 'displayUnenumerable':
-                    return logger.displayUnenumerable(val);
-                case 'displayGetterVal':
-                    return logger.displayGetterVal(val);
-                case 'viewLogInSources':
-                    return logger.viewLogInSources(val);
-                case 'useWorker':
-                    stringify.useWorker = val;
-                    return;
-            }
-        });
-
-        let settings = container.get('settings');
-
-        settings
-            .text('Console')
-            .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
-            .switch(cfg, 'overrideConsole', 'Override Console')
-            .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
-            .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
-            .switch(
-                cfg,
-                'displayUnenumerable',
-                'Display Unenumerable Properties'
-            )
-            .switch(cfg, 'displayGetterVal', 'Access Getter Value');
-
-        if (isWorkerSupported)
-            settings.switch(cfg, 'useWorker', 'Use Web Worker');
-        if (sources)
-            settings.switch(
-                cfg,
-                'viewLogInSources',
-                'View Log In Sources Panel'
-            );
-
-        settings
-            .select(cfg, 'maxLogNum', 'Max Log Number', [
-                'infinite',
-                '250',
-                '125',
-                '100',
-                '50',
-                '10'
-            ])
-            .separator();
-    }
+    settings
+      .select(cfg, 'maxLogNum', 'Max Log Number', [
+        'infinite',
+        '250',
+        '125',
+        '100',
+        '50',
+        '10'
+      ])
+      .separator()
+  }
 }
 
 const CONSOLE_METHOD = [
-    'log',
-    'error',
-    'info',
-    'warn',
-    'dir',
-    'time',
-    'timeEnd',
-    'clear',
-    'table',
-    'assert',
-    'count',
-    'debug'
-];
+  'log',
+  'error',
+  'info',
+  'warn',
+  'dir',
+  'time',
+  'timeEnd',
+  'clear',
+  'table',
+  'assert',
+  'count',
+  'debug'
+]

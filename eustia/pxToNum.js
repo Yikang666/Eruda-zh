@@ -1,8 +1,8 @@
 /* Turn string like '0px' to number.
  */
 
-_('toNum');
+_('toNum')
 
 function exports(str) {
-    return toNum(str.replace('px', ''));
+  return toNum(str.replace('px', ''))
 }

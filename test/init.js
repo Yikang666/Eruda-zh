@@ -1,3 +1,3 @@
 eruda.init({
-    useShadowDom: false
-});
+  useShadowDom: false
+})

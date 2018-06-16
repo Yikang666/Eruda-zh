@@ -1,84 +1,84 @@
-import Tool from '../DevTools/Tool';
-import defInfo from './defInfo';
-import { evalCss, each, isFn } from '../lib/util';
+import Tool from '../DevTools/Tool'
+import defInfo from './defInfo'
+import { evalCss, each, isFn } from '../lib/util'
 
 export default class Info extends Tool {
-    constructor() {
-        super();
+  constructor() {
+    super()
 
-        this._style = evalCss(require('./Info.scss'));
+    this._style = evalCss(require('./Info.scss'))
 
-        this.name = 'info';
-        this._tpl = require('./Info.hbs');
-        this._infos = [];
+    this.name = 'info'
+    this._tpl = require('./Info.hbs')
+    this._infos = []
+  }
+  init($el) {
+    super.init($el)
+
+    this._addDefInfo()
+  }
+  show() {
+    this._render()
+
+    super.show()
+  }
+  destroy() {
+    super.destroy()
+
+    evalCss.remove(this._style)
+  }
+  add(name, val) {
+    let infos = this._infos,
+      isUpdate = false
+
+    each(infos, info => {
+      if (name !== info.name) return
+
+      info.val = val
+      isUpdate = true
+    })
+
+    if (!isUpdate) infos.push({ name, val })
+
+    this._render()
+
+    return this
+  }
+  remove(name) {
+    let infos = this._infos
+
+    for (let i = infos.length - 1; i >= 0; i--) {
+      if (infos[i].name === name) infos.splice(i, 1)
     }
-    init($el) {
-        super.init($el);
 
-        this._addDefInfo();
-    }
-    show() {
-        this._render();
+    this._render()
 
-        super.show();
-    }
-    destroy() {
-        super.destroy();
+    return this
+  }
+  clear() {
+    this._infos = []
 
-        evalCss.remove(this._style);
-    }
-    add(name, val) {
-        let infos = this._infos,
-            isUpdate = false;
+    this._render()
 
-        each(infos, info => {
-            if (name !== info.name) return;
+    return this
+  }
+  _addDefInfo() {
+    each(defInfo, info => this.add(info.name, info.val))
+  }
+  _render() {
+    let infos = []
 
-            info.val = val;
-            isUpdate = true;
-        });
+    each(this._infos, ({ name, val }) => {
+      if (isFn(val)) val = val()
 
-        if (!isUpdate) infos.push({ name, val });
+      infos.push({ name, val })
+    })
 
-        this._render();
-
-        return this;
-    }
-    remove(name) {
-        let infos = this._infos;
-
-        for (let i = infos.length - 1; i >= 0; i--) {
-            if (infos[i].name === name) infos.splice(i, 1);
-        }
-
-        this._render();
-
-        return this;
-    }
-    clear() {
-        this._infos = [];
-
-        this._render();
-
-        return this;
-    }
-    _addDefInfo() {
-        each(defInfo, info => this.add(info.name, info.val));
-    }
-    _render() {
-        let infos = [];
-
-        each(this._infos, ({ name, val }) => {
-            if (isFn(val)) val = val();
-
-            infos.push({ name, val });
-        });
-
-        this._renderHtml(this._tpl({ infos }));
-    }
-    _renderHtml(html) {
-        if (html === this._lastHtml) return;
-        this._lastHtml = html;
-        this._$el.html(html);
-    }
+    this._renderHtml(this._tpl({ infos }))
+  }
+  _renderHtml(html) {
+    if (html === this._lastHtml) return
+    this._lastHtml = html
+    this._$el.html(html)
+  }
 }

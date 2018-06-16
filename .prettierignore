@@ -1,4 +1,4 @@
-/src/lib/util.js
-/src/lib/stringifyUtil.js
-/script/util.js
-/test/util.js
+src/lib/util.js
+src/lib/stringifyUtil.js
+script/util.js
+test/util.js

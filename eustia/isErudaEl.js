@@ -2,14 +2,14 @@
  */
 
 function exports(el) {
-    var parentNode = el.parentNode;
+  var parentNode = el.parentNode
 
-    if (!parentNode) return false;
+  if (!parentNode) return false
 
-    while (parentNode) {
-        parentNode = parentNode.parentNode;
-        if (parentNode && parentNode.id === 'eruda') return true;
-    }
+  while (parentNode) {
+    parentNode = parentNode.parentNode
+    if (parentNode && parentNode.id === 'eruda') return true
+  }
 
-    return false;
+  return false
 }

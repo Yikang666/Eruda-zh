@@ -1,21 +1,21 @@
-import { detectBrowser, detectOs } from '../lib/util';
+import { detectBrowser, detectOs } from '../lib/util'
 
-let browser = detectBrowser();
+let browser = detectBrowser()
 
 export default [
-    {
-        name: 'Location',
-        val() {
-            return location.href;
-        }
-    },
-    {
-        name: 'User Agent',
-        val: navigator.userAgent
-    },
-    {
-        name: 'Device',
-        val: `<table>
+  {
+    name: 'Location',
+    val() {
+      return location.href
+    }
+  },
+  {
+    name: 'User Agent',
+    val: navigator.userAgent
+  },
+  {
+    name: 'Device',
+    val: `<table>
                   <tbody>
                       <tr>
                           <td class="eruda-device-key">screen</td>
@@ -31,10 +31,10 @@ export default [
                       </tr>
                   </tbody>
               </table>`
-    },
-    {
-        name: 'System',
-        val: `<table>
+  },
+  {
+    name: 'System',
+    val: `<table>
                   <tbody>
                       <tr>
                           <td class="eruda-system-key">os</td>
@@ -46,12 +46,12 @@ export default [
                       </tr>
                   </tbody>  
               </table>`
-    },
-    {
-        name: 'About',
-        val:
-            '<a href="https://github.com/liriliri/eruda" target="_blank">Eruda v' +
-            VERSION +
-            '</a>'
-    }
-];
+  },
+  {
+    name: 'About',
+    val:
+      '<a href="https://github.com/liriliri/eruda" target="_blank">Eruda v' +
+      VERSION +
+      '</a>'
+  }
+]

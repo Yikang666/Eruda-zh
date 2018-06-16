@@ -1,14 +1,14 @@
-import { Logger } from './util';
+import { Logger } from './util'
 
-let logger;
+let logger
 
 export default (logger = new Logger(
-    '[Eruda]',
-    ENV === 'production' ? 'warn' : 'debug'
-));
+  '[Eruda]',
+  ENV === 'production' ? 'warn' : 'debug'
+))
 
 logger.formatter = function(type, argList) {
-    argList.unshift(this.name);
+  argList.unshift(this.name)
 
-    return argList;
-};
+  return argList
+}

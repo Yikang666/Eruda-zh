@@ -1,9 +1,9 @@
-/eustia/
-/.idea/
-/src/
-/coverage/
-/test/
-/doc/
+eustia/
+.idea/
+src/
+coverage/
+test/
+doc/
 /script/
 .editorconfig
 .eslintignore

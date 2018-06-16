@@ -1,8 +1,8 @@
 /* Escape json string.
  */
 
-_('escapeJsStr');
+_('escapeJsStr')
 
 function exports(str) {
-    return escapeJsStr(str).replace(/\\'/g, "'");
+  return escapeJsStr(str).replace(/\\'/g, "'")
 }

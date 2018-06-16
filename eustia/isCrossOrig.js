@@ -1,10 +1,10 @@
 /* Check if a url is cross origin.
  */
 
-_('startWith');
+_('startWith')
 
-var origin = window.location.origin;
+var origin = window.location.origin
 
 function exports(url) {
-    return !startWith(url, origin);
+  return !startWith(url, origin)
 }
