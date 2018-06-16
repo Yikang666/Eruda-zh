@@ -2,3 +2,6 @@ src/lib/util.js
 src/lib/stringifyUtil.js
 script/util.js
 test/util.js
+eruda.js
+eruda.min.js
+stringifyUtil.js

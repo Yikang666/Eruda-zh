@@ -10,8 +10,8 @@
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
     "test:sauce": "karma start karma.sauce.js",
-    "format": "prettier eustia/*.js src/**/*.js src/*.js script/*.js test/*.js --write",
-    "lint": "eslint src",
+    "format": "prettier *.js eustia/*.js src/**/*.js src/*.js script/*.js test/*.js --write",
+    "lint": "eslint src/**/*.js",
     "setup": "node script/cpTestLib",
     "genIcon": "node script/icomoon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
