@@ -93,7 +93,7 @@ export default class Highlight {
   _appendTpl($container) {
     $container.append(require('./Highlight.hbs')())
 
-    let $el = (this._$el = $('.eruda-elements-highlight'))
+    let $el = (this._$el = $container.find('.eruda-elements-highlight'))
     this._$margin = $el.find('.eruda-margin')
     this._$padding = $el.find('.eruda-padding')
     this._$content = $el.find('.eruda-content')
