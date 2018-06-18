@@ -8,7 +8,6 @@ import {
   each,
   isStr,
   startWith,
-  has,
   $,
   isErudaEl,
   upperFirst,
@@ -27,7 +26,10 @@ export default [
         return
       }
 
-      style = evalCss(borderCss, document.head)
+      style = evalCss(
+        '* { outline: 2px dashed #707d8b; outline-offset: -3px; }',
+        document.head
+      )
     },
     desc: 'Add color borders to all elements'
   },
@@ -127,27 +129,7 @@ export default [
   }
 ]
 
-let borderCss = '',
-  styleName = has(document.documentElement.style, 'outline')
-    ? 'outline'
-    : 'border',
-  selector = 'html',
-  colors = [
-    'f5f5f5',
-    'dabb3a',
-    'abc1c7',
-    '472936',
-    'c84941',
-    '296dd1',
-    '67adb4',
-    '1ea061'
-  ]
-
-each(colors, (color, idx) => {
-  selector += idx === 0 ? '>*:not([class^="eruda-"])' : '>*'
-
-  borderCss += selector + `{${styleName}: 2px solid #${color} !important}`
-})
+evalCss(require('./searchText.scss'), document.head)
 
 function search(text) {
   let root = document.documentElement,
