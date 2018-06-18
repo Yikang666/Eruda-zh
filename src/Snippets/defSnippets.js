@@ -132,7 +132,7 @@ export default [
 evalCss(require('./searchText.scss'), document.head)
 
 function search(text) {
-  let root = document.documentElement,
+  let root = document.body,
     regText = new RegExp(text, 'ig')
 
   traverse(root, node => {
