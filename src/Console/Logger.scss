@@ -1,125 +1,131 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools { .console {
-    .logs {
+.dev-tools {
+  .tools {
+    .console {
+      .logs {
         @include overflow-auto(y);
         height: 100%;
         font-size: $font-size;
         padding-top: 1px;
         .header {
-            @include overflow-auto(x);
-            white-space: nowrap;
-            margin: 5px 0;
-            padding: 0 $padding;
-            font-size: $font-size-s;
-            color: $gray;
+          @include overflow-auto(x);
+          white-space: nowrap;
+          margin: 5px 0;
+          padding: 0 $padding;
+          font-size: $font-size-s;
+          color: $gray;
         }
         .log-item {
-            position: relative;
-            @include clear-float();
+          position: relative;
+          @include clear-float();
+          background: #fff;
+          padding: $padding;
+          border-bottom: 1px solid $gray-light;
+          border-top: 1px solid $gray-light;
+          margin-top: -1px;
+          a {
+            color: $blue !important;
+          }
+          .count,
+          .icon-container {
+            float: left;
+            margin-right: 5px;
+          }
+          .icon-container {
+            .icon {
+              line-height: 20px;
+              font-size: 12px;
+              color: $gray-dark;
+            }
+            .icon-chevron-right {
+              color: $blue;
+            }
+            .icon-info-circle {
+              color: $blue;
+            }
+            .icon-times-circle {
+              color: $red;
+            }
+            .icon-exclamation-triangle {
+              color: $yellow-dark;
+            }
+          }
+          .count {
+            background: $blue;
+            padding: 2px 4px;
+            color: #fff;
+            border-radius: 10px;
+          }
+          .log-content-wrapper {
+            overflow: hidden;
+          }
+          .log-content {
+            @include overflow-auto(x);
+            white-space: pre-wrap;
+            user-select: text;
+            line-height: 20px;
+            * {
+              user-select: text;
+            }
+          }
+          &.input {
             background: #fff;
-            padding: $padding;
-            border-bottom: 1px solid $gray-light;
-            border-top: 1px solid $gray-light;
-            margin-top: -1px;
-            a {
-                color: $blue !important;
+          }
+          &.html,
+          &.table {
+            table {
+              width: 100%;
+              background: #fff;
+              border-bottom: 1px solid $gray-light;
+              border-collapse: collapse;
+              th {
+                background: $blue;
+                color: #fff;
+              }
+              th,
+              td {
+                padding: 10px;
+              }
             }
-            .count, .icon-container {
-                float: left;
-                margin-right: 5px;
+            .blue {
+              color: $blue;
             }
-            .icon-container {
-                .icon {
-                    line-height: 20px;
-                    font-size: 12px;
-                    color: $gray-dark;
-                }
-                .icon-chevron-right {
-                    color: $blue;
-                }
-                .icon-info-circle {
-                    color: $blue;
-                }
-                .icon-times-circle {
-                    color: $red;
-                }
-                .icon-exclamation-triangle {
-                    color: $yellow-dark;
-                }
+          }
+          &.error {
+            z-index: 50;
+            background: $red-light;
+            color: $red;
+            border-top: 1px solid $red;
+            border-bottom: 1px solid $red;
+            .stack {
+              padding-left: 1.2em;
+              white-space: nowrap;
             }
             .count {
-                background: $blue;
-                padding: 2px 4px;
-                color: #fff;
-                border-radius: 10px;
+              background: $red;
             }
-            .log-content-wrapper {
-                overflow: hidden;
-            }
-            .log-content
-            {
-                @include overflow-auto(x);
-                white-space: pre-wrap;
-                user-select: text;
-                line-height: 20px;
-                * {
-                    user-select: text;
-                }
-            }
-            &.input {
-                background: #fff;
-            }
-            &.html, &.table {
-                table {
-                    width: 100%;
-                    background: #fff;
-                    border-bottom: 1px solid $gray-light;
-                    border-collapse: collapse;
-                    th {
-                        background: $blue;
-                        color: #fff;
-                    }
-                    th, td {
-                        padding: 10px;
-                    }
-                }
-                .blue {
-                    color: $blue;
-                }
-            }
-            &.error {
-                z-index: 50;
-                background: $red-light;
-                color: $red;
-                border-top: 1px solid $red;
-                border-bottom: 1px solid $red;
-                .stack {
-                    padding-left: 1.2em;
-                    white-space: nowrap;
-                }
-                .count {
-                    background: $red;
-                }
-            }
-            &.debug {
-                z-index: 20;
-                color: $blue;
-            }
-            &.warn {
-                z-index: 40;
-                background: #fffbe6;
-                border-top: 1px solid $yellow;
-                border-bottom: 1px solid $yellow;
-            }
-            &.info {
-                z-index: 30;
-                color: $blue;
-            }
-            &.output {
-                color: $gray-dark;
-            }
+          }
+          &.debug {
+            z-index: 20;
+            color: $blue;
+          }
+          &.warn {
+            z-index: 40;
+            background: #fffbe6;
+            border-top: 1px solid $yellow;
+            border-bottom: 1px solid $yellow;
+          }
+          &.info {
+            z-index: 30;
+            color: $blue;
+          }
+          &.output {
+            color: $gray-dark;
+          }
         }
+      }
     }
-} } }
+  }
+}

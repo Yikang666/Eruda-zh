@@ -1,279 +1,288 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools {
+.dev-tools {
+  .tools {
     .elements {
-        padding-bottom: 40px;
-        font-size: 14px;
-        .show-area {
-            @include overflow-auto(y);
-            height: 100%;
-        }
-        .parents {
-            @include overflow-auto(x);
-            background: #fff;
-            padding: $padding;
-            white-space: nowrap;
-            border-bottom: 1px solid $gray-light;
-            cursor: pointer;
-            font-size: $font-size-s;
-            li {
-                display: inline-block;
-                .parent {
-                    display: inline-block;
-                }
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-            .icon-chevron-right {
-                font-size: 8px;
-            }
-        }
-        .breadcrumb {
-            @include breadcrumb();
-            cursor: pointer;
-            transition: background $anim-duration, color $anim-duration;
-            &:active {
-                background: $blue;
-                color: #fff;
-                span {
-                    color: #fff;
-                }
-            }
-        }
-        .section {
-            h2 {
-                .btn {
-                    margin-left: 10px;
-                    float: right;
-                    text-align: center;
-                    width: 18px;
-                    height: 18px;
-                    line-height: 18px;
-                    font-size: 12px;
-                }
-                background: $blue;
-                padding: $padding;
-                color: #fff;
-                font-size: $font-size;
-                transition: background $anim-duration;
-                &.active-effect {
-                    cursor: pointer;
-                }
-                &.active-effect:active {
-                    background: $blue-dark;
-                }
-            }
-            margin-bottom: 10px;
-        }
-        .children {
-            background: #fff;
-            margin-bottom: 10px !important;
-            border-bottom: 1px solid $gray-light;
-            li {
-                @include overflow-auto(x);
-                cursor: default;
-                padding: $padding;
-                border-top: 1px solid $gray-light;
-                white-space: nowrap;
-                transition: background $anim-duration, color $anim-duration;
-                span {
-                    transition: color $anim-duration;
-                }
-                &.active-effect {
-                    cursor: pointer;
-                }
-                &.active-effect:active {
-                    background: $blue;
-                    color: #fff;
-                    span {
-                        color: #fff;
-                    }
-                }
-            }
-        }
-        .attributes {
-            background: #fff;
-            font-size: 12px;
-            a {
-                color: $blue;
-            }
-            .table-wrapper {
-                @include overflow-auto(x);
-            }
-            table {
-                td {
-                    padding: 5px 10px;
-                }
-            }
-        }
-        .text-content {
-            background: #fff;
-            .content {
-                @include overflow-auto(x);
-                padding: $padding;
-            }
-        }
-        .style-color {
-            width: 7px;
-            height: 7px;
-            margin-right: 2px;
-            border: 1px solid $gray-dark;
+      padding-bottom: 40px;
+      font-size: 14px;
+      .show-area {
+        @include overflow-auto(y);
+        height: 100%;
+      }
+      .parents {
+        @include overflow-auto(x);
+        background: #fff;
+        padding: $padding;
+        white-space: nowrap;
+        border-bottom: 1px solid $gray-light;
+        cursor: pointer;
+        font-size: $font-size-s;
+        li {
+          display: inline-block;
+          .parent {
             display: inline-block;
+          }
+          &:last-child {
+            margin-right: 0;
+          }
         }
-        .box-model {
-            @include overflow-auto(x);
-            background: #fff;
-            font-size: $font-size-s;
-            padding: $padding;
+        .icon-chevron-right {
+          font-size: 8px;
+        }
+      }
+      .breadcrumb {
+        @include breadcrumb();
+        cursor: pointer;
+        transition: background $anim-duration, color $anim-duration;
+        &:active {
+          background: $blue;
+          color: #fff;
+          span {
+            color: #fff;
+          }
+        }
+      }
+      .section {
+        h2 {
+          .btn {
+            margin-left: 10px;
+            float: right;
             text-align: center;
-            white-space: nowrap;
-            border-bottom: 1px solid $gray-light;
-            .label {
-                position: absolute;
-                margin-left: 3px;
-                padding: 0 2px;
-            }
-            .top, .left, .right, .bottom {
-                display: inline-block;
-            }
-            .left, .right {
-                vertical-align: middle;
-            }
-            .position, .margin, .border, .padding, .content {
-                position: relative;
-                background: #fff;
-                display: inline-block;
-                text-align: center;
-                vertical-align: middle;
-                padding: 3px;
-                margin: 3px;
-            }
-            .position {
-                border: 1px grey dotted;
-            }
-            .margin {
-                border: 1px dashed;
-                background: rgba(246, 178, 107, 0.66);
-            }
-            .border {
-                border: 1px #000 solid;
-                background: rgba(255, 229, 153, 0.66);
-            }
-            .padding {
-                border: 1px grey dashed;
-                background: rgba(147, 196, 125, 0.55);
-            }
-            .content {
-                border: 1px grey solid;
-                min-width: 100px;
-                background: rgba(111, 168, 220, 0.66);
-            }
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            font-size: 12px;
+          }
+          background: $blue;
+          padding: $padding;
+          color: #fff;
+          font-size: $font-size;
+          transition: background $anim-duration;
+          &.active-effect {
+            cursor: pointer;
+          }
+          &.active-effect:active {
+            background: $blue-dark;
+          }
         }
-        .computed-style {
+        margin-bottom: 10px;
+      }
+      .children {
+        background: #fff;
+        margin-bottom: 10px !important;
+        border-bottom: 1px solid $gray-light;
+        li {
+          @include overflow-auto(x);
+          cursor: default;
+          padding: $padding;
+          border-top: 1px solid $gray-light;
+          white-space: nowrap;
+          transition: background $anim-duration, color $anim-duration;
+          span {
+            transition: color $anim-duration;
+          }
+          &.active-effect {
+            cursor: pointer;
+          }
+          &.active-effect:active {
+            background: $blue;
+            color: #fff;
+            span {
+              color: #fff;
+            }
+          }
+        }
+      }
+      .attributes {
+        background: #fff;
+        font-size: 12px;
+        a {
+          color: $blue;
+        }
+        .table-wrapper {
+          @include overflow-auto(x);
+        }
+        table {
+          td {
+            padding: 5px 10px;
+          }
+        }
+      }
+      .text-content {
+        background: #fff;
+        .content {
+          @include overflow-auto(x);
+          padding: $padding;
+        }
+      }
+      .style-color {
+        width: 7px;
+        height: 7px;
+        margin-right: 2px;
+        border: 1px solid $gray-dark;
+        display: inline-block;
+      }
+      .box-model {
+        @include overflow-auto(x);
+        background: #fff;
+        font-size: $font-size-s;
+        padding: $padding;
+        text-align: center;
+        white-space: nowrap;
+        border-bottom: 1px solid $gray-light;
+        .label {
+          position: absolute;
+          margin-left: 3px;
+          padding: 0 2px;
+        }
+        .top,
+        .left,
+        .right,
+        .bottom {
+          display: inline-block;
+        }
+        .left,
+        .right {
+          vertical-align: middle;
+        }
+        .position,
+        .margin,
+        .border,
+        .padding,
+        .content {
+          position: relative;
+          background: #fff;
+          display: inline-block;
+          text-align: center;
+          vertical-align: middle;
+          padding: 3px;
+          margin: 3px;
+        }
+        .position {
+          border: 1px grey dotted;
+        }
+        .margin {
+          border: 1px dashed;
+          background: rgba(246, 178, 107, 0.66);
+        }
+        .border {
+          border: 1px #000 solid;
+          background: rgba(255, 229, 153, 0.66);
+        }
+        .padding {
+          border: 1px grey dashed;
+          background: rgba(147, 196, 125, 0.55);
+        }
+        .content {
+          border: 1px grey solid;
+          min-width: 100px;
+          background: rgba(111, 168, 220, 0.66);
+        }
+      }
+      .computed-style {
+        background: #fff;
+        font-size: $font-size-s;
+        a {
+          color: $blue;
+        }
+        .table-wrapper {
+          @include overflow-auto(y);
+          max-height: 200px;
+        }
+        table {
+          td {
+            padding: 5px 10px;
+            &.key {
+              white-space: nowrap;
+              color: $red;
+            }
+          }
+        }
+      }
+      .styles {
+        background: #fff;
+        font-size: 12px;
+        .style-wrapper {
+          padding: $padding;
+          .style-rules {
+            border-radius: $border-radius;
+            box-shadow: $box-shadow;
+            padding: $padding;
             background: #fff;
-            font-size: $font-size-s;
-            a {
+            margin-bottom: 10px;
+            .rule {
+              padding-left: 2em;
+              word-break: break-all;
+              a {
                 color: $blue;
+              }
+              span {
+                color: $red;
+              }
             }
-            .table-wrapper {
-                @include overflow-auto(y);
-                max-height: 200px;
+            &:last-child {
+              margin-bottom: 0;
             }
-            table {
-                td {
-                    padding: 5px 10px;
-                    &.key {
-                        white-space: nowrap;
-                        color: $red;
-                    }
-                }
-            }
+          }
         }
-        .styles {
+      }
+      .listeners {
+        background: #fff;
+        font-size: 12px;
+        .listener-wrapper {
+          padding: $padding;
+          .listener {
+            box-shadow: $box-shadow;
+            margin-bottom: 10px;
             background: #fff;
-            font-size: 12px;
-            .style-wrapper {
+            border-radius: $border-radius;
+            overflow: hidden;
+            .listener-type {
+              padding: $padding;
+              background: $blue;
+              color: #fff;
+            }
+            .listener-content {
+              li {
+                @include overflow-auto(x);
                 padding: $padding;
-                .style-rules {
-                    border-radius: $border-radius;
-                    box-shadow: $box-shadow;
-                    padding: $padding;
-                    background: #fff;
-                    margin-bottom: 10px;
-                    .rule {
-                        padding-left: 2em;
-                        word-break: break-all;
-                        a {
-                            color: $blue;
-                        }
-                        span {
-                            color: $red;
-                        }
-                    }
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
+                border-top: none;
+                &.capture {
+                  background: $gray-light;
                 }
+              }
             }
+          }
         }
-        .listeners {
-            background: #fff;
-            font-size: 12px;
-            .listener-wrapper {
-                padding: $padding;
-                .listener {
-                    box-shadow: $box-shadow;
-                    margin-bottom: 10px;
-                    background: #fff;
-                    border-radius: $border-radius;
-                    overflow: hidden;
-                    .listener-type {
-                        padding: $padding;
-                        background: $blue;
-                        color: #fff;
-                    }
-                    .listener-content {
-                        li {
-                            @include overflow-auto(x);
-                            padding: $padding;
-                            border-top: none;
-                            &.capture {
-                                background: $gray-light;
-                            }
-                        }
-                    }
-                }
-            }
+      }
+      .bottom-bar {
+        height: 40px;
+        background: #fff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        font-size: 0;
+        border-top: 1px solid $gray-light;
+        .btn {
+          cursor: pointer;
+          text-align: center;
+          color: $gray;
+          font-size: 14px;
+          line-height: 40px;
+          width: 25%;
+          display: inline-block;
+          transition: background $anim-duration, color $anim-duration;
+          &:active {
+            background: $blue;
+            color: #fff;
+          }
+          &.active {
+            color: $blue;
+          }
         }
-        .bottom-bar {
-            height: 40px;
-            background: #fff;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            font-size: 0;
-            border-top: 1px solid $gray-light;
-            .btn {
-                cursor: pointer;
-                text-align: center;
-                color: $gray;
-                font-size: 14px;
-                line-height: 40px;
-                width: 25%;
-                display: inline-block;
-                transition: background $anim-duration, color $anim-duration;
-                &:active {
-                    background: $blue;
-                    color: #fff;
-                }
-                &.active {
-                    color: $blue;
-                }
-            }
-        }
+      }
     }
-} }
-
+  }
+}

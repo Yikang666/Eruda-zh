@@ -1,108 +1,112 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools {
+.dev-tools {
+  .tools {
     .sources {
-        @include overflow-auto(y);
-        .code-wrapper, .raw-wrapper {
-            @include overflow-auto(x);
-            width: 100%;
-            background: #fff;
-            min-height: 100%;
+      @include overflow-auto(y);
+      .code-wrapper,
+      .raw-wrapper {
+        @include overflow-auto(x);
+        width: 100%;
+        background: #fff;
+        min-height: 100%;
+      }
+      .raw {
+        user-select: text;
+        padding: $padding;
+      }
+      .code {
+        font-family: $font-family-code;
+        font-size: $font-size-s;
+        .content * {
+          user-select: text;
         }
-        .raw {
-            user-select: text;
+      }
+      pre.code {
+        padding: $padding;
+      }
+      table.code {
+        border-collapse: collapse;
+        .gutter {
+          background: $gray-light;
+          color: $gray;
+        }
+        .line-num {
+          border-right: 1px solid $gray;
+          padding: 0 3px 0 5px;
+          text-align: right;
+        }
+        .code-line {
+          padding: 0 4px;
+          white-space: pre;
+        }
+      }
+      .image {
+        .breadcrumb {
+          @include breadcrumb();
+        }
+        .img-container {
+          text-align: center;
+          img {
+            max-width: 100%;
+            box-shadow: $box-shadow;
+          }
+        }
+        .img-info {
+          text-align: center;
+          margin: 20px 0;
+          color: $gray;
+        }
+      }
+      .json {
+        background: #fff;
+        padding: $padding;
+        * {
+          user-select: text;
+        }
+      }
+      .http {
+        .breadcrumb {
+          @include breadcrumb();
+        }
+        .section {
+          background: #fff;
+          h2 {
+            background: $blue;
             padding: $padding;
-        }
-        .code {
-            font-family: $font-family-code;
-            font-size: $font-size-s;
-            .content * {
-                user-select: text;
-            }
-        }
-        pre.code {
-            padding: $padding;
-        }
-        table.code {
-            border-collapse: collapse;
-            .gutter {
-                background: $gray-light;
-                color: $gray;
-            }
-            .line-num {
-                border-right: 1px solid $gray;
-                padding: 0 3px 0 5px;
-                text-align: right;
-            }
-            .code-line {
-                padding: 0 4px;
-                white-space: pre;
-            }
-        }
-        .image {
-            .breadcrumb {
-                @include breadcrumb();
-            }
-            .img-container {
-                text-align: center;
-                img {
-                    max-width: 100%;
-                    box-shadow: $box-shadow;
-                }
-            }
-            .img-info {
-                text-align: center;
-                margin: 20px 0;
-                color: $gray;
-            }
-        }
-        .json {
-            background: #fff;
-            padding: $padding;
+            color: #fff;
+            font-size: $font-size;
+          }
+          margin-bottom: 10px;
+          table {
             * {
-                user-select: text;
+              user-select: text;
             }
+            td {
+              font-size: $font-size-s;
+              padding: 5px 10px;
+            }
+            .key {
+              white-space: nowrap;
+            }
+          }
         }
-        .http {
-            .breadcrumb {
-                @include breadcrumb();
-            }
-            .section {
-                background: #fff;
-                h2 {
-                    background: $blue;
-                    padding: $padding;
-                    color: #fff;
-                    font-size: $font-size;
-                }
-                margin-bottom: 10px;
-                table {
-                    * {
-                        user-select: text;
-                    }
-                    td {
-                        font-size: $font-size-s;
-                        padding: 5px 10px;
-                    }
-                    .key {
-                        white-space: nowrap;
-                    }
-                }
-            }
-            .response, .data {
-                user-select: text;
-                @include overflow-auto(x);
-                background: #fff;
-                padding: $padding;
-                font-size: $font-size-s;
-                margin-bottom: 10px;
-                white-space: pre-wrap;
-            }
+        .response,
+        .data {
+          user-select: text;
+          @include overflow-auto(x);
+          background: #fff;
+          padding: $padding;
+          font-size: $font-size-s;
+          margin-bottom: 10px;
+          white-space: pre-wrap;
         }
-        iframe {
-            width: 100%;
-            height: 100%;
-        }
+      }
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
     }
-} }
+  }
+}

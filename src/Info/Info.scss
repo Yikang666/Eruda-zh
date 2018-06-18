@@ -1,44 +1,49 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools {
+.dev-tools {
+  .tools {
     .info.tool {
-        @include overflow-auto(y);
-        li {
-            border-radius: $border-radius;
-            background: #fff;
-            margin: 10px;
-            box-shadow: $box-shadow;
-            .title, .content {
-                padding: $padding;
-            }
-            .title {
-                padding-bottom: 0;
-                font-size: $font-size-l;
-                color: $blue;
-            }
-            .content {
-                margin: 0;
-                user-select: text;
-                word-break: break-all;
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    th, td {
-                        border: 1px solid $gray-light;
-                        padding: 10px;
-                    }
-                }
-                * {
-                    user-select: text;
-                }
-                a {
-                    color: $blue;
-                }
-            }
-            .device-key, .system-key {
-                width: 100px;
-            }
+      @include overflow-auto(y);
+      li {
+        border-radius: $border-radius;
+        background: #fff;
+        margin: 10px;
+        box-shadow: $box-shadow;
+        .title,
+        .content {
+          padding: $padding;
         }
+        .title {
+          padding-bottom: 0;
+          font-size: $font-size-l;
+          color: $blue;
+        }
+        .content {
+          margin: 0;
+          user-select: text;
+          word-break: break-all;
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            th,
+            td {
+              border: 1px solid $gray-light;
+              padding: 10px;
+            }
+          }
+          * {
+            user-select: text;
+          }
+          a {
+            color: $blue;
+          }
+        }
+        .device-key,
+        .system-key {
+          width: 100px;
+        }
+      }
     }
-} }
+  }
+}

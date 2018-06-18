@@ -1,4 +1,5 @@
-$box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .05), 0 1px 4px 0 rgba(0, 0, 0, .08), 0 3px 1px -2px rgba(0, 0, 0, .2);
+$box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 4px 0 rgba(0, 0, 0, 0.08),
+  0 3px 1px -2px rgba(0, 0, 0, 0.2);
 $border-radius: 4px;
 
 $padding: 10px;
@@ -10,7 +11,7 @@ $font-size-l: 16px;
 $font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri;
 $font-family-code: Consolas, Lucida Console, Monaco, MonoSpace;
 
-$anim-duration: .3s;
+$anim-duration: 0.3s;
 
 // https://www.google.com/design/spec/style/color.html#color-color-palette
 $blue: #2196f3;

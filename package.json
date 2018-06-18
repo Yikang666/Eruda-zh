@@ -10,7 +10,7 @@
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
     "test:sauce": "karma start karma.sauce.js",
-    "format": "prettier *.js eustia/*.js src/**/*.js src/*.js script/*.js test/*.js --write",
+    "format": "prettier *.js eustia/*.js src/**/*.js src/*.js script/*.js test/*.js src/**/*.scss src/**/*.css --write",
     "lint": "eslint src/**/*.js",
     "setup": "node script/cpTestLib",
     "genIcon": "node script/icomoon",

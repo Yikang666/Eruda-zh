@@ -1,53 +1,54 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools {
+.dev-tools {
+  .tools {
     .snippets {
-        @include overflow-auto(y);
-        padding: $padding;
-        .section {
-            margin-bottom: 10px;
-            border-radius: $border-radius;
-            box-shadow: $box-shadow;
-            overflow: hidden;
-            cursor: pointer;
-            &:active {
-                .name {
-                    background: $gray-dark;
-                }
-                .description {
-                    background: $gray-light;
-                }
-            }
-            .name {
-                padding: $padding;
-                color: #fff;
-                background: $gray;
-                transition: background $anim-duration;
-                .btn {
-                    margin-left: 10px;
-                    float: right;
-                    text-align: center;
-                    width: 18px;
-                    height: 18px;
-                    line-height: 18px;
-                    font-size: 12px;
-                }
-            }
-            .description {
-                background: #fff;
-                padding: $padding;
-                transition: background $anim-duration;
-            }
+      @include overflow-auto(y);
+      padding: $padding;
+      .section {
+        margin-bottom: 10px;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        overflow: hidden;
+        cursor: pointer;
+        &:active {
+          .name {
+            background: $gray-dark;
+          }
+          .description {
+            background: $gray-light;
+          }
         }
+        .name {
+          padding: $padding;
+          color: #fff;
+          background: $gray;
+          transition: background $anim-duration;
+          .btn {
+            margin-left: 10px;
+            float: right;
+            text-align: center;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            font-size: 12px;
+          }
+        }
+        .description {
+          background: #fff;
+          padding: $padding;
+          transition: background $anim-duration;
+        }
+      }
     }
-} }
-
-.search-highlight-block {
-    display: inline;
-    .keyword {
-        background: $yellow;
-        color: #fff;
-    }
+  }
 }
 
+.search-highlight-block {
+  display: inline;
+  .keyword {
+    background: $yellow;
+    color: #fff;
+  }
+}

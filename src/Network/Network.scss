@@ -1,42 +1,44 @@
-@import "../style/variable";
-@import "../style/mixin";
+@import '../style/variable';
+@import '../style/mixin';
 
-.dev-tools { .tools {
+.dev-tools {
+  .tools {
     .network {
-        @include overflow-auto(y);
-        .title {
-            @include right-circle-btn();
-            background: $gray;
-            padding: $padding;
-            color: #fff;
-        }
-        .requests {
-            background: #fff;
-            border-bottom: 1px solid $gray-light;
-            margin-bottom: 10px;
-            li {
-                @include overflow-auto(x);
-                cursor: pointer;
-                border-top: 1px solid $gray-light;
-                height: 41px;
-                white-space: nowrap;
-                &.error {
-                    span {
-                        color: $red;
-                    }
-                }
-                span {
-                    display: inline-block;
-                    line-height: 40px;
-                    height: 40px;
-                    padding: 0 10px;
-                    font-size: $font-size-s;
-                    vertical-align: top;
-                }
-                &:nth-child(even) {
-                    background: $gray-light;
-                }
+      @include overflow-auto(y);
+      .title {
+        @include right-circle-btn();
+        background: $gray;
+        padding: $padding;
+        color: #fff;
+      }
+      .requests {
+        background: #fff;
+        border-bottom: 1px solid $gray-light;
+        margin-bottom: 10px;
+        li {
+          @include overflow-auto(x);
+          cursor: pointer;
+          border-top: 1px solid $gray-light;
+          height: 41px;
+          white-space: nowrap;
+          &.error {
+            span {
+              color: $red;
             }
+          }
+          span {
+            display: inline-block;
+            line-height: 40px;
+            height: 40px;
+            padding: 0 10px;
+            font-size: $font-size-s;
+            vertical-align: top;
+          }
+          &:nth-child(even) {
+            background: $gray-light;
+          }
         }
+      }
     }
-} }
+  }
+}
