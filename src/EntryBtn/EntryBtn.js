@@ -21,15 +21,29 @@ export default class EntryBtn extends Emitter {
   show() {
     this._$el.show()
   }
+  setPos(pos) {
+    if (this._isOutOfRange(pos)) {
+      pos = this._getDefPos()
+    }
+
+    this._$el.css({
+      left: pos.x,
+      top: pos.y
+    })
+
+    this.config.set('pos', pos)
+  }
+  getPos() {
+    return this.config.get('pos')
+  }
   destroy() {
     evalCss.remove(this._style)
     this._unregisterListener()
     this._$el.remove()
   }
-  _isOutOfRange() {
-    let cfg = this.config,
-      pos = cfg.get('pos'),
-      defPos = this._getDefPos()
+  _isOutOfRange(pos) {
+    pos = pos || this.config.get('pos')
+    const defPos = this._getDefPos()
 
     return (
       pos.x > defPos.x + 10 || pos.x < 0 || pos.y < 0 || pos.y > defPos.y + 10
@@ -38,7 +52,7 @@ export default class EntryBtn extends Emitter {
   _registerListener() {
     this._scaleListener = () =>
       nextTick(() => {
-        if (this._isOutOfRange()) this._setPos()
+        if (this._isOutOfRange()) this._resetPos()
       })
     emitter.on(emitter.SCALE, this._scaleListener)
   }
@@ -51,20 +65,16 @@ export default class EntryBtn extends Emitter {
     $container.append(require('./EntryBtn.hbs')())
     this._$el = $container.find('.eruda-entry-btn')
   }
-  _setPos(orientationChanged) {
+  _resetPos(orientationChanged) {
     let cfg = this.config,
       pos = cfg.get('pos'),
       defPos = this._getDefPos()
 
-    if (this._isOutOfRange() || !cfg.get('rememberPos') || orientationChanged)
+    if (!cfg.get('rememberPos') || orientationChanged) {
       pos = defPos
+    }
 
-    this._$el.css({
-      left: pos.x,
-      top: pos.y
-    })
-
-    cfg.set('pos', pos)
+    this.setPos(pos)
   }
   _bindEvent() {
     let draggabilly = this._draggabilly,
@@ -87,8 +97,8 @@ export default class EntryBtn extends Emitter {
       $el.rmClass('eruda-active')
     })
 
-    orientation.on('change', () => this._setPos(true))
-    window.addEventListener('resize', () => this._setPos())
+    orientation.on('change', () => this._resetPos(true))
+    window.addEventListener('resize', () => this._resetPos())
   }
   _makeDraggable() {
     this._draggabilly = new Draggabilly(this._$el.get(0), {
@@ -105,7 +115,7 @@ export default class EntryBtn extends Emitter {
       .separator()
       .switch(cfg, 'rememberPos', 'Remember Entry Button Position')
 
-    this._setPos()
+    this._resetPos()
   }
   _getDefPos() {
     let minWidth = this._$el.get(0).offsetWidth + 10

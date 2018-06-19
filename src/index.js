@@ -18,6 +18,7 @@ import {
   isFn,
   evalCss,
   isNum,
+  isObj,
   isMobile,
   viewportScale,
   detectBrowser,
@@ -109,6 +110,16 @@ module.exports = {
     }
 
     return this._scale
+  },
+  position(p) {
+    const entryBtn = this._entryBtn
+
+    if (isObj(p)) {
+      entryBtn.setPos(p)
+      return this
+    }
+
+    return entryBtn.getPos()
   },
   _autoScale() {
     if (!isMobile()) return
