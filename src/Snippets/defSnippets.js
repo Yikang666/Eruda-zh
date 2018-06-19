@@ -191,12 +191,12 @@ function loadPlugin(name) {
   )
 }
 
-let pluginVersion = {
+const pluginVersion = {
   fps: '1.0.2',
   features: '1.0.2',
   timing: '1.1.1',
   memory: '1.0.1',
   code: '1.0.0',
   benchmark: '1.0.0',
-  geolocation: '1.0.0'
+  geolocation: '1.1.0'
 }
