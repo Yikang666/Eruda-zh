@@ -126,7 +126,7 @@ export default class DevTools extends Emitter {
     tool.active = true
     tool.show()
 
-    this._navBar.activeTool(name)
+    this._navBar.activateTool(name)
 
     this.emit('showTool', name, lastTool)
 

@@ -25,6 +25,7 @@ export default class NavBar extends Emitter {
       let $this = $(this)
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
+    this._resetBottomBar()
   }
   setHeight(height) {
     this._height = height
@@ -33,7 +34,7 @@ export default class NavBar extends Emitter {
   setBgColor(color) {
     this._$el.css('background-color', color)
   }
-  activeTool(name) {
+  activateTool(name) {
     let self = this
 
     this._$el.find('.eruda-nav-bar-item').each(function() {
