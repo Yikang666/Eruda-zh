@@ -93,14 +93,15 @@ When initialization, a configuration object can be passed in.
 under html root element.
 * tool: Choose which default tools you want, by default all will be added.
 
+For more information, please check the [documentation](doc/API.md).
+
 ```javascript
 var el = document.createElement('div');
 document.body.appendChild(el);
 
 eruda.init({
     container: el,
-    tool: ['console', 'elements'],
-    useShadowDom: true // Use shadow dom to prevent page css affecting eruda.
+    tool: ['console', 'elements']
 });
 ```
 
