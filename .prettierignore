@@ -4,4 +4,4 @@ script/util.js
 test/util.js
 eruda.js
 eruda.min.js
-stringifyUtil.js
+stringifyWorker.js
