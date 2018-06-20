@@ -9,7 +9,10 @@ exports.plugins = exports.plugins.concat([
     compress: {
       warnings: false
     },
-    comments: /eruda/
+    output: {
+      ascii_only: true
+    },
+    comments: /eruda v/
   }),
   new webpack.DefinePlugin({
     ENV: '"production"'

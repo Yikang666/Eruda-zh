@@ -5,7 +5,7 @@
   "main": "eruda.js",
   "scripts": {
     "ci": "npm run format && npm run lint && npm run test && npm run build",
-    "build": "webpack --config script/webpack.dev.js && webpack -p --config script/webpack.release.js",
+    "build": "webpack --config script/webpack.dev.js && webpack --config script/webpack.release.js",
     "cov": "npm run test && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
@@ -103,7 +103,7 @@
     "prettier": "^1.13.5",
     "remap-istanbul": "^0.9.5",
     "sass-loader": "^6.0.6",
-    "webpack": "^3.10.0",
+    "webpack": "^3.12.0",
     "webpack-dev-server": "^2.9.7",
     "worker-loader": "^1.1.0"
   }
