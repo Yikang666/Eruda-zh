@@ -10,8 +10,8 @@
         padding: 10px 10px 10px 40px;
         background: #fff;
         line-height: 20px;
-        .icon-ban,
-        .icon-info-circle {
+        .icon-clear,
+        .icon-info {
           display: inline-block;
           color: $gray;
           padding: 10px;
@@ -24,10 +24,10 @@
             color: $gray-dark;
           }
         }
-        .icon-ban {
+        .icon-clear {
           left: 0;
         }
-        .icon-info-circle {
+        .icon-info {
           right: 0;
         }
         .filter {

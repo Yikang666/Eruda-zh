@@ -113,17 +113,17 @@ export default class Log {
         msg = formatDir(args)
         break
       case 'info':
-        icon = 'info-circle'
+        icon = 'info'
         msg = formatMsg(args)
         break
       case 'warn':
-        icon = 'exclamation-triangle'
+        icon = 'warn'
         msg = formatMsg(args)
         break
       case 'error':
         if (isStr(args[0]) && args.length !== 1) args = substituteStr(args)
         err = args[0]
-        icon = 'times-circle'
+        icon = 'error'
         err = isErr(err) ? err : new Error(formatMsg(args))
         this.src = err
         msg = formatErr(err)
@@ -136,11 +136,11 @@ export default class Log {
         break
       case 'input':
         msg = formatJs(args[0])
-        icon = 'chevron-right'
+        icon = 'arrow-right'
         break
       case 'output':
         msg = formatMsg(args)
-        icon = 'chevron-left'
+        icon = 'arrow-left'
         break
     }
 

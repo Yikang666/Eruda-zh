@@ -13,7 +13,7 @@
     "format": "prettier *.js eustia/*.js src/**/*.js src/*.js script/*.js test/*.js src/**/*.scss src/**/*.css --write",
     "lint": "eslint src/**/*.js",
     "setup": "node script/cpTestLib",
-    "genIcon": "node script/icomoon",
+    "genIcon": "node script/genIcon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "husky": {

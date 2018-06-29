@@ -14,9 +14,6 @@ module.exports = {
     ENV: true
   },
   rules: {
-    quotes: [
-      'error',
-      'single'
-    ]
+    quotes: ['error', 'single']
   }
 }
