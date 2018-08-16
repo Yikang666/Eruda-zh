@@ -159,6 +159,21 @@ info.add('title', 'content');
 info.add('location', () => location.href);
 ```
 
+### get
+
+Get info or infos.
+
+|Name  |Type           |Desc        |
+|------|---------------|------------|
+|name  |string         |Info name   |
+|return|string function|Info content|
+
+```javascript
+info.add('title', 'content')
+info.get(); // -> [{name: 'title', val: 'content'}]
+info.get('title') // -> 'content'
+```
+
 ### remove
 
 Remove specified info.

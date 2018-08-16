@@ -678,7 +678,7 @@ Perform an asynchronous HTTP request.
 
 Available options:
 
-|Name                                         |Type         |Desc                      |
+|Name                                         |Type         |Desc                       |
 |---------------------------------------------|-------------|---------------------------|
 |url                                          |string       |Request url                |
 |data                                         |string object|Request data               |
@@ -836,6 +836,21 @@ Any nested objects or arrays will be copied by reference, not duplicated.
 
 ```javascript
 clone({name: 'eustia'}); // -> {name: 'eustia'}
+```
+
+## cloneDeep 
+
+Recursively clone value.
+
+|Name  |Type|Desc             |
+|------|----|-----------------|
+|val   |*   |Value to clone   |
+|return|*   |Deep cloned Value|
+
+```javascript
+var obj = [{a: 1}, {a: 2}];
+var obj2 = cloneDeep(obj);
+console.log(obj[0] === obj2[1]); // -> false
 ```
 
 ## concat 
@@ -1724,6 +1739,21 @@ Create an array of values by running each element in collection through iteratee
 
 ```javascript
 map([4, 8], function (n) { return n * n; }); // -> [16, 64]
+```
+
+## mapObj 
+
+Map for objects.
+
+|Name    |Type    |Desc                          |
+|--------|--------|------------------------------|
+|obj     |object  |Object to iterate over        |
+|iteratee|function|Function invoked per iteration|
+|[ctx]   |*       |Function context              |
+|return  |object  |New mapped object             |
+
+```javascript
+mapObj({a: 1, b: 2}, function (val, key) { return val + 1 }); // -> {a: 2, b: 3}
 ```
 
 ## matcher 

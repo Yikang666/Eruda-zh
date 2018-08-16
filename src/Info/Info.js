@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool'
 import defInfo from './defInfo'
-import { evalCss, each, isFn } from '../lib/util'
+import { evalCss, each, isFn, isUndef, cloneDeep } from '../lib/util'
 
 export default class Info extends Tool {
   constructor() {
@@ -28,8 +28,8 @@ export default class Info extends Tool {
     evalCss.remove(this._style)
   }
   add(name, val) {
-    let infos = this._infos,
-      isUpdate = false
+    let infos = this._infos
+    let isUpdate = false
 
     each(infos, info => {
       if (name !== info.name) return
@@ -43,6 +43,21 @@ export default class Info extends Tool {
     this._render()
 
     return this
+  }
+  get(name) {
+    let infos = this._infos
+
+    if (isUndef(name)) {
+      return cloneDeep(infos)
+    }
+
+    let result
+
+    each(infos, info => {
+      if (name === info.name) result = info.val
+    })
+
+    return result
   }
   remove(name) {
     let infos = this._infos

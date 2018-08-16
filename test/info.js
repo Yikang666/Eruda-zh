@@ -39,6 +39,12 @@ describe('info', function() {
     expect($tool.find('.eruda-content')).toContainText('eruda')
   })
 
+  it('get', function() {
+    expect(tool.get()).toEqual([{ name: 'test', val: 'eruda' }])
+    expect(tool.get('test')).toBe('eruda')
+    expect(tool.get('test2')).not.toBeDefined()
+  })
+
   it('remove', function() {
     tool.remove('test')
     expect($tool.find('li')).toHaveLength(0)

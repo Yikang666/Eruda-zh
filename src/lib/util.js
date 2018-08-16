@@ -92,34 +92,6 @@ export var isObj = _.isObj = (function () {
     return exports;
 })();
 
-/* ------------------------------ startWith ------------------------------ */
-
-export var startWith = _.startWith = (function () {
-    /* Check if string starts with the given target string.
-     *
-     * |Name  |Type   |Desc                             |
-     * |------|-------|---------------------------------|
-     * |str   |string |String to search                 |
-     * |prefix|string |String prefix                    |
-     * |return|boolean|True if string starts with prefix|
-     *
-     * ```javascript
-     * startWith('ab', 'a'); // -> true
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    function exports(str, prefix) {
-        return str.indexOf(prefix) === 0;
-    }
-
-    return exports;
-})();
-
 /* ------------------------------ inherits ------------------------------ */
 
 export var inherits = _.inherits = (function () {
@@ -1286,7 +1258,7 @@ export var escapeJsonStr = _.escapeJsonStr = (function () {
      */
 
     function exports(str) {
-        return escapeJsStr(str).replace(/\\'/g, "'");
+      return escapeJsStr(str).replace(/\\'/g, "'")
     }
 
     return exports;
@@ -1357,6 +1329,34 @@ export var fileSize = _.fileSize = (function () {
     return exports;
 })();
 
+/* ------------------------------ startWith ------------------------------ */
+
+export var startWith = _.startWith = (function () {
+    /* Check if string starts with the given target string.
+     *
+     * |Name  |Type   |Desc                             |
+     * |------|-------|---------------------------------|
+     * |str   |string |String to search                 |
+     * |prefix|string |String prefix                    |
+     * |return|boolean|True if string starts with prefix|
+     *
+     * ```javascript
+     * startWith('ab', 'a'); // -> true
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    function exports(str, prefix) {
+        return str.indexOf(prefix) === 0;
+    }
+
+    return exports;
+})();
+
 /* ------------------------------ fullUrl ------------------------------ */
 
 export var fullUrl = _.fullUrl = (function () {
@@ -1367,14 +1367,14 @@ export var fullUrl = _.fullUrl = (function () {
      * startWith 
      */
 
-    let origin = window.location.origin;
+    let origin = window.location.origin
 
     function exports(url) {
-        if (startWith(url, 'http')) return url;
+      if (startWith(url, 'http')) return url
 
-        if (!startWith(url, '/')) url = '/' + url;
+      if (!startWith(url, '/')) url = '/' + url
 
-        return origin + url;
+      return origin + url
     }
 
     return exports;
@@ -1420,9 +1420,9 @@ export var getObjType = _.getObjType = (function () {
      */
 
     function exports(obj) {
-        if (obj.constructor && obj.constructor.name) return obj.constructor.name;
+      if (obj.constructor && obj.constructor.name) return obj.constructor.name
 
-        return upperFirst({}.toString.call(obj).replace(/(\[object )|]/g, ''));
+      return upperFirst({}.toString.call(obj).replace(/(\[object )|]/g, ''))
     }
 
     return exports;
@@ -2205,10 +2205,10 @@ export var isCrossOrig = _.isCrossOrig = (function () {
      * startWith 
      */
 
-    var origin = window.location.origin;
+    var origin = window.location.origin
 
     function exports(url) {
-        return !startWith(url, origin);
+      return !startWith(url, origin)
     }
 
     return exports;
@@ -2279,16 +2279,16 @@ export var isErudaEl = _.isErudaEl = (function () {
      */
 
     function exports(el) {
-        var parentNode = el.parentNode;
+      var parentNode = el.parentNode
 
-        if (!parentNode) return false;
+      if (!parentNode) return false
 
-        while (parentNode) {
-            parentNode = parentNode.parentNode;
-            if (parentNode && parentNode.id === 'eruda') return true;
-        }
+      while (parentNode) {
+        parentNode = parentNode.parentNode
+        if (parentNode && parentNode.id === 'eruda') return true
+      }
 
-        return false;
+      return false
     }
 
     return exports;
@@ -2615,7 +2615,7 @@ export var isNative = _.isNative = (function () {
      */
 
     /* dependencies
-     * isObj isFn has toSrc 
+     * isObj isFn toSrc 
      */
 
     function exports(val) {
@@ -3219,46 +3219,46 @@ export var evalCss = _.evalCss = (function () {
      */
 
     var styleList = [],
-        scale = 1;
+      scale = 1
 
     function exports(css, container) {
-        css = toStr(css);
+      css = toStr(css)
 
-        for (var i = 0, len = styleList.length; i < len; i++) {
-            if (styleList[i].css === css) return;
-        }
+      for (var i = 0, len = styleList.length; i < len; i++) {
+        if (styleList[i].css === css) return
+      }
 
-        container = container || exports.container || document.head;
-        const el = document.createElement('style');
+      container = container || exports.container || document.head
+      const el = document.createElement('style')
 
-        el.type = 'text/css';
-        container.appendChild(el);
+      el.type = 'text/css'
+      container.appendChild(el)
 
-        let style = { css, el, container };
-        resetStyle(style);
-        styleList.push(style);
+      let style = { css, el, container }
+      resetStyle(style)
+      styleList.push(style)
 
-        return style;
+      return style
     }
 
     exports.setScale = function(s) {
-        scale = s;
-        each(styleList, style => resetStyle(style));
-    };
+      scale = s
+      each(styleList, style => resetStyle(style))
+    }
 
     exports.clear = function() {
-        each(styleList, ({ container, el }) => container.removeChild(el));
-        styleList = [];
-    };
+      each(styleList, ({ container, el }) => container.removeChild(el))
+      styleList = []
+    }
 
     exports.remove = function(style) {
-        styleList = filter(styleList, s => s !== style);
+      styleList = filter(styleList, s => s !== style)
 
-        style.container.removeChild(style.el);
-    };
+      style.container.removeChild(style.el)
+    }
 
     function resetStyle({ css, el }) {
-        el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px');
+      el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
     }
 
     return exports;
@@ -3337,8 +3337,6 @@ export var decodeUriComponent = _.decodeUriComponent = (function () {
         try {
             return decodeURIComponent(str);
         } catch (e) {
-            var replaceMap = {};
-
             var matches = str.match(regMatcher);
 
             each(matches, function(match) {
@@ -3581,7 +3579,7 @@ export var Class = _.Class = (function () {
      */
 
     /* dependencies
-     * extend toArr inherits has safeGet isMiniProgram 
+     * extend toArr inherits safeGet isMiniProgram 
      */
 
     function exports(methods, statics) {
@@ -4057,7 +4055,7 @@ export var $css = _.$css = (function () {
      */
 
     /* dependencies
-     * isStr isObj kebabCase isUndef contain isNum $safeEls startWith prefix 
+     * isStr isObj kebabCase isUndef contain isNum $safeEls prefix 
      */
 
     function exports(nodes, name, val) {
@@ -4499,7 +4497,7 @@ export var delegate = _.delegate = (function (exports) {
                 handlers.delegateCount = 0;
                 el.addEventListener(
                     type,
-                    function(e) {
+                    function() {
                         trigger.apply(el, arguments);
                     },
                     false
@@ -4646,6 +4644,95 @@ export var concat = _.concat = (function () {
         }
 
         return ret;
+    }
+
+    return exports;
+})();
+
+/* ------------------------------ mapObj ------------------------------ */
+
+export var mapObj = _.mapObj = (function () {
+    /* Map for objects.
+     *
+     * |Name    |Type    |Desc                          |
+     * |--------|--------|------------------------------|
+     * |obj     |object  |Object to iterate over        |
+     * |iteratee|function|Function invoked per iteration|
+     * |[ctx]   |*       |Function context              |
+     * |return  |object  |New mapped object             |
+     *
+     * ```javascript
+     * mapObj({a: 1, b: 2}, function (val, key) { return val + 1 }); // -> {a: 2, b: 3}
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * safeCb keys 
+     */
+
+    function exports(obj, iteratee, ctx) {
+        iteratee = safeCb(iteratee, ctx);
+
+        var _keys = keys(obj),
+            len = _keys.length,
+            ret = {};
+
+        for (var i = 0; i < len; i++) {
+            var curKey = _keys[i];
+            ret[curKey] = iteratee(obj[curKey], curKey, obj);
+        }
+
+        return ret;
+    }
+
+    return exports;
+})();
+
+/* ------------------------------ cloneDeep ------------------------------ */
+
+export var cloneDeep = _.cloneDeep = (function () {
+    /* Recursively clone value.
+     *
+     * |Name  |Type|Desc             |
+     * |------|----|-----------------|
+     * |val   |*   |Value to clone   |
+     * |return|*   |Deep cloned Value|
+     *
+     * ```javascript
+     * var obj = [{a: 1}, {a: 2}];
+     * var obj2 = cloneDeep(obj);
+     * console.log(obj[0] === obj2[1]); // -> false
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    /* dependencies
+     * isObj isFn isArr mapObj 
+     */
+
+    function exports(obj) {
+        if (isArr(obj)) {
+            return obj.map(function(val) {
+                return exports(val);
+            });
+        }
+
+        if (isObj(obj) && !isFn(obj)) {
+            return mapObj(obj, function(val) {
+                return exports(val);
+            });
+        }
+
+        return obj;
     }
 
     return exports;
@@ -5081,32 +5168,32 @@ export var safeStorage = _.safeStorage = (function () {
      */
 
     function exports(type, memReplacement) {
-        if (isUndef(memReplacement)) memReplacement = true;
+      if (isUndef(memReplacement)) memReplacement = true
 
-        var ret;
+      var ret
 
-        switch (type) {
-            case 'local':
-                ret = window.localStorage;
-                break;
-            case 'session':
-                ret = window.sessionStorage;
-                break;
-        }
+      switch (type) {
+        case 'local':
+          ret = window.localStorage
+          break
+        case 'session':
+          ret = window.sessionStorage
+          break
+      }
 
-        try {
-            // Safari private browsing
-            var x = 'test-localStorage-' + Date.now();
-            ret.setItem(x, x);
-            var y = ret.getItem(x);
-            ret.removeItem(x);
-            if (y !== x) throw new Error();
-        } catch (e) {
-            if (memReplacement) return memStorage;
-            return;
-        }
+      try {
+        // Safari private browsing
+        var x = 'test-localStorage-' + Date.now()
+        ret.setItem(x, x)
+        var y = ret.getItem(x)
+        ret.removeItem(x)
+        if (y !== x) throw new Error()
+      } catch (e) {
+        if (memReplacement) return memStorage
+        return
+      }
 
-        return ret;
+      return ret
     }
 
     return exports;
@@ -6224,7 +6311,7 @@ export var pxToNum = _.pxToNum = (function () {
      */
 
     function exports(str) {
-        return toNum(str.replace('px', ''));
+      return toNum(str.replace('px', ''))
     }
 
     return exports;
@@ -6403,11 +6490,11 @@ export var getFileName = _.getFileName = (function () {
      */
 
     function exports(url) {
-        var ret = last(url.split('/'));
+      var ret = last(url.split('/'))
 
-        if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0]);
+      if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
 
-        return ret === '' ? 'unknown' : ret;
+      return ret === '' ? 'unknown' : ret
     }
 
     return exports;
@@ -6731,7 +6818,7 @@ export var ajax = _.ajax = (function () {
      *
      * Available options:
      *
-     * |Name                                         |Type         |Desc                      |
+     * |Name                                         |Type         |Desc                       |
      * |---------------------------------------------|-------------|---------------------------|
      * |url                                          |string       |Request url                |
      * |data                                         |string object|Request data               |
