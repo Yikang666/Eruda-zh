@@ -52,6 +52,9 @@ export default class Logger extends Emitter {
   displayGetterVal(flag) {
     Log.showGetterVal = flag
   }
+  lazyEvaluation(flag) {
+    Log.lazyEvaluation = flag
+  }
   viewLogInSources(flag) {
     Log.showSrcInSources = flag
   }
@@ -191,9 +194,9 @@ export default class Logger extends Emitter {
     return this
   }
   insert(type, args) {
-    let logs = this._logs,
-      $el = this._$el,
-      el = $el.get(0)
+    let logs = this._logs
+    let $el = this._$el
+    let el = $el.get(0)
 
     let isAtBottom = el.scrollTop === el.scrollHeight - el.offsetHeight
 
@@ -214,7 +217,7 @@ export default class Logger extends Emitter {
       lastLog.addCount()
       if (log.time) lastLog.updateTime(log.time)
       $el
-        .find('li')
+        .find('.eruda-log-container')
         .last()
         .remove()
       log = lastLog
@@ -225,14 +228,15 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       $el
-        .find('li')
+        .find('.eruda-log-container')
         .first()
         .remove()
       logs.shift()
     }
 
-    if (this._filterLog(log) && this._container.active)
+    if (this._filterLog(log) && this._container.active) {
       $el.append(log.formattedMsg)
+    }
 
     this.emit('insert', log)
 
@@ -250,8 +254,8 @@ export default class Logger extends Emitter {
 
     if (filter === 'all') return logs
 
-    let isFilterRegExp = isRegExp(filter),
-      isFilterFn = isFn(filter)
+    let isFilterRegExp = isRegExp(filter)
+    let isFilterFn = isFn(filter)
 
     return logs.filter(log => {
       if (log.ignoreFilter) return true
@@ -295,11 +299,11 @@ export default class Logger extends Emitter {
     let self = this
 
     this._$el.on('click', '.eruda-log-item', function() {
-      let $el = $(this),
-        id = $el.data('id'),
-        type = $el.data('type'),
-        logs = self._logs,
-        log
+      let $el = $(this)
+      let id = $el.data('id')
+      let type = $el.data('type')
+      let logs = self._logs
+      let log
 
       for (let i = 0, len = logs.length; i < len; i++) {
         log = logs[i]

@@ -210,6 +210,7 @@ export default class Console extends Tool {
       displayExtraInfo: false,
       displayUnenumerable: true,
       displayGetterVal: false,
+      lazyEvaluation: true,
       viewLogInSources: false,
       displayIfErr: false,
       useWorker: true,
@@ -227,6 +228,7 @@ export default class Console extends Tool {
     logger.displayHeader(cfg.get('displayExtraInfo'))
     logger.displayUnenumerable(cfg.get('displayUnenumerable'))
     logger.displayGetterVal(cfg.get('displayGetterVal'))
+    logger.lazyEvaluation(cfg.get('lazyEvaluation'))
     if (sources) logger.viewLogInSources(cfg.get('viewLogInSources'))
     logger.maxNum(maxLogNum)
 
@@ -244,6 +246,8 @@ export default class Console extends Tool {
           return logger.displayUnenumerable(val)
         case 'displayGetterVal':
           return logger.displayGetterVal(val)
+        case 'lazyEvaluation':
+          return logger.lazyEvaluation(val)
         case 'viewLogInSources':
           return logger.viewLogInSources(val)
         case 'useWorker':
@@ -262,6 +266,7 @@ export default class Console extends Tool {
       .switch(cfg, 'displayExtraInfo', 'Display Extra Information')
       .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
       .switch(cfg, 'displayGetterVal', 'Access Getter Value')
+      .switch(cfg, 'lazyEvaluation', 'Lazy Evaluation')
 
     if (isWorkerSupported) settings.switch(cfg, 'useWorker', 'Use Web Worker')
     if (sources)
