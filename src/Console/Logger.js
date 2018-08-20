@@ -214,23 +214,27 @@ export default class Logger extends Emitter {
       lastLog.type === log.type &&
       lastLog.value === log.value
     ) {
-      lastLog.addCount()
-      if (log.time) lastLog.updateTime(log.time)
-      $el
-        .find('.eruda-log-container')
-        .last()
-        .remove()
-      log = lastLog
+      let $container = $el.find(`div[data-id="${lastLog.id}"`)
+      if ($container.length > 0) {
+        lastLog.addCount()
+        if (log.time) lastLog.updateTime(log.time)
+        $container.parent().remove()
+        log = lastLog
+      } else {
+        logs.push(log)
+        this._lastLog = log
+      }
     } else {
       logs.push(log)
       this._lastLog = log
     }
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
-      $el
-        .find('.eruda-log-container')
-        .first()
-        .remove()
+      const firstLog = logs[0]
+      let $container = $el.find(`div[data-id="${firstLog.id}"`)
+      if ($container.length > 0) {
+        $container.parent().remove()
+      }
       logs.shift()
     }
 
