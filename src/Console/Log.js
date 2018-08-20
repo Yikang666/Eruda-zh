@@ -166,7 +166,7 @@ export default class Log {
     }
     this.formattedMsg = msg
   }
-  static click(type, log, $el) {
+  static click(type, log, $el, logger) {
     switch (type) {
       case 'log':
       case 'warn':
@@ -176,7 +176,9 @@ export default class Log {
       case 'table':
       case 'dir':
         if (log.src) {
-          if (Log.showSrcInSources) return 'viewSrc'
+          if (Log.showSrcInSources) {
+            return logger.emit('viewJson', log.src)
+          }
           let $json = $el.find('.eruda-json')
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
@@ -189,7 +191,7 @@ export default class Log {
           }
         } else if (log.args) {
           log.extractObj(function() {
-            Log.click(type, log, $el)
+            Log.click(type, log, $el, logger)
             delete log.args
           })
         }

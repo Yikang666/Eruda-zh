@@ -39,8 +39,9 @@ export default class Console extends Tool {
 
     CONSOLE_METHOD.forEach(name => {
       let origin = (origConsole[name] = noop)
-      if (winConsole[name])
+      if (winConsole[name]) {
         origin = origConsole[name] = winConsole[name].bind(winConsole)
+      }
 
       winConsole[name] = (...args) => {
         this[name](...args)

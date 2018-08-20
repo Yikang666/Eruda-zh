@@ -311,13 +311,7 @@ export default class Logger extends Emitter {
       }
       if (!log) return
 
-      let action = Log.click(type, log, $el)
-
-      switch (action) {
-        case 'viewSrc':
-          self.emit('viewJson', log.src)
-          break
-      }
+      Log.click(type, log, $el, self)
     })
   }
 }
