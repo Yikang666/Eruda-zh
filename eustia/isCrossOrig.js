@@ -3,7 +3,7 @@
 
 _('startWith')
 
-var origin = window.location.origin
+let origin = window.location.origin
 
 function exports(url) {
   return !startWith(url, origin)

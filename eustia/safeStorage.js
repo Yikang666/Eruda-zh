@@ -6,7 +6,7 @@ _('isUndef memStorage')
 function exports(type, memReplacement) {
   if (isUndef(memReplacement)) memReplacement = true
 
-  var ret
+  let ret
 
   switch (type) {
     case 'local':
@@ -19,9 +19,9 @@ function exports(type, memReplacement) {
 
   try {
     // Safari private browsing
-    var x = 'test-localStorage-' + Date.now()
+    let x = 'test-localStorage-' + Date.now()
     ret.setItem(x, x)
-    var y = ret.getItem(x)
+    let y = ret.getItem(x)
     ret.removeItem(x)
     if (y !== x) throw new Error()
   } catch (e) {

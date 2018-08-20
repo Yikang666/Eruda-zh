@@ -1,5 +1,5 @@
 module.exports = function(config) {
-  var customLaunchers = {
+  let customLaunchers = {
     sl_ios_safari_8: {
       base: 'SauceLabs',
       browserName: 'iphone',

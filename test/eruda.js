@@ -7,7 +7,7 @@ describe('devTools', function() {
     })
 
     it('init', function() {
-      var container = document.createElement('div')
+      let container = document.createElement('div')
       container.id = 'eruda'
       document.body.appendChild(container)
 
@@ -17,7 +17,7 @@ describe('devTools', function() {
         useShadowDom: false
       })
 
-      var $eruda = $('#eruda')
+      let $eruda = $('#eruda')
       expect($eruda.find('.eruda-dev-tools')).toHaveLength(1)
     })
   })
@@ -36,7 +36,7 @@ describe('devTools', function() {
     })
 
     it('show', function() {
-      var $tool = $('.eruda-test')
+      let $tool = $('.eruda-test')
       expect($tool).toBeHidden()
       eruda.show('test')
       expect($tool).toHaveCss({ display: 'block' })

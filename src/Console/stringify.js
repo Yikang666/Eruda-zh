@@ -10,8 +10,8 @@ let callbacks = {},
 if (isWorkerSupported) {
   tryIt(function() {
     /* Some browsers like uc mobile doesn't destroy worker properly after refreshing.
-         * After a few times of visiting, it reaches the maximum number of workers per site. 
-         */
+     * After a few times of visiting, it reaches the maximum number of workers per site. 
+     */
     worker = new StringifyWorker()
     worker.onmessage = function(e) {
       let [id, result] = e.data

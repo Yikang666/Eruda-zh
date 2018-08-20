@@ -1,6 +1,6 @@
 describe('info', function() {
-  var tool = eruda.get('info'),
-    $tool = $('.eruda-info')
+  let tool = eruda.get('info')
+  let $tool = $('.eruda-info')
 
   describe('default', function() {
     it('location', function() {

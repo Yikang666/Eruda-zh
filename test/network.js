@@ -1,7 +1,4 @@
 describe('network', function() {
-  var tool = eruda.get('network'),
-    $tool = $('.eruda-network')
-
   beforeEach(function() {
     eruda.show('network')
   })

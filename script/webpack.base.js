@@ -1,15 +1,15 @@
-var autoprefixer = require('autoprefixer'),
-  classPrefix = require('postcss-class-prefix'),
-  webpack = require('webpack'),
-  pkg = require('../package.json'),
-  path = require('path')
+const autoprefixer = require('autoprefixer')
+const classPrefix = require('postcss-class-prefix')
+const webpack = require('webpack')
+const pkg = require('../package.json')
+const path = require('path')
 
 process.traceDeprecation = true
 
-var nodeModDir = path.resolve('./node_modules/') + '/',
-  banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
+let nodeModDir = path.resolve('./node_modules/') + '/'
+let banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
 
-var postcssLoader = {
+let postcssLoader = {
   loader: 'postcss-loader',
   options: {
     plugins: [classPrefix('eruda-'), autoprefixer]

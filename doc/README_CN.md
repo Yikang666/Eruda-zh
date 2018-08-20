@@ -80,7 +80,7 @@ Js文件对于移动端来说略重（gzip后大概100kb）。建议通过url参
 * tool：指定要初始化哪些面板，默认加载所有。
 
 ```javascript
-var el = document.createElement('div');
+let el = document.createElement('div');
 document.body.appendChild(el);
 
 eruda.init({

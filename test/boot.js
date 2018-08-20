@@ -1,7 +1,7 @@
 function boot(name, cb) {
   // Need a little delay to make sure width and height of webpack dev server iframe are initialized.
   setTimeout(function() {
-    var options = {
+    let options = {
       useShadowDom: false
     }
     if (name) {
@@ -34,7 +34,7 @@ function boot(name, cb) {
 }
 
 function loadJs(src, cb) {
-  var script = document.createElement('script')
+  let script = document.createElement('script')
   script.src = src + '.js'
   script.onload = cb
   document.body.appendChild(script)

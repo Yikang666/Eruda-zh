@@ -2,7 +2,7 @@
  */
 
 function exports(el) {
-  var parentNode = el.parentNode
+  let parentNode = el.parentNode
 
   if (!parentNode) return false
 

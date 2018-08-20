@@ -287,8 +287,8 @@ class Visitor {
   }
   visit(val) {
     /* Add 0 to distinguish stringify generated id from JsonViewer id.
-         * When used in web worker, they are not calling the same uniqId method, thus result may be repeated.
-         */
+     * When used in web worker, they are not calling the same uniqId method, thus result may be repeated.
+     */
     let id = uniqId('erudaJson0')
 
     this._visited.push({ id, val, abstract: {} })

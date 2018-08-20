@@ -1,6 +1,5 @@
 describe('resources', function() {
-  var tool = eruda.get('resources'),
-    $tool = $('.eruda-resources')
+  let $tool = $('.eruda-resources')
 
   beforeEach(function() {
     eruda.show('resources')

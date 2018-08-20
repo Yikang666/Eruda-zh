@@ -1,6 +1,6 @@
 describe('console', function() {
-  var tool = eruda.get('console'),
-    $tool = $('.eruda-console')
+  let tool = eruda.get('console')
+  let $tool = $('.eruda-console')
 
   beforeEach(function() {
     eruda.show('console')
@@ -8,7 +8,7 @@ describe('console', function() {
   })
 
   it('string', function() {
-    var text = '<span>This is a log</span>'
+    let text = '<span>This is a log</span>'
 
     tool.log(text)
     expect($tool.find('.eruda-log')).toContainText(text)
@@ -26,7 +26,7 @@ describe('console', function() {
   })
 
   it('basic object', function() {
-    var obj = { a: 1 }
+    let obj = { a: 1 }
 
     tool.log(obj)
     expect($tool.find('.eruda-log')).toContainText('Object { a: 1 }')
@@ -97,8 +97,8 @@ describe('console', function() {
     })
 
     it('Repeat log', function() {
-      for (var i = 0; i < 10; i++) tool.log(1)
-      var $log = $tool.find('.eruda-log-item')
+      for (let i = 0; i < 10; i++) tool.log(1)
+      let $log = $tool.find('.eruda-log-item')
       expect($log).toHaveLength(1)
       expect($log.find('.eruda-count')).toContainText('10')
     })
@@ -136,7 +136,7 @@ describe('console', function() {
         return log.type !== 'error'
       })
 
-      var obj = {}
+      let obj = {}
       Object.defineProperty(obj, 'a', {
         get: function() {
           tool.error('deprecated')
@@ -191,11 +191,11 @@ describe('console', function() {
   })
 
   describe('config', function() {
-    var config = tool.config
+    let config = tool.config
 
     it('max number', function() {
       config.set('maxLogNum', '10')
-      for (var i = 0; i < 20; i++) tool.log(i)
+      for (let i = 0; i < 20; i++) tool.log(i)
       expect($tool.find('.eruda-log-item')).toHaveLength(10)
     })
 
@@ -253,7 +253,7 @@ describe('console', function() {
 
   describe('events', function() {
     it('log', function() {
-      var sum = 0
+      let sum = 0
       function add(num) {
         sum += num
       }

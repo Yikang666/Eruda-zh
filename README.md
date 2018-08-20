@@ -96,7 +96,7 @@ under html root element.
 For more information, please check the [documentation](doc/API.md).
 
 ```javascript
-var el = document.createElement('div');
+let el = document.createElement('div');
 document.body.appendChild(el);
 
 eruda.init({

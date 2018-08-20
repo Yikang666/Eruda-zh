@@ -49,13 +49,13 @@
     }
     addClickEvent('issue17', function ()
     {
-        var B = function () {};
-        var A = function () { this._data = 'eruda' };
+        let B = function () {};
+        let A = function () { this._data = 'eruda' };
         A.prototype = Object.create(B.prototype);
         Object.defineProperty(A.prototype, 'data', {
             get: function () { return this._data }
         });
-        var a = new A();
+        let a = new A();
         console.log(a);
     });
     addClickEvent('plugin', function ()
@@ -72,7 +72,7 @@
                 }
             };
         });
-        var Tool = eruda.Tool;
+        let Tool = eruda.Tool;
         eruda.add(new (Tool.extend({
             name: 'test3',
             init: function ($el) 
@@ -89,7 +89,7 @@
             resolve();
         }).then(function (res)
         {
-            var a = res.a;
+            let a = res.a;
         })
     });
     addClickEvent('issue31', function () 
@@ -106,8 +106,8 @@
     });
     addClickEvent('big-array', function () 
     {
-        var arr = [];
-        for (var i = 0; i < 10000; i++) {
+        let arr = [];
+        for (let i = 0; i < 10000; i++) {
             arr.push(i);
         }
         console.log(arr);

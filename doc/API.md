@@ -14,7 +14,7 @@ Initialize eruda.
 |useShadowDom=true|boolean     |Use shadow dom for css encapsulation                                                     |
 
 ```javascript
-var el = document.createElement('div');
+let el = document.createElement('div');
 document.body.appendChild(el);
 
 eruda.init({
@@ -60,7 +60,7 @@ eruda.position(); // -> {x: 20, y: 20}
 Get tool, eg. console, elements panels.
 
 ```javascript
-var console = eruda.get('console');
+let console = eruda.get('console');
 console.log('eruda');
 ```
 

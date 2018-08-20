@@ -1,13 +1,13 @@
 describe('snippets', function() {
-  var tool = eruda.get('snippets'),
-    $tool = $('.eruda-snippets')
+  let tool = eruda.get('snippets')
+  let $tool = $('.eruda-snippets')
 
   describe('default', function() {
     it('border all', function() {
       expect($tool.find('.eruda-name').eq(0)).toContainText('Border All')
 
-      var $body = $('body'),
-        $btn = $tool.find('.eruda-run').eq(0)
+      let $body = $('body')
+      let $btn = $tool.find('.eruda-run').eq(0)
 
       $btn.click()
       expect($body).toHaveCss({ outlineWidth: '2px' })
@@ -26,8 +26,8 @@ describe('snippets', function() {
     it('edit page', function() {
       expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page')
 
-      var $body = $('body'),
-        $btn = $tool.find('.eruda-run').eq(3)
+      let $body = $('body')
+      let $btn = $tool.find('.eruda-run').eq(3)
 
       $btn.click()
       expect($body).toHaveAttr('contenteditable', 'true')

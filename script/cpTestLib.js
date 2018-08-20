@@ -1,6 +1,6 @@
-var copy = require('copy'),
-  path = require('path'),
-  util = require('./util')
+const copy = require('copy')
+const path = require('path')
+const util = require('./util')
 
 util.mkdir(path.resolve(__dirname, '../test/lib'), function(err) {
   if (err) return console.log(err)

@@ -1,22 +1,22 @@
-var path = require('path'),
-  util = require('./util'),
-  istanbul = require('istanbul')
+const path = require('path')
+const util = require('./util')
+const istanbul = require('istanbul')
 
-var collector = new istanbul.Collector(),
-  reporter = new istanbul.Reporter()
+let collector = new istanbul.Collector()
+let reporter = new istanbul.Reporter()
 
-var remappedJson = require('../coverage/coverage-remapped.json')
+let remappedJson = require('../coverage/coverage-remapped.json')
 
-var coverage = util.reduce(
+let coverage = util.reduce(
   util.keys(remappedJson),
   function(result, source) {
     if (isSrc()) {
-      var correctPath = source.replace(
+      let correctPath = source.replace(
         path.resolve(__dirname, '../src'),
         path.resolve(__dirname, '../')
       )
 
-      var val = remappedJson[source]
+      let val = remappedJson[source]
       val.path = correctPath
       result[correctPath] = val
     }

@@ -1,4 +1,4 @@
-var webpackCfg = require('./script/webpack.dev')
+const webpackCfg = require('./script/webpack.dev')
 webpackCfg.devtool = 'inline-source-map'
 
 module.exports = function(config) {
