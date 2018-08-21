@@ -64,8 +64,9 @@ export default class Console extends Tool {
   catchGlobalErr() {
     this._origOnerror = window.onerror
 
-    window.onerror = (errMsg, url, lineNum, column, errObj) =>
+    window.onerror = (errMsg, url, lineNum, column, errObj) => {
       this._logger.error(errObj ? errObj : errMsg)
+    }
     window.addEventListener('unhandledrejection', this._rejectionHandler)
 
     return this
@@ -115,8 +116,8 @@ export default class Console extends Tool {
     })
   }
   _initLogger() {
-    let $filter = this._$control.find('.eruda-filter'),
-      logger = (this._logger = new Logger(this._$logs, this))
+    let $filter = this._$control.find('.eruda-filter')
+    let logger = (this._logger = new Logger(this._$logs, this))
 
     logger.on('filter', filter =>
       $filter.each(function() {
