@@ -1,5 +1,14 @@
 import Tool from '../DevTools/Tool'
-import { evalCss, $, LocalStore } from '../lib/util'
+import {
+  evalCss,
+  $,
+  LocalStore,
+  uniqId,
+  each,
+  filter,
+  isStr,
+  clone
+} from '../lib/util'
 
 export default class Settings extends Tool {
   constructor() {
@@ -19,6 +28,27 @@ export default class Settings extends Tool {
 
     this._bindEvent()
   }
+  remove(config, key) {
+    if (isStr(config)) {
+      this._$el.find('.eruda-text').each(function() {
+        let $this = $(this)
+        if ($this.text() === config) $this.remove()
+      })
+    } else {
+      this._settings = filter(this._settings, setting => {
+        if (setting.config === config && setting.key === key) {
+          this._$el.find('#' + setting.id).remove()
+          return false
+        }
+
+        return true
+      })
+    }
+
+    this._cleanSeparator()
+
+    return this
+  }
   destroy() {
     super.destroy()
 
@@ -29,13 +59,15 @@ export default class Settings extends Tool {
     this._$el.html('')
   }
   switch(config, key, desc) {
-    this._settings.push({ config, key })
+    let id = this._genId('settings')
+
+    this._settings.push({ config, key, id })
 
     this._$el.append(
       this._switchTpl({
         desc,
         key,
-        idx: this._settings.length - 1,
+        id,
         val: config.get(key)
       })
     )
@@ -48,13 +80,15 @@ export default class Settings extends Tool {
     desc,
     colors = ['#2196f3', '#707d8b', '#f44336', '#009688', '#ffc107']
   ) {
-    this._settings.push({ config, key })
+    let id = this._genId('settings')
+
+    this._settings.push({ config, key, id })
 
     this._$el.append(
       this._colorTpl({
         desc,
         colors,
-        idx: this._settings.length - 1,
+        id,
         val: config.get(key)
       })
     )
@@ -62,13 +96,15 @@ export default class Settings extends Tool {
     return this
   }
   select(config, key, desc, selections) {
-    this._settings.push({ config, key })
+    let id = this._genId('settings')
+
+    this._settings.push({ config, key, id })
 
     this._$el.append(
       this._selectTpl({
         desc,
         selections,
-        idx: this._settings.length - 1,
+        id,
         val: config.get(key)
       })
     )
@@ -76,7 +112,9 @@ export default class Settings extends Tool {
     return this
   }
   range(config, key, desc, { min = 0, max = 1, step = 0.1 }) {
-    this._settings.push({ config, key, min, max, step })
+    let id = this._genId('settings')
+
+    this._settings.push({ config, key, min, max, step, id })
 
     let val = config.get(key)
 
@@ -88,7 +126,7 @@ export default class Settings extends Tool {
         step,
         val,
         progress: progress(val, min, max),
-        idx: this._settings.length - 1
+        id
       })
     )
 
@@ -104,36 +142,62 @@ export default class Settings extends Tool {
 
     return this
   }
+  // Merge adjacent separators
+  _cleanSeparator() {
+    let children = clone(this._$el.get(0).children)
+
+    function isSeparator(node) {
+      return node.getAttribute('class') === 'eruda-separator'
+    }
+
+    for (let i = 0, len = children.length; i < len - 1; i++) {
+      if (isSeparator(children[i]) && isSeparator(children[i + 1])) {
+        $(children[i]).remove()
+      }
+    }
+  }
+  _genId() {
+    return uniqId('eruda-settings')
+  }
   _closeAll() {
     this._$el.find('.eruda-open').rmClass('eruda-open')
+  }
+  _getSetting(id) {
+    let ret
+
+    each(this._settings, setting => {
+      if (setting.id === id) ret = setting
+    })
+
+    return ret
   }
   _bindEvent() {
     let self = this
 
     this._$el
       .on('click', '.eruda-checkbox', function() {
-        let $input = $(this).find('input'),
-          idx = $input.data('idx'),
-          val = $input.get(0).checked
+        let $input = $(this).find('input')
+        let id = $input.data('id')
+        let val = $input.get(0).checked
 
-        let setting = self._settings[idx]
+        let setting = self._getSetting(id)
         setting.config.set(setting.key, val)
       })
       .on('click', '.eruda-select .eruda-head', function() {
         let $el = $(this)
-            .parent()
-            .find('ul'),
-          isOpen = $el.hasClass('eruda-open')
+          .parent()
+          .find('ul')
+        let isOpen = $el.hasClass('eruda-open')
 
         self._closeAll()
         isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open')
       })
       .on('click', '.eruda-select li', function() {
-        let $this = $(this),
-          $ul = $this.parent(),
-          val = $this.text(),
-          idx = $ul.data('idx'),
-          setting = self._settings[idx]
+        let $this = $(this)
+        let $ul = $this.parent()
+        let val = $this.text()
+        let id = $ul.data('id')
+        let setting = self._getSetting(id)
 
         $ul.rmClass('eruda-open')
         $ul
@@ -145,29 +209,29 @@ export default class Settings extends Tool {
       })
       .on('click', '.eruda-range .eruda-head', function() {
         let $el = $(this)
-            .parent()
-            .find('.eruda-input-container'),
-          isOpen = $el.hasClass('eruda-open')
+          .parent()
+          .find('.eruda-input-container')
+        let isOpen = $el.hasClass('eruda-open')
 
         self._closeAll()
         isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open')
       })
       .on('change', '.eruda-range input', function() {
-        let $this = $(this),
-          $container = $this.parent(),
-          idx = $container.data('idx'),
-          val = +$this.val(),
-          setting = self._settings[idx]
+        let $this = $(this)
+        let $container = $this.parent()
+        let id = $container.data('id')
+        let val = +$this.val()
+        let setting = self._getSetting(id)
 
         setting.config.set(setting.key, val)
       })
       .on('input', '.eruda-range input', function() {
-        let $this = $(this),
-          $container = $this.parent(),
-          idx = $container.data('idx'),
-          val = +$this.val(),
-          setting = self._settings[idx],
-          { min, max } = setting
+        let $this = $(this)
+        let $container = $this.parent()
+        let id = $container.data('id')
+        let val = +$this.val()
+        let setting = self._getSetting(id)
+        let { min, max } = setting
 
         $container
           .parent()
@@ -179,19 +243,19 @@ export default class Settings extends Tool {
       })
       .on('click', '.eruda-color .eruda-head', function() {
         let $el = $(this)
-            .parent()
-            .find('ul'),
-          isOpen = $el.hasClass('eruda-open')
+          .parent()
+          .find('ul')
+        let isOpen = $el.hasClass('eruda-open')
 
         self._closeAll()
         isOpen ? $el.rmClass('eruda-open') : $el.addClass('eruda-open')
       })
       .on('click', '.eruda-color li', function() {
-        let $this = $(this),
-          $ul = $this.parent(),
-          val = $this.css('background-color'),
-          idx = $ul.data('idx'),
-          setting = self._settings[idx]
+        let $this = $(this)
+        let $ul = $this.parent()
+        let val = $this.css('background-color')
+        let id = $ul.data('id')
+        let setting = self._getSetting(id)
 
         $ul.rmClass('eruda-open')
         $ul

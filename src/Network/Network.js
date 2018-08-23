@@ -199,6 +199,16 @@ export default class Network extends Tool {
     evalCss.remove(this._style)
     this.restoreXhr()
     this.restoreFetch()
+    this._rmCfg()
+  }
+  _rmCfg() {
+    let cfg = this.config
+
+    let settings = this._container.get('settings')
+
+    if (!settings) return
+
+    settings.remove(cfg, 'overrideFetch').remove('Network')
   }
   _initCfg() {
     let cfg = (this.config = Settings.createCfg('network', {

@@ -67,4 +67,12 @@ describe('settings', function() {
       .click()
     expect(cfg.get('testColor')).toBe('rgb(0, 0, 0)')
   })
+
+  it('remove', function () {
+    let text = 'Test Switch'
+    tool.switch(cfg, 'testSwitch', text)
+    expect($tool.find('.eruda-switch')).toContainText(text) 
+    tool.remove(cfg, 'testSwitch')
+    expect($tool.find('.eruda-switch')).toHaveLength(0)
+  })
 })

@@ -63,6 +63,7 @@ export default class Resources extends Tool {
 
     this._disableObserver()
     evalCss.remove(this._style)
+    this._rmCfg()
   }
   refreshScript() {
     let scriptData = []
@@ -179,8 +180,8 @@ export default class Resources extends Tool {
       })
     } else {
       $('img').each(function() {
-        let $this = $(this),
-          src = $this.attr('src')
+        let $this = $(this)
+        let src = $this.attr('src')
 
         if ($this.data('exclude') === 'true') return
 
@@ -206,9 +207,9 @@ export default class Resources extends Tool {
     return super.hide()
   }
   _bindEvent() {
-    let self = this,
-      $el = this._$el,
-      container = this._container
+    let self = this
+    let $el = this._$el
+    let container = this._container
 
     $el
       .on('click', '.eruda-refresh-local-storage', () =>
@@ -231,9 +232,9 @@ export default class Resources extends Tool {
       )
       .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
       .on('click', '.eruda-delete-storage', function() {
-        let $this = $(this),
-          key = $this.data('key'),
-          type = $this.data('type')
+        let $this = $(this)
+        let key = $this.data('key')
+        let type = $this.data('type')
 
         if (type === 'local') {
           localStorage.removeItem(key)
@@ -267,9 +268,9 @@ export default class Resources extends Tool {
         this.refreshCookie()._render()
       })
       .on('click', '.eruda-storage-val', function() {
-        let $this = $(this),
-          key = $this.data('key'),
-          type = $this.data('type')
+        let $this = $(this)
+        let key = $this.data('key')
+        let type = $this.data('type')
 
         let val =
           type === 'local'
@@ -324,6 +325,18 @@ export default class Resources extends Tool {
         }
       }
     }
+  }
+  _rmCfg() {
+    let cfg = this.config
+
+    let settings = this._container.get('settings')
+
+    if (!settings) return
+
+    settings
+      .remove(cfg, 'hideErudaSetting')
+      .remove(cfg, 'observeElement')
+      .remove('Resources')
   }
   _initCfg() {
     let cfg = (this.config = Settings.createCfg('resources', {

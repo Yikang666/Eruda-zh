@@ -76,8 +76,8 @@ export default class Elements extends Tool {
   overrideEventTarget() {
     let winEventProto = getWinEventProto()
 
-    let origAddEvent = (this._origAddEvent = winEventProto.addEventListener),
-      origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
+    let origAddEvent = (this._origAddEvent = winEventProto.addEventListener)
+    let origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
 
     winEventProto.addEventListener = function(type, listener, useCapture) {
       addEvent(this, type, listener, useCapture)
@@ -108,31 +108,32 @@ export default class Elements extends Tool {
     this._highlight.destroy()
     this._disableObserver()
     this.restoreEventTarget()
+    this._rmCfg()
   }
   _back() {
     if (this._curEl === this._htmlEl) return
 
-    let parentQueue = this._curParentQueue,
-      parent = parentQueue.shift()
+    let parentQueue = this._curParentQueue
+    let parent = parentQueue.shift()
 
     while (!isElExist(parent)) parent = parentQueue.shift()
 
     this.set(parent)
   }
   _bindEvent() {
-    let self = this,
-      container = this._container,
-      select = this._select
+    let self = this
+    let container = this._container
+    let select = this._select
 
     this._$el
       .on('click', '.eruda-child', function() {
-        let idx = $(this).data('idx'),
-          curEl = self._curEl,
-          el = curEl.childNodes[idx]
+        let idx = $(this).data('idx')
+        let curEl = self._curEl
+        let el = curEl.childNodes[idx]
 
         if (el && el.nodeType === 3) {
-          let curTagName = curEl.tagName,
-            type
+          let curTagName = curEl.tagName
+          let type
 
           switch (curTagName) {
             case 'SCRIPT':
@@ -158,8 +159,8 @@ export default class Elements extends Tool {
         !isElExist(el) ? self._render() : self.set(el)
       })
       .on('click', '.eruda-listener-content', function() {
-        let text = $(this).text(),
-          sources = container.get('sources')
+        let text = $(this).text()
+        let sources = container.get('sources')
 
         if (sources) {
           sources.set('js', text)
@@ -168,9 +169,9 @@ export default class Elements extends Tool {
       })
       .on('click', '.eruda-breadcrumb', () => {
         let data =
-            this._elData ||
-            JSON.parse(stringify(this._curEl, { getterVal: true })),
-          sources = container.get('sources')
+          this._elData ||
+          JSON.parse(stringify(this._curEl, { getterVal: true }))
+        let sources = container.get('sources')
 
         this._elData = data
 
@@ -180,9 +181,9 @@ export default class Elements extends Tool {
         }
       })
       .on('click', '.eruda-parent', function() {
-        let idx = $(this).data('idx'),
-          curEl = self._curEl,
-          el = curEl.parentNode
+        let idx = $(this).data('idx')
+        let curEl = self._curEl
+        let el = curEl.parentNode
 
         while (idx-- && el.parentNode) el = el.parentNode
 
@@ -258,8 +259,8 @@ export default class Elements extends Tool {
   _getData() {
     let ret = {}
 
-    let el = this._curEl,
-      cssStore = this._curCssStore
+    let el = this._curEl
+    let cssStore = this._curCssStore
 
     let { className, id, attributes, tagName } = el
 
@@ -303,8 +304,9 @@ export default class Elements extends Tool {
     }
     ret.boxModel = boxModel
 
-    if (this._rmDefComputedStyle)
+    if (this._rmDefComputedStyle) {
       computedStyle = rmDefComputedStyle(computedStyle)
+    }
     ret.rmDefComputedStyle = this._rmDefComputedStyle
     processStyleRules(computedStyle)
     ret.computedStyle = computedStyle
@@ -357,6 +359,18 @@ export default class Elements extends Tool {
         if (removedNodes[i] === this._curEl) return this.set(this._htmlEl)
       }
     }
+  }
+  _rmCfg() {
+    let cfg = this.config
+
+    let settings = this._container.get('settings')
+
+    if (!settings) return
+
+    settings
+      .remove(cfg, 'overrideEventTarget')
+      .remove(cfg, 'observeElement')
+      .remove('Elements')
   }
   _initCfg() {
     let cfg = (this.config = Settings.createCfg('elements', {
@@ -484,9 +498,9 @@ function formatChildNodes(nodes) {
 }
 
 function getParents(el) {
-  let ret = [],
-    i = 0,
-    parent = el.parentNode
+  let ret = []
+  let i = 0
+  let parent = el.parentNode
 
   while (parent && parent.nodeType === 1) {
     ret.push({
@@ -566,8 +580,9 @@ function rmEvent(el, type, listener, useCapture = false) {
   if (keys(events).length === 0) delete el.erudaEvents
 }
 
-let getWinEventProto = () =>
-  safeGet(window, 'EventTarget.prototype') || window.Node.prototype
+let getWinEventProto = () => {
+  return safeGet(window, 'EventTarget.prototype') || window.Node.prototype
+}
 
 let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`
 

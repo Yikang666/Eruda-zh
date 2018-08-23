@@ -18,6 +18,7 @@ export default class Console extends Tool {
   }
   init($el, container) {
     super.init($el)
+    this._container = container
 
     this._appendTpl()
 
@@ -25,8 +26,8 @@ export default class Console extends Tool {
     this._exposeLogger()
     this._rejectionHandler = e => this._logger.error(e.reason)
 
-    this._initCfg(container)
-    this._bindEvent(container)
+    this._initCfg()
+    this._bindEvent()
   }
   show() {
     super.show()
@@ -88,6 +89,7 @@ export default class Console extends Tool {
     this.ignoreGlobalErr()
     this.restoreConsole()
     this._unregisterListener()
+    this._rmCfg()
   }
   _registerListener() {
     this._scaleListener = scale => (this._scale = scale)
@@ -142,7 +144,8 @@ export default class Console extends Tool {
         })
     )
   }
-  _bindEvent(container) {
+  _bindEvent() {
+    let container = this._container
     let $input = this._$input,
       $inputBtns = this._$inputBtns,
       $control = this._$control,
@@ -202,9 +205,29 @@ export default class Console extends Tool {
 
     this._$inputBtns.show()
   }
-  _initCfg(container) {
-    let sources = container.get('sources'),
-      logger = this._logger
+  _rmCfg() {
+    let cfg = this.config
+
+    let settings = this._container.get('settings')
+    if (!settings) return
+
+    settings
+      .remove(cfg, 'catchGlobalErr')
+      .remove(cfg, 'overrideConsole')
+      .remove(cfg, 'displayExtraInfo')
+      .remove(cfg, 'displayUnenumerable')
+      .remove(cfg, 'displayGetterVal')
+      .remove(cfg, 'lazyEvaluation')
+      .remove(cfg, 'viewLogInSources')
+      .remove(cfg, 'displayIfErr')
+      .remove(cfg, 'useWorker')
+      .remove(cfg, 'maxLogNum')
+      .remove('Console')
+  }
+  _initCfg() {
+    let container = this._container
+    let sources = container.get('sources')
+    let logger = this._logger
 
     let cfg = (this.config = Settings.createCfg('console', {
       catchGlobalErr: true,
@@ -271,8 +294,9 @@ export default class Console extends Tool {
       .switch(cfg, 'lazyEvaluation', 'Lazy Evaluation')
 
     if (isWorkerSupported) settings.switch(cfg, 'useWorker', 'Use Web Worker')
-    if (sources)
+    if (sources) {
       settings.switch(cfg, 'viewLogInSources', 'View Log In Sources Panel')
+    }
 
     settings
       .select(cfg, 'maxLogNum', 'Max Log Number', [

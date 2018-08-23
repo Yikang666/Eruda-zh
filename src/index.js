@@ -56,6 +56,7 @@ module.exports = {
   Resources,
   Info,
   Snippets,
+  Settings,
   get(name) {
     if (!this._checkInit()) return
 

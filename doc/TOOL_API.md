@@ -239,6 +239,15 @@ Customization for all tools.
 
 Clear settings.
 
+### remove
+
+Remove setting.
+
+|Name|Type  |Desc         |
+|----|------|-------------|
+|cfg |object|Config object|
+|name|string|Option name  |
+
 ### text
 
 Add text.
@@ -308,4 +317,6 @@ settings.text('Test')
         .select(cfg, 'testSelect', 'Test Select', ['select1', 'select2'])
         .range(cfg, 'testRange', 'Test Range', {min: 0, max: 1, step: 0.1})
         .separator();
+
+settings.remove(cfg, 'testBool')        
 ```

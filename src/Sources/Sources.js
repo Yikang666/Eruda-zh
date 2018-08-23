@@ -28,6 +28,7 @@ export default class Sources extends Tool {
     super.destroy()
 
     evalCss.remove(this._style)
+    this._rmCfg()
   }
   set(type, val) {
     if (type === 'img') {
@@ -132,6 +133,18 @@ export default class Sources extends Tool {
     this._jsonTpl = require('./json.hbs')
     this._rawTpl = require('./raw.hbs')
     this._iframeTpl = require('./iframe.hbs')
+  }
+  _rmCfg() {
+    let cfg = this.config
+
+    let settings = this._container.get('settings')
+
+    if (!settings) return
+
+    settings
+      .remove(cfg, 'showLineNum')
+      .remove(cfg, 'formatCode')
+      .remove('Sources')
   }
   _initCfg() {
     let cfg = (this.config = Settings.createCfg('sources', {
