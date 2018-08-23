@@ -1,3 +1,12 @@
+## v1.5.2 (23 Aug 2018)
+
+* Fix console show in sources panel
+* Fix log merge
+* Support getting entryBtn instance
+* Update timing plugin version
+* Add remove setting api
+* Fix safari merge log exception
+
 ## v1.5.1 (18 Aug 2018)
 
 * Fix uglifyjs unicode escape [#69](https://github.com/liriliri/eruda/issues/69)
