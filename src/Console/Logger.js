@@ -214,7 +214,7 @@ export default class Logger extends Emitter {
       lastLog.type === log.type &&
       lastLog.value === log.value
     ) {
-      let $container = $el.find(`div[data-id="${lastLog.id}"`)
+      let $container = $el.find(`div[data-id="${lastLog.id}"]`)
       if ($container.length > 0) {
         lastLog.addCount()
         if (log.time) lastLog.updateTime(log.time)
