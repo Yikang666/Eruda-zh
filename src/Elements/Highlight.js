@@ -32,12 +32,18 @@ export default class Highlight {
 
     let computedStyle = getComputedStyle(this._target, '')
 
+    if (computedStyle.display === 'none') {
+      return this._$el.css('visibility', 'hidden')
+    } else {
+      this._$el.css('visibility', 'visible')
+    }
+
     let getNumStyle = name => pxToNum(computedStyle.getPropertyValue(name))
 
-    let ml = getNumStyle('margin-left'),
-      mr = getNumStyle('margin-right'),
-      mt = getNumStyle('margin-top'),
-      mb = getNumStyle('margin-bottom')
+    let ml = getNumStyle('margin-left')
+    let mr = getNumStyle('margin-right')
+    let mt = getNumStyle('margin-top')
+    let mb = getNumStyle('margin-bottom')
 
     this._$margin.css({
       left: -ml,
@@ -46,13 +52,13 @@ export default class Highlight {
       height: height + mt + mb
     })
 
-    let bl = getNumStyle('border-left-width'),
-      br = getNumStyle('border-right-width'),
-      bt = getNumStyle('border-top-width'),
-      bb = getNumStyle('border-bottom-width')
+    let bl = getNumStyle('border-left-width')
+    let br = getNumStyle('border-right-width')
+    let bt = getNumStyle('border-top-width')
+    let bb = getNumStyle('border-bottom-width')
 
-    let bw = width - bl - br,
-      bh = height - bt - bb
+    let bw = width - bl - br
+    let bh = height - bt - bb
 
     this._$padding.css({
       left: bl,
@@ -61,10 +67,10 @@ export default class Highlight {
       height: bh
     })
 
-    let pl = getNumStyle('padding-left'),
-      pr = getNumStyle('padding-right'),
-      pt = getNumStyle('padding-top'),
-      pb = getNumStyle('padding-bottom')
+    let pl = getNumStyle('padding-left')
+    let pr = getNumStyle('padding-right')
+    let pt = getNumStyle('padding-top')
+    let pb = getNumStyle('padding-bottom')
 
     this._$content.css({
       left: bl + pl,
