@@ -47,7 +47,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 通过CDN使用：
 
 ```html
-<script src="//cdn.bootcss.com/eruda/1.4.2/eruda.min.js"></script>
+<script src="//cdn.bootcss.com/eruda/1.5.2/eruda.min.js"></script>
 <script>eruda.init();</script>
 ```
 
