@@ -259,7 +259,9 @@ export var escapeJsonStr = _.escapeJsonStr = (function () {
      */
 
     function exports(str) {
-        return escapeJsStr(str).replace(/\\'/g, "'");
+      return escapeJsStr(str)
+        .replace(/\\'/g, "'")
+        .replace(/\t/g, '\\t')
     }
 
     return exports;

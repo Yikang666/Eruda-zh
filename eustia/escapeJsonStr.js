@@ -4,5 +4,7 @@
 _('escapeJsStr')
 
 function exports(str) {
-  return escapeJsStr(str).replace(/\\'/g, "'")
+  return escapeJsStr(str)
+    .replace(/\\'/g, "'")
+    .replace(/\t/g, '\\t')
 }

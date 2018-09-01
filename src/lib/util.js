@@ -1258,7 +1258,9 @@ export var escapeJsonStr = _.escapeJsonStr = (function () {
      */
 
     function exports(str) {
-      return escapeJsStr(str).replace(/\\'/g, "'")
+      return escapeJsStr(str)
+        .replace(/\\'/g, "'")
+        .replace(/\t/g, '\\t')
     }
 
     return exports;
@@ -2205,7 +2207,7 @@ export var isCrossOrig = _.isCrossOrig = (function () {
      * startWith 
      */
 
-    var origin = window.location.origin
+    let origin = window.location.origin
 
     function exports(url) {
       return !startWith(url, origin)
@@ -2279,7 +2281,7 @@ export var isErudaEl = _.isErudaEl = (function () {
      */
 
     function exports(el) {
-      var parentNode = el.parentNode
+      let parentNode = el.parentNode
 
       if (!parentNode) return false
 
@@ -3218,13 +3220,13 @@ export var evalCss = _.evalCss = (function () {
      * toStr each filter 
      */
 
-    var styleList = [],
-      scale = 1
+    let styleList = []
+    let scale = 1
 
     function exports(css, container) {
       css = toStr(css)
 
-      for (var i = 0, len = styleList.length; i < len; i++) {
+      for (let i = 0, len = styleList.length; i < len; i++) {
         if (styleList[i].css === css) return
       }
 
@@ -5170,7 +5172,7 @@ export var safeStorage = _.safeStorage = (function () {
     function exports(type, memReplacement) {
       if (isUndef(memReplacement)) memReplacement = true
 
-      var ret
+      let ret
 
       switch (type) {
         case 'local':
@@ -5183,9 +5185,9 @@ export var safeStorage = _.safeStorage = (function () {
 
       try {
         // Safari private browsing
-        var x = 'test-localStorage-' + Date.now()
+        let x = 'test-localStorage-' + Date.now()
         ret.setItem(x, x)
-        var y = ret.getItem(x)
+        let y = ret.getItem(x)
         ret.removeItem(x)
         if (y !== x) throw new Error()
       } catch (e) {
@@ -6490,7 +6492,7 @@ export var getFileName = _.getFileName = (function () {
      */
 
     function exports(url) {
-      var ret = last(url.split('/'))
+      let ret = last(url.split('/'))
 
       if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
 
