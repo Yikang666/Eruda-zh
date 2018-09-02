@@ -118,6 +118,13 @@ export default [
     desc: 'Navigate dom tree'
   },
   {
+    name: 'Load Orientation Plugin',
+    fn() {
+      loadPlugin('orientation')
+    },
+    desc: 'Test orientation api'
+  },
+  {
     name: 'Restore Settings',
     fn() {
       let store = safeStorage('local')
@@ -206,5 +213,6 @@ const pluginVersion = {
   code: '1.0.0',
   benchmark: '1.0.0',
   geolocation: '1.1.0',
-  dom: '1.0.1'
+  dom: '1.0.1',
+  orientation: '1.0.0'
 }
