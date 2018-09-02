@@ -1,3 +1,10 @@
+## v1.5.3 (2 Sep 2018)
+
+* Add load dom plugin snippet
+* Disable highlight for invisible elements
+* Fix unexpected token \t in JSON
+* Add load orientation plugin snippet
+
 ## v1.5.2 (23 Aug 2018)
 
 * Fix console show in sources panel

@@ -13,6 +13,7 @@ doc/
 .npmignore
 .prettierignore
 .travis.yml
+CHANGELOG.md
 prettier.config.js
 karma.conf.js
 karma.sauce.js

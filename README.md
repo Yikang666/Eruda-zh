@@ -117,6 +117,7 @@ It is possible to enhance Eruda with more features by writing plugins. Check sou
 * [eruda-benchmark](https://github.com/liriliri/eruda-benchmark): Run JavaScript benchmarks.
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation): Test geolocation.
 * [eruda-dom](https://github.com/liriliri/eruda-dom): Navigate dom tree.
+* [eruda-orientation](https://github.com/liriliri/eruda-orientation): Test orientation api.
 
 When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
 
