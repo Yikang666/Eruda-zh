@@ -1331,52 +1331,19 @@ export var fileSize = _.fileSize = (function () {
     return exports;
 })();
 
-/* ------------------------------ startWith ------------------------------ */
-
-export var startWith = _.startWith = (function () {
-    /* Check if string starts with the given target string.
-     *
-     * |Name  |Type   |Desc                             |
-     * |------|-------|---------------------------------|
-     * |str   |string |String to search                 |
-     * |prefix|string |String prefix                    |
-     * |return|boolean|True if string starts with prefix|
-     *
-     * ```javascript
-     * startWith('ab', 'a'); // -> true
-     * ```
-     */
-
-    /* module
-     * env: all
-     * test: all
-     */
-
-    function exports(str, prefix) {
-        return str.indexOf(prefix) === 0;
-    }
-
-    return exports;
-})();
-
 /* ------------------------------ fullUrl ------------------------------ */
 
 export var fullUrl = _.fullUrl = (function () {
     /* Add origin to url if needed.
      */
 
-    /* dependencies
-     * startWith 
-     */
+    function exports(href) {
+      let link = document.createElement('a')
+      link.href = href
 
-    let origin = window.location.origin
-
-    function exports(url) {
-      if (startWith(url, 'http')) return url
-
-      if (!startWith(url, '/')) url = '/' + url
-
-      return origin + url
+      return (
+        link.protocol + '//' + link.host + link.pathname + link.search + link.hash
+      )
     }
 
     return exports;
@@ -2192,6 +2159,34 @@ export var isBool = _.isBool = (function () {
 
     function exports(val) {
         return val === true || val === false;
+    }
+
+    return exports;
+})();
+
+/* ------------------------------ startWith ------------------------------ */
+
+export var startWith = _.startWith = (function () {
+    /* Check if string starts with the given target string.
+     *
+     * |Name  |Type   |Desc                             |
+     * |------|-------|---------------------------------|
+     * |str   |string |String to search                 |
+     * |prefix|string |String prefix                    |
+     * |return|boolean|True if string starts with prefix|
+     *
+     * ```javascript
+     * startWith('ab', 'a'); // -> true
+     * ```
+     */
+
+    /* module
+     * env: all
+     * test: all
+     */
+
+    function exports(str, prefix) {
+        return str.indexOf(prefix) === 0;
     }
 
     return exports;

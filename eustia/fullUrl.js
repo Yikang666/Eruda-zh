@@ -1,14 +1,12 @@
 /* Add origin to url if needed.
  */
 
-_('startWith')
+let link = document.createElement('a')
 
-let origin = window.location.origin
+function exports(href) {
+  link.href = href
 
-function exports(url) {
-  if (startWith(url, 'http')) return url
-
-  if (!startWith(url, '/')) url = '/' + url
-
-  return origin + url
+  return (
+    link.protocol + '//' + link.host + link.pathname + link.search + link.hash
+  )
 }

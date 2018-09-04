@@ -45,10 +45,10 @@ export default class Network extends Tool {
   overrideXhr() {
     let winXhrProto = window.XMLHttpRequest.prototype
 
-    let origSend = (this._origSend = winXhrProto.send),
-      origOpen = (this._origOpen = winXhrProto.open),
-      origSetRequestHeader = (this._origSetRequestHeader =
-        winXhrProto.setRequestHeader)
+    let origSend = (this._origSend = winXhrProto.send)
+    let origOpen = (this._origOpen = winXhrProto.open)
+    let origSetRequestHeader = (this._origSetRequestHeader =
+      winXhrProto.setRequestHeader)
 
     let self = this
 
@@ -160,8 +160,8 @@ export default class Network extends Tool {
     this._render()
   }
   _bindEvent() {
-    let $el = this._$el,
-      container = this._container
+    let $el = this._$el
+    let container = this._container
 
     let self = this
 
