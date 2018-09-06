@@ -2,6 +2,7 @@
 node_modules/
 test/lib/
 coverage/
+eustia/cache/
 test/playground.html
 eruda.js
 !/test/eruda.js

@@ -12,6 +12,7 @@ doc/
 .gitignore
 .npmignore
 .prettierignore
+.eustia.js
 .travis.yml
 CHANGELOG.md
 prettier.config.js

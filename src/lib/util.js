@@ -1337,8 +1337,9 @@ export var fullUrl = _.fullUrl = (function () {
     /* Add origin to url if needed.
      */
 
+    let link = document.createElement('a')
+
     function exports(href) {
-      let link = document.createElement('a')
       link.href = href
 
       return (
