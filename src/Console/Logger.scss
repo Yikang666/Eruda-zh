@@ -21,7 +21,7 @@
           position: relative;
           @include clear-float();
           background: #fff;
-          padding: $padding;
+          padding: 3px $padding;
           border-bottom: 1px solid $gray-light;
           border-top: 1px solid $gray-light;
           margin-top: -1px;
