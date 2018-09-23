@@ -16,38 +16,38 @@ export default function getAbstract(
   obj,
   { topObj, level = 0, getterVal = false, unenumerable = true } = {}
 ) {
-  let json = '',
-    type = '',
-    keyNum = 5,
-    parts = [],
-    names = [],
-    objEllipsis = '',
-    circular = false,
-    i
+  let json = ''
+  let type = ''
+  let keyNum = 5
+  let parts = []
+  let names = []
+  let objEllipsis = ''
+  let circular = false
+  let i
 
   topObj = topObj || obj
 
-  let passOpts = { getterVal, unenumerable, level: level + 1 },
-    doStringify = level === 0
+  let passOpts = { getterVal, unenumerable, level: level + 1 }
+  let doStringify = level === 0
 
-  let keyWrapper = '<span style="color: #a71d5d;">',
-    numWrapper = '<span style="color: #0086b3;">',
-    nullWrapper = '<span style="color: #0086b3;">',
-    strWrapper = '<span style="color: #183691;">',
-    boolWrapper = '<span style="color: #0086b3;">',
-    specialWrapper = '<span style="color: #707d8b;">',
-    strEscape = str =>
-      escape(str)
-        .replace(/\\n/g, '↵')
-        .replace(/\\f|\\r|\\t/g, '')
-        .replace(/\\/g, ''),
-    wrapperEnd = '</span>'
+  let keyWrapper = '<span style="color: #a71d5d;">'
+  let numWrapper = '<span style="color: #0086b3;">'
+  let nullWrapper = '<span style="color: #0086b3;">'
+  let strWrapper = '<span style="color: #183691;">'
+  let boolWrapper = '<span style="color: #0086b3;">'
+  let specialWrapper = '<span style="color: #707d8b;">'
+  let strEscape = str =>
+    escape(str)
+      .replace(/\\n/g, '↵')
+      .replace(/\\f|\\r|\\t/g, '')
+      .replace(/\\/g, '')
+  let wrapperEnd = '</span>'
 
-  let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd,
-    wrapNum = num => numWrapper + num + wrapperEnd,
-    wrapRegExp = str => strWrapper + str + wrapperEnd,
-    wrapBool = bool => boolWrapper + bool + wrapperEnd,
-    wrapNull = str => nullWrapper + str + wrapperEnd
+  let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd
+  let wrapNum = num => numWrapper + num + wrapperEnd
+  let wrapRegExp = str => strWrapper + str + wrapperEnd
+  let wrapBool = bool => boolWrapper + bool + wrapperEnd
+  let wrapNull = str => nullWrapper + str + wrapperEnd
 
   function wrapStr(str) {
     str = toStr(str)
@@ -84,14 +84,14 @@ export default function getAbstract(
     type = '[object Object]'
   }
 
-  let isStr = type == '[object String]',
-    isArr = type == '[object Array]',
-    isObj = type == '[object Object]',
-    isNum = type == '[object Number]',
-    isRegExp = type == '[object RegExp]',
-    isSymbol = type == '[object Symbol]',
-    isFn = type == '[object Function]',
-    isBool = type == '[object Boolean]'
+  let isStr = type == '[object String]'
+  let isArr = type == '[object Array]'
+  let isObj = type == '[object Object]'
+  let isNum = type == '[object Number]'
+  let isRegExp = type == '[object RegExp]'
+  let isSymbol = type == '[object Symbol]'
+  let isFn = type == '[object Function]'
+  let isBool = type == '[object Boolean]'
 
   if (circular) {
     json = wrapStr('[circular]')
@@ -104,8 +104,8 @@ export default function getAbstract(
   } else if (isArr) {
     if (doStringify) {
       json = '['
-      let len = obj.length,
-        arrEllipsis = ''
+      let len = obj.length
+      let arrEllipsis = ''
 
       if (len > 100) {
         len = 100
@@ -116,7 +116,7 @@ export default function getAbstract(
       }
       json += parts.join(', ') + arrEllipsis + ']'
     } else {
-      json = wrapStr(`Array(${obj.length})`)
+      json = `Array(${obj.length})`
     }
   } else if (isObj) {
     if (canBeProto(obj)) {
@@ -177,8 +177,8 @@ export default function getAbstract(
 const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'function']
 
 function canBeProto(obj) {
-  let emptyObj = isEmpty(Object.getOwnPropertyNames(obj)),
-    proto = Object.getPrototypeOf(obj)
+  let emptyObj = isEmpty(Object.getOwnPropertyNames(obj))
+  let proto = Object.getPrototypeOf(obj)
 
   return emptyObj && proto && proto !== Object.prototype
 }
