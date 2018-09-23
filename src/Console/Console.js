@@ -4,6 +4,7 @@ import { noop, evalCss, $, Emitter } from '../lib/util'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import stringify from './stringify'
+import libStringify from '../lib/stringify'
 
 export default class Console extends Tool {
   constructor() {
@@ -310,6 +311,8 @@ export default class Console extends Tool {
       .separator()
   }
 }
+
+Console.stringify = libStringify
 
 const CONSOLE_METHOD = [
   'log',

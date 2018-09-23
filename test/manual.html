@@ -36,6 +36,9 @@
         <li>
             <a href="#" id="override-style">Override Style</a>
         </li>
+        <li>
+            <a href="#" id="stringify-timing">Stringify Timing</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -116,6 +119,11 @@
     {
         util.evalCss('.eruda-nav-bar {background: red !important;}');
     });
+    addClickEvent('stringify-timing', function () {
+        console.time('stringify window')
+        eruda.Console.stringify(window)
+        console.timeEnd('stringify window')
+    })
 </script>
 <script>
     eruda.init();

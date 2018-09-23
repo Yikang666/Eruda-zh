@@ -200,9 +200,9 @@ function getKeys(obj) {
 
 // $, upperCase, lowerCase, _
 function sortObjName(a, b) {
-  let lenA = a.length,
-    lenB = b.length,
-    len = lenA > lenB ? lenB : lenA
+  let lenA = a.length
+  let lenB = b.length
+  let len = lenA > lenB ? lenB : lenA
 
   for (let i = 0; i < len; i++) {
     let codeA = a.charCodeAt(i)

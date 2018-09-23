@@ -1,3 +1,8 @@
+## v1.5.4 (23 Sep 2018)
+
+* Fix network url start with //
+* Smaller padding for logs
+
 ## v1.5.3 (2 Sep 2018)
 
 * Add load dom plugin snippet
