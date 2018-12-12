@@ -1,5 +1,5 @@
 <a href="https://eruda.liriliri.io/" target="_blank">
-    <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
+    <img src="./banner.jpg">
 </a>
 
 # Eruda
@@ -24,7 +24,7 @@ Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools �
 
 ## 功能清单
 
-![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot4.jpg)
+![Eruda](./screenshot.jpg)
 
 1. 按钮拖拽，面板透明度大小设置。
 

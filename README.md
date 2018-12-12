@@ -1,5 +1,5 @@
 <a href="https://eruda.liriliri.io/" target="_blank">
-    <img src="http://7xn2zy.com1.z0.glb.clouddn.com/github_eruda2.jpg">
+    <img src="./doc/banner.jpg">
 </a>
 
 [中文](doc/README_CN.md)
@@ -24,7 +24,7 @@
 
 Console for Mobile Browsers.
 
-![Eruda](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_screenshot4.jpg)
+![Eruda](./doc/screenshot.jpg)
 
 ## Why
 
