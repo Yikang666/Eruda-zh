@@ -10,6 +10,7 @@
     } else { root.util = factory(); }
 }(this, function ()
 {
+    /* eslint-disable */
     "use strict";
 
     var _ = {};
@@ -18,27 +19,43 @@
 
     /* ------------------------------ noop ------------------------------ */
 
-    var noop = _.noop = (function () {
+    var noop = _.noop = (function (exports) {
         /* A no-operation function.
-         *
-         * ```javascript
+         */
+
+        /* example
          * noop(); // Does nothing
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function noop(): void;
          */
-
-        function exports() {}
+        exports = function exports() {};
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isObj ------------------------------ */
 
-    var isObj = _.isObj = (function () {
+    var isObj = _.isObj = (function (exports) {
+        function _typeof(obj) {
+            if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
+                _typeof = function _typeof(obj) {
+                    return typeof obj;
+                };
+            } else {
+                _typeof = function _typeof(obj) {
+                    return obj &&
+                        typeof Symbol === 'function' &&
+                        obj.constructor === Symbol &&
+                        obj !== Symbol.prototype
+                        ? 'symbol'
+                        : typeof obj;
+                };
+            }
+            return _typeof(obj);
+        }
+
         /* Check if value is the language type of Object.
          *
          * |Name  |Type   |Desc                      |
@@ -47,30 +64,28 @@
          * |return|boolean|True if value is an object|
          *
          * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
-         *
-         * ```javascript
+         */
+
+        /* example
          * isObj({}); // -> true
          * isObj([]); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isObj(val: any): boolean;
          */
-
-        function exports(val) {
-            var type = typeof val;
+        exports = function exports(val) {
+            var type = _typeof(val);
 
             return !!val && (type === 'function' || type === 'object');
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ allKeys ------------------------------ */
 
-    var allKeys = _.allKeys = (function () {
+    var allKeys = _.allKeys = (function (exports) {
         /* Retrieve all the names of object's own and inherited properties.
          *
          * |Name  |Type  |Desc                       |
@@ -78,59 +93,57 @@
          * |obj   |object|Object to query            |
          * |return|array |Array of all property names|
          *
-         * > Members of Object's prototype won't be retrieved.
-         *
-         * ```javascript
+         * Members of Object's prototype won't be retrieved.
+         */
+
+        /* example
          * var obj = Object.create({zero: 0});
          * obj.one = 1;
          * allKeys(obj) // -> ['zero', 'one']
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function allKeys(obj: any): string[];
          */
-
-        function exports(obj) {
+        exports = function exports(obj) {
             var ret = [],
                 key;
 
-            for (key in obj) ret.push(key);
+            for (key in obj) {
+                ret.push(key);
+            }
 
             return ret;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isUndef ------------------------------ */
 
-    var isUndef = _.isUndef = (function () {
+    var isUndef = _.isUndef = (function (exports) {
         /* Check if value is undefined.
          *
          * |Name  |Type   |Desc                      |
          * |------|-------|--------------------------|
          * |val   |*      |Value to check            |
          * |return|boolean|True if value is undefined|
-         *
-         * ```javascript
+         */
+
+        /* example
          * isUndef(void 0); // -> true
          * isUndef(null); // -> false
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isUndef(val: any): boolean;
          */
-
-        function exports(val) {
+        exports = function exports(val) {
             return val === void 0;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ ucs2 ------------------------------ */
 
@@ -138,54 +151,53 @@
         /* UCS-2 encoding and decoding.
          *
          * ### encode
-         * 
+         *
          * Create a string using an array of code point values.
-         * 
+         *
          * |Name  |Type  |Desc                |
          * |------|------|--------------------|
          * |arr   |array |Array of code points|
          * |return|string|Encoded string      |
-         * 
+         *
          * ### decode
-         * 
+         *
          * Create an array of code point values using a string.
-         * 
+         *
          * |Name  |Type  |Desc                |
          * |------|------|--------------------|
          * |str   |string|Input string        |
          * |return|array |Array of code points|
-         * 
-         * ```javascript
+         */
+
+        /* example
          * ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
          * ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
          * '𝌆'.length; // -> 2
          * ucs2.decode('𝌆').length; // -> 1
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare const ucs2: {
+         *     encode(arr: number[]): string;
+         *     decode(str: string): number[];
+         * };
          */
-
         // https://mathiasbynens.be/notes/javascript-encoding
         exports = {
-            encode: function(arr) {
+            encode: function encode(arr) {
                 return String.fromCodePoint.apply(String, arr);
             },
-            decode: function(str) {
+            decode: function decode(str) {
                 var ret = [];
-
                 var i = 0,
                     len = str.length;
 
                 while (i < len) {
-                    var c = str.charCodeAt(i++);
+                    var c = str.charCodeAt(i++); // A high surrogate
 
-                    // A high surrogate
                     if (c >= 0xd800 && c <= 0xdbff && i < len) {
-                        var tail = str.charCodeAt(i++);
-                        // nextC >= 0xDC00 && nextC <= 0xDFFF
+                        var tail = str.charCodeAt(i++); // nextC >= 0xDC00 && nextC <= 0xDFFF
+
                         if ((tail & 0xfc00) === 0xdc00) {
                             // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
                             ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
@@ -211,44 +223,44 @@
         /* UTF-8 encoding and decoding.
          *
          * ### encode
-         * 
+         *
          * Turn any UTF-8 decoded string into UTF-8 encoded string.
-         * 
+         *
          * |Name  |Type  |Desc            |
          * |------|------|----------------|
          * |str   |string|String to encode|
          * |return|string|Encoded string  |
-         * 
+         *
          * ### decode
-         * 
-         * |Name        |Type   |Desc                  |
-         * |------------|-------|----------------------|
-         * |str         |string |String to decode      |
-         * |[safe=false]|boolean|Suppress error if true|
-         * |return      |string |Decoded string        |
-         * 
+         *
          * Turn any UTF-8 encoded string into UTF-8 decoded string.
-         * 
-         * ```javascript
-         * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
-         * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
-         * ```
+         *
+         * |Name      |Type   |Desc                  |
+         * |----------|-------|----------------------|
+         * |str       |string |String to decode      |
+         * |safe=false|boolean|Suppress error if true|
+         * |return    |string |Decoded string        |
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
+         * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
+         */
+
+        /* typescript
+         * export declare const utf8: {
+         *     encode(str: string): string;
+         *     decode(str: string, safe?: boolean): string;
+         * };
          */
 
         /* dependencies
          * ucs2 
-         */
+         */ // https://encoding.spec.whatwg.org/#utf-8
 
-        // https://encoding.spec.whatwg.org/#utf-8
         exports = {
-            encode: function(str) {
+            encode: function encode(str) {
                 var codePoints = ucs2.decode(str);
-
                 var byteArr = '';
 
                 for (var i = 0, len = codePoints.length; i < len; i++) {
@@ -266,9 +278,7 @@
                 bytesNeeded = 0;
                 lowerBoundary = 0x80;
                 upperBoundary = 0xbf;
-
                 var codePoints = [];
-
                 var tmp;
 
                 while ((tmp = decodeCodePoint(safe)) !== false) {
@@ -278,7 +288,6 @@
                 return ucs2.encode(codePoints);
             }
         };
-
         var fromCharCode = String.fromCharCode;
 
         function encodeCodePoint(codePoint) {
@@ -289,9 +298,8 @@
 
             var ret = '',
                 count,
-                offset;
+                offset; // U+0080 to U+07FF, inclusive
 
-            // U+0080 to U+07FF, inclusive
             if ((codePoint & 0xfffff800) === 0) {
                 count = 1;
                 offset = 0xc0;
@@ -334,31 +342,30 @@
                 }
 
                 if (byteIdx === byteCount) return false;
-
-                var byte = byteArr[byteIdx];
+                var _byte = byteArr[byteIdx];
                 byteIdx++;
 
                 if (!bytesNeeded) {
                     // 0x00 to 0x7F
-                    if ((byte & 0x80) === 0) {
-                        return byte;
-                    }
-                    // 0xC2 to 0xDF
-                    if ((byte & 0xe0) === 0xc0) {
+                    if ((_byte & 0x80) === 0) {
+                        return _byte;
+                    } // 0xC2 to 0xDF
+
+                    if ((_byte & 0xe0) === 0xc0) {
                         bytesNeeded = 1;
-                        codePoint = byte & 0x1f;
-                    } else if ((byte & 0xf0) === 0xe0) {
+                        codePoint = _byte & 0x1f;
+                    } else if ((_byte & 0xf0) === 0xe0) {
                         // 0xE0 to 0xEF
-                        if (byte === 0xe0) lowerBoundary = 0xa0;
-                        if (byte === 0xed) upperBoundary = 0x9f;
+                        if (_byte === 0xe0) lowerBoundary = 0xa0;
+                        if (_byte === 0xed) upperBoundary = 0x9f;
                         bytesNeeded = 2;
-                        codePoint = byte & 0xf;
-                    } else if ((byte & 0xf8) === 0xf0) {
+                        codePoint = _byte & 0xf;
+                    } else if ((_byte & 0xf8) === 0xf0) {
                         // 0xF0 to 0xF4
-                        if (byte === 0xf0) lowerBoundary = 0x90;
-                        if (byte === 0xf4) upperBoundary = 0x8f;
+                        if (_byte === 0xf0) lowerBoundary = 0x90;
+                        if (_byte === 0xf4) upperBoundary = 0x8f;
                         bytesNeeded = 3;
-                        codePoint = byte & 0x7;
+                        codePoint = _byte & 0x7;
                     } else {
                         if (safe) return goBack();
                         throw new Error('Invalid UTF-8 detected');
@@ -367,29 +374,24 @@
                     continue;
                 }
 
-                if (byte < lowerBoundary || byte > upperBoundary) {
+                if (_byte < lowerBoundary || _byte > upperBoundary) {
                     if (safe) {
                         byteIdx--;
                         return goBack();
                     }
+
                     throw new Error('Invalid continuation byte');
                 }
 
                 lowerBoundary = 0x80;
                 upperBoundary = 0xbf;
-
-                codePoint = (codePoint << 6) | (byte & 0x3f);
-
+                codePoint = (codePoint << 6) | (_byte & 0x3f);
                 bytesSeen++;
-
                 if (bytesSeen !== bytesNeeded) continue;
-
                 var tmp = codePoint;
-
                 codePoint = 0;
                 bytesNeeded = 0;
                 bytesSeen = 0;
-
                 return tmp;
             }
         }
@@ -402,7 +404,6 @@
             bytesSeen = 0;
             lowerBoundary = 0x80;
             upperBoundary = 0xbf;
-
             return byteArr[start];
         }
 
@@ -411,20 +412,19 @@
 
     /* ------------------------------ optimizeCb ------------------------------ */
 
-    var optimizeCb = _.optimizeCb = (function () {
+    var optimizeCb = _.optimizeCb = (function (exports) {
         /* Used for function context binding.
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function optimizeCb(fn: Function, ctx: any, argCount?: number): Function;
          */
 
         /* dependencies
          * isUndef 
          */
 
-        function exports(fn, ctx, argCount) {
+        exports = function exports(fn, ctx, argCount) {
             if (isUndef(ctx)) return fn;
 
             switch (argCount == null ? 3 : argCount) {
@@ -432,10 +432,12 @@
                     return function(val) {
                         return fn.call(ctx, val);
                     };
+
                 case 3:
                     return function(val, idx, collection) {
                         return fn.call(ctx, val, idx, collection);
                     };
+
                 case 4:
                     return function(accumulator, val, idx, collection) {
                         return fn.call(ctx, accumulator, val, idx, collection);
@@ -445,44 +447,78 @@
             return function() {
                 return fn.apply(ctx, arguments);
             };
-        }
+        };
 
         return exports;
-    })();
+    })({});
+
+    /* ------------------------------ types ------------------------------ */
+
+    var types = _.types = (function (exports) {
+        /* Used for typescript definitions only.
+         */
+
+        /* typescript
+         * export declare namespace types {
+         *     interface Collection<T> {}
+         *     interface List<T> extends Collection<T> {
+         *         [index: number]: T;
+         *         length: number;
+         *     }
+         *     interface ListIterator<T, TResult> {
+         *         (value: T, index: number, list: List<T>): TResult;
+         *     }
+         *     interface Dictionary<T> extends Collection<T> {
+         *         [index: string]: T;
+         *     }
+         *     interface ObjectIterator<T, TResult> {
+         *         (element: T, key: string, list: Dictionary<T>): TResult;
+         *     }
+         *     interface MemoIterator<T, TResult> {
+         *         (prev: TResult, curr: T, index: number, list: List<T>): TResult;
+         *     }
+         *     interface MemoObjectIterator<T, TResult> {
+         *         (prev: TResult, curr: T, key: string, list: Dictionary<T>): TResult;
+         *     }
+         * }
+         * export declare const types: {}
+         */
+        exports = {};
+
+        return exports;
+    })({});
 
     /* ------------------------------ toStr ------------------------------ */
 
-    var toStr = _.toStr = (function () {
+    var toStr = _.toStr = (function (exports) {
         /* Convert value to a string.
          *
          * |Name  |Type  |Desc            |
          * |------|------|----------------|
          * |val   |*     |Value to convert|
          * |return|string|Resulted string |
-         *
-         * ```javascript
+         */
+
+        /* example
          * toStr(null); // -> ''
          * toStr(1); // -> '1'
          * toStr(false); // -> 'false'
          * toStr([1, 2, 3]); // -> '1,2,3'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function toStr(val: any): string;
          */
-
-        function exports(val) {
+        exports = function exports(val) {
             return val == null ? '' : val.toString();
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ has ------------------------------ */
 
-    var has = _.has = (function () {
+    var has = _.has = (function (exports) {
         /* Checks if key is a direct property.
          *
          * |Name  |Type   |Desc                            |
@@ -490,118 +526,111 @@
          * |obj   |object |Object to query                 |
          * |key   |string |Path to check                   |
          * |return|boolean|True if key is a direct property|
-         *
-         * ```javascript
+         */
+
+        /* example
          * has({one: 1}, 'one'); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function has(obj: {}, key: string): boolean;
          */
-
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
-        function exports(obj, key) {
+        exports = function exports(obj, key) {
             return hasOwnProp.call(obj, key);
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ identity ------------------------------ */
 
-    var identity = _.identity = (function () {
+    var identity = _.identity = (function (exports) {
         /* Return the first argument given.
          *
          * |Name  |Type|Desc       |
          * |------|----|-----------|
          * |val   |*   |Any value  |
          * |return|*   |Given value|
-         *
-         * ```javascript
+         */
+
+        /* example
          * identity('a'); // -> 'a'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function identity<T>(val: T): T;
          */
-
-        function exports(val) {
+        exports = function exports(val) {
             return val;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ objToStr ------------------------------ */
 
-    var objToStr = _.objToStr = (function () {
+    var objToStr = _.objToStr = (function (exports) {
         /* Alias of Object.prototype.toString.
          *
          * |Name  |Type  |Desc                                |
          * |------|------|------------------------------------|
-         * |value |*     |Source value                        |
+         * |val   |*     |Source value                        |
          * |return|string|String representation of given value|
-         * 
-         * ```javascript
+         */
+
+        /* example
          * objToStr(5); // -> '[object Number]'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function objToStr(val: any): string;
          */
-
         var ObjToStr = Object.prototype.toString;
 
-        function exports(val) {
+        exports = function exports(val) {
             return ObjToStr.call(val);
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isArgs ------------------------------ */
 
-    var isArgs = _.isArgs = (function () {
+    var isArgs = _.isArgs = (function (exports) {
         /* Check if value is classified as an arguments object.
          *
          * |Name  |Type   |Desc                                |
          * |------|-------|------------------------------------|
          * |val   |*      |Value to check                      |
          * |return|boolean|True if value is an arguments object|
-         *
-         * ```javascript
+         */
+
+        /* example
          * (function () {
          *     isArgs(arguments); // -> true
          * })();
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isArgs(val: any): boolean;
          */
 
         /* dependencies
          * objToStr 
          */
 
-        function exports(val) {
+        exports = function exports(val) {
             return objToStr(val) === '[object Arguments]';
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isFn ------------------------------ */
 
-    var isFn = _.isFn = (function () {
+    var isFn = _.isFn = (function (exports) {
         /* Check if value is a function.
          *
          * |Name  |Type   |Desc                       |
@@ -610,70 +639,67 @@
          * |return|boolean|True if value is a function|
          *
          * Generator function is also classified as true.
-         *
-         * ```javascript
-         * isFn(function() {}); // -> true
-         * isFn(function*() {}); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * isFn(function() {}); // -> true
+         * isFn(function*() {}); // -> true
+         */
+
+        /* typescript
+         * export declare function isFn(val: any): boolean;
          */
 
         /* dependencies
          * objToStr 
          */
 
-        function exports(val) {
+        exports = function exports(val) {
             var objStr = objToStr(val);
-
             return (
                 objStr === '[object Function]' ||
                 objStr === '[object GeneratorFunction]'
             );
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isNum ------------------------------ */
 
-    var isNum = _.isNum = (function () {
+    var isNum = _.isNum = (function (exports) {
         /* Check if value is classified as a Number primitive or object.
          *
          * |Name  |Type   |Desc                                 |
          * |------|-------|-------------------------------------|
          * |val   |*      |Value to check                       |
          * |return|boolean|True if value is correctly classified|
-         * 
-         * ```javascript
+         */
+
+        /* example
          * isNum(5); // -> true
          * isNum(5.1); // -> true
          * isNum({}); // -> false
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isNum(val: any): boolean;
          */
 
         /* dependencies
          * objToStr 
          */
 
-        function exports(val) {
+        exports = function exports(val) {
             return objToStr(val) === '[object Number]';
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isArrLike ------------------------------ */
 
-    var isArrLike = _.isArrLike = (function () {
+    var isArrLike = _.isArrLike = (function (exports) {
         /* Check if value is array-like.
          *
          * |Name  |Type   |Desc                       |
@@ -681,18 +707,17 @@
          * |val   |*      |Value to check             |
          * |return|boolean|True if value is array like|
          *
-         * > Function returns false.
-         *
-         * ```javascript
+         * Function returns false.
+         */
+
+        /* example
          * isArrLike('test'); // -> true
          * isArrLike(document.body.children); // -> true;
          * isArrLike([1, 2, 3]); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isArrLike(val: any): boolean;
          */
 
         /* dependencies
@@ -701,16 +726,14 @@
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-        function exports(val) {
+        exports = function exports(val) {
             if (!val) return false;
-
             var len = val.length;
-
             return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isArr ------------------------------ */
 
@@ -721,16 +744,15 @@
          * |------|-------|----------------------------------|
          * |val   |*      |Value to check                    |
          * |return|boolean|True if value is an `Array` object|
-         *
-         * ```javascript
-         * isArr([]); // -> true
-         * isArr({}); // -> false
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * isArr([]); // -> true
+         * isArr({}); // -> false
+         */
+
+        /* typescript
+         * export declare function isArr(val: any): boolean;
          */
 
         /* dependencies
@@ -749,21 +771,39 @@
     /* ------------------------------ isBrowser ------------------------------ */
 
     var isBrowser = _.isBrowser = (function (exports) {
+        function _typeof(obj) {
+            if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
+                _typeof = function _typeof(obj) {
+                    return typeof obj;
+                };
+            } else {
+                _typeof = function _typeof(obj) {
+                    return obj &&
+                        typeof Symbol === 'function' &&
+                        obj.constructor === Symbol &&
+                        obj !== Symbol.prototype
+                        ? 'symbol'
+                        : typeof obj;
+                };
+            }
+            return _typeof(obj);
+        }
+
         /* Check if running in a browser.
-         *
-         * ```javascript
+         */
+
+        /* example
          * console.log(isBrowser); // -> true if running in a browser
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare const isBrowser: boolean;
          */
-
         exports =
-            typeof window === 'object' &&
-            typeof document === 'object' &&
+            (typeof window === 'undefined' ? 'undefined' : _typeof(window)) ===
+                'object' &&
+            (typeof document === 'undefined' ? 'undefined' : _typeof(document)) ===
+                'object' &&
             document.nodeType === 9;
 
         return exports;
@@ -774,9 +814,8 @@
     var root = _.root = (function (exports) {
         /* Root object reference, `global` in nodeJs, `window` in browser. */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare const root: any;
          */
 
         /* dependencies
@@ -790,37 +829,35 @@
 
     /* ------------------------------ detectMocha ------------------------------ */
 
-    var detectMocha = _.detectMocha = (function () {
+    var detectMocha = _.detectMocha = (function (exports) {
         /* Detect if mocha is running.
-         *
-         * ```javascript
-         * detectMocha(); // -> True if mocha is running.
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * detectMocha(); // -> True if mocha is running.
+         */
+
+        /* typescript
+         * export declare function detectMocha(): boolean;
          */
 
         /* dependencies
          * root 
          */
 
-        function exports() {
+        exports = function exports() {
             for (var i = 0, len = methods.length; i < len; i++) {
                 var method = methods[i];
-
                 if (typeof root[method] !== 'function') return false;
             }
 
             return true;
-        }
+        };
 
         var methods = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it'];
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ keys ------------------------------ */
 
@@ -831,15 +868,14 @@
          * |------|------|-----------------------|
          * |obj   |object|Object to query        |
          * |return|array |Array of property names|
-         * 
-         * ```javascript
-         * keys({a: 1}); // -> ['a']
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * keys({a: 1}); // -> ['a']
+         */
+
+        /* typescript
+         * export declare function keys(obj: any): string[];
          */
 
         /* dependencies
@@ -849,7 +885,7 @@
         if (Object.keys && !detectMocha()) {
             exports = Object.keys;
         } else {
-            exports = function(obj) {
+            exports = function exports(obj) {
                 var ret = [],
                     key;
 
@@ -866,52 +902,62 @@
 
     /* ------------------------------ each ------------------------------ */
 
-    var each = _.each = (function () {
-        /* Iterate over elements of collection and invokes iteratee for each element.
+    var each = _.each = (function (exports) {
+        /* Iterate over elements of collection and invokes iterator for each element.
          *
          * |Name    |Type        |Desc                          |
          * |--------|------------|------------------------------|
          * |obj     |object array|Collection to iterate over    |
-         * |iteratee|function    |Function invoked per iteration|
+         * |iterator|function    |Function invoked per iteration|
          * |[ctx]   |*           |Function context              |
-         *
-         * ```javascript
-         * each({'a': 1, 'b': 2}, function (val, key) {});
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * each({'a': 1, 'b': 2}, function (val, key) {});
+         */
+
+        /* typescript
+         * export declare function each<T>(
+         *     list: types.List<T>,
+         *     iterator: types.ListIterator<T, void>,
+         *     ctx?: any
+         * ): types.List<T>;
+         * export declare function each<T>(
+         *     object: types.Dictionary<T>,
+         *     iterator: types.ObjectIterator<T, void>,
+         *     ctx?: any
+         * ): types.Collection<T>;
          */
 
         /* dependencies
-         * isArrLike keys optimizeCb 
+         * isArrLike keys optimizeCb types 
          */
 
-        function exports(obj, iteratee, ctx) {
-            iteratee = optimizeCb(iteratee, ctx);
-
+        exports = function exports(obj, iterator, ctx) {
+            iterator = optimizeCb(iterator, ctx);
             var i, len;
 
             if (isArrLike(obj)) {
-                for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
+                for (i = 0, len = obj.length; i < len; i++) {
+                    iterator(obj[i], i, obj);
+                }
             } else {
                 var _keys = keys(obj);
+
                 for (i = 0, len = _keys.length; i < len; i++) {
-                    iteratee(obj[_keys[i]], _keys[i], obj);
+                    iterator(obj[_keys[i]], _keys[i], obj);
                 }
             }
 
             return obj;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ createAssigner ------------------------------ */
 
-    var createAssigner = _.createAssigner = (function () {
+    var createAssigner = _.createAssigner = (function (exports) {
         /* Used to create extend, extendOwn and defaults.
          *
          * |Name    |Type    |Desc                          |
@@ -921,33 +967,29 @@
          * |return  |function|Result function, extend...    |
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function createAssigner(keysFn: Function, defaults: boolean): Function;
          */
 
         /* dependencies
          * isUndef each 
          */
 
-        function exports(keysFn, defaults) {
+        exports = function exports(keysFn, defaults) {
             return function(obj) {
                 each(arguments, function(src, idx) {
                     if (idx === 0) return;
-
                     var keys = keysFn(src);
-
                     each(keys, function(key) {
                         if (!defaults || isUndef(obj[key])) obj[key] = src[key];
                     });
                 });
-
                 return obj;
             };
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ defaults ------------------------------ */
 
@@ -959,15 +1001,14 @@
          * |obj   |object|Destination object|
          * |*src  |object|Sources objects   |
          * |return|object|Destination object|
-         *
-         * ```javascript
-         * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+         */
+
+        /* typescript
+         * export declare function defaults(obj: any, ...src: any[]): any;
          */
 
         /* dependencies
@@ -984,20 +1025,19 @@
     var extendOwn = _.extendOwn = (function (exports) {
         /* Like extend, but only copies own properties over to the destination object.
          *
-         * |Name  |Type  |Desc              |
-         * |------|------|------------------|
-         * |obj   |object|Destination object|
-         * |*src  |object|Sources objects   |
-         * |return|object|Destination object|
-         *
-         * ```javascript
-         * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
-         * ```
+         * |Name       |Type  |Desc              |
+         * |-----------|------|------------------|
+         * |destination|object|Destination object|
+         * |...sources |object|Sources objects   |
+         * |return     |object|Destination object|
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+         */
+
+        /* typescript
+         * export declare function extendOwn(destination: any, ...sources: any[]): any;
          */
 
         /* dependencies
@@ -1011,62 +1051,60 @@
 
     /* ------------------------------ isStr ------------------------------ */
 
-    var isStr = _.isStr = (function () {
+    var isStr = _.isStr = (function (exports) {
         /* Check if value is a string primitive.
          *
          * |Name  |Type   |Desc                               |
          * |------|-------|-----------------------------------|
          * |val   |*      |Value to check                     |
          * |return|boolean|True if value is a string primitive|
-         *
-         * ```javascript
-         * isStr('licia'); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * isStr('licia'); // -> true
+         */
+
+        /* typescript
+         * export declare function isStr(val: any): boolean;
          */
 
         /* dependencies
          * objToStr 
          */
 
-        function exports(val) {
+        exports = function exports(val) {
             return objToStr(val) === '[object String]';
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isEmpty ------------------------------ */
 
-    var isEmpty = _.isEmpty = (function () {
+    var isEmpty = _.isEmpty = (function (exports) {
         /* Check if value is an empty object or array.
          *
          * |Name  |Type   |Desc                  |
          * |------|-------|----------------------|
          * |val   |*      |Value to check        |
          * |return|boolean|True if value is empty|
-         *
-         * ```javascript
+         */
+
+        /* example
          * isEmpty([]); // -> true
          * isEmpty({}); // -> true
          * isEmpty(''); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function isEmpty(val: any): boolean;
          */
 
         /* dependencies
          * isArrLike isArr isStr isArgs keys 
          */
 
-        function exports(val) {
+        exports = function exports(val) {
             if (val == null) return true;
 
             if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
@@ -1074,14 +1112,14 @@
             }
 
             return keys(val).length === 0;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ isMatch ------------------------------ */
 
-    var isMatch = _.isMatch = (function () {
+    var isMatch = _.isMatch = (function (exports) {
         /* Check if keys and values in src are contained in obj.
          *
          * |Name  |Type   |Desc                              |
@@ -1089,27 +1127,25 @@
          * |obj   |object |Object to inspect                 |
          * |src   |object |Object of property values to match|
          * |return|boolean|True if object is match           |
-         *
-         * ```javascript
-         * isMatch({a: 1, b: 2}, {a: 1}); // -> true
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * isMatch({a: 1, b: 2}, {a: 1}); // -> true
+         */
+
+        /* typescript
+         * export declare function isMatch(obj: any, src: any): boolean;
          */
 
         /* dependencies
          * keys 
          */
 
-        function exports(obj, src) {
+        exports = function exports(obj, src) {
             var _keys = keys(src),
                 len = _keys.length;
 
             if (obj == null) return !len;
-
             obj = Object(obj);
 
             for (var i = 0; i < len; i++) {
@@ -1118,39 +1154,36 @@
             }
 
             return true;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ ltrim ------------------------------ */
 
-    var ltrim = _.ltrim = (function () {
+    var ltrim = _.ltrim = (function (exports) {
         /* Remove chars or white-spaces from beginning of string.
          *
-         * |Name  |Type        |Desc              |
-         * |------|------------|------------------|
-         * |str   |string      |String to trim    |
-         * |chars |string array|Characters to trim|
-         * |return|string      |Trimmed string    |
-         *
-         * ```javascript
+         * |Name   |Type        |Desc              |
+         * |-------|------------|------------------|
+         * |str    |string      |String to trim    |
+         * |[chars]|string array|Characters to trim|
+         * |return |string      |Trimmed string    |
+         */
+
+        /* example
          * ltrim(' abc  '); // -> 'abc  '
          * ltrim('_abc_', '_'); // -> 'abc_'
          * ltrim('_abc_', ['a', '_']); // -> 'bc_'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function ltrim(str: string, chars?: string | string[]): string;
          */
-
         var regSpace = /^\s+/;
 
-        function exports(str, chars) {
+        exports = function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
-
             var start = 0,
                 len = str.length,
                 charLen = chars.length,
@@ -1173,49 +1206,47 @@
             }
 
             return start >= len ? '' : str.substr(start, len);
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ matcher ------------------------------ */
 
-    var matcher = _.matcher = (function () {
+    var matcher = _.matcher = (function (exports) {
         /* Return a predicate function that checks if attrs are contained in an object.
          *
          * |Name  |Type    |Desc                              |
          * |------|--------|----------------------------------|
          * |attrs |object  |Object of property values to match|
          * |return|function|New predicate function            |
-         *
-         * ```javascript
-         * var objects = [
+         */
+
+        /* example
+         * const objects = [
          *     {a: 1, b: 2, c: 3 },
          *     {a: 4, b: 5, c: 6 }
          * ];
-         * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6 }]
-         * ```
+         * // filter(objects, matcher({a: 4, c: 6 }));
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function matcher(attrs: any): Function;
          */
 
         /* dependencies
          * extendOwn isMatch 
          */
 
-        function exports(attrs) {
+        exports = function exports(attrs) {
             attrs = extendOwn({}, attrs);
-
             return function(obj) {
                 return isMatch(obj, attrs);
             };
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ safeCb ------------------------------ */
 
@@ -1223,22 +1254,18 @@
         /* Create callback based on input value.
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function safeCb(val?: any, ctx?: any, argCount?: number): Function;
          */
 
         /* dependencies
          * isFn isObj optimizeCb matcher identity 
          */
 
-        exports = function(val, ctx, argCount) {
+        exports = function exports(val, ctx, argCount) {
             if (val == null) return identity;
-
             if (isFn(val)) return optimizeCb(val, ctx, argCount);
-
             if (isObj(val)) return matcher(val);
-
             return function(key) {
                 return function(obj) {
                     return obj == null ? undefined : obj[key];
@@ -1251,7 +1278,7 @@
 
     /* ------------------------------ filter ------------------------------ */
 
-    var filter = _.filter = (function () {
+    var filter = _.filter = (function (exports) {
         /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
          *
          * |Name     |Type    |Desc                                   |
@@ -1260,41 +1287,45 @@
          * |predicate|function|Function invoked per iteration         |
          * |[ctx]    |*       |Predicate context                      |
          * |return   |array   |Array of all values that pass predicate|
-         *
-         * ```javascript
-         * filter([1, 2, 3, 4, 5], function (val)
-         * {
-         *     return val % 2 === 0;
-         * }); // -> [2, 4]
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * filter([1, 2, 3, 4, 5], function (val) {
+         *     return val % 2 === 0;
+         * }); // -> [2, 4]
+         */
+
+        /* typescript
+         * export declare function filter<T>(
+         *     list: types.List<T>,
+         *     iterator: types.ListIterator<T, boolean>,
+         *     context?: any
+         * ): T[];
+         * export declare function filter<T>(
+         *     object: types.Dictionary<T>,
+         *     iterator: types.ObjectIterator<T, boolean>,
+         *     context?: any
+         * ): T[];
          */
 
         /* dependencies
-         * safeCb each 
+         * safeCb each types 
          */
 
-        function exports(obj, predicate, ctx) {
+        exports = function exports(obj, predicate, ctx) {
             var ret = [];
-
             predicate = safeCb(predicate, ctx);
-
             each(obj, function(val, idx, list) {
                 if (predicate(val, idx, list)) ret.push(val);
             });
-
             return ret;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ evalCss ------------------------------ */
-    _.evalCss = (function () {
+    _.evalCss = (function (exports) {
         /* Eval css.
          */
 
@@ -1302,80 +1333,88 @@
          * toStr each filter 
          */
 
-        var styleList = [],
-            scale = 1;
+        let styleList = []
+        let scale = 1
 
         function exports(css, container) {
-            css = toStr(css);
+          css = toStr(css)
 
-            for (var i = 0, len = styleList.length; i < len; i++) {
-                if (styleList[i].css === css) return;
-            }
+          for (let i = 0, len = styleList.length; i < len; i++) {
+            if (styleList[i].css === css) return
+          }
 
-            container = container || exports.container || document.head;
-            const el = document.createElement('style');
+          container = container || exports.container || document.head
+          const el = document.createElement('style')
 
-            el.type = 'text/css';
-            container.appendChild(el);
+          el.type = 'text/css'
+          container.appendChild(el)
 
-            let style = { css, el, container };
-            resetStyle(style);
-            styleList.push(style);
+          let style = { css, el, container }
+          resetStyle(style)
+          styleList.push(style)
 
-            return style;
+          return style
         }
 
         exports.setScale = function(s) {
-            scale = s;
-            each(styleList, style => resetStyle(style));
-        };
+          scale = s
+          each(styleList, style => resetStyle(style))
+        }
 
         exports.clear = function() {
-            each(styleList, ({ container, el }) => container.removeChild(el));
-            styleList = [];
-        };
+          each(styleList, ({ container, el }) => container.removeChild(el))
+          styleList = []
+        }
 
         exports.remove = function(style) {
-            styleList = filter(styleList, s => s !== style);
+          styleList = filter(styleList, s => s !== style)
 
-            style.container.removeChild(style.el);
-        };
+          style.container.removeChild(style.el)
+        }
 
         function resetStyle({ css, el }) {
-            el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px');
+          el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
         }
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ map ------------------------------ */
 
-    var map = _.map = (function () {
+    var map = _.map = (function (exports) {
         /* Create an array of values by running each element in collection through iteratee.
          *
-         * |Name    |Type        |Desc                          |
-         * |--------|------------|------------------------------|
-         * |obj     |array object|Collection to iterate over    |
-         * |iteratee|function    |Function invoked per iteration|
-         * |[ctx]   |*           |Function context              |
-         * |return  |array       |New mapped array              |
-         *
-         * ```javascript
-         * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
-         * ```
+         * |Name     |Type        |Desc                          |
+         * |---------|------------|------------------------------|
+         * |object   |array object|Collection to iterate over    |
+         * |iterator |function    |Function invoked per iteration|
+         * |[context]|*           |Function context              |
+         * |return   |array       |New mapped array              |
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
+         */
+
+        /* typescript
+         * export declare function map<T, TResult>(
+         *     list: types.List<T>,
+         *     iterator: types.ListIterator<T, TResult>,
+         *     context?: any
+         * ): TResult[];
+         * export declare function map<T, TResult>(
+         *     object: types.Dictionary<T>,
+         *     iterator: types.ObjectIterator<T, TResult>,
+         *     context?: any
+         * ): TResult[];
          */
 
         /* dependencies
-         * safeCb keys isArrLike 
+         * safeCb keys isArrLike types 
          */
 
-        function exports(obj, iteratee, ctx) {
-            iteratee = safeCb(iteratee, ctx);
+        exports = function exports(obj, iterator, ctx) {
+            iterator = safeCb(iterator, ctx);
 
             var _keys = !isArrLike(obj) && keys(obj),
                 len = (_keys || obj).length,
@@ -1383,64 +1422,61 @@
 
             for (var i = 0; i < len; i++) {
                 var curKey = _keys ? _keys[i] : i;
-                results[i] = iteratee(obj[curKey], curKey, obj);
+                results[i] = iterator(obj[curKey], curKey, obj);
             }
 
             return results;
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ decodeUriComponent ------------------------------ */
 
-    var decodeUriComponent = _.decodeUriComponent = (function () {
+    var decodeUriComponent = _.decodeUriComponent = (function (exports) {
         /* Better decodeURIComponent that does not throw if input is invalid.
          *
          * |Name  |Type  |Desc            |
          * |------|------|----------------|
          * |str   |string|String to decode|
          * |return|string|Decoded string  |
-         * 
-         * ```javascript
-         * decodeUriComponent('%%25%'); // -> '%%%'
-         * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* example
+         * decodeUriComponent('%%25%'); // -> '%%%'
+         * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
+         */
+
+        /* typescript
+         * export declare function decodeUriComponent(str: string): string;
          */
 
         /* dependencies
          * each ucs2 map utf8 
          */
 
-        function exports(str) {
+        exports = function exports(str) {
             try {
                 return decodeURIComponent(str);
             } catch (e) {
-                var replaceMap = {};
-
                 var matches = str.match(regMatcher);
+
+                if (!matches) {
+                    return str;
+                }
 
                 each(matches, function(match) {
                     str = str.replace(match, decode(match));
                 });
-
                 return str;
             }
-        }
+        };
 
         function decode(str) {
             str = str.split('%').slice(1);
-
             var bytes = map(str, hexToInt);
-
             str = ucs2.encode(bytes);
             str = utf8.decode(str, true);
-
             return str;
         }
 
@@ -1451,7 +1487,7 @@
         var regMatcher = /(%[a-f0-9]{2})+/gi;
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ cookie ------------------------------ */
     _.cookie = (function (exports) {
@@ -1486,24 +1522,38 @@
          * |key      |string |Cookie key    |
          * |[options]|object |Cookie options|
          * |return   |exports|Module cookie |
-         *
-         * ```javascript
+         */
+
+        /* example
          * cookie.set('a', '1', {path: '/'});
          * cookie.get('a'); // -> '1'
          * cookie.remove('a');
-         * ```
          */
 
-        /* module
-         * env: browser
-         * test: browser
+        /* typescript
+         * export declare namespace cookie {
+         *     interface IOptions {
+         *         path?: string;
+         *         expires?: number;
+         *         domain?: string;
+         *         secure?: boolean;
+         *     }
+         *     interface ICookie {
+         *         get(key: string, options?: cookie.IOptions): string;
+         *         set(key: string, val: string, options?: cookie.IOptions): ICookie;
+         *         remove(key: string, options?: cookie.IOptions): ICookie;
+         *     }
+         * }
+         * export declare const cookie: cookie.ICookie;
          */
 
         /* dependencies
          * defaults isNum isUndef decodeUriComponent 
          */
 
-        var defOpts = { path: '/' };
+        var defOpts = {
+            path: '/'
+        };
 
         function setCookie(key, val, options) {
             if (!isUndef(val)) {
@@ -1520,7 +1570,6 @@
 
                 val = encodeURIComponent(val);
                 key = encodeURIComponent(key);
-
                 document.cookie = [
                     key,
                     '=',
@@ -1530,7 +1579,6 @@
                     options.domain && '; domain=' + options.domain,
                     options.secure ? '; secure' : ''
                 ].join('');
-
                 return exports;
             }
 
@@ -1541,7 +1589,6 @@
                 var c = cookies[i],
                     parts = c.split('='),
                     name = decodeUriComponent(parts.shift());
-
                 c = parts.join('=');
                 c = decodeUriComponent(c);
 
@@ -1559,10 +1606,9 @@
         exports = {
             get: setCookie,
             set: setCookie,
-            remove: function(key, options) {
+            remove: function remove(key, options) {
                 options = options || {};
                 options.expires = -1;
-
                 return setCookie(key, '', options);
             }
         };
@@ -1572,32 +1618,29 @@
 
     /* ------------------------------ rtrim ------------------------------ */
 
-    var rtrim = _.rtrim = (function () {
+    var rtrim = _.rtrim = (function (exports) {
         /* Remove chars or white-spaces from end of string.
          *
-         * |Name  |Type        |Desc              |
-         * |------|------------|------------------|
-         * |str   |string      |String to trim    |
-         * |chars |string array|Characters to trim|
-         * |return|string      |Trimmed string    |
-         *
-         * ```javascript
+         * |Name   |Type        |Desc              |
+         * |-------|------------|------------------|
+         * |str    |string      |String to trim    |
+         * |[chars]|string array|Characters to trim|
+         * |return |string      |Trimmed string    |
+         */
+
+        /* example
          * rtrim(' abc  '); // -> ' abc'
          * rtrim('_abc_', '_'); // -> '_abc'
          * rtrim('_abc_', ['c', '_']); // -> '_ab'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function rtrim(str: string, chars?: string | string[]): string;
          */
-
         var regSpace = /\s+$/;
 
-        function exports(str, chars) {
+        exports = function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
-
             var end = str.length - 1,
                 charLen = chars.length,
                 found = true,
@@ -1619,14 +1662,14 @@
             }
 
             return end >= 0 ? str.substring(0, end + 1) : '';
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ trim ------------------------------ */
 
-    var trim = _.trim = (function () {
+    var trim = _.trim = (function (exports) {
         /* Remove chars or white-spaces from beginning end of string.
          *
          * |Name  |Type        |Desc              |
@@ -1634,17 +1677,16 @@
          * |str   |string      |String to trim    |
          * |chars |string array|Characters to trim|
          * |return|string      |Trimmed string    |
-         *
-         * ```javascript
+         */
+
+        /* example
          * trim(' abc  '); // -> 'abc'
          * trim('_abc_', '_'); // -> 'abc'
          * trim('_abc_', ['a', 'c', '_']); // -> 'b'
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare function trim(str: string, chars?: string | string[]): string;
          */
 
         /* dependencies
@@ -1653,14 +1695,13 @@
 
         var regSpace = /^\s+|\s+$/g;
 
-        function exports(str, chars) {
+        exports = function exports(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
-
             return ltrim(rtrim(str, chars), chars);
-        }
+        };
 
         return exports;
-    })();
+    })({});
 
     /* ------------------------------ query ------------------------------ */
 
@@ -1684,17 +1725,19 @@
          * |------|------|------------|
          * |obj   |object|Query object|
          * |return|string|Query string|
-         *
-         * ```javascript
+         */
+
+        /* example
          * query.parse('foo=bar&eruda=true'); // -> {foo: 'bar', eruda: 'true'}
          * query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
          * query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
-         * ```
          */
 
-        /* module
-         * env: all
-         * test: all
+        /* typescript
+         * export declare const query: {
+         *     parse(str: string): any;
+         *     stringify(object: any): string;
+         * };
          */
 
         /* dependencies
@@ -1702,17 +1745,13 @@
          */
 
         exports = {
-            parse: function(str) {
+            parse: function parse(str) {
                 var ret = {};
-
                 str = trim(str).replace(regIllegalChars, '');
-
                 each(str.split('&'), function(param) {
                     var parts = param.split('=');
-
                     var key = parts.shift(),
                         val = parts.length > 0 ? parts.join('=') : null;
-
                     key = decodeURIComponent(key);
                     val = decodeURIComponent(val);
 
@@ -1724,15 +1763,13 @@
                         ret[key] = [ret[key], val];
                     }
                 });
-
                 return ret;
             },
-            stringify: function(obj, arrKey) {
+            stringify: function stringify(obj, arrKey) {
                 return filter(
                     map(obj, function(val, key) {
                         if (isObj(val) && isEmpty(val)) return '';
                         if (isArr(val)) return exports.stringify(val, key);
-
                         return (
                             (arrKey
                                 ? encodeURIComponent(arrKey)
@@ -1747,14 +1784,13 @@
                 ).join('&');
             }
         };
-
         var regIllegalChars = /^(\?|#|&)/g;
 
         return exports;
     })({});
 
     /* ------------------------------ ajax ------------------------------ */
-    _.ajax = (function () {
+    _.ajax = (function (exports) {
         /* Perform an asynchronous HTTP request.
          *
          * |Name   |Type  |Desc        |
@@ -1763,8 +1799,9 @@
          *
          * Available options:
          *
-         * |Name                                         |Type         |Desc                      |
+         * |Name                                         |Type         |Desc                       |
          * |---------------------------------------------|-------------|---------------------------|
+         * |type=get                                     |type         |Request type               |
          * |url                                          |string       |Request url                |
          * |data                                         |string object|Request data               |
          * |dataType=json                                |string       |Response type(json, xml)   |
@@ -1788,38 +1825,58 @@
          * |[data]  |string object|Request data    |
          * |success |function     |Success callback|
          * |dataType|function     |Response type   |
-         *
-         * ```javascript
+         */
+
+        /* example
          * ajax({
          *     url: 'http://example.com',
          *     data: {test: 'true'},
-         *     error: function () {},
-         *     success: function (data)
-         *     {
+         *     error() {},
+         *     success(data) {
          *         // ...
          *     },
          *     dataType: 'json'
          * });
          *
-         * ajax.get('http://example.com', {}, function (data)
-         * {
+         * ajax.get('http://example.com', {}, function (data) {
          *     // ...
          * });
-         * ```
          */
 
-        /* module
-         * env: browser
-         * test: manual
+        /* typescript
+         * export declare namespace ajax {
+         *     interface IOptions {
+         *         url: string;
+         *         data?: string | {};
+         *         dataType?: string;
+         *         contentType?: string;
+         *         success?: Function;
+         *         error?: Function;
+         *         complete?: Function;
+         *         timeout?: number;
+         *     }
+         *     function get(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
+         *     function post(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
+         * }
+         * export declare function ajax(options: ajax.IOptions): XMLHttpRequest;
          */
 
         /* dependencies
          * isFn noop defaults isObj query 
          */
 
-        function exports(options) {
-            defaults(options, exports.setting);
+        exports = (function(_exports) {
+            function exports(_x) {
+                return _exports.apply(this, arguments);
+            }
 
+            exports.toString = function() {
+                return _exports.toString();
+            };
+
+            return exports;
+        })(function(options) {
+            defaults(options, exports.setting);
             var type = options.type,
                 url = options.url,
                 data = options.data,
@@ -1833,19 +1890,19 @@
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState !== 4) return;
-
                 clearTimeout(abortTimeout);
-
                 var result;
-
                 var status = xhr.status;
+
                 if ((status >= 200 && status < 300) || status === 304) {
                     result = xhr.responseText;
                     if (dataType === 'xml') result = xhr.responseXML;
+
                     try {
                         if (dataType === 'json') result = JSON.parse(result);
                         /* eslint-disable no-empty */
                     } catch (e) {}
+
                     success(result, xhr);
                 } else {
                     error(xhr);
@@ -1874,10 +1931,10 @@
                     complete(xhr);
                 }, timeout);
             }
-            xhr.send(type === 'GET' ? null : data);
 
+            xhr.send(type === 'GET' ? null : data);
             return xhr;
-        }
+        });
 
         exports.setting = {
             type: 'GET',
@@ -1887,7 +1944,7 @@
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded',
             data: {},
-            xhr: function() {
+            xhr: function xhr() {
                 return new XMLHttpRequest();
             },
             timeout: 0
@@ -1900,7 +1957,6 @@
         exports.post = function() {
             var options = parseArgs.apply(null, arguments);
             options.type = 'POST';
-
             return exports(options);
         };
 
@@ -1920,7 +1976,7 @@
         }
 
         return exports;
-    })();
+    })({});
 
     return _;
 }));

@@ -152,12 +152,13 @@ export default class Resources extends Tool {
 
     let cookie = document.cookie
     if (trim(cookie) !== '') {
-      each(document.cookie.split(';'), function(val, t) {
+      each(document.cookie.split(';'), function(val) {
         val = val.split('=')
-        t = decodeUriComponent(val[1])
+        const key = trim(val.shift())
+        val = decodeUriComponent(val.join('='))
         cookieData.push({
-          key: trim(val[0]),
-          val: t
+          key,
+          val
         })
       })
     }
