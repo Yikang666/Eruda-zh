@@ -213,6 +213,6 @@ const pluginVersion = {
   code: '1.0.0',
   benchmark: '1.0.0',
   geolocation: '1.1.0',
-  dom: '1.0.1',
+  dom: '1.0.2',
   orientation: '1.0.0'
 }
