@@ -1,3 +1,8 @@
+## v1.5.5 (25 May 2019)
+
+* Fix resources error when cookie has % [#100](ttps://github.com/liriliri/eruda/issues/100)
+* Update dom plugin version
+
 ## v1.5.4 (23 Sep 2018)
 
 * Fix network url start with //
