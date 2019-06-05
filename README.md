@@ -32,7 +32,7 @@ Logging things out on mobile browser is never an easy stuff. I used to include `
 
 ## Demo
 
-![Demo](http://7xn2zy.com1.z0.glb.clouddn.com/eruda_qrcode3.png)
+![Demo](./doc/qrcode.png)
 
 Browse it on your phone: [https://eruda.liriliri.io/](https://eruda.liriliri.io/)
 
