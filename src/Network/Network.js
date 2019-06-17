@@ -98,7 +98,9 @@ export default class Network extends Tool {
 
     if (this._origOpen) winXhrProto.open = this._origOpen
     if (this._origSend) winXhrProto.send = this._origSend
-    if (this._origSetRequestHeader) winXhrProto.setRequestHeader = this._origSetRequestHeader
+    if (this._origSetRequestHeader) {
+      winXhrProto.setRequestHeader = this._origSetRequestHeader
+    }
   }
   overrideFetch() {
     if (!this._isFetchSupported) return

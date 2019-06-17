@@ -212,7 +212,9 @@ export default class Logger extends Emitter {
     if (
       log.type !== 'html' &&
       lastLog.type === log.type &&
-      lastLog.value === log.value
+      lastLog.value === log.value &&
+      !log.src &&
+      !log.args
     ) {
       let $container = $el.find(`div[data-id="${lastLog.id}"]`)
       if ($container.length > 0) {
