@@ -1,3 +1,7 @@
+## v1.5.6 (17 Jun 2019)
+
+* Disable log collapse for objects
+
 ## v1.5.5 (25 May 2019)
 
 * Fix resources error when cookie has % [#100](ttps://github.com/liriliri/eruda/issues/100)
