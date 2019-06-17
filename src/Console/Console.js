@@ -36,8 +36,8 @@ export default class Console extends Tool {
     this._logger.render()
   }
   overrideConsole() {
-    let origConsole = (this._origConsole = {}),
-      winConsole = window.console
+    let origConsole = (this._origConsole = {})
+    let winConsole = window.console
 
     CONSOLE_METHOD.forEach(name => {
       let origin = (origConsole[name] = noop)
@@ -46,7 +46,9 @@ export default class Console extends Tool {
       }
 
       winConsole[name] = (...args) => {
-        this[name](...args)
+        if (args.length > 0) {
+          this[name](...args)
+        }
         origin(...args)
       }
     })
