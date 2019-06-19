@@ -121,6 +121,11 @@ It is possible to enhance Eruda with more features by writing plugins. Check sou
 
 When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
 
+## Related Projects
+
+* [licia](https://github.com/liriliri/licia): Utility library used by eruda.
+* [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin): Eruda webpack plugin.
+
 ## Contribution
 
 Read [Contributing Guide](.github/CONTRIBUTING.md) for development setup instructions.

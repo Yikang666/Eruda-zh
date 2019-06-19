@@ -22,6 +22,18 @@
 
 Eruda 是一个专为手机网页前端设计的调试面板，类似 DevTools 的迷你版，其主要功能包括：捕获 console 日志、检查元素状态、捕获XHR请求、显示本地存储和 Cookie 信息等等。
 
+## Demo
+
+![Demo](./qrcode.png)
+
+请扫描二维码或在手机上直接访问：[https://eruda.liriliri.io/](https://eruda.liriliri.io/)
+
+如果想在其它页面尝试，请在浏览器地址栏上输入以下代码。
+
+```javascript
+javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
+```
+
 ## 功能清单
 
 ![Eruda](./screenshot.jpg)
@@ -90,16 +102,23 @@ eruda.init({
 });
 ```
 
-> 该工具支持自行编写插件，可参考[eruda-fps](https://github.com/liriliri/eruda-fps)。
+## 插件
 
-## Demo
+你可以为 Eruda 编写插件来增强功能。关于怎么编写插件，请查看下边官方插件的源码。另外 [eruda-plugin](https://github.com/liriliri/eruda-plugin) 可以用来初始化一个新插件。
 
-![Demo](./qrcode.png)
+* [eruda-fps](https://github.com/liriliri/eruda-fps)：展示页面的 fps 信息。
+* [eruda-features](https://github.com/liriliri/eruda-features)：浏览器特性检测。
+* [eruda-timing](https://github.com/liriliri/eruda-timing)：展示性能资源数据。
+* [eruda-memory](https://github.com/liriliri/eruda-memory)：展示页面内存信息。
+* [eruda-code](https://github.com/liriliri/eruda-code)：运行 JavaScript 代码。
+* [eruda-benchmark](https://github.com/liriliri/eruda-benchmark)：运行 JavaScript 性能测试。
+* [eruda-geolocation](https://github.com/liriliri/eruda-geolocation)：测试地理位置接口。
+* [eruda-dom](https://github.com/liriliri/eruda-dom)：浏览 dom 树。
+* [eruda-orientation](https://github.com/liriliri/eruda-orientation)：测试重力感应接口。
 
-请扫描二维码或在手机上直接访问：[https://eruda.liriliri.io/](https://eruda.liriliri.io/)
+编写插件的时候，你可以使用 Eruda 提供的工具函数，相关文档请点击[这里](doc/UTIL_API.md)查看。
 
-如果想在其它页面尝试，请在浏览器地址栏上输入以下代码。
+## 相关项目
 
-```javascript
-javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
-```
+* [licia](https://github.com/liriliri/licia)：Eruda 使用的工具库。 
+* [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin)：Eruda webpack 插件。
