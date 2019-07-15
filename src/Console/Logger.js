@@ -233,7 +233,7 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       const firstLog = logs[0]
-      let $container = $el.find(`div[data-id="${firstLog.id}"`)
+      let $container = $el.find(`div[data-id="${firstLog.id}"]`)
       if ($container.length > 0) {
         $container.parent().remove()
       }
