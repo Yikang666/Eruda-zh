@@ -1,4 +1,4 @@
-import { getType, lenToUtf8Bytes } from './util'
+import { getType, lenToUtf8Bytes, readBlobAsText } from './util'
 import {
   Emitter,
   fullUrl,
@@ -47,21 +47,37 @@ export default class XhrRequest extends Emitter {
     })
   }
   handleDone() {
-    let xhr = this._xhr,
-      resType = xhr.responseType
-
+    let xhr = this._xhr
+    let resType = xhr.responseType
     let resTxt = ''
 
-    if (resType === '' || resType === 'text') resTxt = xhr.responseText
-    if (resType === 'json') resTxt = JSON.stringify(xhr.response)
+    const update = () => {
+      this.emit('update', this._id, {
+        status: xhr.status,
+        done: true,
+        size: getSize(xhr, false, this._url),
+        time: now(),
+        resTxt
+      })
+    }
 
-    this.emit('update', this._id, {
-      status: xhr.status,
-      done: true,
-      size: getSize(xhr, false, this._url),
-      time: now(),
-      resTxt: resTxt
-    })
+    const type = getType(xhr.getResponseHeader('Content-Type'))
+    if (
+      resType === 'blob' &&
+      (type.type === 'text' ||
+        type.subType === 'javascript' ||
+        type.subType === 'json')
+    ) {
+      readBlobAsText(xhr.response, (err, result) => {
+        if (result) resTxt = result
+        update()
+      })
+    } else {
+      if (resType === '' || resType === 'text') resTxt = xhr.responseText
+      if (resType === 'json') resTxt = JSON.stringify(xhr.response)
+
+      update()
+    }
   }
 }
 

@@ -342,30 +342,30 @@
                 }
 
                 if (byteIdx === byteCount) return false;
-                var _byte = byteArr[byteIdx];
+                var byte = byteArr[byteIdx];
                 byteIdx++;
 
                 if (!bytesNeeded) {
                     // 0x00 to 0x7F
-                    if ((_byte & 0x80) === 0) {
-                        return _byte;
+                    if ((byte & 0x80) === 0) {
+                        return byte;
                     } // 0xC2 to 0xDF
 
-                    if ((_byte & 0xe0) === 0xc0) {
+                    if ((byte & 0xe0) === 0xc0) {
                         bytesNeeded = 1;
-                        codePoint = _byte & 0x1f;
-                    } else if ((_byte & 0xf0) === 0xe0) {
+                        codePoint = byte & 0x1f;
+                    } else if ((byte & 0xf0) === 0xe0) {
                         // 0xE0 to 0xEF
-                        if (_byte === 0xe0) lowerBoundary = 0xa0;
-                        if (_byte === 0xed) upperBoundary = 0x9f;
+                        if (byte === 0xe0) lowerBoundary = 0xa0;
+                        if (byte === 0xed) upperBoundary = 0x9f;
                         bytesNeeded = 2;
-                        codePoint = _byte & 0xf;
-                    } else if ((_byte & 0xf8) === 0xf0) {
+                        codePoint = byte & 0xf;
+                    } else if ((byte & 0xf8) === 0xf0) {
                         // 0xF0 to 0xF4
-                        if (_byte === 0xf0) lowerBoundary = 0x90;
-                        if (_byte === 0xf4) upperBoundary = 0x8f;
+                        if (byte === 0xf0) lowerBoundary = 0x90;
+                        if (byte === 0xf4) upperBoundary = 0x8f;
                         bytesNeeded = 3;
-                        codePoint = _byte & 0x7;
+                        codePoint = byte & 0x7;
                     } else {
                         if (safe) return goBack();
                         throw new Error('Invalid UTF-8 detected');
@@ -374,7 +374,7 @@
                     continue;
                 }
 
-                if (_byte < lowerBoundary || _byte > upperBoundary) {
+                if (byte < lowerBoundary || byte > upperBoundary) {
                     if (safe) {
                         byteIdx--;
                         return goBack();
@@ -385,7 +385,7 @@
 
                 lowerBoundary = 0x80;
                 upperBoundary = 0xbf;
-                codePoint = (codePoint << 6) | (_byte & 0x3f);
+                codePoint = (codePoint << 6) | (byte & 0x3f);
                 bytesSeen++;
                 if (bytesSeen !== bytesNeeded) continue;
                 var tmp = codePoint;

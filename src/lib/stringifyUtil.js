@@ -252,12 +252,12 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
      */
 
     exports = function exports(str) {
-        return toStr(str).replace(regEscapeChars, function(_char) {
-            switch (_char) {
+        return toStr(str).replace(regEscapeChars, function(char) {
+            switch (char) {
                 case '"':
                 case "'":
                 case '\\':
-                    return '\\' + _char;
+                    return '\\' + char;
 
                 case '\n':
                     return '\\n';

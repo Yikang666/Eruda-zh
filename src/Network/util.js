@@ -16,3 +16,14 @@ export function lenToUtf8Bytes(str) {
 
   return str.length + (m ? m.length : 0)
 }
+
+export function readBlobAsText(blob, callback) {
+  const reader = new FileReader()
+  reader.onload = () => {
+    callback(null, reader.result)
+  }
+  reader.onerror = err => {
+    callback(err)
+  }
+  reader.readAsText(blob)
+}
