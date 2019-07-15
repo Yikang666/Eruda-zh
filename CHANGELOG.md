@@ -1,10 +1,17 @@
+## v1.5.7 (15 Jul 2019)
+
+* Fix iOS max log number
+* Disable calling init if already initialized
+* Disable worker by default
+* Support xhr blob response type [#104](https://github.com/liriliri/eruda/issues/100)
+
 ## v1.5.6 (17 Jun 2019)
 
 * Disable log collapse for objects
 
 ## v1.5.5 (25 May 2019)
 
-* Fix resources error when cookie has % [#100](ttps://github.com/liriliri/eruda/issues/100)
+* Fix resources error when cookie has % [#100](https://github.com/liriliri/eruda/issues/100)
 * Update dom plugin version
 
 ## v1.5.4 (23 Sep 2018)
