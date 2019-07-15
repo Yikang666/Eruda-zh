@@ -241,7 +241,7 @@ export default class Console extends Tool {
       lazyEvaluation: true,
       viewLogInSources: false,
       displayIfErr: false,
-      useWorker: true,
+      useWorker: false,
       maxLogNum: 'infinite'
     }))
 
