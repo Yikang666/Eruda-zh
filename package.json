@@ -12,6 +12,7 @@
     "test:sauce": "karma start karma.sauce.js",
     "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js} --write",
     "lint": "eslint src/**/*.js",
+    "lint:fix": "npm run lint -- --fix",
     "setup": "node script/cpTestLib",
     "genIcon": "node script/genIcon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""

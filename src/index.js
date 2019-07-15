@@ -31,6 +31,8 @@ import {
 
 module.exports = {
   init({ container, tool, autoScale = true, useShadowDom = true } = {}) {
+    if (this._isInit) return
+    
     this._isInit = true
     this._scale = 1
 
@@ -104,6 +106,7 @@ module.exports = {
     this._unregisterListener()
     this._$el.remove()
     evalCss.clear()
+    this._isInit = false
   },
   scale(s) {
     if (isNum(s)) {
