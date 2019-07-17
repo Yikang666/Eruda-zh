@@ -69,9 +69,9 @@ console.log('eruda');
 Add tool.
 
 ```javascript
-eruda.add(eruda.Tool.extend({
+eruda.add(new (eruda.Tool.extend({
     name: 'test'
-}));
+})));
 ```
 
 ## remove
