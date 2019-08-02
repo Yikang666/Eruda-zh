@@ -285,42 +285,6 @@ export var noop = _.noop = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ allKeys ------------------------------ */
-
-export var allKeys = _.allKeys = (function (exports) {
-    /* Retrieve all the names of object's own and inherited properties.
-     *
-     * |Name  |Type  |Desc                       |
-     * |------|------|---------------------------|
-     * |obj   |object|Object to query            |
-     * |return|array |Array of all property names|
-     *
-     * Members of Object's prototype won't be retrieved.
-     */
-
-    /* example
-     * var obj = Object.create({zero: 0});
-     * obj.one = 1;
-     * allKeys(obj) // -> ['zero', 'one']
-     */
-
-    /* typescript
-     * export declare function allKeys(obj: any): string[];
-     */
-    exports = function exports(obj) {
-        var ret = [],
-            key;
-
-        for (key in obj) {
-            ret.push(key);
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ before ------------------------------ */
 
 export var before = _.before = (function (exports) {
@@ -587,7 +551,7 @@ export var toStr = _.toStr = (function (exports) {
      * |Name  |Type  |Desc            |
      * |------|------|----------------|
      * |val   |*     |Value to convert|
-     * |return|string|Resulted string |
+     * |return|string|Result string   |
      */
 
     /* example
@@ -1269,7 +1233,7 @@ export var escapeJsonStr = _.escapeJsonStr = (function (exports) {
      * escapeJsStr 
      */
 
-    function exports(str) {
+    exports = function (str) {
       return escapeJsStr(str)
         .replace(/\\'/g, "'")
         .replace(/\t/g, '\\t')
@@ -1345,7 +1309,7 @@ export var fullUrl = _.fullUrl = (function (exports) {
 
     let link = document.createElement('a')
 
-    function exports(href) {
+    exports = function (href) {
       link.href = href
 
       return (
@@ -1392,7 +1356,7 @@ export var getObjType = _.getObjType = (function (exports) {
      * upperFirst 
      */
 
-    function exports(obj) {
+    exports = function (obj) {
       if (obj.constructor && obj.constructor.name) return obj.constructor.name
 
       return upperFirst({}.toString.call(obj).replace(/(\[object )|]/g, ''))
@@ -1651,6 +1615,7 @@ export var isFn = _.isFn = (function (exports) {
     /* example
      * isFn(function() {}); // -> true
      * isFn(function*() {}); // -> true
+     * isFn(async function() {}); // -> true
      */
 
     /* typescript
@@ -1665,8 +1630,49 @@ export var isFn = _.isFn = (function (exports) {
         var objStr = objToStr(val);
         return (
             objStr === '[object Function]' ||
-            objStr === '[object GeneratorFunction]'
+            objStr === '[object GeneratorFunction]' ||
+            objStr === '[object AsyncFunction]'
         );
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ getProto ------------------------------ */
+
+export var getProto = _.getProto = (function (exports) {
+    /* Get prototype of an object.
+     *
+     * |Name  |Type|Desc                                         |
+     * |------|----|---------------------------------------------|
+     * |obj   |*   |Target object                                |
+     * |return|*   |Prototype of given object, null if not exists|
+     */
+
+    /* example
+     * const a = {};
+     * getProto(Object.create(a)); // -> a
+     */
+
+    /* typescript
+     * export declare function getProto(obj: any): any;
+     */
+
+    /* dependencies
+     * isObj isFn 
+     */
+
+    var getPrototypeOf = Object.getPrototypeOf;
+    var ObjectCtr = {}.constructor;
+
+    exports = function exports(obj) {
+        if (!isObj(obj)) return null;
+        if (getPrototypeOf) return getPrototypeOf(obj);
+        var proto = obj.__proto__;
+        if (proto || proto === null) return proto;
+        if (isFn(obj.constructor)) return obj.constructor.prototype;
+        if (obj instanceof ObjectCtr) return ObjectCtr.prototype;
+        return null;
     };
 
     return exports;
@@ -1857,97 +1863,6 @@ export var createAssigner = _.createAssigner = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ defaults ------------------------------ */
-
-export var defaults = _.defaults = (function (exports) {
-    /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
-     *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |obj   |object|Destination object|
-     * |*src  |object|Sources objects   |
-     * |return|object|Destination object|
-     */
-
-    /* example
-     * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
-     */
-
-    /* typescript
-     * export declare function defaults(obj: any, ...src: any[]): any;
-     */
-
-    /* dependencies
-     * createAssigner allKeys 
-     */
-
-    exports = createAssigner(allKeys, true);
-
-    return exports;
-})({});
-
-/* ------------------------------ extend ------------------------------ */
-
-export var extend = _.extend = (function (exports) {
-    /* Copy all of the properties in the source objects over to the destination object.
-     *
-     * |Name       |Type  |Desc              |
-     * |-----------|------|------------------|
-     * |destination|object|Destination object|
-     * |...sources |object|Sources objects   |
-     * |return     |object|Destination object|
-     */
-
-    /* example
-     * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
-     */
-
-    /* typescript
-     * export declare function extend(destination: any, ...sources: any[]): any;
-     */
-
-    /* dependencies
-     * createAssigner allKeys 
-     */
-
-    exports = createAssigner(allKeys);
-
-    return exports;
-})({});
-
-/* ------------------------------ clone ------------------------------ */
-
-export var clone = _.clone = (function (exports) {
-    /* Create a shallow-copied clone of the provided plain object.
-     *
-     * Any nested objects or arrays will be copied by reference, not duplicated.
-     *
-     * |Name  |Type|Desc          |
-     * |------|----|--------------|
-     * |val   |*   |Value to clone|
-     * |return|*   |Cloned value  |
-     */
-
-    /* example
-     * clone({name: 'eustia'}); // -> {name: 'eustia'}
-     */
-
-    /* typescript
-     * export declare function clone<T>(val: T): T;
-     */
-
-    /* dependencies
-     * isObj isArr extend 
-     */
-
-    exports = function exports(obj) {
-        if (!isObj(obj)) return obj;
-        return isArr(obj) ? obj.slice() : extend({}, obj);
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ extendOwn ------------------------------ */
 
 export var extendOwn = _.extendOwn = (function (exports) {
@@ -2011,39 +1926,6 @@ export var values = _.values = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ contain ------------------------------ */
-
-export var contain = _.contain = (function (exports) {
-    /* Check if the value is present in the list.
-     *
-     * |Name  |Type        |Desc                                |
-     * |------|------------|------------------------------------|
-     * |target|array object|Target object                       |
-     * |value |*           |Value to check                      |
-     * |return|boolean     |True if value is present in the list|
-     */
-
-    /* example
-     * contain([1, 2, 3], 1); // -> true
-     * contain({a: 1, b: 2}, 1); // -> true
-     */
-
-    /* typescript
-     * export declare function contain(arr: any[] | {}, val: any): boolean;
-     */
-
-    /* dependencies
-     * idxOf isArrLike values 
-     */
-
-    exports = function exports(arr, val) {
-        if (!isArrLike(arr)) arr = values(arr);
-        return idxOf(arr, val) >= 0;
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ isStr ------------------------------ */
 
 export var isStr = _.isStr = (function (exports) {
@@ -2069,6 +1951,44 @@ export var isStr = _.isStr = (function (exports) {
 
     exports = function exports(val) {
         return objToStr(val) === '[object String]';
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ contain ------------------------------ */
+
+export var contain = _.contain = (function (exports) {
+    /* Check if the value is present in the list.
+     *
+     * |Name  |Type               |Desc                                |
+     * |------|-------------------|------------------------------------|
+     * |target|array object string|Target object                       |
+     * |value |*                  |Value to check                      |
+     * |return|boolean            |True if value is present in the list|
+     */
+
+    /* example
+     * contain([1, 2, 3], 1); // -> true
+     * contain({a: 1, b: 2}, 1); // -> true
+     * contain('abc', 'a'); // -> true
+     */
+
+    /* typescript
+     * export declare function contain(
+     *     arr: any[] | {} | string,
+     *     val: any
+     * ): boolean;
+     */
+
+    /* dependencies
+     * idxOf isStr isArrLike values 
+     */
+
+    exports = function exports(arr, val) {
+        if (isStr(arr)) return arr.indexOf(val) > -1;
+        if (!isArrLike(arr)) arr = values(arr);
+        return idxOf(arr, val) >= 0;
     };
 
     return exports;
@@ -2177,7 +2097,7 @@ export var isCrossOrig = _.isCrossOrig = (function (exports) {
 
     let origin = window.location.origin
 
-    function exports(url) {
+    exports = function (url) {
       return !startWith(url, origin)
     }
 
@@ -2731,7 +2651,7 @@ export var lpad = _.lpad = (function (exports) {
      * |str    |string|String to pad         |
      * |len    |number|Padding length        |
      * |[chars]|string|String used as padding|
-     * |return |string|Resulted string       |
+     * |return |string|Result string         |
      */
 
     /* example
@@ -3200,6 +3120,243 @@ export var evalCss = _.evalCss = (function (exports) {
     function resetStyle({ css, el }) {
       el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
     }
+
+    return exports;
+})({});
+
+/* ------------------------------ unique ------------------------------ */
+
+export var unique = _.unique = (function (exports) {
+    /* Create duplicate-free version of an array.
+     *
+     * |Name     |Type    |Desc                         |
+     * |---------|--------|-----------------------------|
+     * |arr      |array   |Array to inspect             |
+     * |[compare]|function|Function for comparing values|
+     * |return   |array   |New duplicate free array     |
+     */
+
+    /* example
+     * unique([1, 2, 3, 1]); // -> [1, 2, 3]
+     */
+
+    /* typescript
+     * export declare function unique(
+     *     arr: any[],
+     *     compare?: (a: any, b: any) => boolean | number
+     * ): any[];
+     */
+
+    /* dependencies
+     * filter 
+     */
+
+    exports = function exports(arr, compare) {
+        compare = compare || isEqual;
+        return filter(arr, function(item, idx, arr) {
+            var len = arr.length;
+
+            while (++idx < len) {
+                if (compare(item, arr[idx])) return false;
+            }
+
+            return true;
+        });
+    };
+
+    function isEqual(a, b) {
+        return a === b;
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ allKeys ------------------------------ */
+
+export var allKeys = _.allKeys = (function (exports) {
+    /* Retrieve all the names of object's own and inherited properties.
+     *
+     * |Name     |Type  |Desc                       |
+     * |---------|------|---------------------------|
+     * |obj      |object|Object to query            |
+     * |[options]|object|Options                    |
+     * |return   |array |Array of all property names|
+     *
+     * Available options:
+     *
+     * |Name              |Type   |Desc                     |
+     * |------------------|-------|-------------------------|
+     * |prototype=true    |boolean|Include prototype keys   |
+     * |unenumerable=false|boolean|Include unenumerable keys|
+     * |symbol=false      |boolean|Include symbol keys      |
+     *
+     * Members of Object's prototype won't be retrieved.
+     */
+
+    /* example
+     * var obj = Object.create({zero: 0});
+     * obj.one = 1;
+     * allKeys(obj) // -> ['zero', 'one']
+     */
+
+    /* typescript
+     * export declare namespace allKeys {
+     *     interface IOptions {
+     *         prototype?: boolean;
+     *         unenumerable?: boolean;
+     *     }
+     * }
+     * export declare function allKeys(
+     *     obj: any,
+     *     options: { symbol: true } & allKeys.IOptions
+     * ): Array<string | Symbol>;
+     * export declare function allKeys(
+     *     obj: any,
+     *     options?: ({ symbol: false } & allKeys.IOptions) | allKeys.IOptions
+     * ): string[];
+     */
+
+    /* dependencies
+     * keys getProto unique 
+     */
+
+    var getOwnPropertyNames = Object.getOwnPropertyNames;
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+
+    exports = function exports(obj) {
+        var _ref =
+                arguments.length > 1 && arguments[1] !== undefined
+                    ? arguments[1]
+                    : {},
+            _ref$prototype = _ref.prototype,
+            prototype = _ref$prototype === void 0 ? true : _ref$prototype,
+            _ref$unenumerable = _ref.unenumerable,
+            unenumerable = _ref$unenumerable === void 0 ? false : _ref$unenumerable,
+            _ref$symbol = _ref.symbol,
+            symbol = _ref$symbol === void 0 ? false : _ref$symbol;
+
+        var ret = [];
+
+        if ((unenumerable || symbol) && getOwnPropertyNames) {
+            var getKeys = keys;
+            if (unenumerable && getOwnPropertyNames) getKeys = getOwnPropertyNames;
+
+            do {
+                ret = ret.concat(getKeys(obj));
+
+                if (symbol && getOwnPropertySymbols) {
+                    ret = ret.concat(getOwnPropertySymbols(obj));
+                }
+            } while (
+                prototype &&
+                (obj = getProto(obj)) &&
+                obj !== Object.prototype
+            );
+
+            ret = unique(ret);
+        } else {
+            if (prototype) {
+                for (var key in obj) {
+                    ret.push(key);
+                }
+            } else {
+                ret = keys(obj);
+            }
+        }
+
+        return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ defaults ------------------------------ */
+
+export var defaults = _.defaults = (function (exports) {
+    /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
+     *
+     * |Name  |Type  |Desc              |
+     * |------|------|------------------|
+     * |obj   |object|Destination object|
+     * |*src  |object|Sources objects   |
+     * |return|object|Destination object|
+     */
+
+    /* example
+     * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+     */
+
+    /* typescript
+     * export declare function defaults(obj: any, ...src: any[]): any;
+     */
+
+    /* dependencies
+     * createAssigner allKeys 
+     */
+
+    exports = createAssigner(allKeys, true);
+
+    return exports;
+})({});
+
+/* ------------------------------ extend ------------------------------ */
+
+export var extend = _.extend = (function (exports) {
+    /* Copy all of the properties in the source objects over to the destination object.
+     *
+     * |Name       |Type  |Desc              |
+     * |-----------|------|------------------|
+     * |destination|object|Destination object|
+     * |...sources |object|Sources objects   |
+     * |return     |object|Destination object|
+     */
+
+    /* example
+     * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+     */
+
+    /* typescript
+     * export declare function extend(destination: any, ...sources: any[]): any;
+     */
+
+    /* dependencies
+     * createAssigner allKeys 
+     */
+
+    exports = createAssigner(allKeys);
+
+    return exports;
+})({});
+
+/* ------------------------------ clone ------------------------------ */
+
+export var clone = _.clone = (function (exports) {
+    /* Create a shallow-copied clone of the provided plain object.
+     *
+     * Any nested objects or arrays will be copied by reference, not duplicated.
+     *
+     * |Name  |Type|Desc          |
+     * |------|----|--------------|
+     * |val   |*   |Value to clone|
+     * |return|*   |Cloned value  |
+     */
+
+    /* example
+     * clone({name: 'eustia'}); // -> {name: 'eustia'}
+     */
+
+    /* typescript
+     * export declare function clone<T>(val: T): T;
+     */
+
+    /* dependencies
+     * isObj isArr extend 
+     */
+
+    exports = function exports(obj) {
+        if (!isObj(obj)) return obj;
+        return isArr(obj) ? obj.slice() : extend({}, obj);
+    };
 
     return exports;
 })({});
@@ -5224,7 +5381,7 @@ export var safeStorage = _.safeStorage = (function (exports) {
      * isUndef memStorage 
      */
 
-    function exports(type, memReplacement) {
+    exports = function (type, memReplacement) {
       if (isUndef(memReplacement)) memReplacement = true
 
       let ret
@@ -5399,7 +5556,7 @@ export var toNum = _.toNum = (function (exports) {
      * |Name  |Type  |Desc            |
      * |------|------|----------------|
      * |val   |*     |Value to process|
-     * |return|number|Resulted number |
+     * |return|number|Result number   |
      */
 
     /* example
@@ -6392,7 +6549,7 @@ export var pxToNum = _.pxToNum = (function (exports) {
      * toNum 
      */
 
-    function exports(str) {
+    exports = function (str) {
       return toNum(str.replace('px', ''))
     }
 
@@ -6583,7 +6740,7 @@ export var getFileName = _.getFileName = (function (exports) {
      * last trim 
      */
 
-    function exports(url) {
+    exports = function (url) {
       let ret = last(url.split('/'))
 
       if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
@@ -7114,10 +7271,11 @@ export var ajax = _.ajax = (function (exports) {
 export var type = _.type = (function (exports) {
     /* Determine the internal JavaScript [[Class]] of an object.
      *
-     * |Name  |Type  |Desc                      |
-     * |------|------|--------------------------|
-     * |val   |*     |Value to get type         |
-     * |return|string|Type of object, lowercased|
+     * |Name          |Type   |Desc             |
+     * |--------------|-------|-----------------|
+     * |val           |*      |Value to get type|
+     * |lowerCase=true|boolean|LowerCase result |
+     * |return        |string |Type of object   |
      */
 
     /* example
@@ -7125,10 +7283,12 @@ export var type = _.type = (function (exports) {
      * type({}); // -> 'object'
      * type(function () {}); // -> 'function'
      * type([]); // -> 'array'
+     * type([], false); // -> 'Array'
+     * type(async function () {}, false); // -> 'AsyncFunction'
      */
 
     /* typescript
-     * export declare function type(val: any): string;
+     * export declare function type(val: any, lowerCase: boolean): string;
      */
 
     /* dependencies
@@ -7136,12 +7296,16 @@ export var type = _.type = (function (exports) {
      */
 
     exports = function exports(val) {
-        if (val === null) return 'null';
-        if (val === undefined) return 'undefined';
-        if (isNaN(val)) return 'nan';
+        var lowerCase =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : true;
+        if (val === null) return lowerCase ? 'null' : 'Null';
+        if (val === undefined) return lowerCase ? 'undefined' : 'Undefined';
+        if (isNaN(val)) return lowerCase ? 'nan' : 'NaN';
         var ret = objToStr(val).match(regObj);
         if (!ret) return '';
-        return ret[1].toLowerCase();
+        return lowerCase ? ret[1].toLowerCase() : ret[1];
     };
 
     var regObj = /^\[object\s+(.*?)]$/;
@@ -7288,7 +7452,7 @@ export var stripHtmlTag = _.stripHtmlTag = (function (exports) {
      * |Name  |Type  |Desc           |
      * |------|------|---------------|
      * |str   |string|String to strip|
-     * |return|string|Resulted string|
+     * |return|string|Result string  |
      */
 
     /* example
@@ -7372,53 +7536,6 @@ export var uniqId = _.uniqId = (function (exports) {
         var id = ++idCounter + '';
         return prefix ? prefix + id : id;
     };
-
-    return exports;
-})({});
-
-/* ------------------------------ unique ------------------------------ */
-
-export var unique = _.unique = (function (exports) {
-    /* Create duplicate-free version of an array.
-     *
-     * |Name     |Type    |Desc                         |
-     * |---------|--------|-----------------------------|
-     * |arr      |array   |Array to inspect             |
-     * |[compare]|function|Function for comparing values|
-     * |return   |array   |New duplicate free array     |
-     */
-
-    /* example
-     * unique([1, 2, 3, 1]); // -> [1, 2, 3]
-     */
-
-    /* typescript
-     * export declare function unique(
-     *     arr: any[],
-     *     compare?: (a: any, b: any) => boolean | number
-     * ): any[];
-     */
-
-    /* dependencies
-     * filter 
-     */
-
-    exports = function exports(arr, compare) {
-        compare = compare || isEqual;
-        return filter(arr, function(item, idx, arr) {
-            var len = arr.length;
-
-            while (++idx < len) {
-                if (compare(item, arr[idx])) return false;
-            }
-
-            return true;
-        });
-    };
-
-    function isEqual(a, b) {
-        return a === b;
-    }
 
     return exports;
 })({});

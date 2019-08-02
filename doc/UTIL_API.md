@@ -714,10 +714,19 @@ ajax.get('http://example.com', {}, function (data) {
 
 Retrieve all the names of object's own and inherited properties.
 
-|Name  |Type  |Desc                       |
-|------|------|---------------------------|
-|obj   |object|Object to query            |
-|return|array |Array of all property names|
+|Name     |Type  |Desc                       |
+|---------|------|---------------------------|
+|obj      |object|Object to query            |
+|[options]|object|Options                    |
+|return   |array |Array of all property names|
+
+Available options:
+
+|Name              |Type   |Desc                     |
+|------------------|-------|-------------------------|
+|prototype=true    |boolean|Include prototype keys   |
+|unenumerable=false|boolean|Include unenumerable keys|
+|symbol=false      |boolean|Include symbol keys      |
 
 Members of Object's prototype won't be retrieved.
 
@@ -859,15 +868,16 @@ concat([1, 2], [3], [4, 5]); // -> [1, 2, 3, 4, 5]
 
 Check if the value is present in the list.
 
-|Name  |Type        |Desc                                |
-|------|------------|------------------------------------|
-|target|array object|Target object                       |
-|value |*           |Value to check                      |
-|return|boolean     |True if value is present in the list|
+|Name  |Type               |Desc                                |
+|------|-------------------|------------------------------------|
+|target|array object string|Target object                       |
+|value |*                  |Value to check                      |
+|return|boolean            |True if value is present in the list|
 
 ```javascript
 contain([1, 2, 3], 1); // -> true
 contain({a: 1, b: 2}, 1); // -> true
+contain('abc', 'a'); // -> true
 ```
 
 ## cookie 
@@ -1235,6 +1245,20 @@ Extract file name from url.
 
 Get object type.
 
+## getProto 
+
+Get prototype of an object.
+
+|Name  |Type|Desc                                         |
+|------|----|---------------------------------------------|
+|obj   |*   |Target object                                |
+|return|*   |Prototype of given object, null if not exists|
+
+```javascript
+const a = {};
+getProto(Object.create(a)); // -> a
+```
+
 ## has 
 
 Checks if key is a direct property.
@@ -1448,6 +1472,7 @@ Generator function is also classified as true.
 ```javascript
 isFn(function() {}); // -> true
 isFn(function*() {}); // -> true
+isFn(async function() {}); // -> true
 ```
 
 ## isMatch 
@@ -1683,7 +1708,7 @@ Pad string on the left side if it's shorter than length.
 |str    |string|String to pad         |
 |len    |number|Padding length        |
 |[chars]|string|String used as padding|
-|return |string|Resulted string       |
+|return |string|Result string         |
 
 ```javascript
 lpad('a', 5); // -> '    a'
@@ -2201,7 +2226,7 @@ Strip html tags from a string.
 |Name  |Type  |Desc           |
 |------|------|---------------|
 |str   |string|String to strip|
-|return|string|Resulted string|
+|return|string|Result string  |
 
 ```javascript
 stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
@@ -2244,7 +2269,7 @@ Convert value to a number.
 |Name  |Type  |Desc            |
 |------|------|----------------|
 |val   |*     |Value to process|
-|return|number|Resulted number |
+|return|number|Result number   |
 
 ```javascript
 toNum('5'); // -> 5
@@ -2271,7 +2296,7 @@ Convert value to a string.
 |Name  |Type  |Desc            |
 |------|------|----------------|
 |val   |*     |Value to convert|
-|return|string|Resulted string |
+|return|string|Result string   |
 
 ```javascript
 toStr(null); // -> ''
@@ -2317,16 +2342,19 @@ tryIt(function () {
 
 Determine the internal JavaScript [[Class]] of an object.
 
-|Name  |Type  |Desc                      |
-|------|------|--------------------------|
-|val   |*     |Value to get type         |
-|return|string|Type of object, lowercased|
+|Name          |Type   |Desc             |
+|--------------|-------|-----------------|
+|val           |*      |Value to get type|
+|lowerCase=true|boolean|LowerCase result |
+|return        |string |Type of object   |
 
 ```javascript
 type(5); // -> 'number'
 type({}); // -> 'object'
 type(function () {}); // -> 'function'
 type([]); // -> 'array'
+type([], false); // -> 'Array'
+type(async function () {}, false); // -> 'AsyncFunction'
 ```
 
 ## types 

@@ -83,42 +83,6 @@
         return exports;
     })({});
 
-    /* ------------------------------ allKeys ------------------------------ */
-
-    var allKeys = _.allKeys = (function (exports) {
-        /* Retrieve all the names of object's own and inherited properties.
-         *
-         * |Name  |Type  |Desc                       |
-         * |------|------|---------------------------|
-         * |obj   |object|Object to query            |
-         * |return|array |Array of all property names|
-         *
-         * Members of Object's prototype won't be retrieved.
-         */
-
-        /* example
-         * var obj = Object.create({zero: 0});
-         * obj.one = 1;
-         * allKeys(obj) // -> ['zero', 'one']
-         */
-
-        /* typescript
-         * export declare function allKeys(obj: any): string[];
-         */
-        exports = function exports(obj) {
-            var ret = [],
-                key;
-
-            for (key in obj) {
-                ret.push(key);
-            }
-
-            return ret;
-        };
-
-        return exports;
-    })({});
-
     /* ------------------------------ isUndef ------------------------------ */
 
     var isUndef = _.isUndef = (function (exports) {
@@ -496,7 +460,7 @@
          * |Name  |Type  |Desc            |
          * |------|------|----------------|
          * |val   |*     |Value to convert|
-         * |return|string|Resulted string |
+         * |return|string|Result string   |
          */
 
         /* example
@@ -644,6 +608,7 @@
         /* example
          * isFn(function() {}); // -> true
          * isFn(function*() {}); // -> true
+         * isFn(async function() {}); // -> true
          */
 
         /* typescript
@@ -658,8 +623,49 @@
             var objStr = objToStr(val);
             return (
                 objStr === '[object Function]' ||
-                objStr === '[object GeneratorFunction]'
+                objStr === '[object GeneratorFunction]' ||
+                objStr === '[object AsyncFunction]'
             );
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ getProto ------------------------------ */
+
+    var getProto = _.getProto = (function (exports) {
+        /* Get prototype of an object.
+         *
+         * |Name  |Type|Desc                                         |
+         * |------|----|---------------------------------------------|
+         * |obj   |*   |Target object                                |
+         * |return|*   |Prototype of given object, null if not exists|
+         */
+
+        /* example
+         * const a = {};
+         * getProto(Object.create(a)); // -> a
+         */
+
+        /* typescript
+         * export declare function getProto(obj: any): any;
+         */
+
+        /* dependencies
+         * isObj isFn 
+         */
+
+        var getPrototypeOf = Object.getPrototypeOf;
+        var ObjectCtr = {}.constructor;
+
+        exports = function exports(obj) {
+            if (!isObj(obj)) return null;
+            if (getPrototypeOf) return getPrototypeOf(obj);
+            var proto = obj.__proto__;
+            if (proto || proto === null) return proto;
+            if (isFn(obj.constructor)) return obj.constructor.prototype;
+            if (obj instanceof ObjectCtr) return ObjectCtr.prototype;
+            return null;
         };
 
         return exports;
@@ -987,35 +993,6 @@
                 return obj;
             };
         };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ defaults ------------------------------ */
-
-    var defaults = _.defaults = (function (exports) {
-        /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
-         *
-         * |Name  |Type  |Desc              |
-         * |------|------|------------------|
-         * |obj   |object|Destination object|
-         * |*src  |object|Sources objects   |
-         * |return|object|Destination object|
-         */
-
-        /* example
-         * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
-         */
-
-        /* typescript
-         * export declare function defaults(obj: any, ...src: any[]): any;
-         */
-
-        /* dependencies
-         * createAssigner allKeys 
-         */
-
-        exports = createAssigner(allKeys, true);
 
         return exports;
     })({});
@@ -1375,6 +1352,181 @@
         function resetStyle({ css, el }) {
           el.innerText = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
         }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ unique ------------------------------ */
+
+    var unique = _.unique = (function (exports) {
+        /* Create duplicate-free version of an array.
+         *
+         * |Name     |Type    |Desc                         |
+         * |---------|--------|-----------------------------|
+         * |arr      |array   |Array to inspect             |
+         * |[compare]|function|Function for comparing values|
+         * |return   |array   |New duplicate free array     |
+         */
+
+        /* example
+         * unique([1, 2, 3, 1]); // -> [1, 2, 3]
+         */
+
+        /* typescript
+         * export declare function unique(
+         *     arr: any[],
+         *     compare?: (a: any, b: any) => boolean | number
+         * ): any[];
+         */
+
+        /* dependencies
+         * filter 
+         */
+
+        exports = function exports(arr, compare) {
+            compare = compare || isEqual;
+            return filter(arr, function(item, idx, arr) {
+                var len = arr.length;
+
+                while (++idx < len) {
+                    if (compare(item, arr[idx])) return false;
+                }
+
+                return true;
+            });
+        };
+
+        function isEqual(a, b) {
+            return a === b;
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ allKeys ------------------------------ */
+
+    var allKeys = _.allKeys = (function (exports) {
+        /* Retrieve all the names of object's own and inherited properties.
+         *
+         * |Name     |Type  |Desc                       |
+         * |---------|------|---------------------------|
+         * |obj      |object|Object to query            |
+         * |[options]|object|Options                    |
+         * |return   |array |Array of all property names|
+         *
+         * Available options:
+         *
+         * |Name              |Type   |Desc                     |
+         * |------------------|-------|-------------------------|
+         * |prototype=true    |boolean|Include prototype keys   |
+         * |unenumerable=false|boolean|Include unenumerable keys|
+         * |symbol=false      |boolean|Include symbol keys      |
+         *
+         * Members of Object's prototype won't be retrieved.
+         */
+
+        /* example
+         * var obj = Object.create({zero: 0});
+         * obj.one = 1;
+         * allKeys(obj) // -> ['zero', 'one']
+         */
+
+        /* typescript
+         * export declare namespace allKeys {
+         *     interface IOptions {
+         *         prototype?: boolean;
+         *         unenumerable?: boolean;
+         *     }
+         * }
+         * export declare function allKeys(
+         *     obj: any,
+         *     options: { symbol: true } & allKeys.IOptions
+         * ): Array<string | Symbol>;
+         * export declare function allKeys(
+         *     obj: any,
+         *     options?: ({ symbol: false } & allKeys.IOptions) | allKeys.IOptions
+         * ): string[];
+         */
+
+        /* dependencies
+         * keys getProto unique 
+         */
+
+        var getOwnPropertyNames = Object.getOwnPropertyNames;
+        var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+
+        exports = function exports(obj) {
+            var _ref =
+                    arguments.length > 1 && arguments[1] !== undefined
+                        ? arguments[1]
+                        : {},
+                _ref$prototype = _ref.prototype,
+                prototype = _ref$prototype === void 0 ? true : _ref$prototype,
+                _ref$unenumerable = _ref.unenumerable,
+                unenumerable = _ref$unenumerable === void 0 ? false : _ref$unenumerable,
+                _ref$symbol = _ref.symbol,
+                symbol = _ref$symbol === void 0 ? false : _ref$symbol;
+
+            var ret = [];
+
+            if ((unenumerable || symbol) && getOwnPropertyNames) {
+                var getKeys = keys;
+                if (unenumerable && getOwnPropertyNames) getKeys = getOwnPropertyNames;
+
+                do {
+                    ret = ret.concat(getKeys(obj));
+
+                    if (symbol && getOwnPropertySymbols) {
+                        ret = ret.concat(getOwnPropertySymbols(obj));
+                    }
+                } while (
+                    prototype &&
+                    (obj = getProto(obj)) &&
+                    obj !== Object.prototype
+                );
+
+                ret = unique(ret);
+            } else {
+                if (prototype) {
+                    for (var key in obj) {
+                        ret.push(key);
+                    }
+                } else {
+                    ret = keys(obj);
+                }
+            }
+
+            return ret;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ defaults ------------------------------ */
+
+    var defaults = _.defaults = (function (exports) {
+        /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
+         *
+         * |Name  |Type  |Desc              |
+         * |------|------|------------------|
+         * |obj   |object|Destination object|
+         * |*src  |object|Sources objects   |
+         * |return|object|Destination object|
+         */
+
+        /* example
+         * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+         */
+
+        /* typescript
+         * export declare function defaults(obj: any, ...src: any[]): any;
+         */
+
+        /* dependencies
+         * createAssigner allKeys 
+         */
+
+        exports = createAssigner(allKeys, true);
 
         return exports;
     })({});

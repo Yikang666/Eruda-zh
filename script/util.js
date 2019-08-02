@@ -243,6 +243,7 @@ var isFn = _.isFn = (function (exports) {
     /* example
      * isFn(function() {}); // -> true
      * isFn(function*() {}); // -> true
+     * isFn(async function() {}); // -> true
      */
 
     /* typescript
@@ -257,7 +258,8 @@ var isFn = _.isFn = (function (exports) {
         var objStr = objToStr(val);
         return (
             objStr === '[object Function]' ||
-            objStr === '[object GeneratorFunction]'
+            objStr === '[object GeneratorFunction]' ||
+            objStr === '[object AsyncFunction]'
         );
     };
 

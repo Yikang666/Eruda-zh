@@ -4,42 +4,6 @@
 
 var _ = {};
 
-/* ------------------------------ allKeys ------------------------------ */
-
-export var allKeys = _.allKeys = (function (exports) {
-    /* Retrieve all the names of object's own and inherited properties.
-     *
-     * |Name  |Type  |Desc                       |
-     * |------|------|---------------------------|
-     * |obj   |object|Object to query            |
-     * |return|array |Array of all property names|
-     *
-     * Members of Object's prototype won't be retrieved.
-     */
-
-    /* example
-     * var obj = Object.create({zero: 0});
-     * obj.one = 1;
-     * allKeys(obj) // -> ['zero', 'one']
-     */
-
-    /* typescript
-     * export declare function allKeys(obj: any): string[];
-     */
-    exports = function exports(obj) {
-        var ret = [],
-            key;
-
-        for (key in obj) {
-            ret.push(key);
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ idxOf ------------------------------ */
 
 export var idxOf = _.idxOf = (function (exports) {
@@ -206,7 +170,7 @@ export var toStr = _.toStr = (function (exports) {
      * |Name  |Type  |Desc            |
      * |------|------|----------------|
      * |val   |*     |Value to convert|
-     * |return|string|Resulted string |
+     * |return|string|Result string   |
      */
 
     /* example
@@ -291,11 +255,59 @@ export var escapeJsonStr = _.escapeJsonStr = (function (exports) {
      * escapeJsStr 
      */
 
-    function exports(str) {
+    exports = function (str) {
       return escapeJsStr(str)
         .replace(/\\'/g, "'")
         .replace(/\t/g, '\\t')
     }
+
+    return exports;
+})({});
+
+/* ------------------------------ isObj ------------------------------ */
+
+export var isObj = _.isObj = (function (exports) {
+    function _typeof(obj) {
+        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
+            _typeof = function _typeof(obj) {
+                return typeof obj;
+            };
+        } else {
+            _typeof = function _typeof(obj) {
+                return obj &&
+                    typeof Symbol === 'function' &&
+                    obj.constructor === Symbol &&
+                    obj !== Symbol.prototype
+                    ? 'symbol'
+                    : typeof obj;
+            };
+        }
+        return _typeof(obj);
+    }
+
+    /* Check if value is the language type of Object.
+     *
+     * |Name  |Type   |Desc                      |
+     * |------|-------|--------------------------|
+     * |val   |*      |Value to check            |
+     * |return|boolean|True if value is an object|
+     *
+     * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+     */
+
+    /* example
+     * isObj({}); // -> true
+     * isObj([]); // -> true
+     */
+
+    /* typescript
+     * export declare function isObj(val: any): boolean;
+     */
+    exports = function exports(val) {
+        var type = _typeof(val);
+
+        return !!val && (type === 'function' || type === 'object');
+    };
 
     return exports;
 })({});
@@ -412,6 +424,115 @@ export var isArgs = _.isArgs = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isFn ------------------------------ */
+
+export var isFn = _.isFn = (function (exports) {
+    /* Check if value is a function.
+     *
+     * |Name  |Type   |Desc                       |
+     * |------|-------|---------------------------|
+     * |val   |*      |Value to check             |
+     * |return|boolean|True if value is a function|
+     *
+     * Generator function is also classified as true.
+     */
+
+    /* example
+     * isFn(function() {}); // -> true
+     * isFn(function*() {}); // -> true
+     * isFn(async function() {}); // -> true
+     */
+
+    /* typescript
+     * export declare function isFn(val: any): boolean;
+     */
+
+    /* dependencies
+     * objToStr 
+     */
+
+    exports = function exports(val) {
+        var objStr = objToStr(val);
+        return (
+            objStr === '[object Function]' ||
+            objStr === '[object GeneratorFunction]' ||
+            objStr === '[object AsyncFunction]'
+        );
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ getProto ------------------------------ */
+
+export var getProto = _.getProto = (function (exports) {
+    /* Get prototype of an object.
+     *
+     * |Name  |Type|Desc                                         |
+     * |------|----|---------------------------------------------|
+     * |obj   |*   |Target object                                |
+     * |return|*   |Prototype of given object, null if not exists|
+     */
+
+    /* example
+     * const a = {};
+     * getProto(Object.create(a)); // -> a
+     */
+
+    /* typescript
+     * export declare function getProto(obj: any): any;
+     */
+
+    /* dependencies
+     * isObj isFn 
+     */
+
+    var getPrototypeOf = Object.getPrototypeOf;
+    var ObjectCtr = {}.constructor;
+
+    exports = function exports(obj) {
+        if (!isObj(obj)) return null;
+        if (getPrototypeOf) return getPrototypeOf(obj);
+        var proto = obj.__proto__;
+        if (proto || proto === null) return proto;
+        if (isFn(obj.constructor)) return obj.constructor.prototype;
+        if (obj instanceof ObjectCtr) return ObjectCtr.prototype;
+        return null;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ isStr ------------------------------ */
+
+export var isStr = _.isStr = (function (exports) {
+    /* Check if value is a string primitive.
+     *
+     * |Name  |Type   |Desc                               |
+     * |------|-------|-----------------------------------|
+     * |val   |*      |Value to check                     |
+     * |return|boolean|True if value is a string primitive|
+     */
+
+    /* example
+     * isStr('licia'); // -> true
+     */
+
+    /* typescript
+     * export declare function isStr(val: any): boolean;
+     */
+
+    /* dependencies
+     * objToStr 
+     */
+
+    exports = function exports(val) {
+        return objToStr(val) === '[object String]';
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ isArr ------------------------------ */
 
 export var isArr = _.isArr = (function (exports) {
@@ -472,43 +593,6 @@ export var isNum = _.isNum = (function (exports) {
 
     exports = function exports(val) {
         return objToStr(val) === '[object Number]';
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ isFn ------------------------------ */
-
-export var isFn = _.isFn = (function (exports) {
-    /* Check if value is a function.
-     *
-     * |Name  |Type   |Desc                       |
-     * |------|-------|---------------------------|
-     * |val   |*      |Value to check             |
-     * |return|boolean|True if value is a function|
-     *
-     * Generator function is also classified as true.
-     */
-
-    /* example
-     * isFn(function() {}); // -> true
-     * isFn(function*() {}); // -> true
-     */
-
-    /* typescript
-     * export declare function isFn(val: any): boolean;
-     */
-
-    /* dependencies
-     * objToStr 
-     */
-
-    exports = function exports(val) {
-        var objStr = objToStr(val);
-        return (
-            objStr === '[object Function]' ||
-            objStr === '[object GeneratorFunction]'
-        );
     };
 
     return exports;
@@ -775,35 +859,6 @@ export var createAssigner = _.createAssigner = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ extend ------------------------------ */
-
-export var extend = _.extend = (function (exports) {
-    /* Copy all of the properties in the source objects over to the destination object.
-     *
-     * |Name       |Type  |Desc              |
-     * |-----------|------|------------------|
-     * |destination|object|Destination object|
-     * |...sources |object|Sources objects   |
-     * |return     |object|Destination object|
-     */
-
-    /* example
-     * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
-     */
-
-    /* typescript
-     * export declare function extend(destination: any, ...sources: any[]): any;
-     */
-
-    /* dependencies
-     * createAssigner allKeys 
-     */
-
-    exports = createAssigner(allKeys);
-
-    return exports;
-})({});
-
 /* ------------------------------ values ------------------------------ */
 
 export var values = _.values = (function (exports) {
@@ -843,27 +898,32 @@ export var values = _.values = (function (exports) {
 export var contain = _.contain = (function (exports) {
     /* Check if the value is present in the list.
      *
-     * |Name  |Type        |Desc                                |
-     * |------|------------|------------------------------------|
-     * |target|array object|Target object                       |
-     * |value |*           |Value to check                      |
-     * |return|boolean     |True if value is present in the list|
+     * |Name  |Type               |Desc                                |
+     * |------|-------------------|------------------------------------|
+     * |target|array object string|Target object                       |
+     * |value |*                  |Value to check                      |
+     * |return|boolean            |True if value is present in the list|
      */
 
     /* example
      * contain([1, 2, 3], 1); // -> true
      * contain({a: 1, b: 2}, 1); // -> true
+     * contain('abc', 'a'); // -> true
      */
 
     /* typescript
-     * export declare function contain(arr: any[] | {}, val: any): boolean;
+     * export declare function contain(
+     *     arr: any[] | {} | string,
+     *     val: any
+     * ): boolean;
      */
 
     /* dependencies
-     * idxOf isArrLike values 
+     * idxOf isStr isArrLike values 
      */
 
     exports = function exports(arr, val) {
+        if (isStr(arr)) return arr.indexOf(val) > -1;
         if (!isArrLike(arr)) arr = values(arr);
         return idxOf(arr, val) >= 0;
     };
@@ -896,36 +956,6 @@ export var extendOwn = _.extendOwn = (function (exports) {
      */
 
     exports = createAssigner(keys);
-
-    return exports;
-})({});
-
-/* ------------------------------ isStr ------------------------------ */
-
-export var isStr = _.isStr = (function (exports) {
-    /* Check if value is a string primitive.
-     *
-     * |Name  |Type   |Desc                               |
-     * |------|-------|-----------------------------------|
-     * |val   |*      |Value to check                     |
-     * |return|boolean|True if value is a string primitive|
-     */
-
-    /* example
-     * isStr('licia'); // -> true
-     */
-
-    /* typescript
-     * export declare function isStr(val: any): boolean;
-     */
-
-    /* dependencies
-     * objToStr 
-     */
-
-    exports = function exports(val) {
-        return objToStr(val) === '[object String]';
-    };
 
     return exports;
 })({});
@@ -1005,54 +1035,6 @@ export var isMatch = _.isMatch = (function (exports) {
         }
 
         return true;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ isObj ------------------------------ */
-
-export var isObj = _.isObj = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
-    /* Check if value is the language type of Object.
-     *
-     * |Name  |Type   |Desc                      |
-     * |------|-------|--------------------------|
-     * |val   |*      |Value to check            |
-     * |return|boolean|True if value is an object|
-     *
-     * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
-     */
-
-    /* example
-     * isObj({}); // -> true
-     * isObj([]); // -> true
-     */
-
-    /* typescript
-     * export declare function isObj(val: any): boolean;
-     */
-    exports = function exports(val) {
-        var type = _typeof(val);
-
-        return !!val && (type === 'function' || type === 'object');
     };
 
     return exports;
@@ -1223,6 +1205,181 @@ export var filter = _.filter = (function (exports) {
         });
         return ret;
     };
+
+    return exports;
+})({});
+
+/* ------------------------------ unique ------------------------------ */
+
+export var unique = _.unique = (function (exports) {
+    /* Create duplicate-free version of an array.
+     *
+     * |Name     |Type    |Desc                         |
+     * |---------|--------|-----------------------------|
+     * |arr      |array   |Array to inspect             |
+     * |[compare]|function|Function for comparing values|
+     * |return   |array   |New duplicate free array     |
+     */
+
+    /* example
+     * unique([1, 2, 3, 1]); // -> [1, 2, 3]
+     */
+
+    /* typescript
+     * export declare function unique(
+     *     arr: any[],
+     *     compare?: (a: any, b: any) => boolean | number
+     * ): any[];
+     */
+
+    /* dependencies
+     * filter 
+     */
+
+    exports = function exports(arr, compare) {
+        compare = compare || isEqual;
+        return filter(arr, function(item, idx, arr) {
+            var len = arr.length;
+
+            while (++idx < len) {
+                if (compare(item, arr[idx])) return false;
+            }
+
+            return true;
+        });
+    };
+
+    function isEqual(a, b) {
+        return a === b;
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ allKeys ------------------------------ */
+
+export var allKeys = _.allKeys = (function (exports) {
+    /* Retrieve all the names of object's own and inherited properties.
+     *
+     * |Name     |Type  |Desc                       |
+     * |---------|------|---------------------------|
+     * |obj      |object|Object to query            |
+     * |[options]|object|Options                    |
+     * |return   |array |Array of all property names|
+     *
+     * Available options:
+     *
+     * |Name              |Type   |Desc                     |
+     * |------------------|-------|-------------------------|
+     * |prototype=true    |boolean|Include prototype keys   |
+     * |unenumerable=false|boolean|Include unenumerable keys|
+     * |symbol=false      |boolean|Include symbol keys      |
+     *
+     * Members of Object's prototype won't be retrieved.
+     */
+
+    /* example
+     * var obj = Object.create({zero: 0});
+     * obj.one = 1;
+     * allKeys(obj) // -> ['zero', 'one']
+     */
+
+    /* typescript
+     * export declare namespace allKeys {
+     *     interface IOptions {
+     *         prototype?: boolean;
+     *         unenumerable?: boolean;
+     *     }
+     * }
+     * export declare function allKeys(
+     *     obj: any,
+     *     options: { symbol: true } & allKeys.IOptions
+     * ): Array<string | Symbol>;
+     * export declare function allKeys(
+     *     obj: any,
+     *     options?: ({ symbol: false } & allKeys.IOptions) | allKeys.IOptions
+     * ): string[];
+     */
+
+    /* dependencies
+     * keys getProto unique 
+     */
+
+    var getOwnPropertyNames = Object.getOwnPropertyNames;
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+
+    exports = function exports(obj) {
+        var _ref =
+                arguments.length > 1 && arguments[1] !== undefined
+                    ? arguments[1]
+                    : {},
+            _ref$prototype = _ref.prototype,
+            prototype = _ref$prototype === void 0 ? true : _ref$prototype,
+            _ref$unenumerable = _ref.unenumerable,
+            unenumerable = _ref$unenumerable === void 0 ? false : _ref$unenumerable,
+            _ref$symbol = _ref.symbol,
+            symbol = _ref$symbol === void 0 ? false : _ref$symbol;
+
+        var ret = [];
+
+        if ((unenumerable || symbol) && getOwnPropertyNames) {
+            var getKeys = keys;
+            if (unenumerable && getOwnPropertyNames) getKeys = getOwnPropertyNames;
+
+            do {
+                ret = ret.concat(getKeys(obj));
+
+                if (symbol && getOwnPropertySymbols) {
+                    ret = ret.concat(getOwnPropertySymbols(obj));
+                }
+            } while (
+                prototype &&
+                (obj = getProto(obj)) &&
+                obj !== Object.prototype
+            );
+
+            ret = unique(ret);
+        } else {
+            if (prototype) {
+                for (var key in obj) {
+                    ret.push(key);
+                }
+            } else {
+                ret = keys(obj);
+            }
+        }
+
+        return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ extend ------------------------------ */
+
+export var extend = _.extend = (function (exports) {
+    /* Copy all of the properties in the source objects over to the destination object.
+     *
+     * |Name       |Type  |Desc              |
+     * |-----------|------|------------------|
+     * |destination|object|Destination object|
+     * |...sources |object|Sources objects   |
+     * |return     |object|Destination object|
+     */
+
+    /* example
+     * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+     */
+
+    /* typescript
+     * export declare function extend(destination: any, ...sources: any[]): any;
+     */
+
+    /* dependencies
+     * createAssigner allKeys 
+     */
+
+    exports = createAssigner(allKeys);
 
     return exports;
 })({});
