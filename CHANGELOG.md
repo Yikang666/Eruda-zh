@@ -1,3 +1,7 @@
+## v1.5.8 (2 Aug 2019)
+
+* fix: safeStorage undefined #108
+
 ## v1.5.7 (15 Jul 2019)
 
 * Fix iOS max log number
