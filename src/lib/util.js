@@ -1017,6 +1017,62 @@ export var detectOs = _.detectOs = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ restArgs ------------------------------ */
+
+export var restArgs = _.restArgs = (function (exports) {
+    /* This accumulates the arguments passed into an array, after a given index.
+     *
+     * |Name        |Type    |Desc                                   |
+     * |------------|--------|---------------------------------------|
+     * |function    |function|Function that needs rest parameters    |
+     * |[startIndex]|number  |The start index to accumulates         |
+     * |return      |function|Generated function with rest parameters|
+     */
+
+    /* example
+     * var paramArr = restArgs(function (rest) { return rest });
+     * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+     */
+
+    /* typescript
+     * export declare function restArgs(fn: Function, startIndex?: number): Function;
+     */
+    exports = function exports(fn, startIdx) {
+        startIdx = startIdx == null ? fn.length - 1 : +startIdx;
+        return function() {
+            var len = Math.max(arguments.length - startIdx, 0),
+                rest = new Array(len),
+                i;
+
+            for (i = 0; i < len; i++) {
+                rest[i] = arguments[i + startIdx];
+            } // Call runs faster than apply.
+
+            switch (startIdx) {
+                case 0:
+                    return fn.call(this, rest);
+
+                case 1:
+                    return fn.call(this, arguments[0], rest);
+
+                case 2:
+                    return fn.call(this, arguments[0], arguments[1], rest);
+            }
+
+            var args = new Array(startIdx + 1);
+
+            for (i = 0; i < startIdx; i++) {
+                args[i] = arguments[i];
+            }
+
+            args[startIdx] = rest;
+            return fn.apply(this, args);
+        };
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ optimizeCb ------------------------------ */
 
 export var optimizeCb = _.optimizeCb = (function (exports) {
@@ -1565,6 +1621,49 @@ export var safeGet = _.safeGet = (function (exports) {
 
         return obj;
     };
+
+    return exports;
+})({});
+
+/* ------------------------------ flatten ------------------------------ */
+
+export var flatten = _.flatten = (function (exports) {
+    /* Recursively flatten an array.
+     *
+     * |Name  |Type |Desc               |
+     * |------|-----|-------------------|
+     * |arr   |array|Array to flatten   |
+     * |return|array|New flattened array|
+     */
+
+    /* example
+     * flatten(['a', ['b', ['c']], 'd', ['e']]); // -> ['a', 'b', 'c', 'd', 'e']
+     */
+
+    /* typescript
+     * export declare function flatten(arr: any[]): any[];
+     */
+
+    /* dependencies
+     * isArr 
+     */
+
+    exports = function exports(arr) {
+        return flat(arr, []);
+    };
+
+    function flat(arr, res) {
+        var len = arr.length,
+            i = -1,
+            cur;
+
+        while (len--) {
+            cur = arr[++i];
+            isArr(cur) ? flat(cur, res) : res.push(cur);
+        }
+
+        return res;
+    }
 
     return exports;
 })({});
@@ -2536,6 +2635,37 @@ export var isNull = _.isNull = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isPromise ------------------------------ */
+
+export var isPromise = _.isPromise = (function (exports) {
+    /* Check if value looks like a promise.
+     *
+     * |Name  |Type   |Desc                              |
+     * |------|-------|----------------------------------|
+     * |val   |*      |Value to check                    |
+     * |return|boolean|True if value looks like a promise|
+     */
+
+    /* example
+     * isPromise(new Promise(function () {})); // -> true
+     * isPromise({}); // -> false
+     */
+
+    /* typescript
+     * export declare function isPromise(val: any): boolean;
+     */
+
+    /* dependencies
+     * isObj isFn 
+     */
+
+    exports = function exports(val) {
+        return isObj(val) && isFn(val.then);
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ isRegExp ------------------------------ */
 
 export var isRegExp = _.isRegExp = (function (exports) {
@@ -3064,6 +3194,40 @@ export var filter = _.filter = (function (exports) {
         });
         return ret;
     };
+
+    return exports;
+})({});
+
+/* ------------------------------ difference ------------------------------ */
+
+export var difference = _.difference = (function (exports) {
+    /* Create an array of unique array values not included in the other given array.
+     *
+     * |Name     |Type |Desc                        |
+     * |---------|-----|----------------------------|
+     * |arr      |array|Array to inspect            |
+     * |[...rest]|array|Values to exclude           |
+     * |return   |array|New array of filtered values|
+     */
+
+    /* example
+     * difference([3, 2, 1], [4, 2]); // -> [3, 1]
+     */
+
+    /* typescript
+     * export declare function difference(arr: any[], ...rest: any[]): any[];
+     */
+
+    /* dependencies
+     * restArgs flatten filter contain 
+     */
+
+    exports = restArgs(function(arr, rest) {
+        rest = flatten(rest);
+        return filter(arr, function(val) {
+            return !contain(rest, val);
+        });
+    });
 
     return exports;
 })({});
@@ -5869,62 +6033,6 @@ export var now = _.now = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ restArgs ------------------------------ */
-
-export var restArgs = _.restArgs = (function (exports) {
-    /* This accumulates the arguments passed into an array, after a given index.
-     *
-     * |Name        |Type    |Desc                                   |
-     * |------------|--------|---------------------------------------|
-     * |function    |function|Function that needs rest parameters    |
-     * |[startIndex]|number  |The start index to accumulates         |
-     * |return      |function|Generated function with rest parameters|
-     */
-
-    /* example
-     * var paramArr = restArgs(function (rest) { return rest });
-     * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
-     */
-
-    /* typescript
-     * export declare function restArgs(fn: Function, startIndex?: number): Function;
-     */
-    exports = function exports(fn, startIdx) {
-        startIdx = startIdx == null ? fn.length - 1 : +startIdx;
-        return function() {
-            var len = Math.max(arguments.length - startIdx, 0),
-                rest = new Array(len),
-                i;
-
-            for (i = 0; i < len; i++) {
-                rest[i] = arguments[i + startIdx];
-            } // Call runs faster than apply.
-
-            switch (startIdx) {
-                case 0:
-                    return fn.call(this, rest);
-
-                case 1:
-                    return fn.call(this, arguments[0], rest);
-
-                case 2:
-                    return fn.call(this, arguments[0], arguments[1], rest);
-            }
-
-            var args = new Array(startIdx + 1);
-
-            for (i = 0; i < startIdx; i++) {
-                args[i] = arguments[i];
-            }
-
-            args[startIdx] = rest;
-            return fn.apply(this, args);
-        };
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ partial ------------------------------ */
 
 export var partial = _.partial = (function (exports) {
@@ -7438,6 +7546,335 @@ export var LocalStore = _.LocalStore = (function (exports) {
         save: function save(data) {
             if (isEmpty(data)) return localStorage.removeItem(this._name);
             localStorage.setItem(this._name, stringify(data));
+        }
+    });
+
+    return exports;
+})({});
+
+/* ------------------------------ stringifyAll ------------------------------ */
+
+export var stringifyAll = _.stringifyAll = (function (exports) {
+    function _typeof(obj) {
+        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
+            _typeof = function _typeof(obj) {
+                return typeof obj;
+            };
+        } else {
+            _typeof = function _typeof(obj) {
+                return obj &&
+                    typeof Symbol === 'function' &&
+                    obj.constructor === Symbol &&
+                    obj !== Symbol.prototype
+                    ? 'symbol'
+                    : typeof obj;
+            };
+        }
+        return _typeof(obj);
+    }
+
+    /* Stringify object into json with types.
+     *
+     * |Name     |Type  |Desc               |
+     * |---------|------|-------------------|
+     * |obj      |*     |Object to stringify|
+     * |[options]|object|Stringify options  |
+     * |return   |string|Stringified object |
+     *
+     * Available options:
+     *
+     * |Name              |Type   |Desc                     |
+     * |------------------|-------|-------------------------|
+     * |unenumerable=false|boolean|Include unenumerable keys|
+     * |symbol=false      |boolean|Include symbol keys      |
+     * |accessGetter=false|boolean|Access getter value      |
+     * |timeout=0         |number |Timeout of stringify     |
+     * |depth=0           |number |Max depth of recursion   |
+     *
+     * When time is out, all remaining values will all be "Timeout".
+     */
+
+    /* example
+     * stringifyAll(function test() {}); // -> '{"value":"function test() {}","type":"Function",...}'
+     */
+
+    /* typescript
+     * export declare namespace stringifyAll {
+     *     interface IOptions {
+     *         unenumerable?: boolean;
+     *         symbol?: boolean;
+     *         accessGetter?: boolean;
+     *         timeout?: number;
+     *         depth?: number;
+     *     }
+     * }
+     * export declare function stringifyAll(
+     *     obj: any,
+     *     options?: stringifyAll.IOptions
+     * ): string;
+     */
+
+    /* dependencies
+     * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys 
+     */
+
+    exports = (function(_exports) {
+        function exports(_x) {
+            return _exports.apply(this, arguments);
+        }
+
+        exports.toString = function() {
+            return _exports.toString();
+        };
+
+        return exports;
+    })(function(obj) {
+        var _ref =
+                arguments.length > 1 && arguments[1] !== undefined
+                    ? arguments[1]
+                    : {},
+            self = _ref.self,
+            _ref$startTime = _ref.startTime,
+            startTime = _ref$startTime === void 0 ? now() : _ref$startTime,
+            _ref$timeout = _ref.timeout,
+            timeout = _ref$timeout === void 0 ? 0 : _ref$timeout,
+            _ref$depth = _ref.depth,
+            depth = _ref$depth === void 0 ? 0 : _ref$depth,
+            _ref$curDepth = _ref.curDepth,
+            curDepth = _ref$curDepth === void 0 ? 1 : _ref$curDepth,
+            _ref$visitor = _ref.visitor,
+            visitor = _ref$visitor === void 0 ? new Visitor() : _ref$visitor,
+            _ref$unenumerable = _ref.unenumerable,
+            unenumerable = _ref$unenumerable === void 0 ? false : _ref$unenumerable,
+            _ref$symbol = _ref.symbol,
+            symbol = _ref$symbol === void 0 ? false : _ref$symbol,
+            _ref$accessGetter = _ref.accessGetter,
+            accessGetter = _ref$accessGetter === void 0 ? false : _ref$accessGetter;
+
+        var json = '';
+        var options = {
+            visitor: visitor,
+            unenumerable: unenumerable,
+            symbol: symbol,
+            accessGetter: accessGetter,
+            depth: depth,
+            curDepth: curDepth + 1,
+            timeout: timeout,
+            startTime: startTime
+        };
+        var t = type(obj, false);
+
+        if (t === 'String') {
+            json = wrapStr(obj);
+        } else if (t === 'Number') {
+            json = toStr(obj);
+
+            if (endWith(json, 'Infinity')) {
+                json = '{"value":"'.concat(json, '","type":"Number"}');
+            }
+        } else if (t === 'NaN') {
+            json = '{"value":"NaN","type":"Number"}';
+        } else if (t === 'Boolean') {
+            json = obj ? 'true' : 'false';
+        } else if (t === 'Null') {
+            json = 'null';
+        } else if (t === 'Undefined') {
+            json = '{"type":"Undefined"}';
+        } else if (t === 'Symbol') {
+            var val = 'Symbol';
+
+            try {
+                val = toStr(obj);
+                /* eslint-disable no-empty */
+            } catch (e) {}
+
+            json = '{"value":'.concat(wrapStr(val), ',"type":"Symbol"}');
+        } else {
+            if (timeout && now() - startTime > timeout) {
+                return wrapStr('Timeout');
+            }
+
+            if (depth && curDepth > depth) {
+                return wrapStr('{...}');
+            }
+
+            json = '{';
+            var parts = [];
+            var visitedObj = visitor.get(obj);
+            var id;
+
+            if (visitedObj) {
+                id = visitedObj.id;
+                parts.push('"reference":'.concat(id));
+            } else {
+                id = visitor.set(obj);
+                parts.push('"id":'.concat(id));
+            }
+
+            parts.push('"type":"'.concat(t, '"'));
+
+            if (endWith(t, 'Function')) {
+                parts.push('"value":'.concat(wrapStr(toSrc(obj))));
+            } else if (t === 'RegExp') {
+                parts.push('"value":'.concat(wrapStr(obj)));
+            }
+
+            if (!visitedObj) {
+                var enumerableKeys = keys(obj);
+
+                if (enumerableKeys.length) {
+                    parts.push(
+                        iterateObj(
+                            'enumerable',
+                            enumerableKeys,
+                            self || obj,
+                            options
+                        )
+                    );
+                }
+
+                if (unenumerable) {
+                    var unenumerableKeys = difference(
+                        allKeys(obj, {
+                            prototype: false,
+                            unenumerable: true
+                        }),
+                        enumerableKeys
+                    );
+
+                    if (unenumerableKeys.length) {
+                        parts.push(
+                            iterateObj(
+                                'unenumerable',
+                                unenumerableKeys,
+                                self || obj,
+                                options
+                            )
+                        );
+                    }
+                }
+
+                if (symbol) {
+                    var symbolKeys = filter(
+                        allKeys(obj, {
+                            prototype: false,
+                            symbol: true
+                        }),
+                        function(key) {
+                            return _typeof(key) === 'symbol';
+                        }
+                    );
+
+                    if (symbolKeys.length) {
+                        parts.push(
+                            iterateObj('symbol', symbolKeys, self || obj, options)
+                        );
+                    }
+                }
+
+                var prototype = getProto(obj);
+
+                if (prototype) {
+                    var proto = '"proto":'.concat(
+                        exports(
+                            prototype,
+                            extend(options, {
+                                self: self || obj
+                            })
+                        )
+                    );
+                    parts.push(proto);
+                }
+            }
+
+            json += parts.join(',') + '}';
+        }
+
+        return json;
+    });
+
+    function iterateObj(name, keys, obj, options) {
+        var parts = [];
+        each(keys, function(key) {
+            var val;
+            var descriptor = Object.getOwnPropertyDescriptor(obj, key);
+            var hasGetter = descriptor && descriptor.get;
+            var hasSetter = descriptor && descriptor.set;
+
+            if (!options.accessGetter && hasGetter) {
+                val = '(...)';
+            } else {
+                try {
+                    val = obj[key];
+
+                    if (isPromise(val)) {
+                        val.catch(function() {});
+                    }
+                } catch (e) {
+                    val = e.message;
+                }
+            }
+
+            parts.push(''.concat(wrapKey(key), ':').concat(exports(val, options)));
+
+            if (hasGetter) {
+                parts.push(
+                    ''
+                        .concat(wrapKey('get ' + toStr(key)), ':')
+                        .concat(exports(descriptor.get, options))
+                );
+            }
+
+            if (hasSetter) {
+                parts.push(
+                    ''
+                        .concat(wrapKey('set ' + toStr(key)), ':')
+                        .concat(exports(descriptor.set, options))
+                );
+            }
+        });
+        return '"'.concat(name, '":{') + parts.join(',') + '}';
+    }
+
+    function wrapKey(key) {
+        return '"'.concat(escapeJsonStr(key), '"');
+    }
+
+    function wrapStr(str) {
+        return '"'.concat(escapeJsonStr(toStr(str)), '"');
+    }
+
+    function escapeJsonStr(str) {
+        return escapeJsStr(str)
+            .replace(/\\'/g, "'")
+            .replace(/\t/g, '\\t');
+    }
+
+    var Visitor = Class({
+        initialize: function initialize() {
+            this.id = 0;
+            this.visited = [];
+        },
+        set: function set(val) {
+            var visited = this.visited,
+                id = this.id;
+            var obj = {
+                id: id,
+                val: val
+            };
+            visited.push(obj);
+            this.id++;
+            return id;
+        },
+        get: function get(val) {
+            var visited = this.visited;
+
+            for (var i = 0, len = visited.length; i < len; i++) {
+                var obj = visited[i];
+                if (val === obj.val) return obj;
+            }
+
+            return false;
         }
     });
 

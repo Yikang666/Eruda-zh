@@ -1,6 +1,5 @@
-import stringify from '../lib/stringify'
 import StringifyWorker from '../lib/stringifyWorker'
-import { nextTick, uniqId, tryIt } from '../lib/util'
+import { nextTick, uniqId, tryIt, stringifyAll } from '../lib/util'
 
 let isWorkerSupported = !!window.Worker
 
@@ -38,7 +37,7 @@ function exports(obj, options, cb) {
     }
   }
 
-  let result = stringify(obj, options)
+  let result = stringifyAll(obj, options)
   nextTick(() => cb(result))
 }
 

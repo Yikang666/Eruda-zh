@@ -1076,6 +1076,20 @@ if (detectOs() === 'ios') {
 }
 ```
 
+## difference 
+
+Create an array of unique array values not included in the other given array.
+
+|Name     |Type |Desc                        |
+|---------|-----|----------------------------|
+|arr      |array|Array to inspect            |
+|[...rest]|array|Values to exclude           |
+|return   |array|New array of filtered values|
+
+```javascript
+difference([3, 2, 1], [4, 2]); // -> [3, 1]
+```
+
 ## each 
 
 Iterate over elements of collection and invokes iterator for each element.
@@ -1213,6 +1227,19 @@ Iterates over elements of collection, returning an array of all the values that 
 filter([1, 2, 3, 4, 5], function (val) {
     return val % 2 === 0;
 }); // -> [2, 4]
+```
+
+## flatten 
+
+Recursively flatten an array.
+
+|Name  |Type |Desc               |
+|------|-----|-------------------|
+|arr   |array|Array to flatten   |
+|return|array|New flattened array|
+
+```javascript
+flatten(['a', ['b', ['c']], 'd', ['e']]); // -> ['a', 'b', 'c', 'd', 'e']
 ```
 
 ## freeze 
@@ -1600,6 +1627,20 @@ Check if value is the language type of Object.
 ```javascript
 isObj({}); // -> true
 isObj([]); // -> true
+```
+
+## isPromise 
+
+Check if value looks like a promise.
+
+|Name  |Type   |Desc                              |
+|------|-------|----------------------------------|
+|val   |*      |Value to check                    |
+|return|boolean|True if value looks like a promise|
+
+```javascript
+isPromise(new Promise(function () {})); // -> true
+isPromise({}); // -> false
 ```
 
 ## isRegExp 
@@ -2217,6 +2258,32 @@ stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
 var obj = {a: 1, b: {}};
 obj.b = obj;
 stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
+```
+
+## stringifyAll 
+
+Stringify object into json with types.
+
+|Name     |Type  |Desc               |
+|---------|------|-------------------|
+|obj      |*     |Object to stringify|
+|[options]|object|Stringify options  |
+|return   |string|Stringified object |
+
+Available options:
+
+|Name              |Type   |Desc                     |
+|------------------|-------|-------------------------|
+|unenumerable=false|boolean|Include unenumerable keys|
+|symbol=false      |boolean|Include symbol keys      |
+|accessGetter=false|boolean|Access getter value      |
+|timeout=0         |number |Timeout of stringify     |
+|depth=0           |number |Max depth of recursion   |
+
+When time is out, all remaining values will all be "Timeout".
+
+```javascript
+stringifyAll(function test() {}); // -> '{"value":"function test() {}","type":"Function",...}'
 ```
 
 ## stripHtmlTag 

@@ -100,7 +100,7 @@ export default function getAbstract(
   } else if (isRegExp) {
     json = wrapRegExp(escapeJsonStr(obj.toString()))
   } else if (isFn) {
-    json = wrapStr('function')
+    json = wrapStr('ƒ')
   } else if (isArr) {
     if (doStringify) {
       json = '['
@@ -174,7 +174,7 @@ export default function getAbstract(
   return json
 }
 
-const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'function']
+const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'ƒ']
 
 function canBeProto(obj) {
   let emptyObj = isEmpty(Object.getOwnPropertyNames(obj))

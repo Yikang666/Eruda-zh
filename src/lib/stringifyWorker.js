@@ -1,7 +1,7 @@
-import stringify from './stringify'
+import { stringifyAll } from './stringifyUtil'
 
 onmessage = function(e) {
   let [id, obj, options] = e.data
-  let result = stringify(obj, options)
+  let result = stringifyAll(obj, options)
   postMessage([id, result])
 }

@@ -1,6 +1,5 @@
 import Tool from '../DevTools/Tool'
 import CssStore from './CssStore'
-import stringify from '../lib/stringify'
 import Highlight from './Highlight'
 import Select from './Select'
 import Settings from '../Settings/Settings'
@@ -22,7 +21,8 @@ import {
   safeGet,
   pxToNum,
   isNaN,
-  isNum
+  isNum,
+  stringifyAll
 } from '../lib/util'
 
 export default class Elements extends Tool {
@@ -171,7 +171,12 @@ export default class Elements extends Tool {
         let data = this._elData
 
         if (!data) {
-          data = stringify(this._curEl, { getterVal: true })
+          data = stringifyAll(this._curEl, {
+            unenumerable: true,
+            symbol: true,
+            accessGetter: true,
+            timeout: 1000
+          })
           data = JSON.parse(data)
         }
         let sources = container.get('sources')

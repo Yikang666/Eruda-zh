@@ -13,7 +13,7 @@ module.exports = {
     format: 'es'
   },
   stringify: {
-    files: 'src/lib/stringify.js',
+    files: 'src/lib/stringifyWorker.js',
     output: 'src/lib/stringifyUtil.js',
     format: 'es'
   },

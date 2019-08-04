@@ -425,8 +425,10 @@ let render = data => tpl(data)
 
 function extractObj(obj, options = {}, cb) {
   defaults(options, {
-    getterVal: Log.showGetterVal,
-    unenumerable: Log.showUnenumerable
+    accessGetter: Log.showGetterVal,
+    unenumerable: Log.showUnenumerable,
+    symbol: Log.showUnenumerable,
+    timeout: 1000
   })
 
   stringify(obj, options, result => cb(JSON.parse(result)))
