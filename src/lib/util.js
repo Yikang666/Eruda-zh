@@ -2734,6 +2734,36 @@ export var loadJs = _.loadJs = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ lowerCase ------------------------------ */
+
+export var lowerCase = _.lowerCase = (function (exports) {
+    /* Convert string to lower case.
+     *
+     * |Name  |Type  |Desc              |
+     * |------|------|------------------|
+     * |str   |string|String to convert |
+     * |return|string|Lower cased string|
+     */
+
+    /* example
+     * lowerCase('TEST'); // -> 'test'
+     */
+
+    /* typescript
+     * export declare function lowerCase(str: string): string;
+     */
+
+    /* dependencies
+     * toStr 
+     */
+
+    exports = function exports(str) {
+        return toStr(str).toLocaleLowerCase();
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ repeat ------------------------------ */
 
 export var repeat = _.repeat = (function (exports) {

@@ -15,7 +15,8 @@ import {
   isNum,
   isBool,
   keys,
-  trim
+  trim,
+  lowerCase
 } from './util'
 
 export default class JsonViewer {
@@ -83,11 +84,15 @@ export default class JsonViewer {
 
     if (val === null) {
       return `<li>${wrapKey(key)}<span class="eruda-null">null</span></li>`
-    } else if (type === 'Number' || isNum(val) || isBool(val)) {
+    } else if (val.type === 'Number' || isNum(val) || isBool(val)) {
       return `<li>${wrapKey(key)}<span class="eruda-${typeof val}">${encode(
         val
       )}</span></li>`
-    } else if (type === 'Undefined' || val === 'Symbol' || val === '(...)') {
+    } else if (val.type === 'Undefined' || val.type === 'Symbol') {
+      return `<li>${wrapKey(key)}<span class="eruda-special">${lowerCase(
+        val.type
+      )}</span></li>`
+    } else if (val === '(...)') {
       return `<li>${wrapKey(key)}<span class="eruda-special">${val}</span></li>`
     } else if (isObj(val)) {
       id = val.id

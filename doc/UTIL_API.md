@@ -1740,6 +1740,19 @@ loadJs('main.js', function (isLoaded) {
 });
 ```
 
+## lowerCase 
+
+Convert string to lower case.
+
+|Name  |Type  |Desc              |
+|------|------|------------------|
+|str   |string|String to convert |
+|return|string|Lower cased string|
+
+```javascript
+lowerCase('TEST'); // -> 'test'
+```
+
 ## lpad 
 
 Pad string on the left side if it's shorter than length.
