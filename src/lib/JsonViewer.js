@@ -16,12 +16,18 @@ import {
   isBool,
   keys,
   trim,
-  lowerCase
+  lowerCase,
+  isUndef,
+  stringifyAll
 } from './util'
 
 export default class JsonViewer {
   constructor(data, $el) {
     evalCss(require('./json.scss'))
+
+    if (!isObj(data) && isUndef(data.id)) {
+      data = JSON.parse(stringifyAll(data))
+    }
 
     this._data = {
       id: uniqId('json'),
