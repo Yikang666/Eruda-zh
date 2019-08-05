@@ -1,6 +1,6 @@
 ## v1.5.8 (2 Aug 2019)
 
-* fix: safeStorage undefined #108
+* fix: safeStorage undefined [#108](https://github.com/liriliri/eruda/issues/108)
 
 ## v1.5.7 (15 Jul 2019)
 
