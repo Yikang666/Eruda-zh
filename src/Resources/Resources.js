@@ -69,7 +69,7 @@ export default class Resources extends Tool {
     let scriptData = []
 
     $('script').each(function() {
-      let src = this.src
+      const src = this.src
 
       if (src !== '') scriptData.push(src)
     })
@@ -99,7 +99,7 @@ export default class Resources extends Tool {
     let iframeData = []
 
     $('iframe').each(function() {
-      let $this = $(this),
+      const $this = $(this),
         src = $this.attr('src')
 
       if (src) iframeData.push(src)
@@ -126,7 +126,7 @@ export default class Resources extends Tool {
 
     if (!store) return
 
-    let storeData = []
+    const storeData = []
 
     // Mobile safari is not able to loop through localStorage directly.
     store = JSON.parse(JSON.stringify(store))
@@ -148,9 +148,9 @@ export default class Resources extends Tool {
     this['_' + type + 'StoreData'] = storeData
   }
   refreshCookie() {
-    let cookieData = []
+    const cookieData = []
 
-    let cookie = document.cookie
+    const cookie = document.cookie
     if (trim(cookie) !== '') {
       each(document.cookie.split(';'), function(val) {
         val = val.split('=')
@@ -170,10 +170,10 @@ export default class Resources extends Tool {
   refreshImage() {
     let imageData = []
 
-    let performance = (this._performance =
+    const performance = (this._performance =
       window.webkitPerformance || window.performance)
     if (performance && performance.getEntries) {
-      let entries = this._performance.getEntries()
+      const entries = this._performance.getEntries()
       entries.forEach(entry => {
         if (entry.initiatorType === 'img' || isImg(entry.name)) {
           imageData.push(entry.name)
@@ -181,8 +181,8 @@ export default class Resources extends Tool {
       })
     } else {
       $('img').each(function() {
-        let $this = $(this)
-        let src = $this.attr('src')
+        const $this = $(this)
+        const src = $this.attr('src')
 
         if ($this.data('exclude') === 'true') return
 
@@ -208,9 +208,9 @@ export default class Resources extends Tool {
     return super.hide()
   }
   _bindEvent() {
-    let self = this
-    let $el = this._$el
-    let container = this._container
+    const self = this
+    const $el = this._$el
+    const container = this._container
 
     $el
       .on('click', '.eruda-refresh-local-storage', () =>
@@ -233,9 +233,9 @@ export default class Resources extends Tool {
       )
       .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
       .on('click', '.eruda-delete-storage', function() {
-        let $this = $(this)
-        let key = $this.data('key')
-        let type = $this.data('type')
+        const $this = $(this)
+        const key = $this.data('key')
+        const type = $this.data('type')
 
         if (type === 'local') {
           localStorage.removeItem(key)
@@ -246,13 +246,13 @@ export default class Resources extends Tool {
         }
       })
       .on('click', '.eruda-delete-cookie', function() {
-        let key = $(this).data('key')
+        const key = $(this).data('key')
 
         rmCookie(key)
         self.refreshCookie()._render()
       })
       .on('click', '.eruda-clear-storage', function() {
-        let type = $(this).data('type')
+        const type = $(this).data('type')
 
         if (type === 'local') {
           each(self._localStoreData, val => localStorage.removeItem(val.key))
@@ -269,11 +269,11 @@ export default class Resources extends Tool {
         this.refreshCookie()._render()
       })
       .on('click', '.eruda-storage-val', function() {
-        let $this = $(this)
-        let key = $this.data('key')
-        let type = $this.data('type')
+        const $this = $(this)
+        const key = $this.data('key')
+        const type = $this.data('type')
 
-        let val =
+        const val =
           type === 'local'
             ? localStorage.getItem(key)
             : sessionStorage.getItem(key)
@@ -285,7 +285,7 @@ export default class Resources extends Tool {
         }
       })
       .on('click', '.eruda-img-link', function() {
-        let src = $(this).attr('src')
+        const src = $(this).attr('src')
 
         showSources('img', src)
       })
@@ -296,7 +296,7 @@ export default class Resources extends Tool {
     orientation.on('change', () => this._render())
 
     function showSources(type, data) {
-      let sources = container.get('sources')
+      const sources = container.get('sources')
       if (!sources) return
 
       sources.set(type, data)
@@ -311,7 +311,7 @@ export default class Resources extends Tool {
         if (!container.get('sources')) return
         e.preventDefault()
 
-        let url = $(this).attr('href')
+        const url = $(this).attr('href')
 
         if (type === 'iframe' || isCrossOrig(url)) {
           showSources('iframe', url)
@@ -328,9 +328,9 @@ export default class Resources extends Tool {
     }
   }
   _rmCfg() {
-    let cfg = this.config
+    const cfg = this.config
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
 
     if (!settings) return
 
@@ -340,7 +340,7 @@ export default class Resources extends Tool {
       .remove('Resources')
   }
   _initCfg() {
-    let cfg = (this.config = Settings.createCfg('resources', {
+    const cfg = (this.config = Settings.createCfg('resources', {
       hideErudaSetting: true,
       observeElement: true
     }))
@@ -359,7 +359,7 @@ export default class Resources extends Tool {
       }
     })
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
     settings
       .text('Resources')
       .switch(cfg, 'hideErudaSetting', 'Hide Eruda Setting')
@@ -367,7 +367,7 @@ export default class Resources extends Tool {
       .separator()
   }
   _render() {
-    let cookieData = this._cookieData,
+    const cookieData = this._cookieData,
       scriptData = this._scriptData,
       stylesheetData = this._stylesheetData,
       imageData = this._imageData
@@ -405,8 +405,8 @@ export default class Resources extends Tool {
   _handleMutation(mutation) {
     if (isErudaEl(mutation.target)) return
 
-    let checkEl = el => {
-      let tagName = getLowerCaseTagName(el)
+    const checkEl = el => {
+      const tagName = getLowerCaseTagName(el)
       switch (tagName) {
         case 'script':
           this.refreshScript()
@@ -429,7 +429,7 @@ export default class Resources extends Tool {
       let nodes = toArr(mutation.addedNodes)
       nodes = concat(nodes, toArr(mutation.removedNodes))
 
-      for (let node of nodes) {
+      for (const node of nodes) {
         if (checkEl(node)) return true
       }
     }
@@ -484,9 +484,9 @@ function getLowerCaseTagName(el) {
   return el.tagName.toLowerCase()
 }
 
-let sliceStr = (str, len) =>
+const sliceStr = (str, len) =>
   str.length < len ? str : str.slice(0, len) + '...'
 
-let regImg = /\.(jpeg|jpg|gif|png)$/
+const regImg = /\.(jpeg|jpg|gif|png)$/
 
-let isImg = url => regImg.test(url)
+const isImg = url => regImg.test(url)

@@ -1,10 +1,10 @@
 import { each } from '../lib/util'
 
 function formatStyle(style) {
-  let ret = {}
+  const ret = {}
 
   for (let i = 0, len = style.length; i < len; i++) {
-    let name = style[i]
+    const name = style[i]
 
     if (style[name] === 'initial') continue
 
@@ -14,7 +14,7 @@ function formatStyle(style) {
   return ret
 }
 
-let elProto = Element.prototype
+const elProto = Element.prototype
 
 let matchesSel = function() {
   return false
@@ -31,12 +31,12 @@ export default class CssStore {
     this._el = el
   }
   getComputedStyle() {
-    let computedStyle = window.getComputedStyle(this._el)
+    const computedStyle = window.getComputedStyle(this._el)
 
     return formatStyle(computedStyle)
   }
   getMatchedCSSRules() {
-    let ret = []
+    const ret = []
 
     each(document.styleSheets, styleSheet => {
       try {

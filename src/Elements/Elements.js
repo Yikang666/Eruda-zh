@@ -74,10 +74,10 @@ export default class Elements extends Tool {
     return this
   }
   overrideEventTarget() {
-    let winEventProto = getWinEventProto()
+    const winEventProto = getWinEventProto()
 
-    let origAddEvent = (this._origAddEvent = winEventProto.addEventListener)
-    let origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
+    const origAddEvent = (this._origAddEvent = winEventProto.addEventListener)
+    const origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
 
     winEventProto.addEventListener = function(type, listener, useCapture) {
       addEvent(this, type, listener, useCapture)
@@ -90,12 +90,12 @@ export default class Elements extends Tool {
     }
   }
   scrollToTop() {
-    let el = this._$showArea.get(0)
+    const el = this._$showArea.get(0)
 
     el.scrollTop = 0
   }
   restoreEventTarget() {
-    let winEventProto = getWinEventProto()
+    const winEventProto = getWinEventProto()
 
     if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent
     if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent
@@ -113,7 +113,7 @@ export default class Elements extends Tool {
   _back() {
     if (this._curEl === this._htmlEl) return
 
-    let parentQueue = this._curParentQueue
+    const parentQueue = this._curParentQueue
     let parent = parentQueue.shift()
 
     while (!isElExist(parent)) parent = parentQueue.shift()
@@ -121,18 +121,18 @@ export default class Elements extends Tool {
     this.set(parent)
   }
   _bindEvent() {
-    let self = this
-    let container = this._container
-    let select = this._select
+    const self = this
+    const container = this._container
+    const select = this._select
 
     this._$el
       .on('click', '.eruda-child', function() {
-        let idx = $(this).data('idx')
-        let curEl = self._curEl
-        let el = curEl.childNodes[idx]
+        const idx = $(this).data('idx')
+        const curEl = self._curEl
+        const el = curEl.childNodes[idx]
 
         if (el && el.nodeType === 3) {
-          let curTagName = curEl.tagName
+          const curTagName = curEl.tagName
           let type
 
           switch (curTagName) {
@@ -146,7 +146,7 @@ export default class Elements extends Tool {
               return
           }
 
-          let sources = container.get('sources')
+          const sources = container.get('sources')
 
           if (sources) {
             sources.set(type, el.nodeValue)
@@ -159,8 +159,8 @@ export default class Elements extends Tool {
         !isElExist(el) ? self._render() : self.set(el)
       })
       .on('click', '.eruda-listener-content', function() {
-        let text = $(this).text()
-        let sources = container.get('sources')
+        const text = $(this).text()
+        const sources = container.get('sources')
 
         if (sources) {
           sources.set('js', text)
@@ -179,7 +179,7 @@ export default class Elements extends Tool {
           })
           data = JSON.parse(data)
         }
-        let sources = container.get('sources')
+        const sources = container.get('sources')
 
         this._elData = data
 
@@ -190,7 +190,7 @@ export default class Elements extends Tool {
       })
       .on('click', '.eruda-parent', function() {
         let idx = $(this).data('idx')
-        let curEl = self._curEl
+        const curEl = self._curEl
         let el = curEl.parentNode
 
         while (idx-- && el.parentNode) el = el.parentNode
@@ -201,7 +201,7 @@ export default class Elements extends Tool {
         this._toggleAllComputedStyle()
       )
 
-    let $bottomBar = this._$el.find('.eruda-bottom-bar')
+    const $bottomBar = this._$el.find('.eruda-bottom-bar')
 
     $bottomBar
       .on('click', '.eruda-refresh', () => this._render())
@@ -235,7 +235,7 @@ export default class Elements extends Tool {
     this._render()
   }
   _toggleSelect() {
-    let select = this._select
+    const select = this._select
 
     this._$el.find('.eruda-select').toggleClass('eruda-active')
     if (!this._selectElement && !this._highlightElement) this._toggleHighlight()
@@ -255,7 +255,7 @@ export default class Elements extends Tool {
     this._highlight.setEl(el)
     this._rmDefComputedStyle = true
 
-    let parentQueue = []
+    const parentQueue = []
 
     let parent = el.parentNode
     while (parent) {
@@ -265,19 +265,19 @@ export default class Elements extends Tool {
     this._curParentQueue = parentQueue
   }
   _getData() {
-    let ret = {}
+    const ret = {}
 
-    let el = this._curEl
-    let cssStore = this._curCssStore
+    const el = this._curEl
+    const cssStore = this._curCssStore
 
-    let { className, id, attributes, tagName } = el
+    const { className, id, attributes, tagName } = el
 
     ret.parents = getParents(el)
     ret.children = formatChildNodes(el.childNodes)
     ret.attributes = formatAttr(attributes)
     ret.name = formatElName({ tagName, id, className, attributes })
 
-    let events = el.erudaEvents
+    const events = el.erudaEvents
     if (events && keys(events).length !== 0) ret.listeners = events
 
     if (needNoStyle(tagName)) return ret
@@ -297,7 +297,7 @@ export default class Elements extends Tool {
       }
     }
 
-    let boxModel = {
+    const boxModel = {
       margin: getBoxModelValue('margin'),
       border: getBoxModelValue('border'),
       padding: getBoxModelValue('padding'),
@@ -319,7 +319,7 @@ export default class Elements extends Tool {
     processStyleRules(computedStyle)
     ret.computedStyle = computedStyle
 
-    let styles = cssStore.getMatchedCSSRules()
+    const styles = cssStore.getMatchedCSSRules()
     styles.unshift(getInlineStyle(el.style))
     styles.forEach(style => processStyleRules(style.style))
     ret.styles = styles
@@ -353,7 +353,7 @@ export default class Elements extends Tool {
     } else if (mutation.type === 'childList') {
       if (mutation.target === this._curEl) return this._render()
 
-      let addedNodes = mutation.addedNodes
+      const addedNodes = mutation.addedNodes
 
       for (i = 0, len = addedNodes.length; i < len; i++) {
         node = addedNodes[i]
@@ -361,7 +361,7 @@ export default class Elements extends Tool {
         if (node.parentNode === this._curEl) return this._render()
       }
 
-      let removedNodes = mutation.removedNodes
+      const removedNodes = mutation.removedNodes
 
       for (i = 0, len = removedNodes.length; i < len; i++) {
         if (removedNodes[i] === this._curEl) return this.set(this._htmlEl)
@@ -369,9 +369,9 @@ export default class Elements extends Tool {
     }
   }
   _rmCfg() {
-    let cfg = this.config
+    const cfg = this.config
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
 
     if (!settings) return
 
@@ -381,7 +381,7 @@ export default class Elements extends Tool {
       .remove('Elements')
   }
   _initCfg() {
-    let cfg = (this.config = Settings.createCfg('elements', {
+    const cfg = (this.config = Settings.createCfg('elements', {
       overrideEventTarget: true,
       observeElement: true
     }))
@@ -399,7 +399,7 @@ export default class Elements extends Tool {
       }
     })
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
     settings
       .text('Elements')
       .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
@@ -414,7 +414,7 @@ function processStyleRules(style) {
   each(style, (val, key) => (style[key] = processStyleRule(val)))
 }
 
-let regColor = /rgba?\((.*?)\)/g,
+const regColor = /rgba?\((.*?)\)/g,
   regCssUrl = /url\("?(.*?)"?\)/g
 
 function processStyleRule(val) {
@@ -432,7 +432,7 @@ function processStyleRule(val) {
 const isElExist = val => isEl(val) && val.parentNode
 
 function formatElName(data, { noAttr = false } = {}) {
-  let { id, className, attributes } = data
+  const { id, className, attributes } = data
 
   let ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`
 
@@ -447,7 +447,7 @@ function formatElName(data, { noAttr = false } = {}) {
 
   if (!noAttr) {
     each(attributes, attr => {
-      let name = attr.name
+      const name = attr.name
       if (name === 'id' || name === 'class' || name === 'style') return
       ret += ` ${name}="${attr.value}"`
     })
@@ -456,12 +456,13 @@ function formatElName(data, { noAttr = false } = {}) {
   return ret
 }
 
-let formatAttr = attributes =>
+const formatAttr = attributes =>
   map(attributes, attr => {
-    let { name, value } = attr
+    let { value } = attr
+    const { name } = attr
     value = escape(value)
 
-    let isLink =
+    const isLink =
       (name === 'src' || name === 'href') && !startWith(value, 'data')
     if (isLink) value = wrapLink(value)
     if (name === 'style') value = processStyleRule(value)
@@ -470,14 +471,14 @@ let formatAttr = attributes =>
   })
 
 function formatChildNodes(nodes) {
-  let ret = []
+  const ret = []
 
   for (let i = 0, len = nodes.length; i < len; i++) {
-    let child = nodes[i],
+    const child = nodes[i],
       nodeType = child.nodeType
 
     if (nodeType === 3 || nodeType === 8) {
-      let val = child.nodeValue.trim()
+      const val = child.nodeValue.trim()
       if (val !== '')
         ret.push({
           text: val,
@@ -487,7 +488,7 @@ function formatChildNodes(nodes) {
       continue
     }
 
-    let isSvg = !isStr(child.className)
+    const isSvg = !isStr(child.className)
 
     if (
       nodeType === 1 &&
@@ -506,7 +507,7 @@ function formatChildNodes(nodes) {
 }
 
 function getParents(el) {
-  let ret = []
+  const ret = []
   let i = 0
   let parent = el.parentNode
 
@@ -523,13 +524,13 @@ function getParents(el) {
 }
 
 function getInlineStyle(style) {
-  let ret = {
+  const ret = {
     selectorText: 'element.style',
     style: {}
   }
 
   for (let i = 0, len = style.length; i < len; i++) {
-    let s = style[i]
+    const s = style[i]
 
     ret.style[s] = style[s]
   }
@@ -537,10 +538,10 @@ function getInlineStyle(style) {
   return ret
 }
 
-let defComputedStyle = require('./defComputedStyle.json')
+const defComputedStyle = require('./defComputedStyle.json')
 
 function rmDefComputedStyle(computedStyle) {
-  let ret = {}
+  const ret = {}
 
   each(computedStyle, (val, key) => {
     if (val === defComputedStyle[key]) return
@@ -551,14 +552,14 @@ function rmDefComputedStyle(computedStyle) {
   return ret
 }
 
-let NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head']
+const NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head']
 
-let needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1
+const needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1
 
 function addEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
 
-  let events = (el.erudaEvents = el.erudaEvents || {})
+  const events = (el.erudaEvents = el.erudaEvents || {})
 
   events[type] = events[type] || []
   events[type].push({
@@ -571,11 +572,11 @@ function addEvent(el, type, listener, useCapture = false) {
 function rmEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
 
-  let events = el.erudaEvents
+  const events = el.erudaEvents
 
   if (!(events && events[type])) return
 
-  let listeners = events[type]
+  const listeners = events[type]
 
   for (let i = 0, len = listeners.length; i < len; i++) {
     if (listeners[i].listener === listener) {
@@ -588,18 +589,18 @@ function rmEvent(el, type, listener, useCapture = false) {
   if (keys(events).length === 0) delete el.erudaEvents
 }
 
-let getWinEventProto = () => {
+const getWinEventProto = () => {
   return safeGet(window, 'EventTarget.prototype') || window.Node.prototype
 }
 
-let wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`
+const wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`
 
 function boxModelValue(val, type) {
   if (isNum(val)) return val
 
   if (!isStr(val)) return '‒'
 
-  let ret = pxToNum(val)
+  const ret = pxToNum(val)
   if (isNaN(ret)) return val
 
   if (type === 'position') return ret

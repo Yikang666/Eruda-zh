@@ -36,7 +36,7 @@ export default [
   {
     name: 'Refresh Page',
     fn() {
-      let url = new Url()
+      const url = new Url()
       url.setQuery('timestamp', now())
 
       window.location.replace(url.toString())
@@ -46,7 +46,7 @@ export default [
   {
     name: 'Search Text',
     fn() {
-      let keyword = prompt('Enter the text')
+      const keyword = prompt('Enter the text')
 
       search(keyword)
     },
@@ -55,7 +55,7 @@ export default [
   {
     name: 'Edit Page',
     fn() {
-      let body = document.body
+      const body = document.body
 
       body.contentEditable = body.contentEditable !== 'true'
     },
@@ -127,9 +127,9 @@ export default [
   {
     name: 'Restore Settings',
     fn() {
-      let store = safeStorage('local')
+      const store = safeStorage('local')
 
-      let data = JSON.parse(JSON.stringify(store))
+      const data = JSON.parse(JSON.stringify(store))
 
       each(data, (val, key) => {
         if (!isStr(val)) return
@@ -146,11 +146,11 @@ export default [
 evalCss(require('./searchText.scss'), document.head)
 
 function search(text) {
-  let root = document.body,
+  const root = document.body,
     regText = new RegExp(text, 'ig')
 
   traverse(root, node => {
-    let $node = $(node)
+    const $node = $(node)
 
     if (!$node.hasClass('eruda-search-highlight-block')) return
 
@@ -167,7 +167,7 @@ function search(text) {
     )
     if (val === node.nodeValue) return
 
-    let $ret = $(document.createElement('div'))
+    const $ret = $(document.createElement('div'))
 
     $ret.html(val)
     $ret.addClass('eruda-search-highlight-block')
@@ -177,12 +177,12 @@ function search(text) {
 }
 
 function traverse(root, processor) {
-  let childNodes = root.childNodes
+  const childNodes = root.childNodes
 
   if (isErudaEl(root)) return
 
   for (let i = 0, len = childNodes.length; i < len; i++) {
-    let newNode = traverse(childNodes[i], processor)
+    const newNode = traverse(childNodes[i], processor)
     if (newNode) root.replaceChild(newNode, childNodes[i])
   }
 
@@ -190,7 +190,7 @@ function traverse(root, processor) {
 }
 
 function loadPlugin(name) {
-  let globalName = 'eruda' + upperFirst(name)
+  const globalName = 'eruda' + upperFirst(name)
   if (window[globalName]) return
 
   loadJs(

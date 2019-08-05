@@ -26,11 +26,11 @@ export default class Highlight {
     this._$el.hide()
   }
   render() {
-    let { left, width, top, height } = this._$target.offset()
+    const { left, width, top, height } = this._$target.offset()
 
     this._$el.css({ left, top: top - window.scrollY, width, height })
 
-    let computedStyle = getComputedStyle(this._target, '')
+    const computedStyle = getComputedStyle(this._target, '')
 
     if (computedStyle.display === 'none') {
       return this._$el.css('visibility', 'hidden')
@@ -38,12 +38,12 @@ export default class Highlight {
       this._$el.css('visibility', 'visible')
     }
 
-    let getNumStyle = name => pxToNum(computedStyle.getPropertyValue(name))
+    const getNumStyle = name => pxToNum(computedStyle.getPropertyValue(name))
 
-    let ml = getNumStyle('margin-left')
-    let mr = getNumStyle('margin-right')
-    let mt = getNumStyle('margin-top')
-    let mb = getNumStyle('margin-bottom')
+    const ml = getNumStyle('margin-left')
+    const mr = getNumStyle('margin-right')
+    const mt = getNumStyle('margin-top')
+    const mb = getNumStyle('margin-bottom')
 
     this._$margin.css({
       left: -ml,
@@ -52,13 +52,13 @@ export default class Highlight {
       height: height + mt + mb
     })
 
-    let bl = getNumStyle('border-left-width')
-    let br = getNumStyle('border-right-width')
-    let bt = getNumStyle('border-top-width')
-    let bb = getNumStyle('border-bottom-width')
+    const bl = getNumStyle('border-left-width')
+    const br = getNumStyle('border-right-width')
+    const bt = getNumStyle('border-top-width')
+    const bb = getNumStyle('border-bottom-width')
 
-    let bw = width - bl - br
-    let bh = height - bt - bb
+    const bw = width - bl - br
+    const bh = height - bt - bb
 
     this._$padding.css({
       left: bl,
@@ -67,10 +67,10 @@ export default class Highlight {
       height: bh
     })
 
-    let pl = getNumStyle('padding-left')
-    let pr = getNumStyle('padding-right')
-    let pt = getNumStyle('padding-top')
-    let pb = getNumStyle('padding-bottom')
+    const pl = getNumStyle('padding-left')
+    const pr = getNumStyle('padding-right')
+    const pt = getNumStyle('padding-top')
+    const pb = getNumStyle('padding-bottom')
 
     this._$content.css({
       left: bl + pl,
@@ -99,7 +99,7 @@ export default class Highlight {
   _appendTpl($container) {
     $container.append(require('./Highlight.hbs')())
 
-    let $el = (this._$el = $container.find('.eruda-elements-highlight'))
+    const $el = (this._$el = $container.find('.eruda-elements-highlight'))
     this._$margin = $el.find('.eruda-margin')
     this._$padding = $el.find('.eruda-padding')
     this._$content = $el.find('.eruda-content')
@@ -108,7 +108,7 @@ export default class Highlight {
 }
 
 function formatElName(el) {
-  let { id, className } = el
+  const { id, className } = el
 
   let ret = `<span style="color:#ee78e6">${el.tagName.toLowerCase()}</span>`
 

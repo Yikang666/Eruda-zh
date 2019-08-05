@@ -22,7 +22,7 @@ export default class NavBar extends Emitter {
   remove(name) {
     this._len--
     this._$el.find('.eruda-nav-bar-item').each(function() {
-      let $this = $(this)
+      const $this = $(this)
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
     this._resetBottomBar()
@@ -35,10 +35,10 @@ export default class NavBar extends Emitter {
     this._$el.css('background-color', color)
   }
   activateTool(name) {
-    let self = this
+    const self = this
 
     this._$el.find('.eruda-nav-bar-item').each(function() {
-      let $this = $(this)
+      const $this = $(this)
 
       if ($this.text() === name) {
         $this.addClass('eruda-active')
@@ -54,15 +54,15 @@ export default class NavBar extends Emitter {
     this._$el.remove()
   }
   _scrollItemToView() {
-    let $el = this._$el,
+    const $el = this._$el,
       li = $el.find('.eruda-active').get(0),
       container = $el.get(0)
 
-    let itemLeft = li.offsetLeft,
-      itemWidth = li.offsetWidth,
-      containerWidth = container.offsetWidth,
-      scrollLeft = container.scrollLeft,
-      targetScrollLeft
+    const itemLeft = li.offsetLeft
+    const itemWidth = li.offsetWidth
+    const containerWidth = container.offsetWidth
+    const scrollLeft = container.scrollLeft
+    let targetScrollLeft
 
     if (itemLeft < scrollLeft) {
       targetScrollLeft = itemLeft
@@ -75,9 +75,9 @@ export default class NavBar extends Emitter {
     container.scrollLeft = targetScrollLeft
   }
   _resetBottomBar() {
-    let $bottomBar = this._$bottomBar
+    const $bottomBar = this._$bottomBar
 
-    let li = this._$el.find('.eruda-active').get(0)
+    const li = this._$el.find('.eruda-active').get(0)
 
     if (!li) return
 
@@ -87,11 +87,11 @@ export default class NavBar extends Emitter {
     })
   }
   resetStyle() {
-    let height = this._height
+    const height = this._height
 
     this._$el.css('height', height)
 
-    let $el = this._$el
+    const $el = this._$el
 
     $el.css({
       height: height
@@ -104,7 +104,7 @@ export default class NavBar extends Emitter {
     this._resetBottomBar()
   }
   _bindEvent() {
-    let self = this
+    const self = this
 
     this._$el.on('click', '.eruda-nav-bar-item', function() {
       self.emit('showTool', $(this).text())

@@ -43,19 +43,19 @@ export default class Network extends Tool {
     this._render()
   }
   overrideXhr() {
-    let winXhrProto = window.XMLHttpRequest.prototype
+    const winXhrProto = window.XMLHttpRequest.prototype
 
-    let origSend = (this._origSend = winXhrProto.send)
-    let origOpen = (this._origOpen = winXhrProto.open)
-    let origSetRequestHeader = (this._origSetRequestHeader =
+    const origSend = (this._origSend = winXhrProto.send)
+    const origOpen = (this._origOpen = winXhrProto.open)
+    const origSetRequestHeader = (this._origSetRequestHeader =
       winXhrProto.setRequestHeader)
 
-    let self = this
+    const self = this
 
     winXhrProto.open = function(method, url) {
-      let xhr = this
+      const xhr = this
 
-      let req = (xhr.erudaRequest = new XhrRequest(xhr, method, url))
+      const req = (xhr.erudaRequest = new XhrRequest(xhr, method, url))
 
       req.on('send', (id, data) => self._addReq(id, data))
       req.on('update', (id, data) => self._updateReq(id, data))
@@ -73,19 +73,19 @@ export default class Network extends Tool {
     }
 
     winXhrProto.send = function(data) {
-      let req = this.erudaRequest
+      const req = this.erudaRequest
       if (req) req.handleSend(data)
 
       origSend.apply(this, arguments)
     }
 
     winXhrProto.setRequestHeader = function() {
-      let req = this.erudaRequest
+      const req = this.erudaRequest
       if (!req._headers) {
         req._headers = {}
       }
-      let key = arguments[0]
-      let val = arguments[1]
+      const key = arguments[0]
+      const val = arguments[1]
       if (key && val) {
         req._headers[key] = val
       }
@@ -94,7 +94,7 @@ export default class Network extends Tool {
     }
   }
   restoreXhr() {
-    let winXhrProto = window.XMLHttpRequest.prototype
+    const winXhrProto = window.XMLHttpRequest.prototype
 
     if (this._origOpen) winXhrProto.open = this._origOpen
     if (this._origSend) winXhrProto.send = this._origSend
@@ -105,16 +105,16 @@ export default class Network extends Tool {
   overrideFetch() {
     if (!this._isFetchSupported) return
 
-    let origFetch = (this._origFetch = window.fetch)
+    const origFetch = (this._origFetch = window.fetch)
 
-    let self = this
+    const self = this
 
     window.fetch = function(...args) {
-      let req = new FetchRequest(...args)
+      const req = new FetchRequest(...args)
       req.on('send', (id, data) => self._addReq(id, data))
       req.on('update', (id, data) => self._updateReq(id, data))
 
-      let fetchResult = origFetch(...args)
+      const fetchResult = origFetch(...args)
       req.send(fetchResult)
 
       return fetchResult
@@ -148,7 +148,7 @@ export default class Network extends Tool {
     this._render()
   }
   _updateReq(id, data) {
-    let target = this._requests[id]
+    const target = this._requests[id]
 
     if (!target) return
 
@@ -163,14 +163,14 @@ export default class Network extends Tool {
     this._render()
   }
   _bindEvent() {
-    let $el = this._$el
-    let container = this._container
+    const $el = this._$el
+    const container = this._container
 
-    let self = this
+    const self = this
 
     $el
       .on('click', '.eruda-request', function() {
-        let id = $(this).data('id'),
+        const id = $(this).data('id'),
           data = self._requests[id]
 
         if (!data.done) return
@@ -188,7 +188,7 @@ export default class Network extends Tool {
       .on('click', '.eruda-clear-request', () => this.clear())
 
     function showSources(type, data) {
-      let sources = container.get('sources')
+      const sources = container.get('sources')
       if (!sources) return
 
       sources.set(type, data)
@@ -205,16 +205,16 @@ export default class Network extends Tool {
     this._rmCfg()
   }
   _rmCfg() {
-    let cfg = this.config
+    const cfg = this.config
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
 
     if (!settings) return
 
     settings.remove(cfg, 'overrideFetch').remove('Network')
   }
   _initCfg() {
-    let cfg = (this.config = Settings.createCfg('network', {
+    const cfg = (this.config = Settings.createCfg('network', {
       overrideFetch: true
     }))
 
@@ -227,7 +227,7 @@ export default class Network extends Tool {
       }
     })
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
     settings
       .text('Network')
       .switch(cfg, 'overrideFetch', 'Catch Fetch Requests')
@@ -236,7 +236,7 @@ export default class Network extends Tool {
   _render() {
     if (!this.active) return
 
-    let renderData = {}
+    const renderData = {}
 
     if (!isEmpty(this._requests)) renderData.requests = this._requests
 

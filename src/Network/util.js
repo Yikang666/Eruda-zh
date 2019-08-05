@@ -3,7 +3,7 @@ import { last } from '../lib/util'
 export function getType(contentType) {
   if (!contentType) return 'unknown'
 
-  let type = contentType.split(';')[0].split('/')
+  const type = contentType.split(';')[0].split('/')
 
   return {
     type: type[0],
@@ -12,7 +12,7 @@ export function getType(contentType) {
 }
 
 export function lenToUtf8Bytes(str) {
-  let m = encodeURIComponent(str).match(/%[89ABab]/g)
+  const m = encodeURIComponent(str).match(/%[89ABab]/g)
 
   return str.length + (m ? m.length : 0)
 }

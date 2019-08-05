@@ -4,7 +4,7 @@ export default class Select extends Emitter {
   constructor() {
     super()
 
-    let self = this
+    const self = this
 
     this._startListener = function(e) {
       if (isErudaEl(e.target)) return

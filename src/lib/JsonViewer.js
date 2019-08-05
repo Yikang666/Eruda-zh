@@ -96,8 +96,8 @@ export default class JsonViewer {
       return `<li>${wrapKey(key)}<span class="eruda-special">${val}</span></li>`
     } else if (isObj(val)) {
       id = val.id
-      let referenceId = val.reference
-      let objAbstract = getObjAbstract(val) || upperFirst(type)
+      const referenceId = val.reference
+      const objAbstract = getObjAbstract(val) || upperFirst(type)
 
       let obj = `<li ${
         firstLevel ? 'data-first-level="true"' : ''
@@ -123,19 +123,19 @@ export default class JsonViewer {
     )}"</span></li>`
   }
   _appendTpl() {
-    let data = this._map[this._data.id]
+    const data = this._map[this._data.id]
 
     this._$el.html(this.jsonToHtml(data, true))
   }
   _bindEvent() {
-    let map = this._map
+    const map = this._map
 
-    let self = this
+    const self = this
 
     this._$el.on('click', 'li', function(e) {
-      let $this = $(this)
-      let circularId = $this.data('object-id')
-      let $firstSpan = $(this)
+      const $this = $(this)
+      const circularId = $this.data('object-id')
+      const $firstSpan = $(this)
         .find('span')
         .eq(0)
 
@@ -149,7 +149,7 @@ export default class JsonViewer {
 
       if (!$firstSpan.hasClass('eruda-expanded')) return
 
-      let $ul = $this.find('ul').eq(0)
+      const $ul = $this.find('ul').eq(0)
       if ($firstSpan.hasClass('eruda-collapsed')) {
         $firstSpan.rmClass('eruda-collapsed')
         $ul.show()
@@ -162,13 +162,13 @@ export default class JsonViewer {
 }
 
 function createMap(map, data) {
-  let id = data.id
+  const id = data.id
 
   if (!id && id !== 0) return
 
-  let isArr = data.type && startWith(data.type, 'Array')
+  const isArr = data.type && startWith(data.type, 'Array')
   if (isArr && data.enumerable) {
-    let arr = objToArr(data, id, data.type)
+    const arr = objToArr(data, id, data.type)
     if (arr.length > 100) data = splitBigArr(arr)
   }
   map[id] = data
@@ -176,7 +176,7 @@ function createMap(map, data) {
   const values = []
   each(['enumerable', 'unenumerable', 'symbol'], type => {
     if (!data[type]) return
-    for (let key in data[type]) {
+    for (const key in data[type]) {
       values.push(data[type][key])
     }
   })
@@ -193,15 +193,15 @@ function splitBigArr(data) {
   let idx = 0
   const enumerable = {}
   each(chunk(data, 100), val => {
-    let obj = {}
-    let startIdx = idx
+    const obj = {}
+    const startIdx = idx
     obj.type = '[' + startIdx
     obj.enumerable = {}
     each(val, val => {
       obj.enumerable[idx] = val
       idx += 1
     })
-    let endIdx = idx - 1
+    const endIdx = idx - 1
     obj.type += (endIdx - startIdx > 0 ? ' … ' + endIdx : '') + ']'
     obj.id = uniqId('json')
     obj.jsonSplitArr = true
@@ -220,11 +220,11 @@ function splitBigArr(data) {
 }
 
 function objToArr(data, id, type) {
-  let ret = []
+  const ret = []
 
   const enumerable = {}
   each(data.enumerable, (val, key) => {
-    let idx = toNum(key)
+    const idx = toNum(key)
     if (!isNaN(idx)) {
       ret[idx] = val
     } else {
@@ -242,7 +242,7 @@ function objToArr(data, id, type) {
   return ret
 }
 
-let encode = str => {
+const encode = str => {
   return escape(toStr(str))
     .replace(/\n/g, '↵')
     .replace(/\f|\r|\t/g, '')
@@ -261,14 +261,14 @@ function sortObjName(a, b) {
   if (startWith(a, 'get ') || startWith(a, 'set ')) a = a.slice(4)
   if (startWith(b, 'get ') || startWith(b, 'set ')) b = b.slice(4)
 
-  let lenA = a.length
-  let lenB = b.length
-  let len = lenA > lenB ? lenB : lenA
+  const lenA = a.length
+  const lenB = b.length
+  const len = lenA > lenB ? lenB : lenA
 
   for (let i = 0; i < len; i++) {
-    let codeA = a.charCodeAt(i)
-    let codeB = b.charCodeAt(i)
-    let cmpResult = cmpCode(codeA, codeB)
+    const codeA = a.charCodeAt(i)
+    const codeB = b.charCodeAt(i)
+    const cmpResult = cmpCode(codeA, codeB)
 
     if (cmpResult !== 0) return cmpResult
   }
@@ -311,7 +311,7 @@ function getObjAbstract(data) {
 const regFnHead = /function(.*?)\((.*?)\)/
 
 function extractFnHead(str) {
-  let fnHead = str.match(regFnHead)
+  const fnHead = str.match(regFnHead)
 
   if (fnHead) return fnHead[0]
 

@@ -64,7 +64,7 @@ module.exports = {
 
     if (name === 'entryBtn') return this._entryBtn
 
-    let devTools = this._devTools
+    const devTools = this._devTools
 
     return name ? devTools.get(name) : devTools
   },
@@ -85,7 +85,7 @@ module.exports = {
   show(name) {
     if (!this._checkInit()) return
 
-    let devTools = this._devTools
+    const devTools = this._devTools
 
     name ? devTools.showTool(name) : devTools.show()
 
@@ -188,8 +188,8 @@ module.exports = {
     this._devTools = new DevTools(this._$el)
   },
   _initStyle() {
-    let className = 'eruda-style-container'
-    let $el = this._$el
+    const className = 'eruda-style-container'
+    const $el = this._$el
 
     if (this._shadowRoot) {
       evalCss.container = this._shadowRoot
@@ -210,8 +210,8 @@ module.exports = {
     this._entryBtn.on('click', () => this._devTools.toggle())
   },
   _initSettings() {
-    let devTools = this._devTools
-    let settings = new Settings()
+    const devTools = this._devTools
+    const settings = new Settings()
 
     devTools.add(settings)
 
@@ -231,10 +231,10 @@ module.exports = {
   ) {
     tool = toArr(tool).reverse()
 
-    let devTools = this._devTools
+    const devTools = this._devTools
 
     tool.forEach(name => {
-      let Tool = this[upperFirst(name)]
+      const Tool = this[upperFirst(name)]
       try {
         if (Tool) devTools.add(new Tool())
       } catch (e) {

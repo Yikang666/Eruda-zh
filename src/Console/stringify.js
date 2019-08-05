@@ -1,10 +1,10 @@
 import StringifyWorker from '../lib/stringifyWorker'
 import { nextTick, uniqId, tryIt, stringifyAll } from '../lib/util'
 
-let isWorkerSupported = !!window.Worker
+const isWorkerSupported = !!window.Worker
 
-let callbacks = {},
-  worker
+const callbacks = {}
+let worker
 
 if (isWorkerSupported) {
   tryIt(function() {
@@ -13,7 +13,7 @@ if (isWorkerSupported) {
      */
     worker = new StringifyWorker()
     worker.onmessage = function(e) {
-      let [id, result] = e.data
+      const [id, result] = e.data
       if (callbacks[id]) {
         callbacks[id](result)
         delete callbacks[id]
@@ -23,10 +23,10 @@ if (isWorkerSupported) {
 }
 
 function exports(obj, options, cb) {
-  let useWorker = exports.useWorker && isWorkerSupported && worker
+  const useWorker = exports.useWorker && isWorkerSupported && worker
 
   if (useWorker) {
-    let id = uniqId('stringifyWorker')
+    const id = uniqId('stringifyWorker')
     callbacks[id] = cb
     // Some native object can't be cloned, such as window.location.
     try {
@@ -37,7 +37,7 @@ function exports(obj, options, cb) {
     }
   }
 
-  let result = stringifyAll(obj, options)
+  const result = stringifyAll(obj, options)
   nextTick(() => cb(result))
 }
 

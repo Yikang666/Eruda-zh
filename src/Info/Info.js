@@ -28,7 +28,7 @@ export default class Info extends Tool {
     evalCss.remove(this._style)
   }
   add(name, val) {
-    let infos = this._infos
+    const infos = this._infos
     let isUpdate = false
 
     each(infos, info => {
@@ -45,7 +45,7 @@ export default class Info extends Tool {
     return this
   }
   get(name) {
-    let infos = this._infos
+    const infos = this._infos
 
     if (isUndef(name)) {
       return cloneDeep(infos)
@@ -60,7 +60,7 @@ export default class Info extends Tool {
     return result
   }
   remove(name) {
-    let infos = this._infos
+    const infos = this._infos
 
     for (let i = infos.length - 1; i >= 0; i--) {
       if (infos[i].name === name) infos.splice(i, 1)
@@ -81,7 +81,7 @@ export default class Info extends Tool {
     each(defInfo, info => this.add(info.name, info.val))
   }
   _render() {
-    let infos = []
+    const infos = []
 
     each(this._infos, ({ name, val }) => {
       if (isFn(val)) val = val()

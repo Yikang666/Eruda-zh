@@ -1,6 +1,6 @@
 import { safeStorage, isObj, Emitter, isUndef, each } from './util'
 
-let localStore = {
+const localStore = {
   _storage: safeStorage('local'),
   get(key) {
     let val = this._storage.getItem(key)
@@ -54,7 +54,7 @@ export default class Storage extends Emitter {
     }
 
     each(kv, (val, key) => {
-      let preVal = this._val[key]
+      const preVal = this._val[key]
       this._val[key] = val
       if (preVal !== val) this.emit('change', key, val)
     })

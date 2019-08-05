@@ -32,7 +32,7 @@ export default class Snippets extends Tool {
     return this
   }
   remove(name) {
-    let snippets = this._snippets
+    const snippets = this._snippets
 
     for (let i = 0, len = snippets.length; i < len; i++) {
       if (snippets[i].name === name) snippets.splice(i, 1)
@@ -43,7 +43,7 @@ export default class Snippets extends Tool {
     return this
   }
   run(name) {
-    let snippets = this._snippets
+    const snippets = this._snippets
 
     for (let i = 0, len = snippets.length; i < len; i++) {
       if (snippets[i].name === name) this._run(i)
@@ -58,10 +58,10 @@ export default class Snippets extends Tool {
     return this
   }
   _bindEvent() {
-    let self = this
+    const self = this
 
     this._$el.on('click', '.eruda-run', function() {
-      let idx = $(this).data('idx')
+      const idx = $(this).data('idx')
 
       self._run(idx)
     })

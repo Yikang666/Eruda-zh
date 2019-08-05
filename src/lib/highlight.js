@@ -8,8 +8,8 @@ export default function highlight(str, lang) {
 
   lang = language[lang]
 
-  let subLangSi = 0,
-    subLangs = []
+  let subLangSi = 0
+  const subLangs = []
 
   each(lang, val => {
     if (!val.language) return
@@ -26,10 +26,10 @@ export default function highlight(str, lang) {
     str = str.replace(val.re, '___' + key + '___$1___end' + key + '___')
   })
 
-  let levels = []
+  const levels = []
 
   str = str.replace(/___(?!subtmpl)\w+?___/g, function($0) {
-    let end = $0.substr(3, 3) === 'end',
+    const end = $0.substr(3, 3) === 'end',
       tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g, ''),
       lastTag = levels.length > 0 ? levels[levels.length - 1] : null
 
@@ -67,7 +67,7 @@ export default function highlight(str, lang) {
     if (!val.language) return
 
     str = str.replace(/___subtmpl\d+___/g, function($tmpl) {
-      let i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10)
+      const i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10)
 
       return subLangs[i]
     })
@@ -76,7 +76,7 @@ export default function highlight(str, lang) {
   return str
 }
 
-let style = {
+const style = {
   comment: 'color:#63a35c;',
   string: 'color:#183691;',
   number: 'color:#0086b3;',
@@ -84,7 +84,7 @@ let style = {
   operators: 'color:#a71d5d;'
 }
 
-let language = {}
+const language = {}
 
 language.js = {
   comment: { re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g, style: 'comment' },

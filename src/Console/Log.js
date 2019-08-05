@@ -52,8 +52,8 @@ export default class Log {
   }
   addCount() {
     this.count++
-    let count = this.count,
-      msg = this.formattedMsg
+    const count = this.count
+    let msg = this.formattedMsg
     if (count === 2)
       msg = msg.replace('eruda-count eruda-hidden', 'eruda-count')
     msg = msg.replace(/data-mark="count">\d*/, 'data-mark="count">' + count)
@@ -74,7 +74,7 @@ export default class Log {
     return this
   }
   _needSrc() {
-    let { type, args } = this
+    const { type, args } = this
 
     if (type === 'html') return false
 
@@ -85,9 +85,9 @@ export default class Log {
     return false
   }
   extractObj(cb = noop) {
-    let { args, type } = this
+    const { args, type } = this
 
-    let setSrc = result => {
+    const setSrc = result => {
       this.src = result
       cb()
     }
@@ -102,7 +102,8 @@ export default class Log {
     }
   }
   _formatMsg() {
-    let { type, id, displayHeader, time, from, args } = this
+    let { args } = this
+    const { type, id, displayHeader, time, from } = this
 
     // Don't change original args for lazy evaluation.
     args = clone(args)
@@ -179,7 +180,7 @@ export default class Log {
           if (Log.showSrcInSources) {
             return logger.emit('viewJson', log.src)
           }
-          let $json = $el.find('.eruda-json')
+          const $json = $el.find('.eruda-json')
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
               new JsonViewer(log.src, $json)
@@ -211,7 +212,7 @@ Log.showUnenumerable = true
 Log.showSrcInSources = false
 Log.lazyEvaluation = true
 
-let getAbstract = wrap(origGetAbstract, function(fn, obj) {
+const getAbstract = wrap(origGetAbstract, function(fn, obj) {
   return fn(obj, {
     getterVal: Log.showGetterVal,
     unenumerable: false
@@ -219,10 +220,10 @@ let getAbstract = wrap(origGetAbstract, function(fn, obj) {
 })
 
 function formatTable(args) {
-  let table = args[0],
-    ret = '',
-    filter = args[1],
-    columns = []
+  const table = args[0]
+  let ret = ''
+  let filter = args[1]
+  let columns = []
 
   if (isStr(filter)) filter = toArr(filter)
   if (!isArr(filter)) filter = null
@@ -264,16 +265,16 @@ function formatTable(args) {
   return ret
 }
 
-let regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g
-let regErudaJs = /eruda(\.min)?\.js/
+const regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g
+const regErudaJs = /eruda(\.min)?\.js/
 
 function formatErr(err) {
   let lines = err.stack ? err.stack.split('\n') : []
-  let msg = `${err.message || lines[0]}<br/>`
+  const msg = `${err.message || lines[0]}<br/>`
 
   lines = lines.filter(val => !regErudaJs.test(val)).map(val => escape(val))
 
-  let stack = `<div class="eruda-stack eruda-hidden">${lines
+  const stack = `<div class="eruda-stack eruda-hidden">${lines
     .slice(1)
     .join('<br/>')}</div>`
 
@@ -291,7 +292,7 @@ function formatJs(code) {
 }
 
 function formatMsg(args, { htmlForEl = true } = {}) {
-  let needStrSubstitution = isStr(args[0]) && args.length !== 1
+  const needStrSubstitution = isStr(args[0]) && args.length !== 1
   if (needStrSubstitution) args = substituteStr(args)
 
   for (let i = 0, len = args.length; i < len; i++) {
@@ -317,21 +318,21 @@ function formatMsg(args, { htmlForEl = true } = {}) {
   return args.join(' ') + '<div class="eruda-json eruda-hidden"></div>'
 }
 
-let formatDir = args => formatMsg(args, { htmlForEl: false })
+const formatDir = args => formatMsg(args, { htmlForEl: false })
 
 function substituteStr(args) {
-  let str = escape(args[0]),
-    isInCss = false,
-    newStr = ''
+  const str = escape(args[0])
+  let isInCss = false
+  let newStr = ''
 
   args.shift()
 
   for (let i = 0, len = str.length; i < len; i++) {
-    let c = str[i]
+    const c = str[i]
 
     if (c === '%' && args.length !== 0) {
       i++
-      let arg = args.shift()
+      const arg = args.shift()
       switch (str[i]) {
         case 'i':
         case 'd':
@@ -397,15 +398,15 @@ function formatEl(val) {
   )}</pre>`
 }
 
-let regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
+const regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
 
-let recognizeUrl = str =>
+const recognizeUrl = str =>
   str.replace(regUrl, '<a href="$2" target="_blank">$2</a>')
 
 function getFrom() {
-  let e = new Error(),
-    ret = '',
-    lines = e.stack ? e.stack.split('\n') : ''
+  const e = new Error()
+  let ret = ''
+  const lines = e.stack ? e.stack.split('\n') : ''
 
   for (let i = 0, len = lines.length; i < len; i++) {
     ret = lines[i]
@@ -418,10 +419,10 @@ function getFrom() {
   return ret
 }
 
-let getCurTime = () => dateFormat('HH:MM:ss')
+const getCurTime = () => dateFormat('HH:MM:ss')
 
-let tpl = require('./Log.hbs')
-let render = data => tpl(data)
+const tpl = require('./Log.hbs')
+const render = data => tpl(data)
 
 function extractObj(obj, options = {}, cb) {
   defaults(options, {

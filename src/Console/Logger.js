@@ -38,7 +38,7 @@ export default class Logger extends Emitter {
     this._displayHeader = flag
   }
   maxNum(val) {
-    let logs = this._logs
+    const logs = this._logs
 
     this._maxNum = val
     if (isNum(val) && logs.length > val) {
@@ -68,7 +68,7 @@ export default class Logger extends Emitter {
     return this.render()
   }
   count(label) {
-    let count = this._count
+    const count = this._count
 
     !isUndef(count[label]) ? count[label]++ : (count[label] = 1)
 
@@ -77,7 +77,7 @@ export default class Logger extends Emitter {
   assert(...args) {
     if (args.length === 0) return
 
-    let exp = args.shift()
+    const exp = args.shift()
 
     if (!exp) {
       args.unshift('Assertion failed: ')
@@ -110,7 +110,7 @@ export default class Logger extends Emitter {
     return this
   }
   timeEnd(name) {
-    let startTime = this._timer[name]
+    const startTime = this._timer[name]
 
     if (!startTime) return
     delete this._timer[name]
@@ -194,13 +194,13 @@ export default class Logger extends Emitter {
     return this
   }
   insert(type, args) {
-    let logs = this._logs
-    let $el = this._$el
-    let el = $el.get(0)
+    const logs = this._logs
+    const $el = this._$el
+    const el = $el.get(0)
 
-    let isAtBottom = el.scrollTop === el.scrollHeight - el.offsetHeight
+    const isAtBottom = el.scrollTop === el.scrollHeight - el.offsetHeight
 
-    let options = isStr(type) ? { type, args } : type
+    const options = isStr(type) ? { type, args } : type
     extend(options, {
       id: uniqId('log'),
       displayHeader: this._displayHeader
@@ -208,7 +208,7 @@ export default class Logger extends Emitter {
 
     let log = new Log(options)
 
-    let lastLog = this._lastLog
+    const lastLog = this._lastLog
     if (
       log.type !== 'html' &&
       lastLog.type === log.type &&
@@ -216,7 +216,7 @@ export default class Logger extends Emitter {
       !log.src &&
       !log.args
     ) {
-      let $container = $el.find(`div[data-id="${lastLog.id}"]`)
+      const $container = $el.find(`div[data-id="${lastLog.id}"]`)
       if ($container.length > 0) {
         lastLog.addCount()
         if (log.time) lastLog.updateTime(log.time)
@@ -233,7 +233,7 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       const firstLog = logs[0]
-      let $container = $el.find(`div[data-id="${firstLog.id}"]`)
+      const $container = $el.find(`div[data-id="${firstLog.id}"]`)
       if ($container.length > 0) {
         $container.parent().remove()
       }
@@ -251,17 +251,17 @@ export default class Logger extends Emitter {
     return this
   }
   scrollToBottom() {
-    let el = this._$el.get(0)
+    const el = this._$el.get(0)
 
     el.scrollTop = el.scrollHeight - el.offsetHeight
   }
   _filterLogs(logs) {
-    let filter = this._filter
+    const filter = this._filter
 
     if (filter === 'all') return logs
 
-    let isFilterRegExp = isRegExp(filter)
-    let isFilterFn = isFn(filter)
+    const isFilterRegExp = isRegExp(filter)
+    const isFilterFn = isFn(filter)
 
     return logs.filter(log => {
       if (log.ignoreFilter) return true
@@ -271,11 +271,11 @@ export default class Logger extends Emitter {
     })
   }
   _filterLog(log) {
-    let filter = this._filter
+    const filter = this._filter
 
     if (filter === 'all') return true
 
-    let isFilterRegExp = isRegExp(filter),
+    const isFilterRegExp = isRegExp(filter),
       isFilterFn = isFn(filter)
 
     if (log.ignoreFilter) return true
@@ -302,13 +302,13 @@ export default class Logger extends Emitter {
     }
   }
   _bindEvent() {
-    let self = this
+    const self = this
 
     this._$el.on('click', '.eruda-log-item', function() {
-      let $el = $(this)
-      let id = $el.data('id')
-      let type = $el.data('type')
-      let logs = self._logs
+      const $el = $(this)
+      const id = $el.data('id')
+      const type = $el.data('type')
+      const logs = self._logs
       let log
 
       for (let i = 0, len = logs.length; i < len; i++) {
@@ -322,11 +322,11 @@ export default class Logger extends Emitter {
   }
 }
 
-let cmdList = require('./cmdList.json'),
+const cmdList = require('./cmdList.json'),
   helpMsg = require('./help.hbs')({ commands: cmdList }),
   libraries = require('./libraries.json')
 
-let evalJs = jsInput => {
+const evalJs = jsInput => {
   let ret
 
   try {

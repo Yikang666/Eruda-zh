@@ -1,9 +1,9 @@
 import Storage from './Storage'
 import logger from './logger'
 
-let configs = {}
+const configs = {}
 
-let config = {
+const config = {
   create(name) {
     logger.warn('createCfg is deprecated')
 

@@ -18,36 +18,36 @@ export default function getAbstract(
 ) {
   let json = ''
   let type = ''
-  let keyNum = 5
-  let parts = []
+  const keyNum = 5
+  const parts = []
   let names = []
   let objEllipsis = ''
-  let circular = false
+  const circular = false
   let i
 
   topObj = topObj || obj
 
-  let passOpts = { getterVal, unenumerable, level: level + 1 }
-  let doStringify = level === 0
+  const passOpts = { getterVal, unenumerable, level: level + 1 }
+  const doStringify = level === 0
 
-  let keyWrapper = '<span style="color: #a71d5d;">'
-  let numWrapper = '<span style="color: #0086b3;">'
-  let nullWrapper = '<span style="color: #0086b3;">'
-  let strWrapper = '<span style="color: #183691;">'
-  let boolWrapper = '<span style="color: #0086b3;">'
-  let specialWrapper = '<span style="color: #707d8b;">'
-  let strEscape = str =>
+  const keyWrapper = '<span style="color: #a71d5d;">'
+  const numWrapper = '<span style="color: #0086b3;">'
+  const nullWrapper = '<span style="color: #0086b3;">'
+  const strWrapper = '<span style="color: #183691;">'
+  const boolWrapper = '<span style="color: #0086b3;">'
+  const specialWrapper = '<span style="color: #707d8b;">'
+  const strEscape = str =>
     escape(str)
       .replace(/\\n/g, '↵')
       .replace(/\\f|\\r|\\t/g, '')
       .replace(/\\/g, '')
-  let wrapperEnd = '</span>'
+  const wrapperEnd = '</span>'
 
-  let wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd
-  let wrapNum = num => numWrapper + num + wrapperEnd
-  let wrapRegExp = str => strWrapper + str + wrapperEnd
-  let wrapBool = bool => boolWrapper + bool + wrapperEnd
-  let wrapNull = str => nullWrapper + str + wrapperEnd
+  const wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd
+  const wrapNum = num => numWrapper + num + wrapperEnd
+  const wrapRegExp = str => strWrapper + str + wrapperEnd
+  const wrapBool = bool => boolWrapper + bool + wrapperEnd
+  const wrapNull = str => nullWrapper + str + wrapperEnd
 
   function wrapStr(str) {
     str = toStr(str)
@@ -64,10 +64,10 @@ export default function getAbstract(
       objEllipsis = ', …'
       return
     }
-    let key = wrapKey(escapeJsonStr(name))
+    const key = wrapKey(escapeJsonStr(name))
 
     if (!getterVal) {
-      let descriptor = Object.getOwnPropertyDescriptor(obj, name)
+      const descriptor = Object.getOwnPropertyDescriptor(obj, name)
       if (descriptor.get) {
         parts.push(`${key}: ${wrapStr('(...)')}`)
         i++
@@ -84,14 +84,14 @@ export default function getAbstract(
     type = '[object Object]'
   }
 
-  let isStr = type == '[object String]'
-  let isArr = type == '[object Array]'
-  let isObj = type == '[object Object]'
-  let isNum = type == '[object Number]'
-  let isRegExp = type == '[object RegExp]'
-  let isSymbol = type == '[object Symbol]'
-  let isFn = type == '[object Function]'
-  let isBool = type == '[object Boolean]'
+  const isStr = type == '[object String]'
+  const isArr = type == '[object Array]'
+  const isObj = type == '[object Object]'
+  const isNum = type == '[object Number]'
+  const isRegExp = type == '[object RegExp]'
+  const isSymbol = type == '[object Symbol]'
+  const isFn = type == '[object Function]'
+  const isBool = type == '[object Boolean]'
 
   if (circular) {
     json = wrapStr('[circular]')
@@ -177,8 +177,8 @@ export default function getAbstract(
 const SPECIAL_VAL = ['(...)', 'undefined', 'Symbol', 'Object', 'ƒ']
 
 function canBeProto(obj) {
-  let emptyObj = isEmpty(Object.getOwnPropertyNames(obj))
-  let proto = Object.getPrototypeOf(obj)
+  const emptyObj = isEmpty(Object.getOwnPropertyNames(obj))
+  const proto = Object.getPrototypeOf(obj)
 
   return emptyObj && proto && proto !== Object.prototype
 }

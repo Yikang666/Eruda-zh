@@ -1,6 +1,6 @@
 import { detectBrowser, detectOs } from '../lib/util'
 
-let browser = detectBrowser()
+const browser = detectBrowser()
 
 export default [
   {

@@ -60,15 +60,15 @@ export default class EntryBtn extends Emitter {
     emitter.off(emitter.SCALE, this._scaleListener)
   }
   _appendTpl() {
-    let $container = this._$container
+    const $container = this._$container
 
     $container.append(require('./EntryBtn.hbs')())
     this._$el = $container.find('.eruda-entry-btn')
   }
   _resetPos(orientationChanged) {
-    let cfg = this.config,
-      pos = cfg.get('pos'),
-      defPos = this._getDefPos()
+    const cfg = this.config
+    let pos = cfg.get('pos')
+    const defPos = this._getDefPos()
 
     if (!cfg.get('rememberPos') || orientationChanged) {
       pos = defPos
@@ -77,7 +77,7 @@ export default class EntryBtn extends Emitter {
     this.setPos(pos)
   }
   _bindEvent() {
-    let draggabilly = this._draggabilly,
+    const draggabilly = this._draggabilly,
       $el = this._$el
 
     draggabilly
@@ -85,7 +85,7 @@ export default class EntryBtn extends Emitter {
       .on('dragStart', () => $el.addClass('eruda-active'))
 
     draggabilly.on('dragEnd', () => {
-      let cfg = this.config
+      const cfg = this.config
 
       if (cfg.get('rememberPos')) {
         cfg.set('pos', {
@@ -106,7 +106,7 @@ export default class EntryBtn extends Emitter {
     })
   }
   initCfg(settings) {
-    let cfg = (this.config = Settings.createCfg('home-button', {
+    const cfg = (this.config = Settings.createCfg('home-button', {
       rememberPos: true,
       pos: this._getDefPos()
     }))
@@ -118,7 +118,7 @@ export default class EntryBtn extends Emitter {
     this._resetPos()
   }
   _getDefPos() {
-    let minWidth = this._$el.get(0).offsetWidth + 10
+    const minWidth = this._$el.get(0).offsetWidth + 10
 
     return {
       x: window.innerWidth - minWidth,

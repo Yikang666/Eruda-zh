@@ -34,9 +34,9 @@ export default class Sources extends Tool {
     if (type === 'img') {
       this._isFetchingData = true
 
-      let img = new Image()
+      const img = new Image()
 
-      let self = this
+      const self = this
 
       img.onload = function() {
         self._isFetchingData = false
@@ -107,7 +107,7 @@ export default class Sources extends Tool {
     })
 
     this._$el.on('click', '.eruda-http .eruda-response', () => {
-      let data = this._data.val,
+      const data = this._data.val,
         resTxt = data.resTxt
 
       switch (data.subType) {
@@ -135,9 +135,9 @@ export default class Sources extends Tool {
     this._iframeTpl = require('./iframe.hbs')
   }
   _rmCfg() {
-    let cfg = this.config
+    const cfg = this.config
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
 
     if (!settings) return
 
@@ -147,7 +147,7 @@ export default class Sources extends Tool {
       .remove('Sources')
   }
   _initCfg() {
-    let cfg = (this.config = Settings.createCfg('sources', {
+    const cfg = (this.config = Settings.createCfg('sources', {
       showLineNum: true,
       formatCode: true
     }))
@@ -166,7 +166,7 @@ export default class Sources extends Tool {
       }
     })
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
     settings
       .text('Sources')
       .switch(cfg, 'showLineNum', 'Show Line Numbers')
@@ -176,7 +176,7 @@ export default class Sources extends Tool {
   _render() {
     this._isInit = true
 
-    let data = this._data
+    const data = this._data
 
     switch (data.type) {
       case 'html':
@@ -199,7 +199,7 @@ export default class Sources extends Tool {
     this._renderHtml(this._imgTpl(this._data.val))
   }
   _renderHttp() {
-    let val = this._data.val
+    const val = this._data.val
 
     if (val.resTxt.trim() === '') delete val.resTxt
     if (isEmpty(val.resHeaders)) delete val.resHeaders
@@ -207,10 +207,10 @@ export default class Sources extends Tool {
     this._renderHtml(this._httpTpl(this._data.val))
   }
   _renderCode() {
-    let data = this._data
+    const data = this._data
 
-    let code = data.val,
-      len = data.val.length
+    let code = data.val
+    const len = data.val.length
 
     // If source code too big, don't process it.
     if (len < MAX_BEAUTIFY_LEN && this._formatCode) {

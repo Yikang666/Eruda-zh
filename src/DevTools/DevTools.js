@@ -59,7 +59,7 @@ export default class DevTools extends Emitter {
   }
   add(tool) {
     if (!(tool instanceof Tool)) {
-      let { init, show, hide, destroy } = new Tool()
+      const { init, show, hide, destroy } = new Tool()
       defaults(tool, { init, show, hide, destroy })
     }
 
@@ -78,16 +78,16 @@ export default class DevTools extends Emitter {
     return this
   }
   remove(name) {
-    let tools = this._tools
+    const tools = this._tools
 
     if (!tools[name]) return logger.warn(`Tool ${name} doesn't exist`)
 
     this._navBar.remove(name)
 
-    let tool = tools[name]
+    const tool = tools[name]
     delete tools[name]
     if (tool.active) {
-      let toolKeys = keys(tools)
+      const toolKeys = keys(tools)
       if (toolKeys.length > 0) this.showTool(tools[last(toolKeys)].name)
     }
     tool.destroy()
@@ -100,7 +100,7 @@ export default class DevTools extends Emitter {
     return this
   }
   get(name) {
-    let tool = this._tools[name]
+    const tool = this._tools[name]
 
     if (tool) return tool
   }
@@ -108,9 +108,9 @@ export default class DevTools extends Emitter {
     if (this._curTool === name) return this
     this._curTool = name
 
-    let tools = this._tools
+    const tools = this._tools
 
-    let tool = tools[name]
+    const tool = tools[name]
     if (!tool) return
 
     let lastTool = {}
@@ -133,7 +133,7 @@ export default class DevTools extends Emitter {
     return this
   }
   initCfg(settings) {
-    let cfg = (this.config = Settings.createCfg('dev-tools', {
+    const cfg = (this.config = Settings.createCfg('dev-tools', {
       transparency: 0.95,
       displaySize: 80,
       tinyNavBar: !isMobile(),
@@ -213,7 +213,7 @@ export default class DevTools extends Emitter {
     this._$el.css({ height: height + '%' })
   }
   _appendTpl() {
-    let $container = this.$container
+    const $container = this.$container
 
     $container.append(require('./DevTools.hbs')())
 
@@ -226,6 +226,6 @@ export default class DevTools extends Emitter {
   }
 }
 
-let localStore = safeStorage('local')
+const localStore = safeStorage('local')
 
-let activeEruda = flag => localStore.setItem('active-eruda', flag)
+const activeEruda = flag => localStore.setItem('active-eruda', flag)

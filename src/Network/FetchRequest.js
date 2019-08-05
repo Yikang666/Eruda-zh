@@ -22,9 +22,9 @@ export default class FetchRequest extends Emitter {
     this._method = options.method || 'GET'
   }
   send(fetchResult) {
-    let options = this._options
+    const options = this._options
 
-    let data = isStr(options.body) ? options.body : ''
+    const data = isStr(options.body) ? options.body : ''
 
     this._fetch = fetchResult
     this.emit('send', this._id, {
@@ -37,7 +37,7 @@ export default class FetchRequest extends Emitter {
     fetchResult.then(res => {
       res = res.clone()
 
-      let type = getType(res.headers.get('Content-Type'))
+      const type = getType(res.headers.get('Content-Type'))
 
       res.text().then(resTxt => {
         this.emit('update', this._id, {
@@ -60,7 +60,7 @@ export default class FetchRequest extends Emitter {
 function getSize(res, resTxt) {
   let size = 0
 
-  let contentLen = res.headers.get('Content-length')
+  const contentLen = res.headers.get('Content-length')
 
   if (contentLen) {
     size = toNum(contentLen)
@@ -72,7 +72,7 @@ function getSize(res, resTxt) {
 }
 
 function getHeaders(res) {
-  let ret = {}
+  const ret = {}
 
   res.headers.forEach((val, key) => (ret[key] = val))
 

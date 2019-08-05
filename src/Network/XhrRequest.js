@@ -33,9 +33,9 @@ export default class XhrRequest extends Emitter {
     })
   }
   handleHeadersReceived() {
-    let xhr = this._xhr
+    const xhr = this._xhr
 
-    let type = getType(xhr.getResponseHeader('Content-Type'))
+    const type = getType(xhr.getResponseHeader('Content-Type'))
 
     this.emit('update', this._id, {
       type: type.type,
@@ -47,8 +47,8 @@ export default class XhrRequest extends Emitter {
     })
   }
   handleDone() {
-    let xhr = this._xhr
-    let resType = xhr.responseType
+    const xhr = this._xhr
+    const resType = xhr.responseType
     let resTxt = ''
 
     const update = () => {
@@ -82,17 +82,17 @@ export default class XhrRequest extends Emitter {
 }
 
 function getHeaders(xhr) {
-  let raw = xhr.getAllResponseHeaders(),
+  const raw = xhr.getAllResponseHeaders(),
     lines = raw.split('\n')
 
-  let ret = {}
+  const ret = {}
 
   each(lines, line => {
     line = trim(line)
 
     if (line === '') return
 
-    let [key, val] = line.split(':', 2)
+    const [key, val] = line.split(':', 2)
 
     ret[key] = trim(val)
   })
@@ -105,7 +105,7 @@ function getSize(xhr, headersOnly, url) {
 
   function getStrSize() {
     if (!headersOnly) {
-      let resType = xhr.responseType
+      const resType = xhr.responseType
       let resTxt = ''
 
       if (resType === '' || resType === 'text') resTxt = xhr.responseText

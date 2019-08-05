@@ -35,8 +35,8 @@ export default class Console extends Tool {
     this._logger.render()
   }
   overrideConsole() {
-    let origConsole = (this._origConsole = {})
-    let winConsole = window.console
+    const origConsole = (this._origConsole = {})
+    const winConsole = window.console
 
     CONSOLE_METHOD.forEach(name => {
       let origin = (origConsole[name] = noop)
@@ -102,12 +102,12 @@ export default class Console extends Tool {
     emitter.off(emitter.SCALE, this._scaleListener)
   }
   _appendTpl() {
-    let $el = this._$el
+    const $el = this._$el
 
     this._style = evalCss(require('./Console.scss'))
     $el.append(require('./Console.hbs')())
 
-    let _$inputContainer = $el.find('.eruda-js-input'),
+    const _$inputContainer = $el.find('.eruda-js-input'),
       _$input = _$inputContainer.find('textarea'),
       _$inputBtns = _$inputContainer.find('.eruda-buttons')
 
@@ -120,12 +120,12 @@ export default class Console extends Tool {
     })
   }
   _initLogger() {
-    let $filter = this._$control.find('.eruda-filter')
-    let logger = (this._logger = new Logger(this._$logs, this))
+    const $filter = this._$control.find('.eruda-filter')
+    const logger = (this._logger = new Logger(this._$logs, this))
 
     logger.on('filter', filter =>
       $filter.each(function() {
-        let $this = $(this),
+        const $this = $(this),
           isMatch = $this.data('filter') === filter
 
         $this[isMatch ? 'addClass' : 'rmClass']('eruda-active')
@@ -133,7 +133,7 @@ export default class Console extends Tool {
     )
   }
   _exposeLogger() {
-    let logger = this._logger,
+    const logger = this._logger,
       methods = ['filter', 'html'].concat(CONSOLE_METHOD)
 
     methods.forEach(
@@ -147,8 +147,8 @@ export default class Console extends Tool {
     )
   }
   _bindEvent() {
-    let container = this._container
-    let $input = this._$input,
+    const container = this._container
+    const $input = this._$input,
       $inputBtns = this._$inputBtns,
       $control = this._$control,
       logger = this._logger,
@@ -164,7 +164,7 @@ export default class Console extends Tool {
     $inputBtns
       .on('click', '.eruda-cancel', () => this._hideInput())
       .on('click', '.eruda-execute', () => {
-        let jsInput = $input.val().trim()
+        const jsInput = $input.val().trim()
         if (jsInput === '') return
 
         logger.input(jsInput)
@@ -179,14 +179,14 @@ export default class Console extends Tool {
 
     logger
       .on('viewJson', data => {
-        let sources = container.get('sources')
+        const sources = container.get('sources')
         if (!sources) return
 
         sources.set('json', data)
         container.showTool('sources')
       })
       .on('insert', log => {
-        let autoShow = log.type === 'error' && config.get('displayIfErr')
+        const autoShow = log.type === 'error' && config.get('displayIfErr')
 
         if (autoShow) container.showTool('console').show()
       })
@@ -208,9 +208,9 @@ export default class Console extends Tool {
     this._$inputBtns.show()
   }
   _rmCfg() {
-    let cfg = this.config
+    const cfg = this.config
 
-    let settings = this._container.get('settings')
+    const settings = this._container.get('settings')
     if (!settings) return
 
     settings
@@ -227,11 +227,11 @@ export default class Console extends Tool {
       .remove('Console')
   }
   _initCfg() {
-    let container = this._container
-    let sources = container.get('sources')
-    let logger = this._logger
+    const container = this._container
+    const sources = container.get('sources')
+    const logger = this._logger
 
-    let cfg = (this.config = Settings.createCfg('console', {
+    const cfg = (this.config = Settings.createCfg('console', {
       catchGlobalErr: true,
       overrideConsole: true,
       displayExtraInfo: false,
@@ -244,7 +244,7 @@ export default class Console extends Tool {
       maxLogNum: 'infinite'
     }))
 
-    let isWorkerSupported = !!window.Worker
+    const isWorkerSupported = !!window.Worker
 
     let maxLogNum = cfg.get('maxLogNum')
     maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
@@ -283,7 +283,7 @@ export default class Console extends Tool {
       }
     })
 
-    let settings = container.get('settings')
+    const settings = container.get('settings')
 
     settings
       .text('Console')
