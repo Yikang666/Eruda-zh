@@ -25,7 +25,7 @@ export default class JsonViewer {
   constructor(data, $el) {
     evalCss(require('./json.scss'))
 
-    if (!isObj(data) && isUndef(data.id)) {
+    if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
       data = JSON.parse(stringifyAll(data))
     }
 
