@@ -3,7 +3,15 @@ import beautify from 'js-beautify'
 import highlight from '../lib/highlight'
 import JsonViewer from '../lib/JsonViewer'
 import Settings from '../Settings/Settings'
-import { evalCss, ajax, isEmpty, escape, trim, isStr } from '../lib/util'
+import {
+  evalCss,
+  ajax,
+  isEmpty,
+  escape,
+  trim,
+  isStr,
+  stringifyAll
+} from '../lib/util'
 
 export default class Sources extends Tool {
   constructor() {
@@ -256,7 +264,10 @@ export default class Sources extends Tool {
     let val = this._data.val
 
     try {
-      if (isStr(val)) val = JSON.parse(val)
+      if (isStr(val)) {
+        val = JSON.parse(val)
+        val = stringifyAll(val)
+      }
       /* eslint-disable no-empty */
     } catch (e) {}
 

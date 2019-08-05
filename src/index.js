@@ -32,7 +32,7 @@ import {
 module.exports = {
   init({ container, tool, autoScale = true, useShadowDom = true } = {}) {
     if (this._isInit) return
-    
+
     this._isInit = true
     this._scale = 1
 
