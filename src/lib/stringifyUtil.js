@@ -1995,6 +1995,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      * |accessGetter=false|boolean|Access getter value      |
      * |timeout=0         |number |Timeout of stringify     |
      * |depth=0           |number |Max depth of recursion   |
+     * |[ignore]          |array  |Values to ignore         |
      *
      * When time is out, all remaining values will all be "Timeout".
      */
@@ -2011,6 +2012,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      *         accessGetter?: boolean;
      *         timeout?: number;
      *         depth?: number;
+     *         ignore?: any[];
      *     }
      * }
      * export declare function stringifyAll(
@@ -2020,7 +2022,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      */
 
     /* dependencies
-     * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys 
+     * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain 
      */
 
     exports = (function(_exports) {
@@ -2054,7 +2056,9 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             _ref$symbol = _ref.symbol,
             symbol = _ref$symbol === void 0 ? false : _ref$symbol,
             _ref$accessGetter = _ref.accessGetter,
-            accessGetter = _ref$accessGetter === void 0 ? false : _ref$accessGetter;
+            accessGetter = _ref$accessGetter === void 0 ? false : _ref$accessGetter,
+            _ref$ignore = _ref.ignore,
+            ignore = _ref$ignore === void 0 ? [] : _ref$ignore;
 
         var json = '';
         var options = {
@@ -2065,7 +2069,8 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             depth: depth,
             curDepth: curDepth + 1,
             timeout: timeout,
-            startTime: startTime
+            startTime: startTime,
+            ignore: ignore
         };
         var t = type(obj, false);
 
@@ -2179,7 +2184,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
 
                 var prototype = getProto(obj);
 
-                if (prototype) {
+                if (prototype && !contain(ignore, prototype)) {
                     var proto = '"proto":'.concat(
                         exports(
                             prototype,
@@ -2211,6 +2216,10 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             } else {
                 try {
                     val = obj[key];
+
+                    if (contain(options.ignore, val)) {
+                        return;
+                    }
 
                     if (isPromise(val)) {
                         val.catch(function() {});

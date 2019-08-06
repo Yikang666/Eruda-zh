@@ -1991,6 +1991,175 @@ export var extendOwn = _.extendOwn = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ highlight ------------------------------ */
+
+export var highlight = _.highlight = (function (exports) {
+    /* Highlight code.
+     * 
+     * |Name   |Type  |Desc                        |
+     * |-------|------|----------------------------|
+     * |str    |string|Code string                 |
+     * |lang=js|string|Language, js, html or css   |
+     * |[style]|object|Keyword highlight style     |
+     * |return |string|Highlighted html code string|
+     * 
+     * Available styles:
+     * 
+     * comment, string, number, keyword, operator
+     */
+
+    /* example
+     * highlight('const a = 5;', 'js', {
+     *     number: 'color:#0086b3;'
+     * }); // -> '<span style="color:#a71d5d;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
+     */
+
+    /* typescript
+     * export declare namespace highlight {
+     *     interface IStyle {
+     *         comment?: string;
+     *         string?: string;
+     *         number?: string;
+     *         keyword?: string;
+     *         operator?: string;
+     *     }
+     * }
+     * export declare function highlight(
+     *     str: string,
+     *     lang?: string,
+     *     style: highlight.IStyle
+     * ): string;
+     */
+
+    /* dependencies
+     * each 
+     */ // https://github.com/trentrichardson/jQuery-Litelighter
+
+    exports = function exports(str, lang) {
+        lang = lang || 'js';
+        str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        lang = language[lang];
+        var subLangSi = 0;
+        var subLangs = [];
+        each(lang, function(val) {
+            if (!val.language) return;
+            str = str.replace(val.re, function($1, $2) {
+                subLangs[subLangSi++] = highlight($2, val.language);
+                return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
+            });
+        });
+        each(lang, function(val, key) {
+            if (language[val.language]) return;
+            str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
+        });
+        var levels = [];
+        str = str.replace(/___(?!subtmpl)\w+?___/g, function($0) {
+            var end = $0.substr(3, 3) === 'end',
+                tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g, ''),
+                lastTag = levels.length > 0 ? levels[levels.length - 1] : null;
+
+            if (
+                !end &&
+                (lastTag == null ||
+                    tag == lastTag ||
+                    (lastTag != null &&
+                        lang[lastTag] &&
+                        lang[lastTag].embed != undefined &&
+                        lang[lastTag].embed.indexOf(tag) > -1))
+            ) {
+                levels.push(tag);
+                return $0;
+            } else if (end && tag == lastTag) {
+                levels.pop();
+                return $0;
+            }
+
+            return '';
+        });
+        each(lang, function(val, key) {
+            str = str
+                .replace(new RegExp('___end' + key + '___', 'g'), '</span>')
+                .replace(
+                    new RegExp('___' + key + '___', 'g'),
+                    '<span style="' + style[val.style] + '">'
+                );
+        });
+        each(lang, function(val) {
+            if (!val.language) return;
+            str = str.replace(/___subtmpl\d+___/g, function($tmpl) {
+                var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
+                return subLangs[i];
+            });
+        });
+        return str;
+    };
+
+    var style = {
+        comment: 'color:#63a35c;',
+        string: 'color:#183691;',
+        number: 'color:#0086b3;',
+        keyword: 'color:#a71d5d;',
+        operator: 'color:#994500;'
+    };
+    var language = {};
+    language.js = {
+        comment: {
+            re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g,
+            style: 'comment'
+        },
+        string: {
+            re: /(('.*?')|(".*?"))/g,
+            style: 'string'
+        },
+        numbers: {
+            re: /(-?(\d+|\d+\.\d+|\.\d+))/g,
+            style: 'number'
+        },
+        keywords: {
+            re: /(?:\b)(function|for|foreach|while|if|else|elseif|switch|break|as|return|this|class|self|default|var|const|let|false|true|null|undefined)(?:\b)/gi,
+            style: 'keyword'
+        },
+        operator: {
+            re: /(\+|-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g,
+            style: 'operator'
+        }
+    };
+    language.html = {
+        comment: {
+            re: /(&lt;!--([\s\S]*?)--&gt;)/g,
+            style: 'comment'
+        },
+        tag: {
+            re: /(&lt;\/?\w(.|\n)*?\/?&gt;)/g,
+            style: 'keyword',
+            embed: ['string']
+        },
+        string: language.js.string,
+        css: {
+            re: /(?:&lt;style.*?&gt;)([\s\S]*)?(?:&lt;\/style&gt;)/gi,
+            language: 'css'
+        },
+        script: {
+            re: /(?:&lt;script.*?&gt;)([\s\S]*?)(?:&lt;\/script&gt;)/gi,
+            language: 'js'
+        }
+    };
+    language.css = {
+        comment: language.js.comment,
+        string: language.js.string,
+        numbers: {
+            re: /((-?(\d+|\d+\.\d+|\.\d+)(%|px|em|pt|in)?)|#[0-9a-fA-F]{3}[0-9a-fA-F]{3})/g,
+            style: 'number'
+        },
+        keywords: {
+            re: /(@\w+|:?:\w+|[a-z-]+:)/g,
+            style: 'keyword'
+        }
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ values ------------------------------ */
 
 export var values = _.values = (function (exports) {
@@ -7620,6 +7789,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      * |accessGetter=false|boolean|Access getter value      |
      * |timeout=0         |number |Timeout of stringify     |
      * |depth=0           |number |Max depth of recursion   |
+     * |[ignore]          |array  |Values to ignore         |
      *
      * When time is out, all remaining values will all be "Timeout".
      */
@@ -7636,6 +7806,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      *         accessGetter?: boolean;
      *         timeout?: number;
      *         depth?: number;
+     *         ignore?: any[];
      *     }
      * }
      * export declare function stringifyAll(
@@ -7645,7 +7816,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      */
 
     /* dependencies
-     * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys 
+     * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain 
      */
 
     exports = (function(_exports) {
@@ -7679,7 +7850,9 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             _ref$symbol = _ref.symbol,
             symbol = _ref$symbol === void 0 ? false : _ref$symbol,
             _ref$accessGetter = _ref.accessGetter,
-            accessGetter = _ref$accessGetter === void 0 ? false : _ref$accessGetter;
+            accessGetter = _ref$accessGetter === void 0 ? false : _ref$accessGetter,
+            _ref$ignore = _ref.ignore,
+            ignore = _ref$ignore === void 0 ? [] : _ref$ignore;
 
         var json = '';
         var options = {
@@ -7690,7 +7863,8 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             depth: depth,
             curDepth: curDepth + 1,
             timeout: timeout,
-            startTime: startTime
+            startTime: startTime,
+            ignore: ignore
         };
         var t = type(obj, false);
 
@@ -7804,7 +7978,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
 
                 var prototype = getProto(obj);
 
-                if (prototype) {
+                if (prototype && !contain(ignore, prototype)) {
                     var proto = '"proto":'.concat(
                         exports(
                             prototype,
@@ -7836,6 +8010,10 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             } else {
                 try {
                     val = obj[key];
+
+                    if (contain(options.ignore, val)) {
+                        return;
+                    }
 
                     if (isPromise(val)) {
                         val.catch(function() {});

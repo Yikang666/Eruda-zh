@@ -1,6 +1,5 @@
 import stringify from './stringify'
 import origGetAbstract from '../lib/getAbstract'
-import highlight from '../lib/highlight'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer'
 import {
@@ -25,7 +24,8 @@ import {
   contain,
   isEmpty,
   clone,
-  noop
+  noop,
+  highlight
 } from '../lib/util'
 
 export default class Log {
