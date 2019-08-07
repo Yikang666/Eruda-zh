@@ -36,7 +36,8 @@
   .null {
     color: #0086b3;
   }
-  .string {
+  .string,
+  .regexp {
     color: #183691;
   }
   .number {

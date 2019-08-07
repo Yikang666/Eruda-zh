@@ -2,7 +2,6 @@ import {
   evalCss,
   $,
   startWith,
-  isArr,
   isObj,
   uniqId,
   upperFirst,
@@ -26,7 +25,11 @@ export default class JsonViewer {
     evalCss(require('./json.scss'))
 
     if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
-      data = JSON.parse(stringifyAll(data))
+      data = JSON.parse(
+        stringifyAll(data, {
+          ignore: [Object.prototype]
+        })
+      )
     }
 
     this._data = {
@@ -67,32 +70,23 @@ export default class JsonViewer {
     return ret
   }
   createEl(key, val, keyType, firstLevel = false) {
-    let type = 'object'
+    let type = typeof val
     let id
-
-    if (isArr(val)) type = 'array'
-
-    function wrapKey(key) {
-      if (firstLevel) return ''
-      if (isObj(val) && val.jsonSplitArr) return ''
-
-      let keyClass = 'eruda-key'
-      if (
-        keyType === 'unenumerable' ||
-        keyType === 'proto' ||
-        keyType === 'symbol'
-      ) {
-        keyClass = 'eruda-key-lighter'
-      }
-
-      return `<span class="${keyClass}">${encode(key)}</span>: `
-    }
 
     if (val === null) {
       return `<li>${wrapKey(key)}<span class="eruda-null">null</span></li>`
-    } else if (val.type === 'Number' || isNum(val) || isBool(val)) {
-      return `<li>${wrapKey(key)}<span class="eruda-${typeof val}">${encode(
+    } else if (isNum(val) || isBool(val)) {
+      return `<li>${wrapKey(key)}<span class="eruda-${type}">${encode(
         val
+      )}</span></li>`
+    }
+
+    if (val.type === 'RegExp') type = 'regexp'
+    if (val.type === 'Number') type = 'number'
+
+    if (val.type === 'Number' || val.type === 'RegExp') {
+      return `<li>${wrapKey(key)}<span class="eruda-${type}">${encode(
+        val.value
       )}</span></li>`
     } else if (val.type === 'Undefined' || val.type === 'Symbol') {
       return `<li>${wrapKey(key)}<span class="eruda-special">${lowerCase(
@@ -122,6 +116,22 @@ export default class JsonViewer {
       if (firstLevel) obj += this.jsonToHtml(this._map[id])
 
       return obj + '</ul><span class="eruda-close"></span></li>'
+    }
+
+    function wrapKey(key) {
+      if (firstLevel) return ''
+      if (isObj(val) && val.jsonSplitArr) return ''
+
+      let keyClass = 'eruda-key'
+      if (
+        keyType === 'unenumerable' ||
+        keyType === 'proto' ||
+        keyType === 'symbol'
+      ) {
+        keyClass = 'eruda-key-lighter'
+      }
+
+      return `<span class="${keyClass}">${encode(key)}</span>: `
     }
 
     return `<li>${wrapKey(key)}<span class="eruda-${typeof val}">"${encode(

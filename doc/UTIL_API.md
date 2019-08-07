@@ -1300,6 +1300,27 @@ Checks if key is a direct property.
 has({one: 1}, 'one'); // -> true
 ```
 
+## highlight 
+
+Highlight code.
+
+|Name   |Type  |Desc                        |
+|-------|------|----------------------------|
+|str    |string|Code string                 |
+|lang=js|string|Language, js, html or css   |
+|[style]|object|Keyword highlight style     |
+|return |string|Highlighted html code string|
+
+Available styles:
+
+comment, string, number, keyword, operator
+
+```javascript
+highlight('const a = 5;', 'js', {
+    number: 'color:#0086b3;'
+}); // -> '<span style="color:#a71d5d;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
+```
+
 ## identity 
 
 Return the first argument given.
@@ -2292,6 +2313,7 @@ Available options:
 |accessGetter=false|boolean|Access getter value      |
 |timeout=0         |number |Timeout of stringify     |
 |depth=0           |number |Max depth of recursion   |
+|[ignore]          |array  |Values to ignore         |
 
 When time is out, all remaining values will all be "Timeout".
 
