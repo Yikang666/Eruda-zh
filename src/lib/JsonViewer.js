@@ -27,7 +27,7 @@ export default class JsonViewer {
     if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
       data = JSON.parse(
         stringifyAll(data, {
-          ignore: [Object.prototype]
+          ignore: [Object.prototype, Array.prototype]
         })
       )
     }
