@@ -22,7 +22,7 @@ export var last = _.last = (function (exports) {
     /* typescript
      * export declare function last(arr: any[]): any;
      */
-    exports = function exports(arr) {
+    exports = function(arr) {
         var len = arr ? arr.length : 0;
         if (len) return arr[len - 1];
     };
@@ -49,7 +49,7 @@ export var isUndef = _.isUndef = (function (exports) {
     /* typescript
      * export declare function isUndef(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val === void 0;
     };
 
@@ -59,24 +59,6 @@ export var isUndef = _.isUndef = (function (exports) {
 /* ------------------------------ isObj ------------------------------ */
 
 export var isObj = _.isObj = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Check if value is the language type of Object.
      *
      * |Name  |Type   |Desc                      |
@@ -95,9 +77,8 @@ export var isObj = _.isObj = (function (exports) {
     /* typescript
      * export declare function isObj(val: any): boolean;
      */
-    exports = function exports(val) {
-        var type = _typeof(val);
-
+    exports = function(val) {
+        var type = typeof val;
         return !!val && (type === 'function' || type === 'object');
     };
 
@@ -128,14 +109,14 @@ export var inherits = _.inherits = (function (exports) {
      *     this._name = name;
      * }
      * inherits(Student, People);
-     * var s = new Student('RedHood');
+     * const s = new Student('RedHood');
      * s.getName(); // -> 'RedHood'
      */
 
     /* typescript
      * export declare function inherits(Class: Function, SuperClass: Function): void;
      */
-    exports = function exports(Class, SuperClass) {
+    exports = function(Class, SuperClass) {
         if (objCreate) return (Class.prototype = objCreate(SuperClass.prototype));
         noop.prototype = SuperClass.prototype;
         Class.prototype = new noop();
@@ -169,7 +150,7 @@ export var has = _.has = (function (exports) {
      */
     var hasOwnProp = Object.prototype.hasOwnProperty;
 
-    exports = function exports(obj, key) {
+    exports = function(obj, key) {
         return hasOwnProp.call(obj, key);
     };
 
@@ -195,7 +176,7 @@ export var slice = _.slice = (function (exports) {
     /* typescript
      * export declare function slice(array: any[], start?: number, end?: number): any[];
      */
-    exports = function exports(arr, start, end) {
+    exports = function(arr, start, end) {
         var len = arr.length;
 
         if (start == null) {
@@ -229,24 +210,6 @@ export var slice = _.slice = (function (exports) {
 /* ------------------------------ isBrowser ------------------------------ */
 
 export var isBrowser = _.isBrowser = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Check if running in a browser.
      */
 
@@ -258,10 +221,8 @@ export var isBrowser = _.isBrowser = (function (exports) {
      * export declare const isBrowser: boolean;
      */
     exports =
-        (typeof window === 'undefined' ? 'undefined' : _typeof(window)) ===
-            'object' &&
-        (typeof document === 'undefined' ? 'undefined' : _typeof(document)) ===
-            'object' &&
+        typeof window === 'object' &&
+        typeof document === 'object' &&
         document.nodeType === 9;
 
     return exports;
@@ -280,7 +241,7 @@ export var noop = _.noop = (function (exports) {
     /* typescript
      * export declare function noop(): void;
      */
-    exports = function exports() {};
+    exports = function() {};
 
     return exports;
 })({});
@@ -307,7 +268,7 @@ export var before = _.before = (function (exports) {
     /* typescript
      * export declare function before(n: number, fn: Function): Function;
      */
-    exports = function exports(n, fn) {
+    exports = function(n, fn) {
         var memo;
         return function() {
             if (--n > 0) memo = fn.apply(this, arguments);
@@ -342,11 +303,11 @@ export var splitCase = _.splitCase = (function (exports) {
     /* typescript
      * export declare function splitCase(str: string): string[];
      */
-    var regUpperCase = /([A-Z])/g,
-        regSeparator = /[_.\- ]+/g,
-        regTrim = /(^-)|(-$)/g;
+    var regUpperCase = /([A-Z])/g;
+    var regSeparator = /[_.\- ]+/g;
+    var regTrim = /(^-)|(-$)/g;
 
-    exports = function exports(str) {
+    exports = function(str) {
         str = str
             .replace(regUpperCase, '-$1')
             .toLowerCase()
@@ -384,7 +345,7 @@ export var camelCase = _.camelCase = (function (exports) {
      * splitCase 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         var arr = splitCase(str);
         var ret = arr[0];
         arr.shift();
@@ -428,7 +389,7 @@ export var kebabCase = _.kebabCase = (function (exports) {
      * splitCase 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         return splitCase(str).join('-');
     };
 
@@ -456,13 +417,13 @@ export var chunk = _.chunk = (function (exports) {
     /* typescript
      * export declare function chunk(arr: any[], size?: number): Array<any[]>;
      */
-    exports = function exports(arr, size) {
+    exports = function(arr, size) {
         var ret = [];
         size = size || 1;
 
         for (var i = 0, len = Math.ceil(arr.length / size); i < len; i++) {
-            var start = i * size,
-                end = start + size;
+            var start = i * size;
+            var end = start + size;
             ret.push(arr.slice(start, end));
         }
 
@@ -502,7 +463,7 @@ export var clamp = _.clamp = (function (exports) {
      * isUndef 
      */
 
-    exports = function exports(n, lower, upper) {
+    exports = function(n, lower, upper) {
         if (isUndef(upper)) {
             upper = lower;
             lower = undefined;
@@ -536,7 +497,7 @@ export var idxOf = _.idxOf = (function (exports) {
     /* typescript
      * export declare function idxOf(arr: any[], val: any, fromIdx?: number): number;
      */
-    exports = function exports(arr, val, fromIdx) {
+    exports = function(arr, val, fromIdx) {
         return Array.prototype.indexOf.call(arr, val, fromIdx);
     };
 
@@ -564,7 +525,7 @@ export var toStr = _.toStr = (function (exports) {
     /* typescript
      * export declare function toStr(val: any): string;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val == null ? '' : val.toString();
     };
 
@@ -610,13 +571,13 @@ export var ucs2 = _.ucs2 = (function (exports) {
      */
     // https://mathiasbynens.be/notes/javascript-encoding
     exports = {
-        encode: function encode(arr) {
+        encode: function(arr) {
             return String.fromCodePoint.apply(String, arr);
         },
-        decode: function decode(str) {
+        decode: function(str) {
             var ret = [];
-            var i = 0,
-                len = str.length;
+            var i = 0;
+            var len = str.length;
 
             while (i < len) {
                 var c = str.charCodeAt(i++); // A high surrogate
@@ -685,7 +646,7 @@ export var utf8 = _.utf8 = (function (exports) {
      */ // https://encoding.spec.whatwg.org/#utf-8
 
     exports = {
-        encode: function encode(str) {
+        encode: function(str) {
             var codePoints = ucs2.decode(str);
             var byteArr = '';
 
@@ -872,7 +833,7 @@ export var detectMocha = _.detectMocha = (function (exports) {
      * root 
      */
 
-    exports = function exports() {
+    exports = function() {
         for (var i = 0, len = methods.length; i < len; i++) {
             var method = methods[i];
             if (typeof root[method] !== 'function') return false;
@@ -912,11 +873,10 @@ export var keys = _.keys = (function (exports) {
     if (Object.keys && !detectMocha()) {
         exports = Object.keys;
     } else {
-        exports = function exports(obj) {
-            var ret = [],
-                key;
+        exports = function(obj) {
+            var ret = [];
 
-            for (key in obj) {
+            for (var key in obj) {
                 if (has(obj, key)) ret.push(key);
             }
 
@@ -941,7 +901,7 @@ export var freeze = _.freeze = (function (exports) {
      */
 
     /* example
-     * var a = {b: 1};
+     * const a = {b: 1};
      * freeze(a);
      * a.b = 2;
      * console.log(a); // -> {b: 1}
@@ -955,7 +915,7 @@ export var freeze = _.freeze = (function (exports) {
      * keys 
      */
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         if (Object.freeze) return Object.freeze(obj);
         keys(obj).forEach(function(prop) {
             if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
@@ -997,7 +957,7 @@ export var detectOs = _.detectOs = (function (exports) {
      * isBrowser 
      */
 
-    exports = function exports(ua) {
+    exports = function(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
         ua = ua.toLowerCase();
         if (detect('windows phone')) return 'windows phone';
@@ -1030,19 +990,19 @@ export var restArgs = _.restArgs = (function (exports) {
      */
 
     /* example
-     * var paramArr = restArgs(function (rest) { return rest });
+     * const paramArr = restArgs(function (rest) { return rest });
      * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
      */
 
     /* typescript
      * export declare function restArgs(fn: Function, startIndex?: number): Function;
      */
-    exports = function exports(fn, startIdx) {
+    exports = function(fn, startIdx) {
         startIdx = startIdx == null ? fn.length - 1 : +startIdx;
         return function() {
-            var len = Math.max(arguments.length - startIdx, 0),
-                rest = new Array(len),
-                i;
+            var len = Math.max(arguments.length - startIdx, 0);
+            var rest = new Array(len);
+            var i;
 
             for (i = 0; i < len; i++) {
                 rest[i] = arguments[i + startIdx];
@@ -1087,7 +1047,7 @@ export var optimizeCb = _.optimizeCb = (function (exports) {
      * isUndef 
      */
 
-    exports = function exports(fn, ctx, argCount) {
+    exports = function(fn, ctx, argCount) {
         if (isUndef(ctx)) return fn;
 
         switch (argCount == null ? 3 : argCount) {
@@ -1170,7 +1130,7 @@ export var endWith = _.endWith = (function (exports) {
     /* typescript
      * export declare function endWith(str: string, suffix: string): boolean;
      */
-    exports = function exports(str, suffix) {
+    exports = function(str, suffix) {
         var idx = str.length - suffix.length;
         return idx >= 0 && str.indexOf(suffix, idx) === idx;
     };
@@ -1201,7 +1161,7 @@ export var escape = _.escape = (function (exports) {
      * keys 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         return regTest.test(str) ? str.replace(regReplace, replaceFn) : str;
     };
 
@@ -1213,9 +1173,9 @@ export var escape = _.escape = (function (exports) {
         "'": '&#x27;',
         '`': '&#x60;'
     });
-    var regSrc = '(?:' + keys(map).join('|') + ')',
-        regTest = new RegExp(regSrc),
-        regReplace = new RegExp(regSrc, 'g');
+    var regSrc = '(?:' + keys(map).join('|') + ')';
+    var regTest = new RegExp(regSrc);
+    var regReplace = new RegExp(regSrc, 'g');
 
     function replaceFn(match) {
         return map[match];
@@ -1249,7 +1209,7 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
      * toStr 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         return toStr(str).replace(regEscapeChars, function(char) {
             switch (char) {
                 case '"':
@@ -1316,7 +1276,7 @@ export var escapeRegExp = _.escapeRegExp = (function (exports) {
     /* typescript
      * export declare function escapeRegExp(str: string): string;
      */
-    exports = function exports(str) {
+    exports = function(str) {
         return str.replace(/\W/g, '\\$&');
     };
 
@@ -1345,10 +1305,10 @@ export var fileSize = _.fileSize = (function (exports) {
     /* typescript
      * export declare function fileSize(bytes: number): string;
      */
-    exports = function exports(bytes) {
+    exports = function(bytes) {
         if (bytes <= 0) return '0';
-        var suffixIdx = Math.floor(Math.log(bytes) / Math.log(1024)),
-            val = bytes / Math.pow(2, suffixIdx * 10);
+        var suffixIdx = Math.floor(Math.log(bytes) / Math.log(1024));
+        var val = bytes / Math.pow(2, suffixIdx * 10);
         return +val.toFixed(2) + suffixList[suffixIdx];
     };
 
@@ -1394,7 +1354,7 @@ export var upperFirst = _.upperFirst = (function (exports) {
     /* typescript
      * export declare function upperFirst(str: string): string;
      */
-    exports = function exports(str) {
+    exports = function(str) {
         if (str.length < 1) return str;
         return str[0].toUpperCase() + str.slice(1);
     };
@@ -1439,7 +1399,7 @@ export var identity = _.identity = (function (exports) {
     /* typescript
      * export declare function identity<T>(val: T): T;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val;
     };
 
@@ -1466,7 +1426,7 @@ export var objToStr = _.objToStr = (function (exports) {
      */
     var ObjToStr = Object.prototype.toString;
 
-    exports = function exports(val) {
+    exports = function(val) {
         return ObjToStr.call(val);
     };
 
@@ -1498,7 +1458,7 @@ export var isArgs = _.isArgs = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Arguments]';
     };
 
@@ -1565,7 +1525,7 @@ export var castPath = _.castPath = (function (exports) {
      * has isArr 
      */
 
-    exports = function exports(str, obj) {
+    exports = function(str, obj) {
         if (isArr(str)) return str;
         if (obj && has(obj, str)) return [str];
         var ret = [];
@@ -1575,8 +1535,8 @@ export var castPath = _.castPath = (function (exports) {
         return ret;
     }; // Lodash _stringToPath
 
-    var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
-        regEscapeChar = /\\(\\)?/g;
+    var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+    var regEscapeChar = /\\(\\)?/g;
 
     return exports;
 })({});
@@ -1594,7 +1554,7 @@ export var safeGet = _.safeGet = (function (exports) {
      */
 
     /* example
-     * var obj = {a: {aa: {aaa: 1}}};
+     * const obj = {a: {aa: {aaa: 1}}};
      * safeGet(obj, 'a.aa.aaa'); // -> 1
      * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
      * safeGet(obj, 'a.b'); // -> undefined
@@ -1608,7 +1568,7 @@ export var safeGet = _.safeGet = (function (exports) {
      * isUndef castPath 
      */
 
-    exports = function exports(obj, path) {
+    exports = function(obj, path) {
         path = castPath(path, obj);
         var prop;
         prop = path.shift();
@@ -1648,7 +1608,7 @@ export var flatten = _.flatten = (function (exports) {
      * isArr 
      */
 
-    exports = function exports(arr) {
+    exports = function(arr) {
         return flat(arr, []);
     };
 
@@ -1691,7 +1651,7 @@ export var isDate = _.isDate = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Date]';
     };
 
@@ -1725,7 +1685,7 @@ export var isFn = _.isFn = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         var objStr = objToStr(val);
         return (
             objStr === '[object Function]' ||
@@ -1764,7 +1724,7 @@ export var getProto = _.getProto = (function (exports) {
     var getPrototypeOf = Object.getPrototypeOf;
     var ObjectCtr = {}.constructor;
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         if (!isObj(obj)) return null;
         if (getPrototypeOf) return getPrototypeOf(obj);
         var proto = obj.__proto__;
@@ -1826,7 +1786,7 @@ export var isNum = _.isNum = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Number]';
     };
 
@@ -1862,7 +1822,7 @@ export var isArrLike = _.isArrLike = (function (exports) {
 
     var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return false;
         var len = val.length;
         return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
@@ -1900,11 +1860,13 @@ export var each = _.each = (function (exports) {
      * ): types.Collection<T>;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * isArrLike keys optimizeCb types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = optimizeCb(iterator, ctx);
         var i, len;
 
@@ -1946,7 +1908,7 @@ export var createAssigner = _.createAssigner = (function (exports) {
      * isUndef each 
      */
 
-    exports = function exports(keysFn, defaults) {
+    exports = function(keysFn, defaults) {
         return function(obj) {
             each(arguments, function(src, idx) {
                 if (idx === 0) return;
@@ -1995,16 +1957,16 @@ export var extendOwn = _.extendOwn = (function (exports) {
 
 export var highlight = _.highlight = (function (exports) {
     /* Highlight code.
-     * 
+     *
      * |Name   |Type  |Desc                        |
      * |-------|------|----------------------------|
      * |str    |string|Code string                 |
      * |lang=js|string|Language, js, html or css   |
      * |[style]|object|Keyword highlight style     |
      * |return |string|Highlighted html code string|
-     * 
+     *
      * Available styles:
-     * 
+     *
      * comment, string, number, keyword, operator
      */
 
@@ -2035,7 +1997,7 @@ export var highlight = _.highlight = (function (exports) {
      * each 
      */ // https://github.com/trentrichardson/jQuery-Litelighter
 
-    exports = function exports(str, lang) {
+    exports = function(str, lang) {
         lang = lang || 'js';
         str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         lang = language[lang];
@@ -2044,7 +2006,7 @@ export var highlight = _.highlight = (function (exports) {
         each(lang, function(val) {
             if (!val.language) return;
             str = str.replace(val.re, function($1, $2) {
-                subLangs[subLangSi++] = highlight($2, val.language);
+                subLangs[subLangSi++] = exports($2, val.language);
                 return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
             });
         });
@@ -2183,7 +2145,7 @@ export var values = _.values = (function (exports) {
      * each 
      */
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         var ret = [];
         each(obj, function(val) {
             ret.push(val);
@@ -2217,7 +2179,7 @@ export var isStr = _.isStr = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object String]';
     };
 
@@ -2253,7 +2215,7 @@ export var contain = _.contain = (function (exports) {
      * idxOf isStr isArrLike values 
      */
 
-    exports = function exports(arr, val) {
+    exports = function(arr, val) {
         if (isStr(arr)) return arr.indexOf(val) > -1;
         if (!isArrLike(arr)) arr = values(arr);
         return idxOf(arr, val) >= 0;
@@ -2287,7 +2249,7 @@ export var isEmpty = _.isEmpty = (function (exports) {
      * isArrLike isArr isStr isArgs keys 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (val == null) return true;
 
         if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
@@ -2320,7 +2282,7 @@ export var isBool = _.isBool = (function (exports) {
     /* typescript
      * export declare function isBool(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val === true || val === false;
     };
 
@@ -2346,7 +2308,7 @@ export var startWith = _.startWith = (function (exports) {
     /* typescript
      * export declare function startWith(str: string, prefix: string): boolean;
      */
-    exports = function exports(str, prefix) {
+    exports = function(str, prefix) {
         return str.indexOf(prefix) === 0;
     };
 
@@ -2390,7 +2352,7 @@ export var isEl = _.isEl = (function (exports) {
     /* typescript
      * export declare function isEl(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return !!(val && val.nodeType === 1);
     };
 
@@ -2420,7 +2382,7 @@ export var isErr = _.isErr = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Error]';
     };
 
@@ -2433,7 +2395,7 @@ export var isErudaEl = _.isErudaEl = (function (exports) {
     /* See if an element is within eruda.
      */
 
-    function exports(el) {
+    exports = function (el) {
       let parentNode = el.parentNode
 
       if (!parentNode) return false
@@ -2473,10 +2435,10 @@ export var isMatch = _.isMatch = (function (exports) {
      * keys 
      */
 
-    exports = function exports(obj, src) {
-        var _keys = keys(src),
-            len = _keys.length;
+    exports = function(obj, src) {
+        var _keys = keys(src);
 
+        var len = _keys.length;
         if (obj == null) return !len;
         obj = Object(obj);
 
@@ -2504,7 +2466,7 @@ export var memoize = _.memoize = (function (exports) {
      */
 
     /* example
-     * var fibonacci = memoize(function(n) {
+     * const fibonacci = memoize(function(n) {
      *     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
      * });
      */
@@ -2517,10 +2479,10 @@ export var memoize = _.memoize = (function (exports) {
      * has 
      */
 
-    exports = function exports(fn, hashFn) {
-        var memoize = function memoize(key) {
-            var cache = memoize.cache,
-                address = '' + (hashFn ? hashFn.apply(this, arguments) : key);
+    exports = function(fn, hashFn) {
+        var memoize = function(key) {
+            var cache = memoize.cache;
+            var address = '' + (hashFn ? hashFn.apply(this, arguments) : key);
             if (!has(cache, address)) cache[address] = fn.apply(this, arguments);
             return cache[address];
         };
@@ -2555,8 +2517,8 @@ export var isMobile = _.isMobile = (function (exports) {
      * isBrowser memoize 
      */
 
-    var regMobileAll = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i,
-        regMobileFour = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i;
+    var regMobileAll = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i;
+    var regMobileFour = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i;
     exports = memoize(function(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
         return regMobileAll.test(ua) || regMobileFour.test(ua.substr(0, 4));
@@ -2617,9 +2579,9 @@ export var prefix = _.prefix = (function (exports) {
             kebabCase(camelCaseResult)
         );
     });
-    var prefixes = ['O', 'ms', 'Moz', 'Webkit'],
-        regPrefixes = /^(O)|(ms)|(Moz)|(Webkit)|(-o-)|(-ms-)|(-moz-)|(-webkit-)/g,
-        style = document.createElement('p').style;
+    var prefixes = ['O', 'ms', 'Moz', 'Webkit'];
+    var regPrefixes = /^(O)|(ms)|(Moz)|(Webkit)|(-o-)|(-ms-)|(-moz-)|(-webkit-)/g;
+    var style = document.createElement('p').style;
 
     return exports;
 })({});
@@ -2650,7 +2612,7 @@ export var isNaN = _.isNaN = (function (exports) {
      * isNum 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return isNum(val) && val !== +val;
     };
 
@@ -2680,7 +2642,7 @@ export var isNil = _.isNil = (function (exports) {
     /* typescript
      * export declare function isNil(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val == null;
     };
 
@@ -2711,7 +2673,7 @@ export var toSrc = _.toSrc = (function (exports) {
      * isNil 
      */
 
-    exports = function exports(fn) {
+    exports = function(fn) {
         if (isNil(fn)) return '';
 
         try {
@@ -2756,7 +2718,7 @@ export var isNative = _.isNative = (function (exports) {
      * isObj isFn toSrc 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!isObj(val)) return false;
         if (isFn(val)) return regIsNative.test(toSrc(val)); // Detect host constructors (Safari > 4; really typed array specific)
 
@@ -2797,7 +2759,7 @@ export var isNull = _.isNull = (function (exports) {
     /* typescript
      * export declare function isNull(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val === null;
     };
 
@@ -2828,7 +2790,7 @@ export var isPromise = _.isPromise = (function (exports) {
      * isObj isFn 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return isObj(val) && isFn(val.then);
     };
 
@@ -2858,7 +2820,7 @@ export var isRegExp = _.isRegExp = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object RegExp]';
     };
 
@@ -2885,7 +2847,7 @@ export var loadJs = _.loadJs = (function (exports) {
     /* typescript
      * export declare function loadJs(src: string, cb?: Function): void;
      */
-    exports = function exports(src, cb) {
+    exports = function(src, cb) {
         var script = document.createElement('script');
         script.src = src;
 
@@ -2926,7 +2888,7 @@ export var lowerCase = _.lowerCase = (function (exports) {
      * toStr 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         return toStr(str).toLocaleLowerCase();
     };
 
@@ -2954,7 +2916,7 @@ export var repeat = _.repeat = (function (exports) {
     /* typescript
      * export declare function repeat(str: string, n: number): string;
      */
-    exports = function exports(str, n) {
+    exports = function(str, n) {
         var ret = '';
         if (n < 1) return '';
 
@@ -2998,7 +2960,7 @@ export var lpad = _.lpad = (function (exports) {
      * repeat toStr 
      */
 
-    exports = function exports(str, len, chars) {
+    exports = function(str, len, chars) {
         str = toStr(str);
         var strLen = str.length;
         chars = chars || ' ';
@@ -3076,17 +3038,7 @@ export var dateFormat = _.dateFormat = (function (exports) {
      * isStr isDate toStr lpad 
      */
 
-    exports = (function(_exports) {
-        function exports(_x, _x2, _x3, _x4) {
-            return _exports.apply(this, arguments);
-        }
-
-        exports.toString = function() {
-            return _exports.toString();
-        };
-
-        return exports;
-    })(function(date, mask, utc, gmt) {
+    exports = function(date, mask, utc, gmt) {
         if (arguments.length === 1 && isStr(date) && !regNum.test(date)) {
             mask = date;
             date = undefined;
@@ -3103,72 +3055,69 @@ export var dateFormat = _.dateFormat = (function (exports) {
             if (maskSlice === 'GMT:') gmt = true;
         }
 
-        var prefix = utc ? 'getUTC' : 'get',
-            d = date[prefix + 'Date'](),
-            D = date[prefix + 'Day'](),
-            m = date[prefix + 'Month'](),
-            y = date[prefix + 'FullYear'](),
-            H = date[prefix + 'Hours'](),
-            M = date[prefix + 'Minutes'](),
-            s = date[prefix + 'Seconds'](),
-            L = date[prefix + 'Milliseconds'](),
-            o = utc ? 0 : date.getTimezoneOffset(),
-            flags = {
-                d: d,
-                dd: padZero(d),
-                ddd: exports.i18n.dayNames[D],
-                dddd: exports.i18n.dayNames[D + 7],
-                m: m + 1,
-                mm: padZero(m + 1),
-                mmm: exports.i18n.monthNames[m],
-                mmmm: exports.i18n.monthNames[m + 12],
-                yy: toStr(y).slice(2),
-                yyyy: y,
-                h: H % 12 || 12,
-                hh: padZero(H % 12 || 12),
-                H: H,
-                HH: padZero(H),
-                M: M,
-                MM: padZero(M),
-                s: s,
-                ss: padZero(s),
-                l: padZero(L, 3),
-                L: padZero(Math.round(L / 10)),
-                t: H < 12 ? 'a' : 'p',
-                tt: H < 12 ? 'am' : 'pm',
-                T: H < 12 ? 'A' : 'P',
-                TT: H < 12 ? 'AM' : 'PM',
-                Z: gmt
-                    ? 'GMT'
-                    : utc
-                        ? 'UTC'
-                        : (toStr(date).match(regTimezone) || [''])
-                              .pop()
-                              .replace(regTimezoneClip, ''),
-                o:
-                    (o > 0 ? '-' : '+') +
-                    padZero(
-                        Math.floor(Math.abs(o) / 60) * 100 + (Math.abs(o) % 60),
-                        4
-                    ),
-                S: ['th', 'st', 'nd', 'rd'][
-                    d % 10 > 3 ? 0 : (((d % 100) - (d % 10) != 10) * d) % 10
-                ]
-            };
+        var prefix = utc ? 'getUTC' : 'get';
+        var d = date[prefix + 'Date']();
+        var D = date[prefix + 'Day']();
+        var m = date[prefix + 'Month']();
+        var y = date[prefix + 'FullYear']();
+        var H = date[prefix + 'Hours']();
+        var M = date[prefix + 'Minutes']();
+        var s = date[prefix + 'Seconds']();
+        var L = date[prefix + 'Milliseconds']();
+        var o = utc ? 0 : date.getTimezoneOffset();
+        var flags = {
+            d: d,
+            dd: padZero(d),
+            ddd: exports.i18n.dayNames[D],
+            dddd: exports.i18n.dayNames[D + 7],
+            m: m + 1,
+            mm: padZero(m + 1),
+            mmm: exports.i18n.monthNames[m],
+            mmmm: exports.i18n.monthNames[m + 12],
+            yy: toStr(y).slice(2),
+            yyyy: y,
+            h: H % 12 || 12,
+            hh: padZero(H % 12 || 12),
+            H: H,
+            HH: padZero(H),
+            M: M,
+            MM: padZero(M),
+            s: s,
+            ss: padZero(s),
+            l: padZero(L, 3),
+            L: padZero(Math.round(L / 10)),
+            t: H < 12 ? 'a' : 'p',
+            tt: H < 12 ? 'am' : 'pm',
+            T: H < 12 ? 'A' : 'P',
+            TT: H < 12 ? 'AM' : 'PM',
+            Z: gmt
+                ? 'GMT'
+                : utc
+                    ? 'UTC'
+                    : (toStr(date).match(regTimezone) || [''])
+                          .pop()
+                          .replace(regTimezoneClip, ''),
+            o:
+                (o > 0 ? '-' : '+') +
+                padZero(Math.floor(Math.abs(o) / 60) * 100 + (Math.abs(o) % 60), 4),
+            S: ['th', 'st', 'nd', 'rd'][
+                d % 10 > 3 ? 0 : (((d % 100) - (d % 10) != 10) * d) % 10
+            ]
+        };
         return mask.replace(regToken, function(match) {
             if (match in flags) return flags[match];
             return match.slice(1, match.length - 1);
         });
-    });
+    };
 
     function padZero(str, len) {
         return lpad(toStr(str), len || 2, '0');
     }
 
-    var regToken = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|'[^']*'|'[^']*'/g,
-        regTimezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
-        regNum = /\d/,
-        regTimezoneClip = /[^-+\dA-Z]/g;
+    var regToken = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|'[^']*'|'[^']*'/g;
+    var regTimezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g;
+    var regNum = /\d/;
+    var regTimezoneClip = /[^-+\dA-Z]/g;
     exports.masks = {
         default: 'ddd mmm dd yyyy HH:MM:ss',
         shortDate: 'm/d/yy',
@@ -3255,14 +3204,14 @@ export var ltrim = _.ltrim = (function (exports) {
      */
     var regSpace = /^\s+/;
 
-    exports = function exports(str, chars) {
+    exports = function(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
-        var start = 0,
-            len = str.length,
-            charLen = chars.length,
-            found = true,
-            i,
-            c;
+        var start = 0;
+        var len = str.length;
+        var charLen = chars.length;
+        var found = true;
+        var i;
+        var c;
 
         while (found && start < len) {
             found = false;
@@ -3296,11 +3245,13 @@ export var matcher = _.matcher = (function (exports) {
      */
 
     /* example
+     * const filter = require('licia/filter');
+     *
      * const objects = [
      *     {a: 1, b: 2, c: 3 },
      *     {a: 4, b: 5, c: 6 }
      * ];
-     * // filter(objects, matcher({a: 4, c: 6 }));
+     * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
      */
 
     /* typescript
@@ -3311,7 +3262,7 @@ export var matcher = _.matcher = (function (exports) {
      * extendOwn isMatch 
      */
 
-    exports = function exports(attrs) {
+    exports = function(attrs) {
         attrs = extendOwn({}, attrs);
         return function(obj) {
             return isMatch(obj, attrs);
@@ -3335,7 +3286,7 @@ export var safeCb = _.safeCb = (function (exports) {
      * isFn isObj optimizeCb matcher identity 
      */
 
-    exports = function exports(val, ctx, argCount) {
+    exports = function(val, ctx, argCount) {
         if (val == null) return identity;
         if (isFn(val)) return optimizeCb(val, ctx, argCount);
         if (isObj(val)) return matcher(val);
@@ -3381,11 +3332,13 @@ export var filter = _.filter = (function (exports) {
      * ): T[];
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb each types 
      */
 
-    exports = function exports(obj, predicate, ctx) {
+    exports = function(obj, predicate, ctx) {
         var ret = [];
         predicate = safeCb(predicate, ctx);
         each(obj, function(val, idx, list) {
@@ -3444,7 +3397,7 @@ export var evalCss = _.evalCss = (function (exports) {
     let styleList = []
     let scale = 1
 
-    function exports(css, container) {
+    exports = function (css, container) {
       css = toStr(css)
 
       for (let i = 0, len = styleList.length; i < len; i++) {
@@ -3514,7 +3467,7 @@ export var unique = _.unique = (function (exports) {
      * filter 
      */
 
-    exports = function exports(arr, compare) {
+    exports = function(arr, compare) {
         compare = compare || isEqual;
         return filter(arr, function(item, idx, arr) {
             var len = arr.length;
@@ -3557,7 +3510,7 @@ export var allKeys = _.allKeys = (function (exports) {
      */
 
     /* example
-     * var obj = Object.create({zero: 0});
+     * const obj = Object.create({zero: 0});
      * obj.one = 1;
      * allKeys(obj) // -> ['zero', 'one']
      */
@@ -3586,7 +3539,7 @@ export var allKeys = _.allKeys = (function (exports) {
     var getOwnPropertyNames = Object.getOwnPropertyNames;
     var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         var _ref =
                 arguments.length > 1 && arguments[1] !== undefined
                     ? arguments[1]
@@ -3716,7 +3669,7 @@ export var clone = _.clone = (function (exports) {
      * isObj isArr extend 
      */
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         if (!isObj(obj)) return obj;
         return isArr(obj) ? obj.slice() : extend({}, obj);
     };
@@ -3754,16 +3707,19 @@ export var map = _.map = (function (exports) {
      * ): TResult[];
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb keys isArrLike types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = safeCb(iterator, ctx);
 
-        var _keys = !isArrLike(obj) && keys(obj),
-            len = (_keys || obj).length,
-            results = Array(len);
+        var _keys = !isArrLike(obj) && keys(obj);
+
+        var len = (_keys || obj).length;
+        var results = Array(len);
 
         for (var i = 0; i < len; i++) {
             var curKey = _keys ? _keys[i] : i;
@@ -3800,7 +3756,7 @@ export var decodeUriComponent = _.decodeUriComponent = (function (exports) {
      * each ucs2 map utf8 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         try {
             return decodeURIComponent(str);
         } catch (e) {
@@ -3928,13 +3884,13 @@ export var cookie = _.cookie = (function (exports) {
             return exports;
         }
 
-        var cookies = document.cookie ? document.cookie.split('; ') : [],
-            result = key ? undefined : {};
+        var cookies = document.cookie ? document.cookie.split('; ') : [];
+        var result = key ? undefined : {};
 
         for (var i = 0, len = cookies.length; i < len; i++) {
-            var c = cookies[i],
-                parts = c.split('='),
-                name = decodeUriComponent(parts.shift());
+            var c = cookies[i];
+            var parts = c.split('=');
+            var name = decodeUriComponent(parts.shift());
             c = parts.join('=');
             c = decodeUriComponent(c);
 
@@ -3952,7 +3908,7 @@ export var cookie = _.cookie = (function (exports) {
     exports = {
         get: setCookie,
         set: setCookie,
-        remove: function remove(key, options) {
+        remove: function(key, options) {
             options = options || {};
             options.expires = -1;
             return setCookie(key, '', options);
@@ -3988,7 +3944,7 @@ export var toArr = _.toArr = (function (exports) {
      * isArrLike map isArr isStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return [];
         if (isArr(val)) return val;
         if (isArrLike(val) && !isStr(val)) return map(val);
@@ -4011,7 +3967,7 @@ export var Class = _.Class = (function (exports) {
      */
 
     /* example
-     * var People = Class({
+     * const People = Class({
      *     initialize: function People(name, age) {
      *         this.name = name;
      *         this.age = age;
@@ -4021,7 +3977,7 @@ export var Class = _.Class = (function (exports) {
      *     }
      * });
      *
-     * var Student = People.extend({
+     * const Student = People.extend({
      *     initialize: function Student(name, age, school) {
      *         this.callSuper(People, 'initialize', arguments);
      *
@@ -4036,7 +3992,7 @@ export var Class = _.Class = (function (exports) {
      *     }
      * });
      *
-     * var a = new Student('allen', 17, 'Hogwarts');
+     * const a = new Student('allen', 17, 'Hogwarts');
      * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
      * Student.is(a); // -> true
      */
@@ -4062,7 +4018,7 @@ export var Class = _.Class = (function (exports) {
      * extend toArr inherits safeGet isMiniProgram 
      */
 
-    exports = function exports(methods, statics) {
+    exports = function(methods, statics) {
         return Base.extend(methods, statics);
     };
 
@@ -4074,7 +4030,7 @@ export var Class = _.Class = (function (exports) {
         var ctor;
 
         if (isMiniProgram) {
-            ctor = function ctor() {
+            ctor = function() {
                 var args = toArr(arguments);
                 return this.initialize
                     ? this.initialize.apply(this, args) || this
@@ -4120,11 +4076,11 @@ export var Class = _.Class = (function (exports) {
 
     var Base = (exports.Base = makeClass(Object, {
         className: 'Base',
-        callSuper: function callSuper(parent, name, args) {
+        callSuper: function(parent, name, args) {
             var superMethod = parent.prototype[name];
             return superMethod.apply(this, args);
         },
-        toString: function toString() {
+        toString: function() {
             return this.constructor.name;
         }
     }));
@@ -4149,7 +4105,7 @@ export var Enum = _.Enum = (function (exports) {
      */
 
     /* example
-     * var importance = new Enum([
+     * const importance = new Enum([
      *     'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
      * ]);
      * const val = 1;
@@ -4206,7 +4162,7 @@ export var MutationObserver = _.MutationObserver = (function (exports) {
      */
 
     /* example
-     * var observer = new MutationObserver(function (mutations) {
+     * const observer = new MutationObserver(function (mutations) {
      *     // Do something.
      * });
      * observer.observe(document.documentElement);
@@ -4228,9 +4184,9 @@ export var MutationObserver = _.MutationObserver = (function (exports) {
     if (!exports) {
         exports = Class({
             initialize: function MutationObserver() {},
-            observe: function observe() {},
-            disconnect: function disconnect() {},
-            takeRecords: function takeRecords() {}
+            observe: function() {},
+            disconnect: function() {},
+            takeRecords: function() {}
         });
     }
 
@@ -4266,7 +4222,7 @@ export var Select = _.Select = (function (exports) {
      */
 
     /* example
-     * var $test = new Select('#test');
+     * const $test = new Select('#test');
      * $test.find('.test').each(function (idx, element) {
      *     // Manipulate dom nodes
      * });
@@ -4286,7 +4242,7 @@ export var Select = _.Select = (function (exports) {
 
     exports = Class({
         className: 'Select',
-        initialize: function initialize(selector) {
+        initialize: function(selector) {
             this.length = 0;
             if (!selector) return this;
             if (isStr(selector)) return rootSelect.find(selector);
@@ -4296,35 +4252,25 @@ export var Select = _.Select = (function (exports) {
                 this.length = 1;
             }
         },
-        find: function find(selector) {
-            var ret = new Select();
+        find: function(selector) {
+            var ret = new exports();
             this.each(function() {
                 mergeArr(ret, this.querySelectorAll(selector));
             });
             return ret;
         },
-        each: (function(_each) {
-            function each(_x) {
-                return _each.apply(this, arguments);
-            }
-
-            each.toString = function() {
-                return _each.toString();
-            };
-
-            return each;
-        })(function(fn) {
+        each: function(fn) {
             each(this, function(element, idx) {
                 fn.call(element, idx, element);
             });
             return this;
-        })
+        }
     });
     var rootSelect = new exports(document);
 
     function mergeArr(first, second) {
-        var len = second.length,
-            i = first.length;
+        var len = second.length;
+        var i = first.length;
 
         for (var j = 0; j < len; j++) {
             first[i++] = second[j];
@@ -4365,7 +4311,7 @@ export var $safeEls = _.$safeEls = (function (exports) {
      * isStr toArr Select 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return toArr(isStr(val) ? new Select(val) : val);
     };
 
@@ -4434,7 +4380,7 @@ export var $attr = _.$attr = (function (exports) {
      * toArr isObj isStr each isUndef $safeEls 
      */
 
-    exports = function exports(els, name, val) {
+    exports = function(els, name, val) {
         els = $safeEls(els);
         var isGetter = isUndef(val) && isStr(name);
         if (isGetter) return getAttr(els[0], name);
@@ -4519,10 +4465,10 @@ export var $css = _.$css = (function (exports) {
      */
 
     /* dependencies
-     * isStr isObj kebabCase isUndef contain isNum $safeEls prefix 
+     * isStr isObj kebabCase isUndef contain isNum $safeEls prefix each 
      */
 
-    exports = function exports(nodes, name, val) {
+    exports = function(nodes, name, val) {
         nodes = $safeEls(nodes);
         var isGetter = isUndef(val) && isStr(name);
         if (isGetter) return getCss(nodes[0], name);
@@ -4593,11 +4539,13 @@ export var $data = _.$data = (function (exports) {
      * export declare const $data: $data.IData;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * $attr isStr isObj each $safeEls 
      */
 
-    exports = function exports(nodes, name, val) {
+    exports = function(nodes, name, val) {
         var dataName = name;
         if (isStr(name)) dataName = 'data-' + name;
 
@@ -4720,7 +4668,7 @@ export var $offset = _.$offset = (function (exports) {
      * $safeEls 
      */
 
-    exports = function exports(els) {
+    exports = function(els) {
         els = $safeEls(els);
         var el = els[0];
         var clientRect = el.getBoundingClientRect();
@@ -4821,7 +4769,7 @@ export var $remove = _.$remove = (function (exports) {
      * each $safeEls 
      */
 
-    exports = function exports(els) {
+    exports = function(els) {
         els = $safeEls(els);
         each(els, function(el) {
             var parent = el.parentNode;
@@ -4854,7 +4802,7 @@ export var $show = _.$show = (function (exports) {
      * each $safeEls 
      */
 
-    exports = function exports(els) {
+    exports = function(els) {
         els = $safeEls(els);
         each(els, function(el) {
             if (isHidden(el)) {
@@ -4909,7 +4857,7 @@ export var delegate = _.delegate = (function (exports) {
      */
 
     /* example
-     * var container = document.getElementById('container');
+     * const container = document.getElementById('container');
      * function clickHandler() {
      *     // Do something...
      * }
@@ -4937,9 +4885,9 @@ export var delegate = _.delegate = (function (exports) {
     }
 
     function trigger(e) {
-        var handlers = this.events[e.type],
-            handler,
-            handlerQueue = formatHandlers.call(this, e, handlers);
+        var handlers = this.events[e.type];
+        var handler;
+        var handlerQueue = formatHandlers.call(this, e, handlers);
         e = new exports.Event(e);
         var i = 0,
             j,
@@ -4965,13 +4913,13 @@ export var delegate = _.delegate = (function (exports) {
     }
 
     function formatHandlers(e, handlers) {
-        var current = e.target,
-            ret = [],
-            delegateCount = handlers.delegateCount,
-            selector,
-            matches,
-            handler,
-            i;
+        var current = e.target;
+        var ret = [];
+        var delegateCount = handlers.delegateCount;
+        var selector;
+        var matches;
+        var handler;
+        var i;
 
         if (current.nodeType) {
             for (; current !== this; current = current.parentNode || this) {
@@ -5010,12 +4958,12 @@ export var delegate = _.delegate = (function (exports) {
     }
 
     exports = {
-        add: function add(el, type, selector, fn) {
+        add: function(el, type, selector, fn) {
             var handler = {
-                    selector: selector,
-                    handler: fn
-                },
-                handlers;
+                selector: selector,
+                handler: fn
+            };
+            var handlers;
             if (!el.events) el.events = {};
 
             if (!(handlers = el.events[type])) {
@@ -5034,12 +4982,12 @@ export var delegate = _.delegate = (function (exports) {
                 ? handlers.splice(handlers.delegateCount++, 0, handler)
                 : handlers.push(handler);
         },
-        remove: function remove(el, type, selector, fn) {
+        remove: function(el, type, selector, fn) {
             var events = el.events;
             if (!events || !events[type]) return;
-            var handlers = events[type],
-                i = handlers.length,
-                handler;
+            var handlers = events[type];
+            var i = handlers.length;
+            var handler;
 
             while (i--) {
                 handler = handlers[i];
@@ -5064,17 +5012,17 @@ export var delegate = _.delegate = (function (exports) {
             isDefaultPrevented: retFalse,
             isPropagationStopped: retFalse,
             isImmediatePropagationStopped: retFalse,
-            preventDefault: function preventDefault() {
+            preventDefault: function() {
                 var e = this.origEvent;
                 this.isDefaultPrevented = retTrue;
                 if (e && e.preventDefault) e.preventDefault();
             },
-            stopPropagation: function stopPropagation() {
+            stopPropagation: function() {
                 var e = this.origEvent;
                 this.isPropagationStopped = retTrue;
                 if (e && e.stopPropagation) e.stopPropagation();
             },
-            stopImmediatePropagation: function stopImmediatePropagation() {
+            stopImmediatePropagation: function() {
                 var e = this.origEvent;
                 this.isImmediatePropagationStopped = retTrue;
                 if (e && e.stopImmediatePropagation) e.stopImmediatePropagation();
@@ -5120,7 +5068,7 @@ export var $event = _.$event = (function (exports) {
      */
 
     /* dependencies
-     * delegate isUndef $safeEls 
+     * delegate isUndef $safeEls each 
      */
 
     exports = {
@@ -5169,9 +5117,9 @@ export var concat = _.concat = (function (exports) {
      * toArr 
      */
 
-    exports = function exports() {
-        var args = toArr(arguments),
-            ret = [];
+    exports = function() {
+        var args = toArr(arguments);
+        var ret = [];
 
         for (var i = 0, len = args.length; i < len; i++) {
             ret = ret.concat(toArr(args[i]));
@@ -5208,16 +5156,19 @@ export var mapObj = _.mapObj = (function (exports) {
      * ): types.Dictionary<TResult>;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb keys types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = safeCb(iterator, ctx);
 
-        var _keys = keys(obj),
-            len = _keys.length,
-            ret = {};
+        var _keys = keys(obj);
+
+        var len = _keys.length;
+        var ret = {};
 
         for (var i = 0; i < len; i++) {
             var curKey = _keys[i];
@@ -5242,8 +5193,8 @@ export var cloneDeep = _.cloneDeep = (function (exports) {
      */
 
     /* example
-     * var obj = [{a: 1}, {a: 2}];
-     * var obj2 = cloneDeep(obj);
+     * const obj = [{a: 1}, {a: 2}];
+     * const obj2 = cloneDeep(obj);
      * console.log(obj[0] === obj2[1]); // -> false
      */
 
@@ -5255,17 +5206,7 @@ export var cloneDeep = _.cloneDeep = (function (exports) {
      * isObj isFn isArr mapObj 
      */
 
-    exports = (function(_exports) {
-        function exports(_x) {
-            return _exports.apply(this, arguments);
-        }
-
-        exports.toString = function() {
-            return _exports.toString();
-        };
-
-        return exports;
-    })(function(obj) {
+    exports = function(obj) {
         if (isArr(obj)) {
             return obj.map(function(val) {
                 return exports(val);
@@ -5279,7 +5220,7 @@ export var cloneDeep = _.cloneDeep = (function (exports) {
         }
 
         return obj;
-    });
+    };
 
     return exports;
 })({});
@@ -5316,15 +5257,18 @@ export var some = _.some = (function (exports) {
      * ): boolean;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb isArrLike keys types 
      */
 
-    exports = function exports(obj, predicate, ctx) {
+    exports = function(obj, predicate, ctx) {
         predicate = safeCb(predicate, ctx);
 
-        var _keys = !isArrLike(obj) && keys(obj),
-            len = (_keys || obj).length;
+        var _keys = !isArrLike(obj) && keys(obj);
+
+        var len = (_keys || obj).length;
 
         for (var i = 0; i < len; i++) {
             var key = _keys ? _keys[i] : i;
@@ -5400,11 +5344,11 @@ export var $class = _.$class = (function (exports) {
      */
 
     /* dependencies
-     * toArr some $safeEls isStr 
+     * toArr some $safeEls isStr each 
      */
 
     exports = {
-        add: function add(els, name) {
+        add: function(els, name) {
             els = $safeEls(els);
             var names = safeName(name);
             each(els, function(el) {
@@ -5418,21 +5362,21 @@ export var $class = _.$class = (function (exports) {
                 }
             });
         },
-        has: function has(els, name) {
+        has: function(els, name) {
             els = $safeEls(els);
             var regName = new RegExp('(^|\\s)' + name + '(\\s|$)');
             return some(els, function(el) {
                 return regName.test(el.className);
             });
         },
-        toggle: function toggle(els, name) {
+        toggle: function(els, name) {
             els = $safeEls(els);
             each(els, function(el) {
                 if (!exports.has(el, name)) return exports.add(el, name);
                 exports.remove(el, name);
             });
         },
-        remove: function remove(els, name) {
+        remove: function(els, name) {
             els = $safeEls(els);
             var names = safeName(name);
             each(els, function(el) {
@@ -5463,7 +5407,7 @@ export var $ = _.$ = (function (exports) {
      */
 
     /* example
-     * var $btn = $('#btn');
+     * const $btn = $('#btn');
      * $btn.html('eustia');
      * $btn.addClass('btn');
      * $btn.show();
@@ -5523,120 +5467,110 @@ export var $ = _.$ = (function (exports) {
      * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr 
      */
 
-    exports = function exports(selector) {
+    exports = function(selector) {
         return new Select(selector);
     };
 
     Select.methods({
-        offset: function offset() {
+        offset: function() {
             return $offset(this);
         },
-        hide: function hide() {
+        hide: function() {
             return this.css('display', 'none');
         },
-        show: function show() {
+        show: function() {
             $show(this);
             return this;
         },
-        first: function first() {
+        first: function() {
             return exports(this[0]);
         },
-        last: (function(_last) {
-            function last() {
-                return _last.apply(this, arguments);
-            }
-
-            last.toString = function() {
-                return _last.toString();
-            };
-
-            return last;
-        })(function() {
+        last: function() {
             return exports(last(this));
-        }),
-        get: function get(idx) {
+        },
+        get: function(idx) {
             return this[idx];
         },
-        eq: function eq(idx) {
+        eq: function(idx) {
             return exports(this[idx]);
         },
-        on: function on(event, selector, handler) {
+        on: function(event, selector, handler) {
             $event.on(this, event, selector, handler);
             return this;
         },
-        off: function off(event, selector, handler) {
+        off: function(event, selector, handler) {
             $event.off(this, event, selector, handler);
             return this;
         },
-        html: function html(val) {
+        html: function(val) {
             var result = $property.html(this, val);
             if (isUndef(val)) return result;
             return this;
         },
-        text: function text(val) {
+        text: function(val) {
             var result = $property.text(this, val);
             if (isUndef(val)) return result;
             return this;
         },
-        val: function val(_val) {
-            var result = $property.val(this, _val);
-            if (isUndef(_val)) return result;
+        val: function(val) {
+            var result = $property.val(this, val);
+            if (isUndef(val)) return result;
             return this;
         },
-        css: function css(name, val) {
+        css: function(name, val) {
             var result = $css(this, name, val);
             if (isGetter(name, val)) return result;
             return this;
         },
-        attr: function attr(name, val) {
+        attr: function(name, val) {
             var result = $attr(this, name, val);
             if (isGetter(name, val)) return result;
             return this;
         },
-        data: function data(name, val) {
+        data: function(name, val) {
             var result = $data(this, name, val);
             if (isGetter(name, val)) return result;
             return this;
         },
-        rmAttr: function rmAttr(name) {
+        rmAttr: function(name) {
             $attr.remove(this, name);
             return this;
         },
-        remove: function remove() {
+        remove: function() {
             $remove(this);
             return this;
         },
-        addClass: function addClass(name) {
+        addClass: function(name) {
             $class.add(this, name);
             return this;
         },
-        rmClass: function rmClass(name) {
+        rmClass: function(name) {
             $class.remove(this, name);
             return this;
         },
-        toggleClass: function toggleClass(name) {
+        toggleClass: function(name) {
             $class.toggle(this, name);
             return this;
         },
-        hasClass: function hasClass(name) {
+        hasClass: function(name) {
             return $class.has(this, name);
         },
-        parent: function parent() {
+        parent: function() {
             return exports(this[0].parentNode);
         },
-        append: function append(val) {
+        append: function(val) {
             $insert.append(this, val);
             return this;
         },
-        prepend: function prepend(val) {
+        prepend: function(val) {
             $insert.prepend(this, val);
             return this;
         },
-        before: function before(val) {
+        before: function(val) {
             $insert.before(this, val);
             return this;
         },
-        after: function after(val) {
+        after: function(val) {
             $insert.after(this, val);
             return this;
         }
@@ -5658,7 +5592,7 @@ export var memStorage = _.memStorage = (function (exports) {
      */
 
     /* example
-     * var localStorage = window.localStorage || memStorage;
+     * const localStorage = window.localStorage || memStorage;
      * localStorage.setItem('test', 'licia');
      */
 
@@ -5671,20 +5605,20 @@ export var memStorage = _.memStorage = (function (exports) {
      */
 
     exports = {
-        getItem: function getItem(key) {
+        getItem: function(key) {
             return (API_KEYS[key] ? cloak[key] : this[key]) || null;
         },
-        setItem: function setItem(key, val) {
+        setItem: function(key, val) {
             API_KEYS[key] ? (cloak[key] = val) : (this[key] = val);
         },
-        removeItem: function removeItem(key) {
+        removeItem: function(key) {
             API_KEYS[key] ? delete cloak[key] : delete this[key];
         },
-        key: function key(i) {
+        key: function(i) {
             var keys = enumerableKeys();
             return i >= 0 && i < keys.length ? keys[i] : null;
         },
-        clear: function clear() {
+        clear: function() {
             var keys = uncloakedKeys();
             /* eslint-disable no-cond-assign */
 
@@ -5695,15 +5629,15 @@ export var memStorage = _.memStorage = (function (exports) {
             keys = cloakedKeys();
             /* eslint-disable no-cond-assign */
 
-            for (i = 0; (key = keys[i]); i++) {
-                delete cloak[key];
+            for (var _i = 0, _key; (_key = keys[_i]); _i++) {
+                delete cloak[_key];
             }
         }
     };
     Object.defineProperty(exports, 'length', {
         enumerable: false,
         configurable: true,
-        get: function get() {
+        get: function() {
             return enumerableKeys().length;
         }
     });
@@ -5838,7 +5772,7 @@ export var meta = _.meta = (function (exports) {
      * each isStr isUndef contain isArr isObj toArr 
      */
 
-    exports = function exports(name, content) {
+    exports = function(name, content) {
         if (isUndef(name)) return getAllMeta();
         var isGetter = (isStr(name) && isUndef(content)) || isArr(name);
         if (isGetter) return getMeta(name);
@@ -5897,8 +5831,8 @@ export var meta = _.meta = (function (exports) {
     function metaEach(fn) {
         var metaList = doc.querySelectorAll('meta');
         each(metaList, function(meta) {
-            var name = meta.getAttribute('name'),
-                content = meta.getAttribute('content');
+            var name = meta.getAttribute('name');
+            var content = meta.getAttribute('content');
             if (!name || !content) return;
             fn(name, content);
         });
@@ -5934,7 +5868,7 @@ export var toNum = _.toNum = (function (exports) {
      * isNum isObj isFn isStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (isNum(val)) return val;
 
         if (isObj(val)) {
@@ -5989,14 +5923,14 @@ export var ms = _.ms = (function (exports) {
      * toNum isStr 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         if (isStr(str)) {
             var match = str.match(regStrTime);
             if (!match) return 0;
             return toNum(match[1]) * factor[match[2] || 'ms'];
         } else {
-            var num = str,
-                suffix = 'ms';
+            var num = str;
+            var suffix = 'ms';
 
             for (var i = 0, len = suffixList.length; i < len; i++) {
                 if (num >= factor[suffixList[i]]) {
@@ -6047,7 +5981,7 @@ export var toInt = _.toInt = (function (exports) {
      * toNum 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return val === 0 ? val : 0;
         val = toNum(val);
         return val - (val % 1);
@@ -6070,7 +6004,7 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
      */
 
     /* example
-     * var browser = detectBrowser();
+     * const browser = detectBrowser();
      * if (browser.name === 'ie' && browser.version < 9) {
      *     // Do something about old IE...
      * }
@@ -6090,7 +6024,7 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
      * isBrowser toInt keys 
      */
 
-    exports = function exports(ua) {
+    exports = function(ua) {
         ua = ua || (isBrowser ? navigator.userAgent : '');
         ua = ua.toLowerCase();
         var ieVer = getVer(ua, 'msie ');
@@ -6106,8 +6040,8 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
             };
 
         for (var i = 0, len = browsers.length; i < len; i++) {
-            var name = browsers[i],
-                match = ua.match(regBrowsers[name]);
+            var name = browsers[i];
+            var match = ua.match(regBrowsers[name]);
             if (match == null) continue;
             var version = toInt(match[1].split('.')[0]);
             if (name === 'opera') version = getVer(ua, 'version/') || version;
@@ -6132,8 +6066,8 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
         safari: /version\/([0-9._]+).*safari/,
         chrome: /(?!chrom.*opr)chrom(?:e|ium)\/([0-9.]+)(:?\s|$)/
     };
-    var regIe11 = /trident\/7\./,
-        browsers = keys(regBrowsers);
+    var regIe11 = /trident\/7\./;
+    var browsers = keys(regBrowsers);
 
     function getVer(ua, mark) {
         var idx = ua.indexOf(mark);
@@ -6147,24 +6081,6 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
 /* ------------------------------ nextTick ------------------------------ */
 
 export var nextTick = _.nextTick = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Next tick for both node and browser.
      *
      * |Name|Type    |Desc            |
@@ -6185,18 +6101,14 @@ export var nextTick = _.nextTick = (function (exports) {
     /* typescript
      * export declare function nextTick(cb: Function): void;
      */
-    if (
-        (typeof process === 'undefined' ? 'undefined' : _typeof(process)) ===
-            'object' &&
-        process.nextTick
-    ) {
+    if (typeof process === 'object' && process.nextTick) {
         exports = process.nextTick;
     } else if (typeof setImmediate === 'function') {
-        exports = function exports(cb) {
+        exports = function(cb) {
             setImmediate(ensureCallable(cb));
         };
     } else {
-        exports = function exports(cb) {
+        exports = function(cb) {
             setTimeout(ensureCallable(cb), 0);
         };
     }
@@ -6245,7 +6157,7 @@ export var partial = _.partial = (function (exports) {
      */
 
     /* example
-     * var sub5 = partial(function (a, b) { return b - a }, 5);
+     * const sub5 = partial(function (a, b) { return b - a }, 5);
      * sub5(20); // -> 15
      */
 
@@ -6282,7 +6194,7 @@ export var once = _.once = (function (exports) {
 
     /* example
      * function init() {};
-     * var initOnce = once(init);
+     * const initOnce = once(init);
      * initOnce();
      * initOnce(); // -> init is invoked once
      */
@@ -6341,7 +6253,7 @@ export var Emitter = _.Emitter = (function (exports) {
      */
 
     /* example
-     * var event = new Emitter();
+     * const event = new Emitter();
      * event.on('test', function () { console.log('test') });
      * event.emit('test'); // Logs out 'test'.
      * Emitter.mixin({});
@@ -6368,14 +6280,14 @@ export var Emitter = _.Emitter = (function (exports) {
             initialize: function Emitter() {
                 this._events = this._events || {};
             },
-            on: function on(event, listener) {
+            on: function(event, listener) {
                 this._events[event] = this._events[event] || [];
 
                 this._events[event].push(listener);
 
                 return this;
             },
-            off: function off(event, listener) {
+            off: function(event, listener) {
                 if (!has(this._events, event)) return;
 
                 this._events[event].splice(
@@ -6385,21 +6297,11 @@ export var Emitter = _.Emitter = (function (exports) {
 
                 return this;
             },
-            once: (function(_once) {
-                function once(_x, _x2) {
-                    return _once.apply(this, arguments);
-                }
-
-                once.toString = function() {
-                    return _once.toString();
-                };
-
-                return once;
-            })(function(event, listener) {
+            once: function(event, listener) {
                 this.on(event, once(listener));
                 return this;
-            }),
-            emit: function emit(event) {
+            },
+            emit: function(event) {
                 if (!has(this._events, event)) return;
                 var args = slice(arguments, 1);
                 each(
@@ -6413,7 +6315,7 @@ export var Emitter = _.Emitter = (function (exports) {
             }
         },
         {
-            mixin: function mixin(obj) {
+            mixin: function(obj) {
                 each(['on', 'off', 'once', 'emit'], function(val) {
                     obj[val] = exports.prototype[val];
                 });
@@ -6459,7 +6361,7 @@ export var Logger = _.Logger = (function (exports) {
      */
 
     /* example
-     * var logger = new Logger('licia', Logger.level.ERROR);
+     * const logger = new Logger('licia', Logger.level.ERROR);
      * logger.trace('test');
      *
      * // Format output.
@@ -6505,7 +6407,7 @@ export var Logger = _.Logger = (function (exports) {
                 this.setLevel(isUndef(level) ? exports.level.DEBUG : level);
                 this.callSuper(Emitter, 'initialize', arguments);
             },
-            setLevel: function setLevel(level) {
+            setLevel: function(level) {
                 if (isStr(level)) {
                     level = exports.level[level.toUpperCase()];
                     if (level) this._level = level;
@@ -6515,28 +6417,28 @@ export var Logger = _.Logger = (function (exports) {
                 if (isNum(level)) this._level = level;
                 return this;
             },
-            getLevel: function getLevel() {
+            getLevel: function() {
                 return this._level;
             },
-            formatter: function formatter(type, argList) {
+            formatter: function(type, argList) {
                 return argList;
             },
-            trace: function trace() {
+            trace: function() {
                 return this._log('trace', arguments);
             },
-            debug: function debug() {
+            debug: function() {
                 return this._log('debug', arguments);
             },
-            info: function info() {
+            info: function() {
                 return this._log('info', arguments);
             },
-            warn: function warn() {
+            warn: function() {
                 return this._log('warn', arguments);
             },
-            error: function error() {
+            error: function() {
                 return this._log('error', arguments);
             },
-            _log: function _log(type, argList) {
+            _log: function(type, argList) {
                 argList = toArr(argList);
                 if (argList.length === 0) return this;
                 this.emit('all', type, clone(argList));
@@ -6632,7 +6534,7 @@ export var Store = _.Store = (function (exports) {
      */
 
     /* example
-     * var store = new Store('test');
+     * const store = new Store('test');
      * store.set('user', {name: 'licia'});
      * store.get('user').name; // -> 'licia'
      * store.clear();
@@ -6668,7 +6570,7 @@ export var Store = _.Store = (function (exports) {
             this._data = data || {};
             this.save(this._data);
         },
-        set: function set(key, val) {
+        set: function(key, val) {
             var data;
 
             if (isStr(key)) {
@@ -6686,7 +6588,7 @@ export var Store = _.Store = (function (exports) {
             });
             this.save(this._data);
         },
-        get: function get(key) {
+        get: function(key) {
             var data = this._data;
             if (isStr(key)) return data[key];
             var ret = {};
@@ -6695,7 +6597,7 @@ export var Store = _.Store = (function (exports) {
             });
             return ret;
         },
-        remove: function remove(key) {
+        remove: function(key) {
             key = toArr(key);
             var data = this._data;
             each(key, function(val) {
@@ -6703,25 +6605,15 @@ export var Store = _.Store = (function (exports) {
             });
             this.save(data);
         },
-        clear: function clear() {
+        clear: function() {
             this._data = {};
             this.save(this._data);
         },
-        each: (function(_each) {
-            function each(_x) {
-                return _each.apply(this, arguments);
-            }
-
-            each.toString = function() {
-                return _each.toString();
-            };
-
-            return each;
-        })(function(fn) {
+        each: function(fn) {
             each(this._data, fn);
-        }),
+        },
         // This methods exists to be overwritten.
-        save: function save(data) {
+        save: function(data) {
             this._data = data;
         }
     });
@@ -6769,7 +6661,7 @@ export var orientation = _.orientation = (function (exports) {
 
     var screen = window.screen;
     exports = {
-        get: function get() {
+        get: function() {
             if (screen) {
                 var orientation = safeGet(screen, 'orientation.type');
                 if (orientation) return orientation.split('-').shift();
@@ -6801,7 +6693,7 @@ export var perfNow = _.perfNow = (function (exports) {
      */
 
     /* example
-     * var start = perfNow();
+     * const start = perfNow();
      *
      * // Do something.
      *
@@ -6816,29 +6708,29 @@ export var perfNow = _.perfNow = (function (exports) {
      * now root 
      */
 
-    var performance = root.performance,
-        process = root.process,
-        loadTime;
+    var performance = root.performance;
+    var process = root.process;
+    var loadTime;
 
     if (performance && performance.now) {
-        exports = function exports() {
+        exports = function() {
             return performance.now();
         };
     } else if (process && process.hrtime) {
-        var getNanoSeconds = function getNanoSeconds() {
+        var getNanoSeconds = function() {
             var hr = process.hrtime();
             return hr[0] * 1e9 + hr[1];
         };
 
         loadTime = getNanoSeconds() - process.uptime() * 1e9;
 
-        exports = function exports() {
+        exports = function() {
             return (getNanoSeconds() - loadTime) / 1e6;
         };
     } else {
         loadTime = now();
 
-        exports = function exports() {
+        exports = function() {
             return now() - loadTime;
         };
     }
@@ -6885,15 +6777,15 @@ export var rmCookie = _.rmCookie = (function (exports) {
      * cookie 
      */
 
-    exports = function exports(key) {
-        var location = window.location,
-            hostname = location.hostname,
-            pathname = location.pathname,
-            hostNames = hostname.split('.'),
-            pathNames = pathname.split('/'),
-            domain = '',
-            pathLen = pathNames.length,
-            path;
+    exports = function(key) {
+        var location = window.location;
+        var hostname = location.hostname;
+        var pathname = location.pathname;
+        var hostNames = hostname.split('.');
+        var pathNames = pathname.split('/');
+        var domain = '';
+        var pathLen = pathNames.length;
+        var path;
         if (del()) return;
 
         for (var i = hostNames.length - 1; i >= 0; i--) {
@@ -6973,13 +6865,13 @@ export var rtrim = _.rtrim = (function (exports) {
      */
     var regSpace = /\s+$/;
 
-    exports = function exports(str, chars) {
+    exports = function(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
-        var end = str.length - 1,
-            charLen = chars.length,
-            found = true,
-            i,
-            c;
+        var end = str.length - 1;
+        var charLen = chars.length;
+        var found = true;
+        var i;
+        var c;
 
         while (found && end >= 0) {
             found = false;
@@ -7029,7 +6921,7 @@ export var trim = _.trim = (function (exports) {
 
     var regSpace = /^\s+|\s+$/g;
 
-    exports = function exports(str, chars) {
+    exports = function(str, chars) {
         if (chars == null) return str.replace(regSpace, '');
         return ltrim(rtrim(str, chars), chars);
     };
@@ -7100,7 +6992,7 @@ export var query = _.query = (function (exports) {
      */
 
     exports = {
-        parse: function parse(str) {
+        parse: function(str) {
             var ret = {};
             str = trim(str).replace(regIllegalChars, '');
             each(str.split('&'), function(param) {
@@ -7120,7 +7012,7 @@ export var query = _.query = (function (exports) {
             });
             return ret;
         },
-        stringify: function stringify(obj, arrKey) {
+        stringify: function(obj, arrKey) {
             return filter(
                 map(obj, function(val, key) {
                     if (isObj(val) && isEmpty(val)) return '';
@@ -7212,7 +7104,7 @@ export var Url = _.Url = (function (exports) {
      */
 
     /* example
-     * var url = new Url('http://example.com:8080?eruda=true');
+     * const url = new Url('http://example.com:8080?eruda=true');
      * console.log(url.port); // -> '8080'
      * url.query.foo = 'bar';
      * url.rmQuery('eruda');
@@ -7258,11 +7150,11 @@ export var Url = _.Url = (function (exports) {
     exports = Class(
         {
             className: 'Url',
-            initialize: function initialize(url) {
+            initialize: function(url) {
                 if (!url && isBrowser) url = window.location.href;
                 extend(this, exports.parse(url || ''));
             },
-            setQuery: function setQuery(name, val) {
+            setQuery: function(name, val) {
                 var query = this.query;
 
                 if (isObj(name)) {
@@ -7275,7 +7167,7 @@ export var Url = _.Url = (function (exports) {
 
                 return this;
             },
-            rmQuery: function rmQuery(name) {
+            rmQuery: function(name) {
                 var query = this.query;
                 if (!isArr(name)) name = toArr(name);
                 each(name, function(key) {
@@ -7283,23 +7175,24 @@ export var Url = _.Url = (function (exports) {
                 });
                 return this;
             },
-            toString: function toString() {
+            toString: function() {
                 return exports.stringify(this);
             }
         },
         {
-            parse: function parse(url) {
+            parse: function(url) {
                 var ret = {
-                        protocol: '',
-                        auth: '',
-                        hostname: '',
-                        hash: '',
-                        query: {},
-                        port: '',
-                        pathname: '',
-                        slashes: false
-                    },
-                    rest = trim(url);
+                    protocol: '',
+                    auth: '',
+                    hostname: '',
+                    hash: '',
+                    query: {},
+                    port: '',
+                    pathname: '',
+                    slashes: false
+                };
+                var rest = trim(url);
+                var slashes = false;
                 var proto = rest.match(regProto);
 
                 if (proto) {
@@ -7309,7 +7202,7 @@ export var Url = _.Url = (function (exports) {
                 }
 
                 if (proto) {
-                    var slashes = rest.substr(0, 2) === '//';
+                    slashes = rest.substr(0, 2) === '//';
 
                     if (slashes) {
                         rest = rest.slice(2);
@@ -7362,7 +7255,7 @@ export var Url = _.Url = (function (exports) {
                 ret.pathname = rest || '/';
                 return ret;
             },
-            stringify: function stringify(obj) {
+            stringify: function(obj) {
                 var ret =
                     obj.protocol +
                     (obj.slashes ? '//' : '') +
@@ -7376,9 +7269,9 @@ export var Url = _.Url = (function (exports) {
             }
         }
     );
-    var regProto = /^([a-z0-9.+-]+:)/i,
-        regPort = /:[0-9]*$/,
-        hostEndingChars = ['/', '?', '#'];
+    var regProto = /^([a-z0-9.+-]+:)/i;
+    var regPort = /:[0-9]*$/;
+    var hostEndingChars = ['/', '?', '#'];
 
     return exports;
 })({});
@@ -7460,28 +7353,18 @@ export var ajax = _.ajax = (function (exports) {
      * isFn noop defaults isObj query 
      */
 
-    exports = (function(_exports) {
-        function exports(_x) {
-            return _exports.apply(this, arguments);
-        }
-
-        exports.toString = function() {
-            return _exports.toString();
-        };
-
-        return exports;
-    })(function(options) {
+    exports = function(options) {
         defaults(options, exports.setting);
-        var type = options.type,
-            url = options.url,
-            data = options.data,
-            dataType = options.dataType,
-            success = options.success,
-            error = options.error,
-            timeout = options.timeout,
-            complete = options.complete,
-            xhr = options.xhr(),
-            abortTimeout;
+        var type = options.type;
+        var url = options.url;
+        var data = options.data;
+        var dataType = options.dataType;
+        var success = options.success;
+        var error = options.error;
+        var timeout = options.timeout;
+        var complete = options.complete;
+        var xhr = options.xhr();
+        var abortTimeout;
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState !== 4) return;
@@ -7529,7 +7412,7 @@ export var ajax = _.ajax = (function (exports) {
 
         xhr.send(type === 'GET' ? null : data);
         return xhr;
-    });
+    };
 
     exports.setting = {
         type: 'GET',
@@ -7539,7 +7422,7 @@ export var ajax = _.ajax = (function (exports) {
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         data: {},
-        xhr: function xhr() {
+        xhr: function() {
             return new XMLHttpRequest();
         },
         timeout: 0
@@ -7602,7 +7485,7 @@ export var type = _.type = (function (exports) {
      * objToStr isNaN 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         var lowerCase =
             arguments.length > 1 && arguments[1] !== undefined
                 ? arguments[1]
@@ -7636,7 +7519,7 @@ export var stringify = _.stringify = (function (exports) {
 
     /* example
      * stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
-     * var obj = {a: 1, b: {}};
+     * const obj = {a: 1, b: {}};
      * obj.b = obj;
      * stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
      */
@@ -7649,13 +7532,13 @@ export var stringify = _.stringify = (function (exports) {
      * type upperFirst toStr isUndef isFn isRegExp 
      */
 
-    exports = function exports(obj, spaces) {
+    exports = function(obj, spaces) {
         return JSON.stringify(obj, serializer(), spaces);
     };
 
     function serializer() {
-        var stack = [],
-            keys = [];
+        var stack = [];
+        var keys = [];
         return function(key, val) {
             if (stack.length > 0) {
                 var pos = stack.indexOf(this);
@@ -7711,7 +7594,7 @@ export var LocalStore = _.LocalStore = (function (exports) {
      */
 
     /* example
-     * var store = new LocalStore('licia');
+     * const store = new LocalStore('licia');
      * store.set('name', 'licia');
      */
 
@@ -7742,7 +7625,7 @@ export var LocalStore = _.LocalStore = (function (exports) {
             data = defaults(localData, data);
             this.callSuper(Store, 'initialize', [data]);
         },
-        save: function save(data) {
+        save: function(data) {
             if (isEmpty(data)) return localStorage.removeItem(this._name);
             localStorage.setItem(this._name, stringify(data));
         }
@@ -7754,24 +7637,6 @@ export var LocalStore = _.LocalStore = (function (exports) {
 /* ------------------------------ stringifyAll ------------------------------ */
 
 export var stringifyAll = _.stringifyAll = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Stringify object into json with types.
      *
      * |Name     |Type  |Desc               |
@@ -7819,17 +7684,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain 
      */
 
-    exports = (function(_exports) {
-        function exports(_x) {
-            return _exports.apply(this, arguments);
-        }
-
-        exports.toString = function() {
-            return _exports.toString();
-        };
-
-        return exports;
-    })(function(obj) {
+    exports = function(obj) {
         var _ref =
                 arguments.length > 1 && arguments[1] !== undefined
                     ? arguments[1]
@@ -7965,7 +7820,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
                             symbol: true
                         }),
                         function(key) {
-                            return _typeof(key) === 'symbol';
+                            return typeof key === 'symbol';
                         }
                     );
 
@@ -7995,7 +7850,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
         }
 
         return json;
-    });
+    };
 
     function iterateObj(name, keys, obj, options) {
         var parts = [];
@@ -8059,11 +7914,11 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
     }
 
     var Visitor = Class({
-        initialize: function initialize() {
+        initialize: function() {
             this.id = 0;
             this.visited = [];
         },
-        set: function set(val) {
+        set: function(val) {
             var visited = this.visited,
                 id = this.id;
             var obj = {
@@ -8074,7 +7929,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             this.id++;
             return id;
         },
-        get: function get(val) {
+        get: function(val) {
             var visited = this.visited;
 
             for (var i = 0, len = visited.length; i < len; i++) {
@@ -8109,7 +7964,7 @@ export var stripHtmlTag = _.stripHtmlTag = (function (exports) {
      */
     var regHtmlTag = /<[^>]*>/g;
 
-    exports = function exports(str) {
+    exports = function(str) {
         return str.replace(regHtmlTag, '');
     };
 
@@ -8143,7 +7998,7 @@ export var tryIt = _.tryIt = (function (exports) {
      * noop 
      */
 
-    exports = function exports(fn, cb) {
+    exports = function(fn, cb) {
         cb = cb || noop;
 
         try {
@@ -8177,7 +8032,7 @@ export var uniqId = _.uniqId = (function (exports) {
      */
     var idCounter = 0;
 
-    exports = function exports(prefix) {
+    exports = function(prefix) {
         var id = ++idCounter + '';
         return prefix ? prefix + id : id;
     };
@@ -8203,7 +8058,7 @@ export var viewportScale = _.viewportScale = (function (exports) {
      * meta clamp trim each map isNaN 
      */
 
-    exports = function exports() {
+    exports = function() {
         var viewport = meta('viewport');
         if (!viewport) return 1;
         viewport = map(viewport.split(','), function(val) {
@@ -8242,7 +8097,7 @@ export var wrap = _.wrap = (function (exports) {
      */
 
     /* example
-     * var p = wrap(escape, function(fn, text) {
+     * const p = wrap(escape, function(fn, text) {
      *     return '<p>' + fn(text) + '</p>';
      * });
      * p('You & Me'); // -> '<p>You &amp; Me</p>'
@@ -8256,7 +8111,7 @@ export var wrap = _.wrap = (function (exports) {
      * partial 
      */
 
-    exports = function exports(fn, wrapper) {
+    exports = function(fn, wrapper) {
         return partial(wrapper, fn);
     };
 

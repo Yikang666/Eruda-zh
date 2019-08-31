@@ -1,7 +1,7 @@
 /* See if an element is within eruda.
  */
 
-function exports(el) {
+exports = function (el) {
   let parentNode = el.parentNode
 
   if (!parentNode) return false

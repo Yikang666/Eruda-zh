@@ -61,7 +61,7 @@ var has = _.has = (function (exports) {
      */
     var hasOwnProp = Object.prototype.hasOwnProperty;
 
-    exports = function exports(obj, key) {
+    exports = function(obj, key) {
         return hasOwnProp.call(obj, key);
     };
 
@@ -71,24 +71,6 @@ var has = _.has = (function (exports) {
 /* ------------------------------ isBrowser ------------------------------ */
 
 var isBrowser = _.isBrowser = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Check if running in a browser.
      */
 
@@ -100,10 +82,8 @@ var isBrowser = _.isBrowser = (function (exports) {
      * export declare const isBrowser: boolean;
      */
     exports =
-        (typeof window === 'undefined' ? 'undefined' : _typeof(window)) ===
-            'object' &&
-        (typeof document === 'undefined' ? 'undefined' : _typeof(document)) ===
-            'object' &&
+        typeof window === 'object' &&
+        typeof document === 'object' &&
         document.nodeType === 9;
 
     return exports;
@@ -145,7 +125,7 @@ var detectMocha = _.detectMocha = (function (exports) {
      * root 
      */
 
-    exports = function exports() {
+    exports = function() {
         for (var i = 0, len = methods.length; i < len; i++) {
             var method = methods[i];
             if (typeof root[method] !== 'function') return false;
@@ -185,11 +165,10 @@ var keys = _.keys = (function (exports) {
     if (Object.keys && !detectMocha()) {
         exports = Object.keys;
     } else {
-        exports = function exports(obj) {
-            var ret = [],
-                key;
+        exports = function(obj) {
+            var ret = [];
 
-            for (key in obj) {
+            for (var key in obj) {
                 if (has(obj, key)) ret.push(key);
             }
 
@@ -220,7 +199,7 @@ var objToStr = _.objToStr = (function (exports) {
      */
     var ObjToStr = Object.prototype.toString;
 
-    exports = function exports(val) {
+    exports = function(val) {
         return ObjToStr.call(val);
     };
 
@@ -254,7 +233,7 @@ var isFn = _.isFn = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         var objStr = objToStr(val);
         return (
             objStr === '[object Function]' ||
@@ -291,7 +270,7 @@ var isNum = _.isNum = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Number]';
     };
 
@@ -327,7 +306,7 @@ var isArrLike = _.isArrLike = (function (exports) {
 
     var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return false;
         var len = val.length;
         return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
@@ -355,7 +334,7 @@ var isUndef = _.isUndef = (function (exports) {
     /* typescript
      * export declare function isUndef(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val === void 0;
     };
 
@@ -376,7 +355,7 @@ var optimizeCb = _.optimizeCb = (function (exports) {
      * isUndef 
      */
 
-    exports = function exports(fn, ctx, argCount) {
+    exports = function(fn, ctx, argCount) {
         if (isUndef(ctx)) return fn;
 
         switch (argCount == null ? 3 : argCount) {
@@ -433,11 +412,13 @@ var each = _.each = (function (exports) {
      * ): types.Collection<T>;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * isArrLike keys optimizeCb types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = optimizeCb(iterator, ctx);
         var i, len;
 
@@ -472,7 +453,7 @@ var noop = _.noop = (function (exports) {
     /* typescript
      * export declare function noop(): void;
      */
-    exports = function exports() {};
+    exports = function() {};
 
     return exports;
 })({});
@@ -504,10 +485,10 @@ _.mkdir = (function (exports) {
      * isFn noop 
      */
 
-    var fs = require('fs'),
-        path = require('path');
+    const fs = require('fs');
+    const path = require('path');
 
-    var _0777 = parseInt('0777', 8);
+    const _0777 = parseInt('0777', 8);
 
     exports = function(p, mode, cb) {
         if (isFn(mode)) {
@@ -544,24 +525,6 @@ _.mkdir = (function (exports) {
 /* ------------------------------ nextTick ------------------------------ */
 
 var nextTick = _.nextTick = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Next tick for both node and browser.
      *
      * |Name|Type    |Desc            |
@@ -582,18 +545,14 @@ var nextTick = _.nextTick = (function (exports) {
     /* typescript
      * export declare function nextTick(cb: Function): void;
      */
-    if (
-        (typeof process === 'undefined' ? 'undefined' : _typeof(process)) ===
-            'object' &&
-        process.nextTick
-    ) {
+    if (typeof process === 'object' && process.nextTick) {
         exports = process.nextTick;
     } else if (typeof setImmediate === 'function') {
-        exports = function exports(cb) {
+        exports = function(cb) {
             setImmediate(ensureCallable(cb));
         };
     } else {
-        exports = function exports(cb) {
+        exports = function(cb) {
             setTimeout(ensureCallable(cb), 0);
         };
     }
@@ -638,10 +597,10 @@ _.parallel = (function (exports) {
      * noop each nextTick 
      */
 
-    exports = function exports(tasks, cb) {
+    exports = function(tasks, cb) {
         cb = cb || noop;
-        var results = [],
-            pending = tasks.length;
+        var results = [];
+        var pending = tasks.length;
         if (!pending) return done(null);
         each(tasks, function(task, i) {
             task(function(err, result) {
@@ -696,6 +655,8 @@ _.reduce = (function (exports) {
      *     context?: any
      * ): TResult;
      */
+
+    /* eslint-disable no-unused-vars */
 
     /* dependencies
      * optimizeCb isArrLike isUndef keys types 

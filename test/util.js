@@ -30,7 +30,7 @@
         /* typescript
          * export declare function noop(): void;
          */
-        exports = function exports() {};
+        exports = function() {};
 
         return exports;
     })({});
@@ -38,24 +38,6 @@
     /* ------------------------------ isObj ------------------------------ */
 
     var isObj = _.isObj = (function (exports) {
-        function _typeof(obj) {
-            if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-                _typeof = function _typeof(obj) {
-                    return typeof obj;
-                };
-            } else {
-                _typeof = function _typeof(obj) {
-                    return obj &&
-                        typeof Symbol === 'function' &&
-                        obj.constructor === Symbol &&
-                        obj !== Symbol.prototype
-                        ? 'symbol'
-                        : typeof obj;
-                };
-            }
-            return _typeof(obj);
-        }
-
         /* Check if value is the language type of Object.
          *
          * |Name  |Type   |Desc                      |
@@ -74,9 +56,8 @@
         /* typescript
          * export declare function isObj(val: any): boolean;
          */
-        exports = function exports(val) {
-            var type = _typeof(val);
-
+        exports = function(val) {
+            var type = typeof val;
             return !!val && (type === 'function' || type === 'object');
         };
 
@@ -102,7 +83,7 @@
         /* typescript
          * export declare function isUndef(val: any): boolean;
          */
-        exports = function exports(val) {
+        exports = function(val) {
             return val === void 0;
         };
 
@@ -148,13 +129,13 @@
          */
         // https://mathiasbynens.be/notes/javascript-encoding
         exports = {
-            encode: function encode(arr) {
+            encode: function(arr) {
                 return String.fromCodePoint.apply(String, arr);
             },
-            decode: function decode(str) {
+            decode: function(str) {
                 var ret = [];
-                var i = 0,
-                    len = str.length;
+                var i = 0;
+                var len = str.length;
 
                 while (i < len) {
                     var c = str.charCodeAt(i++); // A high surrogate
@@ -223,7 +204,7 @@
          */ // https://encoding.spec.whatwg.org/#utf-8
 
         exports = {
-            encode: function encode(str) {
+            encode: function(str) {
                 var codePoints = ucs2.decode(str);
                 var byteArr = '';
 
@@ -388,7 +369,7 @@
          * isUndef 
          */
 
-        exports = function exports(fn, ctx, argCount) {
+        exports = function(fn, ctx, argCount) {
             if (isUndef(ctx)) return fn;
 
             switch (argCount == null ? 3 : argCount) {
@@ -473,7 +454,7 @@
         /* typescript
          * export declare function toStr(val: any): string;
          */
-        exports = function exports(val) {
+        exports = function(val) {
             return val == null ? '' : val.toString();
         };
 
@@ -501,7 +482,7 @@
          */
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
-        exports = function exports(obj, key) {
+        exports = function(obj, key) {
             return hasOwnProp.call(obj, key);
         };
 
@@ -526,7 +507,7 @@
         /* typescript
          * export declare function identity<T>(val: T): T;
          */
-        exports = function exports(val) {
+        exports = function(val) {
             return val;
         };
 
@@ -553,7 +534,7 @@
          */
         var ObjToStr = Object.prototype.toString;
 
-        exports = function exports(val) {
+        exports = function(val) {
             return ObjToStr.call(val);
         };
 
@@ -585,7 +566,7 @@
          * objToStr 
          */
 
-        exports = function exports(val) {
+        exports = function(val) {
             return objToStr(val) === '[object Arguments]';
         };
 
@@ -619,7 +600,7 @@
          * objToStr 
          */
 
-        exports = function exports(val) {
+        exports = function(val) {
             var objStr = objToStr(val);
             return (
                 objStr === '[object Function]' ||
@@ -658,7 +639,7 @@
         var getPrototypeOf = Object.getPrototypeOf;
         var ObjectCtr = {}.constructor;
 
-        exports = function exports(obj) {
+        exports = function(obj) {
             if (!isObj(obj)) return null;
             if (getPrototypeOf) return getPrototypeOf(obj);
             var proto = obj.__proto__;
@@ -696,7 +677,7 @@
          * objToStr 
          */
 
-        exports = function exports(val) {
+        exports = function(val) {
             return objToStr(val) === '[object Number]';
         };
 
@@ -732,7 +713,7 @@
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-        exports = function exports(val) {
+        exports = function(val) {
             if (!val) return false;
             var len = val.length;
             return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
@@ -777,24 +758,6 @@
     /* ------------------------------ isBrowser ------------------------------ */
 
     var isBrowser = _.isBrowser = (function (exports) {
-        function _typeof(obj) {
-            if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-                _typeof = function _typeof(obj) {
-                    return typeof obj;
-                };
-            } else {
-                _typeof = function _typeof(obj) {
-                    return obj &&
-                        typeof Symbol === 'function' &&
-                        obj.constructor === Symbol &&
-                        obj !== Symbol.prototype
-                        ? 'symbol'
-                        : typeof obj;
-                };
-            }
-            return _typeof(obj);
-        }
-
         /* Check if running in a browser.
          */
 
@@ -806,10 +769,8 @@
          * export declare const isBrowser: boolean;
          */
         exports =
-            (typeof window === 'undefined' ? 'undefined' : _typeof(window)) ===
-                'object' &&
-            (typeof document === 'undefined' ? 'undefined' : _typeof(document)) ===
-                'object' &&
+            typeof window === 'object' &&
+            typeof document === 'object' &&
             document.nodeType === 9;
 
         return exports;
@@ -851,7 +812,7 @@
          * root 
          */
 
-        exports = function exports() {
+        exports = function() {
             for (var i = 0, len = methods.length; i < len; i++) {
                 var method = methods[i];
                 if (typeof root[method] !== 'function') return false;
@@ -891,11 +852,10 @@
         if (Object.keys && !detectMocha()) {
             exports = Object.keys;
         } else {
-            exports = function exports(obj) {
-                var ret = [],
-                    key;
+            exports = function(obj) {
+                var ret = [];
 
-                for (key in obj) {
+                for (var key in obj) {
                     if (has(obj, key)) ret.push(key);
                 }
 
@@ -935,11 +895,13 @@
          * ): types.Collection<T>;
          */
 
+        /* eslint-disable no-unused-vars */
+
         /* dependencies
          * isArrLike keys optimizeCb types 
          */
 
-        exports = function exports(obj, iterator, ctx) {
+        exports = function(obj, iterator, ctx) {
             iterator = optimizeCb(iterator, ctx);
             var i, len;
 
@@ -981,7 +943,7 @@
          * isUndef each 
          */
 
-        exports = function exports(keysFn, defaults) {
+        exports = function(keysFn, defaults) {
             return function(obj) {
                 each(arguments, function(src, idx) {
                     if (idx === 0) return;
@@ -1049,7 +1011,7 @@
          * objToStr 
          */
 
-        exports = function exports(val) {
+        exports = function(val) {
             return objToStr(val) === '[object String]';
         };
 
@@ -1081,7 +1043,7 @@
          * isArrLike isArr isStr isArgs keys 
          */
 
-        exports = function exports(val) {
+        exports = function(val) {
             if (val == null) return true;
 
             if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val))) {
@@ -1118,10 +1080,10 @@
          * keys 
          */
 
-        exports = function exports(obj, src) {
-            var _keys = keys(src),
-                len = _keys.length;
+        exports = function(obj, src) {
+            var _keys = keys(src);
 
+            var len = _keys.length;
             if (obj == null) return !len;
             obj = Object(obj);
 
@@ -1159,14 +1121,14 @@
          */
         var regSpace = /^\s+/;
 
-        exports = function exports(str, chars) {
+        exports = function(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
-            var start = 0,
-                len = str.length,
-                charLen = chars.length,
-                found = true,
-                i,
-                c;
+            var start = 0;
+            var len = str.length;
+            var charLen = chars.length;
+            var found = true;
+            var i;
+            var c;
 
             while (found && start < len) {
                 found = false;
@@ -1200,11 +1162,13 @@
          */
 
         /* example
+         * const filter = require('licia/filter');
+         *
          * const objects = [
          *     {a: 1, b: 2, c: 3 },
          *     {a: 4, b: 5, c: 6 }
          * ];
-         * // filter(objects, matcher({a: 4, c: 6 }));
+         * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
          */
 
         /* typescript
@@ -1215,7 +1179,7 @@
          * extendOwn isMatch 
          */
 
-        exports = function exports(attrs) {
+        exports = function(attrs) {
             attrs = extendOwn({}, attrs);
             return function(obj) {
                 return isMatch(obj, attrs);
@@ -1239,7 +1203,7 @@
          * isFn isObj optimizeCb matcher identity 
          */
 
-        exports = function exports(val, ctx, argCount) {
+        exports = function(val, ctx, argCount) {
             if (val == null) return identity;
             if (isFn(val)) return optimizeCb(val, ctx, argCount);
             if (isObj(val)) return matcher(val);
@@ -1285,11 +1249,13 @@
          * ): T[];
          */
 
+        /* eslint-disable no-unused-vars */
+
         /* dependencies
          * safeCb each types 
          */
 
-        exports = function exports(obj, predicate, ctx) {
+        exports = function(obj, predicate, ctx) {
             var ret = [];
             predicate = safeCb(predicate, ctx);
             each(obj, function(val, idx, list) {
@@ -1313,7 +1279,7 @@
         let styleList = []
         let scale = 1
 
-        function exports(css, container) {
+        exports = function (css, container) {
           css = toStr(css)
 
           for (let i = 0, len = styleList.length; i < len; i++) {
@@ -1383,7 +1349,7 @@
          * filter 
          */
 
-        exports = function exports(arr, compare) {
+        exports = function(arr, compare) {
             compare = compare || isEqual;
             return filter(arr, function(item, idx, arr) {
                 var len = arr.length;
@@ -1426,7 +1392,7 @@
          */
 
         /* example
-         * var obj = Object.create({zero: 0});
+         * const obj = Object.create({zero: 0});
          * obj.one = 1;
          * allKeys(obj) // -> ['zero', 'one']
          */
@@ -1455,7 +1421,7 @@
         var getOwnPropertyNames = Object.getOwnPropertyNames;
         var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 
-        exports = function exports(obj) {
+        exports = function(obj) {
             var _ref =
                     arguments.length > 1 && arguments[1] !== undefined
                         ? arguments[1]
@@ -1561,16 +1527,19 @@
          * ): TResult[];
          */
 
+        /* eslint-disable no-unused-vars */
+
         /* dependencies
          * safeCb keys isArrLike types 
          */
 
-        exports = function exports(obj, iterator, ctx) {
+        exports = function(obj, iterator, ctx) {
             iterator = safeCb(iterator, ctx);
 
-            var _keys = !isArrLike(obj) && keys(obj),
-                len = (_keys || obj).length,
-                results = Array(len);
+            var _keys = !isArrLike(obj) && keys(obj);
+
+            var len = (_keys || obj).length;
+            var results = Array(len);
 
             for (var i = 0; i < len; i++) {
                 var curKey = _keys ? _keys[i] : i;
@@ -1607,7 +1576,7 @@
          * each ucs2 map utf8 
          */
 
-        exports = function exports(str) {
+        exports = function(str) {
             try {
                 return decodeURIComponent(str);
             } catch (e) {
@@ -1734,13 +1703,13 @@
                 return exports;
             }
 
-            var cookies = document.cookie ? document.cookie.split('; ') : [],
-                result = key ? undefined : {};
+            var cookies = document.cookie ? document.cookie.split('; ') : [];
+            var result = key ? undefined : {};
 
             for (var i = 0, len = cookies.length; i < len; i++) {
-                var c = cookies[i],
-                    parts = c.split('='),
-                    name = decodeUriComponent(parts.shift());
+                var c = cookies[i];
+                var parts = c.split('=');
+                var name = decodeUriComponent(parts.shift());
                 c = parts.join('=');
                 c = decodeUriComponent(c);
 
@@ -1758,7 +1727,7 @@
         exports = {
             get: setCookie,
             set: setCookie,
-            remove: function remove(key, options) {
+            remove: function(key, options) {
                 options = options || {};
                 options.expires = -1;
                 return setCookie(key, '', options);
@@ -1791,13 +1760,13 @@
          */
         var regSpace = /\s+$/;
 
-        exports = function exports(str, chars) {
+        exports = function(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
-            var end = str.length - 1,
-                charLen = chars.length,
-                found = true,
-                i,
-                c;
+            var end = str.length - 1;
+            var charLen = chars.length;
+            var found = true;
+            var i;
+            var c;
 
             while (found && end >= 0) {
                 found = false;
@@ -1847,7 +1816,7 @@
 
         var regSpace = /^\s+|\s+$/g;
 
-        exports = function exports(str, chars) {
+        exports = function(str, chars) {
             if (chars == null) return str.replace(regSpace, '');
             return ltrim(rtrim(str, chars), chars);
         };
@@ -1897,7 +1866,7 @@
          */
 
         exports = {
-            parse: function parse(str) {
+            parse: function(str) {
                 var ret = {};
                 str = trim(str).replace(regIllegalChars, '');
                 each(str.split('&'), function(param) {
@@ -1917,7 +1886,7 @@
                 });
                 return ret;
             },
-            stringify: function stringify(obj, arrKey) {
+            stringify: function(obj, arrKey) {
                 return filter(
                     map(obj, function(val, key) {
                         if (isObj(val) && isEmpty(val)) return '';
@@ -2017,28 +1986,18 @@
          * isFn noop defaults isObj query 
          */
 
-        exports = (function(_exports) {
-            function exports(_x) {
-                return _exports.apply(this, arguments);
-            }
-
-            exports.toString = function() {
-                return _exports.toString();
-            };
-
-            return exports;
-        })(function(options) {
+        exports = function(options) {
             defaults(options, exports.setting);
-            var type = options.type,
-                url = options.url,
-                data = options.data,
-                dataType = options.dataType,
-                success = options.success,
-                error = options.error,
-                timeout = options.timeout,
-                complete = options.complete,
-                xhr = options.xhr(),
-                abortTimeout;
+            var type = options.type;
+            var url = options.url;
+            var data = options.data;
+            var dataType = options.dataType;
+            var success = options.success;
+            var error = options.error;
+            var timeout = options.timeout;
+            var complete = options.complete;
+            var xhr = options.xhr();
+            var abortTimeout;
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState !== 4) return;
@@ -2086,7 +2045,7 @@
 
             xhr.send(type === 'GET' ? null : data);
             return xhr;
-        });
+        };
 
         exports.setting = {
             type: 'GET',
@@ -2096,7 +2055,7 @@
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded',
             data: {},
-            xhr: function xhr() {
+            xhr: function() {
                 return new XMLHttpRequest();
             },
             timeout: 0

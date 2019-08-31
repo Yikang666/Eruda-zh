@@ -11,7 +11,7 @@ data, rmAttr, remove, addClass, rmClass, toggleClass, hasClass, append, prepend,
 before, after
 
 ```javascript
-var $btn = $('#btn');
+const $btn = $('#btn');
 $btn.html('eustia');
 $btn.addClass('btn');
 $btn.show();
@@ -293,7 +293,7 @@ Create JavaScript class.
 |return   |function|Function used to create instances|
 
 ```javascript
-var People = Class({
+const People = Class({
     initialize: function People(name, age) {
         this.name = name;
         this.age = age;
@@ -303,7 +303,7 @@ var People = Class({
     }
 });
 
-var Student = People.extend({
+const Student = People.extend({
     initialize: function Student(name, age, school) {
         this.callSuper(People, 'initialize', arguments);
 
@@ -318,7 +318,7 @@ var Student = People.extend({
     }
 });
 
-var a = new Student('allen', 17, 'Hogwarts');
+const a = new Student('allen', 17, 'Hogwarts');
 a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
 Student.is(a); // -> true
 ```
@@ -362,7 +362,7 @@ Emit event.
 |obj |object|Object to mixin|
 
 ```javascript
-var event = new Emitter();
+const event = new Emitter();
 event.on('test', function () { console.log('test') });
 event.emit('test'); // Logs out 'test'.
 Emitter.mixin({});
@@ -383,7 +383,7 @@ Enum type implementation.
 |obj |object|Pairs of key and value|
 
 ```javascript
-var importance = new Enum([
+const importance = new Enum([
     'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
 ]);
 const val = 1;
@@ -406,7 +406,7 @@ Extend from Store.
 |data|object|Default data          |
 
 ```javascript
-var store = new LocalStore('licia');
+const store = new LocalStore('licia');
 store.set('name', 'licia');
 ```
 
@@ -442,7 +442,7 @@ Logging methods.
 TRACE, DEBUG, INFO, WARN, ERROR and SILENT.
 
 ```javascript
-var logger = new Logger('licia', Logger.level.ERROR);
+const logger = new Logger('licia', Logger.level.ERROR);
 logger.trace('test');
 
 // Format output.
@@ -466,7 +466,7 @@ logger.on('debug', function (argList) {
 Safe MutationObserver, does nothing if MutationObserver is not supported.
 
 ```javascript
-var observer = new MutationObserver(function (mutations) {
+const observer = new MutationObserver(function (mutations) {
     // Do something.
 });
 observer.observe(document.documentElement);
@@ -500,7 +500,7 @@ Iterate over matched elements.
 |fn  |function|Function to execute for each element|
 
 ```javascript
-var $test = new Select('#test');
+const $test = new Select('#test');
 $test.find('.test').each(function (idx, element) {
     // Manipulate dom nodes
 });
@@ -572,7 +572,7 @@ Iterate over values.
 |fn  |function|Function invoked per interation|
 
 ```javascript
-var store = new Store('test');
+const store = new Store('test');
 store.set('user', {name: 'licia'});
 store.get('user').name; // -> 'licia'
 store.clear();
@@ -650,7 +650,7 @@ An url object contains the following properties:
 |hash    |The "fragment" portion of the URL including the pound-sign (#)                        |
 
 ```javascript
-var url = new Url('http://example.com:8080?eruda=true');
+const url = new Url('http://example.com:8080?eruda=true');
 console.log(url.port); // -> '8080'
 url.query.foo = 'bar';
 url.rmQuery('eruda');
@@ -731,7 +731,7 @@ Available options:
 Members of Object's prototype won't be retrieved.
 
 ```javascript
-var obj = Object.create({zero: 0});
+const obj = Object.create({zero: 0});
 obj.one = 1;
 allKeys(obj) // -> ['zero', 'one']
 ```
@@ -846,8 +846,8 @@ Recursively clone value.
 |return|*   |Deep cloned Value|
 
 ```javascript
-var obj = [{a: 1}, {a: 2}];
-var obj2 = cloneDeep(obj);
+const obj = [{a: 1}, {a: 2}];
+const obj2 = cloneDeep(obj);
 console.log(obj[0] === obj2[1]); // -> false
 ```
 
@@ -1025,7 +1025,7 @@ Add event delegation.
 Remove event delegation.
 
 ```javascript
-var container = document.getElementById('container');
+const container = document.getElementById('container');
 function clickHandler() {
     // Do something...
 }
@@ -1045,7 +1045,7 @@ Detect browser info using ua.
 Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
 
 ```javascript
-var browser = detectBrowser();
+const browser = detectBrowser();
 if (browser.name === 'ie' && browser.version < 9) {
     // Do something about old IE...
 }
@@ -1254,7 +1254,7 @@ Use Object.defineProperties if Object.freeze is not supported.
 |return|object|Object passed in|
 
 ```javascript
-var a = {b: 1};
+const a = {b: 1};
 freeze(a);
 a.b = 2;
 console.log(a); // -> {b: 1}
@@ -1371,7 +1371,7 @@ function Student(name) {
     this._name = name;
 }
 inherits(Student, People);
-var s = new Student('RedHood');
+const s = new Student('RedHood');
 s.getName(); // -> 'RedHood'
 ```
 
@@ -1848,11 +1848,13 @@ Return a predicate function that checks if attrs are contained in an object.
 |return|function|New predicate function            |
 
 ```javascript
+const filter = require('licia/filter');
+
 const objects = [
     {a: 1, b: 2, c: 3 },
     {a: 4, b: 5, c: 6 }
 ];
-// filter(objects, matcher({a: 4, c: 6 }));
+filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
 ```
 
 ## memStorage 
@@ -1862,7 +1864,7 @@ Memory-backed implementation of the Web Storage API.
 A replacement for environments where localStorage or sessionStorage is not available.
 
 ```javascript
-var localStorage = window.localStorage || memStorage;
+const localStorage = window.localStorage || memStorage;
 localStorage.setItem('test', 'licia');
 ```
 
@@ -1877,7 +1879,7 @@ Memoize a given function by caching the computed result.
 |return  |function|New memoized function               |
 
 ```javascript
-var fibonacci = memoize(function(n) {
+const fibonacci = memoize(function(n) {
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
 });
 ```
@@ -2014,7 +2016,7 @@ Create a function that invokes once.
 
 ```javascript
 function init() {};
-var initOnce = once(init);
+const initOnce = once(init);
 initOnce();
 initOnce(); // -> init is invoked once
 ```
@@ -2057,7 +2059,7 @@ Partially apply a function by filling in given arguments.
 |return     |function|New partially applied function          |
 
 ```javascript
-var sub5 = partial(function (a, b) { return b - a }, 5);
+const sub5 = partial(function (a, b) { return b - a }, 5);
 sub5(20); // -> 15
 ```
 
@@ -2066,7 +2068,7 @@ sub5(20); // -> 15
 High resolution time up to microsecond precision.
 
 ```javascript
-var start = perfNow();
+const start = perfNow();
 
 // Do something.
 
@@ -2151,7 +2153,7 @@ This accumulates the arguments passed into an array, after a given index.
 |return      |function|Generated function with rest parameters|
 
 ```javascript
-var paramArr = restArgs(function (rest) { return rest });
+const paramArr = restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
 
@@ -2202,7 +2204,7 @@ Get object property, don't throw undefined error.
 |return|*           |Target value or undefined|
 
 ```javascript
-var obj = {a: {aa: {aaa: 1}}};
+const obj = {a: {aa: {aaa: 1}}};
 safeGet(obj, 'a.aa.aaa'); // -> 1
 safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
 safeGet(obj, 'a.b'); // -> undefined
@@ -2289,7 +2291,7 @@ Undefined is treated as null value.
 
 ```javascript
 stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
-var obj = {a: 1, b: {}};
+const obj = {a: 1, b: {}};
 obj.b = obj;
 stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
 ```
@@ -2592,7 +2594,7 @@ Wrap the function inside a wrapper function, passing it as the first argument.
 |return |function|New function    |
 
 ```javascript
-var p = wrap(escape, function(fn, text) {
+const p = wrap(escape, function(fn, text) {
     return '<p>' + fn(text) + '</p>';
 });
 p('You & Me'); // -> '<p>You &amp; Me</p>'

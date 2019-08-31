@@ -28,14 +28,14 @@ export var inherits = _.inherits = (function (exports) {
      *     this._name = name;
      * }
      * inherits(Student, People);
-     * var s = new Student('RedHood');
+     * const s = new Student('RedHood');
      * s.getName(); // -> 'RedHood'
      */
 
     /* typescript
      * export declare function inherits(Class: Function, SuperClass: Function): void;
      */
-    exports = function exports(Class, SuperClass) {
+    exports = function(Class, SuperClass) {
         if (objCreate) return (Class.prototype = objCreate(SuperClass.prototype));
         noop.prototype = SuperClass.prototype;
         Class.prototype = new noop();
@@ -69,7 +69,7 @@ export var has = _.has = (function (exports) {
      */
     var hasOwnProp = Object.prototype.hasOwnProperty;
 
-    exports = function exports(obj, key) {
+    exports = function(obj, key) {
         return hasOwnProp.call(obj, key);
     };
 
@@ -96,7 +96,7 @@ export var idxOf = _.idxOf = (function (exports) {
     /* typescript
      * export declare function idxOf(arr: any[], val: any, fromIdx?: number): number;
      */
-    exports = function exports(arr, val, fromIdx) {
+    exports = function(arr, val, fromIdx) {
         return Array.prototype.indexOf.call(arr, val, fromIdx);
     };
 
@@ -122,7 +122,7 @@ export var isUndef = _.isUndef = (function (exports) {
     /* typescript
      * export declare function isUndef(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val === void 0;
     };
 
@@ -142,19 +142,19 @@ export var restArgs = _.restArgs = (function (exports) {
      */
 
     /* example
-     * var paramArr = restArgs(function (rest) { return rest });
+     * const paramArr = restArgs(function (rest) { return rest });
      * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
      */
 
     /* typescript
      * export declare function restArgs(fn: Function, startIndex?: number): Function;
      */
-    exports = function exports(fn, startIdx) {
+    exports = function(fn, startIdx) {
         startIdx = startIdx == null ? fn.length - 1 : +startIdx;
         return function() {
-            var len = Math.max(arguments.length - startIdx, 0),
-                rest = new Array(len),
-                i;
+            var len = Math.max(arguments.length - startIdx, 0);
+            var rest = new Array(len);
+            var i;
 
             for (i = 0; i < len; i++) {
                 rest[i] = arguments[i + startIdx];
@@ -199,7 +199,7 @@ export var optimizeCb = _.optimizeCb = (function (exports) {
      * isUndef 
      */
 
-    exports = function exports(fn, ctx, argCount) {
+    exports = function(fn, ctx, argCount) {
         if (isUndef(ctx)) return fn;
 
         switch (argCount == null ? 3 : argCount) {
@@ -282,7 +282,7 @@ export var endWith = _.endWith = (function (exports) {
     /* typescript
      * export declare function endWith(str: string, suffix: string): boolean;
      */
-    exports = function exports(str, suffix) {
+    exports = function(str, suffix) {
         var idx = str.length - suffix.length;
         return idx >= 0 && str.indexOf(suffix, idx) === idx;
     };
@@ -311,7 +311,7 @@ export var toStr = _.toStr = (function (exports) {
     /* typescript
      * export declare function toStr(val: any): string;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val == null ? '' : val.toString();
     };
 
@@ -343,7 +343,7 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
      * toStr 
      */
 
-    exports = function exports(str) {
+    exports = function(str) {
         return toStr(str).replace(regEscapeChars, function(char) {
             switch (char) {
                 case '"':
@@ -376,24 +376,6 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
 /* ------------------------------ isObj ------------------------------ */
 
 export var isObj = _.isObj = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Check if value is the language type of Object.
      *
      * |Name  |Type   |Desc                      |
@@ -412,9 +394,8 @@ export var isObj = _.isObj = (function (exports) {
     /* typescript
      * export declare function isObj(val: any): boolean;
      */
-    exports = function exports(val) {
-        var type = _typeof(val);
-
+    exports = function(val) {
+        var type = typeof val;
         return !!val && (type === 'function' || type === 'object');
     };
 
@@ -439,7 +420,7 @@ export var identity = _.identity = (function (exports) {
     /* typescript
      * export declare function identity<T>(val: T): T;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val;
     };
 
@@ -466,7 +447,7 @@ export var objToStr = _.objToStr = (function (exports) {
      */
     var ObjToStr = Object.prototype.toString;
 
-    exports = function exports(val) {
+    exports = function(val) {
         return ObjToStr.call(val);
     };
 
@@ -533,7 +514,7 @@ export var castPath = _.castPath = (function (exports) {
      * has isArr 
      */
 
-    exports = function exports(str, obj) {
+    exports = function(str, obj) {
         if (isArr(str)) return str;
         if (obj && has(obj, str)) return [str];
         var ret = [];
@@ -543,8 +524,8 @@ export var castPath = _.castPath = (function (exports) {
         return ret;
     }; // Lodash _stringToPath
 
-    var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
-        regEscapeChar = /\\(\\)?/g;
+    var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+    var regEscapeChar = /\\(\\)?/g;
 
     return exports;
 })({});
@@ -562,7 +543,7 @@ export var safeGet = _.safeGet = (function (exports) {
      */
 
     /* example
-     * var obj = {a: {aa: {aaa: 1}}};
+     * const obj = {a: {aa: {aaa: 1}}};
      * safeGet(obj, 'a.aa.aaa'); // -> 1
      * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
      * safeGet(obj, 'a.b'); // -> undefined
@@ -576,7 +557,7 @@ export var safeGet = _.safeGet = (function (exports) {
      * isUndef castPath 
      */
 
-    exports = function exports(obj, path) {
+    exports = function(obj, path) {
         path = castPath(path, obj);
         var prop;
         prop = path.shift();
@@ -616,7 +597,7 @@ export var flatten = _.flatten = (function (exports) {
      * isArr 
      */
 
-    exports = function exports(arr) {
+    exports = function(arr) {
         return flat(arr, []);
     };
 
@@ -663,7 +644,7 @@ export var isFn = _.isFn = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         var objStr = objToStr(val);
         return (
             objStr === '[object Function]' ||
@@ -702,7 +683,7 @@ export var getProto = _.getProto = (function (exports) {
     var getPrototypeOf = Object.getPrototypeOf;
     var ObjectCtr = {}.constructor;
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         if (!isObj(obj)) return null;
         if (getPrototypeOf) return getPrototypeOf(obj);
         var proto = obj.__proto__;
@@ -762,7 +743,7 @@ export var isStr = _.isStr = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object String]';
     };
 
@@ -794,7 +775,7 @@ export var isNum = _.isNum = (function (exports) {
      * objToStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return objToStr(val) === '[object Number]';
     };
 
@@ -830,7 +811,7 @@ export var isArrLike = _.isArrLike = (function (exports) {
 
     var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return false;
         var len = val.length;
         return isNum(len) && len >= 0 && len <= MAX_ARR_IDX && !isFn(val);
@@ -842,24 +823,6 @@ export var isArrLike = _.isArrLike = (function (exports) {
 /* ------------------------------ isBrowser ------------------------------ */
 
 export var isBrowser = _.isBrowser = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Check if running in a browser.
      */
 
@@ -871,10 +834,8 @@ export var isBrowser = _.isBrowser = (function (exports) {
      * export declare const isBrowser: boolean;
      */
     exports =
-        (typeof window === 'undefined' ? 'undefined' : _typeof(window)) ===
-            'object' &&
-        (typeof document === 'undefined' ? 'undefined' : _typeof(document)) ===
-            'object' &&
+        typeof window === 'object' &&
+        typeof document === 'object' &&
         document.nodeType === 9;
 
     return exports;
@@ -916,7 +877,7 @@ export var detectMocha = _.detectMocha = (function (exports) {
      * root 
      */
 
-    exports = function exports() {
+    exports = function() {
         for (var i = 0, len = methods.length; i < len; i++) {
             var method = methods[i];
             if (typeof root[method] !== 'function') return false;
@@ -956,11 +917,10 @@ export var keys = _.keys = (function (exports) {
     if (Object.keys && !detectMocha()) {
         exports = Object.keys;
     } else {
-        exports = function exports(obj) {
-            var ret = [],
-                key;
+        exports = function(obj) {
+            var ret = [];
 
-            for (key in obj) {
+            for (var key in obj) {
                 if (has(obj, key)) ret.push(key);
             }
 
@@ -1000,11 +960,13 @@ export var each = _.each = (function (exports) {
      * ): types.Collection<T>;
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * isArrLike keys optimizeCb types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = optimizeCb(iterator, ctx);
         var i, len;
 
@@ -1046,7 +1008,7 @@ export var createAssigner = _.createAssigner = (function (exports) {
      * isUndef each 
      */
 
-    exports = function exports(keysFn, defaults) {
+    exports = function(keysFn, defaults) {
         return function(obj) {
             each(arguments, function(src, idx) {
                 if (idx === 0) return;
@@ -1085,7 +1047,7 @@ export var values = _.values = (function (exports) {
      * each 
      */
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         var ret = [];
         each(obj, function(val) {
             ret.push(val);
@@ -1125,7 +1087,7 @@ export var contain = _.contain = (function (exports) {
      * idxOf isStr isArrLike values 
      */
 
-    exports = function exports(arr, val) {
+    exports = function(arr, val) {
         if (isStr(arr)) return arr.indexOf(val) > -1;
         if (!isArrLike(arr)) arr = values(arr);
         return idxOf(arr, val) >= 0;
@@ -1187,10 +1149,10 @@ export var isMatch = _.isMatch = (function (exports) {
      * keys 
      */
 
-    exports = function exports(obj, src) {
-        var _keys = keys(src),
-            len = _keys.length;
+    exports = function(obj, src) {
+        var _keys = keys(src);
 
+        var len = _keys.length;
         if (obj == null) return !len;
         obj = Object(obj);
 
@@ -1231,7 +1193,7 @@ export var isNaN = _.isNaN = (function (exports) {
      * isNum 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return isNum(val) && val !== +val;
     };
 
@@ -1261,7 +1223,7 @@ export var isNil = _.isNil = (function (exports) {
     /* typescript
      * export declare function isNil(val: any): boolean;
      */
-    exports = function exports(val) {
+    exports = function(val) {
         return val == null;
     };
 
@@ -1292,7 +1254,7 @@ export var isPromise = _.isPromise = (function (exports) {
      * isObj isFn 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         return isObj(val) && isFn(val.then);
     };
 
@@ -1311,11 +1273,13 @@ export var matcher = _.matcher = (function (exports) {
      */
 
     /* example
+     * const filter = require('licia/filter');
+     *
      * const objects = [
      *     {a: 1, b: 2, c: 3 },
      *     {a: 4, b: 5, c: 6 }
      * ];
-     * // filter(objects, matcher({a: 4, c: 6 }));
+     * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
      */
 
     /* typescript
@@ -1326,7 +1290,7 @@ export var matcher = _.matcher = (function (exports) {
      * extendOwn isMatch 
      */
 
-    exports = function exports(attrs) {
+    exports = function(attrs) {
         attrs = extendOwn({}, attrs);
         return function(obj) {
             return isMatch(obj, attrs);
@@ -1350,7 +1314,7 @@ export var safeCb = _.safeCb = (function (exports) {
      * isFn isObj optimizeCb matcher identity 
      */
 
-    exports = function exports(val, ctx, argCount) {
+    exports = function(val, ctx, argCount) {
         if (val == null) return identity;
         if (isFn(val)) return optimizeCb(val, ctx, argCount);
         if (isObj(val)) return matcher(val);
@@ -1396,11 +1360,13 @@ export var filter = _.filter = (function (exports) {
      * ): T[];
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb each types 
      */
 
-    exports = function exports(obj, predicate, ctx) {
+    exports = function(obj, predicate, ctx) {
         var ret = [];
         predicate = safeCb(predicate, ctx);
         each(obj, function(val, idx, list) {
@@ -1473,7 +1439,7 @@ export var unique = _.unique = (function (exports) {
      * filter 
      */
 
-    exports = function exports(arr, compare) {
+    exports = function(arr, compare) {
         compare = compare || isEqual;
         return filter(arr, function(item, idx, arr) {
             var len = arr.length;
@@ -1516,7 +1482,7 @@ export var allKeys = _.allKeys = (function (exports) {
      */
 
     /* example
-     * var obj = Object.create({zero: 0});
+     * const obj = Object.create({zero: 0});
      * obj.one = 1;
      * allKeys(obj) // -> ['zero', 'one']
      */
@@ -1545,7 +1511,7 @@ export var allKeys = _.allKeys = (function (exports) {
     var getOwnPropertyNames = Object.getOwnPropertyNames;
     var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 
-    exports = function exports(obj) {
+    exports = function(obj) {
         var _ref =
                 arguments.length > 1 && arguments[1] !== undefined
                     ? arguments[1]
@@ -1651,16 +1617,19 @@ export var map = _.map = (function (exports) {
      * ): TResult[];
      */
 
+    /* eslint-disable no-unused-vars */
+
     /* dependencies
      * safeCb keys isArrLike types 
      */
 
-    exports = function exports(obj, iterator, ctx) {
+    exports = function(obj, iterator, ctx) {
         iterator = safeCb(iterator, ctx);
 
-        var _keys = !isArrLike(obj) && keys(obj),
-            len = (_keys || obj).length,
-            results = Array(len);
+        var _keys = !isArrLike(obj) && keys(obj);
+
+        var len = (_keys || obj).length;
+        var results = Array(len);
 
         for (var i = 0; i < len; i++) {
             var curKey = _keys ? _keys[i] : i;
@@ -1699,7 +1668,7 @@ export var toArr = _.toArr = (function (exports) {
      * isArrLike map isArr isStr 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         if (!val) return [];
         if (isArr(val)) return val;
         if (isArrLike(val) && !isStr(val)) return map(val);
@@ -1722,7 +1691,7 @@ export var Class = _.Class = (function (exports) {
      */
 
     /* example
-     * var People = Class({
+     * const People = Class({
      *     initialize: function People(name, age) {
      *         this.name = name;
      *         this.age = age;
@@ -1732,7 +1701,7 @@ export var Class = _.Class = (function (exports) {
      *     }
      * });
      *
-     * var Student = People.extend({
+     * const Student = People.extend({
      *     initialize: function Student(name, age, school) {
      *         this.callSuper(People, 'initialize', arguments);
      *
@@ -1747,7 +1716,7 @@ export var Class = _.Class = (function (exports) {
      *     }
      * });
      *
-     * var a = new Student('allen', 17, 'Hogwarts');
+     * const a = new Student('allen', 17, 'Hogwarts');
      * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
      * Student.is(a); // -> true
      */
@@ -1773,7 +1742,7 @@ export var Class = _.Class = (function (exports) {
      * extend toArr inherits safeGet isMiniProgram 
      */
 
-    exports = function exports(methods, statics) {
+    exports = function(methods, statics) {
         return Base.extend(methods, statics);
     };
 
@@ -1785,7 +1754,7 @@ export var Class = _.Class = (function (exports) {
         var ctor;
 
         if (isMiniProgram) {
-            ctor = function ctor() {
+            ctor = function() {
                 var args = toArr(arguments);
                 return this.initialize
                     ? this.initialize.apply(this, args) || this
@@ -1831,11 +1800,11 @@ export var Class = _.Class = (function (exports) {
 
     var Base = (exports.Base = makeClass(Object, {
         className: 'Base',
-        callSuper: function callSuper(parent, name, args) {
+        callSuper: function(parent, name, args) {
             var superMethod = parent.prototype[name];
             return superMethod.apply(this, args);
         },
-        toString: function toString() {
+        toString: function() {
             return this.constructor.name;
         }
     }));
@@ -1894,7 +1863,7 @@ export var type = _.type = (function (exports) {
      * objToStr isNaN 
      */
 
-    exports = function exports(val) {
+    exports = function(val) {
         var lowerCase =
             arguments.length > 1 && arguments[1] !== undefined
                 ? arguments[1]
@@ -1936,7 +1905,7 @@ export var toSrc = _.toSrc = (function (exports) {
      * isNil 
      */
 
-    exports = function exports(fn) {
+    exports = function(fn) {
         if (isNil(fn)) return '';
 
         try {
@@ -1960,24 +1929,6 @@ export var toSrc = _.toSrc = (function (exports) {
 /* ------------------------------ stringifyAll ------------------------------ */
 
 export var stringifyAll = _.stringifyAll = (function (exports) {
-    function _typeof(obj) {
-        if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
-            _typeof = function _typeof(obj) {
-                return typeof obj;
-            };
-        } else {
-            _typeof = function _typeof(obj) {
-                return obj &&
-                    typeof Symbol === 'function' &&
-                    obj.constructor === Symbol &&
-                    obj !== Symbol.prototype
-                    ? 'symbol'
-                    : typeof obj;
-            };
-        }
-        return _typeof(obj);
-    }
-
     /* Stringify object into json with types.
      *
      * |Name     |Type  |Desc               |
@@ -2025,17 +1976,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain 
      */
 
-    exports = (function(_exports) {
-        function exports(_x) {
-            return _exports.apply(this, arguments);
-        }
-
-        exports.toString = function() {
-            return _exports.toString();
-        };
-
-        return exports;
-    })(function(obj) {
+    exports = function(obj) {
         var _ref =
                 arguments.length > 1 && arguments[1] !== undefined
                     ? arguments[1]
@@ -2171,7 +2112,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
                             symbol: true
                         }),
                         function(key) {
-                            return _typeof(key) === 'symbol';
+                            return typeof key === 'symbol';
                         }
                     );
 
@@ -2201,7 +2142,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
         }
 
         return json;
-    });
+    };
 
     function iterateObj(name, keys, obj, options) {
         var parts = [];
@@ -2265,11 +2206,11 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
     }
 
     var Visitor = Class({
-        initialize: function initialize() {
+        initialize: function() {
             this.id = 0;
             this.visited = [];
         },
-        set: function set(val) {
+        set: function(val) {
             var visited = this.visited,
                 id = this.id;
             var obj = {
@@ -2280,7 +2221,7 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
             this.id++;
             return id;
         },
-        get: function get(val) {
+        get: function(val) {
             var visited = this.visited;
 
             for (var i = 0, len = visited.length; i < len; i++) {
