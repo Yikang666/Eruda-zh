@@ -1,14 +1,15 @@
 const path = require('path')
-const util = require('./util')
 const istanbul = require('istanbul')
+const reduce = require('licia/reduce')
+const keys = require('licia/keys')
 
 let collector = new istanbul.Collector()
 let reporter = new istanbul.Reporter()
 
 let remappedJson = require('../coverage/coverage-remapped.json')
 
-let coverage = util.reduce(
-  util.keys(remappedJson),
+let coverage = reduce(
+  keys(remappedJson),
   function(result, source) {
     if (isSrc()) {
       let correctPath = source.replace(

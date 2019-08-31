@@ -1,9 +1,4 @@
 module.exports = {
-  script: {
-    files: 'script/*.js',
-    output: 'script/util.js',
-    format: 'commonjs'
-  },
   eruda: {
     library: 'https://raw.githubusercontent.com/liriliri/fione/master/',
     files: 'src/**/*.js',

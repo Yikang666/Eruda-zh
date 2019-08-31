@@ -1,15 +1,16 @@
 const copy = require('copy')
 const path = require('path')
-const util = require('./util')
+const mkdir = require('licia/mkdir')
+const parallel = require('licia/parallel')
 
-util.mkdir(path.resolve(__dirname, '../test/lib'), function(err) {
+mkdir(path.resolve(__dirname, '../test/lib'), function(err) {
   if (err) return console.log(err)
 
   cpTestFiles()
 })
 
 function cpTestFiles() {
-  util.parallel(
+  parallel(
     [
       genCpCb(
         '/jasmine-core/lib/jasmine-core/{jasmine.css,jasmine.js,jasmine-html.js,boot.js}',

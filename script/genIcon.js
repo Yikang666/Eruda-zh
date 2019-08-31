@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const util = require('./util')
+const each = require('licia/each')
 
 const nameMap = {
   Clearsearch: 'clear',
@@ -36,7 +36,7 @@ function genCssFile(fontData) {
       "[class^='eruda-icon-'],\n[class*=' eruda-icon-']"
     )
 
-    util.each(nameMap, (val, key) => {
+    each(nameMap, (val, key) => {
       data = data.replace('icon-' + key + ':', 'icon-' + val + ':')
     })
 
