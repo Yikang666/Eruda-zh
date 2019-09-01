@@ -7,11 +7,6 @@ module.exports = {
     exclude: ['createCfg'],
     format: 'es'
   },
-  stringify: {
-    files: 'src/lib/stringifyWorker.js',
-    output: 'src/lib/stringifyUtil.js',
-    format: 'es'
-  },
   test: {
     files: ['test/*.js', 'test/*.html'],
     exclude: ['js'],

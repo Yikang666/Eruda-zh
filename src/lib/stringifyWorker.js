@@ -1,4 +1,4 @@
-import { stringifyAll } from './stringifyUtil'
+import stringifyAll from 'licia/stringifyAll'
 
 onmessage = function(e) {
   const [id, obj, options] = e.data
