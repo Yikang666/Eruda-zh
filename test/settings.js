@@ -2,7 +2,7 @@ describe('settings', function() {
   let tool = eruda.get('settings')
   let $tool = $('.eruda-settings')
 
-  let cfg = eruda.config.create('eruda-test')
+  let cfg = eruda.Settings.createCfg('test')
   cfg.set({
     testSwitch: false,
     testSelect: '1',

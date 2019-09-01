@@ -10,7 +10,6 @@ import Info from './Info/Info'
 import Sources from './Sources/Sources'
 import Settings from './Settings/Settings'
 import emitter from './lib/emitter'
-import config from './lib/config'
 import logger from './lib/logger'
 import extraUtil from './lib/extraUtil'
 import util from './lib/util'
@@ -48,7 +47,6 @@ module.exports = {
   },
   _isInit: false,
   version: VERSION,
-  config,
   util,
   Tool,
   Console,
