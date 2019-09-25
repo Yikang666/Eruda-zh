@@ -33,10 +33,14 @@ export default class Log {
     type = 'log',
     args = [],
     id,
+    group = {},
+    targetGroup = {},
     displayHeader = false,
     ignoreFilter = false
   }) {
     this.type = type
+    this.group = group
+    this.targetGroup = targetGroup
     this.args = args
     this.count = 1
     this.id = id
@@ -53,25 +57,47 @@ export default class Log {
   addCount() {
     this.count++
     const count = this.count
-    let msg = this.formattedMsg
-    if (count === 2)
-      msg = msg.replace('eruda-count eruda-hidden', 'eruda-count')
+    let msg = this._formattedMsg
+    if (count === 2) {
+      msg = msg.replace(
+        'eruda-count-container eruda-hidden',
+        'eruda-count-container'
+      )
+    }
     msg = msg.replace(/data-mark="count">\d*/, 'data-mark="count">' + count)
+    msg = msg.replace(
+      'class="eruda-icon-container"',
+      'class="eruda-icon-container eruda-hidden"'
+    )
 
-    this.formattedMsg = msg
+    this._formattedMsg = msg
+
+    return this
+  }
+  groupEnd() {
+    let msg = this._formattedMsg
+
+    const mark = '"eruda-nesting-level"'
+    const lastIdx = msg.lastIndexOf(mark)
+    const len = lastIdx + mark.length - 1
+    msg = msg.slice(0, len) + ' eruda-group-closed"' + msg.slice(len)
+    this._formattedMsg = msg
 
     return this
   }
   updateTime(time) {
-    let msg = this.formattedMsg
+    let msg = this._formattedMsg
 
     if (this.time) {
       msg = msg.replace(/data-mark="time">(.*?)</, `data-mark="time">${time}<`)
       this.time = time
-      this.formattedMsg = msg
+      this._formattedMsg = msg
     }
 
     return this
+  }
+  content() {
+    return this._formattedMsg
   }
   _needSrc() {
     const { type, args } = this
@@ -103,7 +129,7 @@ export default class Log {
   }
   _formatMsg() {
     let { args } = this
-    const { type, id, displayHeader, time, from } = this
+    const { type, id, displayHeader, time, from, group } = this
 
     // Don't change original args for lazy evaluation.
     args = clone(args)
@@ -156,16 +182,19 @@ export default class Log {
         msg = formatMsg(args)
         icon = 'arrow-left'
         break
+      case 'group':
+        msg = formatMsg(args.length === 0 ? 'console.group' : args)
+        break
     }
 
     if (type !== 'error') msg = recognizeUrl(msg)
     this.value = msg
-    msg = render({ msg, type, icon, id, displayHeader, time, from })
+    msg = render({ msg, type, icon, id, displayHeader, time, from, group })
 
     if (!this._needSrc() || !Log.lazyEvaluation) {
       delete this.args
     }
-    this.formattedMsg = msg
+    this._formattedMsg = msg
   }
   static click(type, log, $el, logger) {
     switch (type) {

@@ -45,7 +45,12 @@ export default class Console extends Tool {
       }
 
       winConsole[name] = (...args) => {
-        if (args.length > 0) {
+        if (
+          args.length > 0 ||
+          name === 'group' ||
+          name === 'groupCollapsed' ||
+          name === 'groupEnd'
+        ) {
           this[name](...args)
         }
         origin(...args)
@@ -325,5 +330,8 @@ const CONSOLE_METHOD = [
   'table',
   'assert',
   'count',
-  'debug'
+  'debug',
+  'group',
+  'groupCollapsed',
+  'groupEnd'
 ]

@@ -1,6 +1,5 @@
 // Built by eustia.
 /* eslint-disable */
-"use strict";
 
 var _ = {};
 
@@ -1953,175 +1952,6 @@ export var extendOwn = _.extendOwn = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ highlight ------------------------------ */
-
-export var highlight = _.highlight = (function (exports) {
-    /* Highlight code.
-     *
-     * |Name   |Type  |Desc                        |
-     * |-------|------|----------------------------|
-     * |str    |string|Code string                 |
-     * |lang=js|string|Language, js, html or css   |
-     * |[style]|object|Keyword highlight style     |
-     * |return |string|Highlighted html code string|
-     *
-     * Available styles:
-     *
-     * comment, string, number, keyword, operator
-     */
-
-    /* example
-     * highlight('const a = 5;', 'js', {
-     *     number: 'color:#0086b3;'
-     * }); // -> '<span style="color:#a71d5d;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
-     */
-
-    /* typescript
-     * export declare namespace highlight {
-     *     interface IStyle {
-     *         comment?: string;
-     *         string?: string;
-     *         number?: string;
-     *         keyword?: string;
-     *         operator?: string;
-     *     }
-     * }
-     * export declare function highlight(
-     *     str: string,
-     *     lang?: string,
-     *     style: highlight.IStyle
-     * ): string;
-     */
-
-    /* dependencies
-     * each 
-     */ // https://github.com/trentrichardson/jQuery-Litelighter
-
-    exports = function(str, lang) {
-        lang = lang || 'js';
-        str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        lang = language[lang];
-        var subLangSi = 0;
-        var subLangs = [];
-        each(lang, function(val) {
-            if (!val.language) return;
-            str = str.replace(val.re, function($1, $2) {
-                subLangs[subLangSi++] = exports($2, val.language);
-                return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
-            });
-        });
-        each(lang, function(val, key) {
-            if (language[val.language]) return;
-            str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
-        });
-        var levels = [];
-        str = str.replace(/___(?!subtmpl)\w+?___/g, function($0) {
-            var end = $0.substr(3, 3) === 'end',
-                tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g, ''),
-                lastTag = levels.length > 0 ? levels[levels.length - 1] : null;
-
-            if (
-                !end &&
-                (lastTag == null ||
-                    tag == lastTag ||
-                    (lastTag != null &&
-                        lang[lastTag] &&
-                        lang[lastTag].embed != undefined &&
-                        lang[lastTag].embed.indexOf(tag) > -1))
-            ) {
-                levels.push(tag);
-                return $0;
-            } else if (end && tag == lastTag) {
-                levels.pop();
-                return $0;
-            }
-
-            return '';
-        });
-        each(lang, function(val, key) {
-            str = str
-                .replace(new RegExp('___end' + key + '___', 'g'), '</span>')
-                .replace(
-                    new RegExp('___' + key + '___', 'g'),
-                    '<span style="' + style[val.style] + '">'
-                );
-        });
-        each(lang, function(val) {
-            if (!val.language) return;
-            str = str.replace(/___subtmpl\d+___/g, function($tmpl) {
-                var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
-                return subLangs[i];
-            });
-        });
-        return str;
-    };
-
-    var style = {
-        comment: 'color:#63a35c;',
-        string: 'color:#183691;',
-        number: 'color:#0086b3;',
-        keyword: 'color:#a71d5d;',
-        operator: 'color:#994500;'
-    };
-    var language = {};
-    language.js = {
-        comment: {
-            re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g,
-            style: 'comment'
-        },
-        string: {
-            re: /(('.*?')|(".*?"))/g,
-            style: 'string'
-        },
-        numbers: {
-            re: /(-?(\d+|\d+\.\d+|\.\d+))/g,
-            style: 'number'
-        },
-        keywords: {
-            re: /(?:\b)(function|for|foreach|while|if|else|elseif|switch|break|as|return|this|class|self|default|var|const|let|false|true|null|undefined)(?:\b)/gi,
-            style: 'keyword'
-        },
-        operator: {
-            re: /(\+|-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g,
-            style: 'operator'
-        }
-    };
-    language.html = {
-        comment: {
-            re: /(&lt;!--([\s\S]*?)--&gt;)/g,
-            style: 'comment'
-        },
-        tag: {
-            re: /(&lt;\/?\w(.|\n)*?\/?&gt;)/g,
-            style: 'keyword',
-            embed: ['string']
-        },
-        string: language.js.string,
-        css: {
-            re: /(?:&lt;style.*?&gt;)([\s\S]*)?(?:&lt;\/style&gt;)/gi,
-            language: 'css'
-        },
-        script: {
-            re: /(?:&lt;script.*?&gt;)([\s\S]*?)(?:&lt;\/script&gt;)/gi,
-            language: 'js'
-        }
-    };
-    language.css = {
-        comment: language.js.comment,
-        string: language.js.string,
-        numbers: {
-            re: /((-?(\d+|\d+\.\d+|\.\d+)(%|px|em|pt|in)?)|#[0-9a-fA-F]{3}[0-9a-fA-F]{3})/g,
-            style: 'number'
-        },
-        keywords: {
-            re: /(@\w+|:?:\w+|[a-z-]+:)/g,
-            style: 'keyword'
-        }
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ values ------------------------------ */
 
 export var values = _.values = (function (exports) {
@@ -2395,7 +2225,7 @@ export var isErudaEl = _.isErudaEl = (function (exports) {
     /* See if an element is within eruda.
      */
 
-    exports = function (el) {
+    exports = function(el) {
       let parentNode = el.parentNode
 
       if (!parentNode) return false
@@ -3093,10 +2923,10 @@ export var dateFormat = _.dateFormat = (function (exports) {
             Z: gmt
                 ? 'GMT'
                 : utc
-                    ? 'UTC'
-                    : (toStr(date).match(regTimezone) || [''])
-                          .pop()
-                          .replace(regTimezoneClip, ''),
+                ? 'UTC'
+                : (toStr(date).match(regTimezone) || [''])
+                      .pop()
+                      .replace(regTimezoneClip, ''),
             o:
                 (o > 0 ? '-' : '+') +
                 padZero(Math.floor(Math.abs(o) / 60) * 100 + (Math.abs(o) % 60), 4),
@@ -3397,7 +3227,7 @@ export var evalCss = _.evalCss = (function (exports) {
     let styleList = []
     let scale = 1
 
-    exports = function (css, container) {
+    exports = function(css, container) {
       css = toStr(css)
 
       for (let i = 0, len = styleList.length; i < len; i++) {
@@ -3611,6 +3441,181 @@ export var defaults = _.defaults = (function (exports) {
      */
 
     exports = createAssigner(allKeys, true);
+
+    return exports;
+})({});
+
+/* ------------------------------ highlight ------------------------------ */
+
+export var highlight = _.highlight = (function (exports) {
+    /* Highlight code.
+     *
+     * |Name   |Type  |Desc                        |
+     * |-------|------|----------------------------|
+     * |str    |string|Code string                 |
+     * |lang=js|string|Language, js, html or css   |
+     * |[style]|object|Keyword highlight style     |
+     * |return |string|Highlighted html code string|
+     *
+     * Available styles:
+     *
+     * comment, string, number, keyword, operator
+     */
+
+    /* example
+     * highlight('const a = 5;', 'js', {
+     *     keyword: 'color:#569cd6;'
+     * }); // -> '<span style="color:#569cd6;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
+     */
+
+    /* typescript
+     * export declare namespace highlight {
+     *     interface IStyle {
+     *         comment?: string;
+     *         string?: string;
+     *         number?: string;
+     *         keyword?: string;
+     *         operator?: string;
+     *     }
+     * }
+     * export declare function highlight(
+     *     str: string,
+     *     lang?: string,
+     *     style?: highlight.IStyle
+     * ): string;
+     */
+
+    /* dependencies
+     * each defaults 
+     */ // https://github.com/trentrichardson/jQuery-Litelighter
+
+    exports = function(str) {
+        var lang =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : 'js';
+        var style =
+            arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        defaults(style, defStyle);
+        str = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        lang = language[lang];
+        var subLangSi = 0;
+        var subLangs = [];
+        each(lang, function(val) {
+            if (!val.language) return;
+            str = str.replace(val.re, function($1, $2) {
+                subLangs[subLangSi++] = exports($2, val.language);
+                return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
+            });
+        });
+        each(lang, function(val, key) {
+            if (language[val.language]) return;
+            str = str.replace(val.re, '___' + key + '___$1___end' + key + '___');
+        });
+        var levels = [];
+        str = str.replace(/___(?!subtmpl)\w+?___/g, function($0) {
+            var end = $0.substr(3, 3) === 'end',
+                tag = (!end ? $0.substr(3) : $0.substr(6)).replace(/_/g, ''),
+                lastTag = levels.length > 0 ? levels[levels.length - 1] : null;
+
+            if (
+                !end &&
+                (lastTag == null ||
+                    tag == lastTag ||
+                    (lastTag != null &&
+                        lang[lastTag] &&
+                        lang[lastTag].embed != undefined &&
+                        lang[lastTag].embed.indexOf(tag) > -1))
+            ) {
+                levels.push(tag);
+                return $0;
+            } else if (end && tag == lastTag) {
+                levels.pop();
+                return $0;
+            }
+
+            return '';
+        });
+        each(lang, function(val, key) {
+            str = str
+                .replace(new RegExp('___end' + key + '___', 'g'), '</span>')
+                .replace(
+                    new RegExp('___' + key + '___', 'g'),
+                    '<span style="' + style[val.style] + '">'
+                );
+        });
+        each(lang, function(val) {
+            if (!val.language) return;
+            str = str.replace(/___subtmpl\d+___/g, function($tmpl) {
+                var i = parseInt($tmpl.replace(/___subtmpl(\d+)___/, '$1'), 10);
+                return subLangs[i];
+            });
+        });
+        return str;
+    };
+
+    var defStyle = {
+        comment: 'color:#63a35c;',
+        string: 'color:#183691;',
+        number: 'color:#0086b3;',
+        keyword: 'color:#a71d5d;',
+        operator: 'color:#994500;'
+    };
+    var language = {};
+    language.js = {
+        comment: {
+            re: /(\/\/.*|\/\*([\s\S]*?)\*\/)/g,
+            style: 'comment'
+        },
+        string: {
+            re: /(('.*?')|(".*?"))/g,
+            style: 'string'
+        },
+        numbers: {
+            re: /(-?(\d+|\d+\.\d+|\.\d+))/g,
+            style: 'number'
+        },
+        keywords: {
+            re: /(?:\b)(function|for|foreach|while|if|else|elseif|switch|break|as|return|this|class|self|default|var|const|let|false|true|null|undefined)(?:\b)/gi,
+            style: 'keyword'
+        },
+        operator: {
+            re: /(\+|-|\/|\*|%|=|&lt;|&gt;|\||\?|\.)/g,
+            style: 'operator'
+        }
+    };
+    language.html = {
+        comment: {
+            re: /(&lt;!--([\s\S]*?)--&gt;)/g,
+            style: 'comment'
+        },
+        tag: {
+            re: /(&lt;\/?\w(.|\n)*?\/?&gt;)/g,
+            style: 'keyword',
+            embed: ['string']
+        },
+        string: language.js.string,
+        css: {
+            re: /(?:&lt;style.*?&gt;)([\s\S]*)?(?:&lt;\/style&gt;)/gi,
+            language: 'css'
+        },
+        script: {
+            re: /(?:&lt;script.*?&gt;)([\s\S]*?)(?:&lt;\/script&gt;)/gi,
+            language: 'js'
+        }
+    };
+    language.css = {
+        comment: language.js.comment,
+        string: language.js.string,
+        numbers: {
+            re: /((-?(\d+|\d+\.\d+|\.\d+)(%|px|em|pt|in)?)|#[0-9a-fA-F]{3}[0-9a-fA-F]{3})/g,
+            style: 'number'
+        },
+        keywords: {
+            re: /(@\w+|:?:\w+|[a-z-]+:)/g,
+            style: 'keyword'
+        }
+    };
 
     return exports;
 })({});
@@ -4831,6 +4836,107 @@ export var $show = _.$show = (function (exports) {
 
         return elDisplay[elName];
     }
+
+    return exports;
+})({});
+
+/* ------------------------------ Stack ------------------------------ */
+
+export var Stack = _.Stack = (function (exports) {
+    /* Stack data structure.
+     *
+     * ### clear
+     *
+     * Clear the stack.
+     *
+     * ### push
+     *
+     * Add an item to the stack.
+     *
+     * |Name  |Type  |Desc        |
+     * |------|------|------------|
+     * |item  |*     |Item to add |
+     * |return|number|Current size|
+     *
+     * ### pop
+     *
+     * Get the last item of the stack.
+     *
+     * ### peek
+     *
+     * Get the last item without removing it.
+     *
+     * ### forEach
+     *
+     * Iterate over the stack.
+     *
+     * |Name    |Type    |Desc                      |
+     * |--------|--------|--------------------------|
+     * |iterator|function|Function invoked iteration|
+     * |[ctx]   |*       |Function context          |
+     *
+     * ### toArr
+     *
+     * Convert the stack to a JavaScript array.
+     */
+
+    /* example
+     * const stack = new Stack();
+     *
+     * stack.push(2); // -> 1
+     * stack.push(3); // -> 2
+     * stack.pop(); // -> 3
+     */
+
+    /* typescript
+     * export declare class Stack {
+     *     size: number;
+     *     clear(): void;
+     *     push(item: any): number;
+     *     pop(): any;
+     *     peek(): any;
+     *     forEach(iterator: Function, context?: any): void;
+     *     toArr(): any[];
+     * }
+     */
+
+    /* dependencies
+     * Class 
+     */
+
+    exports = Class({
+        initialize: function Stack() {
+            this.clear();
+        },
+        clear: function() {
+            this._items = [];
+            this.size = 0;
+        },
+        push: function(item) {
+            this._items.push(item);
+
+            return ++this.size;
+        },
+        pop: function() {
+            if (!this.size) return;
+            this.size--;
+            return this._items.pop();
+        },
+        peek: function() {
+            return this._items[this.size - 1];
+        },
+        forEach: function(iterator, ctx) {
+            ctx = arguments.length > 1 ? ctx : this;
+            var items = this._items;
+
+            for (var i = this.size - 1, j = 0; i >= 0; i--, j++) {
+                iterator.call(ctx, items[i], j, this);
+            }
+        },
+        toArr: function() {
+            return this._items.slice(0).reverse();
+        }
+    });
 
     return exports;
 })({});
@@ -7211,6 +7317,7 @@ export var Url = _.Url = (function (exports) {
                 }
 
                 if (slashes) {
+                    var host = rest;
                     var hostEnd = -1;
 
                     for (var i = 0, len = hostEndingChars.length; i < len; i++) {
@@ -7219,8 +7326,11 @@ export var Url = _.Url = (function (exports) {
                             hostEnd = pos;
                     }
 
-                    var host = rest.slice(0, hostEnd);
-                    rest = rest.slice(hostEnd);
+                    if (hostEnd > -1) {
+                        host = rest.slice(0, hostEnd);
+                        rest = rest.slice(hostEnd);
+                    }
+
                     var atSign = host.lastIndexOf('@');
 
                     if (atSign !== -1) {
@@ -7478,7 +7588,7 @@ export var type = _.type = (function (exports) {
      */
 
     /* typescript
-     * export declare function type(val: any, lowerCase: boolean): string;
+     * export declare function type(val: any, lowerCase?: boolean): string;
      */
 
     /* dependencies

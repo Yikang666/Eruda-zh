@@ -9,6 +9,12 @@
         height: 100%;
         font-size: $font-size;
         padding-top: 1px;
+        & > li:last-child {
+          border-bottom: 1px solid $gray-light;
+          .log-item {
+            border-bottom-width: 1px;
+          }
+        }
         .header {
           @include overflow-auto(x);
           white-space: nowrap;
@@ -19,21 +25,40 @@
         }
         .log-item {
           position: relative;
+          display: flex;
           @include clear-float();
           background: #fff;
-          padding: 3px $padding;
-          border-bottom: 1px solid $gray-light;
           border-top: 1px solid $gray-light;
+          border-bottom: 2px solid transparent;
           margin-top: -1px;
           a {
             color: $blue !important;
           }
-          .count,
-          .icon-container {
-            float: left;
-            margin-right: 5px;
+          .nesting-level {
+            width: 14px;
+            flex-shrink: 0;
+            margin-top: -1px;
+            margin-bottom: -2px;
+            position: relative;
+            border-right: 1px solid $gray;
+            &.group-closed::before {
+              content: '';
+            }
+            &::before {
+              border-bottom: 1px solid #a5a5a5;
+              position: absolute;
+              top: 0;
+              left: 0;
+              margin-left: 100%;
+              width: 5px;
+              height: calc(100% - 1px);
+              box-sizing: border-box;
+            }
           }
           .icon-container {
+            margin-right: -6px;
+            padding-top: 3px;
+            margin: 0 -6px 0 $padding;
             .icon {
               line-height: 20px;
               font-size: 12px;
@@ -57,11 +82,15 @@
             padding: 2px 4px;
             color: #fff;
             border-radius: 10px;
+            float: left;
+            margin: 3px -6px 0 $padding;
           }
           .log-content-wrapper {
+            flex: 1;
             overflow: hidden;
           }
           .log-content {
+            padding: 3px $padding;
             @include overflow-auto(x);
             white-space: pre-wrap;
             user-select: text;
@@ -112,10 +141,9 @@
             color: $blue;
           }
           &.warn {
-            z-index: 40;
             background: #fffbe6;
             border-top: 1px solid $yellow;
-            border-bottom: 1px solid $yellow;
+            border-bottom: 2px solid $yellow;
           }
           &.info {
             z-index: 30;
@@ -123,6 +151,10 @@
           }
           &.output {
             color: $gray-dark;
+          }
+          &.group {
+            color: #222;
+            font-weight: bold;
           }
         }
       }

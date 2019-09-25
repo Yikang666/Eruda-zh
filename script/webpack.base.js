@@ -6,10 +6,11 @@ const path = require('path')
 
 process.traceDeprecation = true
 
-let nodeModDir = path.resolve('./node_modules/') + '/'
-let banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
+const nodeModDir = path.resolve('./node_modules/') + '/'
+const srcDir = path.resolve('./src') + '/'
+const banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
 
-let postcssLoader = {
+const postcssLoader = {
   loader: 'postcss-loader',
   options: {
     plugins: [classPrefix('eruda-'), autoprefixer]
@@ -68,7 +69,7 @@ module.exports = {
         test: /\.hbs$/,
         loader: nodeModDir + 'handlebars-loader/index.js',
         options: {
-          runtime: nodeModDir + 'handlebars/dist/handlebars.runtime.js'
+          runtime: srcDir + 'lib/handlebars.js'
         }
       },
       {

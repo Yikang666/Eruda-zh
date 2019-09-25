@@ -11,7 +11,6 @@
 }(this, function ()
 {
     /* eslint-disable */
-    "use strict";
 
     var _ = {};
 
@@ -1279,7 +1278,7 @@
         let styleList = []
         let scale = 1
 
-        exports = function (css, container) {
+        exports = function(css, container) {
           css = toStr(css)
 
           for (let i = 0, len = styleList.length; i < len; i++) {
