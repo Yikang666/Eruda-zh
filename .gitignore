@@ -7,10 +7,6 @@ test/playground.html
 eruda.js
 !/test/eruda.js
 eruda.js.map
-stringifyWorker.js
-!/src/lib/stringifyWorker.js
-stringifyWorker.js.map
 /script/icomoon/
-/src/**/*.js.map
 npm-debug.log
 package-lock.json

@@ -19,5 +19,3 @@ prettier.config.js
 karma.conf.js
 karma.sauce.js
 npm-debug.log
-stringifyWorker.js
-stringifyWorker.js.map

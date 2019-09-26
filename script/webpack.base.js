@@ -37,7 +37,7 @@ module.exports = {
           loader: 'worker-loader',
           options: {
             inline: true,
-            fallback: true,
+            fallback: false,
             name: '[name].js'
           }
         }
