@@ -2,10 +2,11 @@ const webpack = require('webpack')
 
 exports = require('./webpack.base')
 
-exports.output.filename = 'eruda.min.js'
-exports.devtool = false
+exports.output.filename = 'eruda.js'
+exports.devtool = 'source-map'
 exports.plugins = exports.plugins.concat([
   new webpack.optimize.UglifyJsPlugin({
+    sourceMap: true,
     compress: {
       warnings: false
     },
