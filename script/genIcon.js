@@ -24,8 +24,8 @@ function genCssFile(fontData) {
 
     data = data.split('\n')
     data.splice(
-      2,
-      5,
+      1,
+      6,
       "  src: url('data:application/x-font-woff;charset=utf-8;base64," +
         fontData +
         "') format('woff');"

@@ -121,7 +121,7 @@
     });
     addClickEvent('stringify-timing', function () {
         console.time('stringify window')
-        eruda.Console.stringify(window)
+        eruda.util.stringifyAll(window)
         console.timeEnd('stringify window')
     })
 </script>

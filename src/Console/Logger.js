@@ -19,12 +19,11 @@ import {
 } from '../lib/util'
 
 export default class Logger extends Emitter {
-  constructor($el, container) {
+  constructor($el) {
     super()
     this._style = evalCss(require('./Logger.scss'))
 
     this._$el = $el
-    this._container = container
     this._logs = []
     this._timer = {}
     this._count = {}
@@ -124,6 +123,7 @@ export default class Logger extends Emitter {
   clear() {
     this._logs = []
     this._lastLog = {}
+    this._groupStack = new Stack()
 
     return this.render()
   }
@@ -139,18 +139,14 @@ export default class Logger extends Emitter {
   group(...args) {
     return this.insert('group', args)
   }
-  groupCollapsed() {}
+  groupCollapsed(...args) {
+    return this.insert('groupCollapsed', args)
+  }
   groupEnd() {
     const lastLog = this._lastLog
-    const $el = this._$el
     lastLog.groupEnd()
     this._groupStack.pop()
-
-    const $container = $el.find(`div[data-id="${lastLog.id}"]`)
-    if ($container.length > 0) {
-      $container.parent().remove()
-      $el.append(lastLog.content())
-    }
+    this._refreshLogUi(lastLog)
   }
   input(jsCode) {
     if (startWith(jsCode, ':')) {
@@ -197,8 +193,8 @@ export default class Logger extends Emitter {
     })
   }
   render() {
-    let html = '',
-      logs = this._logs
+    let html = ''
+    let logs = this._logs
 
     logs = this._filterLogs(logs)
 
@@ -228,13 +224,14 @@ export default class Logger extends Emitter {
       displayHeader: this._displayHeader
     })
 
-    if (type === 'group') {
+    if (type === 'group' || type === 'groupCollapsed') {
       const group = {
         id: uniqId('group'),
         collapsed: false,
         parent: groupStack.peek(),
         indentLevel: groupStack.size + 1
       }
+      if (type === 'groupCollapsed') group.collapsed = true
       options.targetGroup = group
       groupStack.push(group)
     }
@@ -252,10 +249,7 @@ export default class Logger extends Emitter {
       lastLog.addCount()
       if (log.time) lastLog.updateTime(log.time)
       log = lastLog
-      const $container = $el.find(`div[data-id="${lastLog.id}"]`)
-      if ($container.length > 0) {
-        $container.parent().remove()
-      }
+      this._rmLogUi(lastLog)
     } else {
       logs.push(log)
       this._lastLog = log
@@ -263,14 +257,11 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       const firstLog = logs[0]
-      const $container = $el.find(`div[data-id="${firstLog.id}"]`)
-      if ($container.length > 0) {
-        $container.parent().remove()
-      }
+      this._rmLogUi(firstLog)
       logs.shift()
     }
 
-    if (this._filterLog(log) && this._container.active) {
+    if (this._filterLog(log)) {
       $el.append(log.content())
     }
 
@@ -284,6 +275,19 @@ export default class Logger extends Emitter {
     const el = this._$el.get(0)
 
     el.scrollTop = el.scrollHeight - el.offsetHeight
+  }
+  _rmLogUi(log) {
+    const $container = this._$el.find(`li[data-id="${log.id}"]`)
+    if ($container.length > 0) {
+      $container.remove()
+    }
+  }
+  _refreshLogUi(log) {
+    const $container = this._$el.find(`li[data-id="${log.id}"]`)
+    if ($container.length > 0) {
+      $container.after(log.content())
+      $container.remove()
+    }
   }
   _filterLogs(logs) {
     const filter = this._filter
@@ -331,24 +335,83 @@ export default class Logger extends Emitter {
         this.warn('Unknown command').help()
     }
   }
+  _getLog(id) {
+    const logs = this._logs
+    let log
+
+    for (let i = 0, len = logs.length; i < len; i++) {
+      log = logs[i]
+      if (log.id === id) break
+    }
+
+    return log
+  }
+  _collapseGroup(log) {
+    const { targetGroup } = log
+    targetGroup.collapsed = true
+    log.updateIcon('caret-right')
+    this._refreshLogUi(log)
+
+    this._updateGroup(log)
+  }
+  _openGroup(log) {
+    const { targetGroup } = log
+    targetGroup.collapsed = false
+    log.updateIcon('caret-down')
+    this._refreshLogUi(log)
+
+    this._updateGroup(log)
+  }
+  _updateGroup(log) {
+    const logs = this._logs
+    const len = logs.length
+    let i = logs.indexOf(log) + 1
+    while (i < len) {
+      const log = logs[i]
+      if (log.checkGroup()) {
+        this._refreshLogUi(log)
+      } else {
+        break
+      }
+      i++
+    }
+  }
   _bindEvent() {
     const self = this
+    const $el = this._$el
 
-    this._$el.on('click', '.eruda-log-item', function() {
-      const $el = $(this)
-      const id = $el.data('id')
-      const type = $el.data('type')
-      const logs = self._logs
-      let log
+    $el
+      .on('click', '.eruda-log', function() {
+        const $el = $(this)
+        const id = $el.data('id')
+        const type = $el.data('type')
+        const log = self._getLog(id)
+        if (!log) return
 
-      for (let i = 0, len = logs.length; i < len; i++) {
-        log = logs[i]
-        if (log.id === id) break
-      }
-      if (!log) return
+        Log.click(type, log, $el, self)
+      })
+      .on('click', '.eruda-icon-caret-down', function() {
+        const $el = $(this)
+          .parent()
+          .parent()
+          .parent()
+        const id = $el.data('id')
+        const log = self._getLog(id)
+        if (!log) return
 
-      Log.click(type, log, $el, self)
-    })
+        self._collapseGroup(log)
+      })
+      .on('click', '.eruda-icon-caret-right', function() {
+        const $el = $(this)
+          .parent()
+          .parent()
+          .parent()
+        const id = $el.data('id')
+        const log = self._getLog(id)
+        if (!log) return
+
+        self._openGroup(log)
+      })
   }
 }
 

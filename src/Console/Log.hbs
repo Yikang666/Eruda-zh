@@ -1,10 +1,15 @@
-<li>
+<li class="eruda-log" data-id="{{id}}" data-type="{{type}}">
     {{#if displayHeader}}
         <div class="eruda-header">
-            <span data-mark="time">{{time}}</span> <span>{{from}}</span>
+            {{#repeat group.indentLevel}}
+                <div class="eruda-nesting-level"></div>
+            {{/repeat}}
+            <div class="eruda-time-container">
+                <span data-mark="time">{{time}}</span> <span>{{from}}</span>
+            </div>
         </div>
     {{/if}}
-    <div class="eruda-{{type}} eruda-log-item" data-id="{{id}}" data-type="{{type}}">
+    <div class="eruda-{{type}} eruda-log-item">
         {{#repeat group.indentLevel}}
             <div class="eruda-nesting-level"></div>
         {{/repeat}}

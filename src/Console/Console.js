@@ -29,11 +29,6 @@ export default class Console extends Tool {
     this._initCfg()
     this._bindEvent()
   }
-  show() {
-    super.show()
-
-    this._logger.render()
-  }
   overrideConsole() {
     const origConsole = (this._origConsole = {})
     const winConsole = window.console
@@ -126,7 +121,7 @@ export default class Console extends Tool {
   }
   _initLogger() {
     const $filter = this._$control.find('.eruda-filter')
-    const logger = (this._logger = new Logger(this._$logs, this))
+    const logger = (this._logger = new Logger(this._$logs))
 
     logger.on('filter', filter =>
       $filter.each(function() {

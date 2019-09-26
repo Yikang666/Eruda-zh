@@ -46,6 +46,7 @@ export default class Log {
     this.id = id
     this.displayHeader = displayHeader
     this.ignoreFilter = ignoreFilter
+    this.collapsed = false
 
     if (displayHeader) {
       this.time = getCurTime()
@@ -53,6 +54,60 @@ export default class Log {
     }
 
     this._formatMsg()
+
+    if (this.group) {
+      this.checkGroup()
+    }
+  }
+  // If state changed, return true.
+  checkGroup() {
+    let { group } = this
+
+    let collapsed = false
+    while (group) {
+      if (group.collapsed) {
+        collapsed = true
+        break
+      }
+      group = group.parent
+    }
+    if (collapsed !== this.collapsed) {
+      this.collapsed = collapsed
+      if (collapsed) {
+        this.hide()
+      } else {
+        this.show()
+      }
+      return true
+    } else {
+      return false
+    }
+  }
+  hide() {
+    let msg = this._formattedMsg
+
+    msg = msg.replace('"eruda-log"', '"eruda-log eruda-hidden"')
+
+    this._formattedMsg = msg
+  }
+  show() {
+    let msg = this._formattedMsg
+
+    msg = msg.replace('"eruda-log eruda-hidden"', '"eruda-log"')
+
+    this._formattedMsg = msg
+  }
+  updateIcon(icon) {
+    let msg = this._formattedMsg
+
+    msg = msg.replace(
+      /"eruda-icon eruda-icon-[\w-]+"/,
+      `"eruda-icon eruda-icon-${icon}"`
+    )
+
+    this._formattedMsg = msg
+
+    return this
   }
   addCount() {
     this.count++
@@ -142,6 +197,12 @@ export default class Log {
     let icon
     let err
 
+    if (type === 'group' || type === 'groupCollapsed') {
+      if (args.length === 0) {
+        args = ['console.group']
+      }
+    }
+
     switch (type) {
       case 'log':
         msg = formatMsg(args)
@@ -182,8 +243,13 @@ export default class Log {
         msg = formatMsg(args)
         icon = 'arrow-left'
         break
+      case 'groupCollapsed':
+        msg = formatMsg(args)
+        icon = 'caret-right'
+        break
       case 'group':
-        msg = formatMsg(args.length === 0 ? 'console.group' : args)
+        msg = formatMsg(args)
+        icon = 'caret-down'
         break
     }
 
