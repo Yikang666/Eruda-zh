@@ -91,8 +91,8 @@ describe('console', function() {
 
     it('style', function() {
       tool.log('%cblue%cgreen', 'color:blue', 'color:green')
-      expect($tool.find('.eruda-log')).toContainHtml(
-        '<span style="color:blue">blue</span><span style="color:green">green</span>'
+      expect($tool.find('.eruda-log')).toContainText(
+        'bluegreen'
       )
     })
 

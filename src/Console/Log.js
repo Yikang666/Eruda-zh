@@ -25,7 +25,10 @@ import {
   isEmpty,
   clone,
   noop,
-  highlight
+  highlight,
+  each,
+  trim,
+  lowerCase
 } from '../lib/util'
 
 export default class Log {
@@ -452,9 +455,12 @@ function substituteStr(args) {
           }
           break
         case 'c':
+          if (str.length <= i + 1) {
+            break
+          }
           if (isInCss) newStr += '</span>'
           isInCss = true
-          newStr += `<span style="${arg}">`
+          newStr += `<span style="${correctStyle(arg)}">`
           break
         default:
           i--
@@ -465,11 +471,32 @@ function substituteStr(args) {
       newStr += c
     }
   }
-  if (isInCss) newStr += '</span>'
 
   args.unshift(newStr)
 
   return args
+}
+
+function correctStyle(val) {
+  val = lowerCase(val)
+  const rules = val.split(';')
+  const style = {}
+  each(rules, rule => {
+    if (!contain(rule, ':')) return
+    const [name, val] = rule.split(':')
+    style[trim(name)] = trim(val)
+  })
+  style['display'] = 'inline-block'
+  style['max-width'] = '100%'
+  style['contain'] = 'paint'
+  delete style.width
+  delete style.height
+
+  let ret = ''
+  each(style, (val, key) => {
+    ret += `${key}:${val};`
+  })
+  return ret
 }
 
 function formatObj(val) {
