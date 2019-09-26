@@ -89,14 +89,20 @@ export default class Log {
   hide() {
     let msg = this._formattedMsg
 
-    msg = msg.replace('"eruda-log"', '"eruda-log eruda-hidden"')
+    msg = msg.replace(
+      '"eruda-log-container"',
+      '"eruda-log-container eruda-hidden"'
+    )
 
     this._formattedMsg = msg
   }
   show() {
     let msg = this._formattedMsg
 
-    msg = msg.replace('"eruda-log eruda-hidden"', '"eruda-log"')
+    msg = msg.replace(
+      '"eruda-log-container eruda-hidden"',
+      '"eruda-log-container"'
+    )
 
     this._formattedMsg = msg
   }

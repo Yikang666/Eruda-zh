@@ -363,6 +363,7 @@ export default class Logger extends Emitter {
     this._updateGroup(log)
   }
   _updateGroup(log) {
+    const { targetGroup } = log
     const logs = this._logs
     const len = logs.length
     let i = logs.indexOf(log) + 1
@@ -370,7 +371,7 @@ export default class Logger extends Emitter {
       const log = logs[i]
       if (log.checkGroup()) {
         this._refreshLogUi(log)
-      } else {
+      } else if (log.group === targetGroup) {
         break
       }
       i++
@@ -381,7 +382,7 @@ export default class Logger extends Emitter {
     const $el = this._$el
 
     $el
-      .on('click', '.eruda-log', function() {
+      .on('click', '.eruda-log-container', function() {
         const $el = $(this)
         const id = $el.data('id')
         const type = $el.data('type')
