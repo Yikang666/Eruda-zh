@@ -116,15 +116,24 @@
             table {
               width: 100%;
               background: #fff;
-              border-bottom: 1px solid $gray-light;
               border-collapse: collapse;
+              box-shadow: $box-shadow;
+              border-radius: $border-radius;
+              overflow: hidden;
               th {
                 background: $blue;
                 color: #fff;
               }
               th,
               td {
-                padding: 10px;
+                border-left: 1px solid $gray;
+                padding: 3px $padding;
+                &:first-child {
+                  border-left: none !important;
+                }
+              }
+              tr:nth-child(even) {
+                background: $gray-light;
               }
             }
             .blue {
