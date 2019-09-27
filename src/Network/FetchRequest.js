@@ -7,7 +7,8 @@ import {
   getFileName,
   now,
   toNum,
-  fileSize
+  fileSize,
+  isEmpty
 } from '../lib/util'
 
 export default class FetchRequest extends Emitter {
@@ -19,6 +20,7 @@ export default class FetchRequest extends Emitter {
     this._url = fullUrl(url)
     this._id = uniqId('request')
     this._options = options
+    this._reqHeaders = options.headers || {}
     this._method = options.method || 'GET'
   }
   send(fetchResult) {
@@ -38,9 +40,8 @@ export default class FetchRequest extends Emitter {
       res = res.clone()
 
       const type = getType(res.headers.get('Content-Type'))
-
       res.text().then(resTxt => {
-        this.emit('update', this._id, {
+        const data = {
           type: type.type,
           subType: type.subType,
           time: now(),
@@ -49,7 +50,11 @@ export default class FetchRequest extends Emitter {
           resHeaders: getHeaders(res),
           status: res.status,
           done: true
-        })
+        }
+        if (!isEmpty(this._reqHeaders)) {
+          data.reqHeaders = this._reqHeaders
+        }
+        this.emit('update', this._id, data)
       })
 
       return res

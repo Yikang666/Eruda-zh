@@ -10,7 +10,8 @@ import {
   trim,
   isCrossOrig,
   toNum,
-  fileSize
+  fileSize,
+  isEmpty
 } from '../lib/util'
 
 export default class XhrRequest extends Emitter {
@@ -18,6 +19,7 @@ export default class XhrRequest extends Emitter {
     super()
 
     this._xhr = xhr
+    this._reqHeaders = {}
     this._method = method
     this._url = fullUrl(url)
     this._id = uniqId('request')
@@ -25,25 +27,32 @@ export default class XhrRequest extends Emitter {
   handleSend(data) {
     if (!isStr(data)) data = ''
 
-    this.emit('send', this._id, {
+    data = {
       name: getFileName(this._url),
       url: this._url,
       data,
       method: this._method
-    })
+    }
+    if (!isEmpty(this._reqHeaders)) {
+      data.reqHeaders = this._reqHeaders
+    }
+    this.emit('send', this._id, data)
+  }
+  handleReqHeadersSet(key, val) {
+    if (key && val) {
+      this._reqHeaders[key] = val
+    }
   }
   handleHeadersReceived() {
     const xhr = this._xhr
 
     const type = getType(xhr.getResponseHeader('Content-Type'))
-
     this.emit('update', this._id, {
       type: type.type,
       subType: type.subType,
       size: getSize(xhr, true, this._url),
       time: now(),
-      resHeaders: getHeaders(xhr),
-      reqHeaders: (xhr.erudaRequest && xhr.erudaRequest._headers) || null
+      resHeaders: getHeaders(xhr)
     })
   }
   handleDone() {

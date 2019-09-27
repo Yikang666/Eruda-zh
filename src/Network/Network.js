@@ -79,16 +79,9 @@ export default class Network extends Tool {
       origSend.apply(this, arguments)
     }
 
-    winXhrProto.setRequestHeader = function() {
+    winXhrProto.setRequestHeader = function(key, val) {
       const req = this.erudaRequest
-      if (!req._headers) {
-        req._headers = {}
-      }
-      const key = arguments[0]
-      const val = arguments[1]
-      if (key && val) {
-        req._headers[key] = val
-      }
+      if (req) req.handleReqHeadersSet(key, val)
 
       origSetRequestHeader.apply(this, arguments)
     }
@@ -137,8 +130,6 @@ export default class Network extends Tool {
       method: 'GET',
       startTime: now(),
       time: 0,
-      resHeaders: {},
-      reqHeaders: {},
       resTxt: '',
       done: false
     })
@@ -175,15 +166,7 @@ export default class Network extends Tool {
 
         if (!data.done) return
 
-        showSources('http', {
-          url: data.url,
-          data: data.data,
-          resTxt: data.resTxt,
-          type: data.type,
-          subType: data.subType,
-          resHeaders: data.resHeaders,
-          reqHeaders: data.reqHeaders
-        })
+        showSources('http', data)
       })
       .on('click', '.eruda-clear-request', () => this.clear())
 
