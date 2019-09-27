@@ -1,3 +1,10 @@
+## v1.6.0 (26 Sep 2019)
+
+* feat: console group
+* fix: console style, width and height is forbidden
+* fix: regexp json view
+* chore: update fps and memory plugin version
+
 ## v1.5.8 (2 Aug 2019)
 
 * fix: safeStorage undefined [#108](https://github.com/liriliri/eruda/issues/108)
