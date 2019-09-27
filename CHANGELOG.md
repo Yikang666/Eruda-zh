@@ -1,3 +1,10 @@
+## v1.6.1 (27 Sep 2019)
+
+* feat(network): catch fetch request headers
+* feat(console): timeLog, countReset
+* fix(console): clear not working
+* fix(console): table
+
 ## v1.6.0 (26 Sep 2019)
 
 * feat: console group
