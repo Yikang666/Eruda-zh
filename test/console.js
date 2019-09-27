@@ -4,7 +4,7 @@ describe('console', function() {
 
   beforeEach(function() {
     eruda.show('console')
-    tool.clear()
+    tool._logger.silentClear()
   })
 
   it('string', function() {

@@ -156,7 +156,6 @@
           }
           &.debug {
             z-index: 20;
-            color: $blue;
           }
           &.warn {
             z-index: 40;
@@ -166,7 +165,6 @@
           }
           &.info {
             z-index: 30;
-            color: $blue;
           }
           &.output {
             color: $gray-dark;

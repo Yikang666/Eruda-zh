@@ -40,14 +40,7 @@ export default class Console extends Tool {
       }
 
       winConsole[name] = (...args) => {
-        if (
-          args.length > 0 ||
-          name === 'group' ||
-          name === 'groupCollapsed' ||
-          name === 'groupEnd'
-        ) {
-          this[name](...args)
-        }
+        this[name](...args)
         origin(...args)
       }
     })
@@ -155,7 +148,7 @@ export default class Console extends Tool {
       config = this.config
 
     $control
-      .on('click', '.eruda-clear-console', () => logger.clear())
+      .on('click', '.eruda-clear-console', () => logger.silentClear())
       .on('click', '.eruda-filter', function() {
         logger.filter($(this).data('filter'))
       })

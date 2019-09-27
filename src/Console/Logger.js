@@ -15,7 +15,8 @@ import {
   stripHtmlTag,
   loadJs,
   $,
-  Stack
+  Stack,
+  isEmpty
 } from '../lib/util'
 
 export default class Logger extends Emitter {
@@ -68,15 +69,15 @@ export default class Logger extends Emitter {
 
     return this.render()
   }
-  count(label) {
+  count(label = 'default') {
     const count = this._count
 
     !isUndef(count[label]) ? count[label]++ : (count[label] = 1)
 
-    return this.html(`<div class="eruda-blue">${label}: ${count[label]}</div>`)
+    return this.html(`${label}: ${count[label]}`)
   }
   assert(...args) {
-    if (args.length === 0) return
+    if (isEmpty(args)) return
 
     const exp = args.shift()
 
@@ -86,41 +87,47 @@ export default class Logger extends Emitter {
     }
   }
   log(...args) {
-    this.insert('log', args)
+    if (isEmpty(args)) return
 
-    return this
+    return this.insert('log', args)
   }
   debug(...args) {
-    this.insert('debug', args)
+    if (isEmpty(args)) return
 
-    return this
+    return this.insert('debug', args)
   }
-  dir(...args) {
-    this.insert('dir', args)
+  dir(obj) {
+    if (isUndef(obj)) return
 
-    return this
+    return this.insert('dir', [obj])
   }
   table(...args) {
-    this.insert('table', args)
+    if (isEmpty(args)) return
 
-    return this
+    return this.insert('table', args)
   }
-  time(name) {
+  time(name = 'default') {
     this._timer[name] = perfNow()
 
     return this
   }
-  timeEnd(name) {
+  timeEnd(name = 'default') {
     const startTime = this._timer[name]
 
     if (!startTime) return
     delete this._timer[name]
 
-    return this.html(
-      `<div class="eruda-blue">${name}: ${perfNow() - startTime}ms</div>`
-    )
+    return this.html(`${name}: ${perfNow() - startTime}ms`)
   }
   clear() {
+    this.silentClear()
+
+    return this.insert('log', [
+      '%cConsole was cleared',
+      'color:#808080;font-style:italic;'
+    ])
+  }
+  silentClear() {
     this._logs = []
     this._lastLog = {}
     this._groupStack = new Stack()
@@ -128,12 +135,18 @@ export default class Logger extends Emitter {
     return this.render()
   }
   info(...args) {
+    if (isEmpty(args)) return
+
     return this.insert('info', args)
   }
   error(...args) {
+    if (isEmpty(args)) return
+
     return this.insert('error', args)
   }
   warn(...args) {
+    if (isEmpty(args)) return
+
     return this.insert('warn', args)
   }
   group(...args) {
