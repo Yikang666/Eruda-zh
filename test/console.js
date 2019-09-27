@@ -41,7 +41,7 @@ describe('console', function() {
   it('timing', function() {
     tool.time('eruda')
     tool.timeEnd('eruda')
-    expect($tool.find('.eruda-html')).toHaveText(/eruda: [.\d]+ms/)
+    expect($tool.find('.eruda-info')).toHaveText(/eruda: [.\d]+ms/)
   })
 
   it('error', function() {
@@ -61,7 +61,7 @@ describe('console', function() {
   it('count', function() {
     tool.count('test').clear()
     tool.count('test')
-    expect($tool.find('.eruda-html')).toContainText('test: 2')
+    expect($tool.find('.eruda-info')).toContainText('test: 2')
   })
 
   describe('substitution', function() {

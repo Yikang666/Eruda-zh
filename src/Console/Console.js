@@ -318,6 +318,7 @@ const CONSOLE_METHOD = [
   'table',
   'assert',
   'count',
+  'countReset',
   'debug',
   'group',
   'groupCollapsed',

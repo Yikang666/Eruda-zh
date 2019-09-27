@@ -74,7 +74,12 @@ export default class Logger extends Emitter {
 
     !isUndef(count[label]) ? count[label]++ : (count[label] = 1)
 
-    return this.html(`${label}: ${count[label]}`)
+    return this.info(`${label}: ${count[label]}`)
+  }
+  countReset(label = 'default') {
+    this._count[label] = 0
+
+    return this
   }
   assert(...args) {
     if (isEmpty(args)) return
@@ -117,7 +122,7 @@ export default class Logger extends Emitter {
     if (!startTime) return
     delete this._timer[name]
 
-    return this.html(`${name}: ${perfNow() - startTime}ms`)
+    return this.info(`${name}: ${perfNow() - startTime}ms`)
   }
   clear() {
     this.silentClear()

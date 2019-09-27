@@ -225,7 +225,6 @@ export default class Log {
         msg = formatDir(args)
         break
       case 'info':
-        icon = 'info'
         msg = formatMsg(args)
         break
       case 'warn':
