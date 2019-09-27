@@ -59,9 +59,9 @@ describe('console', function() {
   })
 
   it('count', function() {
-    tool.count('test').clear()
     tool.count('test')
-    expect($tool.find('.eruda-info')).toContainText('test: 2')
+    tool.count('test')
+    expect($tool.find('.eruda-info').eq(1)).toContainText('test: 2')
   })
 
   describe('substitution', function() {

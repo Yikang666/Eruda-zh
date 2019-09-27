@@ -112,17 +112,28 @@ export default class Logger extends Emitter {
     return this.insert('table', args)
   }
   time(name = 'default') {
+    if (this._timer[name]) {
+      return this.insert('warn', [`Timer '${name}' already exists`])
+    }
     this._timer[name] = perfNow()
 
     return this
   }
-  timeEnd(name = 'default') {
+  timeLog(name = 'default') {
     const startTime = this._timer[name]
 
-    if (!startTime) return
-    delete this._timer[name]
+    if (!startTime) {
+      return this.insert('warn', [`Timer '${name}' does not exist`])
+    }
 
     return this.info(`${name}: ${perfNow() - startTime}ms`)
+  }
+  timeEnd(name = 'default') {
+    this.timeLog(name)
+
+    delete this._timer[name]
+
+    return this
   }
   clear() {
     this.silentClear()
@@ -135,6 +146,8 @@ export default class Logger extends Emitter {
   silentClear() {
     this._logs = []
     this._lastLog = {}
+    this._count = {}
+    this._timer = {}
     this._groupStack = new Stack()
 
     return this.render()

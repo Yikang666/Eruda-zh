@@ -313,6 +313,7 @@ const CONSOLE_METHOD = [
   'warn',
   'dir',
   'time',
+  'timeLog',
   'timeEnd',
   'clear',
   'table',

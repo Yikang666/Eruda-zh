@@ -26,7 +26,7 @@ let console = eruda.get('console');
 console.config.set('catchGlobalErr', true);
 ```
 
-### log, error, info, warn, dir, time/timeEnd, clear, count, assert, table, group/groupCollapsed/groupEnd
+### log, error, info, warn, dir, time/timeLog/timeEnd, clear, count/countReset, assert, table, group/groupCollapsed/groupEnd
 
 All these methods can be used in the same way as window.console object. 
 
