@@ -6,6 +6,7 @@ import {
   isObj,
   isStr,
   isErr,
+  isPrimitive,
   wrap,
   defaults,
   dateFormat,
@@ -28,7 +29,8 @@ import {
   highlight,
   each,
   trim,
-  lowerCase
+  lowerCase,
+  keys
 } from '../lib/util'
 
 export default class Log {
@@ -323,6 +325,8 @@ const getAbstract = wrap(origGetAbstract, function(fn, obj) {
   })
 })
 
+const Value = '__ErudaValue'
+
 function formatTable(args) {
   const table = args[0]
   let ret = ''
@@ -332,33 +336,39 @@ function formatTable(args) {
   if (isStr(filter)) filter = toArr(filter)
   if (!isArr(filter)) filter = null
 
-  if (!isArr(table)) return formatMsg(args)
+  if (!isObj(table)) return formatMsg(args)
 
-  table.forEach(val => {
-    if (!isObj(val)) return
-    columns = columns.concat(Object.getOwnPropertyNames(val))
+  each(table, val => {
+    if (isPrimitive(val)) {
+      columns.push(Value)
+    } else if (isObj(val)) {
+      columns = columns.concat(keys(val))
+    }
   })
   columns = unique(columns)
   columns.sort()
   if (filter) columns = columns.filter(val => contain(filter, val))
+  if (columns.length > 20) columns = columns.slice(0, 20)
   if (isEmpty(columns)) return formatMsg(args)
 
   ret += '<table><thead><tr><th>(index)</th>'
-  columns.forEach(val => (ret += `<th>${val}</th>`))
+  columns.forEach(
+    val => (ret += `<th>${val === Value ? 'Value' : toStr(val)}</th>`)
+  )
   ret += '</tr></thead><tbody>'
 
-  table.forEach((obj, idx) => {
-    if (!isObj(obj)) return
+  each(table, (obj, idx) => {
     ret += `<tr><td>${idx}</td>`
     columns.forEach(column => {
-      let val = obj[column]
-      if (isUndef(val)) {
-        val = ''
-      } else if (isObj(val)) {
-        val = getObjType(val)
+      if (isObj(obj)) {
+        ret +=
+          column === Value
+            ? '<td></td>'
+            : `<td>${formatTableVal(obj[column])}</td>`
+      } else if (isPrimitive(obj)) {
+        ret +=
+          column === Value ? `<td>${formatTableVal(obj)}</td>` : '<td></td>'
       }
-
-      ret += `<td>${val}</td>`
     })
     ret += '</tr>'
   })
@@ -367,6 +377,13 @@ function formatTable(args) {
   ret += '<div class="eruda-json eruda-hidden"></div>'
 
   return ret
+}
+
+function formatTableVal(val) {
+  if (isObj(val)) return (val = '{…}')
+  if (isPrimitive(val)) return getAbstract(val)
+
+  return toStr(val)
 }
 
 const regJsUrl = /https?:\/\/([0-9.\-A-Za-z]+)(?::(\d+))?\/[A-Z.a-z0-9/]*\.js/g

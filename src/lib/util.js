@@ -2596,6 +2596,34 @@ export var isNull = _.isNull = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isPrimitive ------------------------------ */
+
+export var isPrimitive = _.isPrimitive = (function (exports) {
+    /* Check if value is string, number, boolean or null.
+     *
+     * |Name  |Type   |Desc                        |
+     * |------|-------|----------------------------|
+     * |val   |*      |Value to check              |
+     * |return|boolean|True if value is a primitive|
+     */
+
+    /* example
+     * isPrimitive(5); // -> true
+     * isPrimitive('abc'); // -> true
+     * isPrimitive(false); // -> true
+     */
+
+    /* typescript
+     * export declare function isPrimitive(val: any): boolean;
+     */
+    exports = function(val) {
+        var type = typeof val;
+        return val == null || (type !== 'function' && type !== 'object');
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ isPromise ------------------------------ */
 
 export var isPromise = _.isPromise = (function (exports) {

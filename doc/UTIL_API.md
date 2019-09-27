@@ -506,6 +506,52 @@ $test.find('.test').each(function (idx, element) {
 });
 ```
 
+## Stack 
+
+Stack data structure.
+
+### clear
+
+Clear the stack.
+
+### push
+
+Add an item to the stack.
+
+|Name  |Type  |Desc        |
+|------|------|------------|
+|item  |*     |Item to add |
+|return|number|Current size|
+
+### pop
+
+Get the last item of the stack.
+
+### peek
+
+Get the last item without removing it.
+
+### forEach
+
+Iterate over the stack.
+
+|Name    |Type    |Desc                      |
+|--------|--------|--------------------------|
+|iterator|function|Function invoked iteration|
+|[ctx]   |*       |Function context          |
+
+### toArr
+
+Convert the stack to a JavaScript array.
+
+```javascript
+const stack = new Stack();
+
+stack.push(2); // -> 1
+stack.push(3); // -> 2
+stack.pop(); // -> 3
+```
+
 ## Store 
 
 Memory storage.
@@ -1317,8 +1363,8 @@ comment, string, number, keyword, operator
 
 ```javascript
 highlight('const a = 5;', 'js', {
-    number: 'color:#0086b3;'
-}); // -> '<span style="color:#a71d5d;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
+    keyword: 'color:#569cd6;'
+}); // -> '<span style="color:#569cd6;">const</span> a <span style="color:#994500;">=</span> <span style="color:#0086b3;">5</span>;'
 ```
 
 ## identity 
@@ -1648,6 +1694,21 @@ Check if value is the language type of Object.
 ```javascript
 isObj({}); // -> true
 isObj([]); // -> true
+```
+
+## isPrimitive 
+
+Check if value is string, number, boolean or null.
+
+|Name  |Type   |Desc                        |
+|------|-------|----------------------------|
+|val   |*      |Value to check              |
+|return|boolean|True if value is a primitive|
+
+```javascript
+isPrimitive(5); // -> true
+isPrimitive('abc'); // -> true
+isPrimitive(false); // -> true
 ```
 
 ## isPromise 
