@@ -1,3 +1,8 @@
+## v1.6.2 (29 Sep 2019)
+
+* fix: container style affected [#119](https://github.com/liriliri/eruda/issues/119)
+* fix(console): log style, line-height should be normal
+
 ## v1.6.1 (27 Sep 2019)
 
 * feat(network): catch fetch request headers
