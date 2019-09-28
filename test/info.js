@@ -37,11 +37,14 @@ describe('info', function() {
     tool.add('test', 'eruda')
     expect($tool.find('.eruda-title')).toContainText('test')
     expect($tool.find('.eruda-content')).toContainText('eruda')
+    tool.add('test', 'update')
+    tool.add('test', 'update')
+    expect($tool.find('.eruda-content')).toContainText('update')
   })
 
   it('get', function() {
-    expect(tool.get()).toEqual([{ name: 'test', val: 'eruda' }])
-    expect(tool.get('test')).toBe('eruda')
+    expect(tool.get()).toEqual([{ name: 'test', val: 'update' }])
+    expect(tool.get('test')).toBe('update')
     expect(tool.get('test2')).not.toBeDefined()
   })
 

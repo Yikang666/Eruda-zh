@@ -17,11 +17,6 @@ export default class Info extends Tool {
 
     this._addDefInfo()
   }
-  show() {
-    this._render()
-
-    super.show()
-  }
   destroy() {
     super.destroy()
 
