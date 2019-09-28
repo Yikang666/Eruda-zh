@@ -10,6 +10,5 @@ before_script:
 script:
   - npm run ci
 after_script:
-  - npm run cov
   - codecov --disable=gcov 
   - npm run test:sauce

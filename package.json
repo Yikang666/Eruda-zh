@@ -6,9 +6,8 @@
   "scripts": {
     "ci": "npm run lint && npm run test && npm run build",
     "build": "webpack --config script/webpack.release.js && shx rm stringifyWorker.js.map",
-    "cov": "npm run test && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
-    "test": "karma start && shx rm src/index.js.map",
+    "test": "karma start && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage && shx rm src/index.js.map",
     "test:sauce": "karma start karma.sauce.js",
     "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js} --write",
     "lint": "eslint src/**/*.js",
