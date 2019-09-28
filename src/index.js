@@ -151,6 +151,7 @@ module.exports = {
     if (!el) {
       el = document.createElement('div')
       document.documentElement.appendChild(el)
+      el.style.all = 'initial'
     }
 
     let shadowRoot
