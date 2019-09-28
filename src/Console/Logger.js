@@ -87,6 +87,7 @@ export default class Logger extends Emitter {
     const exp = args.shift()
 
     if (!exp) {
+      if (args.length === 0) args.unshift('console.assert')
       args.unshift('Assertion failed: ')
       return this.insert('error', args)
     }
