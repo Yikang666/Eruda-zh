@@ -1,3 +1,7 @@
+## v1.6.3 (1 Oct 2019)
+
+* fix(console): log border style
+
 ## v1.6.2 (29 Sep 2019)
 
 * fix: container style affected [#119](https://github.com/liriliri/eruda/issues/119)
