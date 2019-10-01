@@ -1,9 +1,11 @@
 import Logger from './Logger'
 import Tool from '../DevTools/Tool'
-import { noop, evalCss, $, Emitter } from '../lib/util'
+import { noop, evalCss, $, Emitter, uncaught } from '../lib/util'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import stringify from './stringify'
+
+uncaught.start()
 
 export default class Console extends Tool {
   constructor() {
@@ -24,7 +26,7 @@ export default class Console extends Tool {
 
     this._initLogger()
     this._exposeLogger()
-    this._rejectionHandler = e => this._logger.error(e.reason)
+    this._errHandler = err => this._logger.error(err)
 
     this._initCfg()
     this._bindEvent()
@@ -58,21 +60,12 @@ export default class Console extends Tool {
     return this
   }
   catchGlobalErr() {
-    this._origOnerror = window.onerror
-
-    window.onerror = (errMsg, url, lineNum, column, errObj) => {
-      this._logger.error(errObj ? errObj : errMsg)
-    }
-    window.addEventListener('unhandledrejection', this._rejectionHandler)
+    uncaught.addListener(this._errHandler)
 
     return this
   }
   ignoreGlobalErr() {
-    if (this._origOnerror) {
-      window.onerror = this._origOnerror
-      delete this._origOnerror
-    }
-    window.removeEventListener('unhandledrejection', this._rejectionHandler)
+    uncaught.rmListener(this._errHandler)
 
     return this
   }
@@ -141,11 +134,11 @@ export default class Console extends Tool {
   }
   _bindEvent() {
     const container = this._container
-    const $input = this._$input,
-      $inputBtns = this._$inputBtns,
-      $control = this._$control,
-      logger = this._logger,
-      config = this.config
+    const $input = this._$input
+    const $inputBtns = this._$inputBtns
+    const $control = this._$control
+    const logger = this._logger
+    const config = this.config
 
     $control
       .on('click', '.eruda-clear-console', () => logger.silentClear())

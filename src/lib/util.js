@@ -8150,6 +8150,104 @@ export var tryIt = _.tryIt = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ uncaught ------------------------------ */
+
+export var uncaught = _.uncaught = (function (exports) {
+    /* Handle global uncaught errors and promise rejections.
+     *
+     * ### start
+     *
+     * Start handling of errors.
+     *
+     * ### stop
+     *
+     * Stop handling.
+     *
+     * ### addListener
+     *
+     * Add listener for handling errors.
+     *
+     * |Name|Type    |Desc          |
+     * |----|--------|--------------|
+     * |fn  |function|Error listener|
+     *
+     * ### rmListener
+     *
+     * Remove listener.
+     *
+     * ### rmAllListeners
+     *
+     * Remove all listeners.
+     */
+
+    /* example
+     * uncaught.start();
+     * uncaught.addListener(err => {
+     *     // Do something.
+     * });
+     */
+
+    /* typescript
+     * export declare const uncaught: {
+     *     start(): void;
+     *     stop(): void;
+     *     addListener(fn: (err: Error) => void): void;
+     *     rmListener(fn: (err: Error) => void): void;
+     *     rmAllListeners(): void;
+     * };
+     */
+
+    /* dependencies
+     * isBrowser 
+     */
+
+    var listeners = [];
+    var isOn = false;
+    exports = {
+        start: function() {
+            isOn = true;
+        },
+        stop: function() {
+            isOn = false;
+        },
+        addListener: function(fn) {
+            listeners.push(fn);
+        },
+        rmListener: function(fn) {
+            var idx = listeners.indexOf(fn);
+
+            if (idx > -1) {
+                listeners.splice(idx, 1);
+            }
+        },
+        rmAllListeners: function() {
+            listeners = [];
+        }
+    };
+
+    if (isBrowser) {
+        window.addEventListener('error', function(event) {
+            callListeners(event.error);
+        });
+        window.addEventListener('unhandledrejection', function(e) {
+            callListeners(e.reason);
+        });
+    } else {
+        process.on('uncaughtException', callListeners);
+        process.on('unhandledRejection', callListeners);
+    }
+
+    function callListeners(err) {
+        if (!isOn) return;
+
+        for (var i = 0, len = listeners.length; i < len; i++) {
+            listeners[i](err);
+        }
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ uniqId ------------------------------ */
 
 export var uniqId = _.uniqId = (function (exports) {
