@@ -37,7 +37,7 @@ let coverage = reduce(
 
 collector.add(coverage)
 
-reporter.addAll(['html', 'lcov'])
+reporter.addAll(['text', 'html', 'lcov'])
 reporter.write(collector, true, function() {
   console.log('open coverage/index.html to see the coverage report.')
 })

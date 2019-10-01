@@ -16,7 +16,8 @@ import {
   loadJs,
   $,
   Stack,
-  isEmpty
+  isEmpty,
+  contain
 } from '../lib/util'
 
 export default class Logger extends Emitter {
@@ -272,7 +273,7 @@ export default class Logger extends Emitter {
 
     const lastLog = this._lastLog
     if (
-      log.type !== 'html' &&
+      !contain(['html', 'group', 'groupCollapsed'], log.type) &&
       lastLog.type === log.type &&
       lastLog.value === log.value &&
       !log.src &&
