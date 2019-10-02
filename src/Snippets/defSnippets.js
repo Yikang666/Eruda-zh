@@ -146,8 +146,8 @@ export default [
 evalCss(require('./searchText.scss'), document.head)
 
 function search(text) {
-  const root = document.body,
-    regText = new RegExp(text, 'ig')
+  const root = document.body
+  const regText = new RegExp(text, 'ig')
 
   traverse(root, node => {
     const $node = $(node)

@@ -93,9 +93,9 @@ export default class Console extends Tool {
     this._style = evalCss(require('./Console.scss'))
     $el.append(require('./Console.hbs')())
 
-    const _$inputContainer = $el.find('.eruda-js-input'),
-      _$input = _$inputContainer.find('textarea'),
-      _$inputBtns = _$inputContainer.find('.eruda-buttons')
+    const _$inputContainer = $el.find('.eruda-js-input')
+    const _$input = _$inputContainer.find('textarea')
+    const _$inputBtns = _$inputContainer.find('.eruda-buttons')
 
     Object.assign(this, {
       _$control: $el.find('.eruda-control'),
@@ -111,16 +111,16 @@ export default class Console extends Tool {
 
     logger.on('filter', filter =>
       $filter.each(function() {
-        const $this = $(this),
-          isMatch = $this.data('filter') === filter
+        const $this = $(this)
+        const isMatch = $this.data('filter') === filter
 
         $this[isMatch ? 'addClass' : 'rmClass']('eruda-active')
       })
     )
   }
   _exposeLogger() {
-    const logger = this._logger,
-      methods = ['filter', 'html'].concat(CONSOLE_METHOD)
+    const logger = this._logger
+    const methods = ['filter', 'html'].concat(CONSOLE_METHOD)
 
     methods.forEach(
       name =>

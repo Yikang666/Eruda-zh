@@ -99,8 +99,8 @@ export default class Resources extends Tool {
     let iframeData = []
 
     $('iframe').each(function() {
-      const $this = $(this),
-        src = $this.attr('src')
+      const $this = $(this)
+      const src = $this.attr('src')
 
       if (src) iframeData.push(src)
     })
@@ -367,10 +367,10 @@ export default class Resources extends Tool {
       .separator()
   }
   _render() {
-    const cookieData = this._cookieData,
-      scriptData = this._scriptData,
-      stylesheetData = this._stylesheetData,
-      imageData = this._imageData
+    const cookieData = this._cookieData
+    const scriptData = this._scriptData
+    const stylesheetData = this._stylesheetData
+    const imageData = this._imageData
 
     this._renderHtml(
       this._tpl({
@@ -451,8 +451,8 @@ export default class Resources extends Tool {
 function getState(type, len) {
   if (len === 0) return ''
 
-  let warn = 0,
-    danger = 0
+  let warn = 0
+  let danger = 0
 
   switch (type) {
     case 'cookie':

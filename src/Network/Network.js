@@ -161,8 +161,8 @@ export default class Network extends Tool {
 
     $el
       .on('click', '.eruda-request', function() {
-        const id = $(this).data('id'),
-          data = self._requests[id]
+        const id = $(this).data('id')
+        const data = self._requests[id]
 
         if (!data.done) return
 

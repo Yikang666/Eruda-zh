@@ -91,8 +91,8 @@ export default class XhrRequest extends Emitter {
 }
 
 function getHeaders(xhr) {
-  const raw = xhr.getAllResponseHeaders(),
-    lines = raw.split('\n')
+  const raw = xhr.getAllResponseHeaders()
+  const lines = raw.split('\n')
 
   const ret = {}
 

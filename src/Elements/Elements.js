@@ -414,8 +414,8 @@ function processStyleRules(style) {
   each(style, (val, key) => (style[key] = processStyleRule(val)))
 }
 
-const regColor = /rgba?\((.*?)\)/g,
-  regCssUrl = /url\("?(.*?)"?\)/g
+const regColor = /rgba?\((.*?)\)/g
+const regCssUrl = /url\("?(.*?)"?\)/g
 
 function processStyleRule(val) {
   // For css custom properties, val is unable to retrieved.
@@ -474,8 +474,8 @@ function formatChildNodes(nodes) {
   const ret = []
 
   for (let i = 0, len = nodes.length; i < len; i++) {
-    const child = nodes[i],
-      nodeType = child.nodeType
+    const child = nodes[i]
+    const nodeType = child.nodeType
 
     if (nodeType === 3 || nodeType === 8) {
       const val = child.nodeValue.trim()

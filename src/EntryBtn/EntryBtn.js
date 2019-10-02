@@ -77,8 +77,8 @@ export default class EntryBtn extends Emitter {
     this.setPos(pos)
   }
   _bindEvent() {
-    const draggabilly = this._draggabilly,
-      $el = this._$el
+    const draggabilly = this._draggabilly
+    const $el = this._$el
 
     draggabilly
       .on('staticClick', () => this.emit('click'))

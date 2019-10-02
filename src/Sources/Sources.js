@@ -114,8 +114,8 @@ export default class Sources extends Tool {
     })
 
     this._$el.on('click', '.eruda-http .eruda-response', () => {
-      const data = this._data.val,
-        resTxt = data.resTxt
+      const data = this._data.val
+      const resTxt = data.resTxt
 
       switch (data.subType) {
         case 'css':
@@ -286,5 +286,5 @@ export default class Sources extends Tool {
   }
 }
 
-const MAX_BEAUTIFY_LEN = 100000,
-  MAX_LINE_NUM_LEN = 400000
+const MAX_BEAUTIFY_LEN = 100000
+const MAX_LINE_NUM_LEN = 400000

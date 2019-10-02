@@ -342,8 +342,8 @@ export default class Logger extends Emitter {
 
     if (filter === 'all') return true
 
-    const isFilterRegExp = isRegExp(filter),
-      isFilterFn = isFn(filter)
+    const isFilterRegExp = isRegExp(filter)
+    const isFilterFn = isFn(filter)
 
     if (log.ignoreFilter) return true
     if (isFilterFn) return filter(log)
@@ -449,9 +449,9 @@ export default class Logger extends Emitter {
   }
 }
 
-const cmdList = require('./cmdList.json'),
-  helpMsg = require('./help.hbs')({ commands: cmdList }),
-  libraries = require('./libraries.json')
+const cmdList = require('./cmdList.json')
+const helpMsg = require('./help.hbs')({ commands: cmdList })
+const libraries = require('./libraries.json')
 
 const evalJs = jsInput => {
   let ret

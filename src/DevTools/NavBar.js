@@ -54,9 +54,9 @@ export default class NavBar extends Emitter {
     this._$el.remove()
   }
   _scrollItemToView() {
-    const $el = this._$el,
-      li = $el.find('.eruda-active').get(0),
-      container = $el.get(0)
+    const $el = this._$el
+    const li = $el.find('.eruda-active').get(0)
+    const container = $el.get(0)
 
     const itemLeft = li.offsetLeft
     const itemWidth = li.offsetWidth
