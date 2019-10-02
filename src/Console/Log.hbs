@@ -1,28 +1,28 @@
-<li class="eruda-log-container" data-id="{{id}}" data-type="{{type}}">
+<li {{{class 'log-container'}}} data-id="{{id}}" data-type="{{type}}">
     {{#if displayHeader}}
-        <div class="eruda-header">
+        <div {{{class 'header'}}}>
             {{#repeat group.indentLevel}}
-                <div class="eruda-nesting-level"></div>
+                <div {{{class 'nesting-level'}}}></div>
             {{/repeat}}
-            <div class="eruda-time-container">
+            <div {{{class 'time-container'}}}>
                 <span data-mark="time">{{time}}</span> <span>{{from}}</span>
             </div>
         </div>
     {{/if}}
-    <div class="eruda-{{type}} eruda-log-item">
+    <div {{{class (concat type ' log-item')}}}>
         {{#repeat group.indentLevel}}
-            <div class="eruda-nesting-level"></div>
+            <div {{{class 'nesting-level'}}}></div>
         {{/repeat}}
         {{#if icon}}
-            <div class="eruda-icon-container">
-                <span class="eruda-icon eruda-icon-{{icon}}"></span>
+            <div {{{class 'icon-container'}}}>
+                <span {{{class (concat 'icon icon-' icon)}}}></span>
             </div>
         {{/if}}
-        <div class="eruda-count-container eruda-hidden">
-            <div class="eruda-count" data-mark="count"></div>
+        <div {{{class 'count-container hidden'}}}>
+            <div {{{class 'count'}}} data-mark="count"></div>
         </div>    
-        <div class="eruda-log-content-wrapper">
-            <div class="eruda-log-content">{{{msg}}}</div>
+        <div {{{class 'log-content-wrapper'}}}>
+            <div {{{class 'log-content'}}}>{{{msg}}}</div>
         </div>
     </div>
 </li>

@@ -1,16 +1,16 @@
-<div class="eruda-http">
-    <div class="eruda-breadcrumb">{{url}}</div>
+<div {{{class 'http'}}}>
+    <div {{{class 'breadcrumb'}}}>{{url}}</div>
     {{#if data}}
-        <pre class="eruda-data">{{data}}</pre>
+        <pre {{{class 'data'}}}>{{data}}</pre>
     {{/if}}
-    <div class="eruda-section">
+    <div {{{class 'section'}}}>
         <h2>Request Headers</h2>
-        <table class="eruda-headers">
+        <table {{{class 'headers'}}}>
             <tbody>
                 {{#if reqHeaders}}
                     {{#each reqHeaders}}
                         <tr>
-                            <td class="eruda-key">{{@key}}</td>
+                            <td {{{class 'key'}}}>{{@key}}</td>
                             <td>{{.}}</td>
                         </tr>
                     {{/each}}
@@ -22,12 +22,12 @@
             </tbody>
         </table>
         <h2>Response Headers</h2>
-        <table class="eruda-headers">
+        <table {{{class 'headers'}}}>
             <tbody>
                 {{#if resHeaders}}
                     {{#each resHeaders}}
                         <tr>
-                            <td class="eruda-key">{{@key}}</td>
+                            <td {{{class 'key'}}}>{{@key}}</td>
                             <td>{{.}}</td>
                         </tr>
                     {{/each}}
@@ -40,6 +40,6 @@
         </table>
     </div>
     {{#if resTxt}}
-        <pre class="eruda-response">{{resTxt}}</pre>
+        <pre {{{class 'response'}}}>{{resTxt}}</pre>
     {{/if}}
 </div>

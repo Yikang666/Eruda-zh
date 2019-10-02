@@ -1,10 +1,10 @@
-<div class="eruda-title">
+<div {{{class 'title'}}}>
     Request
-    <div class="eruda-btn eruda-clear-request">
-        <span class="eruda-icon-clear"></span>
+    <div {{{class 'btn clear-request'}}}>
+        <span {{{class 'icon-clear'}}}></span>
     </div>
 </div>
-<ul class="eruda-requests">
+<ul {{{class 'requests'}}}>
     {{#if requests}}
         {{#each requests}}
             <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
@@ -14,7 +14,7 @@
                 <span>{{subType}}</span>
                 <span>{{size}}</span>
                 <span>{{displayTime}}</span>
-                <span class="eruda-blue">{{url}}</span>
+                <span {{{class 'blue'}}}>{{url}}</span>
             </li>
         {{/each}}
     {{else}}

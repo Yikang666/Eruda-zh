@@ -1,12 +1,12 @@
-<div id="{{id}}" class="eruda-range">
-    <div class="eruda-head">
+<div id="{{id}}" {{{class 'range'}}}>
+    <div {{{class 'head'}}}>
         {{desc}}
-        <span class="eruda-val">{{val}}</span>
+        <span {{{class 'val'}}}>{{val}}</span>
     </div>
-    <div class="eruda-input-container" data-id="{{id}}">
-        <div class="eruda-range-track">
-            <div class="eruda-range-track-bar">
-                <div class="eruda-range-track-progress" style="width: {{progress}}%"></div>
+    <div {{{class 'input-container'}}} data-id="{{id}}">
+        <div {{{class 'range-track'}}}>
+            <div {{{class 'range-track-bar'}}}>
+                <div {{{class 'range-track-progress'}}} style="width: {{progress}}%"></div>
             </div>
         </div>
         <input type="range" min="{{min}}" max="{{max}}" step="{{step}}" value="{{val}}"/>

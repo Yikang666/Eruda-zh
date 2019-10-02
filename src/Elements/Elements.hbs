@@ -1,26 +1,26 @@
 {{#if parents}}
-    <ul class="eruda-parents">
+    <ul {{{class 'parents'}}}>
         {{#each parents}}
             <li>
-                <div class="eruda-parent" data-idx="{{idx}}">{{{text}}}</div>
-                <span class="eruda-icon-arrow-right"></span>
+                <div {{{class 'parent'}}} data-idx="{{idx}}">{{{text}}}</div>
+                <span {{{class 'icon-arrow-right'}}}></span>
             </li>
         {{/each}}
     </ul>
 {{/if}}
-<div class="eruda-breadcrumb">
+<div {{{class 'breadcrumb'}}}>
     {{{name}}}
 </div>
 {{#if children}}
-    <ul class="eruda-children">
+    <ul {{{class 'children'}}}>
         {{#each children}}
             <li class="eruda-child {{#if isCmt}}eruda-green{{/if}} {{#if isEl}}eruda-active-effect{{/if}}" data-idx="{{idx}}">{{{text}}}</li>
         {{/each}}
     </ul>
 {{/if}}
-<div class="eruda-attributes eruda-section">
+<div {{{class 'attributes section'}}}>
     <h2>Attributes</h2>
-    <div class="eruda-table-wrapper">
+    <div {{{class 'table-wrapper'}}}>
         <table>
             <tbody>
             {{#if attributes}}
@@ -40,14 +40,14 @@
     </div>
 </div>
 {{#if styles}}
-    <div class="eruda-styles eruda-section">
+    <div {{{class 'styles section'}}}>
         <h2>Styles</h2>
-        <div class="eruda-style-wrapper">
+        <div {{{class 'style-wrapper'}}}>
             {{#each styles}}
-                <div class="eruda-style-rules">
+                <div {{{class 'style-rules'}}}>
                     <div>{{selectorText}} {</div>
                     {{#each style}}
-                        <div class="eruda-rule">
+                        <div {{{class 'rule'}}}>
                             <span>{{@key}}</span>: {{{.}}};
                         </div>
                     {{/each}}
@@ -58,43 +58,43 @@
     </div>
 {{/if}}
 {{#if computedStyle}}
-    <div class="eruda-computed-style eruda-section">
-        <h2 class="eruda-toggle-all-computed-style eruda-active-effect">Computed Style
-            <div class="eruda-btn">
+    <div {{{class 'computed-style section'}}}>
+        <h2 {{{class 'toggle-all-computed-style active-effect'}}}>Computed Style
+            <div {{{class 'btn'}}}>
                 {{#if rmDefComputedStyle}}
-                    <span class="eruda-icon-compress"></span>
+                    <span {{{class 'icon-compress'}}}></span>
                 {{else}}
-                    <span class="eruda-icon-expand"></span>
+                    <span {{{class 'icon-expand'}}}></span>
                 {{/if}}
             </div>
         </h2>
-        <div class="eruda-box-model">
-            {{#if boxModel.position}}<div class="eruda-position">
-                <div class="eruda-label">position</div><div class="eruda-top">{{boxModel.position.top}}</div><br><div class="eruda-left">{{boxModel.position.left}}</div>{{/if}}{{!
-                }}<div class="eruda-margin">
-                    <div class="eruda-label">margin</div><div class="eruda-top">{{boxModel.margin.top}}</div><br><div class="eruda-left">{{boxModel.margin.left}}</div>{{!
-                    }}<div class="eruda-border">
-                        <div class="eruda-label">border</div><div class="eruda-top">{{boxModel.border.top}}</div><br><div class="eruda-left">{{boxModel.border.left}}</div>{{!
-                        }}<div class="eruda-padding">
-                            <div class="eruda-label">padding</div><div class="eruda-top">{{boxModel.padding.top}}</div><br><div class="eruda-left">{{boxModel.padding.left}}</div>{{!
-                            }}<div class="eruda-content">
+        <div {{{class 'box-model'}}}>
+            {{#if boxModel.position}}<div {{{class 'position'}}}>
+                <div {{{class 'label'}}}>position</div><div {{{class 'top'}}}>{{boxModel.position.top}}</div><br><div {{{class 'left'}}}>{{boxModel.position.left}}</div>{{/if}}{{!
+                }}<div {{{class 'margin'}}}>
+                    <div {{{class 'label'}}}>margin</div><div {{{class 'top'}}}>{{boxModel.margin.top}}</div><br><div {{{class 'left'}}}>{{boxModel.margin.left}}</div>{{!
+                    }}<div {{{class 'border'}}}>
+                        <div {{{class 'label'}}}>border</div><div {{{class 'top'}}}>{{boxModel.border.top}}</div><br><div {{{class 'left'}}}>{{boxModel.border.left}}</div>{{!
+                        }}<div {{{class 'padding'}}}>
+                            <div {{{class 'label'}}}>padding</div><div {{{class 'top'}}}>{{boxModel.padding.top}}</div><br><div {{{class 'left'}}}>{{boxModel.padding.left}}</div>{{!
+                            }}<div {{{class 'content'}}}>
                                 <span>{{boxModel.content.width}}</span> × <span>{{boxModel.content.height}}</span>
                             </div>{{!
-                            }}<div class="eruda-right">{{boxModel.padding.right}}</div><br><div class="eruda-bottom">{{boxModel.padding.bottom}}</div>{{!
+                            }}<div {{{class 'right'}}}>{{boxModel.padding.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.padding.bottom}}</div>{{!
                             }}</div>{{!
-                        }}<div class="eruda-right">{{boxModel.border.right}}</div><br><div class="eruda-bottom">{{boxModel.border.bottom}}</div>{{!
+                        }}<div {{{class 'right'}}}>{{boxModel.border.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.border.bottom}}</div>{{!
                     }}</div>{{!
-                    }}<div class="eruda-right">{{boxModel.margin.right}}</div><br><div class="eruda-bottom">{{boxModel.margin.bottom}}</div>{{!
+                    }}<div {{{class 'right'}}}>{{boxModel.margin.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.margin.bottom}}</div>{{!
                 }}</div>{{!
-                }}{{#if boxModel.position}}<div class="eruda-right">{{boxModel.position.right}}</div><br><div class="eruda-bottom">{{boxModel.position.bottom}}</div>{{!
+                }}{{#if boxModel.position}}<div {{{class 'right'}}}>{{boxModel.position.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.position.bottom}}</div>{{!
             }}</div>{{/if}}
         </div>
-        <div class="eruda-table-wrapper">
+        <div {{{class 'table-wrapper'}}}>
             <table>
                 <tbody>
                 {{#each computedStyle}}
                     <tr>
-                        <td class="eruda-key">{{@key}}</td>
+                        <td {{{class 'key'}}}>{{@key}}</td>
                         <td>{{{.}}}</td>
                     </tr>
                 {{/each}}
@@ -104,15 +104,15 @@
     </div>
 {{/if}}
 {{#if listeners}}
-    <div class="eruda-listeners eruda-section">
+    <div {{{class 'listeners section'}}}>
         <h2>Event Listeners</h2>
-        <div class="eruda-listener-wrapper">
+        <div {{{class 'listener-wrapper'}}}>
             {{#each listeners}}
-               <div class="eruda-listener">
-                   <div class="eruda-listener-type">{{@key}}</div>
-                   <ul class="eruda-listener-content">
+               <div {{{class 'listener'}}}>
+                   <div {{{class 'listener-type'}}}>{{@key}}</div>
+                   <ul {{{class 'listener-content'}}}>
                        {{#each .}}
-                           <li class="{{#if useCapture}}eruda-capture{{/if}}">{{listenerStr}}</li>
+                           <li {{#if useCapture}}{{{class 'capture'}}}{{/if}}>{{listenerStr}}</li>
                        {{/each}}
                    </ul>
                </div>

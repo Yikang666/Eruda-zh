@@ -1,7 +1,7 @@
-<div id="{{id}}" class="eruda-color">
-    <div class="eruda-head">
+<div id="{{id}}" {{{class 'color'}}}>
+    <div {{{class 'head'}}}>
         {{desc}}
-        <span class="eruda-val" style="background-color: {{val}}"></span>
+        <span {{{class 'val'}}} style="background-color: {{val}}"></span>
     </div>
     <ul data-id="{{id}}">
        {{#each colors}}
