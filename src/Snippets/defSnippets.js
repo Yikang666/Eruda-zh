@@ -11,7 +11,8 @@ import {
   $,
   isErudaEl,
   upperFirst,
-  loadJs
+  loadJs,
+  trim
 } from '../lib/util'
 
 let style = null
@@ -46,7 +47,9 @@ export default [
   {
     name: 'Search Text',
     fn() {
-      const keyword = prompt('Enter the text')
+      const keyword = prompt('Enter the text') || ''
+
+      if (trim(keyword) === '') return
 
       search(keyword)
     },

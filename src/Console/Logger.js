@@ -5,15 +5,12 @@ import {
   isNum,
   isUndef,
   perfNow,
-  startWith,
-  escapeRegExp,
   isStr,
   extend,
   uniqId,
   isRegExp,
   isFn,
   stripHtmlTag,
-  loadJs,
   $,
   Stack,
   isEmpty,
@@ -182,14 +179,6 @@ export default class Logger extends Emitter {
     this._refreshLogUi(lastLog)
   }
   input(jsCode) {
-    if (startWith(jsCode, ':')) {
-      this._runCmd(jsCode.slice(1))
-
-      return this
-    } else if (startWith(jsCode, '/')) {
-      return this.filter(new RegExp(escapeRegExp(jsCode.slice(1))))
-    }
-
     this.insert({
       type: 'input',
       args: [jsCode],
@@ -217,13 +206,6 @@ export default class Logger extends Emitter {
   }
   html(...args) {
     return this.insert('html', args)
-  }
-  help() {
-    return this.insert({
-      type: 'html',
-      args: [helpMsg],
-      ignoreFilter: true
-    })
   }
   render() {
     let html = ''
@@ -351,23 +333,6 @@ export default class Logger extends Emitter {
 
     return log.type === filter
   }
-  _loadJs(name) {
-    loadJs(libraries[name], result => {
-      if (result) return this.log(`${name} is loaded`)
-
-      this.warn(`Failed to load ${name}`)
-    })
-  }
-  _runCmd(cmd) {
-    switch (cmd.trim()) {
-      case '$':
-        return this._loadJs('jQuery')
-      case '_':
-        return this._loadJs('underscore')
-      default:
-        this.warn('Unknown command').help()
-    }
-  }
   _getLog(id) {
     const logs = this._logs
     let log
@@ -448,10 +413,6 @@ export default class Logger extends Emitter {
       })
   }
 }
-
-const cmdList = require('./cmdList.json')
-const helpMsg = require('./help.hbs')({ commands: cmdList })
-const libraries = require('./libraries.json')
 
 const evalJs = jsInput => {
   let ret

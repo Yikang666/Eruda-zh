@@ -1,6 +1,14 @@
 import Logger from './Logger'
 import Tool from '../DevTools/Tool'
-import { noop, evalCss, $, Emitter, uncaught } from '../lib/util'
+import {
+  noop,
+  evalCss,
+  $,
+  Emitter,
+  uncaught,
+  escapeRegExp,
+  trim
+} from '../lib/util'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import stringify from './stringify'
@@ -145,7 +153,11 @@ export default class Console extends Tool {
       .on('click', '.eruda-filter', function() {
         logger.filter($(this).data('filter'))
       })
-      .on('click', '.eruda-help', () => logger.help())
+      .on('click', '.eruda-search', () => {
+        const filter = prompt('Filter') || ''
+        if (trim(filter) === '') return
+        this._logger.filter(new RegExp(escapeRegExp(filter)))
+      })
 
     $inputBtns
       .on('click', '.eruda-cancel', () => this._hideInput())

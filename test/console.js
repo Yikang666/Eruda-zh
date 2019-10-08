@@ -227,11 +227,6 @@ describe('console', function() {
       expect($tool.find('.eruda-logs li')).toHaveLength(1)
       $('.eruda-filter[data-filter="all"]').click()
     })
-
-    it('help', function() {
-      $tool.find('.eruda-help').click()
-      expect($tool.find('.eruda-html')).toHaveLength(1)
-    })
   })
 
   describe('execute', function() {
@@ -239,15 +234,6 @@ describe('console', function() {
       $tool.find('textarea').val('1+2')
       $('.eruda-execute').click()
       expect($tool.find('.eruda-output')).toContainText('3')
-    })
-
-    it('filter', function() {
-      tool.log('test')
-      tool.log('eruda')
-      expect($tool.find('.eruda-logs li')).toHaveLength(2)
-      $tool.find('textarea').val('/eruda')
-      $('.eruda-execute').click()
-      expect($tool.find('.eruda-logs li')).toHaveLength(1)
     })
   })
 
