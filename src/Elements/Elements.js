@@ -22,7 +22,8 @@ import {
   pxToNum,
   isNaN,
   isNum,
-  stringifyAll
+  stringifyAll,
+  nextTick
 } from '../lib/util'
 
 export default class Elements extends Tool {
@@ -37,6 +38,7 @@ export default class Elements extends Tool {
     this._highlightElement = false
     this._selectElement = false
     this._observeElement = true
+    this._history = []
   }
   init($el, container) {
     super.init($el)
@@ -53,6 +55,8 @@ export default class Elements extends Tool {
     this._bindEvent()
     this._initObserver()
     this._initCfg()
+
+    nextTick(() => this._updateHistory())
   }
   show() {
     super.show()
@@ -70,6 +74,7 @@ export default class Elements extends Tool {
     this._setEl(e)
     this.scrollToTop()
     this._render()
+    this._updateHistory()
 
     return this
   }
@@ -337,6 +342,17 @@ export default class Elements extends Tool {
     this._lastHtml = html
     this._$showArea.html(html)
   }
+  _updateHistory() {
+    const console = this._container.get('console')
+    if (!console) return
+
+    const history = this._history
+    history.unshift(this._curEl)
+    if (history.length > 5) history.pop()
+    for (let i = 0; i < 5; i++) {
+      console.setGlobal(`$${i}`, history[i])
+    }
+  }
   _initObserver() {
     this._observer = new MutationObserver(mutations => {
       each(mutations, mutation => this._handleMutation(mutation))
@@ -400,6 +416,8 @@ export default class Elements extends Tool {
     })
 
     const settings = this._container.get('settings')
+    if (!settings) return
+
     settings
       .text('Elements')
       .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
