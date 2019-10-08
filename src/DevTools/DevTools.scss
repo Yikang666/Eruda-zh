@@ -11,7 +11,7 @@
   z-index: 500;
   display: none;
   opacity: 0;
-  transition: opacity $anim-duration;
+  transition: opacity $anim-duration, height $anim-duration;
   .tools {
     @include overflow-auto();
     height: 100%;

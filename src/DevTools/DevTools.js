@@ -13,7 +13,8 @@ import {
   each,
   isNum,
   safeStorage,
-  $
+  $,
+  throttle
 } from '../lib/util'
 
 export default class DevTools extends Emitter {
@@ -243,6 +244,10 @@ export default class DevTools extends Emitter {
         $navBar.css('filter', 'brightness(1.2)')
       }, 1000)
     }
+    const setDisplaySize = throttle(
+      size => this.config.set('displaySize', size),
+      50
+    )
     const moveListener = e => {
       if (!this._isResizing) {
         return clearTimeout(this._resizeTimer)
@@ -260,7 +265,7 @@ export default class DevTools extends Emitter {
       } else if (displaySize > 100) {
         displaySize = 100
       }
-      this.config.set('displaySize', displaySize)
+      setDisplaySize(displaySize)
     }
     const endListener = () => {
       clearTimeout(this._resizeTimer)

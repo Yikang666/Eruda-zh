@@ -531,6 +531,45 @@ export var toStr = _.toStr = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ debounce ------------------------------ */
+
+export var debounce = _.debounce = (function (exports) {
+    /* Return a new debounced version of the passed function.
+     *
+     * |Name  |Type    |Desc                           |
+     * |------|--------|-------------------------------|
+     * |fn    |function|Function to debounce           |
+     * |wait  |number  |Number of milliseconds to delay|
+     * |return|function|New debounced function         |
+     */
+
+    /* example
+     * const calLayout = debounce(function () {}, 300);
+     * // $(window).resize(calLayout);
+     */
+
+    /* typescript
+     * export declare function debounce(fn: Function, wait: number): Function;
+     */
+    exports = function(fn, wait, immediate) {
+        var timeout;
+        return function() {
+            var ctx = this;
+            var args = arguments;
+
+            var throttler = function() {
+                timeout = null;
+                fn.apply(ctx, args);
+            };
+
+            if (!immediate) clearTimeout(timeout);
+            if (!immediate || !timeout) timeout = setTimeout(throttler, wait);
+        };
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ ucs2 ------------------------------ */
 
 export var ucs2 = _.ucs2 = (function (exports) {
@@ -8161,6 +8200,38 @@ export var stripHtmlTag = _.stripHtmlTag = (function (exports) {
 
     exports = function(str) {
         return str.replace(regHtmlTag, '');
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ throttle ------------------------------ */
+
+export var throttle = _.throttle = (function (exports) {
+    /* Return a new throttled version of the passed function.
+     *
+     * |Name  |Type    |Desc                           |
+     * |------|--------|-------------------------------|
+     * |fn    |function|Function to throttle           |
+     * |wait  |number  |Number of milliseconds to delay|
+     * |return|function|New throttled function         |
+     */
+
+    /* example
+     * const updatePos = throttle(function () {}, 100);
+     * // $(window).scroll(updatePos);
+     */
+
+    /* typescript
+     * export declare function throttle(fn: Function, wait: number): Function;
+     */
+
+    /* dependencies
+     * debounce 
+     */
+
+    exports = function(fn, wait) {
+        return debounce(fn, wait, true);
     };
 
     return exports;

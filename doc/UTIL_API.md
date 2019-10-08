@@ -1038,6 +1038,21 @@ dateFormat('yyyy-mm-dd HH:MM:ss'); // -> 2016-11-19 19:00:04
 dateFormat(new Date(), 'yyyy-mm-dd'); // -> 2016-11-19
 ```
 
+## debounce 
+
+Return a new debounced version of the passed function.
+
+|Name  |Type    |Desc                           |
+|------|--------|-------------------------------|
+|fn    |function|Function to debounce           |
+|wait  |number  |Number of milliseconds to delay|
+|return|function|New debounced function         |
+
+```javascript
+const calLayout = debounce(function () {}, 300);
+// $(window).resize(calLayout);
+```
+
 ## decodeUriComponent 
 
 Better decodeURIComponent that does not throw if input is invalid.
@@ -2410,6 +2425,21 @@ Strip html tags from a string.
 
 ```javascript
 stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
+```
+
+## throttle 
+
+Return a new throttled version of the passed function.
+
+|Name  |Type    |Desc                           |
+|------|--------|-------------------------------|
+|fn    |function|Function to throttle           |
+|wait  |number  |Number of milliseconds to delay|
+|return|function|New throttled function         |
+
+```javascript
+const updatePos = throttle(function () {}, 100);
+// $(window).scroll(updatePos);
 ```
 
 ## toArr 
