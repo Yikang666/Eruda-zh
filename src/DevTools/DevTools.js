@@ -12,7 +12,8 @@ import {
   last,
   each,
   isNum,
-  safeStorage
+  safeStorage,
+  $
 } from '../lib/util'
 
 export default class DevTools extends Emitter {
@@ -26,10 +27,15 @@ export default class DevTools extends Emitter {
     this._opacity = 1
     this._scale = 1
     this._tools = {}
+    this._isResizing = false
+    this._resizeTimer = null
+    this._resizeStartY = 0
+    this._resizeStartSize = 0
 
     this._appendTpl()
     this._initNavBar()
     this._registerListener()
+    this._bindEvent()
   }
   show() {
     this._isShow = true
@@ -223,6 +229,61 @@ export default class DevTools extends Emitter {
   _initNavBar() {
     this._navBar = new NavBar(this._$el.find('.eruda-nav-bar'))
     this._navBar.on('showTool', name => this.showTool(name))
+  }
+  _bindEvent() {
+    const $navBar = this._$el.find('.eruda-nav-bar')
+    const startListener = e => {
+      e = e.origEvent
+      this._resizeTimer = setTimeout(() => {
+        e.preventDefault()
+        e.stopPropagation()
+        this._isResizing = true
+        this._resizeStartSize = this.config.get('displaySize')
+        this._resizeStartY = getClientY(e)
+        $navBar.css('filter', 'brightness(1.2)')
+      }, 1000)
+    }
+    const moveListener = e => {
+      if (!this._isResizing) {
+        return clearTimeout(this._resizeTimer)
+      }
+      e.preventDefault()
+      e.stopPropagation()
+
+      e = e.origEvent
+      const deltaY = Math.round(
+        ((this._resizeStartY - getClientY(e)) / window.innerHeight) * 100
+      )
+      let displaySize = this._resizeStartSize + deltaY
+      if (displaySize < 40) {
+        displaySize = 40
+      } else if (displaySize > 100) {
+        displaySize = 100
+      }
+      this.config.set('displaySize', displaySize)
+    }
+    const endListener = () => {
+      clearTimeout(this._resizeTimer)
+      this._isResizing = false
+      $navBar.css('filter', 'brightness(1)')
+    }
+    const getClientY = e => {
+      if (e.clientY) return e.clientY
+
+      if (e.touches) return e.touches[0].clientY
+
+      return 0
+    }
+    $navBar.on('contextmenu', e => e.preventDefault())
+    const $body = $(document.body)
+    if (isMobile()) {
+      $navBar.on('touchstart', startListener).on('touchmove', moveListener)
+      $body.on('touchend', endListener)
+    } else {
+      $navBar.on('mousedown', startListener)
+      $body.on('mousemove', moveListener)
+      $body.on('mouseup', endListener)
+    }
   }
 }
 
