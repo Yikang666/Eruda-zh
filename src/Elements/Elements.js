@@ -23,7 +23,8 @@ import {
   isNaN,
   isNum,
   stringifyAll,
-  nextTick
+  nextTick,
+  Emitter
 } from '../lib/util'
 
 export default class Elements extends Tool {
@@ -39,6 +40,8 @@ export default class Elements extends Tool {
     this._selectElement = false
     this._observeElement = true
     this._history = []
+
+    Emitter.mixin(this)
   }
   init($el, container) {
     super.init($el)
@@ -71,10 +74,14 @@ export default class Elements extends Tool {
     return super.hide()
   }
   set(e) {
+    if (e === this._curEl) return
+
     this._setEl(e)
     this.scrollToTop()
     this._render()
     this._updateHistory()
+
+    this.emit('change', e)
 
     return this
   }

@@ -1,3 +1,12 @@
+## v1.7.0 (8 Oct 2019)
+
+* feat: resize [#89](https://github.com/liriliri/eruda/issues/89)
+* feat(console): replace help button with filter
+* feat(console): disable js execution
+* feat(console): [utilities api](https://developers.google.cn/web/tools/chrome-devtools/console/utilities)
+* fix(console): disable log collapsing for group
+* fix(elements): select not working for desktop
+
 ## v1.6.3 (1 Oct 2019)
 
 * fix(console): log border style
