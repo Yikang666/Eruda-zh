@@ -87,6 +87,11 @@ export default class Console extends Tool {
     this._unregisterListener()
     this._rmCfg()
   }
+  _enableJsExecution(enabled) {
+    const $el = this._$el.find('.eruda-js-input')
+
+    enabled ? $el.show() : $el.hide()
+  }
   _registerListener() {
     this._scaleListener = scale => (this._scale = scale)
 
@@ -212,6 +217,7 @@ export default class Console extends Tool {
     if (!settings) return
 
     settings
+      .remove(cfg, 'jsExecution')
       .remove(cfg, 'catchGlobalErr')
       .remove(cfg, 'overrideConsole')
       .remove(cfg, 'displayExtraInfo')
@@ -231,6 +237,7 @@ export default class Console extends Tool {
 
     const cfg = (this.config = Settings.createCfg('console', {
       catchGlobalErr: true,
+      jsExecution: true,
       overrideConsole: true,
       displayExtraInfo: false,
       displayUnenumerable: true,
@@ -247,6 +254,7 @@ export default class Console extends Tool {
     let maxLogNum = cfg.get('maxLogNum')
     maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
 
+    this._enableJsExecution(cfg.get('jsExecution'))
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
     if (cfg.get('overrideConsole')) this.overrideConsole()
     if (cfg.get('useWorker') && isWorkerSupported) stringify.useWorker = true
@@ -259,6 +267,8 @@ export default class Console extends Tool {
 
     cfg.on('change', (key, val) => {
       switch (key) {
+        case 'jsExecution':
+          return this._enableJsExecution(val)
         case 'catchGlobalErr':
           return val ? this.catchGlobalErr() : this.ignoreGlobalErr()
         case 'overrideConsole':
@@ -282,9 +292,11 @@ export default class Console extends Tool {
     })
 
     const settings = container.get('settings')
+    if (!settings) return
 
     settings
       .text('Console')
+      .switch(cfg, 'jsExecution', 'Enable JavaScript execution')
       .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
       .switch(cfg, 'overrideConsole', 'Override Console')
       .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')

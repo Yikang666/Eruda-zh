@@ -10,6 +10,7 @@ Display console logs. Implementation detail follows the [console api spec](https
 
 |Name               |Type   |Desc                           |
 |-------------------|-------|-------------------------------|
+|jsExecution        |boolean|Enable JavaScript execution    |
 |catchGlobalErr     |boolean|Catch global errors            |
 |overrideConsole    |boolean|Override console               |
 |displayExtraInfo   |boolean|Display extra information      |
