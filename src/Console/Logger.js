@@ -14,7 +14,11 @@ import {
   $,
   Stack,
   isEmpty,
-  contain
+  contain,
+  copy,
+  each,
+  toArr,
+  keys
 } from '../lib/util'
 
 export default class Logger extends Emitter {
@@ -32,7 +36,34 @@ export default class Logger extends Emitter {
     this._displayHeader = false
     this._groupStack = new Stack()
 
+    // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
+    this._global = {
+      copy(value) {
+        if (!isStr(value)) value = JSON.stringify(value, null, 2)
+        copy(value)
+      },
+      $() {
+        return document.querySelector.apply(document, arguments)
+      },
+      $$() {
+        return toArr(document.querySelectorAll.apply(document, arguments))
+      },
+      clear: () => {
+        this.clear()
+      },
+      dir: value => {
+        this.dir(value)
+      },
+      table: (data, columns) => {
+        this.table(data, columns)
+      },
+      keys
+    }
+
     this._bindEvent()
+  }
+  setGlobal(name, val) {
+    this._global[name] = val
   }
   displayHeader(flag) {
     this._displayHeader = flag
@@ -186,7 +217,7 @@ export default class Logger extends Emitter {
     })
 
     try {
-      this.output(evalJs(jsCode))
+      this.output(this._evalJs(jsCode))
     } catch (e) {
       this.insert({
         type: 'error',
@@ -290,6 +321,34 @@ export default class Logger extends Emitter {
     const el = this._$el.get(0)
 
     el.scrollTop = el.scrollHeight - el.offsetHeight
+  }
+  _injectGlobal() {
+    each(this._global, (val, name) => {
+      if (window[name]) return
+
+      window[name] = val
+    })
+  }
+  _clearGlobal() {
+    each(this._global, (val, name) => {
+      if (window[name] && window[name] === val) {
+        delete window[name]
+      }
+    })
+  }
+  _evalJs(jsInput) {
+    let ret
+
+    this._injectGlobal()
+    try {
+      ret = eval.call(window, `(${jsInput})`)
+    } catch (e) {
+      ret = eval.call(window, jsInput)
+    }
+    this.setGlobal('$_', ret)
+    this._clearGlobal()
+
+    return ret
   }
   _rmLogUi(log) {
     const $container = this._$el.find(`li[data-id="${log.id}"]`)
@@ -412,16 +471,4 @@ export default class Logger extends Emitter {
         self._openGroup(log)
       })
   }
-}
-
-const evalJs = jsInput => {
-  let ret
-
-  try {
-    ret = eval.call(window, `(${jsInput})`)
-  } catch (e) {
-    ret = eval.call(window, jsInput)
-  }
-
-  return ret
 }

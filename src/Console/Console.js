@@ -57,6 +57,9 @@ export default class Console extends Tool {
 
     return this
   }
+  setGlobal(name, val) {
+    this._logger.setGlobal(name, val)
+  }
   restoreConsole() {
     if (!this._origConsole) return this
 
