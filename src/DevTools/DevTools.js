@@ -280,14 +280,14 @@ export default class DevTools extends Emitter {
       return 0
     }
     $navBar.on('contextmenu', e => e.preventDefault())
-    const $body = $(document.body)
+    const $root = $(document.documentElement)
     if (isMobile()) {
       $navBar.on('touchstart', startListener).on('touchmove', moveListener)
-      $body.on('touchend', endListener)
+      $root.on('touchend', endListener)
     } else {
       $navBar.on('mousedown', startListener)
-      $body.on('mousemove', moveListener)
-      $body.on('mouseup', endListener)
+      $root.on('mousemove', moveListener)
+      $root.on('mouseup', endListener)
     }
   }
 }
