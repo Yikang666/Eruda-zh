@@ -1,3 +1,7 @@
+## v1.7.1 (10 Oct 2019)
+
+* fix: resize
+
 ## v1.7.0 (8 Oct 2019)
 
 * feat: resize [#89](https://github.com/liriliri/eruda/issues/89)

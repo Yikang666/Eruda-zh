@@ -11,6 +11,7 @@ doc/
 .eslintignore
 .eslintrc.js
 .gitignore
+.gitattributes
 .npmignore
 .prettierignore
 .eustia.js
