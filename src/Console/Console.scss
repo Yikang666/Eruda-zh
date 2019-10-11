@@ -4,6 +4,9 @@
 .dev-tools {
   .tools {
     .console {
+      &.js-input-hidden {
+        padding-bottom: 0;
+      }
       .control {
         @include absolute(100%, 40px);
         cursor: default;

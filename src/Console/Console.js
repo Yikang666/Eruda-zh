@@ -91,9 +91,16 @@ export default class Console extends Tool {
     this._rmCfg()
   }
   _enableJsExecution(enabled) {
-    const $el = this._$el.find('.eruda-js-input')
+    const $el = this._$el
+    const $jsInput = $el.find('.eruda-js-input')
 
-    enabled ? $el.show() : $el.hide()
+    if (enabled) {
+      $jsInput.show()
+      $el.rmClass('eruda-js-input-hidden')
+    } else {
+      $jsInput.hide()
+      $el.addClass('eruda-js-input-hidden')
+    }
   }
   _registerListener() {
     this._scaleListener = scale => (this._scale = scale)
