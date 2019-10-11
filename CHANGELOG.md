@@ -1,3 +1,8 @@
+## v1.7.2 (11 Oct 2019)
+
+* fix(console): blank bottom if js input is disabled
+* chore: update eruda-dom version
+
 ## v1.7.1 (10 Oct 2019)
 
 * fix: resize
