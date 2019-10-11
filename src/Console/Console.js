@@ -299,7 +299,7 @@ export default class Console extends Tool {
 
     settings
       .text('Console')
-      .switch(cfg, 'jsExecution', 'Enable JavaScript execution')
+      .switch(cfg, 'jsExecution', 'Enable JavaScript Execution')
       .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
       .switch(cfg, 'overrideConsole', 'Override Console')
       .switch(cfg, 'displayIfErr', 'Auto Display If Error Occurs')
