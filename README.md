@@ -26,10 +26,6 @@ Console for Mobile Browsers.
 
 ![Eruda](./doc/screenshot.jpg)
 
-## Why
-
-Logging things out on mobile browser is never an easy stuff. I used to include `window onerror alert` script inside pages to find out JavaScript errors, kind of stupid and inefficient. Desktop browser DevTools is great, and I wish there is a similar one on mobile side, which leads to the creation of Eruda.
-
 ## Demo
 
 ![Demo](./doc/qrcode.png)
@@ -107,8 +103,6 @@ eruda.init({
 
 ## Plugins
 
-It is possible to enhance Eruda with more features by writing plugins. Check source code of plugins below to learn how to write your own custom tool panels. Besides, [eruda-plugin](https://github.com/liriliri/eruda-plugin) is available for plugin initialization.
-
 * [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
 * [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
 * [eruda-timing](https://github.com/liriliri/eruda-timing): Show performance and resource timing.
@@ -119,7 +113,7 @@ It is possible to enhance Eruda with more features by writing plugins. Check sou
 * [eruda-dom](https://github.com/liriliri/eruda-dom): Navigate dom tree.
 * [eruda-orientation](https://github.com/liriliri/eruda-orientation): Test orientation api.
 
-When writing plugins, you can use utilities exposed by Eruda, see [docs](doc/UTIL_API.md) here.
+If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.md).
 
 ## Related Projects
 

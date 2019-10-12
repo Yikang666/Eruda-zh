@@ -104,8 +104,6 @@ eruda.init({
 
 ## 插件
 
-你可以为 Eruda 编写插件来增强功能。关于怎么编写插件，请查看下边官方插件的源码。另外 [eruda-plugin](https://github.com/liriliri/eruda-plugin) 可以用来初始化一个新插件。
-
 * [eruda-fps](https://github.com/liriliri/eruda-fps)：展示页面的 fps 信息。
 * [eruda-features](https://github.com/liriliri/eruda-features)：浏览器特性检测。
 * [eruda-timing](https://github.com/liriliri/eruda-timing)：展示性能资源数据。
@@ -116,7 +114,7 @@ eruda.init({
 * [eruda-dom](https://github.com/liriliri/eruda-dom)：浏览 dom 树。
 * [eruda-orientation](https://github.com/liriliri/eruda-orientation)：测试重力感应接口。
 
-编写插件的时候，你可以使用 Eruda 提供的工具函数，相关文档请点击[这里](doc/UTIL_API.md)查看。
+如果你想要自己编写插件，可以查看这里的[教程](./PLUGIN.md)。
 
 ## 相关项目
 
