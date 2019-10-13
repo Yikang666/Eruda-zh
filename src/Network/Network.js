@@ -10,7 +10,8 @@ import {
   extend,
   isEmpty,
   $,
-  ms
+  ms,
+  trim
 } from '../lib/util'
 
 export default class Network extends Tool {
@@ -22,6 +23,9 @@ export default class Network extends Tool {
     this.name = 'network'
     this._requests = {}
     this._tpl = require('./Network.hbs')
+    this._detailTpl = require('./detail.hbs')
+    this._requestsTpl = require('./requests.hbs')
+    this._datailData = {}
     this._isFetchSupported = false
     if (window.fetch) this._isFetchSupported = isNative(window.fetch)
   }
@@ -32,6 +36,7 @@ export default class Network extends Tool {
     this._bindEvent()
     this._initCfg()
     this.overrideXhr()
+    this._appendTpl()
   }
   show() {
     super.show()
@@ -166,9 +171,29 @@ export default class Network extends Tool {
 
         if (!data.done) return
 
-        showSources('http', data)
+        self._showDetail(data)
       })
       .on('click', '.eruda-clear-request', () => this.clear())
+      .on('click', '.eruda-back', () => this._hideDetail())
+      .on('click', '.eruda-http .eruda-response', () => {
+        const data = this._detailData
+        const resTxt = data.resTxt
+
+        switch (data.subType) {
+          case 'css':
+            return showSources('css', resTxt)
+          case 'html':
+            return showSources('html', resTxt)
+          case 'javascript':
+            return showSources('js', resTxt)
+          case 'json':
+            return showSources('json', resTxt)
+        }
+        switch (data.type) {
+          case 'image':
+            return showSources('img', data.url)
+        }
+      })
 
     function showSources(type, data) {
       const sources = container.get('sources')
@@ -187,6 +212,15 @@ export default class Network extends Tool {
     this.restoreFetch()
     this._rmCfg()
   }
+  _showDetail(data) {
+    if (data.resTxt && trim(data.resTxt) === '') delete data.resTxt
+    if (isEmpty(data.resHeaders)) delete data.resHeaders
+    this._$detail.html(this._detailTpl(data)).show()
+    this._detailData = data
+  }
+  _hideDetail() {
+    this._$detail.hide()
+  }
   _rmCfg() {
     const cfg = this.config
 
@@ -195,6 +229,12 @@ export default class Network extends Tool {
     if (!settings) return
 
     settings.remove(cfg, 'overrideFetch').remove('Network')
+  }
+  _appendTpl() {
+    const $el = this._$el
+    $el.html(this._tpl())
+    this._$detail = $el.find('.eruda-detail')
+    this._$requests = $el.find('.eruda-requests')
   }
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('network', {
@@ -223,11 +263,11 @@ export default class Network extends Tool {
 
     if (!isEmpty(this._requests)) renderData.requests = this._requests
 
-    this._renderHtml(this._tpl(renderData))
+    this._renderHtml(this._requestsTpl(renderData))
   }
   _renderHtml(html) {
     if (html === this._lastHtml) return
     this._lastHtml = html
-    this._$el.html(html)
+    this._$requests.html(html)
   }
 }

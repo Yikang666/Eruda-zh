@@ -66,44 +66,6 @@
           user-select: text;
         }
       }
-      .http {
-        .breadcrumb {
-          @include breadcrumb();
-        }
-        .section {
-          background: #fff;
-          h2 {
-            background: $blue;
-            padding: $padding;
-            color: #fff;
-            font-size: $font-size;
-          }
-          margin-bottom: 10px;
-          table {
-            * {
-              user-select: text;
-            }
-            td {
-              font-size: $font-size-s;
-              padding: 5px 10px;
-              word-break: break-all;
-            }
-            .key {
-              white-space: nowrap;
-            }
-          }
-        }
-        .response,
-        .data {
-          user-select: text;
-          @include overflow-auto(x);
-          background: #fff;
-          padding: $padding;
-          font-size: $font-size-s;
-          margin-bottom: 10px;
-          white-space: pre-wrap;
-        }
-      }
       iframe {
         width: 100%;
         height: 100%;

@@ -1,0 +1,15 @@
+{{#if requests}}
+    {{#each requests}}
+        <li class="eruda-request {{#if hasErr}}eruda-error{{/if}}" data-id="{{@key}}">
+            <span>{{name}}</span>
+            <span>{{status}}</span>
+            <span>{{method}}</span>
+            <span>{{subType}}</span>
+            <span>{{size}}</span>
+            <span>{{displayTime}}</span>
+            <span {{{class 'blue'}}}>{{url}}</span>
+        </li>
+    {{/each}}
+{{else}}
+    <li><span>Empty</span></li>
+{{/if}}

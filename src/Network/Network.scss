@@ -39,6 +39,71 @@
           }
         }
       }
+      .detail {
+        @include absolute();
+        z-index: 10;
+        display: none;
+        padding-bottom: 40px;
+        background: #fff;
+        .http {
+          @include overflow-auto(y);
+          height: 100%;
+          .breadcrumb {
+            @include breadcrumb();
+          }
+          .section {
+            background: #fff;
+            h2 {
+              background: $blue;
+              padding: $padding;
+              color: #fff;
+              font-size: $font-size;
+            }
+            margin-bottom: 10px;
+            table {
+              * {
+                user-select: text;
+              }
+              td {
+                font-size: $font-size-s;
+                padding: 5px 10px;
+                word-break: break-all;
+              }
+              .key {
+                white-space: nowrap;
+              }
+            }
+          }
+          .response,
+          .data {
+            user-select: text;
+            @include overflow-auto(x);
+            background: #fff;
+            padding: $padding;
+            font-size: $font-size-s;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+          }
+        }
+        .back {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          color: #fff;
+          width: 100%;
+          background: $blue;
+          display: block;
+          height: 40px;
+          line-height: 40px;
+          text-decoration: none;
+          text-align: center;
+          margin-top: 10px;
+          transition: background 0.3s;
+          &:active {
+            background: $blue-dark;
+          }
+        }
+      }
     }
   }
 }

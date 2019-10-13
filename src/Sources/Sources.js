@@ -2,15 +2,7 @@ import Tool from '../DevTools/Tool'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer'
 import Settings from '../Settings/Settings'
-import {
-  evalCss,
-  ajax,
-  isEmpty,
-  escape,
-  trim,
-  isStr,
-  highlight
-} from '../lib/util'
+import { evalCss, ajax, escape, trim, isStr, highlight } from '../lib/util'
 
 export default class Sources extends Tool {
   constructor() {
@@ -112,31 +104,10 @@ export default class Sources extends Tool {
         delete this._data
       }
     })
-
-    this._$el.on('click', '.eruda-http .eruda-response', () => {
-      const data = this._data.val
-      const resTxt = data.resTxt
-
-      switch (data.subType) {
-        case 'css':
-          return this.set('css', resTxt)
-        case 'html':
-          return this.set('html', resTxt)
-        case 'javascript':
-          return this.set('js', resTxt)
-        case 'json':
-          return this.set('json', resTxt)
-      }
-      switch (data.type) {
-        case 'image':
-          return this.set('img', data.url)
-      }
-    })
   }
   _loadTpl() {
     this._codeTpl = require('./code.hbs')
     this._imgTpl = require('./image.hbs')
-    this._httpTpl = require('./http.hbs')
     this._jsonTpl = require('./json.hbs')
     this._rawTpl = require('./raw.hbs')
     this._iframeTpl = require('./iframe.hbs')
@@ -192,8 +163,6 @@ export default class Sources extends Tool {
         return this._renderCode()
       case 'img':
         return this._renderImg()
-      case 'http':
-        return this._renderHttp()
       case 'json':
         return this._renderJson()
       case 'raw':
@@ -204,14 +173,6 @@ export default class Sources extends Tool {
   }
   _renderImg() {
     this._renderHtml(this._imgTpl(this._data.val))
-  }
-  _renderHttp() {
-    const val = this._data.val
-
-    if (val.resTxt.trim() === '') delete val.resTxt
-    if (isEmpty(val.resHeaders)) delete val.resHeaders
-
-    this._renderHtml(this._httpTpl(this._data.val))
   }
   _renderCode() {
     const data = this._data
