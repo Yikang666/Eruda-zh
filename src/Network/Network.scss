@@ -120,6 +120,7 @@
           text-align: center;
           margin-top: 10px;
           transition: background 0.3s;
+          cursor: pointer;
           &:active {
             background: $blue-dark;
           }
