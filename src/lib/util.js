@@ -7159,27 +7159,6 @@ export var trim = _.trim = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ getFileName ------------------------------ */
-
-export var getFileName = _.getFileName = (function (exports) {
-    /* Extract file name from url.
-     */
-
-    /* dependencies
-     * last trim 
-     */
-
-    exports = function (url) {
-      let ret = last(url.split('/'))
-
-      if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
-
-      return ret === '' ? 'unknown' : ret
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ query ------------------------------ */
 
 export var query = _.query = (function (exports) {
@@ -7506,6 +7485,32 @@ export var Url = _.Url = (function (exports) {
     var regProto = /^([a-z0-9.+-]+:)/i;
     var regPort = /:[0-9]*$/;
     var hostEndingChars = ['/', '?', '#'];
+
+    return exports;
+})({});
+
+/* ------------------------------ getFileName ------------------------------ */
+
+export var getFileName = _.getFileName = (function (exports) {
+    /* Extract file name from url.
+     */
+
+    /* dependencies
+     * last trim Url 
+     */
+
+    exports = function (url) {
+      let ret = last(url.split('/'))
+
+      if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
+
+      if (ret === '') {
+        url = new Url(url)
+        ret = url.hostname
+      }
+
+      return ret
+    }
 
     return exports;
 })({});

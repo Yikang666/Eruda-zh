@@ -16,7 +16,8 @@
         border-bottom: 1px solid $gray-light;
         margin-bottom: 10px;
         li {
-          @include overflow-auto(x);
+          display: flex;
+          width: 100%;
           cursor: pointer;
           border-top: 1px solid $gray-light;
           height: 41px;
@@ -27,12 +28,32 @@
             }
           }
           span {
-            display: inline-block;
+            display: block;
             line-height: 40px;
             height: 40px;
-            padding: 0 10px;
+            padding: 0 5px;
             font-size: $font-size-s;
             vertical-align: top;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+          .name {
+            flex: 1;
+            padding-left: $padding;
+          }
+          .status {
+            width: 40px;
+          }
+          .method {
+            width: 50px;
+          }
+          .size {
+            width: 70px;
+          }
+          .type,
+          .time {
+            width: 60px;
+            padding-right: $padding;
           }
           &:nth-child(even) {
             background: $gray-light;
