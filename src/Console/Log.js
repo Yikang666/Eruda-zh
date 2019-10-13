@@ -281,6 +281,8 @@ export default class Log {
       case 'output':
       case 'table':
       case 'dir':
+      case 'group':
+      case 'groupCollapsed':
         if (log.src) {
           if (Log.showSrcInSources) {
             return logger.emit('viewJson', log.src)
@@ -300,6 +302,8 @@ export default class Log {
             Log.click(type, log, $el, logger)
             delete log.args
           })
+        } else if (log.type === 'group' || log.type === 'groupCollapsed') {
+          logger.toggleGroup(log)
         }
         break
       case 'error':

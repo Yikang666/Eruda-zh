@@ -322,6 +322,10 @@ export default class Logger extends Emitter {
 
     el.scrollTop = el.scrollHeight - el.offsetHeight
   }
+  toggleGroup(log) {
+    const { targetGroup } = log
+    targetGroup.collapsed ? this._openGroup(log) : this._collapseGroup(log)
+  }
   _injectGlobal() {
     each(this._global, (val, name) => {
       if (window[name]) return
