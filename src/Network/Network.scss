@@ -44,13 +44,13 @@
           .status {
             width: 40px;
           }
-          .method {
+          .method,
+          .type {
             width: 50px;
           }
           .size {
             width: 70px;
           }
-          .type,
           .time {
             width: 60px;
             padding-right: $padding;
