@@ -1,3 +1,9 @@
+## v1.8.0 (13 Oct 2019)
+
+* feat(network): display optimization
+* feat: move http view from sources to network
+* fix(console): group object expansion
+
 ## v1.7.2 (11 Oct 2019)
 
 * fix(console): blank bottom if js input is disabled

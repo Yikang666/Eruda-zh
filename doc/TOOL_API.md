@@ -127,7 +127,7 @@ LocalStorage, sessionStorage, cookies, scripts, styleSheets and images.
 
 ## Sources
 
-View json, html, js, css and http request detail.
+View json, html, js, and css.
 
 ### Config
 
