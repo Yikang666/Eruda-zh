@@ -4,14 +4,18 @@
 .dev-tools {
   .tools {
     .network {
-      @include overflow-auto(y);
+      padding-top: 36px;
       .title {
+        @include absolute(100%, 36px);
         @include right-circle-btn();
         background: $gray;
         padding: $padding;
         color: #fff;
+        height: 36px;
       }
       .requests {
+        @include overflow-auto(y);
+        height: 100%;
         background: #fff;
         border-bottom: 1px solid $gray-light;
         margin-bottom: 10px;
