@@ -1,3 +1,7 @@
+## v1.8.1 (14 Oct 2019)
+
+* fix(network): style [#121](https://github.com/liriliri/eruda/issues/121)
+
 ## v1.8.0 (13 Oct 2019)
 
 * feat(network): display optimization
