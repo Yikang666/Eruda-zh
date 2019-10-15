@@ -113,6 +113,7 @@ eruda.init({
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation)：测试地理位置接口。
 * [eruda-dom](https://github.com/liriliri/eruda-dom)：浏览 dom 树。
 * [eruda-orientation](https://github.com/liriliri/eruda-orientation)：测试重力感应接口。
+* [eruda-touches](https://github.com/liriliri/eruda-orientation)：可视化屏幕 Touch 事件触发。
 
 如果你想要自己编写插件，可以查看这里的[教程](./PLUGIN.md)。
 

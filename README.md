@@ -112,6 +112,7 @@ eruda.init({
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation): Test geolocation.
 * [eruda-dom](https://github.com/liriliri/eruda-dom): Navigate dom tree.
 * [eruda-orientation](https://github.com/liriliri/eruda-orientation): Test orientation api.
+* [eruda-touches](https://github.com/liriliri/eruda-touches): Visualize screen touches.
 
 If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.md).
 

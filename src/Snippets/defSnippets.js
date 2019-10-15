@@ -128,6 +128,13 @@ export default [
     desc: 'Test orientation api'
   },
   {
+    name: 'Load Touches Plugin',
+    fn() {
+      loadPlugin('touches')
+    },
+    desc: 'Visualize screen touches'
+  },
+  {
     name: 'Restore Settings',
     fn() {
       const store = safeStorage('local')
@@ -217,5 +224,6 @@ const pluginVersion = {
   benchmark: '1.0.0',
   geolocation: '1.1.0',
   dom: '1.1.0',
-  orientation: '1.0.0'
+  orientation: '1.0.0',
+  touches: '1.0.0'
 }
