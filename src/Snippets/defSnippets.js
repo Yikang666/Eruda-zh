@@ -225,5 +225,5 @@ const pluginVersion = {
   geolocation: '1.1.0',
   dom: '1.1.0',
   orientation: '1.0.0',
-  touches: '1.0.0'
+  touches: '1.0.1'
 }
