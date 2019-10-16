@@ -65,6 +65,37 @@ export default [
     desc: 'Toggle body contentEditable'
   },
   {
+    name: 'Fit Screen',
+    // https://achrafkassioui.com/birdview/
+    fn() {
+      const body = document.body
+      const html = document.documentElement
+      const $body = $(body)
+      if ($body.data('scaled')) {
+        window.scrollTo(0, +$body.data('scaled'))
+        $body.rmAttr('data-scaled')
+        $body.css('transform', 'none')
+      } else {
+        const documentHeight = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight
+        )
+        const viewportHeight = Math.max(
+          document.documentElement.clientHeight,
+          window.innerHeight || 0
+        )
+        const scaleVal = viewportHeight / documentHeight
+        $body.css('transform', `scale(${scaleVal})`)
+        $body.data('scaled', window.scrollY)
+        window.scrollTo(0, documentHeight / 2 - viewportHeight / 2)
+      }
+    },
+    desc: 'Scale down the whole page to fit screen'
+  },
+  {
     name: 'Load Fps Plugin',
     fn() {
       loadPlugin('fps')
