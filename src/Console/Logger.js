@@ -198,10 +198,18 @@ export default class Logger extends Emitter {
     return this.insert('warn', args)
   }
   group(...args) {
-    return this.insert('group', args)
+    return this.insert({
+      type: 'group',
+      args,
+      ignoreFilter: true
+    })
   }
   groupCollapsed(...args) {
-    return this.insert('groupCollapsed', args)
+    return this.insert({
+      type: 'groupCollapsed',
+      args,
+      ignoreFilter: true
+    })
   }
   groupEnd() {
     const lastLog = this._lastLog
@@ -270,14 +278,14 @@ export default class Logger extends Emitter {
       displayHeader: this._displayHeader
     })
 
-    if (type === 'group' || type === 'groupCollapsed') {
+    if (options.type === 'group' || options.type === 'groupCollapsed') {
       const group = {
         id: uniqId('group'),
         collapsed: false,
         parent: groupStack.peek(),
         indentLevel: groupStack.size + 1
       }
-      if (type === 'groupCollapsed') group.collapsed = true
+      if (options.type === 'groupCollapsed') group.collapsed = true
       options.targetGroup = group
       groupStack.push(group)
     }
