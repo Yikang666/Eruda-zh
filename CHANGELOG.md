@@ -1,3 +1,9 @@
+## v1.9.0 (20 Oct 2019)
+
+* feat: add snippet for loading touches plugin
+* feat: add fit screen snippet
+* fix(console): filter shouldn't affect group
+
 ## v1.8.1 (14 Oct 2019)
 
 * fix(network): style [#121](https://github.com/liriliri/eruda/issues/121)
