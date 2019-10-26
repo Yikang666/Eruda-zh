@@ -8183,33 +8183,6 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ stripHtmlTag ------------------------------ */
-
-export var stripHtmlTag = _.stripHtmlTag = (function (exports) {
-    /* Strip html tags from a string.
-     *
-     * |Name  |Type  |Desc           |
-     * |------|------|---------------|
-     * |str   |string|String to strip|
-     * |return|string|Result string  |
-     */
-
-    /* example
-     * stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
-     */
-
-    /* typescript
-     * export declare function stripHtmlTag(str: string): string;
-     */
-    var regHtmlTag = /<[^>]*>/g;
-
-    exports = function(str) {
-        return str.replace(regHtmlTag, '');
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ throttle ------------------------------ */
 
 export var throttle = _.throttle = (function (exports) {

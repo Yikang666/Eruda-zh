@@ -2414,19 +2414,6 @@ When time is out, all remaining values will all be "Timeout".
 stringifyAll(function test() {}); // -> '{"value":"function test() {}","type":"Function",...}'
 ```
 
-## stripHtmlTag 
-
-Strip html tags from a string.
-
-|Name  |Type  |Desc           |
-|------|------|---------------|
-|str   |string|String to strip|
-|return|string|Result string  |
-
-```javascript
-stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
-```
-
 ## throttle 
 
 Return a new throttled version of the passed function.
