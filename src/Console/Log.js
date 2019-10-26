@@ -30,7 +30,8 @@ import {
   each,
   trim,
   lowerCase,
-  keys
+  keys,
+  $
 } from '../lib/util'
 
 export default class Log {
@@ -52,6 +53,8 @@ export default class Log {
     this.displayHeader = displayHeader
     this.ignoreFilter = ignoreFilter
     this.collapsed = false
+    this.el = null
+    this._$el = null
 
     if (displayHeader) {
       this.time = getCurTime()
@@ -83,87 +86,69 @@ export default class Log {
       } else {
         this.show()
       }
-      return true
-    } else {
-      return false
     }
   }
   hide() {
-    let msg = this._formattedMsg
+    this._$el.addClass('eruda-hidden')
 
-    msg = msg.replace(
-      '"eruda-log-container"',
-      '"eruda-log-container eruda-hidden"'
-    )
-
-    this._formattedMsg = msg
+    return this
   }
   show() {
-    let msg = this._formattedMsg
+    this._$el.rmClass('eruda-hidden')
 
-    msg = msg.replace(
-      '"eruda-log-container eruda-hidden"',
-      '"eruda-log-container"'
-    )
-
-    this._formattedMsg = msg
+    return this
   }
   updateIcon(icon) {
-    let msg = this._formattedMsg
+    const $icon = this._$el.find('.eruda-icon')
 
-    msg = msg.replace(
-      /"eruda-icon eruda-icon-[\w-]+"/,
-      `"eruda-icon eruda-icon-${icon}"`
-    )
-
-    this._formattedMsg = msg
+    $icon.rmAttr('class').addClass(['eruda-icon', `eruda-icon-${icon}`])
 
     return this
   }
   addCount() {
     this.count++
     const count = this.count
-    let msg = this._formattedMsg
+    const $el = this._$el
+    const $container = $el.find('.eruda-count-container')
+    const $icon = $el.find('.eruda-icon-container')
+    const $count = $container.find('.eruda-count')
     if (count === 2) {
-      msg = msg.replace(
-        'eruda-count-container eruda-hidden',
-        'eruda-count-container'
-      )
+      $container.rmClass('eruda-hidden')
     }
-    msg = msg.replace(/data-mark="count">\d*/, 'data-mark="count">' + count)
-    msg = msg.replace(
-      'class="eruda-icon-container"',
-      'class="eruda-icon-container eruda-hidden"'
-    )
-
-    this._formattedMsg = msg
+    $count.text(count)
+    $icon.addClass('.eruda-hidden')
 
     return this
   }
   groupEnd() {
-    let msg = this._formattedMsg
+    const $el = this._$el
+    const $lastNesting = $el
+      .find('.eruda-nesting-level:not(.eruda-group-closed)')
+      .last()
 
-    const mark = '"eruda-nesting-level"'
-    const lastIdx = msg.lastIndexOf(mark)
-    const len = lastIdx + mark.length - 1
-    msg = msg.slice(0, len) + ' eruda-group-closed"' + msg.slice(len)
-    this._formattedMsg = msg
+    $lastNesting.addClass('eruda-group-closed')
 
     return this
   }
   updateTime(time) {
-    let msg = this._formattedMsg
+    const $el = this._$el
+    const $container = $el.find('.eruda-time-container')
 
     if (this.time) {
-      msg = msg.replace(/data-mark="time">(.*?)</, `data-mark="time">${time}<`)
+      $container
+        .find('span')
+        .eq(0)
+        .text(time)
       this.time = time
-      this._formattedMsg = msg
     }
 
     return this
   }
-  content() {
-    return this._formattedMsg
+  html() {
+    return this.el.outerHTML
+  }
+  text() {
+    return this.el.textContent
   }
   _needSrc() {
     const { type, args } = this
@@ -192,6 +177,12 @@ export default class Log {
         setSrc
       )
     }
+  }
+  destroy() {
+    this.detach()
+  }
+  detach() {
+    this._$el.remove()
   }
   _formatMsg() {
     let { args } = this
@@ -270,7 +261,14 @@ export default class Log {
     if (!this._needSrc() || !Log.lazyEvaluation) {
       delete this.args
     }
-    this._formattedMsg = msg
+
+    const $el = $(document.createElement('li'))
+    $el
+      .addClass('eruda-log-container')
+      .data({ id, type })
+      .html(msg)
+    this._$el = $el
+    this.el = $el.get(0)
   }
   static click(type, log, $el, logger) {
     switch (type) {

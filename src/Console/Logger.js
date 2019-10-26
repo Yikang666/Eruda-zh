@@ -10,7 +10,6 @@ import {
   uniqId,
   isRegExp,
   isFn,
-  stripHtmlTag,
   $,
   Stack,
   isEmpty,
@@ -27,6 +26,7 @@ export default class Logger extends Emitter {
     this._style = evalCss(require('./Logger.scss'))
 
     this._$el = $el
+    this._el = $el.get(0)
     this._logs = []
     this._timer = {}
     this._count = {}
@@ -215,7 +215,6 @@ export default class Logger extends Emitter {
     const lastLog = this._lastLog
     lastLog.groupEnd()
     this._groupStack.pop()
-    this._refreshLogUi(lastLog)
   }
   input(jsCode) {
     this.insert({
@@ -247,25 +246,21 @@ export default class Logger extends Emitter {
     return this.insert('html', args)
   }
   render() {
-    let html = ''
-    let logs = this._logs
+    const logs = this._filterLogs(this._logs)
 
-    logs = this._filterLogs(logs)
-
+    this._$el.html('')
     for (let i = 0, len = logs.length; i < len; i++) {
-      html += logs[i].content()
+      this._el.appendChild(logs[i].el)
     }
 
-    this._$el.html(html)
     this.scrollToBottom()
 
     return this
   }
   insert(type, args) {
     const logs = this._logs
-    const $el = this._$el
     const groupStack = this._groupStack
-    const el = $el.get(0)
+    const el = this._el
 
     const isAtBottom = el.scrollTop === el.scrollHeight - el.offsetHeight
 
@@ -303,7 +298,7 @@ export default class Logger extends Emitter {
       lastLog.addCount()
       if (log.time) lastLog.updateTime(log.time)
       log = lastLog
-      this._rmLogUi(lastLog)
+      lastLog.detach()
     } else {
       logs.push(log)
       this._lastLog = log
@@ -311,12 +306,12 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       const firstLog = logs[0]
-      this._rmLogUi(firstLog)
+      firstLog.destroy()
       logs.shift()
     }
 
     if (this._filterLog(log)) {
-      $el.append(log.content())
+      el.appendChild(log.el)
     }
 
     this.emit('insert', log)
@@ -362,19 +357,6 @@ export default class Logger extends Emitter {
 
     return ret
   }
-  _rmLogUi(log) {
-    const $container = this._$el.find(`li[data-id="${log.id}"]`)
-    if ($container.length > 0) {
-      $container.remove()
-    }
-  }
-  _refreshLogUi(log) {
-    const $container = this._$el.find(`li[data-id="${log.id}"]`)
-    if ($container.length > 0) {
-      $container.after(log.content())
-      $container.remove()
-    }
-  }
   _filterLogs(logs) {
     const filter = this._filter
 
@@ -386,7 +368,7 @@ export default class Logger extends Emitter {
     return logs.filter(log => {
       if (log.ignoreFilter) return true
       if (isFilterFn) return filter(log)
-      if (isFilterRegExp) return filter.test(stripHtmlTag(log.content()))
+      if (isFilterRegExp) return filter.test(log.text())
       return log.type === filter
     })
   }
@@ -400,7 +382,7 @@ export default class Logger extends Emitter {
 
     if (log.ignoreFilter) return true
     if (isFilterFn) return filter(log)
-    if (isFilterRegExp) return filter.test(stripHtmlTag(log.content()))
+    if (isFilterRegExp) return filter.test(log.text())
 
     return log.type === filter
   }
@@ -419,7 +401,6 @@ export default class Logger extends Emitter {
     const { targetGroup } = log
     targetGroup.collapsed = true
     log.updateIcon('caret-right')
-    this._refreshLogUi(log)
 
     this._updateGroup(log)
   }
@@ -427,7 +408,6 @@ export default class Logger extends Emitter {
     const { targetGroup } = log
     targetGroup.collapsed = false
     log.updateIcon('caret-down')
-    this._refreshLogUi(log)
 
     this._updateGroup(log)
   }
@@ -438,9 +418,8 @@ export default class Logger extends Emitter {
     let i = logs.indexOf(log) + 1
     while (i < len) {
       const log = logs[i]
-      if (log.checkGroup()) {
-        this._refreshLogUi(log)
-      } else if (log.group === targetGroup) {
+      log.checkGroup()
+      if (log.group === targetGroup) {
         break
       }
       i++

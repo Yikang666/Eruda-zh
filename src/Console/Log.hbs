@@ -1,28 +1,26 @@
-<li {{{class 'log-container'}}} data-id="{{id}}" data-type="{{type}}">
-    {{#if displayHeader}}
-        <div {{{class 'header'}}}>
-            {{#repeat group.indentLevel}}
-                <div {{{class 'nesting-level'}}}></div>
-            {{/repeat}}
-            <div {{{class 'time-container'}}}>
-                <span data-mark="time">{{time}}</span> <span>{{from}}</span>
-            </div>
-        </div>
-    {{/if}}
-    <div {{{class (concat type ' log-item')}}}>
+{{#if displayHeader}}
+    <div {{{class 'header'}}}>
         {{#repeat group.indentLevel}}
             <div {{{class 'nesting-level'}}}></div>
         {{/repeat}}
-        {{#if icon}}
-            <div {{{class 'icon-container'}}}>
-                <span {{{class (concat 'icon icon-' icon)}}}></span>
-            </div>
-        {{/if}}
-        <div {{{class 'count-container hidden'}}}>
-            <div {{{class 'count'}}} data-mark="count"></div>
-        </div>    
-        <div {{{class 'log-content-wrapper'}}}>
-            <div {{{class 'log-content'}}}>{{{msg}}}</div>
+        <div {{{class 'time-container'}}}>
+            <span>{{time}}</span> <span>{{from}}</span>
         </div>
     </div>
-</li>
+{{/if}}
+<div {{{class (concat type ' log-item')}}}>
+    {{#repeat group.indentLevel}}
+        <div {{{class 'nesting-level'}}}></div>
+    {{/repeat}}
+    {{#if icon}}
+        <div {{{class 'icon-container'}}}>
+            <span {{{class (concat 'icon icon-' icon)}}}></span>
+        </div>
+    {{/if}}
+    <div {{{class 'count-container hidden'}}}>
+        <div {{{class 'count'}}}></div>
+    </div>    
+    <div {{{class 'log-content-wrapper'}}}>
+        <div {{{class 'log-content'}}}>{{{msg}}}</div>
+    </div>
+</div>
