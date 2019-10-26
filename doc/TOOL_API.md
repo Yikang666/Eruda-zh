@@ -18,7 +18,6 @@ Display console logs. Implementation detail follows the [console api spec](https
 |displayUnenumerable|boolean|Display unenumerable properties|
 |displayGetterVal   |boolean|Access getter value            |
 |lazyEvaluation     |boolean|Stringify object when clicked  |
-|viewLogInSources   |boolean|View log in sources panel      |
 |displayIfErr       |boolean|Auto display if error occurs   |
 |useWorker          |boolean|Use web worker                 |
 |maxLogNum          |string |Max log number                 |
