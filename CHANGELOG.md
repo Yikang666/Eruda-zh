@@ -1,3 +1,8 @@
+## v1.9.1 (27 Oct 2019)
+
+* perf(console): asynchronous log render
+* perf(console): reduce memory usage, 50% drop
+
 ## v1.9.0 (20 Oct 2019)
 
 * feat: add snippet for loading touches plugin
