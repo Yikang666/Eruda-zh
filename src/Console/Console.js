@@ -7,7 +7,8 @@ import {
   Emitter,
   uncaught,
   escapeRegExp,
-  trim
+  trim,
+  nextTick
 } from '../lib/util'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
@@ -23,6 +24,7 @@ export default class Console extends Tool {
 
     this.name = 'console'
     this._scale = 1
+    this._asyncRender = true
 
     this._registerListener()
   }
@@ -50,7 +52,11 @@ export default class Console extends Tool {
       }
 
       winConsole[name] = (...args) => {
-        this[name](...args)
+        if (this._asyncRender) {
+          nextTick(() => this[name](...args))
+        } else {
+          this[name](...args)
+        }
         origin(...args)
       }
     })
@@ -227,6 +233,7 @@ export default class Console extends Tool {
     if (!settings) return
 
     settings
+      .remove(cfg, 'asyncRender')
       .remove(cfg, 'jsExecution')
       .remove(cfg, 'catchGlobalErr')
       .remove(cfg, 'overrideConsole')
@@ -246,6 +253,7 @@ export default class Console extends Tool {
     const logger = this._logger
 
     const cfg = (this.config = Settings.createCfg('console', {
+      asyncRender: true,
       catchGlobalErr: true,
       jsExecution: true,
       overrideConsole: true,
@@ -265,6 +273,7 @@ export default class Console extends Tool {
     maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
 
     this._enableJsExecution(cfg.get('jsExecution'))
+    if (!cfg.get('asyncRender')) this._asyncRender = false
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
     if (cfg.get('overrideConsole')) this.overrideConsole()
     if (cfg.get('useWorker') && isWorkerSupported) stringify.useWorker = true
@@ -277,6 +286,9 @@ export default class Console extends Tool {
 
     cfg.on('change', (key, val) => {
       switch (key) {
+        case 'asyncRender':
+          this._asyncRender = val
+          return
         case 'jsExecution':
           return this._enableJsExecution(val)
         case 'catchGlobalErr':
@@ -306,6 +318,7 @@ export default class Console extends Tool {
 
     settings
       .text('Console')
+      .switch(cfg, 'asyncRender', 'Asynchronous Rendering')
       .switch(cfg, 'jsExecution', 'Enable JavaScript Execution')
       .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
       .switch(cfg, 'overrideConsole', 'Override Console')

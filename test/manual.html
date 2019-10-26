@@ -42,6 +42,9 @@
         <li>
             <a href="#" id="log">Log</a>
         </li>
+        <li>
+            <a href="#" id="heavy-log">Heavy Log</a>
+        </li>
     </ul>
 </nav>
 <script>
@@ -161,6 +164,11 @@
         var arr = [];
         for (var i = 0; i < 10000; i++) arr.push(i);
         console.log(arr);
+    });
+    addClickEvent('heavy-log', () => {
+        for (let i = 0; i < 1000; i++) {
+            console.log(location, i);
+        }
     });
 </script>
 <script>

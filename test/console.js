@@ -1,5 +1,6 @@
 describe('console', function() {
   let tool = eruda.get('console')
+  tool.config.set('asyncRender', false)
   let $tool = $('.eruda-console')
 
   beforeEach(function() {
