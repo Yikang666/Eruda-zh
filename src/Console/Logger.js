@@ -418,8 +418,7 @@ export default class Logger extends Emitter {
     let i = logs.indexOf(log) + 1
     while (i < len) {
       const log = logs[i]
-      log.checkGroup()
-      if (log.group === targetGroup) {
+      if (!log.checkGroup() && log.group === targetGroup) {
         break
       }
       i++

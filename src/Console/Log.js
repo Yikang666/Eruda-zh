@@ -53,8 +53,8 @@ export default class Log {
     this.displayHeader = displayHeader
     this.ignoreFilter = ignoreFilter
     this.collapsed = false
-    this.el = null
-    this._$el = null
+    this.el = document.createElement('li')
+    this._$el = $(this.el)
 
     if (displayHeader) {
       this.time = getCurTime()
@@ -86,7 +86,10 @@ export default class Log {
       } else {
         this.show()
       }
+      return true
     }
+
+    return false
   }
   hide() {
     this._$el.addClass('eruda-hidden')
@@ -262,13 +265,10 @@ export default class Log {
       delete this.args
     }
 
-    const $el = $(document.createElement('li'))
-    $el
+    this._$el
       .addClass('eruda-log-container')
       .data({ id, type })
       .html(msg)
-    this._$el = $el
-    this.el = $el.get(0)
   }
   static click(type, log, $el, logger) {
     switch (type) {
