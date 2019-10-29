@@ -54,6 +54,7 @@ export default class Log {
     this.ignoreFilter = ignoreFilter
     this.collapsed = false
     this.el = document.createElement('li')
+    this.el.log = this
     this._$el = $(this.el)
 
     if (displayHeader) {
@@ -187,6 +188,45 @@ export default class Log {
   detach() {
     this._$el.remove()
   }
+  click(logger) {
+    const { type, src, args } = this
+    const $el = this._$el
+
+    switch (type) {
+      case 'log':
+      case 'warn':
+      case 'info':
+      case 'debug':
+      case 'output':
+      case 'table':
+      case 'dir':
+      case 'group':
+      case 'groupCollapsed':
+        if (src) {
+          const $json = $el.find('.eruda-json')
+          if ($json.hasClass('eruda-hidden')) {
+            if ($json.data('init') !== 'true') {
+              new JsonViewer(src, $json)
+              $json.data('init', 'true')
+            }
+            $json.rmClass('eruda-hidden')
+          } else {
+            $json.addClass('eruda-hidden')
+          }
+        } else if (args) {
+          this.extractObj(() => {
+            this.click(logger)
+            delete this.args
+          })
+        } else if (type === 'group' || type === 'groupCollapsed') {
+          logger.toggleGroup(this)
+        }
+        break
+      case 'error':
+        $el.find('.eruda-stack').toggleClass('eruda-hidden')
+        break
+    }
+  }
   _formatMsg() {
     let { args } = this
     const { type, id, displayHeader, time, from, group } = this
@@ -265,58 +305,13 @@ export default class Log {
       delete this.args
     }
 
-    this._$el
-      .addClass('eruda-log-container')
-      .data({ id, type })
-      .html(msg)
-  }
-  static click(type, log, $el, logger) {
-    switch (type) {
-      case 'log':
-      case 'warn':
-      case 'info':
-      case 'debug':
-      case 'output':
-      case 'table':
-      case 'dir':
-      case 'group':
-      case 'groupCollapsed':
-        if (log.src) {
-          if (Log.showSrcInSources) {
-            return logger.emit('viewJson', log.src)
-          }
-          const $json = $el.find('.eruda-json')
-          if ($json.hasClass('eruda-hidden')) {
-            if ($json.data('init') !== 'true') {
-              new JsonViewer(log.src, $json)
-              $json.data('init', 'true')
-            }
-            $json.rmClass('eruda-hidden')
-          } else {
-            $json.addClass('eruda-hidden')
-          }
-        } else if (log.args) {
-          log.extractObj(function() {
-            Log.click(type, log, $el, logger)
-            delete log.args
-          })
-        } else if (log.type === 'group' || log.type === 'groupCollapsed') {
-          logger.toggleGroup(log)
-        }
-        break
-      case 'error':
-        $el.find('.eruda-stack').toggleClass('eruda-hidden')
-        break
-    }
-
-    return 'handled'
+    this._$el.addClass('eruda-log-container').html(msg)
   }
 }
 
 // Looks like es6 doesn't support static properties yet.
 Log.showGetterVal = false
 Log.showUnenumerable = true
-Log.showSrcInSources = false
 Log.lazyEvaluation = true
 
 const getAbstract = wrap(origGetAbstract, function(fn, obj) {

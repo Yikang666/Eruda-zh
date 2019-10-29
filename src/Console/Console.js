@@ -196,19 +196,11 @@ export default class Console extends Tool {
 
     $input.on('focusin', () => this._showInput())
 
-    logger
-      .on('viewJson', data => {
-        const sources = container.get('sources')
-        if (!sources) return
+    logger.on('insert', log => {
+      const autoShow = log.type === 'error' && config.get('displayIfErr')
 
-        sources.set('json', data)
-        container.showTool('sources')
-      })
-      .on('insert', log => {
-        const autoShow = log.type === 'error' && config.get('displayIfErr')
-
-        if (autoShow) container.showTool('console').show()
-      })
+      if (autoShow) container.showTool('console').show()
+    })
   }
   _hideInput() {
     this._$inputContainer.css({

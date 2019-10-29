@@ -430,35 +430,23 @@ export default class Logger extends Emitter {
 
     $el
       .on('click', '.eruda-log-container', function() {
-        const $el = $(this)
-        const id = $el.data('id')
-        const type = $el.data('type')
-        const log = self._getLog(id)
-        if (!log) return
-
-        Log.click(type, log, $el, self)
+        this.log.click(self)
       })
       .on('click', '.eruda-icon-caret-down', function() {
         const $el = $(this)
           .parent()
           .parent()
           .parent()
-        const id = $el.data('id')
-        const log = self._getLog(id)
-        if (!log) return
 
-        self._collapseGroup(log)
+        self._collapseGroup($el.get(0).log)
       })
       .on('click', '.eruda-icon-caret-right', function() {
         const $el = $(this)
           .parent()
           .parent()
           .parent()
-        const id = $el.data('id')
-        const log = self._getLog(id)
-        if (!log) return
 
-        self._openGroup(log)
+        self._openGroup($el.get(0).log)
       })
   }
 }
