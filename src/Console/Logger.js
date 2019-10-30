@@ -17,8 +17,11 @@ import {
   copy,
   each,
   toArr,
-  keys
+  keys,
+  last
 } from '../lib/util'
+
+let id = 0
 
 export default class Logger extends Emitter {
   constructor($el) {
@@ -28,6 +31,7 @@ export default class Logger extends Emitter {
     this._$el = $el
     this._el = $el.get(0)
     this._logs = []
+    this._displayLogs = []
     this._timer = {}
     this._count = {}
     this._lastLog = {}
@@ -185,6 +189,7 @@ export default class Logger extends Emitter {
   }
   silentClear() {
     this._logs = []
+    this._displayLogs = []
     this._lastLog = {}
     this._count = {}
     this._timer = {}
@@ -259,11 +264,12 @@ export default class Logger extends Emitter {
     return this.insert('html', args)
   }
   render() {
-    const logs = this._filterLogs(this._logs)
+    const logs = this._logs
 
     this._$el.html('')
+    this._displayLogs = []
     for (let i = 0, len = logs.length; i < len; i++) {
-      this._el.appendChild(logs[i].el)
+      this._attachLog(logs[i])
     }
 
     this.scrollToBottom()
@@ -294,7 +300,6 @@ export default class Logger extends Emitter {
   insertSync(type, args) {
     const logs = this._logs
     const groupStack = this._groupStack
-    const el = this._el
 
     // Because asynchronous rendering, groupEnd must be put here.
     if (type === 'groupEnd') {
@@ -311,7 +316,7 @@ export default class Logger extends Emitter {
       options.group = groupStack.peek()
     }
     extend(options, {
-      id: uniqId('log'),
+      id: ++id,
       displayHeader: this._displayHeader
     })
 
@@ -340,7 +345,7 @@ export default class Logger extends Emitter {
       lastLog.addCount()
       if (log.time) lastLog.updateTime(log.time)
       log = lastLog
-      lastLog.detach()
+      this._detachLog(lastLog)
     } else {
       logs.push(log)
       this._lastLog = log
@@ -348,13 +353,11 @@ export default class Logger extends Emitter {
 
     if (this._maxNum !== 'infinite' && logs.length > this._maxNum) {
       const firstLog = logs[0]
-      firstLog.destroy()
+      this._detachLog(firstLog)
       logs.shift()
     }
 
-    if (this._filterLog(log)) {
-      el.appendChild(log.el)
-    }
+    this._attachLog(log)
 
     this.emit('insert', log)
 
@@ -370,6 +373,64 @@ export default class Logger extends Emitter {
   toggleGroup(log) {
     const { targetGroup } = log
     targetGroup.collapsed ? this._openGroup(log) : this._collapseGroup(log)
+  }
+  _detachLog(log) {
+    const displayLogs = this._displayLogs
+
+    const idx = displayLogs.indexOf(log)
+    if (idx > -1) {
+      displayLogs.splice(idx, 1)
+      this._el.removeChild(log.el)
+    }
+  }
+  // Binary search
+  _attachLog(log) {
+    if (!this._filterLog(log) || log.collapsed) return
+
+    const displayLogs = this._displayLogs
+    const el = this._el
+
+    if (displayLogs.length === 0) {
+      el.appendChild(log.el)
+      displayLogs.push(log)
+      return
+    }
+
+    const lastDisplayLog = last(displayLogs)
+    if (log.id > lastDisplayLog) {
+      el.appendChild(log.el)
+      displayLogs.push(log)
+      return
+    }
+
+    let startIdx = 0
+    let endIdx = displayLogs.length - 1
+
+    let middleLog
+    let middleIdx
+
+    while (startIdx <= endIdx) {
+      middleIdx = startIdx + Math.floor((endIdx - startIdx) / 2)
+      middleLog = displayLogs[middleIdx]
+
+      if (middleLog.id === log.id) {
+        return
+      }
+
+      if (middleLog.id < log.id) {
+        startIdx = middleIdx + 1
+      } else {
+        endIdx = middleIdx - 1
+      }
+    }
+
+    if (middleLog.id < log.id) {
+      middleLog.el.insertAdjacentElement('afterend', log.el)
+      displayLogs.splice(middleIdx + 1, 0, log)
+    } else {
+      middleLog.el.insertAdjacentElement('beforebegin', log.el)
+      displayLogs.splice(middleIdx, 0, log)
+    }
   }
   _handleAsyncList() {
     const asyncList = this._asyncList
@@ -417,21 +478,6 @@ export default class Logger extends Emitter {
     this._clearGlobal()
 
     return ret
-  }
-  _filterLogs(logs) {
-    const filter = this._filter
-
-    if (filter === 'all') return logs
-
-    const isFilterRegExp = isRegExp(filter)
-    const isFilterFn = isFn(filter)
-
-    return logs.filter(log => {
-      if (log.ignoreFilter) return true
-      if (isFilterFn) return filter(log)
-      if (isFilterRegExp) return filter.test(log.text())
-      return log.type === filter
-    })
   }
   _filterLog(log) {
     const filter = this._filter
@@ -482,6 +528,7 @@ export default class Logger extends Emitter {
       if (!log.checkGroup() && log.group === targetGroup) {
         break
       }
+      log.collapsed ? this._detachLog(log) : this._attachLog(log)
       i++
     }
   }

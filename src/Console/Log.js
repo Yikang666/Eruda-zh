@@ -82,25 +82,10 @@ export default class Log {
     }
     if (collapsed !== this.collapsed) {
       this.collapsed = collapsed
-      if (collapsed) {
-        this.hide()
-      } else {
-        this.show()
-      }
       return true
     }
 
     return false
-  }
-  hide() {
-    this._$el.addClass('eruda-hidden')
-
-    return this
-  }
-  show() {
-    this._$el.rmClass('eruda-hidden')
-
-    return this
   }
   updateIcon(icon) {
     const $icon = this._$el.find('.eruda-icon')
@@ -181,12 +166,6 @@ export default class Log {
         setSrc
       )
     }
-  }
-  destroy() {
-    this.detach()
-  }
-  detach() {
-    this._$el.remove()
   }
   click(logger) {
     const { type, src, args } = this
