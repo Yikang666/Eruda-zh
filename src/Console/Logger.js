@@ -34,6 +34,10 @@ export default class Logger extends Emitter {
     this._filter = 'all'
     this._maxNum = 'infinite'
     this._displayHeader = false
+    this._asyncRender = false
+    this._asyncList = []
+    this._asyncTimer = null
+    this._isAtBottom = true
     this._groupStack = new Stack()
 
     // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
@@ -61,6 +65,12 @@ export default class Logger extends Emitter {
     }
 
     this._bindEvent()
+  }
+  restoreScroll() {
+    if (this._isAtBottom) this.scrollToBottom()
+  }
+  renderAsync(flag) {
+    this._asyncRender = flag
   }
   setGlobal(name, val) {
     this._global[name] = val
@@ -179,6 +189,11 @@ export default class Logger extends Emitter {
     this._count = {}
     this._timer = {}
     this._groupStack = new Stack()
+    this._asyncList = []
+    if (this._asyncTimer) {
+      clearTimeout(this._asyncTimer)
+      this._asyncTimer = null
+    }
 
     return this.render()
   }
@@ -212,9 +227,7 @@ export default class Logger extends Emitter {
     })
   }
   groupEnd() {
-    const lastLog = this._lastLog
-    lastLog.groupEnd()
-    this._groupStack.pop()
+    this.insert('groupEnd')
   }
   input(jsCode) {
     this.insert({
@@ -258,11 +271,40 @@ export default class Logger extends Emitter {
     return this
   }
   insert(type, args) {
+    this._asyncRender
+      ? this.insertAsync(type, args)
+      : this.insertSync(type, args)
+  }
+  insertAsync(type, args) {
+    this._asyncList.push([type, args])
+
+    this._handleAsyncList()
+  }
+  isAtBottom() {
+    const { scrollTop, scrollHeight, offsetHeight } = this._el
+
+    // invisible
+    if (offsetHeight !== 0) {
+      this._isAtBottom = scrollTop === scrollHeight - offsetHeight
+      return this._isAtBottom
+    } else {
+      return false
+    }
+  }
+  insertSync(type, args) {
     const logs = this._logs
     const groupStack = this._groupStack
     const el = this._el
 
-    const isAtBottom = el.scrollTop === el.scrollHeight - el.offsetHeight
+    // Because asynchronous rendering, groupEnd must be put here.
+    if (type === 'groupEnd') {
+      const lastLog = this._lastLog
+      lastLog.groupEnd()
+      this._groupStack.pop()
+      return this
+    }
+
+    const isAtBottom = this.isAtBottom()
 
     const options = isStr(type) ? { type, args } : type
     if (groupStack.size > 0) {
@@ -328,6 +370,25 @@ export default class Logger extends Emitter {
   toggleGroup(log) {
     const { targetGroup } = log
     targetGroup.collapsed ? this._openGroup(log) : this._collapseGroup(log)
+  }
+  _handleAsyncList() {
+    const asyncList = this._asyncList
+
+    if (this._asyncTimer) return
+
+    this._asyncTimer = setTimeout(() => {
+      this._asyncTimer = null
+      let done = false
+      for (let i = 0; i < 25; i++) {
+        const item = asyncList.shift()
+        if (!item) {
+          done = true
+          break
+        }
+        this.insertSync(item[0], item[1])
+      }
+      if (!done) this._handleAsyncList()
+    }, 25)
   }
   _injectGlobal() {
     each(this._global, (val, name) => {
