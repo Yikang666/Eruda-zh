@@ -144,7 +144,7 @@ export default class Log {
     return this.el.outerHTML
   }
   text() {
-    return this.el.textContent
+    return this._content.textContent
   }
   _needSrc() {
     const { type, args } = this
@@ -287,7 +287,6 @@ export default class Log {
     }
 
     if (type !== 'error') msg = recognizeUrl(msg)
-    this.value = msg
     msg = render({ msg, type, icon, id, displayHeader, time, from, group })
 
     if (!this._needSrc() || !Log.lazyEvaluation) {
@@ -295,6 +294,8 @@ export default class Log {
     }
 
     this._$el.addClass('eruda-log-container').html(msg)
+    this._$content = this._$el.find('.eruda-log-content')
+    this._content = this._$content.get(0)
   }
 }
 

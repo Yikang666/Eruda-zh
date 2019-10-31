@@ -342,9 +342,9 @@ export default class Logger extends Emitter {
     if (
       !contain(['html', 'group', 'groupCollapsed'], log.type) &&
       lastLog.type === log.type &&
-      lastLog.value === log.value &&
       !log.src &&
-      !log.args
+      !log.args &&
+      lastLog.text() === log.text()
     ) {
       lastLog.addCount()
       if (log.time) lastLog.updateTime(log.time)
