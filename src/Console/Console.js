@@ -126,7 +126,7 @@ export default class Console extends Tool {
 
     Object.assign(this, {
       _$control: $el.find('.eruda-control'),
-      _$logs: $el.find('.eruda-logs'),
+      _$logs: $el.find('.eruda-logs-container'),
       _$inputContainer,
       _$input,
       _$inputBtns

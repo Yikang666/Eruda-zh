@@ -17,11 +17,13 @@ import {
   trim,
   lowerCase,
   isUndef,
-  stringifyAll
+  stringifyAll,
+  Emitter
 } from './util'
 
-export default class JsonViewer {
+export default class JsonViewer extends Emitter {
   constructor(data, $el) {
+    super()
     evalCss(require('./json.scss'))
 
     if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
@@ -173,6 +175,8 @@ export default class JsonViewer {
         $firstSpan.addClass('eruda-collapsed')
         $ul.hide()
       }
+
+      self.emit('change')
     })
   }
 }

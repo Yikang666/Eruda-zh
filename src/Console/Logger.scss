@@ -5,9 +5,20 @@
   .tools {
     .console {
       background: #fff;
-      .logs {
+      .logs-container {
         @include overflow-auto(y);
         height: 100%;
+        position: relative;
+      }
+      .fake-logs {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+        visibility: hidden;
+        width: 100%;
+      }
+      .logs {
         font-size: $font-size;
         padding-top: 1px;
         .log-container {

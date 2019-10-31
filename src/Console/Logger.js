@@ -24,12 +24,16 @@ import {
 let id = 0
 
 export default class Logger extends Emitter {
-  constructor($el) {
+  constructor($container) {
     super()
     this._style = evalCss(require('./Logger.scss'))
 
-    this._$el = $el
-    this._el = $el.get(0)
+    this._$container = $container
+    this._container = $container.get(0)
+    this._$el = $container.find('ul.eruda-logs')
+    this._$fakeEl = $container.find('ul.eruda-fake-logs')
+    this._fakeEl = this._$fakeEl.get(0)
+    this._el = this._$el.get(0)
     this._logs = []
     this._displayLogs = []
     this._timer = {}
@@ -287,7 +291,7 @@ export default class Logger extends Emitter {
     this._handleAsyncList()
   }
   isAtBottom() {
-    const { scrollTop, scrollHeight, offsetHeight } = this._el
+    const { scrollTop, scrollHeight, offsetHeight } = this._container
 
     // invisible
     if (offsetHeight !== 0) {
@@ -358,6 +362,7 @@ export default class Logger extends Emitter {
     }
 
     this._attachLog(log)
+    this._updateLogHeight(log)
 
     this.emit('insert', log)
 
@@ -366,13 +371,23 @@ export default class Logger extends Emitter {
     return this
   }
   scrollToBottom() {
-    const el = this._$el.get(0)
+    const container = this._container
+    const { scrollHeight, offsetHeight } = container
 
-    el.scrollTop = el.scrollHeight - el.offsetHeight
+    container.scrollTop = scrollHeight - offsetHeight
   }
   toggleGroup(log) {
     const { targetGroup } = log
     targetGroup.collapsed ? this._openGroup(log) : this._collapseGroup(log)
+  }
+  _updateLogHeight(log) {
+    if (!log.isAttached()) {
+      this._fakeEl.appendChild(log.el)
+      log.updateHeight()
+      this._fakeEl.removeChild(log.el)
+      return
+    }
+    log.updateHeight()
   }
   _detachLog(log) {
     const displayLogs = this._displayLogs
@@ -397,7 +412,7 @@ export default class Logger extends Emitter {
     }
 
     const lastDisplayLog = last(displayLogs)
-    if (log.id > lastDisplayLog) {
+    if (log.id > lastDisplayLog.id) {
       el.appendChild(log.el)
       displayLogs.push(log)
       return

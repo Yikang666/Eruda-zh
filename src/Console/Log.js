@@ -55,6 +55,7 @@ export default class Log {
     this.collapsed = false
     this.el = document.createElement('li')
     this.el.log = this
+    this.height = 0
     this._$el = $(this.el)
 
     if (displayHeader) {
@@ -133,6 +134,12 @@ export default class Log {
 
     return this
   }
+  isAttached() {
+    return !!this.el.parentNode
+  }
+  updateHeight() {
+    this.height = this.el.offsetHeight
+  }
   html() {
     return this.el.outerHTML
   }
@@ -185,7 +192,8 @@ export default class Log {
           const $json = $el.find('.eruda-json')
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
-              new JsonViewer(src, $json)
+              const jsonViewer = new JsonViewer(src, $json)
+              jsonViewer.on('change', () => this.updateHeight())
               $json.data('init', 'true')
             }
             $json.rmClass('eruda-hidden')
@@ -205,6 +213,8 @@ export default class Log {
         $el.find('.eruda-stack').toggleClass('eruda-hidden')
         break
     }
+
+    this.updateHeight()
   }
   _formatMsg() {
     let { args } = this
