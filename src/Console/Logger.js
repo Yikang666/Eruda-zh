@@ -31,9 +31,13 @@ export default class Logger extends Emitter {
     this._$container = $container
     this._container = $container.get(0)
     this._$el = $container.find('ul.eruda-logs')
+    this._el = this._$el.get(0)
     this._$fakeEl = $container.find('ul.eruda-fake-logs')
     this._fakeEl = this._$fakeEl.get(0)
-    this._el = this._$el.get(0)
+    this._$topSpace = $container.find('.eruda-top-space')
+    this._$bottomSpace = $container.find('.eruda-bottom-space')
+    this._topSpaceHeight = 0
+    this._bottomSpaceHeight = 0
     this._logs = []
     this._displayLogs = []
     this._timer = {}
