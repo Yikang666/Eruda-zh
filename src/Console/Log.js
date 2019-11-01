@@ -223,7 +223,7 @@ export default class Log extends Emitter {
         break
     }
 
-    this.updateHeight()
+    this.updateSize(false)
   }
   _formatMsg() {
     let { args } = this
