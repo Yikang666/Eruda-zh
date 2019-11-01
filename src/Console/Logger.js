@@ -36,7 +36,9 @@ export default class Logger extends Emitter {
     this._$fakeEl = $container.find('ul.eruda-fake-logs')
     this._fakeEl = this._$fakeEl.get(0)
     this._$topSpace = $container.find('.eruda-top-space')
+    this._topSpace = this._$topSpace.get(0)
     this._$bottomSpace = $container.find('.eruda-bottom-space')
+    this._bottomSpace = this._$bottomSpace.get(0)
     this._topSpaceHeight = 0
     this._bottomSpaceHeight = 0
     this._logs = []
@@ -53,7 +55,9 @@ export default class Logger extends Emitter {
     this._isAtBottom = true
     this._groupStack = new Stack()
 
-    this.renderViewport = throttle(force => this._renderViewport(force), 16)
+    this.renderViewport = throttle(force => {
+      this._renderViewport(force)
+    }, 16)
 
     // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
     this._global = {
@@ -352,7 +356,6 @@ export default class Logger extends Emitter {
     }
 
     this._attachLog(log)
-    this._updateLogSize(log)
 
     this.emit('insert', log)
 
@@ -364,18 +367,21 @@ export default class Logger extends Emitter {
   }
   _updateTopSpace(height) {
     this._topSpaceHeight = height
-    this._$topSpace.css({ height })
+    this._topSpace.style.height = height + 'px'
   }
   _updateBottomSpace(height) {
     this._bottomSpaceHeight = height
-    this._$bottomSpace.css({ height })
+    this._bottomSpace.style.height = height + 'px'
   }
   _updateLogSize(log) {
-    if (this._fakeEl.offsetParent === null) return
+    const fakeEl = this._fakeEl
+    if (isHidden(this._fakeEl)) return
     if (!log.isAttached()) {
-      this._fakeEl.appendChild(log.el)
+      fakeEl.appendChild(log.el)
       log.updateSize()
-      this._fakeEl.removeChild(log.el)
+      if (fakeEl.children > 100) {
+        fakeEl.innerHTML = ''
+      }
       return
     }
     log.updateSize()
@@ -566,7 +572,7 @@ export default class Logger extends Emitter {
   }
   _renderViewport(force = true) {
     const container = this._container
-    if (container.offsetParent === null) return
+    if (isHidden(container)) return
     const { scrollTop, offsetWidth, offsetHeight } = container
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
@@ -590,17 +596,32 @@ export default class Logger extends Emitter {
     let bottomSpaceHeight = 0
     let currentHeight = 0
 
-    this._$el.html('')
-    const frag = document.createDocumentFragment()
-    for (let i = 0, len = displayLogs.length; i < len; i++) {
+    this._el.innerHTML = ''
+    const len = displayLogs.length
+
+    const fakeEl = this._fakeEl
+    const fakeFrag = document.createDocumentFragment()
+    const logs = []
+    for (let i = 0; i < len; i++) {
       const log = displayLogs[i]
-      const { el } = log
-      let { height } = log
-      const { width } = log
+      const { width, height } = log
       if (height === 0 || width !== offsetWidth) {
-        this._updateLogSize(log)
-        height = log.height
+        fakeFrag.appendChild(log.el)
+        logs.push(log)
       }
+    }
+    if (logs.length > 0) {
+      fakeEl.appendChild(fakeFrag)
+      for (let i = 0, len = logs.length; i < len; i++) {
+        logs[i].updateSize()
+      }
+      fakeEl.innerHTML = ''
+    }
+
+    const frag = document.createDocumentFragment()
+    for (let i = 0; i < len; i++) {
+      const log = displayLogs[i]
+      const { el, height } = log
 
       if (currentHeight > bottom) {
         bottomSpaceHeight += height
@@ -635,4 +656,8 @@ export default class Logger extends Emitter {
       this._isAtBottom = true
     }
   }
+}
+
+function isHidden(el) {
+  return el.offsetParent === null
 }

@@ -9,6 +9,7 @@
         @include overflow-auto(y);
         height: 100%;
         position: relative;
+        will-change: scroll-position;
       }
       .fake-logs {
         position: absolute;
@@ -17,173 +18,178 @@
         pointer-events: none;
         visibility: hidden;
         width: 100%;
+        * {
+          overflow: hidden;
+          color: black;
+          position: static;
+        }
       }
       .logs {
         font-size: $font-size;
         padding-top: 1px;
-        .log-container {
-          box-sizing: content-box;
+      }
+      .log-container {
+        box-sizing: content-box;
+      }
+      .header {
+        white-space: nowrap;
+        display: flex;
+        font-size: $font-size-s;
+        color: $gray;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid $gray-light;
+        .time-container {
+          @include overflow-auto(x);
+          padding: 3px $padding;
         }
-        .header {
-          white-space: nowrap;
-          display: flex;
-          font-size: $font-size-s;
-          color: $gray;
-          border-top: 1px solid transparent;
-          border-bottom: 1px solid $gray-light;
-          .time-container {
-            @include overflow-auto(x);
-            padding: 3px $padding;
+      }
+      .nesting-level {
+        width: 14px;
+        flex-shrink: 0;
+        margin-top: -1px;
+        margin-bottom: -1px;
+        position: relative;
+        border-right: 1px solid $gray;
+        &.group-closed::before {
+          content: '';
+        }
+        &::before {
+          border-bottom: 1px solid #a5a5a5;
+          position: absolute;
+          top: 0;
+          left: 0;
+          margin-left: 100%;
+          width: 5px;
+          height: 100%;
+          box-sizing: border-box;
+        }
+      }
+      .log-item {
+        position: relative;
+        display: flex;
+        @include clear-float();
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid $gray-light;
+        margin-top: -1px;
+        min-height: 24px;
+        a {
+          color: $blue !important;
+        }
+        .icon-container {
+          padding-top: 2px;
+          margin: 0 -6px 0 $padding;
+          .icon {
+            line-height: 20px;
+            font-size: 12px;
+            color: $gray-dark;
+            position: relative;
+          }
+          .icon-caret-right,
+          .icon-caret-down {
+            left: -2px;
+            color: $gray;
+          }
+          .icon-arrow-right {
+            color: $blue;
+          }
+          .icon-info {
+            color: $blue;
+          }
+          .icon-error {
+            color: $red;
+          }
+          .icon-warn {
+            top: -1px;
+            color: $yellow-dark;
           }
         }
-        .nesting-level {
-          width: 14px;
-          flex-shrink: 0;
-          margin-top: -1px;
-          margin-bottom: -1px;
-          position: relative;
-          border-right: 1px solid $gray;
-          &.group-closed::before {
-            content: '';
-          }
-          &::before {
-            border-bottom: 1px solid #a5a5a5;
-            position: absolute;
-            top: 0;
-            left: 0;
-            margin-left: 100%;
-            width: 5px;
-            height: 100%;
-            box-sizing: border-box;
+        .count {
+          background: $blue;
+          padding: 2px 4px;
+          color: #fff;
+          border-radius: 10px;
+          float: left;
+          margin: 3px -6px 0 $padding;
+        }
+        .log-content-wrapper {
+          flex: 1;
+          overflow: hidden;
+        }
+        .log-content {
+          padding: 3px 0;
+          margin: 0 $padding;
+          @include overflow-auto(x);
+          white-space: pre-wrap;
+          user-select: text;
+          * {
+            user-select: text;
           }
         }
-        .log-item {
-          position: relative;
-          display: flex;
-          @include clear-float();
-          border-top: 1px solid transparent;
-          border-bottom: 1px solid $gray-light;
-          margin-top: -1px;
-          min-height: 24px;
-          a {
-            color: $blue !important;
+        &.input {
+          background: #fff;
+        }
+        &.html,
+        &.table {
+          table {
+            width: 100%;
+            background: #fff;
+            border-collapse: collapse;
+            box-shadow: $box-shadow;
+            border-radius: $border-radius;
+            overflow: hidden;
+            th {
+              background: $blue;
+              color: #fff;
+            }
+            th,
+            td {
+              border-left: 1px solid $gray;
+              padding: 3px $padding;
+              &:first-child {
+                border-left: none !important;
+              }
+            }
+            tr:nth-child(even) {
+              background: $gray-light;
+            }
           }
-          .icon-container {
-            padding-top: 2px;
-            margin: 0 -6px 0 $padding;
-            .icon {
-              line-height: 20px;
-              font-size: 12px;
-              color: $gray-dark;
-              position: relative;
-            }
-            .icon-caret-right,
-            .icon-caret-down {
-              left: -2px;
-              color: $gray;
-            }
-            .icon-arrow-right {
-              color: $blue;
-            }
-            .icon-info {
-              color: $blue;
-            }
-            .icon-error {
-              color: $red;
-            }
-            .icon-warn {
-              top: -1px;
-              color: $yellow-dark;
-            }
+          .blue {
+            color: $blue;
+          }
+        }
+        &.error {
+          z-index: 50;
+          background: $red-light;
+          color: $red;
+          border-top: 1px solid $red;
+          border-bottom: 1px solid $red;
+          .stack {
+            padding-left: 1.2em;
+            white-space: nowrap;
           }
           .count {
-            background: $blue;
-            padding: 2px 4px;
-            color: #fff;
-            border-radius: 10px;
-            float: left;
-            margin: 3px -6px 0 $padding;
+            background: $red;
           }
-          .log-content-wrapper {
-            flex: 1;
-            overflow: hidden;
-          }
-          .log-content {
-            padding: 3px 0;
-            margin: 0 $padding;
-            @include overflow-auto(x);
-            white-space: pre-wrap;
-            user-select: text;
-            * {
-              user-select: text;
-            }
-          }
-          &.input {
-            background: #fff;
-          }
-          &.html,
-          &.table {
-            table {
-              width: 100%;
-              background: #fff;
-              border-collapse: collapse;
-              box-shadow: $box-shadow;
-              border-radius: $border-radius;
-              overflow: hidden;
-              th {
-                background: $blue;
-                color: #fff;
-              }
-              th,
-              td {
-                border-left: 1px solid $gray;
-                padding: 3px $padding;
-                &:first-child {
-                  border-left: none !important;
-                }
-              }
-              tr:nth-child(even) {
-                background: $gray-light;
-              }
-            }
-            .blue {
-              color: $blue;
-            }
-          }
-          &.error {
-            z-index: 50;
-            background: $red-light;
-            color: $red;
-            border-top: 1px solid $red;
-            border-bottom: 1px solid $red;
-            .stack {
-              padding-left: 1.2em;
-              white-space: nowrap;
-            }
-            .count {
-              background: $red;
-            }
-          }
-          &.debug {
-            z-index: 20;
-          }
-          &.warn {
-            z-index: 40;
-            background: #fffbe6;
-            border-top: 1px solid $yellow;
-            border-bottom: 1px solid $yellow;
-          }
-          &.info {
-            z-index: 30;
-          }
-          &.output {
-            color: $gray-dark;
-          }
-          &.group,
-          &.groupCollapsed {
-            color: #222;
-            font-weight: bold;
-          }
+        }
+        &.debug {
+          z-index: 20;
+        }
+        &.warn {
+          z-index: 40;
+          background: #fffbe6;
+          border-top: 1px solid $yellow;
+          border-bottom: 1px solid $yellow;
+        }
+        &.info {
+          z-index: 30;
+        }
+        &.output {
+          color: $gray-dark;
+        }
+        &.group,
+        &.groupCollapsed {
+          color: #222;
+          font-weight: bold;
         }
       }
     }
