@@ -208,8 +208,6 @@ export default class Logger extends Emitter {
     this._timer = {}
     this._groupStack = new Stack()
     this._asyncList = []
-    this._updateBottomSpace(0)
-    this._updateTopSpace(0)
     if (this._asyncTimer) {
       clearTimeout(this._asyncTimer)
       this._asyncTimer = null
@@ -282,6 +280,9 @@ export default class Logger extends Emitter {
     const logs = this._logs
 
     this._$el.html('')
+    this._isAtBottom = true
+    this._updateBottomSpace(0)
+    this._updateTopSpace(0)
     this._displayLogs = []
     for (let i = 0, len = logs.length; i < len; i++) {
       this._attachLog(logs[i])
@@ -333,7 +334,10 @@ export default class Logger extends Emitter {
     }
 
     let log = new Log(options)
-    log.on('updateSize', () => this.renderViewport())
+    log.on('updateSize', () => {
+      this._isAtBottom = false
+      this.renderViewport()
+    })
 
     const lastLog = this._lastLog
     if (
