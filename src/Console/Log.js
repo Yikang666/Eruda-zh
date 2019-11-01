@@ -31,10 +31,11 @@ import {
   trim,
   lowerCase,
   keys,
-  $
+  $,
+  Emitter
 } from '../lib/util'
 
-export default class Log {
+export default class Log extends Emitter {
   constructor({
     type = 'log',
     args = [],
@@ -44,6 +45,8 @@ export default class Log {
     displayHeader = false,
     ignoreFilter = false
   }) {
+    super()
+
     this.type = type
     this.group = group
     this.targetGroup = targetGroup
@@ -137,8 +140,12 @@ export default class Log {
   isAttached() {
     return !!this.el.parentNode
   }
-  updateHeight() {
-    this.height = this.el.offsetHeight
+  updateHeight(silent = true) {
+    const height = this.el.offsetHeight
+    if (this.height !== height) {
+      this.height = this.el.offsetHeight
+      if (!silent) this.emit('updateHeight')
+    }
   }
   html() {
     return this.el.outerHTML
@@ -193,7 +200,7 @@ export default class Log {
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
               const jsonViewer = new JsonViewer(src, $json)
-              jsonViewer.on('change', () => this.updateHeight())
+              jsonViewer.on('change', () => this.updateHeight(false))
               $json.data('init', 'true')
             }
             $json.rmClass('eruda-hidden')

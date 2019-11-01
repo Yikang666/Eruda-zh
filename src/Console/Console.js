@@ -41,7 +41,7 @@ export default class Console extends Tool {
   }
   show() {
     super.show()
-    this._logger.restoreScroll()
+    this._logger.renderViewport()
   }
   overrideConsole() {
     const origConsole = (this._origConsole = {})

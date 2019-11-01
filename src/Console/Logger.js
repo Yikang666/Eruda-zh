@@ -19,7 +19,7 @@ import {
   toArr,
   keys,
   last,
-  debounce
+  throttle
 } from '../lib/util'
 
 let id = 0
@@ -53,6 +53,8 @@ export default class Logger extends Emitter {
     this._isAtBottom = true
     this._groupStack = new Stack()
 
+    this.renderViewport = throttle(force => this._renderViewport(force), 16)
+
     // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
     this._global = {
       copy(value) {
@@ -78,9 +80,6 @@ export default class Logger extends Emitter {
     }
 
     this._bindEvent()
-  }
-  restoreScroll() {
-    if (this._isAtBottom) this.scrollToBottom()
   }
   renderAsync(flag) {
     this._asyncRender = flag
@@ -281,8 +280,6 @@ export default class Logger extends Emitter {
       this._attachLog(logs[i])
     }
 
-    this.scrollToBottom()
-
     return this
   }
   insert(type, args) {
@@ -295,17 +292,6 @@ export default class Logger extends Emitter {
 
     this._handleAsyncList()
   }
-  isAtBottom() {
-    const { scrollTop, scrollHeight, offsetHeight } = this._container
-
-    // invisible
-    if (offsetHeight !== 0) {
-      this._isAtBottom = scrollTop === scrollHeight - offsetHeight
-      return this._isAtBottom
-    } else {
-      return false
-    }
-  }
   insertSync(type, args) {
     const logs = this._logs
     const groupStack = this._groupStack
@@ -317,8 +303,6 @@ export default class Logger extends Emitter {
       this._groupStack.pop()
       return this
     }
-
-    const isAtBottom = this.isAtBottom()
 
     const options = isStr(type) ? { type, args } : type
     if (groupStack.size > 0) {
@@ -342,6 +326,7 @@ export default class Logger extends Emitter {
     }
 
     let log = new Log(options)
+    log.on('updateHeight', () => this.renderViewport())
 
     const lastLog = this._lastLog
     if (
@@ -371,15 +356,7 @@ export default class Logger extends Emitter {
 
     this.emit('insert', log)
 
-    if (isAtBottom) this.scrollToBottom()
-
     return this
-  }
-  scrollToBottom() {
-    const container = this._container
-    const { scrollHeight, offsetHeight } = container
-
-    container.scrollTop = scrollHeight - offsetHeight
   }
   toggleGroup(log) {
     const { targetGroup } = log
@@ -394,6 +371,7 @@ export default class Logger extends Emitter {
     this._$bottomSpace.css({ height })
   }
   _updateLogHeight(log) {
+    if (this._fakeEl.offsetParent === null) return
     if (!log.isAttached()) {
       this._fakeEl.appendChild(log.el)
       log.updateHeight()
@@ -408,7 +386,7 @@ export default class Logger extends Emitter {
     const idx = displayLogs.indexOf(log)
     if (idx > -1) {
       displayLogs.splice(idx, 1)
-      this._renderViewport()
+      this.renderViewport()
     }
   }
   // Binary search
@@ -419,14 +397,14 @@ export default class Logger extends Emitter {
 
     if (displayLogs.length === 0) {
       displayLogs.push(log)
-      this._renderViewport()
+      this.renderViewport()
       return
     }
 
     const lastDisplayLog = last(displayLogs)
     if (log.id > lastDisplayLog.id) {
       displayLogs.push(log)
-      this._renderViewport()
+      this.renderViewport()
       return
     }
 
@@ -457,7 +435,7 @@ export default class Logger extends Emitter {
       displayLogs.splice(middleIdx, 0, log)
     }
 
-    this._renderViewport()
+    this.renderViewport()
   }
   _handleAsyncList() {
     const asyncList = this._asyncList
@@ -467,7 +445,7 @@ export default class Logger extends Emitter {
     this._asyncTimer = setTimeout(() => {
       this._asyncTimer = null
       let done = false
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 20; i++) {
         const item = asyncList.shift()
         if (!item) {
           done = true
@@ -476,7 +454,7 @@ export default class Logger extends Emitter {
         this.insertSync(item[0], item[1])
       }
       if (!done) this._handleAsyncList()
-    }, 25)
+    }, 15)
   }
   _injectGlobal() {
     each(this._global, (val, name) => {
@@ -584,35 +562,69 @@ export default class Logger extends Emitter {
         self._openGroup($el.get(0).log)
       })
 
-    const renderViewport = debounce(() => this._renderViewport(), 15)
-    this._$container.on('scroll', renderViewport)
+    this._$container.on('scroll', () => this.renderViewport(false))
   }
-  _renderViewport() {
-    const { scrollTop, offsetHeight } = this._container
-    const top = scrollTop
-    const bottom = scrollTop + offsetHeight
+  _renderViewport(force = true) {
+    const container = this._container
+    if (container.offsetParent === null) return
+    const { scrollTop, offsetHeight } = container
+    let top = scrollTop
+    let bottom = scrollTop + offsetHeight
+
+    if (!force) {
+      if (
+        this._topSpaceHeight < top &&
+        this._topSpaceHeight + this._el.offsetHeight > bottom
+      ) {
+        return
+      }
+    }
+
     const displayLogs = this._displayLogs
+    const tolerance = 1000
+    top -= tolerance
+    bottom += tolerance
 
     let topSpaceHeight = 0
     let bottomSpaceHeight = 0
     let currentHeight = 0
 
     this._$el.html('')
+    const frag = document.createDocumentFragment()
     for (let i = 0, len = displayLogs.length; i < len; i++) {
-      const { el, height } = displayLogs[i]
+      const log = displayLogs[i]
+      const { el } = log
+      let { height } = log
+      if (height === 0) {
+        this._updateLogHeight(log)
+        height = log.height
+      }
 
       if (currentHeight > bottom) {
         bottomSpaceHeight += height
       } else if (currentHeight + height > top) {
-        this._el.appendChild(el)
+        frag.appendChild(el)
       } else if (currentHeight < top) {
         topSpaceHeight += height
       }
 
       currentHeight += height
     }
+    this._el.appendChild(frag)
 
     this._updateTopSpace(topSpaceHeight)
     this._updateBottomSpace(bottomSpaceHeight)
+
+    container.scrollTop = scrollTop
+
+    const scrollHeight = container.scrollHeight
+    if (this._isAtBottom) {
+      container.scrollTop = scrollHeight - offsetHeight
+      this._isAtBottom = true
+    } else if (scrollHeight === offsetHeight) {
+      this._isAtBottom = true
+    } else if (container.scrollTop === scrollHeight - offsetHeight) {
+      this._isAtBottom = true
+    }
   }
 }
