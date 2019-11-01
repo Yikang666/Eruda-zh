@@ -59,6 +59,7 @@ export default class Log extends Emitter {
     this.el = document.createElement('li')
     this.el.log = this
     this.height = 0
+    this.width = 0
     this._$el = $(this.el)
 
     if (displayHeader) {
@@ -140,11 +141,12 @@ export default class Log extends Emitter {
   isAttached() {
     return !!this.el.parentNode
   }
-  updateHeight(silent = true) {
+  updateSize(silent = true) {
     const height = this.el.offsetHeight
     if (this.height !== height) {
       this.height = this.el.offsetHeight
-      if (!silent) this.emit('updateHeight')
+      this.width = this.el.offsetWidth
+      if (!silent) this.emit('updateSize')
     }
   }
   html() {
@@ -200,7 +202,7 @@ export default class Log extends Emitter {
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
               const jsonViewer = new JsonViewer(src, $json)
-              jsonViewer.on('change', () => this.updateHeight(false))
+              jsonViewer.on('change', () => this.updateSize(false))
               $json.data('init', 'true')
             }
             $json.rmClass('eruda-hidden')

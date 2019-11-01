@@ -326,7 +326,7 @@ export default class Logger extends Emitter {
     }
 
     let log = new Log(options)
-    log.on('updateHeight', () => this.renderViewport())
+    log.on('updateSize', () => this.renderViewport())
 
     const lastLog = this._lastLog
     if (
@@ -352,7 +352,7 @@ export default class Logger extends Emitter {
     }
 
     this._attachLog(log)
-    this._updateLogHeight(log)
+    this._updateLogSize(log)
 
     this.emit('insert', log)
 
@@ -370,15 +370,15 @@ export default class Logger extends Emitter {
     this._bottomSpaceHeight = height
     this._$bottomSpace.css({ height })
   }
-  _updateLogHeight(log) {
+  _updateLogSize(log) {
     if (this._fakeEl.offsetParent === null) return
     if (!log.isAttached()) {
       this._fakeEl.appendChild(log.el)
-      log.updateHeight()
+      log.updateSize()
       this._fakeEl.removeChild(log.el)
       return
     }
-    log.updateHeight()
+    log.updateSize()
   }
   _detachLog(log) {
     const displayLogs = this._displayLogs
@@ -567,7 +567,7 @@ export default class Logger extends Emitter {
   _renderViewport(force = true) {
     const container = this._container
     if (container.offsetParent === null) return
-    const { scrollTop, offsetHeight } = container
+    const { scrollTop, offsetWidth, offsetHeight } = container
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
 
@@ -576,6 +576,7 @@ export default class Logger extends Emitter {
         this._topSpaceHeight < top &&
         this._topSpaceHeight + this._el.offsetHeight > bottom
       ) {
+        this._checkScrollBottom(false)
         return
       }
     }
@@ -595,8 +596,9 @@ export default class Logger extends Emitter {
       const log = displayLogs[i]
       const { el } = log
       let { height } = log
-      if (height === 0) {
-        this._updateLogHeight(log)
+      const { width } = log
+      if (height === 0 || width !== offsetWidth) {
+        this._updateLogSize(log)
         height = log.height
       }
 
@@ -617,11 +619,17 @@ export default class Logger extends Emitter {
 
     container.scrollTop = scrollTop
 
-    const scrollHeight = container.scrollHeight
+    this._checkScrollBottom(true)
+  }
+  _checkScrollBottom(scrollToBottom) {
+    const container = this._container
+    const { scrollHeight, offsetHeight } = container
     if (this._isAtBottom) {
-      container.scrollTop = scrollHeight - offsetHeight
+      if (scrollToBottom) container.scrollTop = scrollHeight - offsetHeight
       this._isAtBottom = true
-    } else if (scrollHeight === offsetHeight) {
+    }
+    this._isAtBottom = false
+    if (scrollHeight === offsetHeight) {
       this._isAtBottom = true
     } else if (container.scrollTop === scrollHeight - offsetHeight) {
       this._isAtBottom = true
