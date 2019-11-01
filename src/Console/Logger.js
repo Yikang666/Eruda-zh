@@ -54,6 +54,7 @@ export default class Logger extends Emitter {
     this._asyncTimer = null
     this._isAtBottom = true
     this._groupStack = new Stack()
+    this._ignoreScroll = false
 
     this.renderViewport = throttle(force => {
       this._renderViewport(force)
@@ -207,6 +208,8 @@ export default class Logger extends Emitter {
     this._timer = {}
     this._groupStack = new Stack()
     this._asyncList = []
+    this._updateBottomSpace(0)
+    this._updateTopSpace(0)
     if (this._asyncTimer) {
       clearTimeout(this._asyncTimer)
       this._asyncTimer = null
@@ -568,28 +571,40 @@ export default class Logger extends Emitter {
         self._openGroup($el.get(0).log)
       })
 
-    this._$container.on('scroll', () => this.renderViewport(false))
+    this._$container.on('scroll', () => {
+      if (this._ignoreScroll) {
+        this._ignoreScroll = false
+        return
+      }
+
+      const { scrollHeight, offsetHeight, scrollTop } = this._container
+      let isAtBottom = false
+      if (scrollHeight === offsetHeight) {
+        isAtBottom = true
+      } else if (scrollTop === scrollHeight - offsetHeight) {
+        isAtBottom = true
+      }
+      this._isAtBottom = isAtBottom
+
+      if (
+        this._topSpaceHeight < scrollTop &&
+        this._topSpaceHeight + this._el.offsetHeight > scrollTo + offsetHeight
+      ) {
+        return
+      }
+
+      this.renderViewport(false)
+    })
   }
-  _renderViewport(force = true) {
+  _renderViewport() {
     const container = this._container
     if (isHidden(container)) return
     const { scrollTop, offsetWidth, offsetHeight } = container
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
 
-    const tolerance = 1000
-
-    if (!force) {
-      if (
-        this._topSpaceHeight < top - tolerance / 2 &&
-        this._topSpaceHeight + this._el.offsetHeight > bottom + tolerance / 2
-      ) {
-        this._checkScrollBottom(false)
-        return
-      }
-    }
-
     const displayLogs = this._displayLogs
+    const tolerance = 1000
     top -= tolerance
     bottom += tolerance
 
@@ -639,23 +654,15 @@ export default class Logger extends Emitter {
     this._updateTopSpace(topSpaceHeight)
     this._updateBottomSpace(bottomSpaceHeight)
 
-    container.scrollTop = scrollTop
+    const { scrollHeight } = container
+    if (this._isAtBottom && scrollTop !== scrollHeight - offsetHeight) {
+      container.scrollTop = scrollHeight - offsetHeight
+      this.renderViewport()
+    } else {
+      container.scrollTop = scrollTop
+    }
 
-    this._checkScrollBottom(true)
-  }
-  _checkScrollBottom(scrollToBottom) {
-    const container = this._container
-    const { scrollHeight, offsetHeight } = container
-    if (this._isAtBottom) {
-      if (scrollToBottom) container.scrollTop = scrollHeight - offsetHeight
-      this._isAtBottom = true
-    }
-    this._isAtBottom = false
-    if (scrollHeight === offsetHeight) {
-      this._isAtBottom = true
-    } else if (container.scrollTop === scrollHeight - offsetHeight) {
-      this._isAtBottom = true
-    }
+    this._ignoreScroll = true
   }
 }
 
