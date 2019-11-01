@@ -2,6 +2,7 @@
   .entry-btn {
     width: 40px;
     height: 40px;
+    display: flex;
     background: #000;
     opacity: 0.3;
     border-radius: 10px;
@@ -10,8 +11,8 @@
     transition: opacity 0.3s;
     color: #fff;
     font-size: 25px;
-    text-align: center;
-    line-height: 40px;
+    align-items: center;
+    justify-content: center;
     &.active,
     &:active {
       opacity: 0.8;

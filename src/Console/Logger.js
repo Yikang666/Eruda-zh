@@ -577,10 +577,12 @@ export default class Logger extends Emitter {
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
 
+    const tolerance = 1000
+
     if (!force) {
       if (
-        this._topSpaceHeight < top &&
-        this._topSpaceHeight + this._el.offsetHeight > bottom
+        this._topSpaceHeight < top - tolerance / 2 &&
+        this._topSpaceHeight + this._el.offsetHeight > bottom + tolerance / 2
       ) {
         this._checkScrollBottom(false)
         return
@@ -588,7 +590,6 @@ export default class Logger extends Emitter {
     }
 
     const displayLogs = this._displayLogs
-    const tolerance = 1000
     top -= tolerance
     bottom += tolerance
 

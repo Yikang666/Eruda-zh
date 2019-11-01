@@ -43,7 +43,10 @@
             <a href="#" id="log">Log</a>
         </li>
         <li>
-            <a href="#" id="heavy-log">Heavy Log</a>
+            <a href="#" id="log-10000">Log 10000</a>
+        </li>
+        <li>
+            <a href="#" id="log-1000">Log 1000</a>
         </li>
     </ul>
 </nav>
@@ -165,8 +168,13 @@
         for (var i = 0; i < 10000; i++) arr.push(i);
         console.log(arr);
     });
-    addClickEvent('heavy-log', () => {
+    addClickEvent('log-10000', () => {
         for (let i = 0; i < 10000; i++) {
+            console.log(location, i);
+        }
+    });
+    addClickEvent('log-1000', () => {
+        for (let i = 0; i < 1000; i++) {
             console.log(location, i);
         }
     });
