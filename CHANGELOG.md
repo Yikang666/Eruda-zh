@@ -1,3 +1,7 @@
+## v1.9.2 (1 Nov 2019)
+
+* perf(console): rendering
+
 ## v1.9.1 (27 Oct 2019)
 
 * perf(console): asynchronous log render
