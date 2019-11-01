@@ -29,6 +29,10 @@ export default class Console extends Tool {
   init($el, container) {
     super.init($el)
     this._container = container
+    this._handleShow = () => {
+      if (!this.active) return
+      this._logger.renderViewport()
+    }
 
     this._appendTpl()
 
@@ -41,7 +45,7 @@ export default class Console extends Tool {
   }
   show() {
     super.show()
-    this._logger.renderViewport()
+    this._handleShow()
   }
   overrideConsole() {
     const origConsole = (this._origConsole = {})
@@ -87,6 +91,8 @@ export default class Console extends Tool {
   destroy() {
     this._logger.destroy()
     super.destroy()
+
+    this._container.off('show', this._handleShow)
 
     evalCss.remove(this._style)
     this.ignoreGlobalErr()
@@ -199,6 +205,8 @@ export default class Console extends Tool {
 
       if (autoShow) container.showTool('console').show()
     })
+
+    container.on('show', this._handleShow)
   }
   _hideInput() {
     this._$inputContainer.css({
