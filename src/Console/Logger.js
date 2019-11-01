@@ -18,7 +18,8 @@ import {
   each,
   toArr,
   keys,
-  last
+  last,
+  debounce
 } from '../lib/util'
 
 let id = 0
@@ -384,6 +385,14 @@ export default class Logger extends Emitter {
     const { targetGroup } = log
     targetGroup.collapsed ? this._openGroup(log) : this._collapseGroup(log)
   }
+  _updateTopSpace(height) {
+    this._topSpaceHeight = height
+    this._$topSpace.css({ height })
+  }
+  _updateBottomSpace(height) {
+    this._bottomSpaceHeight = height
+    this._$bottomSpace.css({ height })
+  }
   _updateLogHeight(log) {
     if (!log.isAttached()) {
       this._fakeEl.appendChild(log.el)
@@ -399,7 +408,7 @@ export default class Logger extends Emitter {
     const idx = displayLogs.indexOf(log)
     if (idx > -1) {
       displayLogs.splice(idx, 1)
-      this._el.removeChild(log.el)
+      this._renderViewport()
     }
   }
   // Binary search
@@ -407,18 +416,17 @@ export default class Logger extends Emitter {
     if (!this._filterLog(log) || log.collapsed) return
 
     const displayLogs = this._displayLogs
-    const el = this._el
 
     if (displayLogs.length === 0) {
-      el.appendChild(log.el)
       displayLogs.push(log)
+      this._renderViewport()
       return
     }
 
     const lastDisplayLog = last(displayLogs)
     if (log.id > lastDisplayLog.id) {
-      el.appendChild(log.el)
       displayLogs.push(log)
+      this._renderViewport()
       return
     }
 
@@ -444,12 +452,12 @@ export default class Logger extends Emitter {
     }
 
     if (middleLog.id < log.id) {
-      middleLog.el.insertAdjacentElement('afterend', log.el)
       displayLogs.splice(middleIdx + 1, 0, log)
     } else {
-      middleLog.el.insertAdjacentElement('beforebegin', log.el)
       displayLogs.splice(middleIdx, 0, log)
     }
+
+    this._renderViewport()
   }
   _handleAsyncList() {
     const asyncList = this._asyncList
@@ -575,5 +583,36 @@ export default class Logger extends Emitter {
 
         self._openGroup($el.get(0).log)
       })
+
+    const renderViewport = debounce(() => this._renderViewport(), 15)
+    this._$container.on('scroll', renderViewport)
+  }
+  _renderViewport() {
+    const { scrollTop, offsetHeight } = this._container
+    const top = scrollTop
+    const bottom = scrollTop + offsetHeight
+    const displayLogs = this._displayLogs
+
+    let topSpaceHeight = 0
+    let bottomSpaceHeight = 0
+    let currentHeight = 0
+
+    this._$el.html('')
+    for (let i = 0, len = displayLogs.length; i < len; i++) {
+      const { el, height } = displayLogs[i]
+
+      if (currentHeight > bottom) {
+        bottomSpaceHeight += height
+      } else if (currentHeight + height > top) {
+        this._el.appendChild(el)
+      } else if (currentHeight < top) {
+        topSpaceHeight += height
+      }
+
+      currentHeight += height
+    }
+
+    this._updateTopSpace(topSpaceHeight)
+    this._updateBottomSpace(bottomSpaceHeight)
   }
 }
