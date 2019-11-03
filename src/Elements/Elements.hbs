@@ -1,122 +1,122 @@
 {{#if parents}}
-    <ul {{{class 'parents'}}}>
-        {{#each parents}}
-            <li>
-                <div {{{class 'parent'}}} data-idx="{{idx}}">{{{text}}}</div>
-                <span {{{class 'icon-arrow-right'}}}></span>
-            </li>
-        {{/each}}
-    </ul>
+  <ul {{{class 'parents'}}}>
+    {{#each parents}}
+      <li>
+        <div {{{class 'parent'}}} data-idx="{{idx}}">{{{text}}}</div>
+        <span {{{class 'icon-arrow-right'}}}></span>
+      </li>
+    {{/each}}
+  </ul>
 {{/if}}
 <div {{{class 'breadcrumb'}}}>
-    {{{name}}}
+  {{{name}}}
 </div>
 {{#if children}}
-    <ul {{{class 'children'}}}>
-        {{#each children}}
-            <li class="eruda-child {{#if isCmt}}eruda-green{{/if}} {{#if isEl}}eruda-active-effect{{/if}}" data-idx="{{idx}}">{{{text}}}</li>
-        {{/each}}
-    </ul>
+  <ul {{{class 'children'}}}>
+    {{#each children}}
+      <li class="eruda-child {{#if isCmt}}eruda-green{{/if}} {{#if isEl}}eruda-active-effect{{/if}}" data-idx="{{idx}}">{{{text}}}</li>
+    {{/each}}
+  </ul>
 {{/if}}
 <div {{{class 'attributes section'}}}>
-    <h2>Attributes</h2>
-    <div {{{class 'table-wrapper'}}}>
-        <table>
-            <tbody>
-            {{#if attributes}}
-                {{#each attributes}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>{{{value}}}</td>
-                    </tr>
-                {{/each}}
-            {{else}}
-                <tr>
-                    <td>Empty</td>
-                </tr>
-            {{/if}}
-            </tbody>
-        </table>
-    </div>
+  <h2>Attributes</h2>
+  <div {{{class 'table-wrapper'}}}>
+    <table>
+      <tbody>
+      {{#if attributes}}
+        {{#each attributes}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{{value}}}</td>
+          </tr>
+        {{/each}}
+      {{else}}
+        <tr>
+          <td>Empty</td>
+        </tr>
+      {{/if}}
+      </tbody>
+    </table>
+  </div>
 </div>
 {{#if styles}}
-    <div {{{class 'styles section'}}}>
-        <h2>Styles</h2>
-        <div {{{class 'style-wrapper'}}}>
-            {{#each styles}}
-                <div {{{class 'style-rules'}}}>
-                    <div>{{selectorText}} {</div>
-                    {{#each style}}
-                        <div {{{class 'rule'}}}>
-                            <span>{{@key}}</span>: {{{.}}};
-                        </div>
-                    {{/each}}
-                    <div>}</div>
-                </div>
-            {{/each}}
+  <div {{{class 'styles section'}}}>
+    <h2>Styles</h2>
+    <div {{{class 'style-wrapper'}}}>
+      {{#each styles}}
+        <div {{{class 'style-rules'}}}>
+          <div>{{selectorText}} {</div>
+          {{#each style}}
+            <div {{{class 'rule'}}}>
+              <span>{{@key}}</span>: {{{.}}};
+            </div>
+          {{/each}}
+          <div>}</div>
         </div>
+      {{/each}}
     </div>
+  </div>
 {{/if}}
 {{#if computedStyle}}
-    <div {{{class 'computed-style section'}}}>
-        <h2 {{{class 'toggle-all-computed-style active-effect'}}}>Computed Style
-            <div {{{class 'btn'}}}>
-                {{#if rmDefComputedStyle}}
-                    <span {{{class 'icon-compress'}}}></span>
-                {{else}}
-                    <span {{{class 'icon-expand'}}}></span>
-                {{/if}}
-            </div>
-        </h2>
-        <div {{{class 'box-model'}}}>
-            {{#if boxModel.position}}<div {{{class 'position'}}}>
-                <div {{{class 'label'}}}>position</div><div {{{class 'top'}}}>{{boxModel.position.top}}</div><br><div {{{class 'left'}}}>{{boxModel.position.left}}</div>{{/if}}{{!
-                }}<div {{{class 'margin'}}}>
-                    <div {{{class 'label'}}}>margin</div><div {{{class 'top'}}}>{{boxModel.margin.top}}</div><br><div {{{class 'left'}}}>{{boxModel.margin.left}}</div>{{!
-                    }}<div {{{class 'border'}}}>
-                        <div {{{class 'label'}}}>border</div><div {{{class 'top'}}}>{{boxModel.border.top}}</div><br><div {{{class 'left'}}}>{{boxModel.border.left}}</div>{{!
-                        }}<div {{{class 'padding'}}}>
-                            <div {{{class 'label'}}}>padding</div><div {{{class 'top'}}}>{{boxModel.padding.top}}</div><br><div {{{class 'left'}}}>{{boxModel.padding.left}}</div>{{!
-                            }}<div {{{class 'content'}}}>
-                                <span>{{boxModel.content.width}}</span> × <span>{{boxModel.content.height}}</span>
-                            </div>{{!
-                            }}<div {{{class 'right'}}}>{{boxModel.padding.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.padding.bottom}}</div>{{!
-                            }}</div>{{!
-                        }}<div {{{class 'right'}}}>{{boxModel.border.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.border.bottom}}</div>{{!
-                    }}</div>{{!
-                    }}<div {{{class 'right'}}}>{{boxModel.margin.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.margin.bottom}}</div>{{!
-                }}</div>{{!
-                }}{{#if boxModel.position}}<div {{{class 'right'}}}>{{boxModel.position.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.position.bottom}}</div>{{!
-            }}</div>{{/if}}
-        </div>
-        <div {{{class 'table-wrapper'}}}>
-            <table>
-                <tbody>
-                {{#each computedStyle}}
-                    <tr>
-                        <td {{{class 'key'}}}>{{@key}}</td>
-                        <td>{{{.}}}</td>
-                    </tr>
-                {{/each}}
-                </tbody>
-            </table>
-        </div>
+  <div {{{class 'computed-style section'}}}>
+    <h2 {{{class 'toggle-all-computed-style active-effect'}}}>Computed Style
+      <div {{{class 'btn'}}}>
+        {{#if rmDefComputedStyle}}
+          <span {{{class 'icon-compress'}}}></span>
+        {{else}}
+          <span {{{class 'icon-expand'}}}></span>
+        {{/if}}
+      </div>
+    </h2>
+    <div {{{class 'box-model'}}}>
+      {{#if boxModel.position}}<div {{{class 'position'}}}>
+        <div {{{class 'label'}}}>position</div><div {{{class 'top'}}}>{{boxModel.position.top}}</div><br><div {{{class 'left'}}}>{{boxModel.position.left}}</div>{{/if}}{{!
+        }}<div {{{class 'margin'}}}>
+          <div {{{class 'label'}}}>margin</div><div {{{class 'top'}}}>{{boxModel.margin.top}}</div><br><div {{{class 'left'}}}>{{boxModel.margin.left}}</div>{{!
+          }}<div {{{class 'border'}}}>
+            <div {{{class 'label'}}}>border</div><div {{{class 'top'}}}>{{boxModel.border.top}}</div><br><div {{{class 'left'}}}>{{boxModel.border.left}}</div>{{!
+            }}<div {{{class 'padding'}}}>
+              <div {{{class 'label'}}}>padding</div><div {{{class 'top'}}}>{{boxModel.padding.top}}</div><br><div {{{class 'left'}}}>{{boxModel.padding.left}}</div>{{!
+              }}<div {{{class 'content'}}}>
+                <span>{{boxModel.content.width}}</span> × <span>{{boxModel.content.height}}</span>
+              </div>{{!
+              }}<div {{{class 'right'}}}>{{boxModel.padding.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.padding.bottom}}</div>{{!
+              }}</div>{{!
+            }}<div {{{class 'right'}}}>{{boxModel.border.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.border.bottom}}</div>{{!
+          }}</div>{{!
+          }}<div {{{class 'right'}}}>{{boxModel.margin.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.margin.bottom}}</div>{{!
+        }}</div>{{!
+        }}{{#if boxModel.position}}<div {{{class 'right'}}}>{{boxModel.position.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.position.bottom}}</div>{{!
+      }}</div>{{/if}}
     </div>
+    <div {{{class 'table-wrapper'}}}>
+      <table>
+        <tbody>
+        {{#each computedStyle}}
+          <tr>
+            <td {{{class 'key'}}}>{{@key}}</td>
+            <td>{{{.}}}</td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {{/if}}
 {{#if listeners}}
-    <div {{{class 'listeners section'}}}>
-        <h2>Event Listeners</h2>
-        <div {{{class 'listener-wrapper'}}}>
-            {{#each listeners}}
-               <div {{{class 'listener'}}}>
-                   <div {{{class 'listener-type'}}}>{{@key}}</div>
-                   <ul {{{class 'listener-content'}}}>
-                       {{#each .}}
-                           <li {{#if useCapture}}{{{class 'capture'}}}{{/if}}>{{listenerStr}}</li>
-                       {{/each}}
-                   </ul>
-               </div>
-            {{/each}}
-        </div>
+  <div {{{class 'listeners section'}}}>
+    <h2>Event Listeners</h2>
+    <div {{{class 'listener-wrapper'}}}>
+      {{#each listeners}}
+         <div {{{class 'listener'}}}>
+           <div {{{class 'listener-type'}}}>{{@key}}</div>
+           <ul {{{class 'listener-content'}}}>
+             {{#each .}}
+               <li {{#if useCapture}}{{{class 'capture'}}}{{/if}}>{{listenerStr}}</li>
+             {{/each}}
+           </ul>
+         </div>
+      {{/each}}
     </div>
+  </div>
 {{/if}}

@@ -1,166 +1,166 @@
 <div {{{class 'section local-storage'}}}>
-    <h2 {{{class 'title'}}}>
-        Local Storage
-        <div {{{class 'btn refresh-local-storage'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-        <div {{{class 'btn clear-storage'}}} data-type="local">
-            <span {{{class 'icon-clear'}}}></span>
-        </div>
-    </h2>
-    <table>
-        <tbody>
-            {{#if localStoreData}}
-                {{#each localStoreData}}
-                    <tr>
-                        <td {{{class 'key'}}}>{{key}}</td>
-                        <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="local">{{val}}</td>
-                        <td {{{class 'control'}}}>
-                            <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="local"></span>
-                        </td>
-                    </tr>
-                {{/each}}
-            {{else}}
-                <tr>
-                    <td>Empty</td>
-                </tr>
-            {{/if}}
-        </tbody>
-    </table>
+  <h2 {{{class 'title'}}}>
+    Local Storage
+    <div {{{class 'btn refresh-local-storage'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+    <div {{{class 'btn clear-storage'}}} data-type="local">
+      <span {{{class 'icon-clear'}}}></span>
+    </div>
+  </h2>
+  <table>
+    <tbody>
+      {{#if localStoreData}}
+        {{#each localStoreData}}
+          <tr>
+            <td {{{class 'key'}}}>{{key}}</td>
+            <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="local">{{val}}</td>
+            <td {{{class 'control'}}}>
+              <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="local"></span>
+            </td>
+          </tr>
+        {{/each}}
+      {{else}}
+        <tr>
+          <td>Empty</td>
+        </tr>
+      {{/if}}
+    </tbody>
+  </table>
 </div>
 <div {{{class 'section session-storage'}}}>
-    <h2 {{{class 'title'}}}>
-        Session Storage
-        <div {{{class 'btn refresh-session-storage'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-        <div {{{class 'btn clear-storage'}}} data-type="session">
-            <span {{{class 'icon-clear'}}}></span>
-        </div>
-    </h2>
-    <table>
-        <tbody>
-        {{#if sessionStoreData}}
-            {{#each sessionStoreData}}
-                <tr>
-                    <td {{{class 'key'}}}>{{key}}</td>
-                    <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="session">{{val}}</td>
-                    <td {{{class 'control'}}}>
-                        <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="session"></span>
-                    </td>
-                </tr>
-            {{/each}}
-        {{else}}
-            <tr>
-                <td>Empty</td>
-            </tr>
-        {{/if}}
-        </tbody>
-    </table>
+  <h2 {{{class 'title'}}}>
+    Session Storage
+    <div {{{class 'btn refresh-session-storage'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+    <div {{{class 'btn clear-storage'}}} data-type="session">
+      <span {{{class 'icon-clear'}}}></span>
+    </div>
+  </h2>
+  <table>
+    <tbody>
+    {{#if sessionStoreData}}
+      {{#each sessionStoreData}}
+        <tr>
+          <td {{{class 'key'}}}>{{key}}</td>
+          <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="session">{{val}}</td>
+          <td {{{class 'control'}}}>
+            <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="session"></span>
+          </td>
+        </tr>
+      {{/each}}
+    {{else}}
+      <tr>
+        <td>Empty</td>
+      </tr>
+    {{/if}}
+    </tbody>
+  </table>
 </div>
 <div {{{class 'section cookie'}}}>
-    <h2 {{{class (concat 'title ' cookieState)}}}>
-        Cookie
-        <div {{{class 'btn refresh-cookie'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-        <div {{{class 'btn clear-cookie'}}}>
-            <span {{{class 'icon-clear'}}}></span>
-        </div>
-    </h2>
-    <table>
-        <tbody>
-            {{#if cookieData}}
-                {{#each cookieData}}
-                    <tr>
-                        <td {{{class 'key'}}}>{{key}}</td>
-                        <td>{{val}}</td>
-                        <td {{{class 'control'}}}>
-                            <span {{{class 'icon-delete delete-cookie'}}} data-key="{{key}}"></span>
-                        </td>
-                    </tr>
-                {{/each}}
-            {{else}}
-                <tr>
-                    <td>Empty</td>
-                </tr>
-            {{/if}}
-        </tbody>
-    </table>
+  <h2 {{{class (concat 'title ' cookieState)}}}>
+    Cookie
+    <div {{{class 'btn refresh-cookie'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+    <div {{{class 'btn clear-cookie'}}}>
+      <span {{{class 'icon-clear'}}}></span>
+    </div>
+  </h2>
+  <table>
+    <tbody>
+      {{#if cookieData}}
+        {{#each cookieData}}
+          <tr>
+            <td {{{class 'key'}}}>{{key}}</td>
+            <td>{{val}}</td>
+            <td {{{class 'control'}}}>
+              <span {{{class 'icon-delete delete-cookie'}}} data-key="{{key}}"></span>
+            </td>
+          </tr>
+        {{/each}}
+      {{else}}
+        <tr>
+          <td>Empty</td>
+        </tr>
+      {{/if}}
+    </tbody>
+  </table>
 </div>
 <div {{{class 'section script'}}}>
-    <h2 {{{class (concat 'title ' scriptState)}}}>
-        Script
-        <div {{{class 'btn refresh-script'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-    </h2>
-    <ul {{{class 'link-list'}}}>
-        {{#if scriptData}}
-            {{#each scriptData}}
-                <li>
-                    <a href="{{this}}" target="_blank" {{{class 'js-link'}}}>{{this}}</a>
-                </li>
-            {{/each}}
-        {{else}}
-            <li>Empty</li>
-        {{/if}}
-    </ul>
+  <h2 {{{class (concat 'title ' scriptState)}}}>
+    Script
+    <div {{{class 'btn refresh-script'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+  </h2>
+  <ul {{{class 'link-list'}}}>
+    {{#if scriptData}}
+      {{#each scriptData}}
+        <li>
+          <a href="{{this}}" target="_blank" {{{class 'js-link'}}}>{{this}}</a>
+        </li>
+      {{/each}}
+    {{else}}
+      <li>Empty</li>
+    {{/if}}
+  </ul>
 </div>
 <div {{{class 'section stylesheet'}}}>
-    <h2 {{{class (concat 'title ' stylesheetState)}}}>
-        Stylesheet
-        <div {{{class 'btn refresh-stylesheet'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-    </h2>
-    <ul {{{class 'link-list'}}}>
-        {{#if stylesheetData}}
-            {{#each stylesheetData}}
-                <li>
-                    <a href="{{this}}" target="_blank" {{{class 'css-link'}}}>{{this}}</a>
-                </li>
-            {{/each}}
-        {{else}}
-            <li>Empty</li>
-        {{/if}}
-    </ul>
+  <h2 {{{class (concat 'title ' stylesheetState)}}}>
+    Stylesheet
+    <div {{{class 'btn refresh-stylesheet'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+  </h2>
+  <ul {{{class 'link-list'}}}>
+    {{#if stylesheetData}}
+      {{#each stylesheetData}}
+        <li>
+          <a href="{{this}}" target="_blank" {{{class 'css-link'}}}>{{this}}</a>
+        </li>
+      {{/each}}
+    {{else}}
+      <li>Empty</li>
+    {{/if}}
+  </ul>
 </div>
 <div {{{class 'section iframe'}}}>
-    <h2 {{{class 'title'}}}>
-        Iframe
-        <div {{{class 'btn refresh-iframe'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-    </h2>
-    <ul {{{class 'link-list'}}}>
-        {{#if iframeData}}
-            {{#each iframeData}}
-                <li>
-                    <a href="{{this}}" target="_blank" {{{class 'iframe-link'}}}>{{this}}</a>
-                </li>
-            {{/each}}
-        {{else}}
-            <li>Empty</li>
-        {{/if}}
-    </ul>
+  <h2 {{{class 'title'}}}>
+    Iframe
+    <div {{{class 'btn refresh-iframe'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+  </h2>
+  <ul {{{class 'link-list'}}}>
+    {{#if iframeData}}
+      {{#each iframeData}}
+        <li>
+          <a href="{{this}}" target="_blank" {{{class 'iframe-link'}}}>{{this}}</a>
+        </li>
+      {{/each}}
+    {{else}}
+      <li>Empty</li>
+    {{/if}}
+  </ul>
 </div>
 <div {{{class 'section image'}}}>
-    <h2 {{{class (concat 'title ' imageState)}}}>
-        Image
-        <div {{{class 'btn refresh-image'}}}>
-            <span {{{class 'icon-refresh'}}}></span>
-        </div>
-    </h2>
-    <ul {{{class 'image-list'}}}>
-        {{#if imageData}}
-            {{#each imageData}}
-                <li {{{class 'image'}}}>
-                    <img src="{{this}}" data-exclude="true" {{{class 'img-link'}}}/>
-                </li>
-            {{/each}}
-        {{else}}
-            <li>Empty</li>
-        {{/if}}
-    </ul>
+  <h2 {{{class (concat 'title ' imageState)}}}>
+    Image
+    <div {{{class 'btn refresh-image'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+  </h2>
+  <ul {{{class 'image-list'}}}>
+    {{#if imageData}}
+      {{#each imageData}}
+        <li {{{class 'image'}}}>
+          <img src="{{this}}" data-exclude="true" {{{class 'img-link'}}}/>
+        </li>
+      {{/each}}
+    {{else}}
+      <li>Empty</li>
+    {{/if}}
+  </ul>
 </div>
