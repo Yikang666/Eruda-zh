@@ -2217,6 +2217,20 @@ query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
 query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
 ```
 
+## raf 
+
+Shortcut for requestAnimationFrame.
+
+Use setTimeout if native requestAnimationFrame is not supported.
+
+```javascript
+const id = raf(function tick() {
+    // Animation stuff
+    raf(tick);
+});
+raf.cancel(id);
+```
+
 ## repeat 
 
 Repeat string n-times.

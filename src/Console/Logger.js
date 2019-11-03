@@ -19,7 +19,8 @@ import {
   toArr,
   keys,
   last,
-  throttle
+  throttle,
+  raf
 } from '../lib/util'
 
 let id = 0
@@ -452,7 +453,7 @@ export default class Logger extends Emitter {
 
     this.renderViewport()
   }
-  _handleAsyncList() {
+  _handleAsyncList(timeout = 20) {
     const asyncList = this._asyncList
 
     if (this._asyncTimer) return
@@ -460,16 +461,38 @@ export default class Logger extends Emitter {
     this._asyncTimer = setTimeout(() => {
       this._asyncTimer = null
       let done = false
-      for (let i = 0; i < 20; i++) {
-        const item = asyncList.shift()
-        if (!item) {
-          done = true
-          break
-        }
-        this.insertSync(item[0], item[1])
+      const len = asyncList.length
+      // insert faster if logs is huge, thus takes more time to render.
+      let timeout, num
+      if (len < 1000) {
+        num = 200
+        timeout = 400
+      } else if (len < 5000) {
+        num = 500
+        timeout = 800
+      } else if (len < 10000) {
+        num = 800
+        timeout = 1000
+      } else if (len < 25000) {
+        num = 1000
+        timeout = 1200
+      } else if (len < 50000) {
+        num = 1500
+        timeout = 1500
+      } else {
+        num = 2000
+        timeout = 2500
       }
-      if (!done) this._handleAsyncList()
-    }, 15)
+      if (num > len) {
+        num = len
+        done = true
+      }
+      for (let i = 0; i < num; i++) {
+        const [type, args] = asyncList.shift()
+        this.insertSync(type, args)
+      }
+      if (!done) raf(() => this._handleAsyncList(timeout))
+    }, timeout)
   }
   _injectGlobal() {
     each(this._global, (val, name) => {
