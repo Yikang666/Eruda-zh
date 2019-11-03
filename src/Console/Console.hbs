@@ -1,4 +1,5 @@
-<div {{{class 'control'}}}>
+<div {{{class 'console-container'}}}>
+  <div {{{class 'control'}}}>
     <span {{{class 'icon-clear clear-console'}}}></span>
     <span {{{class 'filter active'}}} data-filter="all">All</span>
     <span {{{class 'filter'}}} data-filter="error">Error</span>
@@ -7,17 +8,18 @@
     <span {{{class 'filter'}}} data-filter="log">Log</span>
     <span {{{class 'filter'}}} data-filter="debug">Debug</span>
     <span {{{class 'icon-search search'}}}></span>
-</div>
-<div {{{class 'logs-container'}}}>
+  </div>
+  <div {{{class 'logs-container'}}}>
     <div {{{class 'top-space'}}}></div>
     <ul {{{class 'fake-logs'}}}></ul>
     <ul {{{class 'logs'}}}></ul>
     <div {{{class 'bottom-space'}}}></div>
-</div>
-<div {{{class 'js-input'}}}>
+  </div>
+  <div {{{class 'js-input'}}}>
     <div {{{class 'buttons'}}}>
-        <div {{{class 'button cancel'}}}>Cancel</div>
-        <div {{{class 'button execute'}}}>Execute</div>
+      <div {{{class 'button cancel'}}}>Cancel</div>
+      <div {{{class 'button execute'}}}>Execute</div>
     </div>
     <textarea placeholder="Type JavaScript here"></textarea>
+  </div>
 </div>

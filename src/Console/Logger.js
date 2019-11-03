@@ -117,7 +117,9 @@ export default class Logger extends Emitter {
     Log.showSrcInSources = flag
   }
   destroy() {
-    evalCss.remove(this._style)
+    if (this._style) {
+      evalCss.remove(this._style)
+    }
   }
   filter(val) {
     this._filter = val

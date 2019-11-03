@@ -3,7 +3,7 @@
 
 .dev-tools {
   .tools {
-    .console {
+    .console-container {
       background: #fff;
       .logs-container {
         @include overflow-auto(y);

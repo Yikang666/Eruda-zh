@@ -7,7 +7,8 @@ import {
   Emitter,
   uncaught,
   escapeRegExp,
-  trim
+  trim,
+  upperFirst
 } from '../lib/util'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
@@ -16,12 +17,12 @@ import stringify from './stringify'
 uncaught.start()
 
 export default class Console extends Tool {
-  constructor() {
+  constructor({ name = 'console' } = {}) {
     super()
 
     Emitter.mixin(this)
 
-    this.name = 'console'
+    this.name = name
     this._scale = 1
 
     this._registerListener()
@@ -94,7 +95,9 @@ export default class Console extends Tool {
 
     this._container.off('show', this._handleShow)
 
-    evalCss.remove(this._style)
+    if (this._style) {
+      evalCss.remove(this._style)
+    }
     this.ignoreGlobalErr()
     this.restoreConsole()
     this._unregisterListener()
@@ -242,13 +245,13 @@ export default class Console extends Tool {
       .remove(cfg, 'displayIfErr')
       .remove(cfg, 'useWorker')
       .remove(cfg, 'maxLogNum')
-      .remove('Console')
+      .remove(upperFirst(this.name))
   }
   _initCfg() {
     const container = this._container
     const logger = this._logger
 
-    const cfg = (this.config = Settings.createCfg('console', {
+    const cfg = (this.config = Settings.createCfg(this.name, {
       asyncRender: true,
       catchGlobalErr: true,
       jsExecution: true,
@@ -308,7 +311,7 @@ export default class Console extends Tool {
     if (!settings) return
 
     settings
-      .text('Console')
+      .text(upperFirst(this.name))
       .switch(cfg, 'asyncRender', 'Asynchronous Rendering')
       .switch(cfg, 'jsExecution', 'Enable JavaScript Execution')
       .switch(cfg, 'catchGlobalErr', 'Catch Global Errors')
