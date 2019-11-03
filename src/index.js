@@ -25,10 +25,11 @@ import {
   toArr,
   upperFirst,
   nextTick,
-  last
+  last,
+  isBrowser
 } from './lib/util'
 
-module.exports = {
+const eruda = {
   init({ container, tool, autoScale = true, useShadowDom = true } = {}) {
     if (this._isInit) return
 
@@ -252,5 +253,9 @@ module.exports = {
 }
 
 extraUtil(util)
+
+if (isBrowser) global.eruda = eruda
+
+export default eruda
 
 //# sourceMappingURL=index.js.map

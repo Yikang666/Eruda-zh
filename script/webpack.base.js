@@ -26,7 +26,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../'),
     publicPath: '/assets/',
-    library: ['eruda'],
     libraryTarget: 'umd'
   },
   module: {
@@ -49,8 +48,8 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['env'],
-              plugins: ['transform-runtime']
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-transform-runtime']
             }
           },
           'eslint-loader'

@@ -5,4 +5,4 @@ emitter.ADD = 'ADD'
 emitter.SHOW = 'SHOW'
 emitter.SCALE = 'SCALE'
 
-module.exports = emitter
+export default emitter
