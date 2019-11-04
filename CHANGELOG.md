@@ -1,3 +1,9 @@
+## v1.10.0 (4 Nov 2019)
+
+* chore: updated to babel7, must add .default if using require. 
+* feat(console): multiple console instance
+* perf(console): rendering for a large number of logs
+
 ## v1.9.2 (1 Nov 2019)
 
 * perf(console): rendering
