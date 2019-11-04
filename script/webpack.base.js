@@ -26,6 +26,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../'),
     publicPath: '/assets/',
+    library: 'eruda',
     libraryTarget: 'umd'
   },
   module: {
@@ -43,7 +44,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules|index\.js/,
         use: [
           {
             loader: 'babel-loader',

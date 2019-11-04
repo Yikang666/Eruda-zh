@@ -6,6 +6,7 @@ eustia/cache/
 test/playground.html
 eruda.js
 !/test/eruda.js
+!/src/eruda.js
 eruda.js.map
 /script/icomoon/
 npm-debug.log
