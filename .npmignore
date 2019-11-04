@@ -19,5 +19,4 @@ doc/
 CHANGELOG.md
 prettier.config.js
 karma.conf.js
-karma.sauce.js
 npm-debug.log
