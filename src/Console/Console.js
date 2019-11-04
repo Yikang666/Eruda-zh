@@ -105,14 +105,15 @@ export default class Console extends Tool {
   }
   _enableJsExecution(enabled) {
     const $el = this._$el
+    const $container = $el.find('.eruda-console-container')
     const $jsInput = $el.find('.eruda-js-input')
 
     if (enabled) {
       $jsInput.show()
-      $el.rmClass('eruda-js-input-hidden')
+      $container.rmClass('eruda-js-input-hidden')
     } else {
       $jsInput.hide()
-      $el.addClass('eruda-js-input-hidden')
+      $container.addClass('eruda-js-input-hidden')
     }
   }
   _registerListener() {

@@ -1,3 +1,7 @@
+## v1.10.1 (4 Nov 2019)
+
+* fix(console): error display when js execution disabled
+
 ## v1.10.0 (4 Nov 2019)
 
 * chore: updated to babel7, must add .default if using require. 
