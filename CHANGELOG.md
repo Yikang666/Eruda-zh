@@ -1,3 +1,7 @@
+## v1.10.2 (5 Nov 2019)
+
+* fix: must add .default if using require. 
+
 ## v1.10.1 (4 Nov 2019)
 
 * fix(console): error display when js execution disabled
