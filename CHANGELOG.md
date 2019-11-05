@@ -1,6 +1,6 @@
 ## v1.10.2 (5 Nov 2019)
 
-* fix: must add .default if using require. 
+* fix: must add .default if using require 
 
 ## v1.10.1 (4 Nov 2019)
 
@@ -8,7 +8,7 @@
 
 ## v1.10.0 (4 Nov 2019)
 
-* chore: updated to babel7, must add .default if using require. 
+* chore: updated to babel7, must add .default if using require 
 * feat(console): multiple console instance
 * perf(console): rendering for a large number of logs
 
