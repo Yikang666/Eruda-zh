@@ -14,7 +14,7 @@
         overflow: hidden;
       }
       .title {
-        @include right-circle-btn();
+        @include right-btn();
         padding: $padding;
         color: #fff;
         background: $blue;

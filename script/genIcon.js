@@ -6,7 +6,8 @@ const nameMap = {
   Clearsearch: 'clear',
   Fill: 'error',
   arrow: 'arrow-left',
-  right: 'arrow-right'
+  right: 'arrow-right',
+  refresh1: 'refresh'
 }
 
 fs.readFile(path.resolve(__dirname, 'icon/iconfont.woff'), function(err, data) {

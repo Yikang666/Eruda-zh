@@ -36,18 +36,17 @@
   }
 }
 
-@mixin right-circle-btn {
+@mixin right-btn {
   .btn {
-    margin-left: 10px;
+    display: flex;
+    margin-left: 5px;
     float: right;
-    background: #fff;
-    color: $gray;
-    text-align: center;
+    color: #fff;
     width: 18px;
     height: 18px;
-    line-height: 18px;
-    border-radius: 50%;
-    font-size: 12px;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-l;
     cursor: pointer;
     transition: color $anim-duration;
     &:active {
