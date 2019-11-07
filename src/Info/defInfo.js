@@ -1,4 +1,4 @@
-import { detectBrowser, detectOs } from '../lib/util'
+import { detectBrowser, detectOs, escape } from '../lib/util'
 
 const browser = detectBrowser()
 
@@ -6,7 +6,7 @@ export default [
   {
     name: 'Location',
     val() {
-      return location.href
+      return escape(location.href)
     }
   },
   {
