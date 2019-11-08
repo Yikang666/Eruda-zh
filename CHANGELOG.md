@@ -1,3 +1,9 @@
+## v1.10.3 (8 Nov 2019)
+
+* fix(info): escape location #127
+* chore: update refresh icon
+* chore: update timing plugin version
+
 ## v1.10.2 (5 Nov 2019)
 
 * fix: must add .default if using require 
