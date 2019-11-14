@@ -1,134 +1,130 @@
 @import '../style/variable';
 @import '../style/mixin';
 
-.dev-tools {
-  .tools {
-    .network {
-      padding-top: 36px;
-      .title {
-        @include absolute(100%, 36px);
-        @include right-btn();
-        background: $gray;
-        padding: $padding;
-        color: #fff;
-        height: 36px;
+#network {
+  padding-top: 36px;
+  .title {
+    @include absolute(100%, 36px);
+    @include right-btn();
+    background: $gray;
+    padding: $padding;
+    color: #fff;
+    height: 36px;
+  }
+  .requests {
+    @include overflow-auto(y);
+    height: 100%;
+    background: #fff;
+    border-bottom: 1px solid $gray-light;
+    margin-bottom: 10px;
+    li {
+      display: flex;
+      width: 100%;
+      cursor: pointer;
+      border-top: 1px solid $gray-light;
+      height: 41px;
+      white-space: nowrap;
+      &.error {
+        span {
+          color: $red;
+        }
       }
-      .requests {
-        @include overflow-auto(y);
-        height: 100%;
+      span {
+        display: block;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 5px;
+        font-size: $font-size-s;
+        vertical-align: top;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .name {
+        flex: 1;
+        padding-left: $padding;
+      }
+      .status {
+        width: 40px;
+      }
+      .method,
+      .type {
+        width: 50px;
+      }
+      .size {
+        width: 70px;
+      }
+      .time {
+        width: 60px;
+        padding-right: $padding;
+      }
+      &:nth-child(even) {
+        background: $gray-light;
+      }
+    }
+  }
+  .detail {
+    @include absolute();
+    z-index: 10;
+    display: none;
+    padding-bottom: 40px;
+    background: #f8f9fa;
+    .http {
+      @include overflow-auto(y);
+      height: 100%;
+      .breadcrumb {
+        @include breadcrumb();
+      }
+      .section {
         background: #fff;
-        border-bottom: 1px solid $gray-light;
+        h2 {
+          background: $blue;
+          padding: $padding;
+          color: #fff;
+          font-size: $font-size;
+        }
         margin-bottom: 10px;
-        li {
-          display: flex;
-          width: 100%;
-          cursor: pointer;
-          border-top: 1px solid $gray-light;
-          height: 41px;
-          white-space: nowrap;
-          &.error {
-            span {
-              color: $red;
-            }
+        table {
+          * {
+            user-select: text;
           }
-          span {
-            display: block;
-            line-height: 40px;
-            height: 40px;
-            padding: 0 5px;
+          td {
             font-size: $font-size-s;
-            vertical-align: top;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            padding: 5px 10px;
+            word-break: break-all;
           }
-          .name {
-            flex: 1;
-            padding-left: $padding;
-          }
-          .status {
-            width: 40px;
-          }
-          .method,
-          .type {
-            width: 50px;
-          }
-          .size {
-            width: 70px;
-          }
-          .time {
-            width: 60px;
-            padding-right: $padding;
-          }
-          &:nth-child(even) {
-            background: $gray-light;
+          .key {
+            white-space: nowrap;
           }
         }
       }
-      .detail {
-        @include absolute();
-        z-index: 10;
-        display: none;
-        padding-bottom: 40px;
-        background: #f8f9fa;
-        .http {
-          @include overflow-auto(y);
-          height: 100%;
-          .breadcrumb {
-            @include breadcrumb();
-          }
-          .section {
-            background: #fff;
-            h2 {
-              background: $blue;
-              padding: $padding;
-              color: #fff;
-              font-size: $font-size;
-            }
-            margin-bottom: 10px;
-            table {
-              * {
-                user-select: text;
-              }
-              td {
-                font-size: $font-size-s;
-                padding: 5px 10px;
-                word-break: break-all;
-              }
-              .key {
-                white-space: nowrap;
-              }
-            }
-          }
-          .response,
-          .data {
-            user-select: text;
-            @include overflow-auto(x);
-            background: #fff;
-            padding: $padding;
-            font-size: $font-size-s;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-          }
-        }
-        .back {
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          color: #fff;
-          width: 100%;
-          background: $blue;
-          display: block;
-          height: 40px;
-          line-height: 40px;
-          text-decoration: none;
-          text-align: center;
-          margin-top: 10px;
-          transition: background 0.3s;
-          cursor: pointer;
-          &:active {
-            background: $blue-dark;
-          }
-        }
+      .response,
+      .data {
+        user-select: text;
+        @include overflow-auto(x);
+        background: #fff;
+        padding: $padding;
+        font-size: $font-size-s;
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+      }
+    }
+    .back {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      color: #fff;
+      width: 100%;
+      background: $blue;
+      display: block;
+      height: 40px;
+      line-height: 40px;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 10px;
+      transition: background 0.3s;
+      cursor: pointer;
+      &:active {
+        background: $blue-dark;
       }
     }
   }

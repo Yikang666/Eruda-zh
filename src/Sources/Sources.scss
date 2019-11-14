@@ -1,75 +1,71 @@
 @import '../style/variable';
 @import '../style/mixin';
 
-.dev-tools {
-  .tools {
-    .sources {
-      @include overflow-auto(y);
-      .code-wrapper,
-      .raw-wrapper {
-        @include overflow-auto(x);
-        width: 100%;
-        background: #fff;
-        min-height: 100%;
-      }
-      .raw {
-        user-select: text;
-        padding: $padding;
-      }
-      .code {
-        font-family: $font-family-code;
-        font-size: $font-size-s;
-        .content * {
-          user-select: text;
-        }
-      }
-      pre.code {
-        padding: $padding;
-      }
-      table.code {
-        border-collapse: collapse;
-        .gutter {
-          background: $gray-light;
-          color: $gray;
-        }
-        .line-num {
-          border-right: 1px solid $gray;
-          padding: 0 3px 0 5px;
-          text-align: right;
-        }
-        .code-line {
-          padding: 0 4px;
-          white-space: pre;
-        }
-      }
-      .image {
-        .breadcrumb {
-          @include breadcrumb();
-        }
-        .img-container {
-          text-align: center;
-          img {
-            max-width: 100%;
-            box-shadow: $box-shadow;
-          }
-        }
-        .img-info {
-          text-align: center;
-          margin: 20px 0;
-          color: $gray;
-        }
-      }
-      .json {
-        background: #fff;
-        padding: $padding;
-        * {
-          user-select: text;
-        }
-      }
-      iframe {
-        width: 100%;
-        height: 100%;
+.sources {
+  @include overflow-auto(y);
+  .code-wrapper,
+  .raw-wrapper {
+    @include overflow-auto(x);
+    width: 100%;
+    background: #fff;
+    min-height: 100%;
+  }
+  .raw {
+    user-select: text;
+    padding: $padding;
+  }
+  .code {
+    font-family: $font-family-code;
+    font-size: $font-size-s;
+    .content * {
+      user-select: text;
+    }
+  }
+  pre.code {
+    padding: $padding;
+  }
+  table.code {
+    border-collapse: collapse;
+    .gutter {
+      background: $gray-light;
+      color: $gray;
+    }
+    .line-num {
+      border-right: 1px solid $gray;
+      padding: 0 3px 0 5px;
+      text-align: right;
+    }
+    .code-line {
+      padding: 0 4px;
+      white-space: pre;
+    }
+  }
+  .image {
+    .breadcrumb {
+      @include breadcrumb();
+    }
+    .img-container {
+      text-align: center;
+      img {
+        max-width: 100%;
+        box-shadow: $box-shadow;
       }
     }
+    .img-info {
+      text-align: center;
+      margin: 20px 0;
+      color: $gray;
+    }
+  }
+  .json {
+    background: #fff;
+    padding: $padding;
+    * {
+      user-select: text;
+    }
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
 }

@@ -32,10 +32,7 @@ function genCssFile(fontData) {
         "') format('woff');"
     )
     data = data.join('\n')
-    data = data.replace(
-      /\.eruda-icon/g,
-      "[class^='eruda-icon-'],\n[class*=' eruda-icon-']"
-    )
+    data = data.replace(/\.eruda-icon/g, "[class^='icon-'],\n[class*=' icon-']")
 
     each(nameMap, (val, key) => {
       data = data.replace('icon-' + key + ':', 'icon-' + val + ':')
