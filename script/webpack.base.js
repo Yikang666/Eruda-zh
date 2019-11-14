@@ -1,5 +1,6 @@
 const autoprefixer = require('autoprefixer')
 const classPrefix = require('postcss-class-prefix')
+const clean = require('postcss-clean')
 const webpack = require('webpack')
 const pkg = require('../package.json')
 const path = require('path')
@@ -13,7 +14,7 @@ const banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
 const postcssLoader = {
   loader: 'postcss-loader',
   options: {
-    plugins: [classPrefix('eruda-'), autoprefixer]
+    plugins: [classPrefix('eruda-'), autoprefixer, clean()]
   }
 }
 
