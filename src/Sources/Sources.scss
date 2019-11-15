@@ -1,7 +1,7 @@
 @import '../style/variable';
 @import '../style/mixin';
 
-.sources {
+#sources {
   @include overflow-auto(y);
   .code-wrapper,
   .raw-wrapper {
