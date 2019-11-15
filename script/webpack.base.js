@@ -74,10 +74,20 @@ module.exports = {
       // https://github.com/wycats/handlebars.js/issues/1134
       {
         test: /\.hbs$/,
-        loader: nodeModDir + 'handlebars-loader/index.js',
-        options: {
-          runtime: srcDir + 'lib/handlebars.js'
-        }
+        use: [
+          {
+            loader: nodeModDir + 'handlebars-loader/index.js',
+            options: {
+              runtime: srcDir + 'lib/handlebars.js'
+            }
+          },
+          {
+            loader: 'html-minifier-loader',
+            options: {
+              ignoreCustomFragments: [/\{\{\{[^}]+\}\}\}/, /\{\{[^}]+\}\}/]
+            }
+          }
+        ]
       },
       {
         test: /\.json$/,
