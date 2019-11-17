@@ -1,8 +1,7 @@
 @import '../style/variable';
 @import '../style/mixin';
 
-#console-container {
-  background: #fff;
+.console-container {
   .logs-container {
     @include overflow-auto(y);
     height: 100%;
@@ -33,9 +32,9 @@
     white-space: nowrap;
     display: flex;
     font-size: $font-size-s;
-    color: $gray;
+    color: var(--link-color);
     border-top: 1px solid transparent;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--border);
     .time-container {
       @include overflow-auto(x);
       padding: 3px $padding;
@@ -67,9 +66,10 @@
     display: flex;
     @include clear-float();
     border-top: 1px solid transparent;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--border);
     margin-top: -1px;
     min-height: 24px;
+    color: var(--foreground);
     a {
       color: $blue !important;
     }
@@ -85,7 +85,7 @@
       .icon-caret-right,
       .icon-caret-down {
         left: -2px;
-        color: $gray;
+        color: var(--foreground);
       }
       .icon-arrow-right {
         color: $blue;
@@ -94,17 +94,17 @@
         color: $blue;
       }
       .icon-error {
-        color: $red;
+        color: var(--console-error-foreground);
       }
       .icon-warn {
         top: -1px;
-        color: $yellow-dark;
+        color: var(--console-warn-foreground);
       }
     }
     .count {
-      background: $blue;
+      background: var(--text-color);
       padding: 2px 4px;
-      color: #fff;
+      color: var(--accent);
       border-radius: 10px;
       float: left;
       margin: 3px -6px 0 $padding;
@@ -130,25 +130,23 @@
     &.table {
       table {
         width: 100%;
-        background: #fff;
         border-collapse: collapse;
-        box-shadow: $box-shadow;
-        border-radius: $border-radius;
         overflow: hidden;
+        color: var(--foreground);
         th {
-          background: $blue;
-          color: #fff;
+          background: var(--contrast);
+          border-bottom: 1px solid var(--active);
         }
         th,
         td {
-          border-left: 1px solid $gray;
+          border-left: 1px solid var(--active);
           padding: 3px $padding;
           &:first-child {
             border-left: none !important;
           }
         }
         tr:nth-child(even) {
-          background: $gray-light;
+          background: var(--contrast);
         }
       }
       .blue {
@@ -157,10 +155,10 @@
     }
     &.error {
       z-index: 50;
-      background: $red-light;
-      color: $red;
-      border-top: 1px solid $red;
-      border-bottom: 1px solid $red;
+      background: var(--console-error-background);
+      color: var(--console-error-foreground);
+      border-top: 1px solid var(--console-error-border);
+      border-bottom: 1px solid var(--console-error-border);
       .stack {
         padding-left: 1.2em;
         white-space: nowrap;
@@ -174,9 +172,10 @@
     }
     &.warn {
       z-index: 40;
-      background: #fffbe6;
-      border-top: 1px solid $yellow;
-      border-bottom: 1px solid $yellow;
+      color: var(--console-warn-foreground);
+      background: var(--console-warn-background);
+      border-top: 1px solid var(--console-warn-border);
+      border-bottom: 1px solid var(--console-warn-border);
     }
     &.info {
       z-index: 30;
@@ -186,7 +185,6 @@
     }
     &.group,
     &.groupCollapsed {
-      color: #222;
       font-weight: bold;
     }
   }

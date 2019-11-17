@@ -147,13 +147,13 @@ export default class DevTools extends Emitter {
       displaySize: 80,
       tinyNavBar: !isMobile(),
       activeEruda: false,
-      navBarBgColor: '#2196f3'
+      theme: 'default'
     }))
 
     this._setTransparency(cfg.get('transparency'))
     this._setDisplaySize(cfg.get('displaySize'))
     this.setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55)
-    this._navBar.setBgColor(cfg.get('navBarBgColor'))
+    evalCss.setTheme(cfg.get('theme'))
 
     cfg.on('change', (key, val) => {
       switch (key) {
@@ -163,10 +163,10 @@ export default class DevTools extends Emitter {
           return this._setDisplaySize(val)
         case 'activeEruda':
           return activeEruda(val)
+        case 'theme':
+          return evalCss.setTheme(val)
         case 'tinyNavBar':
           return this.setNavBarHeight(val ? 30 : 55)
-        case 'navBarBgColor':
-          return this._navBar.setBgColor(val)
       }
     })
 
@@ -174,7 +174,7 @@ export default class DevTools extends Emitter {
       .separator()
       .switch(cfg, 'activeEruda', 'Always Activated')
       .switch(cfg, 'tinyNavBar', 'Tiny Navigation Bar')
-      .color(cfg, 'navBarBgColor', 'Navigation Bar Background Color')
+      .select(cfg, 'theme', 'Theme', ['default'])
       .range(cfg, 'transparency', 'Transparency', {
         min: 0.2,
         max: 1,

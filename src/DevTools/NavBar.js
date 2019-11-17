@@ -31,9 +31,6 @@ export default class NavBar extends Emitter {
     this._height = height
     this.resetStyle()
   }
-  setBgColor(color) {
-    this._$el.css('background-color', color)
-  }
   activateTool(name) {
     const self = this
 
@@ -94,7 +91,7 @@ export default class NavBar extends Emitter {
     const $el = this._$el
 
     $el.css({
-      height: height
+      height: height + 1
     })
     $el.find('.eruda-nav-bar-item').css({
       height: height,

@@ -18,14 +18,15 @@
 }
 
 @mixin breadcrumb {
-  background: #fff;
+  background: var(--darker-background);
+  color: var(--primary);
   user-select: text;
   margin-bottom: 10px;
   word-break: break-all;
   padding: $padding;
   font-size: $font-size-l;
   min-height: 40px;
-  border-bottom: 1px solid $gray-light;
+  border-bottom: 1px solid var(--border);
 }
 
 @mixin clear-float {
@@ -41,7 +42,7 @@
     display: flex;
     margin-left: 5px;
     float: right;
-    color: #fff;
+    color: var(--primary);
     width: 18px;
     height: 18px;
     justify-content: center;
@@ -50,7 +51,7 @@
     cursor: pointer;
     transition: color $anim-duration;
     &:active {
-      color: $gray-dark;
+      color: var(--accent);
     }
   }
 }

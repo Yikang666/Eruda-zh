@@ -32,7 +32,8 @@ import {
   lowerCase,
   keys,
   $,
-  Emitter
+  Emitter,
+  evalCss
 } from '../lib/util'
 
 export default class Log extends Emitter {
@@ -314,10 +315,14 @@ Log.showUnenumerable = true
 Log.lazyEvaluation = true
 
 const getAbstract = wrap(origGetAbstract, function(fn, obj) {
-  return fn(obj, {
-    getterVal: Log.showGetterVal,
-    unenumerable: false
-  })
+  return (
+    '<span class="eruda-abstract">' +
+    fn(obj, {
+      getterVal: Log.showGetterVal,
+      unenumerable: false
+    }) +
+    '</span>'
+  )
 })
 
 const Value = '__ErudaValue'
@@ -404,7 +409,14 @@ function formatErr(err) {
 }
 
 function formatJs(code) {
-  return highlight(beautify(code), 'js')
+  const curTheme = evalCss.getCurTheme()
+  return highlight(beautify(code), 'js', {
+    keyword: `color:${curTheme.keywordColor}`,
+    number: `color:${curTheme.numberColor}`,
+    operator: `color:${curTheme.operatorColor}`,
+    comment: `color:${curTheme.commentColor}`,
+    string: `color:${curTheme.stringColor}`
+  })
 }
 
 function formatMsg(args, { htmlForEl = true } = {}) {
@@ -525,10 +537,7 @@ function formatObj(val) {
 }
 
 function formatFn(val) {
-  return `<pre style="display:inline">${highlight(
-    beautify.js(val.toString()),
-    'js'
-  )}</pre>`
+  return `<pre style="display:inline">${formatJs(val.toString())}</pre>`
 }
 
 function formatEl(val) {

@@ -473,10 +473,10 @@ function getState(type, len) {
       break
   }
 
-  if (len >= danger) return 'eruda-danger'
-  if (len >= warn) return 'eruda-warn'
+  if (len >= danger) return 'danger'
+  if (len >= warn) return 'warn'
 
-  return 'eruda-ok'
+  return 'ok'
 }
 
 function getLowerCaseTagName(el) {

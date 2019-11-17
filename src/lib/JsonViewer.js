@@ -21,10 +21,16 @@ import {
   Emitter
 } from './util'
 
+let hasEvalCss = false
+
 export default class JsonViewer extends Emitter {
   constructor(data, $el) {
     super()
-    evalCss(require('./json.scss'))
+
+    if (!hasEvalCss) {
+      evalCss(require('./json.scss'))
+      hasEvalCss = true
+    }
 
     if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
       data = JSON.parse(

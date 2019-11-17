@@ -7,7 +7,7 @@
   height: 100%;
   left: 0;
   bottom: 0;
-  background: #fff;
+  background: var(--background);
   z-index: 500;
   display: none;
   opacity: 0;
@@ -21,7 +21,6 @@
       @include absolute();
       overflow: hidden;
       display: none;
-      background: #f8f9fa;
     }
   }
 }

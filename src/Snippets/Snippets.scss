@@ -6,22 +6,19 @@
   padding: $padding;
   .section {
     margin-bottom: 10px;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
+    border: 1px solid var(--border);
     overflow: hidden;
     cursor: pointer;
     &:active {
       .name {
-        background: $gray-dark;
-      }
-      .description {
-        background: $gray-light;
+        background: var(--highlight);
+        color: var(--select-foreground);
       }
     }
     .name {
       padding: $padding;
-      color: #fff;
-      background: $gray;
+      color: var(--primary);
+      background: var(--darker-background);
       transition: background $anim-duration;
       .btn {
         margin-left: 10px;
@@ -34,7 +31,7 @@
       }
     }
     .description {
-      background: #fff;
+      color: var(--foreground);
       padding: $padding;
       transition: background $anim-duration;
     }

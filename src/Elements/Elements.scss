@@ -10,10 +10,11 @@
   }
   .parents {
     @include overflow-auto(x);
-    background: #fff;
+    background: var(--darker-background);
+    color: var(--primary);
     padding: $padding;
     white-space: nowrap;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--border);
     cursor: pointer;
     font-size: $font-size-s;
     li {
@@ -27,6 +28,8 @@
     }
     .icon-arrow-right {
       font-size: 8px;
+      position: relative;
+      top: -1px;
     }
   }
   .breadcrumb {
@@ -34,15 +37,18 @@
     cursor: pointer;
     transition: background $anim-duration, color $anim-duration;
     &:active {
-      background: $blue;
-      color: #fff;
+      background: var(--highlight);
+      color: var(--select-foreground);
       span {
-        color: #fff;
+        color: var(--select-foreground);
       }
     }
   }
   .section {
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground);
     h2 {
+      color: var(--primary);
       .btn {
         margin-left: 10px;
         float: right;
@@ -52,29 +58,31 @@
         line-height: 18px;
         font-size: 12px;
       }
-      background: $blue;
+      background: var(--darker-background);
+      border-top: 1px solid var(--border);
       padding: $padding;
-      color: #fff;
       font-size: $font-size;
       transition: background $anim-duration;
       &.active-effect {
         cursor: pointer;
       }
       &.active-effect:active {
-        background: $blue-dark;
+        background: var(--highlight);
+        color: var(--select-foreground);
       }
     }
     margin-bottom: 10px;
   }
   .children {
-    background: #fff;
+    background: var(--darker-background);
+    color: var(--foreground);
     margin-bottom: 10px !important;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--border);
     li {
       @include overflow-auto(x);
       cursor: default;
       padding: $padding;
-      border-top: 1px solid $gray-light;
+      border-top: 1px solid var(--border);
       white-space: nowrap;
       transition: background $anim-duration, color $anim-duration;
       span {
@@ -93,7 +101,6 @@
     }
   }
   .attributes {
-    background: #fff;
     font-size: 12px;
     a {
       color: $blue;
@@ -115,20 +122,23 @@
     }
   }
   .style-color {
-    width: 7px;
-    height: 7px;
+    position: relative;
+    top: 1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
     margin-right: 2px;
     border: 1px solid $gray-dark;
     display: inline-block;
   }
   .box-model {
     @include overflow-auto(x);
-    background: #fff;
+    color: #222;
     font-size: $font-size-s;
     padding: $padding;
     text-align: center;
     white-space: nowrap;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--color);
     .label {
       position: absolute;
       margin-left: 3px;
@@ -179,7 +189,6 @@
     }
   }
   .computed-style {
-    background: #fff;
     font-size: $font-size-s;
     a {
       color: $blue;
@@ -193,21 +202,19 @@
         padding: 5px 10px;
         &.key {
           white-space: nowrap;
-          color: $red;
+          color: var(--css-property);
         }
       }
     }
   }
   .styles {
-    background: #fff;
     font-size: 12px;
     .style-wrapper {
       padding: $padding;
       .style-rules {
         border-radius: $border-radius;
-        box-shadow: $box-shadow;
+        border: 1px solid var(--border);
         padding: $padding;
-        background: #fff;
         margin-bottom: 10px;
         .rule {
           padding-left: 2em;
@@ -216,7 +223,7 @@
             color: $blue;
           }
           span {
-            color: $red;
+            color: var(--var-color);
           }
         }
         &:last-child {
@@ -226,20 +233,17 @@
     }
   }
   .listeners {
-    background: #fff;
     font-size: 12px;
     .listener-wrapper {
       padding: $padding;
       .listener {
-        box-shadow: $box-shadow;
         margin-bottom: 10px;
-        background: #fff;
-        border-radius: $border-radius;
         overflow: hidden;
+        border: 1px solid var(--border);
         .listener-type {
           padding: $padding;
-          background: $blue;
-          color: #fff;
+          background: var(--darker-background);
+          color: var(--primary);
         }
         .listener-content {
           li {
@@ -256,28 +260,28 @@
   }
   .bottom-bar {
     height: 40px;
-    background: #fff;
+    background: var(--darker-background);
     position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
     font-size: 0;
-    border-top: 1px solid $gray-light;
+    border-top: 1px solid var(--border);
     .btn {
       cursor: pointer;
       text-align: center;
-      color: $gray;
+      color: var(--primary);
       font-size: 14px;
       line-height: 40px;
       width: 25%;
       display: inline-block;
       transition: background $anim-duration, color $anim-duration;
       &:active {
-        background: $blue;
-        color: #fff;
+        background: var(--highlight);
+        color: var(--select-foreground);
       }
       &.active {
-        color: $blue;
+        color: var(--accent);
       }
     }
   }

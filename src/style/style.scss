@@ -48,3 +48,23 @@
 .green {
   color: $green;
 }
+
+.tag-name-color {
+  color: var(--tag-name-color);
+}
+
+.function-color {
+  color: var(--function-color);
+}
+
+.attribute-name-color {
+  color: var(--attribute-name-color);
+}
+
+.operator-color {
+  color: var(--operator-color);
+}
+
+.string-color {
+  color: var(--string-color);
+}

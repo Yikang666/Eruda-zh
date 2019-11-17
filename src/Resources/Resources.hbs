@@ -8,25 +8,27 @@
       <span {{{class 'icon-clear'}}}></span>
     </div>
   </h2>
-  <table>
-    <tbody>
-      {{#if localStoreData}}
-        {{#each localStoreData}}
+  <div {{{class 'content'}}}>
+    <table>
+      <tbody>
+        {{#if localStoreData}}
+          {{#each localStoreData}}
+            <tr>
+              <td {{{class 'key'}}}>{{key}}</td>
+              <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="local">{{val}}</td>
+              <td {{{class 'control'}}}>
+                <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="local"></span>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
           <tr>
-            <td {{{class 'key'}}}>{{key}}</td>
-            <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="local">{{val}}</td>
-            <td {{{class 'control'}}}>
-              <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="local"></span>
-            </td>
+            <td>Empty</td>
           </tr>
-        {{/each}}
-      {{else}}
-        <tr>
-          <td>Empty</td>
-        </tr>
-      {{/if}}
-    </tbody>
-  </table>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
 </div>
 <div {{{class 'section session-storage'}}}>
   <h2 {{{class 'title'}}}>
@@ -38,45 +40,16 @@
       <span {{{class 'icon-clear'}}}></span>
     </div>
   </h2>
-  <table>
-    <tbody>
-    {{#if sessionStoreData}}
-      {{#each sessionStoreData}}
-        <tr>
-          <td {{{class 'key'}}}>{{key}}</td>
-          <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="session">{{val}}</td>
-          <td {{{class 'control'}}}>
-            <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="session"></span>
-          </td>
-        </tr>
-      {{/each}}
-    {{else}}
-      <tr>
-        <td>Empty</td>
-      </tr>
-    {{/if}}
-    </tbody>
-  </table>
-</div>
-<div {{{class 'section cookie'}}}>
-  <h2 {{{class (concat 'title ' cookieState)}}}>
-    Cookie
-    <div {{{class 'btn refresh-cookie'}}}>
-      <span {{{class 'icon-refresh'}}}></span>
-    </div>
-    <div {{{class 'btn clear-cookie'}}}>
-      <span {{{class 'icon-clear'}}}></span>
-    </div>
-  </h2>
-  <table>
-    <tbody>
-      {{#if cookieData}}
-        {{#each cookieData}}
+  <div {{{class 'content'}}}>
+    <table>
+      <tbody>
+      {{#if sessionStoreData}}
+        {{#each sessionStoreData}}
           <tr>
             <td {{{class 'key'}}}>{{key}}</td>
-            <td>{{val}}</td>
+            <td {{{class 'storage-val'}}} data-key="{{key}}" data-type="session">{{val}}</td>
             <td {{{class 'control'}}}>
-              <span {{{class 'icon-delete delete-cookie'}}} data-key="{{key}}"></span>
+              <span {{{class 'icon-delete delete-storage'}}} data-key="{{key}}" data-type="session"></span>
             </td>
           </tr>
         {{/each}}
@@ -85,11 +58,44 @@
           <td>Empty</td>
         </tr>
       {{/if}}
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
-<div {{{class 'section script'}}}>
-  <h2 {{{class (concat 'title ' scriptState)}}}>
+<div {{{class (concat 'section cookie ' cookieState)}}}>
+  <h2 {{{class 'title'}}}>
+    Cookie
+    <div {{{class 'btn refresh-cookie'}}}>
+      <span {{{class 'icon-refresh'}}}></span>
+    </div>
+    <div {{{class 'btn clear-cookie'}}}>
+      <span {{{class 'icon-clear'}}}></span>
+    </div>
+  </h2>
+  <div {{{class 'content'}}}>
+    <table>
+      <tbody>
+        {{#if cookieData}}
+          {{#each cookieData}}
+            <tr>
+              <td {{{class 'key'}}}>{{key}}</td>
+              <td>{{val}}</td>
+              <td {{{class 'control'}}}>
+                <span {{{class 'icon-delete delete-cookie'}}} data-key="{{key}}"></span>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td>Empty</td>
+          </tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div {{{class (concat 'section script ' scriptState)}}}>
+  <h2 {{{class 'title'}}}>
     Script
     <div {{{class 'btn refresh-script'}}}>
       <span {{{class 'icon-refresh'}}}></span>
@@ -107,8 +113,8 @@
     {{/if}}
   </ul>
 </div>
-<div {{{class 'section stylesheet'}}}>
-  <h2 {{{class (concat 'title ' stylesheetState)}}}>
+<div {{{class (concat 'section stylesheet ' stylesheetState)}}}>
+  <h2 {{{class 'title'}}}>
     Stylesheet
     <div {{{class 'btn refresh-stylesheet'}}}>
       <span {{{class 'icon-refresh'}}}></span>

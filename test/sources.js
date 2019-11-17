@@ -10,7 +10,7 @@ describe('sources', function() {
     it('highlight', function() {
       tool.set('js', '/* test */')
       expect($tool.find('.eruda-content')).toContainHtml(
-        '<span style="color:#63a35c;">/* test */</span>'
+        '/* test */'
       )
     })
   })

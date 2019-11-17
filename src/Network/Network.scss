@@ -6,23 +6,23 @@
   .title {
     @include absolute(100%, 36px);
     @include right-btn();
-    background: $gray;
+    background: var(--darker-background);
     padding: $padding;
-    color: #fff;
+    color: var(--primary);
     height: 36px;
   }
   .requests {
     @include overflow-auto(y);
     height: 100%;
-    background: #fff;
-    border-bottom: 1px solid $gray-light;
+    border-bottom: 1px solid var(--border);
     margin-bottom: 10px;
     li {
       display: flex;
       width: 100%;
       cursor: pointer;
-      border-top: 1px solid $gray-light;
+      border-top: 1px solid var(--border);
       height: 41px;
+      color: var(--foreground);
       white-space: nowrap;
       &.error {
         span {
@@ -58,7 +58,7 @@
         padding-right: $padding;
       }
       &:nth-child(even) {
-        background: $gray-light;
+        background: var(--darker-background);
       }
     }
   }
@@ -67,7 +67,7 @@
     z-index: 10;
     display: none;
     padding-bottom: 40px;
-    background: #f8f9fa;
+    background: var(--background);
     .http {
       @include overflow-auto(y);
       height: 100%;
@@ -75,15 +75,18 @@
         @include breadcrumb();
       }
       .section {
-        background: #fff;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
         h2 {
-          background: $blue;
+          background: var(--darker-background);
+          color: var(--primary);
           padding: $padding;
           color: #fff;
           font-size: $font-size;
         }
         margin-bottom: 10px;
         table {
+          color: var(--foreground);
           * {
             user-select: text;
           }
@@ -94,6 +97,8 @@
           }
           .key {
             white-space: nowrap;
+            font-weight: bold;
+            color: var(--accent);
           }
         }
       }
@@ -101,20 +106,22 @@
       .data {
         user-select: text;
         @include overflow-auto(x);
-        background: #fff;
         padding: $padding;
         font-size: $font-size-s;
         margin-bottom: 10px;
         white-space: pre-wrap;
+        border-top: 1px solid var(--border);
+        color: var(--foreground);
+        border-bottom: 1px solid var(--border);
       }
     }
     .back {
       position: absolute;
       left: 0;
       bottom: 0;
-      color: #fff;
+      color: var(--foreground);
       width: 100%;
-      background: $blue;
+      background: var(--accent);
       display: block;
       height: 40px;
       line-height: 40px;
@@ -124,7 +131,7 @@
       transition: background 0.3s;
       cursor: pointer;
       &:active {
-        background: $blue-dark;
+        color: var(--select-foreground);
       }
     }
   }

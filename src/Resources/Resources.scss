@@ -7,40 +7,48 @@
   font-size: 14px;
   .section {
     margin-bottom: 10px;
-    border-radius: 4px;
-    box-shadow: $box-shadow;
     overflow: hidden;
+    border: 1px solid var(--border);
+    .content {
+      @include overflow-auto(y);
+      max-height: 400px;
+    }
+    &.warn {
+      border: 1px solid var(--console-warn-border);
+      .title {
+        background: var(--console-warn-background);
+        color: var(--console-warn-foreground);
+      }
+    }
+    &.danger {
+      border: 1px solid var(--console-error-border);
+      .title {
+        background: var(--console-error-background);
+        color: var(--console-error-foreground);
+      }
+    }
   }
   .title {
     @include right-btn();
     padding: $padding;
-    color: #fff;
-    background: $blue;
-    &.ok {
-      background: $green;
-    }
-    &.warn {
-      background: $yellow;
-    }
-    &.danger {
-      background: $red;
-    }
+    color: var(--primary);
+    background: var(--darker-background);
   }
   .link-list {
     font-size: $font-size-s;
+    color: var(--foreground);
     li {
       padding: 10px;
-      background: #fff;
       word-break: break-all;
       a {
-        color: $blue !important;
+        color: var(--link-color) !important;
       }
     }
   }
   .image-list {
     @include clear-float();
+    color: var(--foreground);
     font-size: $font-size-s;
-    background: #fff;
     display: flex;
     flex-wrap: wrap;
     padding: $padding !important;
@@ -60,9 +68,13 @@
     }
   }
   table {
+    color: var(--foreground);
     border-collapse: collapse;
     width: 100%;
     font-size: $font-size-s;
+    tr:nth-child(even) {
+      background: var(--darker-background);
+    }
     td {
       padding: 10px;
       word-break: break-all;
@@ -77,7 +89,7 @@
         width: 40px;
         .icon-delete {
           cursor: pointer;
-          color: $red;
+          color: var(--primary);
           font-size: $font-size;
           display: inline-block;
           width: 40px;
@@ -86,11 +98,10 @@
           line-height: 40px;
           transition: color $anim-duration;
           &:active {
-            color: $red-dark;
+            color: var(--accent);
           }
         }
       }
     }
-    background: #fff;
   }
 }

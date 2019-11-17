@@ -459,22 +459,24 @@ const isElExist = val => isEl(val) && val.parentNode
 function formatElName(data, { noAttr = false } = {}) {
   const { id, className, attributes } = data
 
-  let ret = `<span class="eruda-blue">${data.tagName.toLowerCase()}</span>`
+  let ret = `<span class="eruda-tag-name-color">${data.tagName.toLowerCase()}</span>`
 
-  if (id !== '') ret += `#${id}`
+  if (id !== '') ret += `<span class="eruda-function-color">#${id}</span>`
 
   if (isStr(className)) {
+    let classes = ''
     each(className.split(/\s+/g), val => {
       if (val.trim() === '') return
-      ret += `.${val}`
+      classes += `.${val}`
     })
+    ret += `<span class="eruda-attribute-name-color">${classes}</span>`
   }
 
   if (!noAttr) {
     each(attributes, attr => {
       const name = attr.name
       if (name === 'id' || name === 'class' || name === 'style') return
-      ret += ` ${name}="${attr.value}"`
+      ret += ` <span class="eruda-attribute-name-color">${name}</span><span class="eruda-operator-color">="</span><span class="eruda-string-color">${attr.value}</span><span class="eruda-operator-color">"</span>`
     })
   }
 

@@ -194,7 +194,14 @@ export default class Sources extends Tool {
           break
       }
 
-      code = highlight(code, data.type)
+      const curTheme = evalCss.getCurTheme()
+      code = highlight(code, data.type, {
+        keyword: `color:${curTheme.keywordColor}`,
+        number: `color:${curTheme.numberColor}`,
+        operator: `color:${curTheme.operatorColor}`,
+        comment: `color:${curTheme.commentColor}`,
+        string: `color:${curTheme.stringColor}`
+      })
     } else {
       code = escape(code)
     }

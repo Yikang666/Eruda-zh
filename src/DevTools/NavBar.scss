@@ -4,41 +4,42 @@
 $height: 55px;
 $item-width: 69px;
 
-.nav-bar {
-  @include absolute(100%, $height);
-  @include overflow-auto(x);
-  box-shadow: $box-shadow;
-  z-index: 100;
-  background: $blue;
-  font-size: 0;
-  white-space: nowrap;
-  .nav-bar-item {
-    cursor: pointer;
-    display: inline-block;
-    height: $height;
-    line-height: $height;
-    padding: 0 10px;
-    color: #fff;
-    font-size: $font-size-s;
-    text-align: center;
-    text-transform: capitalize;
-    transition: all $anim-duration;
-    &:active {
-      background: $gray-dark;
-      opacity: 0.5;
+.container {
+  .nav-bar {
+    @include absolute(100%, $height);
+    @include overflow-auto(x);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    background: var(--darker-background);
+    font-size: 0;
+    white-space: nowrap;
+    .nav-bar-item {
+      cursor: pointer;
+      display: inline-block;
+      height: $height;
+      line-height: $height;
+      padding: 0 10px;
+      color: var(--foreground);
+      font-size: $font-size-s;
+      text-align: center;
+      text-transform: capitalize;
+      transition: all $anim-duration;
+      &:active {
+        background: var(--active);
+        color: var(--select-foreground);
+      }
+      &.active {
+        background: var(--highlight);
+        color: var(--select-foreground);
+      }
     }
-    &.active {
-      background: $gray-light;
-      color: $gray-dark;
-      opacity: 0.5;
+    .bottom-bar {
+      transition: left $anim-duration, width $anim-duration;
+      height: 3px;
+      background: var(--accent);
+      position: absolute;
+      bottom: 0;
+      left: 0;
     }
-  }
-  .bottom-bar {
-    transition: left $anim-duration, width $anim-duration;
-    height: 3px;
-    background: #fff;
-    position: absolute;
-    bottom: 0;
-    left: 0;
   }
 }

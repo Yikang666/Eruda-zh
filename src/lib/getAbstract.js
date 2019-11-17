@@ -8,14 +8,22 @@ import {
   each,
   getObjType,
   endWith,
-  isEmpty
+  isEmpty,
+  evalCss
 } from './util'
+
+let hasEvalCss = false
 
 // Modified from: https://jsconsole.com/
 export default function getAbstract(
   obj,
   { topObj, level = 0, getterVal = false, unenumerable = true } = {}
 ) {
+  if (!hasEvalCss) {
+    evalCss(require('./abstract.scss'))
+    hasEvalCss = true
+  }
+
   let json = ''
   let type = ''
   const keyNum = 5
@@ -30,12 +38,12 @@ export default function getAbstract(
   const passOpts = { getterVal, unenumerable, level: level + 1 }
   const doStringify = level === 0
 
-  const keyWrapper = '<span style="color: #a71d5d;">'
-  const numWrapper = '<span style="color: #0086b3;">'
-  const nullWrapper = '<span style="color: #0086b3;">'
-  const strWrapper = '<span style="color: #183691;">'
-  const boolWrapper = '<span style="color: #0086b3;">'
-  const specialWrapper = '<span style="color: #707d8b;">'
+  const keyWrapper = '<span class="eruda-key">'
+  const numWrapper = '<span class="eruda-number">'
+  const nullWrapper = '<span class="eruda-null">'
+  const strWrapper = '<span class="eruda-string">'
+  const boolWrapper = '<span class="eruda-boolean">'
+  const specialWrapper = '<span class="eruda-special">'
   const strEscape = str =>
     escape(str)
       .replace(/\\n/g, '↵')
