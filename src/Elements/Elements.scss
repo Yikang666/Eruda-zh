@@ -56,7 +56,7 @@
         width: 18px;
         height: 18px;
         line-height: 18px;
-        font-size: 12px;
+        font-size: $font-size-s;
       }
       background: var(--darker-background);
       border-top: 1px solid var(--border);
@@ -92,18 +92,18 @@
         cursor: pointer;
       }
       &.active-effect:active {
-        background: $blue;
-        color: #fff;
+        background: var(--highlight);
+        color: var(--select-foreground);
         span {
-          color: #fff;
+          color: var(--select-foreground);
         }
       }
     }
   }
   .attributes {
-    font-size: 12px;
+    font-size: $font-size-s;
     a {
-      color: $blue;
+      color: var(--link-color);
     }
     .table-wrapper {
       @include overflow-auto(x);
@@ -128,7 +128,7 @@
     height: 10px;
     border-radius: 50%;
     margin-right: 2px;
-    border: 1px solid $gray-dark;
+    border: 1px solid var(--border);
     display: inline-block;
   }
   .box-model {
@@ -191,7 +191,7 @@
   .computed-style {
     font-size: $font-size-s;
     a {
-      color: $blue;
+      color: var(--link-color);
     }
     .table-wrapper {
       @include overflow-auto(y);
@@ -208,11 +208,10 @@
     }
   }
   .styles {
-    font-size: 12px;
+    font-size: $font-size-s;
     .style-wrapper {
       padding: $padding;
       .style-rules {
-        border-radius: $border-radius;
         border: 1px solid var(--border);
         padding: $padding;
         margin-bottom: 10px;
@@ -220,7 +219,7 @@
           padding-left: 2em;
           word-break: break-all;
           a {
-            color: $blue;
+            color: var(--link-color);
           }
           span {
             color: var(--var-color);
@@ -233,7 +232,7 @@
     }
   }
   .listeners {
-    font-size: 12px;
+    font-size: $font-size-s;
     .listener-wrapper {
       padding: $padding;
       .listener {
@@ -250,9 +249,6 @@
             @include overflow-auto(x);
             padding: $padding;
             border-top: none;
-            &.capture {
-              background: $gray-light;
-            }
           }
         }
       }

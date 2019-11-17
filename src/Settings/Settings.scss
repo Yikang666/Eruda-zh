@@ -9,7 +9,7 @@
   .text {
     padding: $padding;
     color: var(--accent);
-    font-size: 12px;
+    font-size: $font-size-s;
   }
   .select,
   .range,

@@ -3,7 +3,7 @@
 .search-highlight-block {
   display: inline;
   .keyword {
-    background: $yellow;
-    color: #fff;
+    background: var(--console-warn-background);
+    color: var(--console-warn-foreground);
   }
 }
