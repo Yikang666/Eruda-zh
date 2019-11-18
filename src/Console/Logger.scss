@@ -97,10 +97,11 @@
     .count {
       background: var(--text-color);
       padding: 2px 4px;
-      color: var(--accent);
+      color: #000;
       border-radius: 10px;
+      font-size: $font-size-s;
       float: left;
-      margin: 3px -6px 0 $padding;
+      margin: 2px -6px 0 $padding;
     }
     .log-content-wrapper {
       flex: 1;
@@ -159,6 +160,9 @@
       background: var(--console-warn-background);
       border-top: 1px solid var(--console-warn-border);
       border-bottom: 1px solid var(--console-warn-border);
+      .count {
+        background: #e8a400;
+      }
     }
     &.info {
       z-index: 30;

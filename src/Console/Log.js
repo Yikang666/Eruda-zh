@@ -111,7 +111,7 @@ export default class Log extends Emitter {
       $container.rmClass('eruda-hidden')
     }
     $count.text(count)
-    $icon.addClass('.eruda-hidden')
+    $icon.addClass('eruda-hidden')
 
     return this
   }

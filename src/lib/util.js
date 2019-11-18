@@ -3819,7 +3819,7 @@ export var evalCss = _.evalCss = (function (exports) {
         background: '#242424',
         foreground: '#a5a5a5',
         selectForeground: '#eaeaea',
-        accent: '#000',
+        accent: '#555',
         highlight: '#000',
         active: '#555',
         border: '#3d3d3d',
