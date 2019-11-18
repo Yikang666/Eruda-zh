@@ -110,9 +110,9 @@ export default class Highlight {
 function formatElName(el) {
   const { id, className } = el
 
-  let ret = `<span class="eruda-tag-name-color">${el.tagName.toLowerCase()}</span>`
+  let ret = `<span style="color:#881280;">${el.tagName.toLowerCase()}</span>`
 
-  if (id !== '') ret += `<span class="eruda-function-color">#${id}</span>`
+  if (id !== '') ret += `<span style="color:1a1aa8;">#${id}</span>`
 
   let classes = ''
   if (isStr(className)) {
@@ -123,7 +123,7 @@ function formatElName(el) {
     })
   }
 
-  ret += `<span class="eruda-attribute-name-color">${classes}</span>`
+  ret += `<span style="color:1a1aa8;">${classes}</span>`
 
   return ret
 }
