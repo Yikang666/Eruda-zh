@@ -2125,12 +2125,50 @@
             consoleErrorBackground: '#290000',
             consoleErrorForeground: '#ff8080',
             consoleErrorBorder: '#5c0000',
-            cssProperty: '#35d4c7'
+            light: '#ccc',
+            dark: '#aaa'
+          })
+        }
+
+        function createLightTheme(theme) {
+          return extend(theme, {
+            consoleWarnBackground: '#fffbe5',
+            consoleWarnForeground: '#5c5c00',
+            consoleWarnBorder: '#fff5c2',
+            consoleErrorBackground: '#fff0f0',
+            consoleErrorForeground: '#f00',
+            consoleErrorBorder: '#ffd6d6',
+            light: '#fff',
+            dark: '#eee'
           })
         }
 
         const themes = {
-          default: createDarkTheme({
+          Light: createLightTheme({
+            darkerBackground: '#f3f3f3',
+            background: '#fff',
+            foreground: '#333',
+            selectForeground: '#333',
+            accent: '#1a73e8',
+            highlight: '#eaeaea',
+            active: '#aaa',
+            border: '#ccc',
+            primary: '#333',
+            contrast: '#f2f7fd',
+            varColor: '#c80000',
+            stringColor: '#1a1aa6',
+            keywordColor: '#0d22aa',
+            numberColor: '#1c00cf',
+            operatorColor: '#808080',
+            linkColor: '#1155cc',
+            textColor: '#8097bd',
+            tagNameColor: '#881280',
+            functionColor: '#222',
+            attributeNameColor: '#994500',
+            commentColor: '#236e25',
+            cssProperty: '#c80000'
+          }),
+          'Material Oceanic': createDarkTheme({
             darkerBackground: '#212c31',
             background: '#263238',
             foreground: '#b0b1c5',
@@ -2151,12 +2189,12 @@
             tagNameColor: '#f07178',
             functionColor: '#82aaff',
             attributeNameColor: '#ffcb6b',
-            linkColor: '#80cbc4',
-            commentColor: '#546e7a'
+            commentColor: '#546e7a',
+            cssProperty: '#35d4c7'
           })
         }
 
-        let curTheme = themes.default
+        let curTheme = themes.Light
 
         exports = function(css, container) {
           css = toStr(css)
@@ -2185,17 +2223,17 @@
 
         exports.setTheme = function(theme) {
           if (isStr(theme)) {
-            curTheme = themes[theme] || themes.default
+            curTheme = themes[theme] || themes.Light
           } else {
-            curTheme = defaults(theme, themes.default)
+            curTheme = defaults(theme, themes.Light)
           }
 
           resetStyles()
         }
 
-        exports.getCurTheme = function() {
-          return curTheme
-        }
+        exports.getCurTheme = () => curTheme
+
+        exports.getThemes = () => themes
 
         exports.clear = function() {
           each(styleList, ({ container, el }) => container.removeChild(el))
@@ -2214,7 +2252,7 @@
 
         function resetStyle({ css, el }) {
           css = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
-          const _keys = keys(themes.default)
+          const _keys = keys(themes.Light)
           each(_keys, key => {
             css = css.replace(
               new RegExp(`var\\(--${kebabCase(key)}\\)`, 'g'),

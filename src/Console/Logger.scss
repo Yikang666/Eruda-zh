@@ -51,7 +51,7 @@
       content: '';
     }
     &::before {
-      border-bottom: 1px solid #a5a5a5;
+      border-bottom: 1px solid var(--border);
       position: absolute;
       top: 0;
       left: 0;
@@ -87,11 +87,11 @@
         left: -2px;
       }
       .icon-error {
-        color: var(--console-error-foreground);
+        color: #ef3842;
       }
       .icon-warn {
         top: -1px;
-        color: var(--console-warn-foreground);
+        color: #e8a400;
       }
     }
     .count {
@@ -124,16 +124,12 @@
         overflow: hidden;
         color: var(--foreground);
         th {
-          background: var(--contrast);
-          border-bottom: 1px solid var(--active);
+          background: var(--darker-background);
         }
         th,
         td {
-          border-left: 1px solid var(--active);
+          border: 1px solid var(--active);
           padding: 3px $padding;
-          &:first-child {
-            border-left: none !important;
-          }
         }
         tr:nth-child(even) {
           background: var(--contrast);

@@ -73,7 +73,7 @@
     width: 100%;
     font-size: $font-size-s;
     tr:nth-child(even) {
-      background: var(--darker-background);
+      background: var(--contrast);
     }
     td {
       padding: 10px;

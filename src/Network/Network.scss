@@ -10,6 +10,7 @@
     padding: $padding;
     color: var(--primary);
     height: 36px;
+    border-bottom: 1px solid var(--border);
   }
   .requests {
     @include overflow-auto(y);
@@ -20,7 +21,7 @@
       display: flex;
       width: 100%;
       cursor: pointer;
-      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       height: 41px;
       color: var(--foreground);
       white-space: nowrap;
@@ -58,7 +59,7 @@
         padding-right: $padding;
       }
       &:nth-child(even) {
-        background: var(--darker-background);
+        background: var(--contrast);
       }
     }
   }

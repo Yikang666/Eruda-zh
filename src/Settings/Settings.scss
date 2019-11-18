@@ -126,12 +126,13 @@
       border: none;
       height: 16px;
       border-radius: 10px;
+      border: 1px solid var(--border);
       background: radial-gradient(
         circle at center,
-        var(--darker-background) 0,
-        var(--darker-background) 15%,
-        var(--foreground) 22%,
-        var(--foreground) 100%
+        var(--dark) 0,
+        var(--dark) 15%,
+        var(--light) 22%,
+        var(--light) 100%
       );
     }
   }
@@ -144,13 +145,12 @@
       height: 20px;
       padding: 3px;
       border-radius: 18px;
-      box-shadow: inset 0 -1px var(--foreground),
-        inset 0 1px 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
       cursor: pointer;
       background-image: linear-gradient(
         to bottom,
-        var(--primary),
-        var(--foreground) 25px
+        var(--dark),
+        var(--light) 25px
       );
       .input {
         position: absolute;
@@ -162,7 +162,7 @@
         pointer-events: none;
         position: relative;
         display: block;
-        height: 14px;
+        height: 12px;
         font-size: 10px;
         text-transform: uppercase;
         background: var(--darker-background);
@@ -194,7 +194,7 @@
       .handle {
         position: absolute;
         pointer-events: none;
-        top: 1px;
+        top: 0;
         left: 0;
         width: 18px;
         height: 18px;
@@ -202,8 +202,8 @@
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
         background-image: linear-gradient(
           to bottom,
-          var(--foreground) 40%,
-          var(--darker-background)
+          var(--light) 40%,
+          var(--dark)
         );
         transition: left 0.15s ease-out;
       }
@@ -217,11 +217,7 @@
         height: 12px;
         border-radius: 6px;
         box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
-        background-image: linear-gradient(
-          to bottom,
-          var(--primary),
-          var(--foreground)
-        );
+        background-image: linear-gradient(to bottom, var(--dark), var(--light));
       }
       .input:checked ~ .handle {
         left: 30px;

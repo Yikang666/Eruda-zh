@@ -147,7 +147,7 @@ export default class DevTools extends Emitter {
       displaySize: 80,
       tinyNavBar: !isMobile(),
       activeEruda: false,
-      theme: 'default'
+      theme: 'Light'
     }))
 
     this._setTransparency(cfg.get('transparency'))
@@ -174,7 +174,7 @@ export default class DevTools extends Emitter {
       .separator()
       .switch(cfg, 'activeEruda', 'Always Activated')
       .switch(cfg, 'tinyNavBar', 'Tiny Navigation Bar')
-      .select(cfg, 'theme', 'Theme', ['default'])
+      .select(cfg, 'theme', 'Theme', keys(evalCss.getThemes()))
       .range(cfg, 'transparency', 'Transparency', {
         min: 0.2,
         max: 1,

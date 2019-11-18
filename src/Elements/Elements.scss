@@ -196,6 +196,7 @@
     .table-wrapper {
       @include overflow-auto(y);
       max-height: 200px;
+      border-top: 1px solid var(--border);
     }
     table {
       td {
