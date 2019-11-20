@@ -91,7 +91,7 @@ export default class NavBar extends Emitter {
     const $el = this._$el
 
     $el.css({
-      height: height + 1
+      height: height + 2
     })
     $el.find('.eruda-nav-bar-item').css({
       height: height,

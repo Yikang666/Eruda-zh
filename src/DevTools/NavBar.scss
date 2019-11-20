@@ -8,6 +8,7 @@ $item-width: 69px;
   .nav-bar {
     @include absolute(100%, $height);
     @include overflow-auto(x);
+    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     z-index: 100;
     background: var(--darker-background);
