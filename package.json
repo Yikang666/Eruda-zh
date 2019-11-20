@@ -15,11 +15,6 @@
     "genIcon": "node script/genIcon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run ci"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liriliri/eruda.git"
@@ -51,7 +46,6 @@
     "handlebars-loader": "^1.7.1",
     "html-minifier": "^4.0.0",
     "html-minifier-loader": "^1.4.1",
-    "husky": "^3.0.9",
     "istanbul": "^0.4.5",
     "jasmine-core": "^2.8.0",
     "jasmine-jquery": "^2.1.1",
