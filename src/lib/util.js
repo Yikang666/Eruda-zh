@@ -3515,7 +3515,7 @@ export var highlight = _.highlight = (function (exports) {
         each(lang, function(val) {
             if (!val.language) return;
             str = str.replace(val.re, function($1, $2) {
-                subLangs[subLangSi++] = exports($2, val.language);
+                subLangs[subLangSi++] = exports($2, val.language, style);
                 return $1.replace($2, '___subtmpl' + (subLangSi - 1) + '___');
             });
         });
