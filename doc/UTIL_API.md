@@ -2741,3 +2741,16 @@ const p = wrap(escape, function(fn, text) {
 });
 p('You & Me'); // -> '<p>You &amp; Me</p>'
 ```
+
+## xpath 
+
+Select elements using xpath, IE is not supported.
+
+|Name  |Type  |Desc           |
+|------|------|---------------|
+|xpath |string|Xpath          |
+|return|array |Target elements|
+
+```javascript
+xpath('//html/body'); // -> [body]
+```

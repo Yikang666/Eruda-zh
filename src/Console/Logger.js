@@ -20,7 +20,8 @@ import {
   keys,
   last,
   throttle,
-  raf
+  raf,
+  xpath
 } from '../lib/util'
 
 let id = 0
@@ -72,6 +73,9 @@ export default class Logger extends Emitter {
       },
       $$() {
         return toArr(document.querySelectorAll.apply(document, arguments))
+      },
+      $x(path) {
+        return xpath(path)
       },
       clear: () => {
         this.clear()

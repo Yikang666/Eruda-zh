@@ -8952,4 +8952,42 @@ export var wrap = _.wrap = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ xpath ------------------------------ */
+
+export var xpath = _.xpath = (function (exports) {
+    /* Select elements using xpath, IE is not supported.
+     *
+     * |Name  |Type  |Desc           |
+     * |------|------|---------------|
+     * |xpath |string|Xpath          |
+     * |return|array |Target elements|
+     */
+
+    /* example
+     * xpath('//html/body'); // -> [body]
+     */
+
+    /* typescript
+     * export declare function xpath(xpath: string): HTMLElement[];
+     */
+    exports = function(xpath) {
+        var ret = [];
+        var nodesSnapshot = document.evaluate(
+            xpath,
+            document,
+            null,
+            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+            null
+        );
+
+        for (var i = 0; i < nodesSnapshot.snapshotLength; i++) {
+            ret.push(nodesSnapshot.snapshotItem(i));
+        }
+
+        return ret;
+    };
+
+    return exports;
+})({});
+
 export default _;
