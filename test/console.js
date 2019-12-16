@@ -103,9 +103,7 @@ describe('console', function() {
 
     it('style', function() {
       tool.log('%cblue%cgreen', 'color:blue', 'color:green')
-      expect($(log(0))).toContainText(
-        'bluegreen'
-      )
+      expect($(log(0))).toContainText('bluegreen')
     })
 
     it('Repeat log', function() {

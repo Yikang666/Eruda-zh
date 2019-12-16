@@ -8,7 +8,7 @@
     "build": "webpack --config script/webpack.release.js && shx rm stringifyWorker.js.map",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage && shx rm src/index.js.map",
-    "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js} --write",
+    "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js,html} --write",
     "lint": "eslint src/**/*.js",
     "lint:fix": "npm run lint -- --fix",
     "setup": "node script/cpTestLib",

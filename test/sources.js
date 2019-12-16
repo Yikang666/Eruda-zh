@@ -9,9 +9,7 @@ describe('sources', function() {
   describe('js', function() {
     it('highlight', function() {
       tool.set('js', '/* test */')
-      expect($tool.find('.eruda-content')).toContainHtml(
-        '/* test */'
-      )
+      expect($tool.find('.eruda-content')).toContainHtml('/* test */')
     })
   })
 })
