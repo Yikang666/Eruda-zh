@@ -1,7 +1,6 @@
 import logger from '../lib/logger'
 import emitter from '../lib/emitter'
 import {
-  evalCss,
   Url,
   now,
   safeStorage,
@@ -14,6 +13,7 @@ import {
   loadJs,
   trim
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 let style = null
 

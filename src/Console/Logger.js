@@ -1,7 +1,6 @@
 import Log from './Log'
 import {
   Emitter,
-  evalCss,
   isNum,
   isUndef,
   perfNow,
@@ -23,6 +22,7 @@ import {
   raf,
   xpath
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 let id = 0
 

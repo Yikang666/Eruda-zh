@@ -1,7 +1,8 @@
 import Draggabilly from 'draggabilly'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
-import { Emitter, evalCss, nextTick, pxToNum, orientation } from '../lib/util'
+import { Emitter, nextTick, pxToNum, orientation } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class EntryBtn extends Emitter {
   constructor($container) {

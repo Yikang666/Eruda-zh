@@ -3,7 +3,6 @@ import XhrRequest from './XhrRequest'
 import FetchRequest from './FetchRequest'
 import Settings from '../Settings/Settings'
 import {
-  evalCss,
   isNative,
   defaults,
   now,
@@ -13,6 +12,7 @@ import {
   ms,
   trim
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Network extends Tool {
   constructor() {

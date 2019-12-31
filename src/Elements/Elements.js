@@ -4,7 +4,6 @@ import Highlight from './Highlight'
 import Select from './Select'
 import Settings from '../Settings/Settings'
 import {
-  evalCss,
   $,
   keys,
   MutationObserver,
@@ -26,6 +25,7 @@ import {
   nextTick,
   Emitter
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Elements extends Tool {
   constructor() {

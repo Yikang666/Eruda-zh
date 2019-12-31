@@ -1,5 +1,4 @@
 import {
-  evalCss,
   $,
   startWith,
   isObj,
@@ -20,6 +19,7 @@ import {
   stringifyAll,
   Emitter
 } from './util'
+import evalCss from './evalCss'
 
 let hasEvalCss = false
 

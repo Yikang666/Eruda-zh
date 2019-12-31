@@ -2,7 +2,6 @@ import Logger from './Logger'
 import Tool from '../DevTools/Tool'
 import {
   noop,
-  evalCss,
   $,
   Emitter,
   uncaught,
@@ -10,6 +9,7 @@ import {
   trim,
   upperFirst
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import stringify from './stringify'

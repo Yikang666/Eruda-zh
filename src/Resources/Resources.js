@@ -1,7 +1,6 @@
 import Tool from '../DevTools/Tool'
 import Settings from '../Settings/Settings'
 import {
-  evalCss,
   $,
   unique,
   safeStorage,
@@ -19,6 +18,7 @@ import {
   rmCookie,
   decodeUriComponent
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Resources extends Tool {
   constructor() {

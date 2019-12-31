@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool'
 import defInfo from './defInfo'
-import { evalCss, each, isFn, isUndef, cloneDeep } from '../lib/util'
+import { each, isFn, isUndef, cloneDeep } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Info extends Tool {
   constructor() {

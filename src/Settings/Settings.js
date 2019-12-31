@@ -1,14 +1,6 @@
 import Tool from '../DevTools/Tool'
-import {
-  evalCss,
-  $,
-  LocalStore,
-  uniqId,
-  each,
-  filter,
-  isStr,
-  clone
-} from '../lib/util'
+import { $, LocalStore, uniqId, each, filter, isStr, clone } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Settings extends Tool {
   constructor() {

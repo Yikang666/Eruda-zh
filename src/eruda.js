@@ -15,7 +15,6 @@ import extraUtil from './lib/extraUtil'
 import util from './lib/util'
 import {
   isFn,
-  evalCss,
   isNum,
   isObj,
   isMobile,
@@ -27,6 +26,7 @@ import {
   nextTick,
   last
 } from './lib/util'
+import evalCss from './lib/evalCss'
 
 export default {
   init({ container, tool, autoScale = true, useShadowDom = true } = {}) {

@@ -2,7 +2,8 @@ import Tool from '../DevTools/Tool'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer'
 import Settings from '../Settings/Settings'
-import { evalCss, ajax, escape, trim, isStr, highlight } from '../lib/util'
+import { ajax, escape, trim, isStr, highlight } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Sources extends Tool {
   constructor() {

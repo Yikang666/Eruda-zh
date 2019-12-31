@@ -1,4 +1,5 @@
-import { evalCss, $, pxToNum, isStr, each, trim } from '../lib/util'
+import { $, pxToNum, isStr, each, trim } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Highlight {
   constructor($container) {

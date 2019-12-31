@@ -1,4 +1,5 @@
-import { Emitter, evalCss, $, isNum } from '../lib/util'
+import { Emitter, $, isNum } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class NavBar extends Emitter {
   constructor($el) {

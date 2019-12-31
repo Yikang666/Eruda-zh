@@ -6,7 +6,6 @@ import Settings from '../Settings/Settings'
 import {
   Emitter,
   isMobile,
-  evalCss,
   defaults,
   keys,
   last,
@@ -16,6 +15,7 @@ import {
   $,
   throttle
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class DevTools extends Emitter {
   constructor($container) {

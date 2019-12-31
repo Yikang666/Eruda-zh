@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool'
 import defSnippets from './defSnippets'
-import { evalCss, $, each } from '../lib/util'
+import { $, each } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Snippets extends Tool {
   constructor() {

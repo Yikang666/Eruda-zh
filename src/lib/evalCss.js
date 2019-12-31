@@ -1,7 +1,13 @@
-/* Eval css.
- */
-
-_('toStr each filter isStr keys kebabCase defaults extend')
+import {
+  toStr,
+  each,
+  filter,
+  isStr,
+  keys,
+  kebabCase,
+  defaults,
+  extend
+} from './util'
 
 let styleList = []
 let scale = 1
@@ -405,7 +411,7 @@ const themes = {
 
 let curTheme = themes.Light
 
-exports = function(css, container) {
+const exports = function(css, container) {
   css = toStr(css)
 
   for (let i = 0, len = styleList.length; i < len; i++) {
@@ -418,7 +424,7 @@ exports = function(css, container) {
   el.type = 'text/css'
   container.appendChild(el)
 
-  let style = { css, el, container }
+  const style = { css, el, container }
   resetStyle(style)
   styleList.push(style)
 
@@ -470,3 +476,5 @@ function resetStyle({ css, el }) {
   })
   el.innerText = css
 }
+
+export default exports
