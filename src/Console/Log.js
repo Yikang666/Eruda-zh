@@ -410,7 +410,7 @@ function formatErr(err) {
 
 function formatJs(code) {
   const curTheme = evalCss.getCurTheme()
-  return highlight(beautify(code), 'js', {
+  return highlight(beautify(code, { indent_size: 2 }), 'js', {
     keyword: `color:${curTheme.keywordColor}`,
     number: `color:${curTheme.numberColor}`,
     operator: `color:${curTheme.operatorColor}`,
@@ -542,7 +542,7 @@ function formatFn(val) {
 
 function formatEl(val) {
   return `<pre style="display:inline">${highlight(
-    beautify.html(val.outerHTML, { unformatted: [] }),
+    beautify.html(val.outerHTML, { unformatted: [], indent_size: 2 }),
     'html'
   )}</pre>`
 }

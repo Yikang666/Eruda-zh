@@ -185,13 +185,13 @@ export default class Sources extends Tool {
     if (len < MAX_BEAUTIFY_LEN && this._formatCode) {
       switch (data.type) {
         case 'html':
-          code = beautify.html(code, { unformatted: [] })
+          code = beautify.html(code, { unformatted: [], indent_size: 2 })
           break
         case 'css':
-          code = beautify.css(code)
+          code = beautify.css(code, { indent_size: 2 })
           break
         case 'js':
-          code = beautify(code)
+          code = beautify(code, { indent_size: 2 })
           break
       }
 
