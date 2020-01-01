@@ -32,9 +32,9 @@ import {
   lowerCase,
   keys,
   $,
-  Emitter,
-  evalCss
+  Emitter
 } from '../lib/util'
+import evalCss from '../lib/evalCss'
 
 export default class Log extends Emitter {
   constructor({
