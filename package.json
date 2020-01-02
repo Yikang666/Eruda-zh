@@ -5,7 +5,7 @@
   "main": "eruda.js",
   "scripts": {
     "ci": "npm run lint && npm run test && npm run build",
-    "build": "webpack --config script/webpack.release.js && shx rm stringifyWorker.js.map",
+    "build": "webpack --config script/webpack.release.js",
     "dev": "webpack-dev-server --config script/webpack.dev.js --host 0.0.0.0",
     "test": "karma start && remap-istanbul -i coverage/coverage-final.json -o coverage/coverage-remapped.json -t json && node script/coverage && shx rm src/index.js.map",
     "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js,html} --write",
@@ -70,7 +70,6 @@
     "sass-loader": "^6.0.6",
     "shx": "^0.3.2",
     "webpack": "^3.12.0",
-    "webpack-dev-server": "^2.9.7",
-    "worker-loader": "^1.1.0"
+    "webpack-dev-server": "^2.9.7"
   }
 }

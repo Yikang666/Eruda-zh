@@ -12,7 +12,6 @@ import {
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
-import stringify from './stringify'
 
 uncaught.start()
 
@@ -244,7 +243,6 @@ export default class Console extends Tool {
       .remove(cfg, 'displayGetterVal')
       .remove(cfg, 'lazyEvaluation')
       .remove(cfg, 'displayIfErr')
-      .remove(cfg, 'useWorker')
       .remove(cfg, 'maxLogNum')
       .remove(upperFirst(this.name))
   }
@@ -262,11 +260,8 @@ export default class Console extends Tool {
       displayGetterVal: false,
       lazyEvaluation: true,
       displayIfErr: false,
-      useWorker: false,
       maxLogNum: 'infinite'
     }))
-
-    const isWorkerSupported = !!window.Worker
 
     let maxLogNum = cfg.get('maxLogNum')
     maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
@@ -275,7 +270,6 @@ export default class Console extends Tool {
     if (cfg.get('asyncRender')) logger.renderAsync(true)
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
     if (cfg.get('overrideConsole')) this.overrideConsole()
-    if (cfg.get('useWorker') && isWorkerSupported) stringify.useWorker = true
     logger.displayHeader(cfg.get('displayExtraInfo'))
     logger.displayUnenumerable(cfg.get('displayUnenumerable'))
     logger.displayGetterVal(cfg.get('displayGetterVal'))
@@ -302,9 +296,6 @@ export default class Console extends Tool {
           return logger.displayGetterVal(val)
         case 'lazyEvaluation':
           return logger.lazyEvaluation(val)
-        case 'useWorker':
-          stringify.useWorker = val
-          return
       }
     })
 
@@ -322,10 +313,6 @@ export default class Console extends Tool {
       .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
       .switch(cfg, 'displayGetterVal', 'Access Getter Value')
       .switch(cfg, 'lazyEvaluation', 'Lazy Evaluation')
-
-    if (isWorkerSupported) settings.switch(cfg, 'useWorker', 'Use Web Worker')
-
-    settings
       .select(cfg, 'maxLogNum', 'Max Log Number', [
         'infinite',
         '250',

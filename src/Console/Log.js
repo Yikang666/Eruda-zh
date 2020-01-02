@@ -1,4 +1,3 @@
-import stringify from './stringify'
 import origGetAbstract from '../lib/getAbstract'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer'
@@ -33,7 +32,9 @@ import {
   lowerCase,
   keys,
   $,
-  Emitter
+  Emitter,
+  stringifyAll,
+  nextTick
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -590,4 +591,9 @@ function extractObj(obj, options = {}, cb) {
   })
 
   stringify(obj, options, result => cb(JSON.parse(result)))
+}
+
+function stringify(obj, options, cb) {
+  const result = stringifyAll(obj, options)
+  nextTick(() => cb(result))
 }
