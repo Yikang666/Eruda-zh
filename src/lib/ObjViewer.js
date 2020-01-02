@@ -6,6 +6,7 @@ import {
   isBool,
   lowerCase,
   isObj,
+  isArr,
   upperFirst,
   keys,
   each,
@@ -15,7 +16,8 @@ import {
   $,
   difference,
   allKeys,
-  filter
+  filter,
+  chunk
 } from './util'
 import { encode, getFnAbstract, sortObjName } from './JsonViewer'
 import evalCss from './evalCss'
@@ -46,8 +48,10 @@ export default class ObjViewer extends Emitter {
     this._bindEvent()
   }
   _objToHtml(data, firstLevel) {
+    const visitor = this._visitor
     let self = data
-    const visitedObj = this._visitor.get(data)
+    let isBigArr = false
+    const visitedObj = visitor.get(data)
     if (visitedObj && visitedObj.self) {
       self = visitedObj.self
     }
@@ -55,9 +59,11 @@ export default class ObjViewer extends Emitter {
     let ret = ''
 
     const types = ['enumerable']
-    const enumerableKeys = keys(data)
+    let enumerableKeys = keys(data)
     let unenumerableKeys = []
     let symbolKeys = []
+    let virtualKeys = []
+    const virtualData = {}
 
     if (this._showUnenumerable && !firstLevel) {
       types.push('unenumerable')
@@ -80,16 +86,42 @@ export default class ObjViewer extends Emitter {
       )
     }
 
-    each(['enumerable', 'unenumerable', 'symbol'], type => {
+    if (isArr(data) && data.length > 100) {
+      types.unshift('virtual')
+      isBigArr = true
+      let idx = 0
+      const map = {}
+      each(chunk(data, 100), val => {
+        const obj = Object.create(null)
+        const startIdx = idx
+        let key = '[' + startIdx
+        each(val, val => {
+          obj[idx] = val
+          map[idx] = true
+          idx++
+        })
+        const endIdx = idx - 1
+        key += (endIdx - startIdx > 0 ? ' … ' + endIdx : '') + ']'
+        virtualData[key] = obj
+      })
+      virtualKeys = keys(virtualData)
+      enumerableKeys = filter(keys, val => !map[val])
+    }
+
+    each(types, type => {
       let typeKeys = []
       if (type === 'symbol') {
         typeKeys = symbolKeys
       } else if (type === 'unenumerable') {
         typeKeys = unenumerableKeys
+      } else if (type === 'virtual') {
+        typeKeys = virtualKeys
       } else {
         typeKeys = enumerableKeys
       }
-      typeKeys.sort(sortObjName)
+      if (!isBigArr) {
+        typeKeys.sort(sortObjName)
+      }
       for (let i = 0, len = typeKeys.length; i < len; i++) {
         const key = typeKeys[i]
         let val = ''
@@ -100,7 +132,11 @@ export default class ObjViewer extends Emitter {
           val = '(...)'
         } else {
           try {
-            val = self[key]
+            if (type === 'virtual') {
+              val = virtualData[key]
+            } else {
+              val = self[key]
+            }
             if (isPromise(val)) {
               val.catch(() => {})
             }
@@ -133,6 +169,10 @@ export default class ObjViewer extends Emitter {
     const proto = getProto(data)
     if (!firstLevel && proto) {
       if (ret === '') {
+        const id = visitor.set(proto, {
+          self: data
+        })
+        this._map[id] = proto
         ret = this._objToHtml(proto)
       } else {
         ret += this._createEl('__proto__', self || data, proto, 'proto')
@@ -144,7 +184,8 @@ export default class ObjViewer extends Emitter {
   _createEl(key, self, val, keyType, firstLevel = false) {
     const visitor = this._visitor
     let t = typeof val
-    const valType = type(val, false)
+    let valType = type(val, false)
+    if (keyType === 'virtual') valType = key
 
     if (val === null) {
       return `<li>${wrapKey(key)}<span class="eruda-null">null</span></li>`
@@ -203,7 +244,7 @@ export default class ObjViewer extends Emitter {
 
     function wrapKey(key) {
       if (firstLevel) return ''
-      if (isObj(val) && val.jsonSplitArr) return ''
+      if (isObj(val) && keyType === 'virtual') return ''
 
       let keyClass = 'eruda-key'
       if (
