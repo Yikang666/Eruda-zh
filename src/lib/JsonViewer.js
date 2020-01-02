@@ -5,8 +5,8 @@ import {
   uniqId,
   upperFirst,
   toNum,
-  escape,
   toStr,
+  escape,
   chunk,
   each,
   isNaN,
@@ -275,6 +275,8 @@ export const encode = str => {
 
 // $, upperCase, lowerCase, _
 export function sortObjName(a, b) {
+  a = toStr(a)
+  b = toStr(b)
   const numA = toNum(a)
   const numB = toNum(b)
   if (!isNaN(numA) && !isNaN(numB)) {

@@ -1,4 +1,5 @@
 import {
+  extend,
   Emitter,
   getProto,
   isNum,
@@ -45,6 +46,12 @@ export default class ObjViewer extends Emitter {
     this._bindEvent()
   }
   _objToHtml(data, firstLevel) {
+    let self = data
+    const visitedObj = this._visitor.get(data)
+    if (visitedObj && visitedObj.self) {
+      self = visitedObj.self
+    }
+
     let ret = ''
 
     const types = ['enumerable']
@@ -86,15 +93,40 @@ export default class ObjViewer extends Emitter {
       for (let i = 0, len = typeKeys.length; i < len; i++) {
         const key = typeKeys[i]
         let val = ''
-        try {
-          val = data[key]
-          if (isPromise(val)) {
-            val.catch(() => {})
+        const descriptor = Object.getOwnPropertyDescriptor(data, key)
+        const hasGetter = descriptor && descriptor.get
+        const hasSetter = descriptor && descriptor.set
+        if (hasGetter && !this._showGetterVal) {
+          val = '(...)'
+        } else {
+          try {
+            val = self[key]
+            if (isPromise(val)) {
+              val.catch(() => {})
+            }
+          } catch (e) {
+            val = e.message
           }
-        } catch (e) {
-          val = e.message
         }
-        ret += this._createEl(key, val, type, firstLevel)
+        ret += this._createEl(key, data, val, type, firstLevel)
+        if (hasGetter) {
+          ret += this._createEl(
+            `get ${key}`,
+            data,
+            descriptor.get,
+            type,
+            firstLevel
+          )
+        }
+        if (hasSetter) {
+          ret += this._createEl(
+            `set ${key}`,
+            data,
+            descriptor.set,
+            type,
+            firstLevel
+          )
+        }
       }
     })
 
@@ -103,13 +135,13 @@ export default class ObjViewer extends Emitter {
       if (ret === '') {
         ret = this._objToHtml(proto)
       } else {
-        ret += this._createEl('__proto__', proto, 'proto')
+        ret += this._createEl('__proto__', self || data, proto, 'proto')
       }
     }
 
     return ret
   }
-  _createEl(key, val, keyType, firstLevel = false) {
+  _createEl(key, self, val, keyType, firstLevel = false) {
     const visitor = this._visitor
     let t = typeof val
     const valType = type(val, false)
@@ -141,7 +173,11 @@ export default class ObjViewer extends Emitter {
       if (visitedObj) {
         id = visitedObj.id
       } else {
-        id = visitor.set(val)
+        const extra = {}
+        if (keyType === 'proto') {
+          extra.self = self
+        }
+        id = visitor.set(val, extra)
         this._map[id] = val
       }
       const objAbstract = getObjAbstract(val, valType) || upperFirst(t)
@@ -242,12 +278,13 @@ class Visitor {
     this.id = 0
     this.visited = []
   }
-  set(val) {
+  set(val, extra) {
     const { visited, id } = this
     const obj = {
       id,
       val
     }
+    extend(obj, extra)
     visited.push(obj)
 
     this.id++

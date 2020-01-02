@@ -555,10 +555,10 @@ function formatEl(val) {
   )}</pre>`
 }
 
-const regUrl = /(^|[\s\n]|<[A-Za-z]*\/?>)((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
+const regUrl = /((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
 
 const recognizeUrl = str =>
-  str.replace(regUrl, '<a href="$2" target="_blank">$2</a>')
+  str.replace(regUrl, '<a href="$1" target="_blank">$1</a>')
 
 function getFrom() {
   const e = new Error()

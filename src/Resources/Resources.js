@@ -279,7 +279,7 @@ export default class Resources extends Tool {
             : sessionStorage.getItem(key)
 
         try {
-          showSources('json', JSON.parse(val))
+          showSources('object', JSON.parse(val))
         } catch (e) {
           showSources('raw', val)
         }

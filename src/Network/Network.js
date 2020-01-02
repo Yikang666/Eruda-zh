@@ -187,7 +187,7 @@ export default class Network extends Tool {
           case 'javascript':
             return showSources('js', resTxt)
           case 'json':
-            return showSources('json', resTxt)
+            return showSources('object', resTxt)
         }
         switch (data.type) {
           case 'image':

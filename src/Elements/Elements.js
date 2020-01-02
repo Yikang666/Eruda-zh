@@ -21,7 +21,6 @@ import {
   pxToNum,
   isNaN,
   isNum,
-  stringifyAll,
   nextTick,
   Emitter
 } from '../lib/util'
@@ -180,23 +179,10 @@ export default class Elements extends Tool {
         }
       })
       .on('click', '.eruda-breadcrumb', () => {
-        let data = this._elData
-
-        if (!data) {
-          data = stringifyAll(this._curEl, {
-            unenumerable: true,
-            symbol: true,
-            accessGetter: true,
-            timeout: 1000
-          })
-          data = JSON.parse(data)
-        }
         const sources = container.get('sources')
 
-        this._elData = data
-
         if (sources) {
-          sources.set('json', data)
+          sources.set('object', this._curEl)
           container.showTool('sources')
         }
       })
@@ -262,7 +248,6 @@ export default class Elements extends Tool {
   }
   _setEl(el) {
     this._curEl = el
-    this._elData = null
     this._curCssStore = new CssStore(el)
     this._highlight.setEl(el)
     this._rmDefComputedStyle = true

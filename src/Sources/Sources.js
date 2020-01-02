@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool'
 import beautify from 'js-beautify'
-import JsonViewer from '../lib/JsonViewer'
+import ObjViewer from '../lib/ObjViewer'
 import Settings from '../Settings/Settings'
 import { ajax, escape, trim, isStr, highlight } from '../lib/util'
 import evalCss from '../lib/evalCss'
@@ -109,7 +109,7 @@ export default class Sources extends Tool {
   _loadTpl() {
     this._codeTpl = require('./code.hbs')
     this._imgTpl = require('./image.hbs')
-    this._jsonTpl = require('./json.hbs')
+    this._objTpl = require('./object.hbs')
     this._rawTpl = require('./raw.hbs')
     this._iframeTpl = require('./iframe.hbs')
   }
@@ -164,8 +164,8 @@ export default class Sources extends Tool {
         return this._renderCode()
       case 'img':
         return this._renderImg()
-      case 'json':
-        return this._renderJson()
+      case 'object':
+        return this._renderObj()
       case 'raw':
         return this._renderRaw()
       case 'iframe':
@@ -225,9 +225,9 @@ export default class Sources extends Tool {
       })
     )
   }
-  _renderJson() {
-    // Using cache will keep binding json events to the same elements.
-    this._renderHtml(this._jsonTpl(), false)
+  _renderObj() {
+    // Using cache will keep binding events to the same elements.
+    this._renderHtml(this._objTpl(), false)
 
     let val = this._data.val
 
@@ -238,7 +238,10 @@ export default class Sources extends Tool {
       /* eslint-disable no-empty */
     } catch (e) {}
 
-    new JsonViewer(val, this._$el.find('.eruda-json'))
+    new ObjViewer(val, this._$el.find('.eruda-json'), {
+      showUnenumerable: true,
+      showGetterVal: true
+    })
   }
   _renderRaw() {
     this._renderHtml(this._rawTpl({ val: this._data.val }))
