@@ -134,6 +134,7 @@ View object, html, js, and css.
 |-----------|-------|-----------------|
 |showLineNum|boolean|Show Line Numbers|
 |formatCode |boolean|Beautify Code    |
+|indentSize |string |Indent Size      |
 
 ## Info
 

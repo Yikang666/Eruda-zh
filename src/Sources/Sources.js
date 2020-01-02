@@ -14,6 +14,7 @@ export default class Sources extends Tool {
     this.name = 'sources'
     this._showLineNum = true
     this._formatCode = true
+    this._indentSize = 4
 
     this._loadTpl()
   }
@@ -123,16 +124,19 @@ export default class Sources extends Tool {
     settings
       .remove(cfg, 'showLineNum')
       .remove(cfg, 'formatCode')
+      .remove(cfg, 'indentSize')
       .remove('Sources')
   }
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('sources', {
       showLineNum: true,
-      formatCode: true
+      formatCode: true,
+      indentSize: 4
     }))
 
     if (!cfg.get('showLineNum')) this._showLineNum = false
     if (!cfg.get('formatCode')) this._formatCode = false
+    this._indentSize = cfg.get('indentSize')
 
     cfg.on('change', (key, val) => {
       switch (key) {
@@ -142,6 +146,9 @@ export default class Sources extends Tool {
         case 'formatCode':
           this._formatCode = val
           return
+        case 'indentSize':
+          this._indentSize = +val
+          return
       }
     })
 
@@ -150,6 +157,7 @@ export default class Sources extends Tool {
       .text('Sources')
       .switch(cfg, 'showLineNum', 'Show Line Numbers')
       .switch(cfg, 'formatCode', 'Beautify Code')
+      .select(cfg, 'indentSize', 'Indent Size', ['2', '4'])
       .separator()
   }
   _render() {
@@ -177,6 +185,7 @@ export default class Sources extends Tool {
   }
   _renderCode() {
     const data = this._data
+    const indent_size = this._indentSize
 
     let code = data.val
     const len = data.val.length
@@ -185,13 +194,13 @@ export default class Sources extends Tool {
     if (len < MAX_BEAUTIFY_LEN && this._formatCode) {
       switch (data.type) {
         case 'html':
-          code = beautify.html(code, { unformatted: [], indent_size: 2 })
+          code = beautify.html(code, { unformatted: [], indent_size })
           break
         case 'css':
-          code = beautify.css(code, { indent_size: 2 })
+          code = beautify.css(code, { indent_size })
           break
         case 'js':
-          code = beautify(code, { indent_size: 2 })
+          code = beautify(code, { indent_size })
           break
       }
 
