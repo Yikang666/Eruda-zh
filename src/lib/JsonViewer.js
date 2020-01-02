@@ -15,8 +15,6 @@ import {
   keys,
   trim,
   lowerCase,
-  isUndef,
-  stringifyAll,
   Emitter
 } from './util'
 import evalCss from './evalCss'
@@ -30,14 +28,6 @@ export default class JsonViewer extends Emitter {
     if (!hasEvalCss) {
       evalCss(require('./json.scss'))
       hasEvalCss = true
-    }
-
-    if (isObj(data) && isUndef(data.type) && isUndef(data.id)) {
-      data = JSON.parse(
-        stringifyAll(data, {
-          ignore: [Object.prototype, Array.prototype]
-        })
-      )
     }
 
     this._data = {
