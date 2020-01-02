@@ -8,9 +8,9 @@ import {
   each,
   getObjType,
   endWith,
-  isEmpty,
-  evalCss
+  isEmpty
 } from './util'
+import evalCss from './evalCss'
 
 let hasEvalCss = false
 

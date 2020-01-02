@@ -121,7 +121,8 @@
       bottom: 0;
       color: var(--foreground);
       width: 100%;
-      background: var(--accent);
+      border-top: 1px solid var(--border);
+      background: var(--darker-background);
       display: block;
       height: 40px;
       line-height: 40px;

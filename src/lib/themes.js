@@ -13,7 +13,7 @@ export default {
     contrast: '#f2f7fd',
     varColor: '#c80000',
     stringColor: '#1a1aa6',
-    keywordColor: '#0d22aa',
+    keywordColor: '#881280',
     numberColor: '#1c00cf',
     operatorColor: '#808080',
     linkColor: '#1155cc',

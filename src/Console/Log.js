@@ -2,6 +2,7 @@ import stringify from './stringify'
 import origGetAbstract from '../lib/getAbstract'
 import beautify from 'js-beautify'
 import JsonViewer from '../lib/JsonViewer'
+import ObjViewer from '../lib/ObjViewer'
 import {
   isObj,
   isStr,
@@ -185,7 +186,8 @@ export default class Log extends Emitter {
     }
   }
   click(logger) {
-    const { type, src, args } = this
+    const { type, src } = this
+    let { args } = this
     const $el = this._$el
 
     switch (type) {
@@ -198,23 +200,29 @@ export default class Log extends Emitter {
       case 'dir':
       case 'group':
       case 'groupCollapsed':
-        if (src) {
+        if (src || args) {
           const $json = $el.find('.eruda-json')
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
-              const jsonViewer = new JsonViewer(src, $json)
-              jsonViewer.on('change', () => this.updateSize(false))
+              if (src) {
+                const jsonViewer = new JsonViewer(src, $json)
+                jsonViewer.on('change', () => this.updateSize(false))
+              } else {
+                if (type === 'table' || args.length === 1) {
+                  if (isObj(args[0])) args = args[0]
+                }
+                const objViewer = new ObjViewer(args, $json, {
+                  showUnenumerable: Log.showUnenumerable,
+                  showGetterVal: Log.showGetterVal
+                })
+                objViewer.on('change', () => this.updateSize(false))
+              }
               $json.data('init', 'true')
             }
             $json.rmClass('eruda-hidden')
           } else {
             $json.addClass('eruda-hidden')
           }
-        } else if (args) {
-          this.extractObj(() => {
-            this.click(logger)
-            delete this.args
-          })
         } else if (type === 'group' || type === 'groupCollapsed') {
           logger.toggleGroup(this)
         }

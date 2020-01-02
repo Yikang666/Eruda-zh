@@ -53,7 +53,7 @@ export default class JsonViewer extends Emitter {
     this._appendTpl()
     this._bindEvent()
   }
-  jsonToHtml(data, firstLevel) {
+  _jsonToHtml(data, firstLevel) {
     let ret = ''
 
     each(['enumerable', 'unenumerable', 'symbol'], type => {
@@ -63,23 +63,22 @@ export default class JsonViewer extends Emitter {
       typeKeys.sort(sortObjName)
       for (let i = 0, len = typeKeys.length; i < len; i++) {
         const key = typeKeys[i]
-        ret += this.createEl(key, data[type][key], type, firstLevel)
+        ret += this._createEl(key, data[type][key], type, firstLevel)
       }
     })
 
     if (data.proto) {
       if (ret === '') {
-        ret = this.jsonToHtml(data.proto, firstLevel)
+        ret = this._jsonToHtml(data.proto)
       } else {
-        ret += this.createEl('__proto__', data.proto, 'proto', firstLevel)
+        ret += this._createEl('__proto__', data.proto, 'proto')
       }
     }
 
     return ret
   }
-  createEl(key, val, keyType, firstLevel = false) {
+  _createEl(key, val, keyType, firstLevel = false) {
     let type = typeof val
-    let id
 
     if (val === null) {
       return `<li>${wrapKey(key)}<span class="eruda-null">null</span></li>`
@@ -103,7 +102,7 @@ export default class JsonViewer extends Emitter {
     } else if (val === '(...)') {
       return `<li>${wrapKey(key)}<span class="eruda-special">${val}</span></li>`
     } else if (isObj(val)) {
-      id = val.id
+      const id = val.id
       const referenceId = val.reference
       const objAbstract = getObjAbstract(val) || upperFirst(type)
 
@@ -121,7 +120,7 @@ export default class JsonViewer extends Emitter {
         firstLevel ? '' : 'style="display:none"'
       }>`
 
-      if (firstLevel) obj += this.jsonToHtml(this._map[id])
+      if (firstLevel) obj += this._jsonToHtml(this._map[id])
 
       return obj + '</ul><span class="eruda-close"></span></li>'
     }
@@ -149,7 +148,7 @@ export default class JsonViewer extends Emitter {
   _appendTpl() {
     const data = this._map[this._data.id]
 
-    this._$el.html(this.jsonToHtml(data, true))
+    this._$el.html(this._jsonToHtml(data, true))
   }
   _bindEvent() {
     const map = this._map
@@ -165,7 +164,7 @@ export default class JsonViewer extends Emitter {
 
       if ($this.data('first-level')) return
       if (circularId) {
-        $this.find('ul').html(self.jsonToHtml(map[circularId], false))
+        $this.find('ul').html(self._jsonToHtml(map[circularId], false))
         $this.rmAttr('data-object-id')
       }
 
@@ -268,14 +267,14 @@ function objToArr(data, id, type) {
   return ret
 }
 
-const encode = str => {
+export const encode = str => {
   return escape(toStr(str))
     .replace(/\n/g, '↵')
     .replace(/\f|\r|\t/g, '')
 }
 
 // $, upperCase, lowerCase, _
-function sortObjName(a, b) {
+export function sortObjName(a, b) {
   const numA = toNum(a)
   const numB = toNum(b)
   if (!isNaN(numA) && !isNaN(numB)) {
@@ -320,7 +319,7 @@ function transCode(code) {
   return code
 }
 
-function getObjAbstract(data) {
+export function getObjAbstract(data) {
   const { type, value } = data
   if (!type) return
 
@@ -344,7 +343,7 @@ function extractFnHead(str) {
   return str
 }
 
-function getFnAbstract(str) {
+export function getFnAbstract(str) {
   if (str.length > 500) str = str.slice(0, 500) + '...'
 
   return 'ƒ ' + trim(extractFnHead(str).replace('function', ''))
