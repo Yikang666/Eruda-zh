@@ -34,7 +34,8 @@ import {
   $,
   Emitter,
   stringifyAll,
-  nextTick
+  nextTick,
+  linkify
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -305,12 +306,17 @@ export default class Log extends Emitter {
         break
     }
 
-    if (type !== 'error') msg = recognizeUrl(msg)
-    msg = render({ msg, type, icon, id, displayHeader, time, from, group })
-
     if (!this._needSrc() || !Log.lazyEvaluation) {
       delete this.args
     }
+
+    // Only linkify for simple types
+    if (type !== 'error' && !this.args) {
+      msg = linkify(msg, url => {
+        return `<a href="${url}" target="_blank">${url}</a>`
+      })
+    }
+    msg = render({ msg, type, icon, id, displayHeader, time, from, group })
 
     this._$el.addClass('eruda-log-container').html(msg)
     this._$content = this._$el.find('.eruda-log-content')
@@ -555,11 +561,6 @@ function formatEl(val) {
     'html'
   )}</pre>`
 }
-
-const regUrl = /((?:https?|ftp):\/\/[-A-Z0-9+\u0026\u2019@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|])/gi
-
-const recognizeUrl = str =>
-  str.replace(regUrl, '<a href="$1" target="_blank">$1</a>')
 
 function getFrom() {
   const e = new Error()

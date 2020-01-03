@@ -1321,33 +1321,6 @@ export var escapeRegExp = _.escapeRegExp = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ evalCss ------------------------------ */
-
-export var evalCss = _.evalCss = (function (exports) {
-    /* Load css into page.
-     *
-     * |Name|Type  |Desc    |
-     * |----|------|--------|
-     * |css |string|Css code|
-     */
-
-    /* example
-     * evalCss('body{background:#08c}');
-     */
-
-    /* typescript
-     * export declare function evalCss(css: string): void;
-     */
-    exports = function(css) {
-        var style = document.createElement('style');
-        style.textContent = css;
-        style.type = 'text/css';
-        document.head.appendChild(style);
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ fileSize ------------------------------ */
 
 export var fileSize = _.fileSize = (function (exports) {
@@ -7197,6 +7170,88 @@ export var trim = _.trim = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ extractUrls ------------------------------ */
+
+export var extractUrls = _.extractUrls = (function (exports) {
+    /* Extract urls from plain text.
+     *
+     * |Name  |Type  |Desc           |
+     * |------|------|---------------|
+     * |str   |string|Text to extract|
+     * |return|array |Url list       |
+     */
+
+    /* example
+     * const str = '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
+     * extractUrls(str); // -> ['http://eustia.liriliri.io']
+     */
+
+    /* typescript
+     * export declare function extractUrls(str: string): string[];
+     */
+
+    /* dependencies
+     * unique trim map toArr 
+     */
+
+    exports = function(str) {
+        var urlList = toArr(str.match(regUrl));
+        return unique(
+            map(urlList, function(url) {
+                return trim(url);
+            })
+        );
+    };
+
+    var regUrl = /((https?)|(ftp)):\/\/[\w.]+[^ \f\n\r\t\v"\\<>[\]\u2100-\uFFFF(),]*/gi;
+
+    return exports;
+})({});
+
+/* ------------------------------ linkify ------------------------------ */
+
+export var linkify = _.linkify = (function (exports) {
+    /* Hyperlink urls in a string.
+     *
+     * |Name       |Type    |Desc                     |
+     * |-----------|--------|-------------------------|
+     * |str        |string  |String to hyperlink      |
+     * |[hyperlink]|function|Function to hyperlink url|
+     * |return     |string  |Result string            |
+     */
+
+    /* example
+     * const str = 'Official site: http://eustia.liriliri.io'
+     * linkify(str); // -> 'Official site: <a href="http://eustia.liriliri.io">http://eustia.liriliri.io</a>'
+     * linkify(str, function (url) {
+     *     return '<a href="' + url + '" target="_blank">' + url + '</a>';
+     * });
+     */
+
+    /* typescript
+     * export declare function linkify(str: string, hyperlink?: Function): string;
+     */
+
+    /* dependencies
+     * extractUrls each escapeRegExp 
+     */
+
+    exports = function(str, hyperlink) {
+        hyperlink = hyperlink || defHyperlink;
+        var urlList = extractUrls(str);
+        each(urlList, function(url) {
+            str = str.replace(new RegExp(escapeRegExp(url), 'g'), hyperlink);
+        });
+        return str;
+    };
+
+    function defHyperlink(url) {
+        return '<a href="' + url + '">' + url + '</a>';
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ query ------------------------------ */
 
 export var query = _.query = (function (exports) {
@@ -8248,47 +8303,6 @@ export var throttle = _.throttle = (function (exports) {
 
     exports = function(fn, wait) {
         return debounce(fn, wait, true);
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ tryIt ------------------------------ */
-
-export var tryIt = _.tryIt = (function (exports) {
-    /* Run function in a try catch.
-     *
-     * |Name|Type    |Desc                 |
-     * |----|--------|---------------------|
-     * |fn  |function|Function to try catch|
-     * |[cb]|function|Callback             |
-     */
-
-    /* example
-     * tryIt(function () {
-     *     // Do something that might cause an error.
-     * }, function (err, result) {
-     *     if (err) console.log(err);
-     * });
-     */
-
-    /* typescript
-     * export declare function tryIt(fn: Function, cb?: Function): void;
-     */
-
-    /* dependencies
-     * noop 
-     */
-
-    exports = function(fn, cb) {
-        cb = cb || noop;
-
-        try {
-            cb(null, fn());
-        } catch (e) {
-            cb(e);
-            return;
-        }
     };
 
     return exports;

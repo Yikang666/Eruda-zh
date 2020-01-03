@@ -1239,10 +1239,6 @@ Escape special chars to be used as literals in RegExp constructors.
 escapeRegExp('[licia]'); // -> '\\[licia\\]'
 ```
 
-## evalCss 
-
-Eval css.
-
 ## extend 
 
 Copy all of the properties in the source objects over to the destination object.
@@ -1269,6 +1265,20 @@ Like extend, but only copies own properties over to the destination object.
 
 ```javascript
 extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+```
+
+## extractUrls 
+
+Extract urls from plain text.
+
+|Name  |Type  |Desc           |
+|------|------|---------------|
+|str   |string|Text to extract|
+|return|array |Url list       |
+
+```javascript
+const str = '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
+extractUrls(str); // -> ['http://eustia.liriliri.io']
 ```
 
 ## fileSize 
@@ -1835,6 +1845,24 @@ Get the last element of array.
 
 ```javascript
 last([1, 2]); // -> 2
+```
+
+## linkify 
+
+Hyperlink urls in a string.
+
+|Name       |Type    |Desc                     |
+|-----------|--------|-------------------------|
+|str        |string  |String to hyperlink      |
+|[hyperlink]|function|Function to hyperlink url|
+|return     |string  |Result string            |
+
+```javascript
+const str = 'Official site: http://eustia.liriliri.io'
+linkify(str); // -> 'Official site: <a href="http://eustia.liriliri.io">http://eustia.liriliri.io</a>'
+linkify(str, function (url) {
+    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+});
 ```
 
 ## loadJs 
@@ -2530,23 +2558,6 @@ Remove chars or white-spaces from beginning end of string.
 trim(' abc  '); // -> 'abc'
 trim('_abc_', '_'); // -> 'abc'
 trim('_abc_', ['a', 'c', '_']); // -> 'b'
-```
-
-## tryIt 
-
-Run function in a try catch.
-
-|Name|Type    |Desc                 |
-|----|--------|---------------------|
-|fn  |function|Function to try catch|
-|[cb]|function|Callback             |
-
-```javascript
-tryIt(function () {
-    // Do something that might cause an error.
-}, function (err, result) {
-    if (err) console.log(err);
-});
 ```
 
 ## type 
