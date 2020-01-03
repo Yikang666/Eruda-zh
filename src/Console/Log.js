@@ -516,6 +516,7 @@ function substituteStr(args) {
       newStr += c
     }
   }
+  if (isInCss) newStr += '</span>'
 
   args.unshift(newStr)
 
