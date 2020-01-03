@@ -1,3 +1,15 @@
+## v2.0.0 (3 Jan 2020)
+
+* feat: theme support
+* feat(console): $x utility
+* feat(console): remove useWorker
+* feat(sources): indent size configuration
+* fix(console): url recognition
+* fix(console): log style
+* fix(sources): scrolling
+* perf(console): large object expansion
+* chore: reduce file size (472kb -> 452kb)
+
 ## v1.10.3 (8 Nov 2019)
 
 * fix(info): escape location #127
