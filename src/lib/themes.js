@@ -220,7 +220,7 @@ export default {
     selectForeground: '#FFFFFF',
     accent: '#2979ff',
     highlight: '#383D48',
-    border: '#282C34',
+    border: '#2e3239',
     primary: '#979FAD',
     contrast: '#21252B',
     varColor: '#D19A66',
