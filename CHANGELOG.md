@@ -1,3 +1,7 @@
+## v2.0.1 (6 Jan 2020)
+
+* chore: update plugins
+
 ## v2.0.0 (3 Jan 2020)
 
 * feat: theme support
