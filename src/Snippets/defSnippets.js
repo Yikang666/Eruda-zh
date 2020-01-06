@@ -247,14 +247,14 @@ function loadPlugin(name) {
 }
 
 const pluginVersion = {
-  fps: '1.1.2',
-  features: '1.0.2',
-  timing: '1.1.3',
-  memory: '1.1.1',
-  code: '1.0.0',
-  benchmark: '1.0.0',
-  geolocation: '1.1.0',
-  dom: '1.1.0',
-  orientation: '1.0.0',
-  touches: '1.0.1'
+  fps: '2.0.0',
+  features: '2.0.0',
+  timing: '2.0.0',
+  memory: '2.0.0',
+  code: '2.0.0',
+  benchmark: '2.0.0',
+  geolocation: '2.0.0',
+  dom: '2.0.0',
+  orientation: '2.0.0',
+  touches: '2.0.0'
 }
