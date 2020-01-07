@@ -22,7 +22,9 @@ import {
   isNaN,
   isNum,
   nextTick,
-  Emitter
+  Emitter,
+  contain,
+  unique
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -309,17 +311,17 @@ export default class Elements extends Tool {
     }
     ret.boxModel = boxModel
 
-    if (this._rmDefComputedStyle) {
-      computedStyle = rmDefComputedStyle(computedStyle)
-    }
-    ret.rmDefComputedStyle = this._rmDefComputedStyle
-    processStyleRules(computedStyle)
-    ret.computedStyle = computedStyle
-
     const styles = cssStore.getMatchedCSSRules()
     styles.unshift(getInlineStyle(el.style))
     styles.forEach(style => processStyleRules(style.style))
     ret.styles = styles
+
+    if (this._rmDefComputedStyle) {
+      computedStyle = rmDefComputedStyle(computedStyle, styles)
+    }
+    ret.rmDefComputedStyle = this._rmDefComputedStyle
+    processStyleRules(computedStyle)
+    ret.computedStyle = computedStyle
 
     return ret
   }
@@ -550,13 +552,17 @@ function getInlineStyle(style) {
   return ret
 }
 
-const defComputedStyle = require('./defComputedStyle.json')
-
-function rmDefComputedStyle(computedStyle) {
+function rmDefComputedStyle(computedStyle, styles) {
   const ret = {}
 
+  let keepStyles = ['display', 'width', 'height']
+  each(styles, style => {
+    keepStyles = keepStyles.concat(keys(style.style))
+  })
+  keepStyles = unique(keepStyles)
+
   each(computedStyle, (val, key) => {
-    if (val === defComputedStyle[key]) return
+    if (!contain(keepStyles, key)) return
 
     ret[key] = val
   })

@@ -2724,6 +2724,43 @@ export var isRegExp = _.isRegExp = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isSorted ------------------------------ */
+
+export var isSorted = _.isSorted = (function (exports) {
+    /* Check if an array is sorted.
+     *
+     * |Name  |Type    |Desc                   |
+     * |------|--------|-----------------------|
+     * |arr   |array   |Array to check         |
+     * |[cmp] |function|Comparator             |
+     * |return|boolean |True if array is sorted|
+     */
+
+    /* example
+     * isSorted([1, 2, 3]); // -> true
+     * isSorted([3, 2, 1]); // -> false
+     */
+
+    /* typescript
+     * export declare function isSorted(arr: any[], cmp?: Function): boolean;
+     */
+    exports = function(arr, cmp) {
+        cmp = cmp || comparator;
+
+        for (var i = 0, len = arr.length; i < len - 1; i++) {
+            if (cmp(arr[i], arr[i + 1]) > 0) return false;
+        }
+
+        return true;
+    };
+
+    function comparator(a, b) {
+        return a - b;
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ loadJs ------------------------------ */
 
 export var loadJs = _.loadJs = (function (exports) {
@@ -7784,6 +7821,110 @@ export var ajax = _.ajax = (function (exports) {
             dataType: dataType
         };
     }
+
+    return exports;
+})({});
+
+/* ------------------------------ sortKeys ------------------------------ */
+
+export var sortKeys = _.sortKeys = (function (exports) {
+    /* Sort keys of an object.
+     *
+     * |Name   |Type  |Desc                   |
+     * |-------|------|-----------------------|
+     * |obj    |object|Object to sort         |
+     * |options|object|Sort options           |
+     * |return |object|Object with sorted keys|
+     *
+     * Available options:
+     *
+     * |Name        |Type    |Desc                 |
+     * |------------|--------|---------------------|
+     * |deep=false  |boolean |Sort keys recursively|
+     * |[comparator]|function|Comparator           |
+     */
+
+    /* example
+     * sortKeys({b: {d: 2, c: 1}, a: 0}, {
+     *     deep: true
+     * }); // -> {a: 0, b: {c: 1, d: 2}}
+     */
+
+    /* typescript
+     * export declare function sortKeys(
+     *     obj: object,
+     *     options?: {
+     *         deep?: boolean,
+     *         comparator?: Function
+     *     }
+     * ): object;
+     */
+
+    /* dependencies
+     * isSorted defaults keys isArr isObj 
+     */
+
+    exports = function(obj) {
+        var options =
+            arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        defaults(options, defOpts);
+        var deep = options.deep,
+            comparator = options.comparator;
+        var visited = [];
+        var visitedResult = [];
+
+        function sort(obj) {
+            var idx = visited.indexOf(obj);
+
+            if (idx > -1) {
+                return visitedResult[idx];
+            }
+
+            var result;
+
+            if (isArr(obj)) {
+                result = [];
+                visited.push(obj);
+                visitedResult.push(result);
+
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    var value = obj[i];
+
+                    if (deep && isObj(value)) {
+                        result[i] = sort(value);
+                    } else {
+                        result[i] = value;
+                    }
+                }
+            } else {
+                result = {};
+                visited.push(obj);
+                visitedResult.push(result);
+
+                var _keys = keys(obj).sort(comparator);
+
+                for (var _i = 0, _len = _keys.length; _i < _len; _i++) {
+                    var key = _keys[_i];
+                    var _value = obj[key];
+
+                    if (deep && isObj(_value)) {
+                        result[key] = sort(_value);
+                    } else {
+                        result[key] = _value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        return sort(obj);
+    };
+
+    var defOpts = {
+        deep: false,
+        comparator: isSorted.defComparator
+    };
 
     return exports;
 })({});

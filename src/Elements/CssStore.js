@@ -1,4 +1,4 @@
-import { each } from '../lib/util'
+import { each, sortKeys } from '../lib/util'
 
 function formatStyle(style) {
   const ret = {}
@@ -11,7 +11,7 @@ function formatStyle(style) {
     ret[name] = style[name]
   }
 
-  return ret
+  return sortStyleKeys(ret)
 }
 
 const elProto = Element.prototype
@@ -69,4 +69,42 @@ export default class CssStore {
   _elMatchesSel(selText) {
     return matchesSel(this._el, selText)
   }
+}
+
+function sortStyleKeys(style) {
+  return sortKeys(style, {
+    comparator: (a, b) => {
+      const lenA = a.length
+      const lenB = b.length
+      const len = lenA > lenB ? lenB : lenA
+
+      for (let i = 0; i < len; i++) {
+        const codeA = a.charCodeAt(i)
+        const codeB = b.charCodeAt(i)
+        const cmpResult = cmpCode(codeA, codeB)
+
+        if (cmpResult !== 0) return cmpResult
+      }
+
+      if (lenA > lenB) return 1
+      if (lenA < lenB) return -1
+
+      return 0
+    }
+  })
+}
+
+function cmpCode(a, b) {
+  a = transCode(a)
+  b = transCode(b)
+
+  if (a > b) return 1
+  if (a < b) return -1
+  return 0
+}
+
+function transCode(code) {
+  // - should be placed after lowercase chars.
+  if (code === 45) return 123
+  return code
 }
