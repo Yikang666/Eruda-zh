@@ -1,7 +1,4 @@
 const handlebars = require('handlebars/runtime')
-const map = require('licia/map')
-const reduce = require('licia/reduce')
-const isStr = require('licia/isStr')
 
 // https://github.com/helpers/handlebars-helper-repeat
 handlebars.registerHelper('repeat', function(count = 0, options) {
@@ -33,13 +30,20 @@ handlebars.registerHelper('repeat', function(count = 0, options) {
 handlebars.registerHelper('class', function(value) {
   let classes = value.split(/\s+/)
 
-  classes = map(classes, c => `eruda-${c}`)
+  classes = classes.map(c => `eruda-${c}`)
 
   return `class="${classes.join(' ')}"`
 })
 
 handlebars.registerHelper('concat', function() {
-  return reduce(arguments, (ret, n) => (isStr(n) ? ret + n : ret), '')
+  let ret = ''
+
+  for (let i = 0, len = arguments.length; i < len; i++) {
+    const arg = arguments[i]
+    if (typeof arg === 'string') ret += arg
+  }
+
+  return ret
 })
 
 module.exports = handlebars
