@@ -24,6 +24,11 @@ const postcssLoader = {
   }
 }
 
+const cssMinifierLoader = {
+  loader: path.resolve(__dirname, './loaders/css-minifier-loader'),
+  options: {}
+}
+
 module.exports = {
   entry: './src/index',
   devServer: {
@@ -54,20 +59,31 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['css-loader', postcssLoader, 'sass-loader']
+        loaders: [cssMinifierLoader, 'css-loader', postcssLoader, 'sass-loader']
       },
       {
         test: /\.css$/,
-        loaders: ['css-loader', postcssLoader]
+        loaders: [cssMinifierLoader, 'css-loader', postcssLoader]
       },
       // https://github.com/wycats/handlebars.js/issues/1134
       {
         test: /\.hbs$/,
         use: [
           {
+            loader: path.resolve(
+              __dirname,
+              './loaders/handlebars-minifier-loader.js'
+            ),
+            options: {}
+          },
+          {
             loader: nodeModDir + 'handlebars-loader/index.js',
             options: {
-              runtime: srcDir + 'lib/handlebars.js'
+              runtime: srcDir + 'lib/handlebars.js',
+              knownHelpers: ['class', 'repeat', 'concat'],
+              precompileOptions: {
+                knownHelpersOnly: true
+              }
             }
           },
           {

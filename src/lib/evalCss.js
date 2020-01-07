@@ -1,5 +1,15 @@
-import { toStr, each, filter, isStr, keys, kebabCase, defaults } from './util'
+import {
+  toStr,
+  each,
+  filter,
+  isStr,
+  keys,
+  kebabCase,
+  defaults,
+  escapeRegExp
+} from './util'
 import themes from './themes'
+import cssMap from './cssMap'
 
 let styleList = []
 let scale = 1
@@ -63,6 +73,12 @@ function resetStyles() {
 function resetStyle({ css, el }) {
   css = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
   css = css.replace(/_/g, 'eruda-')
+  each(cssMap, (val, key) => {
+    css = css.replace(
+      new RegExp(escapeRegExp(`$${val}:`), 'g'),
+      ';' + key + ':'
+    )
+  })
   const _keys = keys(themes.Light)
   each(_keys, key => {
     css = css.replace(

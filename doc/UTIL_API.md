@@ -1778,6 +1778,21 @@ Check if value is a regular expression.
 isRegExp(/a/); // -> true
 ```
 
+## isSorted 
+
+Check if an array is sorted.
+
+|Name  |Type    |Desc                   |
+|------|--------|-----------------------|
+|arr   |array   |Array to check         |
+|[cmp] |function|Comparator             |
+|return|boolean |True if array is sorted|
+
+```javascript
+isSorted([1, 2, 3]); // -> true
+isSorted([3, 2, 1]); // -> false
+```
+
 ## isStr 
 
 Check if value is a string primitive.
@@ -2376,6 +2391,29 @@ Check if predicate return truthy for any element.
 some([2, 5], function (val) {
     return val % 2 === 0;
 }); // -> true
+```
+
+## sortKeys 
+
+Sort keys of an object.
+
+|Name   |Type  |Desc                   |
+|-------|------|-----------------------|
+|obj    |object|Object to sort         |
+|options|object|Sort options           |
+|return |object|Object with sorted keys|
+
+Available options:
+
+|Name        |Type    |Desc                 |
+|------------|--------|---------------------|
+|deep=false  |boolean |Sort keys recursively|
+|[comparator]|function|Comparator           |
+
+```javascript
+sortKeys({b: {d: 2, c: 1}, a: 0}, {
+    deep: true
+}); // -> {a: 0, b: {c: 1, d: 2}}
 ```
 
 ## splitCase 
