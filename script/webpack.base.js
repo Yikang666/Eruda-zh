@@ -16,7 +16,7 @@ const postcssLoader = {
   options: {
     plugins: [
       prefixer({
-        prefix: 'eruda-'
+        prefix: '_'
       }),
       autoprefixer,
       clean()

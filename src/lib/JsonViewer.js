@@ -98,15 +98,11 @@ export default class JsonViewer extends Emitter {
 
       let obj = `<li ${
         firstLevel ? 'data-first-level="true"' : ''
-      } ${'data-object-id="' + (referenceId || id) + '"'}>
-                            <span class="${
-                              firstLevel ? '' : 'eruda-expanded eruda-collapsed'
-                            }"></span>
-                            ${wrapKey(key)}
-                            <span class="eruda-open">${
-                              firstLevel ? '' : objAbstract
-                            }</span>
-                            <ul class="eruda-${type}" ${
+      } ${'data-object-id="' + (referenceId || id) + '"'}><span class="${
+        firstLevel ? '' : 'eruda-expanded eruda-collapsed'
+      }"></span>${wrapKey(key)}<span class="eruda-open">${
+        firstLevel ? '' : objAbstract
+      }</span><ul class="eruda-${type}" ${
         firstLevel ? '' : 'style="display:none"'
       }>`
 

@@ -225,15 +225,11 @@ export default class ObjViewer extends Emitter {
 
       let obj = `<li ${
         firstLevel ? 'data-first-level="true"' : ''
-      } ${'data-object-id="' + id + '"'}>
-                            <span class="${
-                              firstLevel ? '' : 'eruda-expanded eruda-collapsed'
-                            }"></span>
-                            ${wrapKey(key)}
-                            <span class="eruda-open">${
-                              firstLevel ? '' : objAbstract
-                            }</span>
-                            <ul class="eruda-${t}" ${
+      } ${'data-object-id="' + id + '"'}><span class="${
+        firstLevel ? '' : 'eruda-expanded eruda-collapsed'
+      }"></span>${wrapKey(key)}<span class="eruda-open">${
+        firstLevel ? '' : objAbstract
+      }</span><ul class="eruda-${t}" ${
         firstLevel ? '' : 'style="display:none"'
       }>`
 
