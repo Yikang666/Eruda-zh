@@ -11,7 +11,7 @@
     "format": "prettier *.js eustia/*.js src/**/*.{js,scss,css} script/*.js test/*.{js,html} --write",
     "lint": "eslint src/**/*.js",
     "lint:fix": "npm run lint -- --fix",
-    "setup": "node script/cpTestLib",
+    "setup": "shx mkdir -p test/lib && shx cp node_modules/jasmine-core/lib/jasmine-core/{jasmine.css,jasmine.js,jasmine-html.js,boot.js} test/lib && shx cp node_modules/jasmine-jquery/lib/jasmine-jquery.js test/lib && shx cp node_modules/jquery/dist/jquery.js test/lib",
     "genIcon": "node script/genIcon",
     "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
@@ -37,7 +37,6 @@
     "@babel/runtime": "^7.6.3",
     "autoprefixer": "^9.7.1",
     "babel-loader": "^8.0.6",
-    "copy": "^0.3.2",
     "css-loader": "^0.28.7",
     "draggabilly": "^2.2.0",
     "eslint": "^6.6.0",
