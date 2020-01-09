@@ -1,3 +1,7 @@
+## v2.0.2 (9 Jan 2020)
+
+* chore: reduce file size (452kb -> 418kb)
+
 ## v2.0.1 (6 Jan 2020)
 
 * chore: update plugins
