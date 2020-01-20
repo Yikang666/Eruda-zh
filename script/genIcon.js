@@ -1,56 +1,34 @@
-const fs = require('fs')
+const webfontsGenerator = require('webfonts-generator')
+const fs = require('licia/fs')
+const map = require('licia/map')
+const filter = require('licia/filter')
+const endWith = require('licia/endWith')
+const promisify = require('licia/promisify')
 const path = require('path')
-const each = require('licia/each')
 
-const nameMap = {
-  Clearsearch: 'clear',
-  Fill: 'error',
-  arrow: 'arrow-left',
-  right: 'arrow-right',
-  refresh1: 'refresh'
-}
+const generate = promisify(webfontsGenerator)
 
-fs.readFile(path.resolve(__dirname, 'icon/iconfont.woff'), function(err, data) {
-  if (err) return console.log(err)
-
-  genCssFile(data.toString('base64'))
-})
-
-function genCssFile(fontData) {
-  fs.readFile(path.resolve(__dirname, 'icon/iconfont.css'), 'utf-8', function(
-    err,
-    data
-  ) {
-    if (err) return console.log(err)
-
-    data = data.split('\n')
-    data.splice(
-      1,
-      6,
-      "  src: url('data:application/x-font-woff;charset=utf-8;base64," +
-        fontData +
-        "') format('woff');"
-    )
-    data = data.join('\n')
-    data = data.replace(/\.eruda-icon/g, "[class^='icon-'],\n[class*=' icon-']")
-
-    each(nameMap, (val, key) => {
-      data = data.replace('icon-' + key + ':', 'icon-' + val + ':')
-    })
-
-    writeCssFile(data)
+async function main() {
+  const iconDir = path.resolve(__dirname, '../src/style/icon')
+  let files = await fs.readdir(iconDir)
+  files = filter(files, file => endWith(file, '.svg'))
+  const dest = path.resolve(__dirname, './icon')
+  const result = await generate({
+    files: map(files, file => iconDir + '/' + file),
+    types: ['woff'],
+    cssTemplate: iconDir + '/cssTemplate.hbs',
+    dest,
+    writeFiles: false
   })
-}
-
-function writeCssFile(data) {
-  fs.writeFile(
+  const iconData = result.woff.toString('base64')
+  const css = result.generateCss({
+    woff: 'data:application/x-font-woff;charset=utf-8;base64,' + iconData
+  })
+  await fs.writeFile(
     path.resolve(__dirname, '../src/style/icon.css'),
-    data,
-    'utf-8',
-    function(err, data) {
-      if (err) return console.log(err)
-
-      console.log('icon.css generated!')
-    }
+    css,
+    'utf8'
   )
 }
+
+main()
