@@ -36,7 +36,7 @@ module.exports = {
     port: 3000
   },
   output: {
-    path: path.resolve(__dirname, '../'),
+    path: path.resolve(__dirname, '../dist'),
     publicPath: '/assets/',
     library: 'eruda',
     libraryTarget: 'umd'
