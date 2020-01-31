@@ -20,7 +20,8 @@ import {
   last,
   throttle,
   raf,
-  xpath
+  xpath,
+  isHidden
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -697,8 +698,4 @@ export default class Logger extends Emitter {
 
     this._ignoreScroll = true
   }
-}
-
-function isHidden(el) {
-  return el.offsetParent === null
 }

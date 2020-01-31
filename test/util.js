@@ -16,50 +16,6 @@
 
     if (typeof window === 'object' && window.util) _ = window.util;
 
-    /* ------------------------------ inherits ------------------------------ */
-
-    var inherits = _.inherits = (function (exports) {
-        /* Inherit the prototype methods from one constructor into another.
-         *
-         * |Name      |Type    |Desc       |
-         * |----------|--------|-----------|
-         * |Class     |function|Child Class|
-         * |SuperClass|function|Super Class|
-         */
-
-        /* example
-         * function People(name) {
-         *     this._name = name;
-         * }
-         * People.prototype = {
-         *     getName: function () {
-         *         return this._name;
-         *     }
-         * };
-         * function Student(name) {
-         *     this._name = name;
-         * }
-         * inherits(Student, People);
-         * const s = new Student('RedHood');
-         * s.getName(); // -> 'RedHood'
-         */
-
-        /* typescript
-         * export declare function inherits(Class: Function, SuperClass: Function): void;
-         */
-        exports = function(Class, SuperClass) {
-            if (objCreate) return (Class.prototype = objCreate(SuperClass.prototype));
-            noop.prototype = SuperClass.prototype;
-            Class.prototype = new noop();
-        };
-
-        var objCreate = Object.create;
-
-        function noop() {}
-
-        return exports;
-    })({});
-
     /* ------------------------------ noop ------------------------------ */
 
     var noop = _.noop = (function (exports) {
@@ -183,6 +139,88 @@
          */
         exports = function(val) {
             return val === void 0;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ create ------------------------------ */
+
+    var create = _.create = (function (exports) {
+        /* Create new object using given object as prototype.
+         *
+         * |Name   |Type  |Desc                   |
+         * |-------|------|-----------------------|
+         * |[proto]|object|Prototype of new object|
+         * |return |object|Created object         |
+         */
+
+        /* example
+         * const obj = create({ a: 1 });
+         * console.log(obj.a); // -> 1
+         */
+
+        /* typescript
+         * export declare function create(proto?: object): any;
+         */
+
+        /* dependencies
+         * isObj 
+         */
+
+        exports = function(proto) {
+            if (!isObj(proto)) return {};
+            if (objCreate) return objCreate(proto);
+
+            function noop() {}
+
+            noop.prototype = proto;
+            return new noop();
+        };
+
+        var objCreate = Object.create;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ inherits ------------------------------ */
+
+    var inherits = _.inherits = (function (exports) {
+        /* Inherit the prototype methods from one constructor into another.
+         *
+         * |Name      |Type    |Desc       |
+         * |----------|--------|-----------|
+         * |Class     |function|Child Class|
+         * |SuperClass|function|Super Class|
+         */
+
+        /* example
+         * function People(name) {
+         *     this._name = name;
+         * }
+         * People.prototype = {
+         *     getName: function () {
+         *         return this._name;
+         *     }
+         * };
+         * function Student(name) {
+         *     this._name = name;
+         * }
+         * inherits(Student, People);
+         * const s = new Student('RedHood');
+         * s.getName(); // -> 'RedHood'
+         */
+
+        /* typescript
+         * export declare function inherits(Class: Function, SuperClass: Function): void;
+         */
+
+        /* dependencies
+         * create 
+         */
+
+        exports = function(Class, SuperClass) {
+            Class.prototype = create(SuperClass.prototype);
         };
 
         return exports;
@@ -312,7 +350,7 @@
 
                 return byteArr;
             },
-            decode: function decode(str, safe) {
+            decode: function(str, safe) {
                 byteArr = ucs2.decode(str);
                 byteIdx = 0;
                 byteCount = byteArr.length;
@@ -1860,11 +1898,11 @@
     var unique = _.unique = (function (exports) {
         /* Create duplicate-free version of an array.
          *
-         * |Name     |Type    |Desc                         |
-         * |---------|--------|-----------------------------|
-         * |arr      |array   |Array to inspect             |
-         * |[compare]|function|Function for comparing values|
-         * |return   |array   |New duplicate free array     |
+         * |Name  |Type    |Desc                         |
+         * |------|--------|-----------------------------|
+         * |arr   |array   |Array to inspect             |
+         * |[cmp] |function|Function for comparing values|
+         * |return|array   |New duplicate free array     |
          */
 
         /* example
@@ -1874,7 +1912,7 @@
         /* typescript
          * export declare function unique(
          *     arr: any[],
-         *     compare?: (a: any, b: any) => boolean | number
+         *     cmp?: (a: any, b: any) => boolean | number
          * ): any[];
          */
 
@@ -1882,13 +1920,13 @@
          * filter 
          */
 
-        exports = function(arr, compare) {
-            compare = compare || isEqual;
+        exports = function(arr, cmp) {
+            cmp = cmp || isEqual;
             return filter(arr, function(item, idx, arr) {
                 var len = arr.length;
 
                 while (++idx < len) {
-                    if (compare(item, arr[idx])) return false;
+                    if (cmp(item, arr[idx])) return false;
                 }
 
                 return true;

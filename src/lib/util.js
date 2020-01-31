@@ -84,50 +84,6 @@ export var isObj = _.isObj = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ inherits ------------------------------ */
-
-export var inherits = _.inherits = (function (exports) {
-    /* Inherit the prototype methods from one constructor into another.
-     *
-     * |Name      |Type    |Desc       |
-     * |----------|--------|-----------|
-     * |Class     |function|Child Class|
-     * |SuperClass|function|Super Class|
-     */
-
-    /* example
-     * function People(name) {
-     *     this._name = name;
-     * }
-     * People.prototype = {
-     *     getName: function () {
-     *         return this._name;
-     *     }
-     * };
-     * function Student(name) {
-     *     this._name = name;
-     * }
-     * inherits(Student, People);
-     * const s = new Student('RedHood');
-     * s.getName(); // -> 'RedHood'
-     */
-
-    /* typescript
-     * export declare function inherits(Class: Function, SuperClass: Function): void;
-     */
-    exports = function(Class, SuperClass) {
-        if (objCreate) return (Class.prototype = objCreate(SuperClass.prototype));
-        noop.prototype = SuperClass.prototype;
-        Class.prototype = new noop();
-    };
-
-    var objCreate = Object.create;
-
-    function noop() {}
-
-    return exports;
-})({});
-
 /* ------------------------------ has ------------------------------ */
 
 export var has = _.has = (function (exports) {
@@ -198,6 +154,39 @@ export var slice = _.slice = (function (exports) {
 
         while (start < end) {
             ret.push(arr[start++]);
+        }
+
+        return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ reverse ------------------------------ */
+
+export var reverse = _.reverse = (function (exports) {
+    /* Reverse array without mutating it.
+     *
+     * |Name  |Type |Desc           |
+     * |------|-----|---------------|
+     * |arr   |array|Array to modify|
+     * |return|array|Reversed array |
+     */
+
+    /* example
+     * reverse([1, 2, 3]); // -> [3, 2, 1]
+     */
+
+    /* typescript
+     * export declare function reverse(arr: any[]): any[];
+     */
+    exports = function(arr) {
+        var len = arr.length;
+        var ret = Array(len);
+        len--;
+
+        for (var i = 0; i <= len; i++) {
+            ret[len - i] = arr[i];
         }
 
         return ret;
@@ -503,6 +492,88 @@ export var idxOf = _.idxOf = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ create ------------------------------ */
+
+export var create = _.create = (function (exports) {
+    /* Create new object using given object as prototype.
+     *
+     * |Name   |Type  |Desc                   |
+     * |-------|------|-----------------------|
+     * |[proto]|object|Prototype of new object|
+     * |return |object|Created object         |
+     */
+
+    /* example
+     * const obj = create({ a: 1 });
+     * console.log(obj.a); // -> 1
+     */
+
+    /* typescript
+     * export declare function create(proto?: object): any;
+     */
+
+    /* dependencies
+     * isObj 
+     */
+
+    exports = function(proto) {
+        if (!isObj(proto)) return {};
+        if (objCreate) return objCreate(proto);
+
+        function noop() {}
+
+        noop.prototype = proto;
+        return new noop();
+    };
+
+    var objCreate = Object.create;
+
+    return exports;
+})({});
+
+/* ------------------------------ inherits ------------------------------ */
+
+export var inherits = _.inherits = (function (exports) {
+    /* Inherit the prototype methods from one constructor into another.
+     *
+     * |Name      |Type    |Desc       |
+     * |----------|--------|-----------|
+     * |Class     |function|Child Class|
+     * |SuperClass|function|Super Class|
+     */
+
+    /* example
+     * function People(name) {
+     *     this._name = name;
+     * }
+     * People.prototype = {
+     *     getName: function () {
+     *         return this._name;
+     *     }
+     * };
+     * function Student(name) {
+     *     this._name = name;
+     * }
+     * inherits(Student, People);
+     * const s = new Student('RedHood');
+     * s.getName(); // -> 'RedHood'
+     */
+
+    /* typescript
+     * export declare function inherits(Class: Function, SuperClass: Function): void;
+     */
+
+    /* dependencies
+     * create 
+     */
+
+    exports = function(Class, SuperClass) {
+        Class.prototype = create(SuperClass.prototype);
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ toStr ------------------------------ */
 
 export var toStr = _.toStr = (function (exports) {
@@ -694,7 +765,7 @@ export var utf8 = _.utf8 = (function (exports) {
 
             return byteArr;
         },
-        decode: function decode(str, safe) {
+        decode: function(str, safe) {
             byteArr = ucs2.decode(str);
             byteIdx = 0;
             byteCount = byteArr.length;
@@ -2280,6 +2351,142 @@ export var isErudaEl = _.isErudaEl = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isHidden ------------------------------ */
+
+export var isHidden = _.isHidden = (function (exports) {
+    /* Check if element is hidden.
+     *
+     * |Name   |Type   |Desc                     |
+     * |-------|-------|-------------------------|
+     * |el     |element|Target element           |
+     * |options|object |Check options            |
+     * |return |boolean|True if element is hidden|
+     *
+     * Available options:
+     *
+     * |Name            |Type   |Desc                         |
+     * |----------------|-------|-----------------------------|
+     * |display=true    |boolean|Check if it is displayed     |
+     * |visibility=false|boolean|Check visibility css property|
+     * |opacity=false   |boolean|Check opacity css property   |
+     * |size=false      |boolean|Check width and height       |
+     * |viewport=false  |boolean|Check if it is in viewport   |
+     * |overflow=false  |boolean|Check if hidden in overflow  |
+     */
+
+    /* example
+     * isHidden(document.createElement('div')); // -> true
+     */
+
+    /* typescript
+     * export declare function isHidden(el: Element, options?: {
+     *     display?: boolean;
+     *     visibility?: boolean;
+     *     opacity?: boolean;
+     *     size?: boolean;
+     *     viewport?: boolean;
+     *     overflow?: boolean;
+     * }): boolean;
+     */
+
+    /* dependencies
+     * root 
+     */
+
+    var getComputedStyle = root.getComputedStyle;
+    var document = root.document;
+
+    exports = function(el) {
+        var _ref =
+                arguments.length > 1 && arguments[1] !== undefined
+                    ? arguments[1]
+                    : {},
+            _ref$display = _ref.display,
+            display = _ref$display === void 0 ? true : _ref$display,
+            _ref$visibility = _ref.visibility,
+            visibility = _ref$visibility === void 0 ? false : _ref$visibility,
+            _ref$opacity = _ref.opacity,
+            opacity = _ref$opacity === void 0 ? false : _ref$opacity,
+            _ref$size = _ref.size,
+            size = _ref$size === void 0 ? false : _ref$size,
+            _ref$viewport = _ref.viewport,
+            viewport = _ref$viewport === void 0 ? false : _ref$viewport,
+            _ref$overflow = _ref.overflow,
+            overflow = _ref$overflow === void 0 ? false : _ref$overflow;
+
+        if (display) {
+            return el.offsetParent === null;
+        }
+
+        var computedStyle = getComputedStyle(el);
+
+        if (visibility && computedStyle.visibility === 'hidden') {
+            return true;
+        }
+
+        if (opacity) {
+            if (computedStyle.opacity === '0') {
+                return true;
+            } else {
+                var cur = el;
+
+                while ((cur = cur.parentElement)) {
+                    var _computedStyle = getComputedStyle(cur);
+
+                    if (_computedStyle.opacity === '0') {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        var clientRect = el.getBoundingClientRect();
+
+        if (size && (clientRect.width === 0 || clientRect.height === 0)) {
+            return true;
+        }
+
+        if (viewport) {
+            var containerRect = {
+                top: 0,
+                left: 0,
+                right: document.documentElement.clientWidth,
+                bottom: document.documentElement.clientHeight
+            };
+            return isOutside(clientRect, containerRect);
+        }
+
+        if (overflow) {
+            var _cur = el;
+
+            while ((_cur = _cur.parentElement)) {
+                var _computedStyle2 = getComputedStyle(_cur);
+
+                var _overflow = _computedStyle2.overflow;
+
+                if (_overflow === 'scroll' || _overflow === 'hidden') {
+                    var curRect = _cur.getBoundingClientRect();
+
+                    if (isOutside(clientRect, curRect)) return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    function isOutside(clientRect, containerRect) {
+        return (
+            clientRect.right < containerRect.left ||
+            clientRect.left > containerRect.right ||
+            clientRect.bottom < containerRect.top ||
+            clientRect.top > containerRect.bottom
+        );
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ isMatch ------------------------------ */
 
 export var isMatch = _.isMatch = (function (exports) {
@@ -2744,8 +2951,11 @@ export var isSorted = _.isSorted = (function (exports) {
     /* typescript
      * export declare function isSorted(arr: any[], cmp?: Function): boolean;
      */
-    exports = function(arr, cmp) {
-        cmp = cmp || comparator;
+    exports = function(arr) {
+        var cmp =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : exports.defComparator;
 
         for (var i = 0, len = arr.length; i < len - 1; i++) {
             if (cmp(arr[i], arr[i + 1]) > 0) return false;
@@ -2754,9 +2964,11 @@ export var isSorted = _.isSorted = (function (exports) {
         return true;
     };
 
-    function comparator(a, b) {
-        return a - b;
-    }
+    exports.defComparator = function(a, b) {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+    };
 
     return exports;
 })({});
@@ -2916,8 +3128,9 @@ export var dateFormat = _.dateFormat = (function (exports) {
      * |mask         |string |Format mask          |
      * |utc=false    |boolean|UTC or not           |
      * |gmt=false    |boolean|GMT or not           |
+     * |return       |string |Formatted duration   |
      *
-     * |Mask|Description                                                      |
+     * |Mask|Desc                                                             |
      * |----|-----------------------------------------------------------------|
      * |d   |Day of the month as digits; no leading zero for single-digit days|
      * |dd  |Day of the month as digits; leading zero for single-digit days   |
@@ -3044,11 +3257,13 @@ export var dateFormat = _.dateFormat = (function (exports) {
         });
     };
 
-    function padZero(str, len) {
-        return lpad(toStr(str), len || 2, '0');
-    }
+    var padZero = function(str) {
+        var len =
+            arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+        return lpad(toStr(str), len, '0');
+    };
 
-    var regToken = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|'[^']*'|'[^']*'/g;
+    var regToken = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|"[^"]*"|'[^']*'/g;
     var regTimezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g;
     var regNum = /\d/;
     var regTimezoneClip = /[^-+\dA-Z]/g;
@@ -3323,11 +3538,11 @@ export var difference = _.difference = (function (exports) {
 export var unique = _.unique = (function (exports) {
     /* Create duplicate-free version of an array.
      *
-     * |Name     |Type    |Desc                         |
-     * |---------|--------|-----------------------------|
-     * |arr      |array   |Array to inspect             |
-     * |[compare]|function|Function for comparing values|
-     * |return   |array   |New duplicate free array     |
+     * |Name  |Type    |Desc                         |
+     * |------|--------|-----------------------------|
+     * |arr   |array   |Array to inspect             |
+     * |[cmp] |function|Function for comparing values|
+     * |return|array   |New duplicate free array     |
      */
 
     /* example
@@ -3337,7 +3552,7 @@ export var unique = _.unique = (function (exports) {
     /* typescript
      * export declare function unique(
      *     arr: any[],
-     *     compare?: (a: any, b: any) => boolean | number
+     *     cmp?: (a: any, b: any) => boolean | number
      * ): any[];
      */
 
@@ -3345,13 +3560,13 @@ export var unique = _.unique = (function (exports) {
      * filter 
      */
 
-    exports = function(arr, compare) {
-        compare = compare || isEqual;
+    exports = function(arr, cmp) {
+        cmp = cmp || isEqual;
         return filter(arr, function(item, idx, arr) {
             var len = arr.length;
 
             while (++idx < len) {
-                if (compare(item, arr[idx])) return false;
+                if (cmp(item, arr[idx])) return false;
             }
 
             return true;
@@ -4950,6 +5165,10 @@ export var $show = _.$show = (function (exports) {
 export var Stack = _.Stack = (function (exports) {
     /* Stack data structure.
      *
+     * ### size
+     *
+     * Stack size.
+     *
      * ### clear
      *
      * Clear the stack.
@@ -5006,7 +5225,7 @@ export var Stack = _.Stack = (function (exports) {
      */
 
     /* dependencies
-     * Class 
+     * Class reverse 
      */
 
     exports = Class({
@@ -5039,7 +5258,7 @@ export var Stack = _.Stack = (function (exports) {
             }
         },
         toArr: function() {
-            return this._items.slice(0).reverse();
+            return reverse(this._items);
         }
     });
 
@@ -5787,9 +6006,9 @@ export var $ = _.$ = (function (exports) {
         }
     });
 
-    function isGetter(name, val) {
+    var isGetter = function(name, val) {
         return isUndef(val) && isStr(name);
-    }
+    };
 
     return exports;
 })({});
@@ -5882,41 +6101,54 @@ export var memStorage = _.memStorage = (function (exports) {
 /* ------------------------------ safeStorage ------------------------------ */
 
 export var safeStorage = _.safeStorage = (function (exports) {
-    /* Safe localStorage and sessionStorage.
+    /* Use storage safely in safari private browsing and older browsers.
+     *
+     * |Name        |Type  |Desc             |
+     * |------------|------|-----------------|
+     * |type='local'|string|local or session |
+     * |return      |object|Specified storage|
+     */
+
+    /* example
+     * const localStorage = safeStorage('local');
+     * localStorage.setItem('licia', 'util');
+     */
+
+    /* typescript
+     * export declare function safeStorage(type?: string): typeof window.localStorage;
      */
 
     /* dependencies
-     * isUndef memStorage 
+     * memStorage 
      */
 
-    exports = function (type, memReplacement) {
-      if (isUndef(memReplacement)) memReplacement = true
+    exports = function(type) {
+        type = type || 'local';
+        var ret;
 
-      let ret
+        switch (type) {
+            case 'local':
+                ret = window.localStorage;
+                break;
 
-      switch (type) {
-        case 'local':
-          ret = window.localStorage
-          break
-        case 'session':
-          ret = window.sessionStorage
-          break
-      }
+            case 'session':
+                ret = window.sessionStorage;
+                break;
+        }
 
-      try {
-        // Safari private browsing
-        let x = 'test-localStorage-' + Date.now()
-        ret.setItem(x, x)
-        let y = ret.getItem(x)
-        ret.removeItem(x)
-        if (y !== x) throw new Error()
-      } catch (e) {
-        if (memReplacement) return memStorage
-        return
-      }
+        try {
+            // Safari private browsing
+            var x = 'test-localStorage-' + Date.now();
+            ret.setItem(x, x);
+            var y = ret.getItem(x);
+            ret.removeItem(x);
+            if (y !== x) throw new Error();
+        } catch (e) {
+            return memStorage;
+        }
 
-      return ret
-    }
+        return ret;
+    };
 
     return exports;
 })({});

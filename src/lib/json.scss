@@ -4,7 +4,6 @@
 .container .json {
   @include overflow-auto(x);
   cursor: default;
-  font-family: $font-family-code;
   font-size: $font-size-s;
   line-height: 1.2;
   min-height: 100%;

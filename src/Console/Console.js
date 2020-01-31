@@ -7,7 +7,8 @@ import {
   uncaught,
   escapeRegExp,
   trim,
-  upperFirst
+  upperFirst,
+  isHidden
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
@@ -29,16 +30,11 @@ export default class Console extends Tool {
   init($el, container) {
     super.init($el)
     this._container = container
-    this._handleShow = () => {
-      if (!this.active) return
-      this._logger.renderViewport()
-    }
 
     this._appendTpl()
 
     this._initLogger()
     this._exposeLogger()
-    this._errHandler = err => this._logger.error(err)
 
     this._initCfg()
     this._bindEvent()
@@ -79,12 +75,12 @@ export default class Console extends Tool {
     return this
   }
   catchGlobalErr() {
-    uncaught.addListener(this._errHandler)
+    uncaught.addListener(this._handleErr)
 
     return this
   }
   ignoreGlobalErr() {
-    uncaught.rmListener(this._errHandler)
+    uncaught.rmListener(this._handleErr)
 
     return this
   }
@@ -101,6 +97,13 @@ export default class Console extends Tool {
     this.restoreConsole()
     this._unregisterListener()
     this._rmCfg()
+  }
+  _handleShow = () => {
+    if (isHidden(this._$el.get(0))) return
+    this._logger.renderViewport()
+  }
+  _handleErr = err => {
+    this._logger.error(err)
   }
   _enableJsExecution(enabled) {
     const $el = this._$el

@@ -40,7 +40,6 @@ export default class DevTools extends Emitter {
   }
   show() {
     this._isShow = true
-    this.emit('show')
 
     this._$el.show()
     this._navBar.resetStyle()
@@ -49,6 +48,8 @@ export default class DevTools extends Emitter {
     setTimeout(() => {
       this._$el.css('opacity', this._opacity)
     }, 50)
+
+    this.emit('show')
 
     return this
   }

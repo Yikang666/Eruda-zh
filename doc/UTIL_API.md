@@ -510,6 +510,10 @@ $test.find('.test').each(function (idx, element) {
 
 Stack data structure.
 
+### size
+
+Stack size.
+
 ### clear
 
 Clear the stack.
@@ -981,6 +985,20 @@ copy('text', function (err) {
 });
 ```
 
+## create 
+
+Create new object using given object as prototype.
+
+|Name   |Type  |Desc                   |
+|-------|------|-----------------------|
+|[proto]|object|Prototype of new object|
+|return |object|Created object         |
+
+```javascript
+const obj = create({ a: 1 });
+console.log(obj.a); // -> 1
+```
+
 ## createAssigner 
 
 Used to create extend, extendOwn and defaults.
@@ -1001,8 +1019,9 @@ Simple but extremely useful date format function.
 |mask         |string |Format mask          |
 |utc=false    |boolean|UTC or not           |
 |gmt=false    |boolean|GMT or not           |
+|return       |string |Formatted duration   |
 
-|Mask|Description                                                      |
+|Mask|Desc                                                             |
 |----|-----------------------------------------------------------------|
 |d   |Day of the month as digits; no leading zero for single-digit days|
 |dd  |Day of the month as digits; leading zero for single-digit days   |
@@ -1607,6 +1626,31 @@ Generator function is also classified as true.
 isFn(function() {}); // -> true
 isFn(function*() {}); // -> true
 isFn(async function() {}); // -> true
+```
+
+## isHidden 
+
+Check if element is hidden.
+
+|Name   |Type   |Desc                     |
+|-------|-------|-------------------------|
+|el     |element|Target element           |
+|options|object |Check options            |
+|return |boolean|True if element is hidden|
+
+Available options:
+
+|Name            |Type   |Desc                         |
+|----------------|-------|-----------------------------|
+|display=true    |boolean|Check if it is displayed     |
+|visibility=false|boolean|Check visibility css property|
+|opacity=false   |boolean|Check opacity css property   |
+|size=false      |boolean|Check width and height       |
+|viewport=false  |boolean|Check if it is in viewport   |
+|overflow=false  |boolean|Check if hidden in overflow  |
+
+```javascript
+isHidden(document.createElement('div')); // -> true
 ```
 
 ## isMatch 
@@ -2305,6 +2349,19 @@ const paramArr = restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
 
+## reverse 
+
+Reverse array without mutating it.
+
+|Name  |Type |Desc           |
+|------|-----|---------------|
+|arr   |array|Array to modify|
+|return|array|Reversed array |
+
+```javascript
+reverse([1, 2, 3]); // -> [3, 2, 1]
+```
+
 ## rmCookie 
 
 Loop through all possible path and domain to remove cookie.
@@ -2360,7 +2417,17 @@ safeGet(obj, 'a.b'); // -> undefined
 
 ## safeStorage 
 
-Safe localStorage and sessionStorage.
+Use storage safely in safari private browsing and older browsers.
+
+|Name        |Type  |Desc             |
+|------------|------|-----------------|
+|type='local'|string|local or session |
+|return      |object|Specified storage|
+
+```javascript
+const localStorage = safeStorage('local');
+localStorage.setItem('licia', 'util');
+```
 
 ## slice 
 
@@ -2702,11 +2769,11 @@ uniqId('eusita_'); // -> 'eustia_xxx'
 
 Create duplicate-free version of an array.
 
-|Name     |Type    |Desc                         |
-|---------|--------|-----------------------------|
-|arr      |array   |Array to inspect             |
-|[compare]|function|Function for comparing values|
-|return   |array   |New duplicate free array     |
+|Name  |Type    |Desc                         |
+|------|--------|-----------------------------|
+|arr   |array   |Array to inspect             |
+|[cmp] |function|Function for comparing values|
+|return|array   |New duplicate free array     |
 
 ```javascript
 unique([1, 2, 3, 1]); // -> [1, 2, 3]

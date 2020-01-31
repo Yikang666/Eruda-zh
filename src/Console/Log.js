@@ -40,6 +40,9 @@ import {
 import evalCss from '../lib/evalCss'
 
 export default class Log extends Emitter {
+  static showGetterVal = false
+  static showUnenumerable = true
+  static lazyEvaluation = true
   constructor({
     type = 'log',
     args = [],
@@ -323,11 +326,6 @@ export default class Log extends Emitter {
     this._content = this._$content.get(0)
   }
 }
-
-// Looks like es6 doesn't support static properties yet.
-Log.showGetterVal = false
-Log.showUnenumerable = true
-Log.lazyEvaluation = true
 
 const getAbstract = wrap(origGetAbstract, function(fn, obj) {
   return (
