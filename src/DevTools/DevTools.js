@@ -39,6 +39,7 @@ export default class DevTools extends Emitter {
     this._isShow = true
 
     this._$el.show()
+    this._navBar.resetBottomBar()
 
     // Need a delay after show to enable transition effect.
     setTimeout(() => {

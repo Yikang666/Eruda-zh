@@ -17,7 +17,7 @@ export default class NavBar extends Emitter {
   add(name) {
     this._len++
     this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`)
-    this._resetBottomBar()
+    this.resetBottomBar()
   }
   remove(name) {
     this._len--
@@ -25,7 +25,7 @@ export default class NavBar extends Emitter {
       const $this = $(this)
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
-    this._resetBottomBar()
+    this.resetBottomBar()
   }
   activateTool(name) {
     const self = this
@@ -35,7 +35,7 @@ export default class NavBar extends Emitter {
 
       if ($this.text() === name) {
         $this.addClass('eruda-active')
-        self._resetBottomBar()
+        self.resetBottomBar()
         self._scrollItemToView()
       } else {
         $this.rmClass('eruda-active')
@@ -67,7 +67,7 @@ export default class NavBar extends Emitter {
 
     container.scrollLeft = targetScrollLeft
   }
-  _resetBottomBar() {
+  resetBottomBar() {
     const $bottomBar = this._$bottomBar
 
     const li = this._$el.find('.eruda-active').get(0)
