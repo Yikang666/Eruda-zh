@@ -11,14 +11,13 @@ export default class NavBar extends Emitter {
     $el.html('<div class="eruda-bottom-bar"></div>')
     this._$bottomBar = $el.find('.eruda-bottom-bar')
     this._len = 0
-    this._height = 55
 
     this._bindEvent()
   }
   add(name) {
     this._len++
     this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`)
-    this.resetStyle()
+    this._resetBottomBar()
   }
   remove(name) {
     this._len--
@@ -27,10 +26,6 @@ export default class NavBar extends Emitter {
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
     this._resetBottomBar()
-  }
-  setHeight(height) {
-    this._height = height
-    this.resetStyle()
   }
   activateTool(name) {
     const self = this
@@ -83,23 +78,6 @@ export default class NavBar extends Emitter {
       width: li.offsetWidth,
       left: li.offsetLeft
     })
-  }
-  resetStyle() {
-    const height = this._height
-
-    this._$el.css('height', height)
-
-    const $el = this._$el
-
-    $el.css({
-      height: height + 2
-    })
-    $el.find('.eruda-nav-bar-item').css({
-      height: height,
-      lineHeight: height
-    })
-
-    this._resetBottomBar()
   }
   _bindEvent() {
     const self = this

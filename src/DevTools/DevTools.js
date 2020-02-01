@@ -1,7 +1,6 @@
 import NavBar from './NavBar'
 import logger from '../lib/logger'
 import Tool from './Tool'
-import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import {
   Emitter,
@@ -26,7 +25,6 @@ export default class DevTools extends Emitter {
     this.$container = $container
     this._isShow = false
     this._opacity = 1
-    this._scale = 1
     this._tools = {}
     this._isResizing = false
     this._resizeTimer = null
@@ -35,14 +33,12 @@ export default class DevTools extends Emitter {
 
     this._appendTpl()
     this._initNavBar()
-    this._registerListener()
     this._bindEvent()
   }
   show() {
     this._isShow = true
 
     this._$el.show()
-    this._navBar.resetStyle()
 
     // Need a delay after show to enable transition effect.
     setTimeout(() => {
@@ -146,14 +142,12 @@ export default class DevTools extends Emitter {
     const cfg = (this.config = Settings.createCfg('dev-tools', {
       transparency: 0.95,
       displaySize: 80,
-      tinyNavBar: !isMobile(),
       activeEruda: false,
       theme: 'Light'
     }))
 
     this._setTransparency(cfg.get('transparency'))
     this._setDisplaySize(cfg.get('displaySize'))
-    this.setNavBarHeight(cfg.get('tinyNavBar') ? 30 : 55)
     evalCss.setTheme(cfg.get('theme'))
 
     cfg.on('change', (key, val) => {
@@ -166,15 +160,12 @@ export default class DevTools extends Emitter {
           return activeEruda(val)
         case 'theme':
           return evalCss.setTheme(val)
-        case 'tinyNavBar':
-          return this.setNavBarHeight(val ? 30 : 55)
       }
     })
 
     settings
       .separator()
       .switch(cfg, 'activeEruda', 'Always Activated')
-      .switch(cfg, 'tinyNavBar', 'Tiny Navigation Bar')
       .select(cfg, 'theme', 'Theme', keys(evalCss.getThemes()))
       .range(cfg, 'transparency', 'Transparency', {
         min: 0.2,
@@ -188,28 +179,12 @@ export default class DevTools extends Emitter {
       })
       .separator()
   }
-  setNavBarHeight(height) {
-    this._navBarHeight = height
-    this._$el.css('paddingTop', height * this._scale)
-    this._navBar.setHeight(height * this._scale)
-  }
+
   destroy() {
     evalCss.remove(this._style)
-    this._unregisterListener()
     this.removeAll()
     this._navBar.destroy()
     this._$el.remove()
-  }
-  _registerListener() {
-    this._scaleListener = scale => {
-      this._scale = scale
-      this.setNavBarHeight(this._navBarHeight)
-    }
-
-    emitter.on(emitter.SCALE, this._scaleListener)
-  }
-  _unregisterListener() {
-    emitter.off(emitter.SCALE, this._scaleListener)
   }
   _setTransparency(opacity) {
     if (!isNum(opacity)) return
