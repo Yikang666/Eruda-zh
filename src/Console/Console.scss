@@ -70,6 +70,7 @@
       position: absolute;
       left: 10px;
       top: 0;
+      z-index: 10;
     }
     &.active {
       height: 100%;
