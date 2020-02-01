@@ -141,7 +141,7 @@ export default class DevTools extends Emitter {
   }
   initCfg(settings) {
     const cfg = (this.config = Settings.createCfg('dev-tools', {
-      transparency: 0.95,
+      transparency: 1,
       displaySize: 80,
       activeEruda: false,
       theme: 'Light'
