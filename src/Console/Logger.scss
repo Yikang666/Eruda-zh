@@ -154,6 +154,9 @@
     &.debug {
       z-index: 20;
     }
+    &.input {
+      border-bottom-color: transparent;
+    }
     &.warn {
       z-index: 40;
       color: var(--console-warn-foreground);

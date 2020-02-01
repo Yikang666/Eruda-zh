@@ -215,19 +215,11 @@ export default class Console extends Tool {
     container.on('show', this._handleShow)
   }
   _hideInput() {
-    this._$inputContainer.css({
-      paddingTop: 0,
-      height: 40 * this._scale
-    })
-
+    this._$inputContainer.rmClass('eruda-active')
     this._$inputBtns.hide()
   }
   _showInput() {
-    this._$inputContainer.css({
-      paddingTop: 40 * this._scale,
-      height: '100%'
-    })
-
+    this._$inputContainer.addClass('eruda-active')
     this._$inputBtns.show()
   }
   _rmCfg() {
