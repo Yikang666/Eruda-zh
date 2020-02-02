@@ -23,8 +23,7 @@ import {
   $,
   toArr,
   upperFirst,
-  nextTick,
-  last
+  nextTick
 } from './lib/util'
 import evalCss from './lib/evalCss'
 
@@ -228,7 +227,7 @@ export default {
       'snippets'
     ]
   ) {
-    tool = toArr(tool).reverse()
+    tool = toArr(tool)
 
     const devTools = this._devTools
 
@@ -247,7 +246,7 @@ export default {
       }
     })
 
-    devTools.showTool(last(tool) || 'settings')
+    devTools.showTool(tool[0] || 'settings')
   }
 }
 

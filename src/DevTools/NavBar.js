@@ -14,8 +14,16 @@ export default class NavBar extends Emitter {
     this._bindEvent()
   }
   add(name) {
+    const $el = this._$el
     this._len++
-    this._$el.prepend(`<div class="eruda-nav-bar-item">${name}</div>`)
+
+    const $last = $el.find('.eruda-nav-bar-item').last()
+    const html = `<div class="eruda-nav-bar-item">${name}</div>`
+    if ($last.length > 0 && $last.text() === 'settings') {
+      $last.before(html)
+    } else {
+      $el.append(html)
+    }
     this.resetBottomBar()
   }
   remove(name) {
