@@ -1,3 +1,13 @@
+## v2.1.0 (2 Feb 2020)
+
+* feat: change navigation bar height
+* feat: change default transparency to 1
+* feat: change loaded plugin position
+* feat(console): remove debug filter
+* feat(console): improve input style
+* feat(console): show filter text
+* feat(network): add requests api [#132](https://github.com/liriliri/eruda/issues/132)
+
 ## v2.0.2 (9 Jan 2020)
 
 * chore: reduce file size (452kb -> 418kb)
