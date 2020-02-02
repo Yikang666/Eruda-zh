@@ -57,6 +57,7 @@
     }
   }
   .js-input {
+    pointer-events: none;
     position: absolute;
     z-index: 100;
     left: 0;
@@ -93,6 +94,7 @@
       font-size: $font-size-s;
       border-top: 1px solid var(--border);
       .button {
+        pointer-events: all;
         cursor: pointer;
         width: 50%;
         display: inline-block;
@@ -111,6 +113,7 @@
       }
     }
     textarea {
+      pointer-events: all;
       padding: 3px 10px;
       outline: none;
       border: none;
