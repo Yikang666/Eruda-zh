@@ -55,6 +55,15 @@
         color: var(--select-foreground);
       }
     }
+    .search-keyword {
+      position: absolute;
+      line-height: 20px;
+      max-width: 80px;
+      overflow: hidden;
+      right: 40px;
+      font-size: $font-size;
+      text-overflow: ellipsis;
+    }
   }
   .js-input {
     pointer-events: none;

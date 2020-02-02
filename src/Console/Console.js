@@ -8,7 +8,8 @@ import {
   escapeRegExp,
   trim,
   upperFirst,
-  isHidden
+  isHidden,
+  lowerCase
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
@@ -141,7 +142,8 @@ export default class Console extends Tool {
       _$logs: $el.find('.eruda-logs-container'),
       _$inputContainer,
       _$input,
-      _$inputBtns
+      _$inputBtns,
+      _$searchKeyword: $el.find('.eruda-search-keyword')
     })
   }
   _initLogger() {
@@ -176,18 +178,26 @@ export default class Console extends Tool {
     const $input = this._$input
     const $inputBtns = this._$inputBtns
     const $control = this._$control
+    const $searchKeyword = this._$searchKeyword
+
     const logger = this._logger
     const config = this.config
 
     $control
       .on('click', '.eruda-clear-console', () => logger.silentClear())
       .on('click', '.eruda-filter', function() {
+        $searchKeyword.text('')
         logger.filter($(this).data('filter'))
       })
       .on('click', '.eruda-search', () => {
-        const filter = prompt('Filter') || ''
-        if (trim(filter) === '') return
-        this._logger.filter(new RegExp(escapeRegExp(filter)))
+        const filter = prompt('Filter')
+        if (!filter) return
+        $searchKeyword.text(filter)
+        if (trim(filter) === '') {
+          logger.filter('all')
+          return
+        }
+        this._logger.filter(new RegExp(escapeRegExp(lowerCase(filter))))
       })
 
     $inputBtns

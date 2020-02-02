@@ -21,7 +21,8 @@ import {
   throttle,
   raf,
   xpath,
-  isHidden
+  isHidden,
+  lowerCase
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -537,7 +538,7 @@ export default class Logger extends Emitter {
 
     if (log.ignoreFilter) return true
     if (isFilterFn) return filter(log)
-    if (isFilterRegExp) return filter.test(log.text())
+    if (isFilterRegExp) return filter.test(lowerCase(log.text()))
 
     return log.type === filter
   }
