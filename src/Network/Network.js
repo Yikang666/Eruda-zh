@@ -10,7 +10,8 @@ import {
   isEmpty,
   $,
   ms,
-  trim
+  trim,
+  each
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -122,6 +123,13 @@ export default class Network extends Tool {
     if (!this._isFetchSupported) return
 
     if (this._origFetch) window.fetch = this._origFetch
+  }
+  requests() {
+    const ret = []
+    each(this._requests, request => {
+      ret.push(request)
+    })
+    return ret
   }
   _addReq(id, data) {
     defaults(data, {

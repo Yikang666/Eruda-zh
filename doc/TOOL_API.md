@@ -109,6 +109,10 @@ Display requests.
 
 Clear requests.
 
+### requests
+
+Get request data.
+
 ```javascript
 network.clear();
 ```
