@@ -7,8 +7,7 @@ export default class NavBar extends Emitter {
 
     this._style = evalCss(require('./NavBar.scss'))
 
-    this._$el = $el
-    $el.html('<div class="eruda-bottom-bar"></div>')
+    this._$el = $el.find('.eruda-nav-bar')
     this._$bottomBar = $el.find('.eruda-bottom-bar')
     this._len = 0
 
@@ -69,21 +68,24 @@ export default class NavBar extends Emitter {
   }
   resetBottomBar() {
     const $bottomBar = this._$bottomBar
+    const $el = this._$el
 
-    const li = this._$el.find('.eruda-active').get(0)
+    const li = $el.find('.eruda-active').get(0)
 
     if (!li) return
 
     $bottomBar.css({
       width: li.offsetWidth,
-      left: li.offsetLeft
+      left: li.offsetLeft - $el.get(0).scrollLeft
     })
   }
   _bindEvent() {
     const self = this
 
-    this._$el.on('click', '.eruda-nav-bar-item', function() {
-      self.emit('showTool', $(this).text())
-    })
+    this._$el
+      .on('click', '.eruda-nav-bar-item', function() {
+        self.emit('showTool', $(this).text())
+      })
+      .on('scroll', () => this.resetBottomBar())
   }
 }

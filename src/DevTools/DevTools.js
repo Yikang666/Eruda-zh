@@ -10,7 +10,6 @@ import {
   last,
   each,
   isNum,
-  safeStorage,
   $,
   throttle
 } from '../lib/util'
@@ -143,7 +142,6 @@ export default class DevTools extends Emitter {
     const cfg = (this.config = Settings.createCfg('dev-tools', {
       transparency: 1,
       displaySize: 80,
-      activeEruda: false,
       theme: 'Light'
     }))
 
@@ -157,8 +155,6 @@ export default class DevTools extends Emitter {
           return this._setTransparency(val)
         case 'displaySize':
           return this._setDisplaySize(val)
-        case 'activeEruda':
-          return activeEruda(val)
         case 'theme':
           return evalCss.setTheme(val)
       }
@@ -166,7 +162,6 @@ export default class DevTools extends Emitter {
 
     settings
       .separator()
-      .switch(cfg, 'activeEruda', 'Always Activated')
       .select(cfg, 'theme', 'Theme', keys(evalCss.getThemes()))
       .range(cfg, 'transparency', 'Transparency', {
         min: 0.2,
@@ -207,7 +202,7 @@ export default class DevTools extends Emitter {
     this._$tools = this._$el.find('.eruda-tools')
   }
   _initNavBar() {
-    this._navBar = new NavBar(this._$el.find('.eruda-nav-bar'))
+    this._navBar = new NavBar(this._$el.find('.eruda-nav-bar-container'))
     this._navBar.on('showTool', name => this.showTool(name))
   }
   _bindEvent() {
@@ -270,7 +265,3 @@ export default class DevTools extends Emitter {
     }
   }
 }
-
-const localStore = safeStorage('local')
-
-const activeEruda = flag => localStore.setItem('active-eruda', flag)
