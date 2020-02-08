@@ -9,7 +9,8 @@ import {
   trim,
   upperFirst,
   isHidden,
-  lowerCase
+  lowerCase,
+  isNull
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
@@ -191,7 +192,7 @@ export default class Console extends Tool {
       })
       .on('click', '.eruda-search', () => {
         const filter = prompt('Filter')
-        if (!filter) return
+        if (isNull(filter)) return
         $searchKeyword.text(filter)
         if (trim(filter) === '') {
           logger.filter('all')
