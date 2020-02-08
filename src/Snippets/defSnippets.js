@@ -234,8 +234,11 @@ function loadPlugin(name) {
   const globalName = 'eruda' + upperFirst(name)
   if (window[globalName]) return
 
+  let protocol = location.protocol
+  if (!startWith(protocol, 'http')) protocol = 'http:'
+
   loadJs(
-    `//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`,
+    `${protocol}//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`,
     isLoaded => {
       if (!isLoaded || !window[globalName])
         return logger.error('Fail to load plugin ' + name)
