@@ -6909,6 +6909,73 @@ export var Logger = _.Logger = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ MediaQuery ------------------------------ */
+
+export var MediaQuery = _.MediaQuery = (function (exports) {
+    /* CSS media query listener.
+     *
+     * Extend from Emitter.
+     *
+     * ### constructor
+     *
+     * |Name |Type  |Desc       |
+     * |-----|------|-----------|
+     * |query|string|Media query|
+     *
+     * ### isMatch
+     *
+     * Return true if given media query matches.
+     *
+     * ### Events
+     *
+     * #### match
+     *
+     * Triggered when a media query matches.
+     *
+     * #### unmatch
+     *
+     * Opposite of match.
+     */
+
+    /* example
+     * const mediaQuery = new MediaQuery('screen and (max-width:1000px)');
+     * mediaQuery.isMatch(); // -> false
+     * mediaQuery.on('match', () => {
+     *     // Do something...
+     * });
+     */
+
+    /* typescript
+     * export declare class MediaQuery extends Emitter {
+     *     constructor(query: string);
+     *     isMatch(): boolean;
+     * }
+     */
+
+    /* dependencies
+     * Emitter 
+     */
+
+    exports = Emitter.extend({
+        className: 'MediaQuery',
+        initialize: function(query) {
+            var _this = this;
+
+            this.callSuper(Emitter, 'initialize');
+            this._mql = window.matchMedia(query);
+
+            this._mql.addListener(function() {
+                _this.emit(_this.isMatch() ? 'match' : 'unmatch');
+            });
+        },
+        isMatch: function() {
+            return this._mql.matches;
+        }
+    });
+
+    return exports;
+})({});
+
 /* ------------------------------ Store ------------------------------ */
 
 export var Store = _.Store = (function (exports) {

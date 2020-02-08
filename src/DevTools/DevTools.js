@@ -11,7 +11,8 @@ import {
   each,
   isNum,
   $,
-  throttle
+  throttle,
+  MediaQuery
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -142,7 +143,7 @@ export default class DevTools extends Emitter {
     const cfg = (this.config = Settings.createCfg('dev-tools', {
       transparency: 1,
       displaySize: 80,
-      theme: 'Light'
+      theme: isDarkMode() ? 'Dark' : 'Light'
     }))
 
     this._setTransparency(cfg.get('transparency'))
@@ -264,4 +265,9 @@ export default class DevTools extends Emitter {
       $root.on('mouseup', endListener)
     }
   }
+}
+
+function isDarkMode() {
+  const m = new MediaQuery('(prefers-color-scheme: dark)')
+  return m.isMatch()
 }
