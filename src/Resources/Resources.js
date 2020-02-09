@@ -12,7 +12,6 @@ import {
   isCrossOrig,
   ajax,
   MutationObserver,
-  isErudaEl,
   toArr,
   concat,
   rmCookie,
@@ -22,6 +21,7 @@ import {
   contain,
   filter
 } from '../lib/util'
+import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 
 export default class Resources extends Tool {

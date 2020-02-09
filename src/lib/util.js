@@ -2329,28 +2329,6 @@ export var isErr = _.isErr = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ isErudaEl ------------------------------ */
-
-export var isErudaEl = _.isErudaEl = (function (exports) {
-    /* See if an element is within eruda.
-     */
-
-    exports = function(el) {
-      let parentNode = el.parentNode
-
-      if (!parentNode) return false
-
-      while (parentNode) {
-        parentNode = parentNode.parentNode
-        if (parentNode && parentNode.id === 'eruda') return true
-      }
-
-      return false
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ isHidden ------------------------------ */
 
 export var isHidden = _.isHidden = (function (exports) {

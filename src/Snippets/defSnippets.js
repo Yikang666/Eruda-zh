@@ -8,11 +8,11 @@ import {
   isStr,
   startWith,
   $,
-  isErudaEl,
   upperFirst,
   loadJs,
   trim
 } from '../lib/util'
+import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 
 let style = null

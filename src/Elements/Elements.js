@@ -8,7 +8,6 @@ import {
   keys,
   MutationObserver,
   each,
-  isErudaEl,
   toStr,
   isEl,
   isStr,
@@ -30,6 +29,7 @@ import {
   lowerCase,
   pick
 } from '../lib/util'
+import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 
 export default class Elements extends Tool {

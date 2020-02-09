@@ -1,4 +1,5 @@
-import { Emitter, isErudaEl, isMobile } from '../lib/util'
+import { Emitter, isMobile } from '../lib/util'
+import { isErudaEl } from '../lib/extraUtil'
 
 export default class Select extends Emitter {
   constructor() {
