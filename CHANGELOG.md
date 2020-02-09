@@ -1,3 +1,11 @@
+## v2.2.0 (9 Feb 2020)
+
+* feat: use dark theme for dark mode
+* feat(elements): computed style filter
+* feat(resources): storage and cookie filter
+* fix(snippet): error loading plugin for local page
+* fix(console): unable to clear filter
+
 ## v2.1.0 (2 Feb 2020)
 
 * feat: change navigation bar height
