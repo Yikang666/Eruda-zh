@@ -7,6 +7,10 @@
     <div {{{class 'btn clear-storage'}}} data-type="local">
       <span {{{class 'icon-clear'}}}></span>
     </div>
+    <div {{{class 'btn search'}}} data-type="local">
+      <span {{{class 'icon-search'}}}></span>
+    </div>
+    {{#if localStoreSearchKeyword}}<div {{{class 'btn search-keyword'}}}>{{localStoreSearchKeyword}}</div>{{/if}}
   </h2>
   <div {{{class 'content'}}}>
     <table>
@@ -39,6 +43,10 @@
     <div {{{class 'btn clear-storage'}}} data-type="session">
       <span {{{class 'icon-clear'}}}></span>
     </div>
+    <div {{{class 'btn search'}}} data-type="session">
+      <span {{{class 'icon-search'}}}></span>
+    </div>
+    {{#if sessionStoreSearchKeyword}}<div {{{class 'btn search-keyword'}}}>{{sessionStoreSearchKeyword}}</div>{{/if}}
   </h2>
   <div {{{class 'content'}}}>
     <table>
@@ -71,6 +79,10 @@
     <div {{{class 'btn clear-cookie'}}}>
       <span {{{class 'icon-clear'}}}></span>
     </div>
+    <div {{{class 'btn search'}}} data-type="cookie">
+      <span {{{class 'icon-search'}}}></span>
+    </div>
+    {{#if cookieSearchKeyword}}<div {{{class 'btn search-keyword'}}}>{{cookieSearchKeyword}}</div>{{/if}}
   </h2>
   <div {{{class 'content'}}}>
     <table>

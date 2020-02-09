@@ -44,7 +44,7 @@ export default class Elements extends Tool {
     this._highlightElement = false
     this._selectElement = false
     this._observeElement = true
-    this._computedStyleSearchText = ''
+    this._computedStyleSearchKeyword = ''
     this._history = []
 
     Emitter.mixin(this)
@@ -209,7 +209,7 @@ export default class Elements extends Tool {
         let filter = prompt('Filter')
         if (isNull(filter)) return
         filter = trim(filter)
-        this._computedStyleSearchText = filter
+        this._computedStyleSearchKeyword = filter
         this._render()
       })
 
@@ -283,7 +283,7 @@ export default class Elements extends Tool {
 
     const { className, id, attributes, tagName } = el
 
-    ret.computedStyleSearchText = this._computedStyleSearchText
+    ret.computedStyleSearchKeyword = this._computedStyleSearchKeyword
     ret.parents = getParents(el)
     ret.children = formatChildNodes(el.childNodes)
     ret.attributes = formatAttr(attributes)
@@ -333,12 +333,12 @@ export default class Elements extends Tool {
       computedStyle = rmDefComputedStyle(computedStyle, styles)
     }
     ret.rmDefComputedStyle = this._rmDefComputedStyle
-    const computedStyleSearchText = lowerCase(ret.computedStyleSearchText)
-    if (computedStyleSearchText) {
+    const computedStyleSearchKeyword = lowerCase(ret.computedStyleSearchKeyword)
+    if (computedStyleSearchKeyword) {
       computedStyle = pick(computedStyle, (val, property) => {
         return (
-          contain(property, computedStyleSearchText) ||
-          contain(val, computedStyleSearchText)
+          contain(property, computedStyleSearchKeyword) ||
+          contain(val, computedStyleSearchKeyword)
         )
       })
     }

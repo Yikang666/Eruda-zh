@@ -48,19 +48,8 @@
     border-bottom: 1px solid var(--border);
     color: var(--foreground);
     h2 {
+      @include right-btn();
       color: var(--primary);
-      .btn {
-        float: right;
-        text-align: center;
-        line-height: 18px;
-        font-size: $font-size-s;
-        .search-text {
-          vertical-align: top;
-        }
-        span {
-          margin-left: 5px;
-        }
-      }
       background: var(--darker-background);
       border-top: 1px solid var(--border);
       padding: $padding;

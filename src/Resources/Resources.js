@@ -16,7 +16,11 @@ import {
   toArr,
   concat,
   rmCookie,
-  decodeUriComponent
+  decodeUriComponent,
+  isNull,
+  lowerCase,
+  contain,
+  filter
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -28,9 +32,12 @@ export default class Resources extends Tool {
 
     this.name = 'resources'
     this._localStoreData = []
+    this._localStoreSearchKeyword = ''
     this._hideErudaSetting = false
     this._sessionStoreData = []
+    this._sessionStoreSearchKeyword = ''
     this._cookieData = []
+    this._cookieSearchKeyword = ''
     this._scriptData = []
     this._stylesheetData = []
     this._iframeData = []
@@ -232,6 +239,25 @@ export default class Resources extends Tool {
         this.refreshIframe()._render()
       )
       .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
+      .on('click', '.eruda-search', function() {
+        const $this = $(this)
+        const type = $this.data('type')
+        let filter = prompt('Filter')
+        if (isNull(filter)) return
+        filter = trim(filter)
+        switch (type) {
+          case 'local':
+            self._localStoreSearchKeyword = filter
+            break
+          case 'session':
+            self._sessionStoreSearchKeyword = filter
+            break
+          case 'cookie':
+            self._cookieSearchKeyword = filter
+            break
+        }
+        self._render()
+      })
       .on('click', '.eruda-delete-storage', function() {
         const $this = $(this)
         const key = $this.data('key')
@@ -372,11 +398,36 @@ export default class Resources extends Tool {
     const stylesheetData = this._stylesheetData
     const imageData = this._imageData
 
+    const localStoreSearchKeyword = this._localStoreSearchKeyword
+    const sessionStoreSearchKeyword = this._sessionStoreSearchKeyword
+    const cookieSearchKeyword = this._cookieSearchKeyword
+
+    function filterData(data, keyword) {
+      keyword = lowerCase(keyword)
+
+      if (!keyword) return data
+
+      return filter(data, ({ key, val }) => {
+        return (
+          contain(lowerCase(key), keyword) || contain(lowerCase(val), keyword)
+        )
+      })
+    }
+
     this._renderHtml(
       this._tpl({
-        localStoreData: this._localStoreData,
-        sessionStoreData: this._sessionStoreData,
-        cookieData,
+        localStoreData: filterData(
+          this._localStoreData,
+          localStoreSearchKeyword
+        ),
+        localStoreSearchKeyword,
+        sessionStoreData: filterData(
+          this._sessionStoreData,
+          sessionStoreSearchKeyword
+        ),
+        sessionStoreSearchKeyword,
+        cookieData: filterData(cookieData, cookieSearchKeyword),
+        cookieSearchKeyword,
         cookieState: getState('cookie', cookieData.length),
         scriptData,
         scriptState: getState('script', scriptData.length),

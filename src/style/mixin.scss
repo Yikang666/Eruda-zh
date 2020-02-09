@@ -50,6 +50,14 @@
     font-size: $font-size-l;
     cursor: pointer;
     transition: color $anim-duration;
+    &.search-keyword {
+      width: auto;
+      max-width: 80px;
+      font-size: $font-size;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
     &:active {
       color: var(--accent);
     }

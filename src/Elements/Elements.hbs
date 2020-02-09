@@ -59,16 +59,25 @@
 {{/if}}
 {{#if computedStyle}}
   <div {{{class 'computed-style section'}}}>
-    <h2>Computed Style
-      <div {{{class 'btn'}}}>
-        {{#if computedStyleSearchText}}<span {{{class 'search-text'}}}>{{computedStyleSearchText}}</span>{{/if}}
-        <span {{{class 'icon-search computed-style-search'}}}></span>
-        {{#if rmDefComputedStyle}}
-          <span {{{class 'toggle-all-computed-style icon-compress'}}}></span>
-        {{else}}
-          <span {{{class 'toggle-all-computed-style icon-expand'}}}></span>
-        {{/if}}
+    <h2>
+      Computed Style
+      {{#if rmDefComputedStyle}}
+        <div {{{class 'btn toggle-all-computed-style'}}}>
+          <span {{{class 'icon-compress'}}}></span>
+        </div>
+      {{else}}
+        <div {{{class 'btn toggle-all-computed-style'}}}>
+          <span {{{class 'icon-expand'}}}></span>
+        </div>
+      {{/if}}
+      <div {{{class 'btn computed-style-search'}}}>
+        <span {{{class 'icon-search'}}}></span>
       </div>
+      {{#if computedStyleSearchKeyword}}
+        <div {{{class 'btn search-keyword'}}}>
+          {{computedStyleSearchKeyword}}
+        </div>
+      {{/if}}
     </h2>
     <div {{{class 'box-model'}}}>
       {{#if boxModel.position}}<div {{{class 'position'}}}>
