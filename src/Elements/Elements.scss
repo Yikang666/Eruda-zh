@@ -50,13 +50,16 @@
     h2 {
       color: var(--primary);
       .btn {
-        margin-left: 10px;
         float: right;
         text-align: center;
-        width: 18px;
-        height: 18px;
         line-height: 18px;
         font-size: $font-size-s;
+        .search-text {
+          vertical-align: top;
+        }
+        span {
+          margin-left: 5px;
+        }
       }
       background: var(--darker-background);
       border-top: 1px solid var(--border);

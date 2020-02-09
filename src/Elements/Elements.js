@@ -24,7 +24,11 @@ import {
   nextTick,
   Emitter,
   contain,
-  unique
+  unique,
+  isNull,
+  trim,
+  lowerCase,
+  pick
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -40,6 +44,7 @@ export default class Elements extends Tool {
     this._highlightElement = false
     this._selectElement = false
     this._observeElement = true
+    this._computedStyleSearchText = ''
     this._history = []
 
     Emitter.mixin(this)
@@ -200,6 +205,13 @@ export default class Elements extends Tool {
       .on('click', '.eruda-toggle-all-computed-style', () =>
         this._toggleAllComputedStyle()
       )
+      .on('click', '.eruda-computed-style-search', () => {
+        let filter = prompt('Filter')
+        if (isNull(filter)) return
+        filter = trim(filter)
+        this._computedStyleSearchText = filter
+        this._render()
+      })
 
     const $bottomBar = this._$el.find('.eruda-bottom-bar')
 
@@ -271,6 +283,7 @@ export default class Elements extends Tool {
 
     const { className, id, attributes, tagName } = el
 
+    ret.computedStyleSearchText = this._computedStyleSearchText
     ret.parents = getParents(el)
     ret.children = formatChildNodes(el.childNodes)
     ret.attributes = formatAttr(attributes)
@@ -320,6 +333,15 @@ export default class Elements extends Tool {
       computedStyle = rmDefComputedStyle(computedStyle, styles)
     }
     ret.rmDefComputedStyle = this._rmDefComputedStyle
+    const computedStyleSearchText = lowerCase(ret.computedStyleSearchText)
+    if (computedStyleSearchText) {
+      computedStyle = pick(computedStyle, (val, property) => {
+        return (
+          contain(property, computedStyleSearchText) ||
+          contain(val, computedStyleSearchText)
+        )
+      })
+    }
     processStyleRules(computedStyle)
     ret.computedStyle = computedStyle
 

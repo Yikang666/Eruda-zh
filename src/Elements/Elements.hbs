@@ -59,12 +59,14 @@
 {{/if}}
 {{#if computedStyle}}
   <div {{{class 'computed-style section'}}}>
-    <h2 {{{class 'toggle-all-computed-style active-effect'}}}>Computed Style
+    <h2>Computed Style
       <div {{{class 'btn'}}}>
+        {{#if computedStyleSearchText}}<span {{{class 'search-text'}}}>{{computedStyleSearchText}}</span>{{/if}}
+        <span {{{class 'icon-search computed-style-search'}}}></span>
         {{#if rmDefComputedStyle}}
-          <span {{{class 'icon-compress'}}}></span>
+          <span {{{class 'toggle-all-computed-style icon-compress'}}}></span>
         {{else}}
-          <span {{{class 'icon-expand'}}}></span>
+          <span {{{class 'toggle-all-computed-style icon-expand'}}}></span>
         {{/if}}
       </div>
     </h2>
@@ -78,7 +80,7 @@
             }}<div {{{class 'padding'}}}>
               <div {{{class 'label'}}}>padding</div><div {{{class 'top'}}}>{{boxModel.padding.top}}</div><br><div {{{class 'left'}}}>{{boxModel.padding.left}}</div>{{!
               }}<div {{{class 'content'}}}>
-                <span>{{boxModel.content.width}}</span> × <span>{{boxModel.content.height}}</span>
+                <span>{{boxModel.content.width}}</span>&nbsp;×&nbsp;<span>{{boxModel.content.height}}</span>
               </div>{{!
               }}<div {{{class 'right'}}}>{{boxModel.padding.right}}</div><br><div {{{class 'bottom'}}}>{{boxModel.padding.bottom}}</div>{{!
               }}</div>{{!

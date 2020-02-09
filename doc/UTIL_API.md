@@ -2287,6 +2287,24 @@ const start = perfNow();
 console.log(perfNow() - start);
 ```
 
+## pick 
+
+Return a filtered copy of an object.
+
+|Name  |Type                 |Desc           |
+|------|---------------------|---------------|
+|object|object               |Source object  |
+|filter|string array function|Object filter  |
+|return|object               |Filtered object|
+
+```javascript
+pick({a: 1, b: 2}, 'a'); // -> {a: 1}
+pick({a: 1, b: 2, c: 3}, ['b', 'c']) // -> {b: 2, c: 3}
+pick({a: 1, b: 2, c: 3, d: 4}, function (val, key) {
+    return val % 2;
+}); // -> {a: 1, c: 3}
+```
+
 ## prefix 
 
 Add vendor prefixes to a CSS attribute.

@@ -90,6 +90,9 @@
       .icon-arrow-right {
         display: none;
       }
+      textarea {
+        padding-left: 10px;
+      }
     }
     .buttons {
       display: none;
@@ -124,6 +127,7 @@
     textarea {
       pointer-events: all;
       padding: 3px 10px;
+      padding-left: 25px;
       outline: none;
       border: none;
       font-size: $font-size;
