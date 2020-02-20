@@ -8,10 +8,10 @@ var _ = {};
 export var last = _.last = (function (exports) {
     /* Get the last element of array.
      *
-     * |Name  |Type |Desc                     |
-     * |------|-----|-------------------------|
-     * |arr   |array|The array to query       |
-     * |return|*    |The last element of array|
+     * |Name  |Desc                     |
+     * |------|-------------------------|
+     * |arr   |The array to query       |
+     * |return|The last element of array|
      */
 
     /* example
@@ -34,10 +34,10 @@ export var last = _.last = (function (exports) {
 export var isUndef = _.isUndef = (function (exports) {
     /* Check if value is undefined.
      *
-     * |Name  |Type   |Desc                      |
-     * |------|-------|--------------------------|
-     * |val   |*      |Value to check            |
-     * |return|boolean|True if value is undefined|
+     * |Name  |Desc                      |
+     * |------|--------------------------|
+     * |val   |Value to check            |
+     * |return|True if value is undefined|
      */
 
     /* example
@@ -60,10 +60,10 @@ export var isUndef = _.isUndef = (function (exports) {
 export var isObj = _.isObj = (function (exports) {
     /* Check if value is the language type of Object.
      *
-     * |Name  |Type   |Desc                      |
-     * |------|-------|--------------------------|
-     * |val   |*      |Value to check            |
-     * |return|boolean|True if value is an object|
+     * |Name  |Desc                      |
+     * |------|--------------------------|
+     * |val   |Value to check            |
+     * |return|True if value is an object|
      *
      * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
      */
@@ -89,11 +89,11 @@ export var isObj = _.isObj = (function (exports) {
 export var has = _.has = (function (exports) {
     /* Checks if key is a direct property.
      *
-     * |Name  |Type   |Desc                            |
-     * |------|-------|--------------------------------|
-     * |obj   |object |Object to query                 |
-     * |key   |string |Path to check                   |
-     * |return|boolean|True if key is a direct property|
+     * |Name  |Desc                            |
+     * |------|--------------------------------|
+     * |obj   |Object to query                 |
+     * |key   |Path to check                   |
+     * |return|True if key is a direct property|
      */
 
     /* example
@@ -117,11 +117,11 @@ export var has = _.has = (function (exports) {
 export var slice = _.slice = (function (exports) {
     /* Create slice of source array or array-like object.
      *
-     * |Name              |Type  |Desc                      |
-     * |------------------|------|--------------------------|
-     * |array             |array |Array to slice            |
-     * |[start=0]         |number|Start position            |
-     * |[end=array.length]|number|End position, not included|
+     * |Name            |Desc                      |
+     * |----------------|--------------------------|
+     * |array           |Array to slice            |
+     * |start=0         |Start position            |
+     * |end=array.length|End position, not included|
      */
 
     /* example
@@ -167,10 +167,10 @@ export var slice = _.slice = (function (exports) {
 export var reverse = _.reverse = (function (exports) {
     /* Reverse array without mutating it.
      *
-     * |Name  |Type |Desc           |
-     * |------|-----|---------------|
-     * |arr   |array|Array to modify|
-     * |return|array|Reversed array |
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |arr   |Array to modify|
+     * |return|Reversed array |
      */
 
     /* example
@@ -239,11 +239,11 @@ export var noop = _.noop = (function (exports) {
 export var before = _.before = (function (exports) {
     /* Create a function that invokes less than n times.
      *
-     * |Name  |Type    |Desc                                            |
-     * |------|--------|------------------------------------------------|
-     * |n     |number  |Number of calls at which fn is no longer invoked|
-     * |fn    |function|Function to restrict                            |
-     * |return|function|New restricted function                         |
+     * |Name  |Desc                                            |
+     * |------|------------------------------------------------|
+     * |n     |Number of calls at which fn is no longer invoked|
+     * |fn    |Function to restrict                            |
+     * |return|New restricted function                         |
      *
      * Subsequent calls to the created function return the result of the last fn invocation.
      */
@@ -273,10 +273,10 @@ export var before = _.before = (function (exports) {
 export var splitCase = _.splitCase = (function (exports) {
     /* Split different string case to an array.
      *
-     * |Name  |Type  |Desc           |
-     * |------|------|---------------|
-     * |str   |string|String to split|
-     * |return|array |Result array   |
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |str   |String to split|
+     * |return|Result array   |
      */
 
     /* example
@@ -312,10 +312,10 @@ export var splitCase = _.splitCase = (function (exports) {
 export var camelCase = _.camelCase = (function (exports) {
     /* Convert string to "camelCase".
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |str   |string|String to convert |
-     * |return|string|Camel cased string|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to convert |
+     * |return|Camel cased string|
      */
 
     /* example
@@ -356,10 +356,10 @@ export var camelCase = _.camelCase = (function (exports) {
 export var kebabCase = _.kebabCase = (function (exports) {
     /* Convert string to "kebabCase".
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |str   |string|String to convert |
-     * |return|string|Kebab cased string|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to convert |
+     * |return|Kebab cased string|
      */
 
     /* example
@@ -389,11 +389,11 @@ export var kebabCase = _.kebabCase = (function (exports) {
 export var chunk = _.chunk = (function (exports) {
     /* Split array into groups the length of given size.
      *
-     * |Name  |Type  |Desc                |
-     * |------|------|--------------------|
-     * |arr   |array |Array to process    |
-     * |size=1|number|Length of each chunk|
-     * |return|array |Chunks of given size|
+     * |Name  |Desc                |
+     * |------|--------------------|
+     * |arr   |Array to process    |
+     * |size=1|Length of each chunk|
+     * |return|Chunks of given size|
      */
 
     /* example
@@ -426,12 +426,12 @@ export var chunk = _.chunk = (function (exports) {
 export var clamp = _.clamp = (function (exports) {
     /* Clamp number within the inclusive lower and upper bounds.
      *
-     * |Name   |Type  |Desc           |
-     * |-------|------|---------------|
-     * |n      |number|Number to clamp|
-     * |[lower]|number|Lower bound    |
-     * |upper  |number|Upper bound    |
-     * |return |number|Clamped number |
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |n     |Number to clamp|
+     * |lower |Lower bound    |
+     * |upper |Upper bound    |
+     * |return|Clamped number |
      */
 
     /* example
@@ -470,12 +470,12 @@ export var clamp = _.clamp = (function (exports) {
 export var idxOf = _.idxOf = (function (exports) {
     /* Get the index at which the first occurrence of value.
      *
-     * |Name     |Type  |Desc                |
-     * |---------|------|--------------------|
-     * |arr      |array |Array to search     |
-     * |val      |*     |Value to search for |
-     * |fromIdx=0|number|Index to search from|
-     * |return   |number|Value index         |
+     * |Name     |Desc                |
+     * |---------|--------------------|
+     * |arr      |Array to search     |
+     * |val      |Value to search for |
+     * |fromIdx=0|Index to search from|
+     * |return   |Value index         |
      */
 
     /* example
@@ -497,10 +497,10 @@ export var idxOf = _.idxOf = (function (exports) {
 export var create = _.create = (function (exports) {
     /* Create new object using given object as prototype.
      *
-     * |Name   |Type  |Desc                   |
-     * |-------|------|-----------------------|
-     * |[proto]|object|Prototype of new object|
-     * |return |object|Created object         |
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |proto |Prototype of new object|
+     * |return|Created object         |
      */
 
     /* example
@@ -536,10 +536,10 @@ export var create = _.create = (function (exports) {
 export var inherits = _.inherits = (function (exports) {
     /* Inherit the prototype methods from one constructor into another.
      *
-     * |Name      |Type    |Desc       |
-     * |----------|--------|-----------|
-     * |Class     |function|Child Class|
-     * |SuperClass|function|Super Class|
+     * |Name      |Desc       |
+     * |----------|-----------|
+     * |Class     |Child Class|
+     * |SuperClass|Super Class|
      */
 
     /* example
@@ -579,10 +579,10 @@ export var inherits = _.inherits = (function (exports) {
 export var toStr = _.toStr = (function (exports) {
     /* Convert value to a string.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |val   |*     |Value to convert|
-     * |return|string|Result string   |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |val   |Value to convert|
+     * |return|Result string   |
      */
 
     /* example
@@ -607,11 +607,11 @@ export var toStr = _.toStr = (function (exports) {
 export var debounce = _.debounce = (function (exports) {
     /* Return a new debounced version of the passed function.
      *
-     * |Name  |Type    |Desc                           |
-     * |------|--------|-------------------------------|
-     * |fn    |function|Function to debounce           |
-     * |wait  |number  |Number of milliseconds to delay|
-     * |return|function|New debounced function         |
+     * |Name  |Desc                           |
+     * |------|-------------------------------|
+     * |fn    |Function to debounce           |
+     * |wait  |Number of milliseconds to delay|
+     * |return|New debounced function         |
      */
 
     /* example
@@ -650,19 +650,19 @@ export var ucs2 = _.ucs2 = (function (exports) {
      *
      * Create a string using an array of code point values.
      *
-     * |Name  |Type  |Desc                |
-     * |------|------|--------------------|
-     * |arr   |array |Array of code points|
-     * |return|string|Encoded string      |
+     * |Name  |Desc                |
+     * |------|--------------------|
+     * |arr   |Array of code points|
+     * |return|Encoded string      |
      *
      * ### decode
      *
      * Create an array of code point values using a string.
      *
-     * |Name  |Type  |Desc                |
-     * |------|------|--------------------|
-     * |str   |string|Input string        |
-     * |return|array |Array of code points|
+     * |Name  |Desc                |
+     * |------|--------------------|
+     * |str   |Input string        |
+     * |return|Array of code points|
      */
 
     /* example
@@ -722,20 +722,20 @@ export var utf8 = _.utf8 = (function (exports) {
      *
      * Turn any UTF-8 decoded string into UTF-8 encoded string.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to encode|
-     * |return|string|Encoded string  |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to encode|
+     * |return|Encoded string  |
      *
      * ### decode
      *
      * Turn any UTF-8 encoded string into UTF-8 decoded string.
      *
-     * |Name      |Type   |Desc                  |
-     * |----------|-------|----------------------|
-     * |str       |string |String to decode      |
-     * |safe=false|boolean|Suppress error if true|
-     * |return    |string |Decoded string        |
+     * |Name      |Desc                  |
+     * |----------|----------------------|
+     * |str       |String to decode      |
+     * |safe=false|Suppress error if true|
+     * |return    |Decoded string        |
      */
 
     /* example
@@ -961,10 +961,10 @@ export var detectMocha = _.detectMocha = (function (exports) {
 export var keys = _.keys = (function (exports) {
     /* Create an array of the own enumerable property names of object.
      *
-     * |Name  |Type  |Desc                   |
-     * |------|------|-----------------------|
-     * |obj   |object|Object to query        |
-     * |return|array |Array of property names|
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |obj   |Object to query        |
+     * |return|Array of property names|
      */
 
     /* example
@@ -1003,10 +1003,10 @@ export var freeze = _.freeze = (function (exports) {
      *
      * Use Object.defineProperties if Object.freeze is not supported.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |obj   |object|Object to freeze|
-     * |return|object|Object passed in|
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |obj   |Object to freeze|
+     * |return|Object passed in|
      */
 
     /* example
@@ -1044,10 +1044,10 @@ export var freeze = _.freeze = (function (exports) {
 export var detectOs = _.detectOs = (function (exports) {
     /* Detect operating system using ua.
      *
-     * |Name                  |Type  |Desc                 |
-     * |----------------------|------|---------------------|
-     * |ua=navigator.userAgent|string|Browser userAgent    |
-     * |return                |string|Operating system name|
+     * |Name                  |Desc                 |
+     * |----------------------|---------------------|
+     * |ua=navigator.userAgent|Browser userAgent    |
+     * |return                |Operating system name|
      *
      * Supported os: windows, os x, linux, ios, android, windows phone
      */
@@ -1091,11 +1091,11 @@ export var detectOs = _.detectOs = (function (exports) {
 export var restArgs = _.restArgs = (function (exports) {
     /* This accumulates the arguments passed into an array, after a given index.
      *
-     * |Name        |Type    |Desc                                   |
-     * |------------|--------|---------------------------------------|
-     * |function    |function|Function that needs rest parameters    |
-     * |[startIndex]|number  |The start index to accumulates         |
-     * |return      |function|Generated function with rest parameters|
+     * |Name      |Desc                                   |
+     * |----------|---------------------------------------|
+     * |function  |Function that needs rest parameters    |
+     * |startIndex|The start index to accumulates         |
+     * |return    |Generated function with rest parameters|
      */
 
     /* example
@@ -1225,11 +1225,11 @@ export var types = _.types = (function (exports) {
 export var endWith = _.endWith = (function (exports) {
     /* Check if string ends with the given target string.
      *
-     * |Name  |Type   |Desc                           |
-     * |------|-------|-------------------------------|
-     * |str   |string |The string to search           |
-     * |suffix|string |String suffix                  |
-     * |return|boolean|True if string ends with target|
+     * |Name  |Desc                           |
+     * |------|-------------------------------|
+     * |str   |The string to search           |
+     * |suffix|String suffix                  |
+     * |return|True if string ends with target|
      */
 
     /* example
@@ -1252,10 +1252,10 @@ export var endWith = _.endWith = (function (exports) {
 export var escape = _.escape = (function (exports) {
     /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to escape|
-     * |return|string|Escaped string  |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to escape|
+     * |return|Escaped string  |
      */
 
     /* example
@@ -1286,9 +1286,9 @@ export var escape = _.escape = (function (exports) {
     var regTest = new RegExp(regSrc);
     var regReplace = new RegExp(regSrc, 'g');
 
-    function replaceFn(match) {
+    var replaceFn = function(match) {
         return map[match];
-    }
+    };
 
     return exports;
 })({});
@@ -1300,10 +1300,10 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
      *
      * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to escape|
-     * |return|string|Escaped string  |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to escape|
+     * |return|Escaped string  |
      */
 
     /* example
@@ -1372,10 +1372,10 @@ export var escapeJsonStr = _.escapeJsonStr = (function (exports) {
 export var escapeRegExp = _.escapeRegExp = (function (exports) {
     /* Escape special chars to be used as literals in RegExp constructors.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to escape|
-     * |return|string|Escaped string  |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to escape|
+     * |return|Escaped string  |
      */
 
     /* example
@@ -1397,10 +1397,10 @@ export var escapeRegExp = _.escapeRegExp = (function (exports) {
 export var fileSize = _.fileSize = (function (exports) {
     /* Turn bytes into human readable file size.
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |bytes |number|File bytes        |
-     * |return|string|Readable file size|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |bytes |File bytes        |
+     * |return|Readable file size|
      */
 
     /* example
@@ -1450,10 +1450,10 @@ export var fullUrl = _.fullUrl = (function (exports) {
 export var upperFirst = _.upperFirst = (function (exports) {
     /* Convert the first character of string to upper case.
      *
-     * |Name  |Type  |Desc             |
-     * |------|------|-----------------|
-     * |str   |string|String to convert|
-     * |return|string|Converted string |
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |str   |String to convert|
+     * |return|Converted string |
      */
 
     /* example
@@ -1495,10 +1495,10 @@ export var getObjType = _.getObjType = (function (exports) {
 export var identity = _.identity = (function (exports) {
     /* Return the first argument given.
      *
-     * |Name  |Type|Desc       |
-     * |------|----|-----------|
-     * |val   |*   |Any value  |
-     * |return|*   |Given value|
+     * |Name  |Desc       |
+     * |------|-----------|
+     * |val   |Any value  |
+     * |return|Given value|
      */
 
     /* example
@@ -1520,10 +1520,10 @@ export var identity = _.identity = (function (exports) {
 export var objToStr = _.objToStr = (function (exports) {
     /* Alias of Object.prototype.toString.
      *
-     * |Name  |Type  |Desc                                |
-     * |------|------|------------------------------------|
-     * |val   |*     |Source value                        |
-     * |return|string|String representation of given value|
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |val   |Source value                        |
+     * |return|String representation of given value|
      */
 
     /* example
@@ -1547,10 +1547,10 @@ export var objToStr = _.objToStr = (function (exports) {
 export var isArgs = _.isArgs = (function (exports) {
     /* Check if value is classified as an arguments object.
      *
-     * |Name  |Type   |Desc                                |
-     * |------|-------|------------------------------------|
-     * |val   |*      |Value to check                      |
-     * |return|boolean|True if value is an arguments object|
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |val   |Value to check                      |
+     * |return|True if value is an arguments object|
      */
 
     /* example
@@ -1579,10 +1579,10 @@ export var isArgs = _.isArgs = (function (exports) {
 export var isArr = _.isArr = (function (exports) {
     /* Check if value is an `Array` object.
      *
-     * |Name  |Type   |Desc                              |
-     * |------|-------|----------------------------------|
-     * |val   |*      |Value to check                    |
-     * |return|boolean|True if value is an `Array` object|
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |val   |Value to check                    |
+     * |return|True if value is an `Array` object|
      */
 
     /* example
@@ -1612,11 +1612,11 @@ export var isArr = _.isArr = (function (exports) {
 export var castPath = _.castPath = (function (exports) {
     /* Cast value into a property path array.
      *
-     * |Name  |Type        |Desc               |
-     * |------|------------|-------------------|
-     * |path  |string array|Value to inspect   |
-     * |[obj] |object      |Object to query    |
-     * |return|array       |Property path array|
+     * |Name  |Desc               |
+     * |------|-------------------|
+     * |path  |Value to inspect   |
+     * |obj   |Object to query    |
+     * |return|Property path array|
      */
 
     /* example
@@ -1655,11 +1655,11 @@ export var castPath = _.castPath = (function (exports) {
 export var safeGet = _.safeGet = (function (exports) {
     /* Get object property, don't throw undefined error.
      *
-     * |Name  |Type        |Desc                     |
-     * |------|------------|-------------------------|
-     * |obj   |object      |Object to query          |
-     * |path  |array string|Path of property to get  |
-     * |return|*           |Target value or undefined|
+     * |Name  |Desc                     |
+     * |------|-------------------------|
+     * |obj   |Object to query          |
+     * |path  |Path of property to get  |
+     * |return|Target value or undefined|
      */
 
     /* example
@@ -1699,10 +1699,10 @@ export var safeGet = _.safeGet = (function (exports) {
 export var flatten = _.flatten = (function (exports) {
     /* Recursively flatten an array.
      *
-     * |Name  |Type |Desc               |
-     * |------|-----|-------------------|
-     * |arr   |array|Array to flatten   |
-     * |return|array|New flattened array|
+     * |Name  |Desc               |
+     * |------|-------------------|
+     * |arr   |Array to flatten   |
+     * |return|New flattened array|
      */
 
     /* example
@@ -1742,10 +1742,10 @@ export var flatten = _.flatten = (function (exports) {
 export var isDate = _.isDate = (function (exports) {
     /* Check if value is classified as a Date object.
      *
-     * |Name  |Type   |Desc                          |
-     * |------|-------|------------------------------|
-     * |val   |*      |value to check                |
-     * |return|boolean|True if value is a Date object|
+     * |Name  |Desc                          |
+     * |------|------------------------------|
+     * |val   |value to check                |
+     * |return|True if value is a Date object|
      */
 
     /* example
@@ -1772,10 +1772,10 @@ export var isDate = _.isDate = (function (exports) {
 export var isFn = _.isFn = (function (exports) {
     /* Check if value is a function.
      *
-     * |Name  |Type   |Desc                       |
-     * |------|-------|---------------------------|
-     * |val   |*      |Value to check             |
-     * |return|boolean|True if value is a function|
+     * |Name  |Desc                       |
+     * |------|---------------------------|
+     * |val   |Value to check             |
+     * |return|True if value is a function|
      *
      * Generator function is also classified as true.
      */
@@ -1811,10 +1811,10 @@ export var isFn = _.isFn = (function (exports) {
 export var getProto = _.getProto = (function (exports) {
     /* Get prototype of an object.
      *
-     * |Name  |Type|Desc                                         |
-     * |------|----|---------------------------------------------|
-     * |obj   |*   |Target object                                |
-     * |return|*   |Prototype of given object, null if not exists|
+     * |Name  |Desc                                         |
+     * |------|---------------------------------------------|
+     * |obj   |Target object                                |
+     * |return|Prototype of given object, null if not exists|
      */
 
     /* example
@@ -1834,13 +1834,12 @@ export var getProto = _.getProto = (function (exports) {
     var ObjectCtr = {}.constructor;
 
     exports = function(obj) {
-        if (!isObj(obj)) return null;
+        if (!isObj(obj)) return;
         if (getPrototypeOf) return getPrototypeOf(obj);
         var proto = obj.__proto__;
         if (proto || proto === null) return proto;
         if (isFn(obj.constructor)) return obj.constructor.prototype;
         if (obj instanceof ObjectCtr) return ObjectCtr.prototype;
-        return null;
     };
 
     return exports;
@@ -1875,10 +1874,10 @@ export var isMiniProgram = _.isMiniProgram = (function (exports) {
 export var isNum = _.isNum = (function (exports) {
     /* Check if value is classified as a Number primitive or object.
      *
-     * |Name  |Type   |Desc                                 |
-     * |------|-------|-------------------------------------|
-     * |val   |*      |Value to check                       |
-     * |return|boolean|True if value is correctly classified|
+     * |Name  |Desc                                 |
+     * |------|-------------------------------------|
+     * |val   |Value to check                       |
+     * |return|True if value is correctly classified|
      */
 
     /* example
@@ -1907,10 +1906,10 @@ export var isNum = _.isNum = (function (exports) {
 export var isArrLike = _.isArrLike = (function (exports) {
     /* Check if value is array-like.
      *
-     * |Name  |Type   |Desc                       |
-     * |------|-------|---------------------------|
-     * |val   |*      |Value to check             |
-     * |return|boolean|True if value is array like|
+     * |Name  |Desc                       |
+     * |------|---------------------------|
+     * |val   |Value to check             |
+     * |return|True if value is array like|
      *
      * Function returns false.
      */
@@ -1945,11 +1944,11 @@ export var isArrLike = _.isArrLike = (function (exports) {
 export var each = _.each = (function (exports) {
     /* Iterate over elements of collection and invokes iterator for each element.
      *
-     * |Name    |Type        |Desc                          |
-     * |--------|------------|------------------------------|
-     * |obj     |object array|Collection to iterate over    |
-     * |iterator|function    |Function invoked per iteration|
-     * |[ctx]   |*           |Function context              |
+     * |Name    |Desc                          |
+     * |--------|------------------------------|
+     * |obj     |Collection to iterate over    |
+     * |iterator|Function invoked per iteration|
+     * |ctx     |Function context              |
      */
 
     /* example
@@ -2002,11 +2001,11 @@ export var each = _.each = (function (exports) {
 export var createAssigner = _.createAssigner = (function (exports) {
     /* Used to create extend, extendOwn and defaults.
      *
-     * |Name    |Type    |Desc                          |
-     * |--------|--------|------------------------------|
-     * |keysFn  |function|Function to get object keys   |
-     * |defaults|boolean |No override when set to true  |
-     * |return  |function|Result function, extend...    |
+     * |Name    |Desc                          |
+     * |--------|------------------------------|
+     * |keysFn  |Function to get object keys   |
+     * |defaults|No override when set to true  |
+     * |return  |Result function, extend...    |
      */
 
     /* typescript
@@ -2038,11 +2037,11 @@ export var createAssigner = _.createAssigner = (function (exports) {
 export var extendOwn = _.extendOwn = (function (exports) {
     /* Like extend, but only copies own properties over to the destination object.
      *
-     * |Name       |Type  |Desc              |
-     * |-----------|------|------------------|
-     * |destination|object|Destination object|
-     * |...sources |object|Sources objects   |
-     * |return     |object|Destination object|
+     * |Name       |Desc              |
+     * |-----------|------------------|
+     * |destination|Destination object|
+     * |...sources |Sources objects   |
+     * |return     |Destination object|
      */
 
     /* example
@@ -2067,10 +2066,10 @@ export var extendOwn = _.extendOwn = (function (exports) {
 export var values = _.values = (function (exports) {
     /* Create an array of the own enumerable property values of object.
      *
-     * |Name  |Type  |Desc                    |
-     * |------|------|------------------------|
-     * |obj   |object|Object to query         |
-     * |return|array |Array of property values|
+     * |Name  |Desc                    |
+     * |------|------------------------|
+     * |obj   |Object to query         |
+     * |return|Array of property values|
      */
 
     /* example
@@ -2101,10 +2100,10 @@ export var values = _.values = (function (exports) {
 export var isStr = _.isStr = (function (exports) {
     /* Check if value is a string primitive.
      *
-     * |Name  |Type   |Desc                               |
-     * |------|-------|-----------------------------------|
-     * |val   |*      |Value to check                     |
-     * |return|boolean|True if value is a string primitive|
+     * |Name  |Desc                               |
+     * |------|-----------------------------------|
+     * |val   |Value to check                     |
+     * |return|True if value is a string primitive|
      */
 
     /* example
@@ -2131,11 +2130,11 @@ export var isStr = _.isStr = (function (exports) {
 export var contain = _.contain = (function (exports) {
     /* Check if the value is present in the list.
      *
-     * |Name  |Type               |Desc                                |
-     * |------|-------------------|------------------------------------|
-     * |target|array object string|Target object                       |
-     * |value |*                  |Value to check                      |
-     * |return|boolean            |True if value is present in the list|
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |target|Target object                       |
+     * |val   |Value to check                      |
+     * |return|True if value is present in the list|
      */
 
     /* example
@@ -2169,10 +2168,10 @@ export var contain = _.contain = (function (exports) {
 export var isEmpty = _.isEmpty = (function (exports) {
     /* Check if value is an empty object or array.
      *
-     * |Name  |Type   |Desc                  |
-     * |------|-------|----------------------|
-     * |val   |*      |Value to check        |
-     * |return|boolean|True if value is empty|
+     * |Name  |Desc                  |
+     * |------|----------------------|
+     * |val   |Value to check        |
+     * |return|True if value is empty|
      */
 
     /* example
@@ -2207,10 +2206,10 @@ export var isEmpty = _.isEmpty = (function (exports) {
 export var isBool = _.isBool = (function (exports) {
     /* Check if value is a boolean primitive.
      *
-     * |Name  |Type   |Desc                      |
-     * |------|-------|--------------------------|
-     * |val   |*      |Value to check            |
-     * |return|boolean|True if value is a boolean|
+     * |Name  |Desc                      |
+     * |------|--------------------------|
+     * |val   |Value to check            |
+     * |return|True if value is a boolean|
      */
 
     /* example
@@ -2234,11 +2233,11 @@ export var isBool = _.isBool = (function (exports) {
 export var startWith = _.startWith = (function (exports) {
     /* Check if string starts with the given target string.
      *
-     * |Name  |Type   |Desc                             |
-     * |------|-------|---------------------------------|
-     * |str   |string |String to search                 |
-     * |prefix|string |String prefix                    |
-     * |return|boolean|True if string starts with prefix|
+     * |Name  |Desc                             |
+     * |------|---------------------------------|
+     * |str   |String to search                 |
+     * |prefix|String prefix                    |
+     * |return|True if string starts with prefix|
      */
 
     /* example
@@ -2279,10 +2278,10 @@ export var isCrossOrig = _.isCrossOrig = (function (exports) {
 export var isEl = _.isEl = (function (exports) {
     /* Check if value is a DOM element.
      *
-     * |Name  |Type   |Desc                          |
-     * |------|-------|------------------------------|
-     * |val   |*      |Value to check                |
-     * |return|boolean|True if value is a DOM element|
+     * |Name  |Desc                          |
+     * |------|------------------------------|
+     * |val   |Value to check                |
+     * |return|True if value is a DOM element|
      */
 
     /* example
@@ -2304,10 +2303,10 @@ export var isEl = _.isEl = (function (exports) {
 export var isErr = _.isErr = (function (exports) {
     /* Check if value is an error.
      *
-     * |Name  |Type   |Desc                     |
-     * |------|-------|-------------------------|
-     * |val   |*      |Value to check           |
-     * |return|boolean|True if value is an error|
+     * |Name  |Desc                     |
+     * |------|-------------------------|
+     * |val   |Value to check           |
+     * |return|True if value is an error|
      */
 
     /* example
@@ -2334,22 +2333,22 @@ export var isErr = _.isErr = (function (exports) {
 export var isHidden = _.isHidden = (function (exports) {
     /* Check if element is hidden.
      *
-     * |Name   |Type   |Desc                     |
-     * |-------|-------|-------------------------|
-     * |el     |element|Target element           |
-     * |options|object |Check options            |
-     * |return |boolean|True if element is hidden|
+     * |Name   |Desc                     |
+     * |-------|-------------------------|
+     * |el     |Target element           |
+     * |options|Check options            |
+     * |return |True if element is hidden|
      *
      * Available options:
      *
-     * |Name            |Type   |Desc                         |
-     * |----------------|-------|-----------------------------|
-     * |display=true    |boolean|Check if it is displayed     |
-     * |visibility=false|boolean|Check visibility css property|
-     * |opacity=false   |boolean|Check opacity css property   |
-     * |size=false      |boolean|Check width and height       |
-     * |viewport=false  |boolean|Check if it is in viewport   |
-     * |overflow=false  |boolean|Check if hidden in overflow  |
+     * |Name            |Desc                         |
+     * |----------------|-----------------------------|
+     * |display=true    |Check if it is displayed     |
+     * |visibility=false|Check visibility css property|
+     * |opacity=false   |Check opacity css property   |
+     * |size=false      |Check width and height       |
+     * |viewport=false  |Check if it is in viewport   |
+     * |overflow=false  |Check if hidden in overflow  |
      */
 
     /* example
@@ -2470,11 +2469,11 @@ export var isHidden = _.isHidden = (function (exports) {
 export var isMatch = _.isMatch = (function (exports) {
     /* Check if keys and values in src are contained in obj.
      *
-     * |Name  |Type   |Desc                              |
-     * |------|-------|----------------------------------|
-     * |obj   |object |Object to inspect                 |
-     * |src   |object |Object of property values to match|
-     * |return|boolean|True if object is match           |
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |obj   |Object to inspect                 |
+     * |src   |Object of property values to match|
+     * |return|True if object is match           |
      */
 
     /* example
@@ -2512,11 +2511,11 @@ export var isMatch = _.isMatch = (function (exports) {
 export var memoize = _.memoize = (function (exports) {
     /* Memoize a given function by caching the computed result.
      *
-     * |Name    |Type    |Desc                                |
-     * |--------|--------|------------------------------------|
-     * |fn      |function|Function to have its output memoized|
-     * |[hashFn]|function|Function to create cache key        |
-     * |return  |function|New memoized function               |
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |fn    |Function to have its output memoized|
+     * |hashFn|Function to create cache key        |
+     * |return|New memoized function               |
      */
 
     /* example
@@ -2553,10 +2552,10 @@ export var memoize = _.memoize = (function (exports) {
 export var isMobile = _.isMobile = (function (exports) {
     /* Check whether client is using a mobile browser using ua.
      *
-     * |Name                  |Type   |Desc                                 |
-     * |----------------------|-------|-------------------------------------|
-     * |ua=navigator.userAgent|string |User agent                           |
-     * |return                |boolean|True if ua belongs to mobile browsers|
+     * |Name                  |Desc                                 |
+     * |----------------------|-------------------------------------|
+     * |ua=navigator.userAgent|User agent                           |
+     * |return                |True if ua belongs to mobile browsers|
      */
 
     /* example
@@ -2586,10 +2585,10 @@ export var isMobile = _.isMobile = (function (exports) {
 export var prefix = _.prefix = (function (exports) {
     /* Add vendor prefixes to a CSS attribute.
      *
-     * |Name  |Type  |Desc                  |
-     * |------|------|----------------------|
-     * |name  |string|Property name         |
-     * |return|string|Prefixed property name|
+     * |Name  |Desc                  |
+     * |------|----------------------|
+     * |name  |Property name         |
+     * |return|Prefixed property name|
      *
      * ### dash
      *
@@ -2645,10 +2644,10 @@ export var prefix = _.prefix = (function (exports) {
 export var isNaN = _.isNaN = (function (exports) {
     /* Check if value is an NaN.
      *
-     * |Name  |Type   |Desc                   |
-     * |------|-------|-----------------------|
-     * |val   |*      |Value to check         |
-     * |return|boolean|True if value is an NaN|
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |val   |Value to check         |
+     * |return|True if value is an NaN|
      *
      * Undefined is not an NaN, different from global isNaN function.
      */
@@ -2678,10 +2677,10 @@ export var isNaN = _.isNaN = (function (exports) {
 export var isNil = _.isNil = (function (exports) {
     /* Check if value is null or undefined, the same as value == null.
      *
-     * |Name  |Type   |Desc                              |
-     * |------|-------|----------------------------------|
-     * |val   |*      |Value to check                    |
-     * |return|boolean|True if value is null or undefined|
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |val   |Value to check                    |
+     * |return|True if value is null or undefined|
      */
 
     /* example
@@ -2708,10 +2707,10 @@ export var isNil = _.isNil = (function (exports) {
 export var toSrc = _.toSrc = (function (exports) {
     /* Convert function to its source code.
      *
-     * |Name  |Type    |Desc               |
-     * |------|--------|-------------------|
-     * |fn    |function|Function to convert|
-     * |return|string  |Source code        |
+     * |Name  |Desc               |
+     * |------|-------------------|
+     * |fn    |Function to convert|
+     * |return|Source code        |
      */
 
     /* example
@@ -2753,10 +2752,10 @@ export var toSrc = _.toSrc = (function (exports) {
 export var isNative = _.isNative = (function (exports) {
     /* Check if value is a native function.
      *
-     * |Name  |Type   |Desc                              |
-     * |------|-------|----------------------------------|
-     * |val   |*      |Value to check                    |
-     * |return|boolean|True if value is a native function|
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |val   |Value to check                    |
+     * |return|True if value is a native function|
      */
 
     /* example
@@ -2800,10 +2799,10 @@ export var isNative = _.isNative = (function (exports) {
 export var isNull = _.isNull = (function (exports) {
     /* Check if value is an Null.
      *
-     * |Name  |Type   |Desc                    |
-     * |------|-------|------------------------|
-     * |val   |*      |Value to check          |
-     * |return|boolean|True if value is an Null|
+     * |Name  |Desc                    |
+     * |------|------------------------|
+     * |val   |Value to check          |
+     * |return|True if value is an Null|
      */
 
     /* example
@@ -2825,10 +2824,10 @@ export var isNull = _.isNull = (function (exports) {
 export var isPrimitive = _.isPrimitive = (function (exports) {
     /* Check if value is string, number, boolean or null.
      *
-     * |Name  |Type   |Desc                        |
-     * |------|-------|----------------------------|
-     * |val   |*      |Value to check              |
-     * |return|boolean|True if value is a primitive|
+     * |Name  |Desc                        |
+     * |------|----------------------------|
+     * |val   |Value to check              |
+     * |return|True if value is a primitive|
      */
 
     /* example
@@ -2853,10 +2852,10 @@ export var isPrimitive = _.isPrimitive = (function (exports) {
 export var isPromise = _.isPromise = (function (exports) {
     /* Check if value looks like a promise.
      *
-     * |Name  |Type   |Desc                              |
-     * |------|-------|----------------------------------|
-     * |val   |*      |Value to check                    |
-     * |return|boolean|True if value looks like a promise|
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |val   |Value to check                    |
+     * |return|True if value looks like a promise|
      */
 
     /* example
@@ -2884,10 +2883,10 @@ export var isPromise = _.isPromise = (function (exports) {
 export var isRegExp = _.isRegExp = (function (exports) {
     /* Check if value is a regular expression.
      *
-     * |Name  |Type   |Desc                                 |
-     * |------|-------|-------------------------------------|
-     * |val   |*      |Value to check                       |
-     * |return|boolean|True if value is a regular expression|
+     * |Name  |Desc                                 |
+     * |------|-------------------------------------|
+     * |val   |Value to check                       |
+     * |return|True if value is a regular expression|
      */
 
     /* example
@@ -2914,11 +2913,11 @@ export var isRegExp = _.isRegExp = (function (exports) {
 export var isSorted = _.isSorted = (function (exports) {
     /* Check if an array is sorted.
      *
-     * |Name  |Type    |Desc                   |
-     * |------|--------|-----------------------|
-     * |arr   |array   |Array to check         |
-     * |[cmp] |function|Comparator             |
-     * |return|boolean |True if array is sorted|
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |arr   |Array to check         |
+     * |cmp   |Comparator             |
+     * |return|True if array is sorted|
      */
 
     /* example
@@ -2956,10 +2955,10 @@ export var isSorted = _.isSorted = (function (exports) {
 export var loadJs = _.loadJs = (function (exports) {
     /* Inject script tag into page with given src value.
      *
-     * |Name|Type    |Desc           |
-     * |----|--------|---------------|
-     * |src |string  |Script source  |
-     * |cb  |function|Onload callback|
+     * |Name|Desc           |
+     * |----|---------------|
+     * |src |Script source  |
+     * |cb  |Onload callback|
      */
 
     /* example
@@ -2994,10 +2993,10 @@ export var loadJs = _.loadJs = (function (exports) {
 export var lowerCase = _.lowerCase = (function (exports) {
     /* Convert string to lower case.
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |str   |string|String to convert |
-     * |return|string|Lower cased string|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to convert |
+     * |return|Lower cased string|
      */
 
     /* example
@@ -3024,11 +3023,11 @@ export var lowerCase = _.lowerCase = (function (exports) {
 export var repeat = _.repeat = (function (exports) {
     /* Repeat string n-times.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to repeat|
-     * |n     |number|Repeat times    |
-     * |return|string|Repeated string |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to repeat|
+     * |n     |Repeat times    |
+     * |return|Repeated string |
      */
 
     /* example
@@ -3061,12 +3060,12 @@ export var repeat = _.repeat = (function (exports) {
 export var lpad = _.lpad = (function (exports) {
     /* Pad string on the left side if it's shorter than length.
      *
-     * |Name   |Type  |Desc                  |
-     * |-------|------|----------------------|
-     * |str    |string|String to pad         |
-     * |len    |number|Padding length        |
-     * |[chars]|string|String used as padding|
-     * |return |string|Result string         |
+     * |Name  |Desc                  |
+     * |------|----------------------|
+     * |str   |String to pad         |
+     * |len   |Padding length        |
+     * |chars |String used as padding|
+     * |return|Result string         |
      */
 
     /* example
@@ -3100,13 +3099,13 @@ export var lpad = _.lpad = (function (exports) {
 export var dateFormat = _.dateFormat = (function (exports) {
     /* Simple but extremely useful date format function.
      *
-     * |Name         |Type   |Desc                 |
-     * |-------------|-------|---------------------|
-     * |date=new Date|Date   |Date object to format|
-     * |mask         |string |Format mask          |
-     * |utc=false    |boolean|UTC or not           |
-     * |gmt=false    |boolean|GMT or not           |
-     * |return       |string |Formatted duration   |
+     * |Name         |Desc                 |
+     * |-------------|---------------------|
+     * |date=new Date|Date object to format|
+     * |mask         |Format mask          |
+     * |utc=false    |UTC or not           |
+     * |gmt=false    |GMT or not           |
+     * |return       |Formatted duration   |
      *
      * |Mask|Desc                                                             |
      * |----|-----------------------------------------------------------------|
@@ -3313,11 +3312,11 @@ export var dateFormat = _.dateFormat = (function (exports) {
 export var ltrim = _.ltrim = (function (exports) {
     /* Remove chars or white-spaces from beginning of string.
      *
-     * |Name   |Type        |Desc              |
-     * |-------|------------|------------------|
-     * |str    |string      |String to trim    |
-     * |[chars]|string array|Characters to trim|
-     * |return |string      |Trimmed string    |
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to trim    |
+     * |chars |Characters to trim|
+     * |return|Trimmed string    |
      */
 
     /* example
@@ -3365,10 +3364,10 @@ export var ltrim = _.ltrim = (function (exports) {
 export var matcher = _.matcher = (function (exports) {
     /* Return a predicate function that checks if attrs are contained in an object.
      *
-     * |Name  |Type    |Desc                              |
-     * |------|--------|----------------------------------|
-     * |attrs |object  |Object of property values to match|
-     * |return|function|New predicate function            |
+     * |Name  |Desc                              |
+     * |------|----------------------------------|
+     * |attrs |Object of property values to match|
+     * |return|New predicate function            |
      */
 
     /* example
@@ -3432,12 +3431,12 @@ export var safeCb = _.safeCb = (function (exports) {
 export var filter = _.filter = (function (exports) {
     /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
      *
-     * |Name     |Type    |Desc                                   |
-     * |---------|--------|---------------------------------------|
-     * |obj      |array   |Collection to iterate over             |
-     * |predicate|function|Function invoked per iteration         |
-     * |[ctx]    |*       |Predicate context                      |
-     * |return   |array   |Array of all values that pass predicate|
+     * |Name     |Desc                                   |
+     * |---------|---------------------------------------|
+     * |obj      |Collection to iterate over             |
+     * |predicate|Function invoked per iteration         |
+     * |ctx      |Predicate context                      |
+     * |return   |Array of all values that pass predicate|
      */
 
     /* example
@@ -3482,11 +3481,11 @@ export var filter = _.filter = (function (exports) {
 export var difference = _.difference = (function (exports) {
     /* Create an array of unique array values not included in the other given array.
      *
-     * |Name     |Type |Desc                        |
-     * |---------|-----|----------------------------|
-     * |arr      |array|Array to inspect            |
-     * |[...rest]|array|Values to exclude           |
-     * |return   |array|New array of filtered values|
+     * |Name   |Desc                        |
+     * |-------|----------------------------|
+     * |arr    |Array to inspect            |
+     * |...rest|Values to exclude           |
+     * |return |New array of filtered values|
      */
 
     /* example
@@ -3516,11 +3515,11 @@ export var difference = _.difference = (function (exports) {
 export var unique = _.unique = (function (exports) {
     /* Create duplicate-free version of an array.
      *
-     * |Name  |Type    |Desc                         |
-     * |------|--------|-----------------------------|
-     * |arr   |array   |Array to inspect             |
-     * |[cmp] |function|Function for comparing values|
-     * |return|array   |New duplicate free array     |
+     * |Name  |Desc                         |
+     * |------|-----------------------------|
+     * |arr   |Array to inspect             |
+     * |cmp   |Function for comparing values|
+     * |return|New duplicate free array     |
      */
 
     /* example
@@ -3563,19 +3562,19 @@ export var unique = _.unique = (function (exports) {
 export var allKeys = _.allKeys = (function (exports) {
     /* Retrieve all the names of object's own and inherited properties.
      *
-     * |Name     |Type  |Desc                       |
-     * |---------|------|---------------------------|
-     * |obj      |object|Object to query            |
-     * |[options]|object|Options                    |
-     * |return   |array |Array of all property names|
+     * |Name   |Desc                       |
+     * |-------|---------------------------|
+     * |obj    |Object to query            |
+     * |options|Options                    |
+     * |return |Array of all property names|
      *
      * Available options:
      *
-     * |Name              |Type   |Desc                     |
-     * |------------------|-------|-------------------------|
-     * |prototype=true    |boolean|Include prototype keys   |
-     * |unenumerable=false|boolean|Include unenumerable keys|
-     * |symbol=false      |boolean|Include symbol keys      |
+     * |Name              |Desc                     |
+     * |------------------|-------------------------|
+     * |prototype=true    |Include prototype keys   |
+     * |unenumerable=false|Include unenumerable keys|
+     * |symbol=false      |Include symbol keys      |
      *
      * Members of Object's prototype won't be retrieved.
      */
@@ -3662,11 +3661,11 @@ export var allKeys = _.allKeys = (function (exports) {
 export var defaults = _.defaults = (function (exports) {
     /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |obj   |object|Destination object|
-     * |*src  |object|Sources objects   |
-     * |return|object|Destination object|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |obj   |Destination object|
+     * |...src|Sources objects   |
+     * |return|Destination object|
      */
 
     /* example
@@ -3691,12 +3690,12 @@ export var defaults = _.defaults = (function (exports) {
 export var highlight = _.highlight = (function (exports) {
     /* Highlight code.
      *
-     * |Name   |Type  |Desc                        |
-     * |-------|------|----------------------------|
-     * |str    |string|Code string                 |
-     * |lang=js|string|Language, js, html or css   |
-     * |[style]|object|Keyword highlight style     |
-     * |return |string|Highlighted html code string|
+     * |Name   |Desc                        |
+     * |-------|----------------------------|
+     * |str    |Code string                 |
+     * |lang=js|Language, js, html or css   |
+     * |style  |Keyword highlight style     |
+     * |return |Highlighted html code string|
      *
      * Available styles:
      *
@@ -3710,19 +3709,16 @@ export var highlight = _.highlight = (function (exports) {
      */
 
     /* typescript
-     * export declare namespace highlight {
-     *     interface IStyle {
+     * export declare function highlight(
+     *     str: string,
+     *     lang?: string,
+     *     style?: {
      *         comment?: string;
      *         string?: string;
      *         number?: string;
      *         keyword?: string;
      *         operator?: string;
      *     }
-     * }
-     * export declare function highlight(
-     *     str: string,
-     *     lang?: string,
-     *     style?: highlight.IStyle
      * ): string;
      */
 
@@ -3866,11 +3862,11 @@ export var highlight = _.highlight = (function (exports) {
 export var extend = _.extend = (function (exports) {
     /* Copy all of the properties in the source objects over to the destination object.
      *
-     * |Name       |Type  |Desc              |
-     * |-----------|------|------------------|
-     * |destination|object|Destination object|
-     * |...sources |object|Sources objects   |
-     * |return     |object|Destination object|
+     * |Name       |Desc              |
+     * |-----------|------------------|
+     * |destination|Destination object|
+     * |...sources |Sources objects   |
+     * |return     |Destination object|
      */
 
     /* example
@@ -3897,10 +3893,10 @@ export var clone = _.clone = (function (exports) {
      *
      * Any nested objects or arrays will be copied by reference, not duplicated.
      *
-     * |Name  |Type|Desc          |
-     * |------|----|--------------|
-     * |val   |*   |Value to clone|
-     * |return|*   |Cloned value  |
+     * |Name  |Desc          |
+     * |------|--------------|
+     * |val   |Value to clone|
+     * |return|Cloned value  |
      */
 
     /* example
@@ -3928,10 +3924,10 @@ export var clone = _.clone = (function (exports) {
 export var copy = _.copy = (function (exports) {
     /* Copy text to clipboard using document.execCommand.
      *
-     * |Name|Type    |Desc             |
-     * |----|--------|-----------------|
-     * |text|string  |Text to copy     |
-     * |[cb]|function|Optional callback|
+     * |Name|Desc             |
+     * |----|-----------------|
+     * |text|Text to copy     |
+     * |cb  |Optional callback|
      */
 
     /* example
@@ -3985,12 +3981,12 @@ export var copy = _.copy = (function (exports) {
 export var map = _.map = (function (exports) {
     /* Create an array of values by running each element in collection through iteratee.
      *
-     * |Name     |Type        |Desc                          |
-     * |---------|------------|------------------------------|
-     * |object   |array object|Collection to iterate over    |
-     * |iterator |function    |Function invoked per iteration|
-     * |[context]|*           |Function context              |
-     * |return   |array       |New mapped array              |
+     * |Name    |Desc                          |
+     * |--------|------------------------------|
+     * |object  |Collection to iterate over    |
+     * |iterator|Function invoked per iteration|
+     * |context |Function context              |
+     * |return  |New mapped array              |
      */
 
     /* example
@@ -4040,10 +4036,10 @@ export var map = _.map = (function (exports) {
 export var decodeUriComponent = _.decodeUriComponent = (function (exports) {
     /* Better decodeURIComponent that does not throw if input is invalid.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |str   |string|String to decode|
-     * |return|string|Decoded string  |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |str   |String to decode|
+     * |return|Decoded string  |
      */
 
     /* example
@@ -4102,31 +4098,31 @@ export var cookie = _.cookie = (function (exports) {
      *
      * Get cookie value.
      *
-     * |Name  |Type  |Desc                      |
-     * |------|------|--------------------------|
-     * |key   |string|Cookie key                |
-     * |return|string|Corresponding cookie value|
+     * |Name  |Desc                      |
+     * |------|--------------------------|
+     * |key   |Cookie key                |
+     * |return|Corresponding cookie value|
      *
      * ### set
      *
      * Set cookie value.
      *
-     * |Name     |Type   |Desc          |
-     * |---------|-------|--------------|
-     * |key      |string |Cookie key    |
-     * |val      |string |Cookie value  |
-     * |[options]|object |Cookie options|
-     * |return   |exports|Module cookie |
+     * |Name   |Desc          |
+     * |-------|--------------|
+     * |key    |Cookie key    |
+     * |val    |Cookie value  |
+     * |options|Cookie options|
+     * |return |Module cookie |
      *
      * ### remove
      *
      * Remove cookie value.
      *
-     * |Name     |Type   |Desc          |
-     * |---------|-------|--------------|
-     * |key      |string |Cookie key    |
-     * |[options]|object |Cookie options|
-     * |return   |exports|Module cookie |
+     * |Name   |Desc          |
+     * |-------|--------------|
+     * |key    |Cookie key    |
+     * |options|Cookie options|
+     * |return |Module cookie |
      */
 
     /* example
@@ -4226,10 +4222,10 @@ export var cookie = _.cookie = (function (exports) {
 export var toArr = _.toArr = (function (exports) {
     /* Convert value to an array.
      *
-     * |Name  |Type |Desc            |
-     * |------|-----|----------------|
-     * |val   |*    |Value to convert|
-     * |return|array|Converted array |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |val   |Value to convert|
+     * |return|Converted array |
      */
 
     /* example
@@ -4262,11 +4258,11 @@ export var toArr = _.toArr = (function (exports) {
 export var Class = _.Class = (function (exports) {
     /* Create JavaScript class.
      *
-     * |Name     |Type    |Desc                             |
-     * |---------|--------|---------------------------------|
-     * |methods  |object  |Public methods                   |
-     * |[statics]|object  |Static methods                   |
-     * |return   |function|Function used to create instances|
+     * |Name   |Desc                             |
+     * |-------|---------------------------------|
+     * |methods|Public methods                   |
+     * [statics|Static methods                   |
+     * |return |Function used to create instances|
      */
 
     /* example
@@ -4398,13 +4394,13 @@ export var Enum = _.Enum = (function (exports) {
      *
      * ### constructor
      *
-     * |Name|Type |Desc            |
-     * |----|-----|----------------|
-     * |arr |array|Array of strings|
+     * |Name|Desc            |
+     * |----|----------------|
+     * |arr |Array of strings|
      *
-     * |Name|Type  |Desc                  |
-     * |----|------|----------------------|
-     * |obj |object|Pairs of key and value|
+     * |Name|Desc                  |
+     * |----|----------------------|
+     * |obj |Pairs of key and value|
      */
 
     /* example
@@ -4503,25 +4499,25 @@ export var Select = _.Select = (function (exports) {
      *
      * ### constructor
      *
-     * |Name    |Type  |Desc               |
-     * |--------|------|-------------------|
-     * |selector|string|Dom selector string|
+     * |Name    |Desc               |
+     * |--------|-------------------|
+     * |selector|Dom selector string|
      *
      * ### find
      *
      * Get desdendants of current matched elements.
      *
-     * |Name    |Type  |Desc               |
-     * |--------|------|-------------------|
-     * |selector|string|Dom selector string|
+     * |Name    |Desc               |
+     * |--------|-------------------|
+     * |selector|Dom selector string|
      *
      * ### each
      *
      * Iterate over matched elements.
      *
-     * |Name|Type    |Desc                                |
-     * |----|--------|------------------------------------|
-     * |fn  |function|Function to execute for each element|
+     * |Name|Desc                                |
+     * |----|------------------------------------|
+     * |fn  |Function to execute for each element|
      */
 
     /* example
@@ -4591,10 +4587,10 @@ export var Select = _.Select = (function (exports) {
 export var $safeEls = _.$safeEls = (function (exports) {
     /* Convert value into an array, if it's a string, do querySelector.
      *
-     * |Name  |Type                |Desc             |
-     * |------|--------------------|-----------------|
-     * |value |element array string|Value to convert |
-     * |return|array               |Array of elements|
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |val   |Value to convert |
+     * |return|Array of elements|
      */
 
     /* example
@@ -4607,7 +4603,7 @@ export var $safeEls = _.$safeEls = (function (exports) {
      * export declare namespace $safeEls {
      *     type El = Element | Element[] | NodeListOf<Element> | string;
      * }
-     * export declare function $safeEls(value: $safeEls.El): Element[];
+     * export declare function $safeEls(val: $safeEls.El): Element[];
      */
 
     /* dependencies
@@ -4628,33 +4624,33 @@ export var $attr = _.$attr = (function (exports) {
      *
      * Get the value of an attribute for the first element in the set of matched elements.
      *
-     * |Name   |Type                |Desc                            |
-     * |-------|--------------------|--------------------------------|
-     * |element|string array element|Elements to manipulate          |
-     * |name   |string              |Attribute name                  |
-     * |return |string              |Attribute value of first element|
+     * |Name   |Desc                            |
+     * |-------|--------------------------------|
+     * |element|Elements to manipulate          |
+     * |name   |Attribute name                  |
+     * |return |Attribute value of first element|
      *
      * Set one or more attributes for the set of matched elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |name   |string              |Attribute name        |
-     * |value  |string              |Attribute value       |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Attribute name        |
+     * |val    |Attribute value       |
      *
-     * |Name      |Type                |Desc                                  |
-     * |----------|--------------------|--------------------------------------|
-     * |element   |string array element|Elements to manipulate                |
-     * |attributes|object              |Object of attribute-value pairs to set|
+     * |Name      |Desc                                  |
+     * |----------|--------------------------------------|
+     * |element   |Elements to manipulate                |
+     * |attributes|Object of attribute-value pairs to set|
      *
      * ### remove
      *
      * Remove an attribute from each element in the set of matched elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |name   |string              |Attribute name        |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Attribute name        |
      */
 
     /* example
@@ -4669,14 +4665,17 @@ export var $attr = _.$attr = (function (exports) {
 
     /* typescript
      * export declare namespace $attr {
-     *     interface IAttr {
-     *         (element: $safeEls.El, name: string, value: string): void;
-     *         (element: $safeEls.El, attributes: { [name: string]: string }): void;
-     *         (element: $safeEls.El, name: string): string;
-     *         remove(element: $safeEls.El, name: string): void;
-     *     }
+     *     function remove(element: $safeEls.El, name: string): void;
      * }
-     * export declare const $attr: $attr.IAttr;
+     * export declare function $attr(
+     *     element: $safeEls.El,name: string,
+     *     value: string
+     * ): void;
+     * export declare function $attr(
+     *     element: $safeEls.El,
+     *     attributes: { [name: string]: string }
+     * ): void;
+     * export declare function $attr(element: $safeEls.El, name: string): string;
      */
 
     /* dependencies
@@ -4729,24 +4728,24 @@ export var $css = _.$css = (function (exports) {
      *
      * Get the computed style properties for the first element in the set of matched elements.
      *
-     * |Name   |Type                |Desc                      |
-     * |-------|--------------------|--------------------------|
-     * |element|string array element|Elements to manipulate    |
-     * |name   |string              |Property name             |
-     * |return |string              |Css value of first element|
+     * |Name   |Desc                      |
+     * |-------|--------------------------|
+     * |element|Elements to manipulate    |
+     * |name   |Property name             |
+     * |return |Css value of first element|
      *
      * Set one or more CSS properties for the set of matched elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |name   |string              |Property name         |
-     * |value  |string              |Css value             |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Property name         |
+     * |val    |Css value             |
      *
-     * |Name      |Type                |Desc                            |
-     * |----------|--------------------|--------------------------------|
-     * |element   |string array element|Elements to manipulate          |
-     * |properties|object              |Object of css-value pairs to set|
+     * |Name      |Desc                            |
+     * |----------|--------------------------------|
+     * |element   |Elements to manipulate          |
+     * |properties|Object of css-value pairs to set|
      */
 
     /* example
@@ -4760,7 +4759,7 @@ export var $css = _.$css = (function (exports) {
 
     /* typescript
      * export declare function $css(element: $safeEls.El, name: string): string;
-     * export declare function $css(element: $safeEls.El, name: string, value: string): void;
+     * export declare function $css(element: $safeEls.El, name: string, val: string): void;
      * export declare function $css(
      *     element: $safeEls.El,
      *     properties: { [name: string]: string }
@@ -4832,14 +4831,16 @@ export var $data = _.$data = (function (exports) {
      */
 
     /* typescript
-     * export declare namespace $data {
-     *     interface IData {
-     *         (element: $safeEls.El, name: string, value: string): void;
-     *         (element: $safeEls.El, attributes: { [name: string]: string }): void;
-     *         (element: $safeEls.El, name: string): string;
-     *     }
-     * }
-     * export declare const $data: $data.IData;
+     * export declare function $data(
+     *     element: $safeEls.El,
+     *     name: string,
+     *     value: string
+     * ): void;
+     * export declare function $data(
+     *     element: $safeEls.El,
+     *     attributes: { [name: string]: string }
+     * ): void;
+     * export declare function $data(element: $safeEls.El, name: string): string;
      */
 
     /* eslint-disable no-unused-vars */
@@ -4886,10 +4887,10 @@ export var $insert = _.$insert = (function (exports) {
      *
      * Insert content to the end of elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |content|string              |Html strings          |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |content|Html strings          |
      */
 
     /* example
@@ -4906,9 +4907,7 @@ export var $insert = _.$insert = (function (exports) {
 
     /* typescript
      * export declare namespace $insert {
-     *     interface IInsert {
-     *         (element: $safeEls.El, content: string): void;
-     *     }
+     *     type IInsert = (element: $safeEls.El, content: string) => void;
      * }
      * export declare const $insert: {
      *     before: $insert.IInsert;
@@ -4946,9 +4945,10 @@ export var $insert = _.$insert = (function (exports) {
 export var $offset = _.$offset = (function (exports) {
     /* Get the position of the element in document.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to get offset|
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to get offset|
+     * |return |Element position      |
      */
 
     /* example
@@ -5040,7 +5040,13 @@ export var $property = _.$property = (function (exports) {
     function propFactory(name) {
         return function(nodes, val) {
             nodes = $safeEls(nodes);
-            if (isUndef(val)) return nodes[0][name];
+            var node = nodes[0];
+
+            if (isUndef(val)) {
+                return node ? node[name] : '';
+            }
+
+            if (!node) return;
             each(nodes, function(node) {
                 node[name] = val;
             });
@@ -5055,9 +5061,9 @@ export var $property = _.$property = (function (exports) {
 export var $remove = _.$remove = (function (exports) {
     /* Remove the set of matched elements from the DOM.
      *
-     * |Name   |Type                |Desc              |
-     * |-------|--------------------|------------------|
-     * |element|string array element|Elements to delete|
+     * |Name   |Desc              |
+     * |-------|------------------|
+     * |element|Elements to delete|
      */
 
     /* example
@@ -5088,9 +5094,9 @@ export var $remove = _.$remove = (function (exports) {
 export var $show = _.$show = (function (exports) {
     /* Show elements.
      *
-     * |Name   |Type                |Desc            |
-     * |-------|--------------------|----------------|
-     * |element|string array element|Elements to show|
+     * |Name   |Desc            |
+     * |-------|----------------|
+     * |element|Elements to show|
      */
 
     /* example
@@ -5155,10 +5161,10 @@ export var Stack = _.Stack = (function (exports) {
      *
      * Add an item to the stack.
      *
-     * |Name  |Type  |Desc        |
-     * |------|------|------------|
-     * |item  |*     |Item to add |
-     * |return|number|Current size|
+     * |Name  |Desc        |
+     * |------|------------|
+     * |item  |Item to add |
+     * |return|Current size|
      *
      * ### pop
      *
@@ -5172,10 +5178,10 @@ export var Stack = _.Stack = (function (exports) {
      *
      * Iterate over the stack.
      *
-     * |Name    |Type    |Desc                      |
-     * |--------|--------|--------------------------|
-     * |iterator|function|Function invoked iteration|
-     * |[ctx]   |*       |Function context          |
+     * |Name    |Desc                      |
+     * |--------|--------------------------|
+     * |iterator|Function invoked iteration|
+     * |ctx     |Function context          |
      *
      * ### toArr
      *
@@ -5252,12 +5258,12 @@ export var delegate = _.delegate = (function (exports) {
      *
      * Add event delegation.
      *
-     * |Name    |Type    |Desc          |
-     * |--------|--------|--------------|
-     * |el      |element |Parent element|
-     * |type    |string  |Event type    |
-     * |selector|string  |Match selector|
-     * |cb      |function|Event callback|
+     * |Name    |Desc          |
+     * |--------|--------------|
+     * |el      |Parent element|
+     * |type    |Event type    |
+     * |selector|Match selector|
+     * |cb      |Event callback|
      *
      * ### remove
      *
@@ -5507,10 +5513,10 @@ export var $event = _.$event = (function (exports) {
 export var concat = _.concat = (function (exports) {
     /* Concat multiple arrays into a single array.
      *
-     * |Name  |Type |Desc              |
-     * |------|-----|------------------|
-     * |...arr|array|Arrays to concat  |
-     * |return|array|Concatenated array|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |...arr|Arrays to concat  |
+     * |return|Concatenated array|
      */
 
     /* example
@@ -5544,12 +5550,12 @@ export var concat = _.concat = (function (exports) {
 export var mapObj = _.mapObj = (function (exports) {
     /* Map for objects.
      *
-     * |Name     |Type    |Desc                          |
-     * |---------|--------|------------------------------|
-     * |object   |object  |Object to iterate over        |
-     * |iterator |function|Function invoked per iteration|
-     * |[context]|*       |Function context              |
-     * |return   |object  |New mapped object             |
+     * |Name    |Desc                          |
+     * |--------|------------------------------|
+     * |object  |Object to iterate over        |
+     * |iterator|Function invoked per iteration|
+     * |context |Function context              |
+     * |return  |New mapped object             |
      */
 
     /* example
@@ -5594,10 +5600,10 @@ export var mapObj = _.mapObj = (function (exports) {
 export var cloneDeep = _.cloneDeep = (function (exports) {
     /* Recursively clone value.
      *
-     * |Name  |Type|Desc             |
-     * |------|----|-----------------|
-     * |val   |*   |Value to clone   |
-     * |return|*   |Deep cloned Value|
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |val   |Value to clone   |
+     * |return|Deep cloned Value|
      */
 
     /* example
@@ -5638,12 +5644,12 @@ export var cloneDeep = _.cloneDeep = (function (exports) {
 export var some = _.some = (function (exports) {
     /* Check if predicate return truthy for any element.
      *
-     * |Name     |Type        |Desc                                          |
-     * |---------|------------|----------------------------------------------|
-     * |obj      |array object|Collection to iterate over                    |
-     * |predicate|function    |Function to invoked per iteration             |
-     * |ctx      |*           |Predicate context                             |
-     * |return   |boolean     |True if any element passes the predicate check|
+     * |Name     |Desc                                          |
+     * |---------|----------------------------------------------|
+     * |obj      |Collection to iterate over                    |
+     * |predicate|Function to invoked per iteration             |
+     * |ctx      |Predicate context                             |
+     * |return   |True if any element passes the predicate check|
      */
 
     /* example
@@ -5698,38 +5704,38 @@ export var $class = _.$class = (function (exports) {
      *
      * Add the specified class(es) to each element in the set of matched elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |names  |string array        |Classes to add        |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |names  |Classes to add        |
      *
      * ### has
      *
      * Determine whether any of the matched elements are assigned the given class.
      *
-     * |Name   |Type                |Desc                                 |
-     * |-------|--------------------|-------------------------------------|
-     * |element|string array element|Elements to manipulate               |
-     * |name   |string              |Class name                           |
-     * |return |boolean             |True if elements has given class name|
+     * |Name   |Desc                                 |
+     * |-------|-------------------------------------|
+     * |element|Elements to manipulate               |
+     * |name   |Class name                           |
+     * |return |True if elements has given class name|
      *
      * ### toggle
      *
      * Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the state argument.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |name   |string              |Class name to toggle  |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Class name to toggle  |
      *
      * ### remove
      *
      * Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
      *
-     * |Name   |Type                |Desc                  |
-     * |-------|--------------------|----------------------|
-     * |element|string array element|Elements to manipulate|
-     * |name   |string              |Class names to remove |
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Class names to remove |
      */
 
     /* example
@@ -6081,10 +6087,10 @@ export var memStorage = _.memStorage = (function (exports) {
 export var safeStorage = _.safeStorage = (function (exports) {
     /* Use storage safely in safari private browsing and older browsers.
      *
-     * |Name        |Type  |Desc             |
-     * |------------|------|-----------------|
-     * |type='local'|string|local or session |
-     * |return      |object|Specified storage|
+     * |Name        |Desc             |
+     * |------------|-----------------|
+     * |type='local'|local or session |
+     * |return      |Specified storage|
      */
 
     /* example
@@ -6138,29 +6144,29 @@ export var meta = _.meta = (function (exports) {
      *
      * Get meta content with given name. If name is omitted, all pairs will be return.
      *
-     * |Name  |Type        |Desc        |
-     * |------|------------|------------|
-     * |[name]|string array|Meta name   |
-     * |return|string      |Meta content|
+     * |Name  |Desc        |
+     * |------|------------|
+     * |name  |Meta name   |
+     * |return|Meta content|
      *
      * Set meta content.
      *
-     * |Name   |Type  |Desc        |
-     * |-------|------|------------|
-     * |name   |string|Meta name   |
-     * |content|string|Meta content|
+     * |Name   |Desc        |
+     * |-------|------------|
+     * |name   |Meta name   |
+     * |content|Meta content|
      *
-     * |Name |Type  |Desc                        |
-     * |-----|------|----------------------------|
-     * |metas|object|Object of name content pairs|
+     * |Name |Desc                        |
+     * |-----|----------------------------|
+     * |metas|Object of name content pairs|
      *
      * ### remove
      *
      * Remove metas.
      *
-     * |Name|Type        |Desc     |
-     * |----|------------|---------|
-     * |name|string array|Meta name|
+     * |Name|Desc     |
+     * |----|---------|
+     * |name|Meta name|
      */
 
     /* example
@@ -6271,10 +6277,10 @@ export var meta = _.meta = (function (exports) {
 export var toNum = _.toNum = (function (exports) {
     /* Convert value to a number.
      *
-     * |Name  |Type  |Desc            |
-     * |------|------|----------------|
-     * |val   |*     |Value to process|
-     * |return|number|Result number   |
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |val   |Value to process|
+     * |return|Result number   |
      */
 
     /* example
@@ -6311,17 +6317,17 @@ export var ms = _.ms = (function (exports) {
      *
      * Turn time string into milliseconds.
      *
-     * |Name  |Type  |Desc         |
-     * |------|------|-------------|
-     * |str   |string|String format|
-     * |return|number|Milliseconds |
+     * |Name  |Desc         |
+     * |------|-------------|
+     * |str   |String format|
+     * |return|Milliseconds |
      *
      * Turn milliseconds into time string.
      *
-     * |Name  |Type  |Desc         |
-     * |------|------|-------------|
-     * |num   |number|Milliseconds |
-     * |return|string|String format|
+     * |Name  |Desc         |
+     * |------|-------------|
+     * |num   |Milliseconds |
+     * |return|String format|
      */
 
     /* example
@@ -6383,10 +6389,10 @@ export var ms = _.ms = (function (exports) {
 export var toInt = _.toInt = (function (exports) {
     /* Convert value to an integer.
      *
-     * |Name  |Type  |Desc             |
-     * |------|------|-----------------|
-     * |val   |*     |Value to convert |
-     * |return|number|Converted integer|
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |val   |Value to convert |
+     * |return|Converted integer|
      */
 
     /* example
@@ -6416,10 +6422,10 @@ export var toInt = _.toInt = (function (exports) {
 export var detectBrowser = _.detectBrowser = (function (exports) {
     /* Detect browser info using ua.
      *
-     * |Name                  |Type  |Desc                              |
-     * |----------------------|------|----------------------------------|
-     * |ua=navigator.userAgent|string|Browser userAgent                 |
-     * |return                |object|Object containing name and version|
+     * |Name                  |Desc                              |
+     * |----------------------|----------------------------------|
+     * |ua=navigator.userAgent|Browser userAgent                 |
+     * |return                |Object containing name and version|
      *
      * Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
      */
@@ -6432,13 +6438,10 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
      */
 
     /* typescript
-     * export declare namespace detectBrowser {
-     *     interface IBrowser {
-     *         name: string;
-     *         version: number;
-     *     }
-     * }
-     * export declare function detectBrowser(ua?: string): detectBrowser.IBrowser;
+     * export declare function detectBrowser(ua?: string): {
+     *     name: string;
+     *     version: number;
+     * };
      */
 
     /* dependencies
@@ -6504,9 +6507,9 @@ export var detectBrowser = _.detectBrowser = (function (exports) {
 export var nextTick = _.nextTick = (function (exports) {
     /* Next tick for both node and browser.
      *
-     * |Name|Type    |Desc            |
-     * |----|--------|----------------|
-     * |cb  |function|Function to call|
+     * |Name|Desc            |
+     * |----|----------------|
+     * |cb  |Function to call|
      *
      * Use process.nextTick if available.
      *
@@ -6570,11 +6573,11 @@ export var now = _.now = (function (exports) {
 export var partial = _.partial = (function (exports) {
     /* Partially apply a function by filling in given arguments.
      *
-     * |Name       |Type    |Desc                                    |
-     * |-----------|--------|----------------------------------------|
-     * |fn         |function|Function to partially apply arguments to|
-     * |...partials|*       |Arguments to be partially applied       |
-     * |return     |function|New partially applied function          |
+     * |Name       |Desc                                    |
+     * |-----------|----------------------------------------|
+     * |fn         |Function to partially apply arguments to|
+     * |...partials|Arguments to be partially applied       |
+     * |return     |New partially applied function          |
      */
 
     /* example
@@ -6607,10 +6610,10 @@ export var partial = _.partial = (function (exports) {
 export var once = _.once = (function (exports) {
     /* Create a function that invokes once.
      *
-     * |Name  |Type    |Desc                   |
-     * |------|--------|-----------------------|
-     * |fn    |function|Function to restrict   |
-     * |return|function|New restricted function|
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |fn    |Function to restrict   |
+     * |return|New restricted function|
      */
 
     /* example
@@ -6650,27 +6653,27 @@ export var Emitter = _.Emitter = (function (exports) {
      *
      * Bind event that trigger once.
      *
-     * |Name    |Type    |Desc          |
-     * |--------|--------|--------------|
-     * |event   |string  |Event name    |
-     * |listener|function|Event listener|
+     * |Name    |Desc          |
+     * |--------|--------------|
+     * |event   |Event name    |
+     * |listener|Event listener|
      *
      * ### emit
      *
      * Emit event.
      *
-     * |Name   |Type  |Desc                        |
-     * |-------|------|----------------------------|
-     * |event  |string|Event name                  |
-     * |...args|*     |Arguments passed to listener|
+     * |Name   |Desc                        |
+     * |-------|----------------------------|
+     * |event  |Event name                  |
+     * |...args|Arguments passed to listener|
      *
      * ### mixin
      *
      * [static] Mixin object class methods.
      *
-     * |Name|Type  |Desc           |
-     * |----|------|---------------|
-     * |obj |object|Object to mixin|
+     * |Name|Desc           |
+     * |----|---------------|
+     * |obj |Object to mixin|
      */
 
     /* example
@@ -6681,14 +6684,12 @@ export var Emitter = _.Emitter = (function (exports) {
      */
 
     /* typescript
-     * export declare namespace Emitter {
-     *     function mixin(obj: any): any;
-     * }
      * export declare class Emitter {
      *     on(event: string, listener: Function): Emitter;
      *     off(event: string, listener: Function): Emitter;
      *     once(event: string, listener: Function): Emitter;
      *     emit(event: string): Emitter;
+     *     static mixin(obj: any): any;
      * }
      */
 
@@ -6755,18 +6756,18 @@ export var Logger = _.Logger = (function (exports) {
      *
      * ### constructor
      *
-     * |Name       |Type  |Desc        |
-     * |-----------|------|------------|
-     * |name       |string|Logger name |
-     * |level=DEBUG|number|Logger level|
+     * |Name       |Desc        |
+     * |-----------|------------|
+     * |name       |Logger name |
+     * |level=DEBUG|Logger level|
      *
      * ### setLevel
      *
      * Set level.
      *
-     * |Name |Type         |Desc        |
-     * |-----|-------------|------------|
-     * |level|number string|Logger level|
+     * |Name |Desc        |
+     * |-----|------------|
+     * |level|Logger level|
      *
      * ### getLevel
      *
@@ -6896,9 +6897,9 @@ export var MediaQuery = _.MediaQuery = (function (exports) {
      *
      * ### constructor
      *
-     * |Name |Type  |Desc       |
-     * |-----|------|-----------|
-     * |query|string|Media query|
+     * |Name |Desc       |
+     * |-----|-----------|
+     * |query|Media query|
      *
      * ### isMatch
      *
@@ -6954,6 +6955,33 @@ export var MediaQuery = _.MediaQuery = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ isDarkMode ------------------------------ */
+
+export var isDarkMode = _.isDarkMode = (function (exports) {
+    /* Detect dark mode.
+     */
+
+    /* example
+     * console.log(isDarkMode()); // true if dark mode
+     */
+
+    /* typescript
+     * export declare function isDarkMode(): boolean;
+     */
+
+    /* dependencies
+     * MediaQuery 
+     */
+
+    var m = new MediaQuery('(prefers-color-scheme: dark)');
+
+    exports = function() {
+        return m.isMatch();
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ Store ------------------------------ */
 
 export var Store = _.Store = (function (exports) {
@@ -6963,24 +6991,24 @@ export var Store = _.Store = (function (exports) {
      *
      * ### constructor
      *
-     * |Name|Type  |Desc        |
-     * |----|------|------------|
-     * |data|object|Initial data|
+     * |Name|Desc        |
+     * |----|------------|
+     * |data|Initial data|
      *
      * ### set
      *
      * Set value.
      *
-     * |Name|Type  |Desc        |
-     * |----|------|------------|
-     * |key |string|Value key   |
-     * |val |*     |Value to set|
+     * |Name|Desc        |
+     * |----|------------|
+     * |key |Value key   |
+     * |val |Value to set|
      *
      * Set values.
      *
-     * |Name|Type  |Desc           |
-     * |----|------|---------------|
-     * |vals|object|Key value pairs|
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |values|Key value pairs|
      *
      * This emit a change event whenever is called.
      *
@@ -6988,25 +7016,25 @@ export var Store = _.Store = (function (exports) {
      *
      * Get value.
      *
-     * |Name  |Type  |Desc              |
-     * |------|------|------------------|
-     * |key   |string|Value key         |
-     * |return|*     |Value of given key|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |key   |Value key         |
+     * |return|Value of given key|
      *
      * Get values.
      *
-     * |Name  |Type  |Desc           |
-     * |------|------|---------------|
-     * |keys  |array |Array of keys  |
-     * |return|object|Key value pairs|
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |keys  |Array of keys  |
+     * |return|Key value pairs|
      *
      * ### remove
      *
      * Remove value.
      *
-     * |Name|Type        |Desc         |
-     * |----|------------|-------------|
-     * |key |string array|Key to remove|
+     * |Name|Desc         |
+     * |----|-------------|
+     * |key |Key to remove|
      *
      * ### clear
      *
@@ -7016,9 +7044,9 @@ export var Store = _.Store = (function (exports) {
      *
      * Iterate over values.
      *
-     * |Name|Type    |Desc                           |
-     * |----|--------|-------------------------------|
-     * |fn  |function|Function invoked per interation|
+     * |Name|Desc                          |
+     * |----|------------------------------|
+     * |fn  |Function invoked per iteration|
      */
 
     /* example
@@ -7038,7 +7066,7 @@ export var Store = _.Store = (function (exports) {
      * export declare class Store extends Emitter {
      *     constructor(data?: {});
      *     set(key: string, val: any): void;
-     *     set(vals: {}): void;
+     *     set(values: {}): void;
      *     get(key: string): any;
      *     get(keys: string[]): {};
      *     remove(key: string): void;
@@ -7231,11 +7259,11 @@ export var perfNow = _.perfNow = (function (exports) {
 export var pick = _.pick = (function (exports) {
     /* Return a filtered copy of an object.
      *
-     * |Name  |Type                 |Desc           |
-     * |------|---------------------|---------------|
-     * |object|object               |Source object  |
-     * |filter|string array function|Object filter  |
-     * |return|object               |Filtered object|
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |object|Source object  |
+     * |filter|Object filter  |
+     * |return|Filtered object|
      */
 
     /* example
@@ -7376,9 +7404,9 @@ export var raf = _.raf = (function (exports) {
 export var rmCookie = _.rmCookie = (function (exports) {
     /* Loop through all possible path and domain to remove cookie.
      *
-     * |Name|Type  |Desc      |
-     * |----|------|----------|
-     * |key |string|Cookie key|
+     * |Name|Desc      |
+     * |----|----------|
+     * |key |Cookie key|
      */
 
     /* example
@@ -7463,11 +7491,11 @@ export var rmCookie = _.rmCookie = (function (exports) {
 export var rtrim = _.rtrim = (function (exports) {
     /* Remove chars or white-spaces from end of string.
      *
-     * |Name   |Type        |Desc              |
-     * |-------|------------|------------------|
-     * |str    |string      |String to trim    |
-     * |[chars]|string array|Characters to trim|
-     * |return |string      |Trimmed string    |
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to trim    |
+     * |chars |Characters to trim|
+     * |return|Trimmed string    |
      */
 
     /* example
@@ -7514,11 +7542,11 @@ export var rtrim = _.rtrim = (function (exports) {
 export var trim = _.trim = (function (exports) {
     /* Remove chars or white-spaces from beginning end of string.
      *
-     * |Name  |Type        |Desc              |
-     * |------|------------|------------------|
-     * |str   |string      |String to trim    |
-     * |chars |string array|Characters to trim|
-     * |return|string      |Trimmed string    |
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |str   |String to trim    |
+     * |chars |Characters to trim|
+     * |return|Trimmed string    |
      */
 
     /* example
@@ -7550,10 +7578,10 @@ export var trim = _.trim = (function (exports) {
 export var extractUrls = _.extractUrls = (function (exports) {
     /* Extract urls from plain text.
      *
-     * |Name  |Type  |Desc           |
-     * |------|------|---------------|
-     * |str   |string|Text to extract|
-     * |return|array |Url list       |
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |str   |Text to extract|
+     * |return|Url list       |
      */
 
     /* example
@@ -7588,11 +7616,11 @@ export var extractUrls = _.extractUrls = (function (exports) {
 export var linkify = _.linkify = (function (exports) {
     /* Hyperlink urls in a string.
      *
-     * |Name       |Type    |Desc                     |
-     * |-----------|--------|-------------------------|
-     * |str        |string  |String to hyperlink      |
-     * |[hyperlink]|function|Function to hyperlink url|
-     * |return     |string  |Result string            |
+     * |Name     |Desc                     |
+     * |---------|-------------------------|
+     * |str      |String to hyperlink      |
+     * |hyperlink|Function to hyperlink url|
+     * |return   |Result string            |
      */
 
     /* example
@@ -7636,19 +7664,19 @@ export var query = _.query = (function (exports) {
      *
      * Parse a query string into an object.
      *
-     * |Name  |Type  |Desc        |
-     * |------|------|------------|
-     * |str   |string|Query string|
-     * |return|object|Query object|
+     * |Name  |Desc        |
+     * |------|------------|
+     * |str   |Query string|
+     * |return|Query object|
      *
      * ### stringify
      *
      * Stringify an object into a query string.
      *
-     * |Name  |Type  |Desc        |
-     * |------|------|------------|
-     * |obj   |object|Query object|
-     * |return|string|Query string|
+     * |Name  |Desc        |
+     * |------|------------|
+     * |obj   |Query object|
+     * |return|Query string|
      */
 
     /* example
@@ -7720,51 +7748,51 @@ export var Url = _.Url = (function (exports) {
      *
      * ### constructor
      *
-     * |Name        |Type  |Desc      |
-     * |------------|------|----------|
-     * |url=location|string|Url string|
+     * |Name        |Desc      |
+     * |------------|----------|
+     * |url=location|Url string|
      *
      * ### setQuery
      *
      * Set query value.
      *
-     * |Name  |Type  |Desc       |
-     * |------|------|-----------|
-     * |name  |string|Query name |
-     * |value |string|Query value|
-     * |return|Url   |this       |
+     * |Name  |Desc       |
+     * |------|-----------|
+     * |name  |Query name |
+     * |val   |Query value|
+     * |return|this       |
      *
-     * |Name  |Type  |Desc        |
-     * |------|------|------------|
-     * |query |object|query object|
-     * |return|Url   |this        |
+     * |Name  |Desc        |
+     * |------|------------|
+     * |query |query object|
+     * |return|this        |
      *
      * ### rmQuery
      *
      * Remove query value.
      *
-     * |Name  |Type        |Desc      |
-     * |------|------------|----------|
-     * |name  |string array|Query name|
-     * |return|Url         |this      |
+     * |Name  |Desc      |
+     * |------|----------|
+     * |name  |Query name|
+     * |return|this      |
      *
      * ### parse
      *
      * [static] Parse url into an object.
      *
-     * |Name  |Type  |Desc      |
-     * |------|------|----------|
-     * |url   |string|Url string|
-     * |return|object|Url object|
+     * |Name  |Desc      |
+     * |------|----------|
+     * |url   |Url string|
+     * |return|Url object|
      *
      * ### stringify
      *
      * [static] Stringify url object into a string.
      *
-     * |Name  |Type  |Desc      |
-     * |------|------|----------|
-     * |url   |object|Url object|
-     * |return|string|Url string|
+     * |Name  |Desc      |
+     * |------|----------|
+     * |url   |Url object|
+     * |return|Url string|
      *
      * An url object contains the following properties:
      *
@@ -7811,7 +7839,7 @@ export var Url = _.Url = (function (exports) {
      *     pathname: string;
      *     slashes: boolean;
      *     constructor(url?: string);
-     *     setQuery(name: string, value: string): Url;
+     *     setQuery(name: string, val: string): Url;
      *     setQuery(query: { [name: string]: string }): Url;
      *     rmQuery(name: string | string[]): Url;
      *     toString(): string;
@@ -7988,23 +8016,23 @@ export var getFileName = _.getFileName = (function (exports) {
 export var ajax = _.ajax = (function (exports) {
     /* Perform an asynchronous HTTP request.
      *
-     * |Name   |Type  |Desc        |
-     * |-------|------|------------|
-     * |options|object|Ajax options|
+     * |Name   |Desc        |
+     * |-------|------------|
+     * |options|Ajax options|
      *
      * Available options:
      *
-     * |Name                                         |Type         |Desc                       |
-     * |---------------------------------------------|-------------|---------------------------|
-     * |type=get                                     |type         |Request type               |
-     * |url                                          |string       |Request url                |
-     * |data                                         |string object|Request data               |
-     * |dataType=json                                |string       |Response type(json, xml)   |
-     * |contentType=application/x-www-form-urlencoded|string       |Request header Content-Type|
-     * |success                                      |function     |Success callback           |
-     * |error                                        |function     |Error callback             |
-     * |complete                                     |function     |Callback after request     |
-     * |timeout                                      |number       |Request timeout            |
+     * |Name                                         |Desc                       |
+     * |---------------------------------------------|---------------------------|
+     * |type=get                                     |Request type               |
+     * |url                                          |Request url                |
+     * |data                                         |Request data               |
+     * |dataType=json                                |Response type(json, xml)   |
+     * |contentType=application/x-www-form-urlencoded|Request header Content-Type|
+     * |success                                      |Success callback           |
+     * |error                                        |Error callback             |
+     * |complete                                     |Callback after request     |
+     * |timeout                                      |Request timeout            |
      *
      * ### get
      *
@@ -8014,12 +8042,12 @@ export var ajax = _.ajax = (function (exports) {
      *
      * Shortcut for type = POST;
      *
-     * |Name    |Type         |Desc            |
-     * |--------|-------------|----------------|
-     * |url     |string       |Request url     |
-     * |[data]  |string object|Request data    |
-     * |success |function     |Success callback|
-     * |dataType|function     |Response type   |
+     * |Name    |Desc            |
+     * |--------|----------------|
+     * |url     |Request url     |
+     * |data    |Request data    |
+     * |success |Success callback|
+     * |dataType|Response type   |
      */
 
     /* example
@@ -8040,20 +8068,32 @@ export var ajax = _.ajax = (function (exports) {
 
     /* typescript
      * export declare namespace ajax {
-     *     interface IOptions {
-     *         url: string;
-     *         data?: string | {};
-     *         dataType?: string;
-     *         contentType?: string;
-     *         success?: Function;
-     *         error?: Function;
-     *         complete?: Function;
-     *         timeout?: number;
-     *     }
-     *     function get(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
-     *     function post(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
+     *     function get(
+     *         url: string,
+     *         data: string | {},
+     *         success: Function,
+     *         dataType?: string
+     *     ): XMLHttpRequest;
+     *     function get(url: string, success: Function, dataType?: string): XMLHttpRequest;
+     *     function post(
+     *         url: string,
+     *         data: string | {},
+     *         success: Function,
+     *         dataType?: string
+     *     ): XMLHttpRequest;
+     *     function post(url: string, success: Function, dataType?: string): XMLHttpRequest;
      * }
-     * export declare function ajax(options: ajax.IOptions): XMLHttpRequest;
+     * export declare function ajax(options: {
+     *     type?: string;
+     *     url: string;
+     *     data?: string | {};
+     *     dataType?: string;
+     *     contentType?: string;
+     *     success?: Function;
+     *     error?: Function;
+     *     complete?: Function;
+     *     timeout?: number;
+     * }): XMLHttpRequest;
      */
 
     /* dependencies
@@ -8168,18 +8208,18 @@ export var ajax = _.ajax = (function (exports) {
 export var sortKeys = _.sortKeys = (function (exports) {
     /* Sort keys of an object.
      *
-     * |Name   |Type  |Desc                   |
-     * |-------|------|-----------------------|
-     * |obj    |object|Object to sort         |
-     * |options|object|Sort options           |
-     * |return |object|Object with sorted keys|
+     * |Name   |Desc                   |
+     * |-------|-----------------------|
+     * |obj    |Object to sort         |
+     * |options|Sort options           |
+     * |return |Object with sorted keys|
      *
      * Available options:
      *
-     * |Name        |Type    |Desc                 |
-     * |------------|--------|---------------------|
-     * |deep=false  |boolean |Sort keys recursively|
-     * |[comparator]|function|Comparator           |
+     * |Name      |Desc                 |
+     * |----------|---------------------|
+     * |deep=false|Sort keys recursively|
+     * |comparator|Comparator           |
      */
 
     /* example
@@ -8272,11 +8312,11 @@ export var sortKeys = _.sortKeys = (function (exports) {
 export var type = _.type = (function (exports) {
     /* Determine the internal JavaScript [[Class]] of an object.
      *
-     * |Name          |Type   |Desc             |
-     * |--------------|-------|-----------------|
-     * |val           |*      |Value to get type|
-     * |lowerCase=true|boolean|LowerCase result |
-     * |return        |string |Type of object   |
+     * |Name          |Desc             |
+     * |--------------|-----------------|
+     * |val           |Value to get type|
+     * |lowerCase=true|LowerCase result |
+     * |return        |Type of object   |
      */
 
     /* example
@@ -8321,11 +8361,11 @@ export var stringify = _.stringify = (function (exports) {
      *
      * Undefined is treated as null value.
      *
-     * |Name  |Type  |Desc               |
-     * |------|------|-------------------|
-     * |obj   |object|Object to stringify|
-     * |spaces|number|Indent spaces      |
-     * |return|string|Stringified object |
+     * |Name  |Desc               |
+     * |------|-------------------|
+     * |obj   |Object to stringify|
+     * |spaces|Indent spaces      |
+     * |return|Stringified object |
      */
 
     /* example
@@ -8398,10 +8438,10 @@ export var LocalStore = _.LocalStore = (function (exports) {
      *
      * ### constructor
      *
-     * |Name|Type  |Desc                  |
-     * |----|------|----------------------|
-     * |name|string|LocalStorage item name|
-     * |data|object|Default data          |
+     * |Name|Desc                  |
+     * |----|----------------------|
+     * |name|LocalStorage item name|
+     * |data|Default data          |
      */
 
     /* example
@@ -8450,22 +8490,22 @@ export var LocalStore = _.LocalStore = (function (exports) {
 export var stringifyAll = _.stringifyAll = (function (exports) {
     /* Stringify object into json with types.
      *
-     * |Name     |Type  |Desc               |
-     * |---------|------|-------------------|
-     * |obj      |*     |Object to stringify|
-     * |[options]|object|Stringify options  |
-     * |return   |string|Stringified object |
+     * |Name   |Desc               |
+     * |-------|-------------------|
+     * |obj    |Object to stringify|
+     * |options|Stringify options  |
+     * |return |Stringified object |
      *
      * Available options:
      *
-     * |Name              |Type   |Desc                     |
-     * |------------------|-------|-------------------------|
-     * |unenumerable=false|boolean|Include unenumerable keys|
-     * |symbol=false      |boolean|Include symbol keys      |
-     * |accessGetter=false|boolean|Access getter value      |
-     * |timeout=0         |number |Timeout of stringify     |
-     * |depth=0           |number |Max depth of recursion   |
-     * |[ignore]          |array  |Values to ignore         |
+     * |Name              |Desc                     |
+     * |------------------|-------------------------|
+     * |unenumerable=false|Include unenumerable keys|
+     * |symbol=false      |Include symbol keys      |
+     * |accessGetter=false|Access getter value      |
+     * |timeout=0         |Timeout of stringify     |
+     * |depth=0           |Max depth of recursion   |
+     * |ignore            |Values to ignore         |
      *
      * When time is out, all remaining values will all be "Timeout".
      */
@@ -8475,8 +8515,9 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      */
 
     /* typescript
-     * export declare namespace stringifyAll {
-     *     interface IOptions {
+     * export declare function stringifyAll(
+     *     obj: any,
+     *     options?: {
      *         unenumerable?: boolean;
      *         symbol?: boolean;
      *         accessGetter?: boolean;
@@ -8484,10 +8525,6 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
      *         depth?: number;
      *         ignore?: any[];
      *     }
-     * }
-     * export declare function stringifyAll(
-     *     obj: any,
-     *     options?: stringifyAll.IOptions
      * ): string;
      */
 
@@ -8760,11 +8797,11 @@ export var stringifyAll = _.stringifyAll = (function (exports) {
 export var throttle = _.throttle = (function (exports) {
     /* Return a new throttled version of the passed function.
      *
-     * |Name  |Type    |Desc                           |
-     * |------|--------|-------------------------------|
-     * |fn    |function|Function to throttle           |
-     * |wait  |number  |Number of milliseconds to delay|
-     * |return|function|New throttled function         |
+     * |Name  |Desc                           |
+     * |------|-------------------------------|
+     * |fn    |Function to throttle           |
+     * |wait  |Number of milliseconds to delay|
+     * |return|New throttled function         |
      */
 
     /* example
@@ -8804,9 +8841,9 @@ export var uncaught = _.uncaught = (function (exports) {
      *
      * Add listener for handling errors.
      *
-     * |Name|Type    |Desc          |
-     * |----|--------|--------------|
-     * |fn  |function|Error listener|
+     * |Name|Desc          |
+     * |----|--------------|
+     * |fn  |Error listener|
      *
      * ### rmListener
      *
@@ -8890,10 +8927,10 @@ export var uncaught = _.uncaught = (function (exports) {
 export var uniqId = _.uniqId = (function (exports) {
     /* Generate a globally-unique id.
      *
-     * |Name    |Type  |Desc              |
-     * |--------|------|------------------|
-     * |[prefix]|string|Id prefix         |
-     * |return  |string|Globally-unique id|
+     * |Name  |Desc              |
+     * |------|------------------|
+     * |prefix|Id prefix         |
+     * |return|Globally-unique id|
      */
 
     /* example
@@ -8962,11 +8999,11 @@ export var viewportScale = _.viewportScale = (function (exports) {
 export var wrap = _.wrap = (function (exports) {
     /* Wrap the function inside a wrapper function, passing it as the first argument.
      *
-     * |Name   |Type    |Desc            |
-     * |-------|--------|----------------|
-     * |fn     |function|Function to wrap|
-     * |wrapper|function|Wrapper function|
-     * |return |function|New function    |
+     * |Name   |Desc            |
+     * |-------|----------------|
+     * |fn     |Function to wrap|
+     * |wrapper|Wrapper function|
+     * |return |New function    |
      */
 
     /* example
@@ -8996,10 +9033,10 @@ export var wrap = _.wrap = (function (exports) {
 export var xpath = _.xpath = (function (exports) {
     /* Select elements using xpath, IE is not supported.
      *
-     * |Name  |Type  |Desc           |
-     * |------|------|---------------|
-     * |xpath |string|Xpath          |
-     * |return|array |Target elements|
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |xpath |Xpath          |
+     * |return|Target elements|
      */
 
     /* example

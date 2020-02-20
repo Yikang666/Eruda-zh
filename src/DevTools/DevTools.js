@@ -12,7 +12,7 @@ import {
   isNum,
   $,
   throttle,
-  MediaQuery
+  isDarkMode
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -265,9 +265,4 @@ export default class DevTools extends Emitter {
       $root.on('mouseup', endListener)
     }
   }
-}
-
-function isDarkMode() {
-  const m = new MediaQuery('(prefers-color-scheme: dark)')
-  return m.isMatch()
 }

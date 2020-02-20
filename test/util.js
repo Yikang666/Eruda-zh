@@ -39,10 +39,10 @@
     var isObj = _.isObj = (function (exports) {
         /* Check if value is the language type of Object.
          *
-         * |Name  |Type   |Desc                      |
-         * |------|-------|--------------------------|
-         * |val   |*      |Value to check            |
-         * |return|boolean|True if value is an object|
+         * |Name  |Desc                      |
+         * |------|--------------------------|
+         * |val   |Value to check            |
+         * |return|True if value is an object|
          *
          * [Language Spec](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
          */
@@ -68,11 +68,11 @@
     var has = _.has = (function (exports) {
         /* Checks if key is a direct property.
          *
-         * |Name  |Type   |Desc                            |
-         * |------|-------|--------------------------------|
-         * |obj   |object |Object to query                 |
-         * |key   |string |Path to check                   |
-         * |return|boolean|True if key is a direct property|
+         * |Name  |Desc                            |
+         * |------|--------------------------------|
+         * |obj   |Object to query                 |
+         * |key   |Path to check                   |
+         * |return|True if key is a direct property|
          */
 
         /* example
@@ -96,12 +96,12 @@
     var idxOf = _.idxOf = (function (exports) {
         /* Get the index at which the first occurrence of value.
          *
-         * |Name     |Type  |Desc                |
-         * |---------|------|--------------------|
-         * |arr      |array |Array to search     |
-         * |val      |*     |Value to search for |
-         * |fromIdx=0|number|Index to search from|
-         * |return   |number|Value index         |
+         * |Name     |Desc                |
+         * |---------|--------------------|
+         * |arr      |Array to search     |
+         * |val      |Value to search for |
+         * |fromIdx=0|Index to search from|
+         * |return   |Value index         |
          */
 
         /* example
@@ -123,10 +123,10 @@
     var isUndef = _.isUndef = (function (exports) {
         /* Check if value is undefined.
          *
-         * |Name  |Type   |Desc                      |
-         * |------|-------|--------------------------|
-         * |val   |*      |Value to check            |
-         * |return|boolean|True if value is undefined|
+         * |Name  |Desc                      |
+         * |------|--------------------------|
+         * |val   |Value to check            |
+         * |return|True if value is undefined|
          */
 
         /* example
@@ -149,10 +149,10 @@
     var create = _.create = (function (exports) {
         /* Create new object using given object as prototype.
          *
-         * |Name   |Type  |Desc                   |
-         * |-------|------|-----------------------|
-         * |[proto]|object|Prototype of new object|
-         * |return |object|Created object         |
+         * |Name  |Desc                   |
+         * |------|-----------------------|
+         * |proto |Prototype of new object|
+         * |return|Created object         |
          */
 
         /* example
@@ -188,10 +188,10 @@
     var inherits = _.inherits = (function (exports) {
         /* Inherit the prototype methods from one constructor into another.
          *
-         * |Name      |Type    |Desc       |
-         * |----------|--------|-----------|
-         * |Class     |function|Child Class|
-         * |SuperClass|function|Super Class|
+         * |Name      |Desc       |
+         * |----------|-----------|
+         * |Class     |Child Class|
+         * |SuperClass|Super Class|
          */
 
         /* example
@@ -235,19 +235,19 @@
          *
          * Create a string using an array of code point values.
          *
-         * |Name  |Type  |Desc                |
-         * |------|------|--------------------|
-         * |arr   |array |Array of code points|
-         * |return|string|Encoded string      |
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |arr   |Array of code points|
+         * |return|Encoded string      |
          *
          * ### decode
          *
          * Create an array of code point values using a string.
          *
-         * |Name  |Type  |Desc                |
-         * |------|------|--------------------|
-         * |str   |string|Input string        |
-         * |return|array |Array of code points|
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |str   |Input string        |
+         * |return|Array of code points|
          */
 
         /* example
@@ -307,20 +307,20 @@
          *
          * Turn any UTF-8 decoded string into UTF-8 encoded string.
          *
-         * |Name  |Type  |Desc            |
-         * |------|------|----------------|
-         * |str   |string|String to encode|
-         * |return|string|Encoded string  |
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |str   |String to encode|
+         * |return|Encoded string  |
          *
          * ### decode
          *
          * Turn any UTF-8 encoded string into UTF-8 decoded string.
          *
-         * |Name      |Type   |Desc                  |
-         * |----------|-------|----------------------|
-         * |str       |string |String to decode      |
-         * |safe=false|boolean|Suppress error if true|
-         * |return    |string |Decoded string        |
+         * |Name      |Desc                  |
+         * |----------|----------------------|
+         * |str       |String to decode      |
+         * |safe=false|Suppress error if true|
+         * |return    |Decoded string        |
          */
 
         /* example
@@ -496,11 +496,11 @@
     var restArgs = _.restArgs = (function (exports) {
         /* This accumulates the arguments passed into an array, after a given index.
          *
-         * |Name        |Type    |Desc                                   |
-         * |------------|--------|---------------------------------------|
-         * |function    |function|Function that needs rest parameters    |
-         * |[startIndex]|number  |The start index to accumulates         |
-         * |return      |function|Generated function with rest parameters|
+         * |Name      |Desc                                   |
+         * |----------|---------------------------------------|
+         * |function  |Function that needs rest parameters    |
+         * |startIndex|The start index to accumulates         |
+         * |return    |Generated function with rest parameters|
          */
 
         /* example
@@ -630,11 +630,11 @@
     var endWith = _.endWith = (function (exports) {
         /* Check if string ends with the given target string.
          *
-         * |Name  |Type   |Desc                           |
-         * |------|-------|-------------------------------|
-         * |str   |string |The string to search           |
-         * |suffix|string |String suffix                  |
-         * |return|boolean|True if string ends with target|
+         * |Name  |Desc                           |
+         * |------|-------------------------------|
+         * |str   |The string to search           |
+         * |suffix|String suffix                  |
+         * |return|True if string ends with target|
          */
 
         /* example
@@ -657,10 +657,10 @@
     var toStr = _.toStr = (function (exports) {
         /* Convert value to a string.
          *
-         * |Name  |Type  |Desc            |
-         * |------|------|----------------|
-         * |val   |*     |Value to convert|
-         * |return|string|Result string   |
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |val   |Value to convert|
+         * |return|Result string   |
          */
 
         /* example
@@ -687,10 +687,10 @@
          *
          * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
          *
-         * |Name  |Type  |Desc            |
-         * |------|------|----------------|
-         * |str   |string|String to escape|
-         * |return|string|Escaped string  |
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |str   |String to escape|
+         * |return|Escaped string  |
          */
 
         /* example
@@ -739,9 +739,9 @@
     _.evalCss = (function (exports) {
         /* Load css into page.
          *
-         * |Name|Type  |Desc    |
-         * |----|------|--------|
-         * |css |string|Css code|
+         * |Name|Desc    |
+         * |----|--------|
+         * |css |Css code|
          */
 
         /* example
@@ -766,10 +766,10 @@
     var identity = _.identity = (function (exports) {
         /* Return the first argument given.
          *
-         * |Name  |Type|Desc       |
-         * |------|----|-----------|
-         * |val   |*   |Any value  |
-         * |return|*   |Given value|
+         * |Name  |Desc       |
+         * |------|-----------|
+         * |val   |Any value  |
+         * |return|Given value|
          */
 
         /* example
@@ -791,10 +791,10 @@
     var objToStr = _.objToStr = (function (exports) {
         /* Alias of Object.prototype.toString.
          *
-         * |Name  |Type  |Desc                                |
-         * |------|------|------------------------------------|
-         * |val   |*     |Source value                        |
-         * |return|string|String representation of given value|
+         * |Name  |Desc                                |
+         * |------|------------------------------------|
+         * |val   |Source value                        |
+         * |return|String representation of given value|
          */
 
         /* example
@@ -818,10 +818,10 @@
     var isArgs = _.isArgs = (function (exports) {
         /* Check if value is classified as an arguments object.
          *
-         * |Name  |Type   |Desc                                |
-         * |------|-------|------------------------------------|
-         * |val   |*      |Value to check                      |
-         * |return|boolean|True if value is an arguments object|
+         * |Name  |Desc                                |
+         * |------|------------------------------------|
+         * |val   |Value to check                      |
+         * |return|True if value is an arguments object|
          */
 
         /* example
@@ -850,10 +850,10 @@
     var isArr = _.isArr = (function (exports) {
         /* Check if value is an `Array` object.
          *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |Value to check                    |
-         * |return|boolean|True if value is an `Array` object|
+         * |Name  |Desc                              |
+         * |------|----------------------------------|
+         * |val   |Value to check                    |
+         * |return|True if value is an `Array` object|
          */
 
         /* example
@@ -883,11 +883,11 @@
     var castPath = _.castPath = (function (exports) {
         /* Cast value into a property path array.
          *
-         * |Name  |Type        |Desc               |
-         * |------|------------|-------------------|
-         * |path  |string array|Value to inspect   |
-         * |[obj] |object      |Object to query    |
-         * |return|array       |Property path array|
+         * |Name  |Desc               |
+         * |------|-------------------|
+         * |path  |Value to inspect   |
+         * |obj   |Object to query    |
+         * |return|Property path array|
          */
 
         /* example
@@ -926,11 +926,11 @@
     var safeGet = _.safeGet = (function (exports) {
         /* Get object property, don't throw undefined error.
          *
-         * |Name  |Type        |Desc                     |
-         * |------|------------|-------------------------|
-         * |obj   |object      |Object to query          |
-         * |path  |array string|Path of property to get  |
-         * |return|*           |Target value or undefined|
+         * |Name  |Desc                     |
+         * |------|-------------------------|
+         * |obj   |Object to query          |
+         * |path  |Path of property to get  |
+         * |return|Target value or undefined|
          */
 
         /* example
@@ -970,10 +970,10 @@
     var flatten = _.flatten = (function (exports) {
         /* Recursively flatten an array.
          *
-         * |Name  |Type |Desc               |
-         * |------|-----|-------------------|
-         * |arr   |array|Array to flatten   |
-         * |return|array|New flattened array|
+         * |Name  |Desc               |
+         * |------|-------------------|
+         * |arr   |Array to flatten   |
+         * |return|New flattened array|
          */
 
         /* example
@@ -1013,10 +1013,10 @@
     var isFn = _.isFn = (function (exports) {
         /* Check if value is a function.
          *
-         * |Name  |Type   |Desc                       |
-         * |------|-------|---------------------------|
-         * |val   |*      |Value to check             |
-         * |return|boolean|True if value is a function|
+         * |Name  |Desc                       |
+         * |------|---------------------------|
+         * |val   |Value to check             |
+         * |return|True if value is a function|
          *
          * Generator function is also classified as true.
          */
@@ -1052,10 +1052,10 @@
     var getProto = _.getProto = (function (exports) {
         /* Get prototype of an object.
          *
-         * |Name  |Type|Desc                                         |
-         * |------|----|---------------------------------------------|
-         * |obj   |*   |Target object                                |
-         * |return|*   |Prototype of given object, null if not exists|
+         * |Name  |Desc                                         |
+         * |------|---------------------------------------------|
+         * |obj   |Target object                                |
+         * |return|Prototype of given object, null if not exists|
          */
 
         /* example
@@ -1075,13 +1075,12 @@
         var ObjectCtr = {}.constructor;
 
         exports = function(obj) {
-            if (!isObj(obj)) return null;
+            if (!isObj(obj)) return;
             if (getPrototypeOf) return getPrototypeOf(obj);
             var proto = obj.__proto__;
             if (proto || proto === null) return proto;
             if (isFn(obj.constructor)) return obj.constructor.prototype;
             if (obj instanceof ObjectCtr) return ObjectCtr.prototype;
-            return null;
         };
 
         return exports;
@@ -1116,10 +1115,10 @@
     var isNum = _.isNum = (function (exports) {
         /* Check if value is classified as a Number primitive or object.
          *
-         * |Name  |Type   |Desc                                 |
-         * |------|-------|-------------------------------------|
-         * |val   |*      |Value to check                       |
-         * |return|boolean|True if value is correctly classified|
+         * |Name  |Desc                                 |
+         * |------|-------------------------------------|
+         * |val   |Value to check                       |
+         * |return|True if value is correctly classified|
          */
 
         /* example
@@ -1148,10 +1147,10 @@
     var isArrLike = _.isArrLike = (function (exports) {
         /* Check if value is array-like.
          *
-         * |Name  |Type   |Desc                       |
-         * |------|-------|---------------------------|
-         * |val   |*      |Value to check             |
-         * |return|boolean|True if value is array like|
+         * |Name  |Desc                       |
+         * |------|---------------------------|
+         * |val   |Value to check             |
+         * |return|True if value is array like|
          *
          * Function returns false.
          */
@@ -1186,10 +1185,10 @@
     var isStr = _.isStr = (function (exports) {
         /* Check if value is a string primitive.
          *
-         * |Name  |Type   |Desc                               |
-         * |------|-------|-----------------------------------|
-         * |val   |*      |Value to check                     |
-         * |return|boolean|True if value is a string primitive|
+         * |Name  |Desc                               |
+         * |------|-----------------------------------|
+         * |val   |Value to check                     |
+         * |return|True if value is a string primitive|
          */
 
         /* example
@@ -1287,10 +1286,10 @@
     var keys = _.keys = (function (exports) {
         /* Create an array of the own enumerable property names of object.
          *
-         * |Name  |Type  |Desc                   |
-         * |------|------|-----------------------|
-         * |obj   |object|Object to query        |
-         * |return|array |Array of property names|
+         * |Name  |Desc                   |
+         * |------|-----------------------|
+         * |obj   |Object to query        |
+         * |return|Array of property names|
          */
 
         /* example
@@ -1327,11 +1326,11 @@
     var each = _.each = (function (exports) {
         /* Iterate over elements of collection and invokes iterator for each element.
          *
-         * |Name    |Type        |Desc                          |
-         * |--------|------------|------------------------------|
-         * |obj     |object array|Collection to iterate over    |
-         * |iterator|function    |Function invoked per iteration|
-         * |[ctx]   |*           |Function context              |
+         * |Name    |Desc                          |
+         * |--------|------------------------------|
+         * |obj     |Collection to iterate over    |
+         * |iterator|Function invoked per iteration|
+         * |ctx     |Function context              |
          */
 
         /* example
@@ -1384,11 +1383,11 @@
     var createAssigner = _.createAssigner = (function (exports) {
         /* Used to create extend, extendOwn and defaults.
          *
-         * |Name    |Type    |Desc                          |
-         * |--------|--------|------------------------------|
-         * |keysFn  |function|Function to get object keys   |
-         * |defaults|boolean |No override when set to true  |
-         * |return  |function|Result function, extend...    |
+         * |Name    |Desc                          |
+         * |--------|------------------------------|
+         * |keysFn  |Function to get object keys   |
+         * |defaults|No override when set to true  |
+         * |return  |Result function, extend...    |
          */
 
         /* typescript
@@ -1420,10 +1419,10 @@
     var values = _.values = (function (exports) {
         /* Create an array of the own enumerable property values of object.
          *
-         * |Name  |Type  |Desc                    |
-         * |------|------|------------------------|
-         * |obj   |object|Object to query         |
-         * |return|array |Array of property values|
+         * |Name  |Desc                    |
+         * |------|------------------------|
+         * |obj   |Object to query         |
+         * |return|Array of property values|
          */
 
         /* example
@@ -1454,11 +1453,11 @@
     var contain = _.contain = (function (exports) {
         /* Check if the value is present in the list.
          *
-         * |Name  |Type               |Desc                                |
-         * |------|-------------------|------------------------------------|
-         * |target|array object string|Target object                       |
-         * |value |*                  |Value to check                      |
-         * |return|boolean            |True if value is present in the list|
+         * |Name  |Desc                                |
+         * |------|------------------------------------|
+         * |target|Target object                       |
+         * |val   |Value to check                      |
+         * |return|True if value is present in the list|
          */
 
         /* example
@@ -1492,11 +1491,11 @@
     var extendOwn = _.extendOwn = (function (exports) {
         /* Like extend, but only copies own properties over to the destination object.
          *
-         * |Name       |Type  |Desc              |
-         * |-----------|------|------------------|
-         * |destination|object|Destination object|
-         * |...sources |object|Sources objects   |
-         * |return     |object|Destination object|
+         * |Name       |Desc              |
+         * |-----------|------------------|
+         * |destination|Destination object|
+         * |...sources |Sources objects   |
+         * |return     |Destination object|
          */
 
         /* example
@@ -1521,10 +1520,10 @@
     var isEmpty = _.isEmpty = (function (exports) {
         /* Check if value is an empty object or array.
          *
-         * |Name  |Type   |Desc                  |
-         * |------|-------|----------------------|
-         * |val   |*      |Value to check        |
-         * |return|boolean|True if value is empty|
+         * |Name  |Desc                  |
+         * |------|----------------------|
+         * |val   |Value to check        |
+         * |return|True if value is empty|
          */
 
         /* example
@@ -1559,11 +1558,11 @@
     var isMatch = _.isMatch = (function (exports) {
         /* Check if keys and values in src are contained in obj.
          *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |obj   |object |Object to inspect                 |
-         * |src   |object |Object of property values to match|
-         * |return|boolean|True if object is match           |
+         * |Name  |Desc                              |
+         * |------|----------------------------------|
+         * |obj   |Object to inspect                 |
+         * |src   |Object of property values to match|
+         * |return|True if object is match           |
          */
 
         /* example
@@ -1601,10 +1600,10 @@
     var isNaN = _.isNaN = (function (exports) {
         /* Check if value is an NaN.
          *
-         * |Name  |Type   |Desc                   |
-         * |------|-------|-----------------------|
-         * |val   |*      |Value to check         |
-         * |return|boolean|True if value is an NaN|
+         * |Name  |Desc                   |
+         * |------|-----------------------|
+         * |val   |Value to check         |
+         * |return|True if value is an NaN|
          *
          * Undefined is not an NaN, different from global isNaN function.
          */
@@ -1634,10 +1633,10 @@
     var isNil = _.isNil = (function (exports) {
         /* Check if value is null or undefined, the same as value == null.
          *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |Value to check                    |
-         * |return|boolean|True if value is null or undefined|
+         * |Name  |Desc                              |
+         * |------|----------------------------------|
+         * |val   |Value to check                    |
+         * |return|True if value is null or undefined|
          */
 
         /* example
@@ -1664,10 +1663,10 @@
     var isPromise = _.isPromise = (function (exports) {
         /* Check if value looks like a promise.
          *
-         * |Name  |Type   |Desc                              |
-         * |------|-------|----------------------------------|
-         * |val   |*      |Value to check                    |
-         * |return|boolean|True if value looks like a promise|
+         * |Name  |Desc                              |
+         * |------|----------------------------------|
+         * |val   |Value to check                    |
+         * |return|True if value looks like a promise|
          */
 
         /* example
@@ -1695,11 +1694,11 @@
     var ltrim = _.ltrim = (function (exports) {
         /* Remove chars or white-spaces from beginning of string.
          *
-         * |Name   |Type        |Desc              |
-         * |-------|------------|------------------|
-         * |str    |string      |String to trim    |
-         * |[chars]|string array|Characters to trim|
-         * |return |string      |Trimmed string    |
+         * |Name  |Desc              |
+         * |------|------------------|
+         * |str   |String to trim    |
+         * |chars |Characters to trim|
+         * |return|Trimmed string    |
          */
 
         /* example
@@ -1747,10 +1746,10 @@
     var matcher = _.matcher = (function (exports) {
         /* Return a predicate function that checks if attrs are contained in an object.
          *
-         * |Name  |Type    |Desc                              |
-         * |------|--------|----------------------------------|
-         * |attrs |object  |Object of property values to match|
-         * |return|function|New predicate function            |
+         * |Name  |Desc                              |
+         * |------|----------------------------------|
+         * |attrs |Object of property values to match|
+         * |return|New predicate function            |
          */
 
         /* example
@@ -1814,12 +1813,12 @@
     var filter = _.filter = (function (exports) {
         /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
          *
-         * |Name     |Type    |Desc                                   |
-         * |---------|--------|---------------------------------------|
-         * |obj      |array   |Collection to iterate over             |
-         * |predicate|function|Function invoked per iteration         |
-         * |[ctx]    |*       |Predicate context                      |
-         * |return   |array   |Array of all values that pass predicate|
+         * |Name     |Desc                                   |
+         * |---------|---------------------------------------|
+         * |obj      |Collection to iterate over             |
+         * |predicate|Function invoked per iteration         |
+         * |ctx      |Predicate context                      |
+         * |return   |Array of all values that pass predicate|
          */
 
         /* example
@@ -1864,11 +1863,11 @@
     var difference = _.difference = (function (exports) {
         /* Create an array of unique array values not included in the other given array.
          *
-         * |Name     |Type |Desc                        |
-         * |---------|-----|----------------------------|
-         * |arr      |array|Array to inspect            |
-         * |[...rest]|array|Values to exclude           |
-         * |return   |array|New array of filtered values|
+         * |Name   |Desc                        |
+         * |-------|----------------------------|
+         * |arr    |Array to inspect            |
+         * |...rest|Values to exclude           |
+         * |return |New array of filtered values|
          */
 
         /* example
@@ -1898,11 +1897,11 @@
     var unique = _.unique = (function (exports) {
         /* Create duplicate-free version of an array.
          *
-         * |Name  |Type    |Desc                         |
-         * |------|--------|-----------------------------|
-         * |arr   |array   |Array to inspect             |
-         * |[cmp] |function|Function for comparing values|
-         * |return|array   |New duplicate free array     |
+         * |Name  |Desc                         |
+         * |------|-----------------------------|
+         * |arr   |Array to inspect             |
+         * |cmp   |Function for comparing values|
+         * |return|New duplicate free array     |
          */
 
         /* example
@@ -1945,19 +1944,19 @@
     var allKeys = _.allKeys = (function (exports) {
         /* Retrieve all the names of object's own and inherited properties.
          *
-         * |Name     |Type  |Desc                       |
-         * |---------|------|---------------------------|
-         * |obj      |object|Object to query            |
-         * |[options]|object|Options                    |
-         * |return   |array |Array of all property names|
+         * |Name   |Desc                       |
+         * |-------|---------------------------|
+         * |obj    |Object to query            |
+         * |options|Options                    |
+         * |return |Array of all property names|
          *
          * Available options:
          *
-         * |Name              |Type   |Desc                     |
-         * |------------------|-------|-------------------------|
-         * |prototype=true    |boolean|Include prototype keys   |
-         * |unenumerable=false|boolean|Include unenumerable keys|
-         * |symbol=false      |boolean|Include symbol keys      |
+         * |Name              |Desc                     |
+         * |------------------|-------------------------|
+         * |prototype=true    |Include prototype keys   |
+         * |unenumerable=false|Include unenumerable keys|
+         * |symbol=false      |Include symbol keys      |
          *
          * Members of Object's prototype won't be retrieved.
          */
@@ -2044,11 +2043,11 @@
     var defaults = _.defaults = (function (exports) {
         /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
          *
-         * |Name  |Type  |Desc              |
-         * |------|------|------------------|
-         * |obj   |object|Destination object|
-         * |*src  |object|Sources objects   |
-         * |return|object|Destination object|
+         * |Name  |Desc              |
+         * |------|------------------|
+         * |obj   |Destination object|
+         * |...src|Sources objects   |
+         * |return|Destination object|
          */
 
         /* example
@@ -2073,11 +2072,11 @@
     var extend = _.extend = (function (exports) {
         /* Copy all of the properties in the source objects over to the destination object.
          *
-         * |Name       |Type  |Desc              |
-         * |-----------|------|------------------|
-         * |destination|object|Destination object|
-         * |...sources |object|Sources objects   |
-         * |return     |object|Destination object|
+         * |Name       |Desc              |
+         * |-----------|------------------|
+         * |destination|Destination object|
+         * |...sources |Sources objects   |
+         * |return     |Destination object|
          */
 
         /* example
@@ -2102,12 +2101,12 @@
     var map = _.map = (function (exports) {
         /* Create an array of values by running each element in collection through iteratee.
          *
-         * |Name     |Type        |Desc                          |
-         * |---------|------------|------------------------------|
-         * |object   |array object|Collection to iterate over    |
-         * |iterator |function    |Function invoked per iteration|
-         * |[context]|*           |Function context              |
-         * |return   |array       |New mapped array              |
+         * |Name    |Desc                          |
+         * |--------|------------------------------|
+         * |object  |Collection to iterate over    |
+         * |iterator|Function invoked per iteration|
+         * |context |Function context              |
+         * |return  |New mapped array              |
          */
 
         /* example
@@ -2157,10 +2156,10 @@
     var decodeUriComponent = _.decodeUriComponent = (function (exports) {
         /* Better decodeURIComponent that does not throw if input is invalid.
          *
-         * |Name  |Type  |Desc            |
-         * |------|------|----------------|
-         * |str   |string|String to decode|
-         * |return|string|Decoded string  |
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |str   |String to decode|
+         * |return|Decoded string  |
          */
 
         /* example
@@ -2218,31 +2217,31 @@
          *
          * Get cookie value.
          *
-         * |Name  |Type  |Desc                      |
-         * |------|------|--------------------------|
-         * |key   |string|Cookie key                |
-         * |return|string|Corresponding cookie value|
+         * |Name  |Desc                      |
+         * |------|--------------------------|
+         * |key   |Cookie key                |
+         * |return|Corresponding cookie value|
          *
          * ### set
          *
          * Set cookie value.
          *
-         * |Name     |Type   |Desc          |
-         * |---------|-------|--------------|
-         * |key      |string |Cookie key    |
-         * |val      |string |Cookie value  |
-         * |[options]|object |Cookie options|
-         * |return   |exports|Module cookie |
+         * |Name   |Desc          |
+         * |-------|--------------|
+         * |key    |Cookie key    |
+         * |val    |Cookie value  |
+         * |options|Cookie options|
+         * |return |Module cookie |
          *
          * ### remove
          *
          * Remove cookie value.
          *
-         * |Name     |Type   |Desc          |
-         * |---------|-------|--------------|
-         * |key      |string |Cookie key    |
-         * |[options]|object |Cookie options|
-         * |return   |exports|Module cookie |
+         * |Name   |Desc          |
+         * |-------|--------------|
+         * |key    |Cookie key    |
+         * |options|Cookie options|
+         * |return |Module cookie |
          */
 
         /* example
@@ -2342,10 +2341,10 @@
     var toArr = _.toArr = (function (exports) {
         /* Convert value to an array.
          *
-         * |Name  |Type |Desc            |
-         * |------|-----|----------------|
-         * |val   |*    |Value to convert|
-         * |return|array|Converted array |
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |val   |Value to convert|
+         * |return|Converted array |
          */
 
         /* example
@@ -2378,11 +2377,11 @@
     var Class = _.Class = (function (exports) {
         /* Create JavaScript class.
          *
-         * |Name     |Type    |Desc                             |
-         * |---------|--------|---------------------------------|
-         * |methods  |object  |Public methods                   |
-         * |[statics]|object  |Static methods                   |
-         * |return   |function|Function used to create instances|
+         * |Name   |Desc                             |
+         * |-------|---------------------------------|
+         * |methods|Public methods                   |
+         * [statics|Static methods                   |
+         * |return |Function used to create instances|
          */
 
         /* example
@@ -2534,11 +2533,11 @@
     var rtrim = _.rtrim = (function (exports) {
         /* Remove chars or white-spaces from end of string.
          *
-         * |Name   |Type        |Desc              |
-         * |-------|------------|------------------|
-         * |str    |string      |String to trim    |
-         * |[chars]|string array|Characters to trim|
-         * |return |string      |Trimmed string    |
+         * |Name  |Desc              |
+         * |------|------------------|
+         * |str   |String to trim    |
+         * |chars |Characters to trim|
+         * |return|Trimmed string    |
          */
 
         /* example
@@ -2585,11 +2584,11 @@
     var trim = _.trim = (function (exports) {
         /* Remove chars or white-spaces from beginning end of string.
          *
-         * |Name  |Type        |Desc              |
-         * |------|------------|------------------|
-         * |str   |string      |String to trim    |
-         * |chars |string array|Characters to trim|
-         * |return|string      |Trimmed string    |
+         * |Name  |Desc              |
+         * |------|------------------|
+         * |str   |String to trim    |
+         * |chars |Characters to trim|
+         * |return|Trimmed string    |
          */
 
         /* example
@@ -2625,19 +2624,19 @@
          *
          * Parse a query string into an object.
          *
-         * |Name  |Type  |Desc        |
-         * |------|------|------------|
-         * |str   |string|Query string|
-         * |return|object|Query object|
+         * |Name  |Desc        |
+         * |------|------------|
+         * |str   |Query string|
+         * |return|Query object|
          *
          * ### stringify
          *
          * Stringify an object into a query string.
          *
-         * |Name  |Type  |Desc        |
-         * |------|------|------------|
-         * |obj   |object|Query object|
-         * |return|string|Query string|
+         * |Name  |Desc        |
+         * |------|------------|
+         * |obj   |Query object|
+         * |return|Query string|
          */
 
         /* example
@@ -2706,23 +2705,23 @@
     _.ajax = (function (exports) {
         /* Perform an asynchronous HTTP request.
          *
-         * |Name   |Type  |Desc        |
-         * |-------|------|------------|
-         * |options|object|Ajax options|
+         * |Name   |Desc        |
+         * |-------|------------|
+         * |options|Ajax options|
          *
          * Available options:
          *
-         * |Name                                         |Type         |Desc                       |
-         * |---------------------------------------------|-------------|---------------------------|
-         * |type=get                                     |type         |Request type               |
-         * |url                                          |string       |Request url                |
-         * |data                                         |string object|Request data               |
-         * |dataType=json                                |string       |Response type(json, xml)   |
-         * |contentType=application/x-www-form-urlencoded|string       |Request header Content-Type|
-         * |success                                      |function     |Success callback           |
-         * |error                                        |function     |Error callback             |
-         * |complete                                     |function     |Callback after request     |
-         * |timeout                                      |number       |Request timeout            |
+         * |Name                                         |Desc                       |
+         * |---------------------------------------------|---------------------------|
+         * |type=get                                     |Request type               |
+         * |url                                          |Request url                |
+         * |data                                         |Request data               |
+         * |dataType=json                                |Response type(json, xml)   |
+         * |contentType=application/x-www-form-urlencoded|Request header Content-Type|
+         * |success                                      |Success callback           |
+         * |error                                        |Error callback             |
+         * |complete                                     |Callback after request     |
+         * |timeout                                      |Request timeout            |
          *
          * ### get
          *
@@ -2732,12 +2731,12 @@
          *
          * Shortcut for type = POST;
          *
-         * |Name    |Type         |Desc            |
-         * |--------|-------------|----------------|
-         * |url     |string       |Request url     |
-         * |[data]  |string object|Request data    |
-         * |success |function     |Success callback|
-         * |dataType|function     |Response type   |
+         * |Name    |Desc            |
+         * |--------|----------------|
+         * |url     |Request url     |
+         * |data    |Request data    |
+         * |success |Success callback|
+         * |dataType|Response type   |
          */
 
         /* example
@@ -2758,20 +2757,32 @@
 
         /* typescript
          * export declare namespace ajax {
-         *     interface IOptions {
-         *         url: string;
-         *         data?: string | {};
-         *         dataType?: string;
-         *         contentType?: string;
-         *         success?: Function;
-         *         error?: Function;
-         *         complete?: Function;
-         *         timeout?: number;
-         *     }
-         *     function get(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
-         *     function post(url: string, data: any, success: Function, dataType?: string): XMLHttpRequest;
+         *     function get(
+         *         url: string,
+         *         data: string | {},
+         *         success: Function,
+         *         dataType?: string
+         *     ): XMLHttpRequest;
+         *     function get(url: string, success: Function, dataType?: string): XMLHttpRequest;
+         *     function post(
+         *         url: string,
+         *         data: string | {},
+         *         success: Function,
+         *         dataType?: string
+         *     ): XMLHttpRequest;
+         *     function post(url: string, success: Function, dataType?: string): XMLHttpRequest;
          * }
-         * export declare function ajax(options: ajax.IOptions): XMLHttpRequest;
+         * export declare function ajax(options: {
+         *     type?: string;
+         *     url: string;
+         *     data?: string | {};
+         *     dataType?: string;
+         *     contentType?: string;
+         *     success?: Function;
+         *     error?: Function;
+         *     complete?: Function;
+         *     timeout?: number;
+         * }): XMLHttpRequest;
          */
 
         /* dependencies
@@ -2886,11 +2897,11 @@
     var type = _.type = (function (exports) {
         /* Determine the internal JavaScript [[Class]] of an object.
          *
-         * |Name          |Type   |Desc             |
-         * |--------------|-------|-----------------|
-         * |val           |*      |Value to get type|
-         * |lowerCase=true|boolean|LowerCase result |
-         * |return        |string |Type of object   |
+         * |Name          |Desc             |
+         * |--------------|-----------------|
+         * |val           |Value to get type|
+         * |lowerCase=true|LowerCase result |
+         * |return        |Type of object   |
          */
 
         /* example
@@ -2933,10 +2944,10 @@
     var toSrc = _.toSrc = (function (exports) {
         /* Convert function to its source code.
          *
-         * |Name  |Type    |Desc               |
-         * |------|--------|-------------------|
-         * |fn    |function|Function to convert|
-         * |return|string  |Source code        |
+         * |Name  |Desc               |
+         * |------|-------------------|
+         * |fn    |Function to convert|
+         * |return|Source code        |
          */
 
         /* example
@@ -2977,22 +2988,22 @@
     _.stringifyAll = (function (exports) {
         /* Stringify object into json with types.
          *
-         * |Name     |Type  |Desc               |
-         * |---------|------|-------------------|
-         * |obj      |*     |Object to stringify|
-         * |[options]|object|Stringify options  |
-         * |return   |string|Stringified object |
+         * |Name   |Desc               |
+         * |-------|-------------------|
+         * |obj    |Object to stringify|
+         * |options|Stringify options  |
+         * |return |Stringified object |
          *
          * Available options:
          *
-         * |Name              |Type   |Desc                     |
-         * |------------------|-------|-------------------------|
-         * |unenumerable=false|boolean|Include unenumerable keys|
-         * |symbol=false      |boolean|Include symbol keys      |
-         * |accessGetter=false|boolean|Access getter value      |
-         * |timeout=0         |number |Timeout of stringify     |
-         * |depth=0           |number |Max depth of recursion   |
-         * |[ignore]          |array  |Values to ignore         |
+         * |Name              |Desc                     |
+         * |------------------|-------------------------|
+         * |unenumerable=false|Include unenumerable keys|
+         * |symbol=false      |Include symbol keys      |
+         * |accessGetter=false|Access getter value      |
+         * |timeout=0         |Timeout of stringify     |
+         * |depth=0           |Max depth of recursion   |
+         * |ignore            |Values to ignore         |
          *
          * When time is out, all remaining values will all be "Timeout".
          */
@@ -3002,8 +3013,9 @@
          */
 
         /* typescript
-         * export declare namespace stringifyAll {
-         *     interface IOptions {
+         * export declare function stringifyAll(
+         *     obj: any,
+         *     options?: {
          *         unenumerable?: boolean;
          *         symbol?: boolean;
          *         accessGetter?: boolean;
@@ -3011,10 +3023,6 @@
          *         depth?: number;
          *         ignore?: any[];
          *     }
-         * }
-         * export declare function stringifyAll(
-         *     obj: any,
-         *     options?: stringifyAll.IOptions
          * ): string;
          */
 
