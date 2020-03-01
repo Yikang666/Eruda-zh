@@ -1,5 +1,14 @@
 const webpackCfg = require('./script/webpack.dev')
 webpackCfg.devtool = 'inline-source-map'
+webpackCfg.module.loaders.push({
+  test: /\.js$/,
+  exclude: /node_modules|lib\/util\.js/,
+  loader: 'istanbul-instrumenter-loader',
+  enforce: 'post',
+  options: {
+    esModules: true
+  }
+})
 
 module.exports = function(config) {
   config.set({
@@ -27,24 +36,21 @@ module.exports = function(config) {
       'karma-jasmine',
       'karma-jquery',
       'karma-chrome-launcher',
-      'karma-coverage',
       'karma-webpack',
       'karma-sourcemap-loader',
-      'karma-sourcemap-writer'
+      'karma-coverage-istanbul-reporter'
     ],
     webpackServer: {
       noInfo: true
     },
     preprocessors: {
-      'src/index.js': ['webpack', 'sourcemap', 'sourcemap-writer', 'coverage']
+      'src/index.js': ['webpack', 'sourcemap']
     },
     webpack: webpackCfg,
-    coverageReporter: {
-      type: 'json',
-      subdir: '.',
-      file: 'coverage-final.json'
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly', 'text', 'text-summary']
     },
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage-istanbul'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
