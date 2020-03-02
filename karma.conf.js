@@ -1,6 +1,6 @@
 const webpackCfg = require('./script/webpack.dev')
 webpackCfg.devtool = 'inline-source-map'
-webpackCfg.module.loaders.push({
+webpackCfg.module.rules.push({
   test: /\.js$/,
   exclude: /node_modules|lib\/util\.js/,
   loader: 'istanbul-instrumenter-loader',
