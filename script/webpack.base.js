@@ -42,7 +42,7 @@ module.exports = {
     libraryTarget: 'umd'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules|index\.js/,
@@ -96,10 +96,6 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
       }
     ]
   },
