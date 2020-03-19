@@ -105,7 +105,7 @@ export default class ObjViewer extends Emitter {
         virtualData[key] = obj
       })
       virtualKeys = keys(virtualData)
-      enumerableKeys = filter(keys, val => !map[val])
+      enumerableKeys = filter(enumerableKeys, val => !map[val])
     }
 
     each(types, type => {
