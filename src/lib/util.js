@@ -384,43 +384,6 @@ export var kebabCase = _.kebabCase = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ chunk ------------------------------ */
-
-export var chunk = _.chunk = (function (exports) {
-    /* Split array into groups the length of given size.
-     *
-     * |Name  |Desc                |
-     * |------|--------------------|
-     * |arr   |Array to process    |
-     * |size=1|Length of each chunk|
-     * |return|Chunks of given size|
-     */
-
-    /* example
-     * chunk([1, 2, 3, 4], 2); // -> [[1, 2], [3, 4]]
-     * chunk([1, 2, 3, 4], 3); // -> [[1, 2, 3], [4]]
-     * chunk([1, 2, 3, 4]); // -> [[1], [2], [3], [4]]
-     */
-
-    /* typescript
-     * export declare function chunk(arr: any[], size?: number): Array<any[]>;
-     */
-    exports = function(arr, size) {
-        var ret = [];
-        size = size || 1;
-
-        for (var i = 0, len = Math.ceil(arr.length / size); i < len; i++) {
-            var start = i * size;
-            var end = start + size;
-            ret.push(arr.slice(start, end));
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ clamp ------------------------------ */
 
 export var clamp = _.clamp = (function (exports) {
