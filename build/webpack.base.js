@@ -16,7 +16,8 @@ const postcssLoader = {
   options: {
     plugins: [
       prefixer({
-        prefix: '_'
+        prefix: '_',
+        ignore: [/luna-object-viewer/]
       }),
       autoprefixer,
       clean()

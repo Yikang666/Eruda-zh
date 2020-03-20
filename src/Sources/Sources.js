@@ -1,6 +1,6 @@
 import Tool from '../DevTools/Tool'
 import beautify from 'js-beautify'
-import ObjViewer from '../lib/ObjViewer'
+import LunaObjectViewer from 'luna-object-viewer'
 import Settings from '../Settings/Settings'
 import { ajax, escape, trim, isStr, highlight } from '../lib/util'
 import evalCss from '../lib/evalCss'
@@ -247,10 +247,14 @@ export default class Sources extends Tool {
       /* eslint-disable no-empty */
     } catch (e) {}
 
-    new ObjViewer(val, this._$el.find('.eruda-json'), {
-      showUnenumerable: true,
-      showGetterVal: true
-    })
+    const objViewer = new LunaObjectViewer(
+      this._$el.find('.eruda-json').get(0),
+      {
+        unenumerable: true,
+        accessGetter: true
+      }
+    )
+    objViewer.set(val)
   }
   _renderRaw() {
     this._renderHtml(this._rawTpl({ val: this._data.val }))

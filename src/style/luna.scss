@@ -1,0 +1,37 @@
+@import './variable';
+
+.luna-object-viewer {
+  color: var(--primary);
+  font-size: 12px !important;
+  & > li {
+    padding: $padding 0 !important;
+  }
+}
+.luna-object-viewer-null {
+  color: var(--operator-color);
+}
+.luna-object-viewer-string,
+.luna-object-viewer-regexp {
+  color: var(--string-color);
+}
+.luna-object-viewer-number {
+  color: var(--number-color);
+}
+.luna-object-viewer-boolean {
+  color: var(--keyword-color);
+}
+.luna-object-viewer-special {
+  color: var(--operator-color);
+}
+.luna-object-viewer-key,
+.luna-object-viewer-key-lighter {
+  color: var(--var-color);
+}
+.luna-object-viewer-expanded:before {
+  border-color: transparent;
+  border-top-color: var(--foreground);
+}
+.luna-object-viewer-collapsed:before {
+  border-top-color: transparent;
+  border-left-color: var(--foreground);
+}

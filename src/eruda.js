@@ -198,6 +198,7 @@ export default {
     }
 
     evalCss(
+      require('luna-object-viewer/luna-object-viewer.css') +
       require('./style/style.scss') +
         require('./style/reset.scss') +
         require('./style/icon.css')

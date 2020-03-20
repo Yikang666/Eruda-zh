@@ -1,7 +1,6 @@
 import origGetAbstract from '../lib/getAbstract'
 import beautify from 'js-beautify'
-import JsonViewer from '../lib/JsonViewer'
-import ObjViewer from '../lib/ObjViewer'
+import LunaObjectViewer from 'luna-object-viewer'
 import {
   isObj,
   isStr,
@@ -210,16 +209,18 @@ export default class Log extends Emitter {
           if ($json.hasClass('eruda-hidden')) {
             if ($json.data('init') !== 'true') {
               if (src) {
-                const jsonViewer = new JsonViewer(src, $json)
-                jsonViewer.on('change', () => this.updateSize(false))
+                const staticViewer = new LunaObjectViewer.Static($json.get(0))
+                staticViewer.set(src)
+                staticViewer.on('change', () => this.updateSize(false))
               } else {
                 if (type === 'table' || args.length === 1) {
                   if (isObj(args[0])) args = args[0]
                 }
-                const objViewer = new ObjViewer(args, $json, {
-                  showUnenumerable: Log.showUnenumerable,
-                  showGetterVal: Log.showGetterVal
+                const objViewer = new LunaObjectViewer($json.get(0), {
+                  unenumerable: Log.showUnenumerable,
+                  accessGetter: Log.showGetterVal
                 })
+                objViewer.set(args)
                 objViewer.on('change', () => this.updateSize(false))
               }
               $json.data('init', 'true')
