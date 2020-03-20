@@ -1,3 +1,8 @@
+## v2.2.1 (20 Mar 2020)
+
+* fix: redundant evaluated style
+* chore: use [luna-object-viewer](https://github.com/liriliri/luna) for viewing object
+
 ## v2.2.0 (9 Feb 2020)
 
 * feat: use dark theme for dark mode
