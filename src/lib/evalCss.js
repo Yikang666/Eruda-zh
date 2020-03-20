@@ -76,7 +76,7 @@ function resetStyle({ css, el }) {
   each(cssMap, (val, key) => {
     css = css.replace(
       new RegExp(escapeRegExp(`$${val}:`), 'g'),
-      ';' + key + ':'
+      key + ':'
     )
   })
   const _keys = keys(themes.Light)
