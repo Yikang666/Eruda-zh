@@ -1,4 +1,4 @@
-const webpackCfg = require('./script/webpack.dev')
+const webpackCfg = require('./build/webpack.dev')
 webpackCfg.devtool = 'inline-source-map'
 webpackCfg.module.rules.push({
   test: /\.js$/,
