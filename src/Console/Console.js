@@ -263,7 +263,7 @@ export default class Console extends Tool {
       overrideConsole: true,
       displayExtraInfo: false,
       displayUnenumerable: true,
-      displayGetterVal: false,
+      displayGetterVal: true,
       lazyEvaluation: true,
       displayIfErr: false,
       maxLogNum: 'infinite'
