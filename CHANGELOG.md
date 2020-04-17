@@ -1,3 +1,8 @@
+## v2.2.2 (17 Apr 2020)
+
+* fix(console): extra info from
+* chore: update icons
+
 ## v2.2.1 (20 Mar 2020)
 
 * fix: redundant evaluated style
