@@ -710,7 +710,7 @@ export default class Logger extends Emitter {
   }
 }
 
-const getCurTime = () => dateFormat('HH:MM:ss')
+const getCurTime = () => dateFormat('HH:MM:ss ')
 
 function getFrom() {
   const e = new Error()
