@@ -22,7 +22,8 @@ import {
   raf,
   xpath,
   isHidden,
-  lowerCase
+  lowerCase,
+  dateFormat
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -300,16 +301,24 @@ export default class Logger extends Emitter {
     return this
   }
   insert(type, args) {
+    let headers
+    if (this._displayHeader) {
+      headers = {
+        time: getCurTime(),
+        from: getFrom()
+      }
+    }
+
     this._asyncRender
-      ? this.insertAsync(type, args)
-      : this.insertSync(type, args)
+      ? this.insertAsync(type, args, headers)
+      : this.insertSync(type, args, headers)
   }
-  insertAsync(type, args) {
-    this._asyncList.push([type, args])
+  insertAsync(type, args, headers) {
+    this._asyncList.push([type, args, headers])
 
     this._handleAsyncList()
   }
-  insertSync(type, args) {
+  insertSync(type, args, headers) {
     const logs = this._logs
     const groupStack = this._groupStack
 
@@ -327,7 +336,7 @@ export default class Logger extends Emitter {
     }
     extend(options, {
       id: ++id,
-      displayHeader: this._displayHeader
+      headers
     })
 
     if (options.type === 'group' || options.type === 'groupCollapsed') {
@@ -494,8 +503,8 @@ export default class Logger extends Emitter {
         done = true
       }
       for (let i = 0; i < num; i++) {
-        const [type, args] = asyncList.shift()
-        this.insertSync(type, args)
+        const [type, args, headers] = asyncList.shift()
+        this.insertSync(type, args, headers)
       }
       if (!done) raf(() => this._handleAsyncList(timeout))
     }, timeout)
@@ -699,4 +708,22 @@ export default class Logger extends Emitter {
 
     this._ignoreScroll = true
   }
+}
+
+const getCurTime = () => dateFormat('HH:MM:ss')
+
+function getFrom() {
+  const e = new Error()
+  let ret = ''
+  const lines = e.stack ? e.stack.split('\n') : ''
+
+  for (let i = 0, len = lines.length; i < len; i++) {
+    ret = lines[i]
+    if (ret.indexOf('winConsole') > -1 && i < len - 1) {
+      ret = lines[i + 1]
+      break
+    }
+  }
+
+  return ret
 }

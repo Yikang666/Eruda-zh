@@ -1,10 +1,10 @@
-{{#if displayHeader}}
+{{#if headers}}
   <div {{{class 'header'}}}>
     {{#repeat group.indentLevel}}
       <div {{{class 'nesting-level'}}}></div>
     {{/repeat}}
     <div {{{class 'time-container'}}}>
-      <span>{{time}}</span> <span>{{from}}</span>
+      <span>{{headers.time}}</span> <span>{{headers.from}}</span>
     </div>
   </div>
 {{/if}}

@@ -8,7 +8,6 @@ import {
   isPrimitive,
   wrap,
   defaults,
-  dateFormat,
   getObjType,
   isEl,
   toStr,
@@ -48,7 +47,7 @@ export default class Log extends Emitter {
     id,
     group = {},
     targetGroup = {},
-    displayHeader = false,
+    headers,
     ignoreFilter = false
   }) {
     super()
@@ -59,7 +58,7 @@ export default class Log extends Emitter {
     this.args = args
     this.count = 1
     this.id = id
-    this.displayHeader = displayHeader
+    this.headers = headers
     this.ignoreFilter = ignoreFilter
     this.collapsed = false
     this.el = document.createElement('li')
@@ -67,11 +66,6 @@ export default class Log extends Emitter {
     this.height = 0
     this.width = 0
     this._$el = $(this.el)
-
-    if (displayHeader) {
-      this.time = getCurTime()
-      this.from = getFrom()
-    }
 
     this._formatMsg()
 
@@ -242,7 +236,7 @@ export default class Log extends Emitter {
   }
   _formatMsg() {
     let { args } = this
-    const { type, id, displayHeader, time, from, group } = this
+    const { type, id, headers, group } = this
 
     // Don't change original args for lazy evaluation.
     args = clone(args)
@@ -320,7 +314,7 @@ export default class Log extends Emitter {
         return `<a href="${url}" target="_blank">${url}</a>`
       })
     }
-    msg = render({ msg, type, icon, id, displayHeader, time, from, group })
+    msg = render({ msg, type, icon, id, headers, group })
 
     this._$el.addClass('eruda-log-container').html(msg)
     this._$content = this._$el.find('.eruda-log-content')
@@ -561,24 +555,6 @@ function formatEl(val) {
     'html'
   )}</pre>`
 }
-
-function getFrom() {
-  const e = new Error()
-  let ret = ''
-  const lines = e.stack ? e.stack.split('\n') : ''
-
-  for (let i = 0, len = lines.length; i < len; i++) {
-    ret = lines[i]
-    if (ret.indexOf('winConsole') > -1 && i < len - 1) {
-      ret = lines[i + 1]
-      break
-    }
-  }
-
-  return ret
-}
-
-const getCurTime = () => dateFormat('HH:MM:ss')
 
 const tpl = require('./Log.hbs')
 const render = data => tpl(data)
