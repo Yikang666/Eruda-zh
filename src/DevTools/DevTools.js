@@ -15,6 +15,7 @@ import {
   isDarkMode
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
+import LunaNotification from 'luna-notification'
 
 export default class DevTools extends Emitter {
   constructor($container) {
@@ -33,6 +34,7 @@ export default class DevTools extends Emitter {
 
     this._appendTpl()
     this._initNavBar()
+    this._initNotification()
     this._bindEvent()
   }
   show() {
@@ -176,7 +178,9 @@ export default class DevTools extends Emitter {
       })
       .separator()
   }
-
+  notify(content, options) {
+    this._notification.notify(content, options)
+  }
   destroy() {
     evalCss.remove(this._style)
     this.removeAll()
@@ -205,6 +209,14 @@ export default class DevTools extends Emitter {
   _initNavBar() {
     this._navBar = new NavBar(this._$el.find('.eruda-nav-bar-container'))
     this._navBar.on('showTool', name => this.showTool(name))
+  }
+  _initNotification() {
+    this._notification = new LunaNotification(this._$el.get(0), {
+      position: {
+        x: 'center',
+        y: 'top'
+      }
+    })
   }
   _bindEvent() {
     const $navBar = this._$el.find('.eruda-nav-bar')

@@ -216,7 +216,10 @@ export default class Elements extends Tool {
     const $bottomBar = this._$el.find('.eruda-bottom-bar')
 
     $bottomBar
-      .on('click', '.eruda-refresh', () => this._render())
+      .on('click', '.eruda-refresh', () => {
+        this._render()
+        container.notify('Refreshed')
+      })
       .on('click', '.eruda-highlight', () => this._toggleHighlight())
       .on('click', '.eruda-select', () => this._toggleSelect())
       .on('click', '.eruda-reset', () => this.set(this._htmlEl))

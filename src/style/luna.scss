@@ -35,3 +35,26 @@
   border-top-color: transparent;
   border-left-color: var(--foreground);
 }
+
+.luna-notification {
+  pointer-events: none !important;
+  padding: $padding;
+  z-index: 1000;
+}
+
+.luna-notification-item {
+  z-index: 500;
+  color: var(--foreground);
+  background: var(--background);
+  box-shadow: none;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+}
+
+.luna-notification-upper {
+  margin-bottom: 10px;
+}
+
+.luna-notification-lower {
+  margin-top: 10px;
+}

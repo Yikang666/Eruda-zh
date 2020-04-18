@@ -220,25 +220,34 @@ export default class Resources extends Tool {
     const container = this._container
 
     $el
-      .on('click', '.eruda-refresh-local-storage', () =>
+      .on('click', '.eruda-refresh-local-storage', () => {
+        container.notify('Refreshed')
         this.refreshLocalStorage()._render()
-      )
-      .on('click', '.eruda-refresh-session-storage', () =>
+      })
+      .on('click', '.eruda-refresh-session-storage', () => {
+        container.notify('Refreshed')
         this.refreshSessionStorage()._render()
-      )
-      .on('click', '.eruda-refresh-cookie', () =>
+      })
+      .on('click', '.eruda-refresh-cookie', () => {
+        container.notify('Refreshed')
         this.refreshCookie()._render()
-      )
-      .on('click', '.eruda-refresh-script', () =>
+      })
+      .on('click', '.eruda-refresh-script', () => {
+        container.notify('Refreshed')
         this.refreshScript()._render()
-      )
-      .on('click', '.eruda-refresh-stylesheet', () =>
+      })
+      .on('click', '.eruda-refresh-stylesheet', () => {
+        container.notify('Refreshed')
         this.refreshStylesheet()._render()
-      )
-      .on('click', '.eruda-refresh-iframe', () =>
+      })
+      .on('click', '.eruda-refresh-iframe', () => {
+        container.notify('Refreshed')
         this.refreshIframe()._render()
-      )
-      .on('click', '.eruda-refresh-image', () => this.refreshImage()._render())
+      })
+      .on('click', '.eruda-refresh-image', () => {
+        container.notify('Refreshed')
+        this.refreshImage()._render()
+      })
       .on('click', '.eruda-search', function() {
         const $this = $(this)
         const type = $this.data('type')
