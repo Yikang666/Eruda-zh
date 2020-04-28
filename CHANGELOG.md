@@ -1,3 +1,9 @@
+## v2.3.0 (28 Apr 2020)
+
+* feat: refresh notification
+* fix(console): safari bounce effect
+* fix(elements): highlight
+
 ## v2.2.2 (17 Apr 2020)
 
 * fix(console): extra info from
