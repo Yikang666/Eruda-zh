@@ -59,10 +59,9 @@ export default class Logger extends Emitter {
     this._asyncTimer = null
     this._isAtBottom = true
     this._groupStack = new Stack()
-    this._ignoreScroll = false
 
-    this.renderViewport = throttle(force => {
-      this._renderViewport(force)
+    this.renderViewport = throttle(() => {
+      this._renderViewport()
     }, 16)
 
     // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
@@ -616,11 +615,6 @@ export default class Logger extends Emitter {
       })
 
     this._$container.on('scroll', () => {
-      if (this._ignoreScroll) {
-        this._ignoreScroll = false
-        return
-      }
-
       const { scrollHeight, offsetHeight, scrollTop } = this._container
       // safari bounce effect
       if (scrollTop < 0) return
@@ -636,12 +630,12 @@ export default class Logger extends Emitter {
 
       if (
         this._topSpaceHeight < scrollTop &&
-        this._topSpaceHeight + this._el.offsetHeight > scrollTo + offsetHeight
+        this._topSpaceHeight + this._el.offsetHeight > scrollTop + offsetHeight
       ) {
         return
       }
 
-      this.renderViewport(false)
+      this.renderViewport()
     })
   }
   _renderViewport() {
@@ -709,8 +703,6 @@ export default class Logger extends Emitter {
     } else {
       container.scrollTop = scrollTop
     }
-
-    this._ignoreScroll = true
   }
 }
 
