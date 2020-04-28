@@ -46,38 +46,63 @@ export default class Highlight {
     const mt = getNumStyle('margin-top')
     const mb = getNumStyle('margin-bottom')
 
-    this._$margin.css({
-      left: -ml,
-      top: -mt,
-      width: width + ml + mr,
-      height: height + mt + mb
-    })
-
     const bl = getNumStyle('border-left-width')
     const br = getNumStyle('border-right-width')
     const bt = getNumStyle('border-top-width')
     const bb = getNumStyle('border-bottom-width')
-
-    const bw = width - bl - br
-    const bh = height - bt - bb
-
-    this._$padding.css({
-      left: bl,
-      top: bt,
-      width: bw,
-      height: bh
-    })
 
     const pl = getNumStyle('padding-left')
     const pr = getNumStyle('padding-right')
     const pt = getNumStyle('padding-top')
     const pb = getNumStyle('padding-bottom')
 
+    const pw = width - bl - br
+    const ph = height - bt - bb
+
+    const marginColor = 'rgba(246, 178, 107, 0.66)'
+    const borderColor = 'rgba(255, 229, 153, 0.66)'
+    const paddingColor = 'rgba(147, 196, 125, 0.55)'
+    const contentColor = 'rgba(111, 168, 220, 0.66)'
+
+    this._$margin.css({
+      left: -ml,
+      top: -mt,
+      width: width + ml + mr,
+      height: height + mt + mb,
+      borderTop: `${mt}px solid ${marginColor}`,
+      borderLeft: `${ml}px solid ${marginColor}`,
+      borderRight: `${mr}px solid ${marginColor}`,
+      borderBottom: `${mb}px solid ${marginColor}`
+    })
+
+    this._$border.css({
+      left: 0,
+      top: 0,
+      width,
+      height,
+      borderTop: `${bt}px solid ${borderColor}`,
+      borderLeft: `${bl}px solid ${borderColor}`,
+      borderRight: `${br}px solid ${borderColor}`,
+      borderBottom: `${bb}px solid ${borderColor}`
+    })
+
+    this._$padding.css({
+      left: bl,
+      top: bt,
+      width: pw,
+      height: ph,
+      borderTop: `${pt}px solid ${paddingColor}`,
+      borderLeft: `${pl}px solid ${paddingColor}`,
+      borderRight: `${pr}px solid ${paddingColor}`,
+      borderBottom: `${pb}px solid ${paddingColor}`
+    })
+
     this._$content.css({
       left: bl + pl,
       top: bl + pt,
-      width: bw - pl - pr,
-      height: bh - pt - pb
+      width: pw - pl - pr,
+      height: ph - pt - pb,
+      background: contentColor
     })
 
     this._$size
@@ -104,6 +129,7 @@ export default class Highlight {
     this._$margin = $el.find('.eruda-margin')
     this._$padding = $el.find('.eruda-padding')
     this._$content = $el.find('.eruda-content')
+    this._$border = $el.find('.eruda-border')
     this._$size = $el.find('.eruda-size')
   }
 }
