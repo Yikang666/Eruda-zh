@@ -622,6 +622,10 @@ export default class Logger extends Emitter {
       }
 
       const { scrollHeight, offsetHeight, scrollTop } = this._container
+      // safari bounce effect
+      if (scrollTop < 0) return
+      if (offsetHeight + scrollTop > scrollHeight) return
+
       let isAtBottom = false
       if (scrollHeight === offsetHeight) {
         isAtBottom = true
