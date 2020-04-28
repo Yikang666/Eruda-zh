@@ -1,3 +1,7 @@
+## v2.3.1 (28 Apr 2020)
+
+* fix(elements): content highlight
+
 ## v2.3.0 (28 Apr 2020)
 
 * feat: refresh notification
