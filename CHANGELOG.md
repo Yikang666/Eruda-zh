@@ -1,3 +1,7 @@
+## v2.3.2 (29 Apr 2020)
+
+* fix(console): scroll performance
+
 ## v2.3.1 (28 Apr 2020)
 
 * fix(elements): content highlight
