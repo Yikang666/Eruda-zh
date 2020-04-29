@@ -641,7 +641,7 @@ export default class Logger extends Emitter {
   _renderViewport() {
     const container = this._container
     if (isHidden(container)) return
-    const { scrollTop, offsetWidth, offsetHeight } = container
+    const { scrollTop, clientWidth, offsetHeight } = container
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
 
@@ -663,7 +663,7 @@ export default class Logger extends Emitter {
     for (let i = 0; i < len; i++) {
       const log = displayLogs[i]
       const { width, height } = log
-      if (height === 0 || width !== offsetWidth) {
+      if (height === 0 || width !== clientWidth) {
         fakeFrag.appendChild(log.el)
         logs.push(log)
       }
