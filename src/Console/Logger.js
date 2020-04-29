@@ -28,6 +28,9 @@ import {
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
+const u = navigator.userAgent
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
+
 let id = 0
 
 export default class Logger extends Emitter {
@@ -37,9 +40,9 @@ export default class Logger extends Emitter {
 
     this._$container = $container
     this._container = $container.get(0)
-    this._$el = $container.find('ul.eruda-logs')
+    this._$el = $container.find('.eruda-logs')
     this._el = this._$el.get(0)
-    this._$fakeEl = $container.find('ul.eruda-fake-logs')
+    this._$fakeEl = $container.find('.eruda-fake-logs')
     this._fakeEl = this._$fakeEl.get(0)
     this._$space = $container.find('.eruda-logs-space')
     this._space = this._$space.get(0)
@@ -48,6 +51,9 @@ export default class Logger extends Emitter {
     this._bottomSpaceHeight = 0
     this._lastScrollTop = 0
     this._lastTimestamp = 0
+    this._speedToleranceFactor = 100
+    this._maxSpeedTolerance = 2000
+    this._minSpeedTolerance = 100
     this._logs = []
     this._displayLogs = []
     this._timer = {}
@@ -61,6 +67,13 @@ export default class Logger extends Emitter {
     this._asyncTimer = null
     this._isAtBottom = true
     this._groupStack = new Stack()
+
+    // For android slowing rendering
+    if (isAndroid) {
+      this._speedToleranceFactor = 800
+      this._maxSpeedTolerance = 3000
+      this._minSpeedTolerance = 800
+    }
 
     this.renderViewport = throttle(options => {
       this._renderViewport(options)
@@ -641,23 +654,27 @@ export default class Logger extends Emitter {
       const duration = timestamp - lastTimestamp
       const distance = scrollTop - lastScrollTop
       const speed = Math.abs(distance / duration)
-      let speedTolerance = speed * 800
+      let speedTolerance = speed * this._speedToleranceFactor
       if (duration > 1000) {
         speedTolerance = 1000
       }
-      if (speedTolerance > 4000) speedTolerance = 4000
-      if (speedTolerance < 500) speedTolerance = 1000
+      if (speedTolerance > this._maxSpeedTolerance) {
+        speedTolerance = this._maxSpeedTolerance
+      }
+      if (speedTolerance < this._minSpeedTolerance) {
+        speedTolerance = this._minSpeedTolerance
+      }
       this._lastScrollTop = scrollTop
       this._lastTimestamp = timestamp
 
       let topTolerance = 0
       let bottomTolerance = 0
       if (lastScrollTop < scrollTop) {
-        topTolerance = 500
+        topTolerance = this._minSpeedTolerance
         bottomTolerance = speedTolerance
       } else {
         topTolerance = speedTolerance
-        bottomTolerance = 500
+        bottomTolerance = this._minSpeedTolerance
       }
 
       if (
@@ -728,14 +745,15 @@ export default class Logger extends Emitter {
     this._updateSpace(currentHeight)
     this._updateTopSpace(topSpaceHeight)
     this._updateBottomSpace(bottomSpaceHeight)
-    el.innerHTML = ''
+
+    while (el.firstChild) {
+      el.removeChild(el.lastChild)
+    }
     el.appendChild(frag)
 
     const { scrollHeight } = container
     if (this._isAtBottom && scrollTop <= scrollHeight - offsetHeight) {
       container.scrollTop = 10000000
-    } else {
-      container.scrollTop = scrollTop
     }
   }
 }

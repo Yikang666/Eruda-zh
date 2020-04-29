@@ -61,7 +61,7 @@ export default class Log extends Emitter {
     this.headers = headers
     this.ignoreFilter = ignoreFilter
     this.collapsed = false
-    this.el = document.createElement('li')
+    this.el = document.createElement('div')
     this.el.log = this
     this.height = 0
     this.width = 0
