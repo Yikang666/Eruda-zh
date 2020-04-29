@@ -46,6 +46,7 @@ export default class Logger extends Emitter {
     this._bottomSpace = this._$bottomSpace.get(0)
     this._topSpaceHeight = 0
     this._bottomSpaceHeight = 0
+    this._lastScrollTop = 0
     this._logs = []
     this._displayLogs = []
     this._timer = {}
@@ -628,9 +629,11 @@ export default class Logger extends Emitter {
       }
       this._isAtBottom = isAtBottom
 
+      const tolerance = 500
       if (
-        this._topSpaceHeight < scrollTop &&
-        this._topSpaceHeight + this._el.offsetHeight > scrollTop + offsetHeight
+        this._topSpaceHeight < scrollTop - tolerance &&
+        this._topSpaceHeight + this._el.offsetHeight >
+          scrollTop + offsetHeight + tolerance
       ) {
         return
       }
@@ -640,21 +643,28 @@ export default class Logger extends Emitter {
   }
   _renderViewport() {
     const container = this._container
+    const el = this._el
     if (isHidden(container)) return
     const { scrollTop, clientWidth, offsetHeight } = container
     let top = scrollTop
     let bottom = scrollTop + offsetHeight
 
     const displayLogs = this._displayLogs
-    const tolerance = 1000
-    top -= tolerance
-    bottom += tolerance
+
+    const lastScrollTop = this._lastScrollTop
+    if (lastScrollTop < scrollTop) {
+      top -= 500
+      bottom += 2000
+    } else {
+      top -= 2000
+      bottom += 500
+    }
+    this._lastScrollTop = scrollTop
 
     let topSpaceHeight = 0
     let bottomSpaceHeight = 0
     let currentHeight = 0
 
-    this._el.innerHTML = ''
     const len = displayLogs.length
 
     const fakeEl = this._fakeEl
@@ -691,15 +701,15 @@ export default class Logger extends Emitter {
 
       currentHeight += height
     }
-    this._el.appendChild(frag)
 
     this._updateTopSpace(topSpaceHeight)
     this._updateBottomSpace(bottomSpaceHeight)
+    el.innerHTML = ''
+    el.appendChild(frag)
 
     const { scrollHeight } = container
-    if (this._isAtBottom && scrollTop !== scrollHeight - offsetHeight) {
-      container.scrollTop = scrollHeight - offsetHeight
-      this.renderViewport()
+    if (this._isAtBottom && scrollTop <= scrollHeight - offsetHeight) {
+      container.scrollTop = 10000000
     } else {
       container.scrollTop = scrollTop
     }

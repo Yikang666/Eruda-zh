@@ -143,9 +143,10 @@ export default class Log extends Emitter {
   }
   updateSize(silent = true) {
     const height = this.el.offsetHeight
-    if (this.height !== height) {
-      this.height = this.el.offsetHeight
-      this.width = this.el.offsetWidth
+    const width = this.el.offsetWidth
+    if (this.height !== height || this.width !== width) {
+      this.height = height
+      this.width = width
       if (!silent) this.emit('updateSize')
     }
   }
