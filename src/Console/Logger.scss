@@ -24,6 +24,8 @@
   .logs {
     font-size: $font-size;
     padding-top: 1px;
+    position: absolute;
+    width: 100%;
   }
   .log-container {
     box-sizing: content-box;

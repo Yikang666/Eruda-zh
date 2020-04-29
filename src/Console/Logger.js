@@ -4,6 +4,7 @@ import {
   isNum,
   isUndef,
   perfNow,
+  now,
   isStr,
   extend,
   uniqId,
@@ -40,13 +41,13 @@ export default class Logger extends Emitter {
     this._el = this._$el.get(0)
     this._$fakeEl = $container.find('ul.eruda-fake-logs')
     this._fakeEl = this._$fakeEl.get(0)
-    this._$topSpace = $container.find('.eruda-top-space')
-    this._topSpace = this._$topSpace.get(0)
-    this._$bottomSpace = $container.find('.eruda-bottom-space')
-    this._bottomSpace = this._$bottomSpace.get(0)
+    this._$space = $container.find('.eruda-logs-space')
+    this._space = this._$space.get(0)
+    this._spaceHeight = 0
     this._topSpaceHeight = 0
     this._bottomSpaceHeight = 0
     this._lastScrollTop = 0
+    this._lastTimestamp = 0
     this._logs = []
     this._displayLogs = []
     this._timer = {}
@@ -61,8 +62,8 @@ export default class Logger extends Emitter {
     this._isAtBottom = true
     this._groupStack = new Stack()
 
-    this.renderViewport = throttle(() => {
-      this._renderViewport()
+    this.renderViewport = throttle(options => {
+      this._renderViewport(options)
     }, 16)
 
     // https://developers.google.cn/web/tools/chrome-devtools/console/utilities
@@ -392,11 +393,15 @@ export default class Logger extends Emitter {
   }
   _updateTopSpace(height) {
     this._topSpaceHeight = height
-    this._topSpace.style.height = height + 'px'
+    this._el.style.top = height + 'px'
   }
   _updateBottomSpace(height) {
     this._bottomSpaceHeight = height
-    this._bottomSpace.style.height = height + 'px'
+  }
+  _updateSpace(height) {
+    if (this._spaceHeight === height) return
+    this._spaceHeight = height
+    this._space.style.height = height + 'px'
   }
   _updateLogSize(log) {
     const fakeEl = this._fakeEl
@@ -629,37 +634,55 @@ export default class Logger extends Emitter {
       }
       this._isAtBottom = isAtBottom
 
-      const tolerance = 500
+      const lastScrollTop = this._lastScrollTop
+      const lastTimestamp = this._lastTimestamp
+
+      const timestamp = now()
+      const duration = timestamp - lastTimestamp
+      const distance = scrollTop - lastScrollTop
+      const speed = Math.abs(distance / duration)
+      let speedTolerance = speed * 800
+      if (duration > 1000) {
+        speedTolerance = 1000
+      }
+      if (speedTolerance > 4000) speedTolerance = 4000
+      if (speedTolerance < 500) speedTolerance = 1000
+      this._lastScrollTop = scrollTop
+      this._lastTimestamp = timestamp
+
+      let topTolerance = 0
+      let bottomTolerance = 0
+      if (lastScrollTop < scrollTop) {
+        topTolerance = 500
+        bottomTolerance = speedTolerance
+      } else {
+        topTolerance = speedTolerance
+        bottomTolerance = 500
+      }
+
       if (
-        this._topSpaceHeight < scrollTop - tolerance &&
+        this._topSpaceHeight < scrollTop - topTolerance &&
         this._topSpaceHeight + this._el.offsetHeight >
-          scrollTop + offsetHeight + tolerance
+          scrollTop + offsetHeight + bottomTolerance
       ) {
         return
       }
 
-      this.renderViewport()
+      this.renderViewport({
+        topTolerance: topTolerance * 2,
+        bottomTolerance: bottomTolerance * 2
+      })
     })
   }
-  _renderViewport() {
+  _renderViewport({ topTolerance = 500, bottomTolerance = 500 } = {}) {
     const container = this._container
     const el = this._el
     if (isHidden(container)) return
     const { scrollTop, clientWidth, offsetHeight } = container
-    let top = scrollTop
-    let bottom = scrollTop + offsetHeight
+    const top = scrollTop - topTolerance
+    const bottom = scrollTop + offsetHeight + bottomTolerance
 
     const displayLogs = this._displayLogs
-
-    const lastScrollTop = this._lastScrollTop
-    if (lastScrollTop < scrollTop) {
-      top -= 500
-      bottom += 2000
-    } else {
-      top -= 2000
-      bottom += 500
-    }
-    this._lastScrollTop = scrollTop
 
     let topSpaceHeight = 0
     let bottomSpaceHeight = 0
@@ -702,6 +725,7 @@ export default class Logger extends Emitter {
       currentHeight += height
     }
 
+    this._updateSpace(currentHeight)
     this._updateTopSpace(topSpaceHeight)
     this._updateBottomSpace(bottomSpaceHeight)
     el.innerHTML = ''
