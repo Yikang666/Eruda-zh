@@ -1,3 +1,7 @@
+## 2.3.3 (3 May 2020)
+
+* fix: unsafe-eval CSP violation #140
+
 ## v2.3.2 (29 Apr 2020)
 
 * fix(console): scroll performance
