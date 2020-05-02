@@ -15,7 +15,7 @@ const $btn = $('#btn');
 $btn.html('eustia');
 $btn.addClass('btn');
 $btn.show();
-$btn.on('click', function () {
+$btn.on('click', function() {
     // Do something...
 });
 ```
@@ -59,8 +59,8 @@ $attr('#test', 'attr1', 'test');
 $attr('#test', 'attr1'); // -> test
 $attr.remove('#test', 'attr1');
 $attr('#test', {
-    'attr1': 'test',
-    'attr2': 'test'
+    attr1: 'test',
+    attr2: 'test'
 });
 ```
 
@@ -143,7 +143,8 @@ Set one or more CSS properties for the set of matched elements.
 ```javascript
 $css('#test', {
     color: '#fff',
-    background: 'black'
+    background: 'black',
+    opacity: 0.5
 });
 $css('#test', 'display', 'block');
 $css('#test', 'color'); // -> #fff
@@ -299,25 +300,33 @@ const People = Class({
         this.name = name;
         this.age = age;
     },
-    introduce: function () {
+    introduce: function() {
         return 'I am ' + this.name + ', ' + this.age + ' years old.';
     }
 });
 
-const Student = People.extend({
-    initialize: function Student(name, age, school) {
-        this.callSuper(People, 'initialize', arguments);
+const Student = People.extend(
+    {
+        initialize: function Student(name, age, school) {
+            this.callSuper(People, 'initialize', arguments);
 
-        this.school = school;
+            this.school = school;
+        },
+        introduce: function() {
+            return (
+                this.callSuper(People, 'introduce') +
+                '\n I study at ' +
+                this.school +
+                '.'
+            );
+        }
     },
-    introduce: function () {
-        return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.';
+    {
+        is: function(obj) {
+            return obj instanceof Student;
+        }
     }
-}, {
-    is: function (obj) {
-        return obj instanceof Student;
-    }
-});
+);
 
 const a = new Student('allen', 17, 'Hogwarts');
 a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
@@ -364,8 +373,10 @@ Emit event.
 
 ```javascript
 const event = new Emitter();
-event.on('test', function () { console.log('test') });
-event.emit('test'); // Logs out 'test'.
+event.on('test', function(name) {
+    console.log(name);
+});
+event.emit('test', 'licia'); // Logs out 'licia'.
 Emitter.mixin({});
 ```
 
@@ -385,7 +396,11 @@ Enum type implementation.
 
 ```javascript
 const importance = new Enum([
-    'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
+    'NONE',
+    'TRIVIAL',
+    'REGULAR',
+    'IMPORTANT',
+    'CRITICAL'
 ]);
 const val = 1;
 if (val === importance.CRITICAL) {
@@ -447,17 +462,17 @@ const logger = new Logger('licia', Logger.level.ERROR);
 logger.trace('test');
 
 // Format output.
-logger.formatter = function (type, argList) {
+logger.formatter = function(type, argList) {
     argList.push(new Date().getTime());
 
     return argList;
 };
 
-logger.on('all', function (type, argList) {
+logger.on('all', function(type, argList) {
     // It's not affected by log level.
 });
 
-logger.on('debug', function (argList) {
+logger.on('debug', function(argList) {
     // Affected by log level.
 });
 ```
@@ -501,7 +516,7 @@ mediaQuery.on('match', () => {
 Safe MutationObserver, does nothing if MutationObserver is not supported.
 
 ```javascript
-const observer = new MutationObserver(function (mutations) {
+const observer = new MutationObserver(function(mutations) {
     // Do something.
 });
 observer.observe(document.documentElement);
@@ -536,7 +551,7 @@ Iterate over matched elements.
 
 ```javascript
 const $test = new Select('#test');
-$test.find('.test').each(function (idx, element) {
+$test.find('.test').each(function(idx, element) {
     // Manipulate dom nodes
 });
 ```
@@ -658,13 +673,13 @@ Iterate over values.
 
 ```javascript
 const store = new Store('test');
-store.set('user', {name: 'licia'});
+store.set('user', { name: 'licia' });
 store.get('user').name; // -> 'licia'
 store.clear();
-store.each(function (val, key) {
+store.each(function(val, key) {
     // Do something.
 });
-store.on('change', function (key, newVal, oldVal) {
+store.on('change', function(key, newVal, oldVal) {
     // It triggers whenever set is called.
 });
 ```
@@ -782,7 +797,7 @@ Shortcut for type = POST;
 ```javascript
 ajax({
     url: 'http://example.com',
-    data: {test: 'true'},
+    data: { test: 'true' },
     error() {},
     success(data) {
         // ...
@@ -790,7 +805,7 @@ ajax({
     dataType: 'json'
 });
 
-ajax.get('http://example.com', {}, function (data) {
+ajax.get('http://example.com', {}, function(data) {
     // ...
 });
 ```
@@ -816,9 +831,9 @@ Available options:
 Members of Object's prototype won't be retrieved.
 
 ```javascript
-const obj = Object.create({zero: 0});
+const obj = Object.create({ zero: 0 });
 obj.one = 1;
-allKeys(obj) // -> ['zero', 'one']
+allKeys(obj); // -> ['zero', 'one']
 ```
 
 ## before 
@@ -868,7 +883,7 @@ Cast value into a property path array.
 castPath('a.b.c'); // -> ['a', 'b', 'c']
 castPath(['a']); // -> ['a']
 castPath('a[0].b'); // -> ['a', '0', 'b']
-castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
+castPath('a.b.c', { 'a.b.c': true }); // -> ['a.b.c']
 ```
 
 ## clamp 
@@ -902,7 +917,7 @@ Any nested objects or arrays will be copied by reference, not duplicated.
 |return|Cloned value  |
 
 ```javascript
-clone({name: 'eustia'}); // -> {name: 'eustia'}
+clone({ name: 'eustia' }); // -> {name: 'eustia'}
 ```
 
 ## cloneDeep 
@@ -915,7 +930,7 @@ Recursively clone value.
 |return|Deep cloned Value|
 
 ```javascript
-const obj = [{a: 1}, {a: 2}];
+const obj = [{ a: 1 }, { a: 2 }];
 const obj2 = cloneDeep(obj);
 console.log(obj[0] === obj2[1]); // -> false
 ```
@@ -945,7 +960,7 @@ Check if the value is present in the list.
 
 ```javascript
 contain([1, 2, 3], 1); // -> true
-contain({a: 1, b: 2}, 1); // -> true
+contain({ a: 1, b: 2 }, 1); // -> true
 contain('abc', 'a'); // -> true
 ```
 
@@ -984,7 +999,7 @@ Remove cookie value.
 |return |Module cookie |
 
 ```javascript
-cookie.set('a', '1', {path: '/'});
+cookie.set('a', '1', { path: '/' });
 cookie.get('a'); // -> '1'
 cookie.remove('a');
 ```
@@ -999,7 +1014,7 @@ Copy text to clipboard using document.execCommand.
 |cb  |Optional callback|
 
 ```javascript
-copy('text', function (err) {
+copy('text', function(err) {
     // Handle errors.
 });
 ```
@@ -1087,7 +1102,7 @@ Return a new debounced version of the passed function.
 |return|New debounced function         |
 
 ```javascript
-const calLayout = debounce(function () {}, 300);
+const calLayout = debounce(function() {}, 300);
 // $(window).resize(calLayout);
 ```
 
@@ -1116,7 +1131,7 @@ Fill in undefined properties in object with the first value present in the follo
 |return|Destination object|
 
 ```javascript
-defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+defaults({ name: 'RedHood' }, { name: 'Unknown', age: 24 }); // -> {name: 'RedHood', age: 24}
 ```
 
 ## delegate 
@@ -1165,14 +1180,6 @@ if (browser.name === 'ie' && browser.version < 9) {
 }
 ```
 
-## detectMocha 
-
-Detect if mocha is running.
-
-```javascript
-detectMocha(); // -> True if mocha is running.
-```
-
 ## detectOs 
 
 Detect operating system using ua.
@@ -1197,7 +1204,7 @@ Create an array of unique array values not included in the other given array.
 |Name   |Desc                        |
 |-------|----------------------------|
 |arr    |Array to inspect            |
-|...rest|Values to exclude           |
+|...args|Values to exclude           |
 |return |New array of filtered values|
 
 ```javascript
@@ -1215,7 +1222,7 @@ Iterate over elements of collection and invokes iterator for each element.
 |ctx     |Function context              |
 
 ```javascript
-each({'a': 1, 'b': 2}, function (val, key) {});
+each({ a: 1, b: 2 }, function(val, key) {});
 ```
 
 ## endWith 
@@ -1257,7 +1264,7 @@ http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
 |return|Escaped string  |
 
 ```javascript
-escapeJsStr('\"\n'); // -> '\\"\\\\n'
+escapeJsStr('"\n'); // -> '\\"\\\\n'
 ```
 
 ## escapeJsonStr 
@@ -1288,7 +1295,7 @@ Copy all of the properties in the source objects over to the destination object.
 |return     |Destination object|
 
 ```javascript
-extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+extend({ name: 'RedHood' }, { age: 24 }); // -> {name: 'RedHood', age: 24}
 ```
 
 ## extendOwn 
@@ -1302,7 +1309,7 @@ Like extend, but only copies own properties over to the destination object.
 |return     |Destination object|
 
 ```javascript
-extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+extendOwn({ name: 'RedHood' }, { age: 24 }); // -> {name: 'RedHood', age: 24}
 ```
 
 ## extractUrls 
@@ -1315,7 +1322,8 @@ Extract urls from plain text.
 |return|Url list       |
 
 ```javascript
-const str = '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
+const str =
+    '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
 extractUrls(str); // -> ['http://eustia.liriliri.io']
 ```
 
@@ -1348,7 +1356,7 @@ Iterates over elements of collection, returning an array of all the values that 
 |return   |Array of all values that pass predicate|
 
 ```javascript
-filter([1, 2, 3, 4, 5], function (val) {
+filter([1, 2, 3, 4, 5], function(val) {
     return val % 2 === 0;
 }); // -> [2, 4]
 ```
@@ -1378,7 +1386,7 @@ Use Object.defineProperties if Object.freeze is not supported.
 |return|Object passed in|
 
 ```javascript
-const a = {b: 1};
+const a = { b: 1 };
 freeze(a);
 a.b = 2;
 console.log(a); // -> {b: 1}
@@ -1421,7 +1429,7 @@ Checks if key is a direct property.
 |return|True if key is a direct property|
 
 ```javascript
-has({one: 1}, 'one'); // -> true
+has({ one: 1 }, 'one'); // -> true
 ```
 
 ## highlight 
@@ -1487,7 +1495,7 @@ function People(name) {
     this._name = name;
 }
 People.prototype = {
-    getName: function () {
+    getName: function() {
         return this._name;
     }
 };
@@ -1509,9 +1517,11 @@ Check if value is classified as an arguments object.
 |return|True if value is an arguments object|
 
 ```javascript
-(function () {
-    isArgs(arguments); // -> true
-})();
+isArgs(
+    (function() {
+        return arguments;
+    })()
+); // -> true
 ```
 
 ## isArr 
@@ -1566,6 +1576,19 @@ Check if running in a browser.
 
 ```javascript
 console.log(isBrowser); // -> true if running in a browser
+```
+
+## isBuffer 
+
+Check if value is a buffer.
+
+|Name  |Desc                     |
+|------|-------------------------|
+|val   |The value to check       |
+|return|True if value is a buffer|
+
+```javascript
+isBuffer(new Buffer(4)); // -> true
 ```
 
 ## isCrossOrig 
@@ -1687,7 +1710,7 @@ Check if keys and values in src are contained in obj.
 |return|True if object is match           |
 
 ```javascript
-isMatch({a: 1, b: 2}, {a: 1}); // -> true
+isMatch({ a: 1, b: 2 }, { a: 1 }); // -> true
 ```
 
 ## isMiniProgram 
@@ -1737,7 +1760,7 @@ Check if value is a native function.
 |return|True if value is a native function|
 
 ```javascript
-isNative(function () {}); // -> false
+isNative(function() {}); // -> false
 isNative(Math.min); // -> true
 ```
 
@@ -1828,7 +1851,7 @@ Check if value looks like a promise.
 |return|True if value looks like a promise|
 
 ```javascript
-isPromise(new Promise(function () {})); // -> true
+isPromise(new Promise(function() {})); // -> true
 isPromise({}); // -> false
 ```
 
@@ -1913,7 +1936,7 @@ Create an array of the own enumerable property names of object.
 |return|Array of property names|
 
 ```javascript
-keys({a: 1}); // -> ['a']
+keys({ a: 1 }); // -> ['a']
 ```
 
 ## last 
@@ -1940,9 +1963,9 @@ Hyperlink urls in a string.
 |return   |Result string            |
 
 ```javascript
-const str = 'Official site: http://eustia.liriliri.io'
+const str = 'Official site: http://eustia.liriliri.io';
 linkify(str); // -> 'Official site: <a href="http://eustia.liriliri.io">http://eustia.liriliri.io</a>'
-linkify(str, function (url) {
+linkify(str, function(url) {
     return '<a href="' + url + '" target="_blank">' + url + '</a>';
 });
 ```
@@ -1957,7 +1980,7 @@ Inject script tag into page with given src value.
 |cb  |Onload callback|
 
 ```javascript
-loadJs('main.js', function (isLoaded) {
+loadJs('main.js', function(isLoaded) {
     // Do something...
 });
 ```
@@ -2021,7 +2044,9 @@ Create an array of values by running each element in collection through iteratee
 |return  |New mapped array              |
 
 ```javascript
-map([4, 8], function (n) { return n * n; }); // -> [16, 64]
+map([4, 8], function(n) {
+    return n * n;
+}); // -> [16, 64]
 ```
 
 ## mapObj 
@@ -2036,7 +2061,9 @@ Map for objects.
 |return  |New mapped object             |
 
 ```javascript
-mapObj({a: 1, b: 2}, function (val, key) { return val + 1 }); // -> {a: 2, b: 3}
+mapObj({ a: 1, b: 2 }, function(val, key) {
+    return val + 1;
+}); // -> {a: 2, b: 3}
 ```
 
 ## matcher 
@@ -2052,10 +2079,10 @@ Return a predicate function that checks if attrs are contained in an object.
 const filter = require('licia/filter');
 
 const objects = [
-    {a: 1, b: 2, c: 3 },
-    {a: 4, b: 5, c: 6 }
+    { a: 1, b: 2, c: 3 },
+    { a: 4, b: 5, c: 6 }
 ];
-filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
+filter(objects, matcher({ a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
 ```
 
 ## memStorage 
@@ -2172,7 +2199,7 @@ Use process.nextTick if available.
 Otherwise setImmediate or setTimeout is used as fallback.
 
 ```javascript
-nextTick(function () {
+nextTick(function() {
     // Do something...
 });
 ```
@@ -2216,7 +2243,7 @@ Create a function that invokes once.
 |return|New restricted function|
 
 ```javascript
-function init() {};
+function init() {}
 const initOnce = once(init);
 initOnce();
 initOnce(); // -> init is invoked once
@@ -2243,7 +2270,7 @@ Unbind change event.
 Get current orientation(landscape or portrait).
 
 ```javascript
-orientation.on('change', function (direction) {
+orientation.on('change', function(direction) {
     console.log(direction); // -> 'portrait'
 });
 orientation.get(); // -> 'landscape'
@@ -2260,7 +2287,9 @@ Partially apply a function by filling in given arguments.
 |return     |New partially applied function          |
 
 ```javascript
-const sub5 = partial(function (a, b) { return b - a }, 5);
+const sub5 = partial(function(a, b) {
+    return b - a;
+}, 5);
 sub5(20); // -> 15
 ```
 
@@ -2287,9 +2316,9 @@ Return a filtered copy of an object.
 |return|Filtered object|
 
 ```javascript
-pick({a: 1, b: 2}, 'a'); // -> {a: 1}
-pick({a: 1, b: 2, c: 3}, ['b', 'c']) // -> {b: 2, c: 3}
-pick({a: 1, b: 2, c: 3, d: 4}, function (val, key) {
+pick({ a: 1, b: 2 }, 'a'); // -> {a: 1}
+pick({ a: 1, b: 2, c: 3 }, ['b', 'c']); // -> {b: 2, c: 3}
+pick({ a: 1, b: 2, c: 3, d: 4 }, function(val, key) {
     return val % 2;
 }); // -> {a: 1, c: 3}
 ```
@@ -2311,6 +2340,21 @@ Create a dasherize version.
 prefix('text-emphasis'); // -> 'WebkitTextEmphasis'
 prefix.dash('text-emphasis'); // -> '-webkit-text-emphasis'
 prefix('color'); // -> 'color'
+```
+
+## property 
+
+Return a function that will itself return the key property of any passed-in object.
+
+|Name  |Desc                       |
+|------|---------------------------|
+|path  |Path of the property to get|
+|return|New accessor function      |
+
+```javascript
+const obj = { a: { b: 1 } };
+property('a')(obj); // -> {b: 1}
+property(['a', 'b'])(obj); // -> 1
 ```
 
 ## pxToNum 
@@ -2341,7 +2385,7 @@ Stringify an object into a query string.
 
 ```javascript
 query.parse('foo=bar&eruda=true'); // -> {foo: 'bar', eruda: 'true'}
-query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
+query.stringify({ foo: 'bar', eruda: 'true' }); // -> 'foo=bar&eruda=true'
 query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
 ```
 
@@ -2386,7 +2430,9 @@ This accumulates the arguments passed into an array, after a given index.
 |return    |Generated function with rest parameters|
 
 ```javascript
-const paramArr = restArgs(function (rest) { return rest });
+const paramArr = restArgs(function(rest) {
+    return rest;
+});
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
 ```
 
@@ -2450,7 +2496,7 @@ Get object property, don't throw undefined error.
 |return|Target value or undefined|
 
 ```javascript
-const obj = {a: {aa: {aaa: 1}}};
+const obj = { a: { aa: { aaa: 1 } } };
 safeGet(obj, 'a.aa.aaa'); // -> 1
 safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
 safeGet(obj, 'a.b'); // -> undefined
@@ -2458,17 +2504,7 @@ safeGet(obj, 'a.b'); // -> undefined
 
 ## safeStorage 
 
-Use storage safely in safari private browsing and older browsers.
-
-|Name        |Desc             |
-|------------|-----------------|
-|type='local'|local or session |
-|return      |Specified storage|
-
-```javascript
-const localStorage = safeStorage('local');
-localStorage.setItem('licia', 'util');
-```
+Safe localStorage and sessionStorage.
 
 ## slice 
 
@@ -2496,7 +2532,7 @@ Check if predicate return truthy for any element.
 |return   |True if any element passes the predicate check|
 
 ```javascript
-some([2, 5], function (val) {
+some([2, 5], function(val) {
     return val % 2 === 0;
 }); // -> true
 ```
@@ -2519,9 +2555,12 @@ Available options:
 |comparator|Comparator           |
 
 ```javascript
-sortKeys({b: {d: 2, c: 1}, a: 0}, {
-    deep: true
-}); // -> {a: 0, b: {c: 1, d: 2}}
+sortKeys(
+    { b: { d: 2, c: 1 }, a: 0 },
+    {
+        deep: true
+    }
+); // -> {a: 0, b: {c: 1, d: 2}}
 ```
 
 ## splitCase 
@@ -2569,8 +2608,8 @@ Undefined is treated as null value.
 |return|Stringified object |
 
 ```javascript
-stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
-const obj = {a: 1, b: {}};
+stringify({ a: function() {} }); // -> '{"a":"[Function function () {}]"}'
+const obj = { a: 1, b: {} };
 obj.b = obj;
 stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
 ```
@@ -2613,7 +2652,7 @@ Return a new throttled version of the passed function.
 |return|New throttled function         |
 
 ```javascript
-const updatePos = throttle(function () {}, 100);
+const updatePos = throttle(function() {}, 100);
 // $(window).scroll(updatePos);
 ```
 
@@ -2627,7 +2666,7 @@ Convert value to an array.
 |return|Converted array |
 
 ```javascript
-toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
+toArr({ a: 1, b: 2 }); // -> [{a: 1, b: 2}]
 toArr('abc'); // -> ['abc']
 toArr(1); // -> [1]
 toArr(null); // -> []
@@ -2671,7 +2710,7 @@ Convert function to its source code.
 
 ```javascript
 toSrc(Math.min); // -> 'function min() { [native code] }'
-toSrc(function () {}) // -> 'function () { }'
+toSrc(function() {}); // -> 'function () { }'
 ```
 
 ## toStr 
@@ -2719,10 +2758,10 @@ Determine the internal JavaScript [[Class]] of an object.
 ```javascript
 type(5); // -> 'number'
 type({}); // -> 'object'
-type(function () {}); // -> 'function'
+type(function() {}); // -> 'function'
 type([]); // -> 'array'
 type([], false); // -> 'Array'
-type(async function () {}, false); // -> 'AsyncFunction'
+type(async function() {}, false); // -> 'AsyncFunction'
 ```
 
 ## types 
@@ -2803,7 +2842,7 @@ Generate a globally-unique id.
 |return|Globally-unique id|
 
 ```javascript
-uniqId('eusita_'); // -> 'eustia_xxx'
+uniqId('eustia_'); // -> 'eustia_xxx'
 ```
 
 ## unique 
@@ -2871,7 +2910,7 @@ Create an array of the own enumerable property values of object.
 |return|Array of property values|
 
 ```javascript
-values({one: 1, two: 2}); // -> [1, 2]
+values({ one: 1, two: 2 }); // -> [1, 2]
 ```
 
 ## viewportScale 

@@ -55,6 +55,45 @@ export var isUndef = _.isUndef = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ types ------------------------------ */
+
+export var types = _.types = (function (exports) {
+    /* Used for typescript definitions only.
+     */
+
+    /* typescript
+     * export declare namespace types {
+     *     interface Collection<T> {}
+     *     interface List<T> extends Collection<T> {
+     *         [index: number]: T;
+     *         length: number;
+     *     }
+     *     interface ListIterator<T, TResult> {
+     *         (value: T, index: number, list: List<T>): TResult;
+     *     }
+     *     interface Dictionary<T> extends Collection<T> {
+     *         [index: string]: T;
+     *     }
+     *     interface ObjectIterator<T, TResult> {
+     *         (element: T, key: string, list: Dictionary<T>): TResult;
+     *     }
+     *     interface MemoIterator<T, TResult> {
+     *         (prev: TResult, curr: T, index: number, list: List<T>): TResult;
+     *     }
+     *     interface MemoObjectIterator<T, TResult> {
+     *         (prev: TResult, curr: T, key: string, list: Dictionary<T>): TResult;
+     *     }
+     *     type Fn<T> = (...args: any[]) => T;
+     *     type AnyFn = Fn<any>;
+     *     type PlainObj<T> = { [name: string]: T };
+     * }
+     * export declare const types: {};
+     */
+    exports = {};
+
+    return exports;
+})({});
+
 /* ------------------------------ isObj ------------------------------ */
 
 export var isObj = _.isObj = (function (exports) {
@@ -97,7 +136,7 @@ export var has = _.has = (function (exports) {
      */
 
     /* example
-     * has({one: 1}, 'one'); // -> true
+     * has({ one: 1 }, 'one'); // -> true
      */
 
     /* typescript
@@ -129,7 +168,11 @@ export var slice = _.slice = (function (exports) {
      */
 
     /* typescript
-     * export declare function slice(array: any[], start?: number, end?: number): any[];
+     * export declare function slice(
+     *     array: any[],
+     *     start?: number,
+     *     end?: number
+     * ): any[];
      */
     exports = function(arr, start, end) {
         var len = arr.length;
@@ -157,6 +200,89 @@ export var slice = _.slice = (function (exports) {
         }
 
         return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ keys ------------------------------ */
+
+export var keys = _.keys = (function (exports) {
+    /* Create an array of the own enumerable property names of object.
+     *
+     * |Name  |Desc                   |
+     * |------|-----------------------|
+     * |obj   |Object to query        |
+     * |return|Array of property names|
+     */
+
+    /* example
+     * keys({ a: 1 }); // -> ['a']
+     */
+
+    /* typescript
+     * export declare function keys(obj: any): string[];
+     */
+
+    /* dependencies
+     * has 
+     */
+
+    if (Object.keys && !false) {
+        exports = Object.keys;
+    } else {
+        exports = function(obj) {
+            var ret = [];
+
+            for (var key in obj) {
+                if (has(obj, key)) ret.push(key);
+            }
+
+            return ret;
+        };
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ freeze ------------------------------ */
+
+export var freeze = _.freeze = (function (exports) {
+    /* Shortcut for Object.freeze.
+     *
+     * Use Object.defineProperties if Object.freeze is not supported.
+     *
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |obj   |Object to freeze|
+     * |return|Object passed in|
+     */
+
+    /* example
+     * const a = { b: 1 };
+     * freeze(a);
+     * a.b = 2;
+     * console.log(a); // -> {b: 1}
+     */
+
+    /* typescript
+     * export declare function freeze<T>(obj: T): T;
+     */
+
+    /* dependencies
+     * keys 
+     */
+
+    exports = function(obj) {
+        if (Object.freeze) return Object.freeze(obj);
+        keys(obj).forEach(function(prop) {
+            if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
+            Object.defineProperty(obj, prop, {
+                writable: false,
+                configurable: false
+            });
+        });
+        return obj;
     };
 
     return exports;
@@ -254,8 +380,13 @@ export var before = _.before = (function (exports) {
      */
 
     /* typescript
-     * export declare function before(n: number, fn: Function): Function;
+     * export declare function before<T extends types.AnyFn>(n: number, fn: T): T;
      */
+
+    /* dependencies
+     * types 
+     */
+
     exports = function(n, fn) {
         var memo;
         return function() {
@@ -481,7 +612,7 @@ export var create = _.create = (function (exports) {
 
     exports = function(proto) {
         if (!isObj(proto)) return {};
-        if (objCreate) return objCreate(proto);
+        if (objCreate && !false) return objCreate(proto);
 
         function noop() {}
 
@@ -510,7 +641,7 @@ export var inherits = _.inherits = (function (exports) {
      *     this._name = name;
      * }
      * People.prototype = {
-     *     getName: function () {
+     *     getName: function() {
      *         return this._name;
      *     }
      * };
@@ -523,11 +654,14 @@ export var inherits = _.inherits = (function (exports) {
      */
 
     /* typescript
-     * export declare function inherits(Class: Function, SuperClass: Function): void;
+     * export declare function inherits(
+     *     Class: types.AnyFn,
+     *     SuperClass: types.AnyFn
+     * ): void;
      */
 
     /* dependencies
-     * create 
+     * create types 
      */
 
     exports = function(Class, SuperClass) {
@@ -578,13 +712,18 @@ export var debounce = _.debounce = (function (exports) {
      */
 
     /* example
-     * const calLayout = debounce(function () {}, 300);
+     * const calLayout = debounce(function() {}, 300);
      * // $(window).resize(calLayout);
      */
 
     /* typescript
-     * export declare function debounce(fn: Function, wait: number): Function;
+     * export declare function debounce<T extends types.AnyFn>(fn: T, wait: number): T;
      */
+
+    /* dependencies
+     * types 
+     */
+
     exports = function(fn, wait, immediate) {
         var timeout;
         return function() {
@@ -869,139 +1008,6 @@ export var utf8 = _.utf8 = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ root ------------------------------ */
-
-export var root = _.root = (function (exports) {
-    /* Root object reference, `global` in nodeJs, `window` in browser. */
-
-    /* typescript
-     * export declare const root: any;
-     */
-
-    /* dependencies
-     * isBrowser 
-     */
-
-    exports = isBrowser ? window : global;
-
-    return exports;
-})({});
-
-/* ------------------------------ detectMocha ------------------------------ */
-
-export var detectMocha = _.detectMocha = (function (exports) {
-    /* Detect if mocha is running.
-     */
-
-    /* example
-     * detectMocha(); // -> True if mocha is running.
-     */
-
-    /* typescript
-     * export declare function detectMocha(): boolean;
-     */
-
-    /* dependencies
-     * root 
-     */
-
-    exports = function() {
-        for (var i = 0, len = methods.length; i < len; i++) {
-            var method = methods[i];
-            if (typeof root[method] !== 'function') return false;
-        }
-
-        return true;
-    };
-
-    var methods = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it'];
-
-    return exports;
-})({});
-
-/* ------------------------------ keys ------------------------------ */
-
-export var keys = _.keys = (function (exports) {
-    /* Create an array of the own enumerable property names of object.
-     *
-     * |Name  |Desc                   |
-     * |------|-----------------------|
-     * |obj   |Object to query        |
-     * |return|Array of property names|
-     */
-
-    /* example
-     * keys({a: 1}); // -> ['a']
-     */
-
-    /* typescript
-     * export declare function keys(obj: any): string[];
-     */
-
-    /* dependencies
-     * has detectMocha 
-     */
-
-    if (Object.keys && !detectMocha()) {
-        exports = Object.keys;
-    } else {
-        exports = function(obj) {
-            var ret = [];
-
-            for (var key in obj) {
-                if (has(obj, key)) ret.push(key);
-            }
-
-            return ret;
-        };
-    }
-
-    return exports;
-})({});
-
-/* ------------------------------ freeze ------------------------------ */
-
-export var freeze = _.freeze = (function (exports) {
-    /* Shortcut for Object.freeze.
-     *
-     * Use Object.defineProperties if Object.freeze is not supported.
-     *
-     * |Name  |Desc            |
-     * |------|----------------|
-     * |obj   |Object to freeze|
-     * |return|Object passed in|
-     */
-
-    /* example
-     * const a = {b: 1};
-     * freeze(a);
-     * a.b = 2;
-     * console.log(a); // -> {b: 1}
-     */
-
-    /* typescript
-     * export declare function freeze<T>(obj: T): T;
-     */
-
-    /* dependencies
-     * keys 
-     */
-
-    exports = function(obj) {
-        if (Object.freeze) return Object.freeze(obj);
-        keys(obj).forEach(function(prop) {
-            if (!Object.getOwnPropertyDescriptor(obj, prop).configurable) return;
-            Object.defineProperty(obj, prop, {
-                writable: false,
-                configurable: false
-            });
-        });
-        return obj;
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ detectOs ------------------------------ */
 
 export var detectOs = _.detectOs = (function (exports) {
@@ -1062,13 +1068,23 @@ export var restArgs = _.restArgs = (function (exports) {
      */
 
     /* example
-     * const paramArr = restArgs(function (rest) { return rest });
+     * const paramArr = restArgs(function(rest) {
+     *     return rest;
+     * });
      * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
      */
 
     /* typescript
-     * export declare function restArgs(fn: Function, startIndex?: number): Function;
+     * export declare function restArgs(
+     *     fn: types.AnyFn,
+     *     startIndex?: number
+     * ): types.AnyFn;
      */
+
+    /* dependencies
+     * types 
+     */
+
     exports = function(fn, startIdx) {
         startIdx = startIdx == null ? fn.length - 1 : +startIdx;
         return function() {
@@ -1112,11 +1128,15 @@ export var optimizeCb = _.optimizeCb = (function (exports) {
      */
 
     /* typescript
-     * export declare function optimizeCb(fn: Function, ctx: any, argCount?: number): Function;
+     * export declare function optimizeCb(
+     *     fn: types.AnyFn,
+     *     ctx: any,
+     *     argCount?: number
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * isUndef 
+     * isUndef types 
      */
 
     exports = function(fn, ctx, argCount) {
@@ -1143,42 +1163,6 @@ export var optimizeCb = _.optimizeCb = (function (exports) {
             return fn.apply(ctx, arguments);
         };
     };
-
-    return exports;
-})({});
-
-/* ------------------------------ types ------------------------------ */
-
-export var types = _.types = (function (exports) {
-    /* Used for typescript definitions only.
-     */
-
-    /* typescript
-     * export declare namespace types {
-     *     interface Collection<T> {}
-     *     interface List<T> extends Collection<T> {
-     *         [index: number]: T;
-     *         length: number;
-     *     }
-     *     interface ListIterator<T, TResult> {
-     *         (value: T, index: number, list: List<T>): TResult;
-     *     }
-     *     interface Dictionary<T> extends Collection<T> {
-     *         [index: string]: T;
-     *     }
-     *     interface ObjectIterator<T, TResult> {
-     *         (element: T, key: string, list: Dictionary<T>): TResult;
-     *     }
-     *     interface MemoIterator<T, TResult> {
-     *         (prev: TResult, curr: T, index: number, list: List<T>): TResult;
-     *     }
-     *     interface MemoObjectIterator<T, TResult> {
-     *         (prev: TResult, curr: T, key: string, list: Dictionary<T>): TResult;
-     *     }
-     * }
-     * export declare const types: {}
-     */
-    exports = {};
 
     return exports;
 })({});
@@ -1270,7 +1254,7 @@ export var escapeJsStr = _.escapeJsStr = (function (exports) {
      */
 
     /* example
-     * escapeJsStr('\"\n'); // -> '\\"\\\\n'
+     * escapeJsStr('"\n'); // -> '\\"\\\\n'
      */
 
     /* typescript
@@ -1517,9 +1501,11 @@ export var isArgs = _.isArgs = (function (exports) {
      */
 
     /* example
-     * (function () {
-     *     isArgs(arguments); // -> true
-     * })();
+     * isArgs(
+     *     (function() {
+     *         return arguments;
+     *     })()
+     * ); // -> true
      */
 
     /* typescript
@@ -1561,11 +1547,13 @@ export var isArr = _.isArr = (function (exports) {
      * objToStr 
      */
 
-    exports =
-        Array.isArray ||
-        function(val) {
+    if (Array.isArray && !false) {
+        exports = Array.isArray;
+    } else {
+        exports = function(val) {
             return objToStr(val) === '[object Array]';
         };
+    }
 
     return exports;
 })({});
@@ -1586,7 +1574,7 @@ export var castPath = _.castPath = (function (exports) {
      * castPath('a.b.c'); // -> ['a', 'b', 'c']
      * castPath(['a']); // -> ['a']
      * castPath('a[0].b'); // -> ['a', '0', 'b']
-     * castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
+     * castPath('a.b.c', { 'a.b.c': true }); // -> ['a.b.c']
      */
 
     /* typescript
@@ -1626,7 +1614,7 @@ export var safeGet = _.safeGet = (function (exports) {
      */
 
     /* example
-     * const obj = {a: {aa: {aaa: 1}}};
+     * const obj = { a: { aa: { aaa: 1 } } };
      * safeGet(obj, 'a.aa.aaa'); // -> 1
      * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
      * safeGet(obj, 'a.b'); // -> undefined
@@ -1798,7 +1786,7 @@ export var getProto = _.getProto = (function (exports) {
 
     exports = function(obj) {
         if (!isObj(obj)) return;
-        if (getPrototypeOf) return getPrototypeOf(obj);
+        if (getPrototypeOf && !false) return getPrototypeOf(obj);
         var proto = obj.__proto__;
         if (proto || proto === null) return proto;
         if (isFn(obj.constructor)) return obj.constructor.prototype;
@@ -1915,7 +1903,7 @@ export var each = _.each = (function (exports) {
      */
 
     /* example
-     * each({'a': 1, 'b': 2}, function (val, key) {});
+     * each({ a: 1, b: 2 }, function(val, key) {});
      */
 
     /* typescript
@@ -1930,8 +1918,6 @@ export var each = _.each = (function (exports) {
      *     ctx?: any
      * ): types.Collection<T>;
      */
-
-    /* eslint-disable no-unused-vars */
 
     /* dependencies
      * isArrLike keys optimizeCb types 
@@ -1972,11 +1958,14 @@ export var createAssigner = _.createAssigner = (function (exports) {
      */
 
     /* typescript
-     * export declare function createAssigner(keysFn: Function, defaults: boolean): Function;
+     * export declare function createAssigner(
+     *     keysFn: types.AnyFn,
+     *     defaults: boolean
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * isUndef each 
+     * isUndef each types 
      */
 
     exports = function(keysFn, defaults) {
@@ -2008,7 +1997,7 @@ export var extendOwn = _.extendOwn = (function (exports) {
      */
 
     /* example
-     * extendOwn({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+     * extendOwn({ name: 'RedHood' }, { age: 24 }); // -> {name: 'RedHood', age: 24}
      */
 
     /* typescript
@@ -2036,7 +2025,7 @@ export var values = _.values = (function (exports) {
      */
 
     /* example
-     * values({one: 1, two: 2}); // -> [1, 2]
+     * values({ one: 1, two: 2 }); // -> [1, 2]
      */
 
     /* typescript
@@ -2102,15 +2091,12 @@ export var contain = _.contain = (function (exports) {
 
     /* example
      * contain([1, 2, 3], 1); // -> true
-     * contain({a: 1, b: 2}, 1); // -> true
+     * contain({ a: 1, b: 2 }, 1); // -> true
      * contain('abc', 'a'); // -> true
      */
 
     /* typescript
-     * export declare function contain(
-     *     arr: any[] | {} | string,
-     *     val: any
-     * ): boolean;
+     * export declare function contain(arr: any[] | {} | string, val: any): boolean;
      */
 
     /* dependencies
@@ -2186,6 +2172,42 @@ export var isBool = _.isBool = (function (exports) {
      */
     exports = function(val) {
         return val === true || val === false;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ isBuffer ------------------------------ */
+
+export var isBuffer = _.isBuffer = (function (exports) {
+    /* Check if value is a buffer.
+     *
+     * |Name  |Desc                     |
+     * |------|-------------------------|
+     * |val   |The value to check       |
+     * |return|True if value is a buffer|
+     */
+
+    /* example
+     * isBuffer(new Buffer(4)); // -> true
+     */
+
+    /* typescript
+     * export declare function isBuffer(val: any): boolean;
+     */
+
+    /* dependencies
+     * isFn 
+     */
+
+    exports = function(val) {
+        if (val == null) return false;
+        if (val._isBuffer) return true;
+        return (
+            val.constructor &&
+            isFn(val.constructor.isBuffer) &&
+            val.constructor.isBuffer(val)
+        );
     };
 
     return exports;
@@ -2291,6 +2313,24 @@ export var isErr = _.isErr = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ root ------------------------------ */
+
+export var root = _.root = (function (exports) {
+    /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+    /* typescript
+     * export declare const root: any;
+     */
+
+    /* dependencies
+     * isBrowser 
+     */
+
+    exports = isBrowser ? window : global;
+
+    return exports;
+})({});
+
 /* ------------------------------ isHidden ------------------------------ */
 
 export var isHidden = _.isHidden = (function (exports) {
@@ -2319,14 +2359,17 @@ export var isHidden = _.isHidden = (function (exports) {
      */
 
     /* typescript
-     * export declare function isHidden(el: Element, options?: {
-     *     display?: boolean;
-     *     visibility?: boolean;
-     *     opacity?: boolean;
-     *     size?: boolean;
-     *     viewport?: boolean;
-     *     overflow?: boolean;
-     * }): boolean;
+     * export declare function isHidden(
+     *     el: Element,
+     *     options?: {
+     *         display?: boolean;
+     *         visibility?: boolean;
+     *         opacity?: boolean;
+     *         size?: boolean;
+     *         viewport?: boolean;
+     *         overflow?: boolean;
+     *     }
+     * ): boolean;
      */
 
     /* dependencies
@@ -2440,7 +2483,7 @@ export var isMatch = _.isMatch = (function (exports) {
      */
 
     /* example
-     * isMatch({a: 1, b: 2}, {a: 1}); // -> true
+     * isMatch({ a: 1, b: 2 }, { a: 1 }); // -> true
      */
 
     /* typescript
@@ -2488,11 +2531,14 @@ export var memoize = _.memoize = (function (exports) {
      */
 
     /* typescript
-     * export declare function memoize(fn: Function, hashFn?: Function): Function;
+     * export declare function memoize(
+     *     fn: types.AnyFn,
+     *     hashFn?: types.AnyFn
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * has 
+     * has types 
      */
 
     exports = function(fn, hashFn) {
@@ -2678,15 +2724,15 @@ export var toSrc = _.toSrc = (function (exports) {
 
     /* example
      * toSrc(Math.min); // -> 'function min() { [native code] }'
-     * toSrc(function () {}) // -> 'function () { }'
+     * toSrc(function() {}); // -> 'function () { }'
      */
 
     /* typescript
-     * export declare function toSrc(fn: Function): string;
+     * export declare function toSrc(fn: types.AnyFn): string;
      */
 
     /* dependencies
-     * isNil 
+     * isNil types 
      */
 
     exports = function(fn) {
@@ -2722,7 +2768,7 @@ export var isNative = _.isNative = (function (exports) {
      */
 
     /* example
-     * isNative(function () {}); // -> false
+     * isNative(function() {}); // -> false
      * isNative(Math.min); // -> true
      */
 
@@ -2822,7 +2868,7 @@ export var isPromise = _.isPromise = (function (exports) {
      */
 
     /* example
-     * isPromise(new Promise(function () {})); // -> true
+     * isPromise(new Promise(function() {})); // -> true
      * isPromise({}); // -> false
      */
 
@@ -2835,7 +2881,7 @@ export var isPromise = _.isPromise = (function (exports) {
      */
 
     exports = function(val) {
-        return isObj(val) && isFn(val.then);
+        return isObj(val) && isFn(val.then) && isFn(val.catch);
     };
 
     return exports;
@@ -2889,8 +2935,13 @@ export var isSorted = _.isSorted = (function (exports) {
      */
 
     /* typescript
-     * export declare function isSorted(arr: any[], cmp?: Function): boolean;
+     * export declare function isSorted(arr: any[], cmp?: types.AnyFn): boolean;
      */
+
+    /* dependencies
+     * types 
+     */
+
     exports = function(arr) {
         var cmp =
             arguments.length > 1 && arguments[1] !== undefined
@@ -2925,14 +2976,19 @@ export var loadJs = _.loadJs = (function (exports) {
      */
 
     /* example
-     * loadJs('main.js', function (isLoaded) {
+     * loadJs('main.js', function(isLoaded) {
      *     // Do something...
      * });
      */
 
     /* typescript
-     * export declare function loadJs(src: string, cb?: Function): void;
+     * export declare function loadJs(src: string, cb?: types.AnyFn): void;
      */
+
+    /* dependencies
+     * types 
+     */
+
     exports = function(src, cb) {
         var script = document.createElement('script');
         script.src = src;
@@ -2943,6 +2999,10 @@ export var loadJs = _.loadJs = (function (exports) {
                 script.readyState != 'complete' &&
                 script.readyState != 'loaded';
             cb && cb(!isNotLoaded);
+        };
+
+        script.onerror = function() {
+            cb(false);
         };
 
         document.body.appendChild(script);
@@ -3337,18 +3397,18 @@ export var matcher = _.matcher = (function (exports) {
      * const filter = require('licia/filter');
      *
      * const objects = [
-     *     {a: 1, b: 2, c: 3 },
-     *     {a: 4, b: 5, c: 6 }
+     *     { a: 1, b: 2, c: 3 },
+     *     { a: 4, b: 5, c: 6 }
      * ];
-     * filter(objects, matcher({a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
+     * filter(objects, matcher({ a: 4, c: 6 })); // -> [{a: 4, b: 5, c: 6}]
      */
 
     /* typescript
-     * export declare function matcher(attrs: any): Function;
+     * export declare function matcher(attrs: any): types.AnyFn;
      */
 
     /* dependencies
-     * extendOwn isMatch 
+     * extendOwn isMatch types 
      */
 
     exports = function(attrs) {
@@ -3361,6 +3421,592 @@ export var matcher = _.matcher = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ memStorage ------------------------------ */
+
+export var memStorage = _.memStorage = (function (exports) {
+    /* Memory-backed implementation of the Web Storage API.
+     *
+     * A replacement for environments where localStorage or sessionStorage is not available.
+     */
+
+    /* example
+     * const localStorage = window.localStorage || memStorage;
+     * localStorage.setItem('test', 'licia');
+     */
+
+    /* typescript
+     * export declare const memStorage: typeof window.localStorage;
+     */
+
+    /* dependencies
+     * keys 
+     */
+
+    exports = {
+        getItem: function(key) {
+            return (API_KEYS[key] ? cloak[key] : this[key]) || null;
+        },
+        setItem: function(key, val) {
+            API_KEYS[key] ? (cloak[key] = val) : (this[key] = val);
+        },
+        removeItem: function(key) {
+            API_KEYS[key] ? delete cloak[key] : delete this[key];
+        },
+        key: function(i) {
+            var keys = enumerableKeys();
+            return i >= 0 && i < keys.length ? keys[i] : null;
+        },
+        clear: function() {
+            var keys = uncloakedKeys();
+            /* eslint-disable no-cond-assign */
+
+            for (var i = 0, key; (key = keys[i]); i++) {
+                delete this[key];
+            }
+
+            keys = cloakedKeys();
+            /* eslint-disable no-cond-assign */
+
+            for (var _i = 0, _key; (_key = keys[_i]); _i++) {
+                delete cloak[_key];
+            }
+        }
+    };
+    Object.defineProperty(exports, 'length', {
+        enumerable: false,
+        configurable: true,
+        get: function() {
+            return enumerableKeys().length;
+        }
+    });
+    var cloak = {};
+    var API_KEYS = {
+        getItem: 1,
+        setItem: 1,
+        removeItem: 1,
+        key: 1,
+        clear: 1,
+        length: 1
+    };
+
+    function enumerableKeys() {
+        return uncloakedKeys().concat(cloakedKeys());
+    }
+
+    function uncloakedKeys() {
+        return keys(exports).filter(function(key) {
+            return !API_KEYS[key];
+        });
+    }
+
+    function cloakedKeys() {
+        return keys(cloak);
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ safeStorage ------------------------------ */
+
+export var safeStorage = _.safeStorage = (function (exports) {
+    /* Safe localStorage and sessionStorage.
+     */
+
+    /* dependencies
+     * isUndef memStorage 
+     */
+
+    exports = function (type, memReplacement) {
+      if (isUndef(memReplacement)) memReplacement = true
+
+      let ret
+
+      switch (type) {
+        case 'local':
+          ret = window.localStorage
+          break
+        case 'session':
+          ret = window.sessionStorage
+          break
+      }
+
+      try {
+        // Safari private browsing
+        let x = 'test-localStorage-' + Date.now()
+        ret.setItem(x, x)
+        let y = ret.getItem(x)
+        ret.removeItem(x)
+        if (y !== x) throw new Error()
+      } catch (e) {
+        if (memReplacement) return memStorage
+        return
+      }
+
+      return ret
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ toNum ------------------------------ */
+
+export var toNum = _.toNum = (function (exports) {
+    /* Convert value to a number.
+     *
+     * |Name  |Desc            |
+     * |------|----------------|
+     * |val   |Value to process|
+     * |return|Result number   |
+     */
+
+    /* example
+     * toNum('5'); // -> 5
+     */
+
+    /* typescript
+     * export declare function toNum(val: any): number;
+     */
+
+    /* dependencies
+     * isNum isObj isFn isStr 
+     */
+
+    exports = function(val) {
+        if (isNum(val)) return val;
+
+        if (isObj(val)) {
+            var temp = isFn(val.valueOf) ? val.valueOf() : val;
+            val = isObj(temp) ? temp + '' : temp;
+        }
+
+        if (!isStr(val)) return val === 0 ? val : +val;
+        return +val;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ ms ------------------------------ */
+
+export var ms = _.ms = (function (exports) {
+    /* Convert time string formats to milliseconds.
+     *
+     * Turn time string into milliseconds.
+     *
+     * |Name  |Desc         |
+     * |------|-------------|
+     * |str   |String format|
+     * |return|Milliseconds |
+     *
+     * Turn milliseconds into time string.
+     *
+     * |Name  |Desc         |
+     * |------|-------------|
+     * |num   |Milliseconds |
+     * |return|String format|
+     */
+
+    /* example
+     * ms('1s'); // -> 1000
+     * ms('1m'); // -> 60000
+     * ms('1.5h'); // -> 5400000
+     * ms('1d'); // -> 86400000
+     * ms('1y'); // -> 31557600000
+     * ms('1000'); // -> 1000
+     * ms(1500); // -> '1.5s'
+     * ms(60000); // -> '1m'
+     */
+
+    /* typescript
+     * export declare function ms(str: string): number;
+     * export declare function ms(num: number): string;
+     */
+
+    /* dependencies
+     * toNum isStr 
+     */
+
+    exports = function(str) {
+        if (isStr(str)) {
+            var match = str.match(regStrTime);
+            if (!match) return 0;
+            return toNum(match[1]) * factor[match[2] || 'ms'];
+        } else {
+            var num = str;
+            var suffix = 'ms';
+
+            for (var i = 0, len = suffixList.length; i < len; i++) {
+                if (num >= factor[suffixList[i]]) {
+                    suffix = suffixList[i];
+                    break;
+                }
+            }
+
+            return +(num / factor[suffix]).toFixed(2) + suffix;
+        }
+    };
+
+    var factor = {
+        ms: 1,
+        s: 1000
+    };
+    factor.m = factor.s * 60;
+    factor.h = factor.m * 60;
+    factor.d = factor.h * 24;
+    factor.y = factor.d * 365.25;
+    var suffixList = ['y', 'd', 'h', 'm', 's'];
+    var regStrTime = /^((?:\d+)?\.?\d+) *(s|m|h|d|y)?$/;
+
+    return exports;
+})({});
+
+/* ------------------------------ toInt ------------------------------ */
+
+export var toInt = _.toInt = (function (exports) {
+    /* Convert value to an integer.
+     *
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |val   |Value to convert |
+     * |return|Converted integer|
+     */
+
+    /* example
+     * toInt(1.1); // -> 1
+     * toInt(undefined); // -> 0
+     */
+
+    /* typescript
+     * export declare function toInt(val: any): number;
+     */
+
+    /* dependencies
+     * toNum 
+     */
+
+    exports = function(val) {
+        if (!val) return val === 0 ? val : 0;
+        val = toNum(val);
+        return val - (val % 1);
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ detectBrowser ------------------------------ */
+
+export var detectBrowser = _.detectBrowser = (function (exports) {
+    /* Detect browser info using ua.
+     *
+     * |Name                  |Desc                              |
+     * |----------------------|----------------------------------|
+     * |ua=navigator.userAgent|Browser userAgent                 |
+     * |return                |Object containing name and version|
+     *
+     * Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
+     */
+
+    /* example
+     * const browser = detectBrowser();
+     * if (browser.name === 'ie' && browser.version < 9) {
+     *     // Do something about old IE...
+     * }
+     */
+
+    /* typescript
+     * export declare function detectBrowser(
+     *     ua?: string
+     * ): {
+     *     name: string;
+     *     version: number;
+     * };
+     */
+
+    /* dependencies
+     * isBrowser toInt keys 
+     */
+
+    exports = function(ua) {
+        ua = ua || (isBrowser ? navigator.userAgent : '');
+        ua = ua.toLowerCase();
+        var ieVer = getVer(ua, 'msie ');
+        if (ieVer)
+            return {
+                version: ieVer,
+                name: 'ie'
+            };
+        if (regIe11.test(ua))
+            return {
+                version: 11,
+                name: 'ie'
+            };
+
+        for (var i = 0, len = browsers.length; i < len; i++) {
+            var name = browsers[i];
+            var match = ua.match(regBrowsers[name]);
+            if (match == null) continue;
+            var version = toInt(match[1].split('.')[0]);
+            if (name === 'opera') version = getVer(ua, 'version/') || version;
+            return {
+                name: name,
+                version: version
+            };
+        }
+
+        return {
+            name: 'unknown',
+            version: -1
+        };
+    };
+
+    var regBrowsers = {
+        edge: /edge\/([0-9._]+)/,
+        firefox: /firefox\/([0-9.]+)(?:\s|$)/,
+        opera: /opera\/([0-9.]+)(?:\s|$)/,
+        android: /android\s([0-9.]+)/,
+        ios: /version\/([0-9._]+).*mobile.*safari.*/,
+        safari: /version\/([0-9._]+).*safari/,
+        chrome: /(?!chrom.*opr)chrom(?:e|ium)\/([0-9.]+)(:?\s|$)/
+    };
+    var regIe11 = /trident\/7\./;
+    var browsers = keys(regBrowsers);
+
+    function getVer(ua, mark) {
+        var idx = ua.indexOf(mark);
+        if (idx > -1)
+            return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ nextTick ------------------------------ */
+
+export var nextTick = _.nextTick = (function (exports) {
+    /* Next tick for both node and browser.
+     *
+     * |Name|Desc            |
+     * |----|----------------|
+     * |cb  |Function to call|
+     *
+     * Use process.nextTick if available.
+     *
+     * Otherwise setImmediate or setTimeout is used as fallback.
+     */
+
+    /* example
+     * nextTick(function() {
+     *     // Do something...
+     * });
+     */
+
+    /* typescript
+     * export declare function nextTick(cb: types.AnyFn): void;
+     */
+
+    /* dependencies
+     * types 
+     */
+
+    if (typeof process === 'object' && process.nextTick && !false) {
+        exports = process.nextTick;
+    } else if (typeof setImmediate === 'function') {
+        exports = function(cb) {
+            setImmediate(ensureCallable(cb));
+        };
+    } else {
+        exports = function(cb) {
+            setTimeout(ensureCallable(cb), 0);
+        };
+    }
+
+    function ensureCallable(fn) {
+        if (typeof fn !== 'function')
+            throw new TypeError(fn + ' is not a function');
+        return fn;
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ now ------------------------------ */
+
+export var now = _.now = (function (exports) {
+    /* Gets the number of milliseconds that have elapsed since the Unix epoch.
+     */
+
+    /* example
+     * now(); // -> 1468826678701
+     */
+
+    /* typescript
+     * export declare function now(): number;
+     */
+    if (Date.now && !false) {
+        exports = Date.now;
+    } else {
+        exports = function() {
+            return new Date().getTime();
+        };
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ perfNow ------------------------------ */
+
+export var perfNow = _.perfNow = (function (exports) {
+    /* High resolution time up to microsecond precision.
+     */
+
+    /* example
+     * const start = perfNow();
+     *
+     * // Do something.
+     *
+     * console.log(perfNow() - start);
+     */
+
+    /* typescript
+     * export declare function perfNow(): number;
+     */
+
+    /* dependencies
+     * now root 
+     */
+
+    var performance = root.performance;
+    var process = root.process;
+    var loadTime;
+
+    if (performance && performance.now) {
+        exports = function() {
+            return performance.now();
+        };
+    } else if (process && process.hrtime) {
+        var getNanoSeconds = function() {
+            var hr = process.hrtime();
+            return hr[0] * 1e9 + hr[1];
+        };
+
+        loadTime = getNanoSeconds() - process.uptime() * 1e9;
+
+        exports = function() {
+            return (getNanoSeconds() - loadTime) / 1e6;
+        };
+    } else {
+        loadTime = now();
+
+        exports = function() {
+            return now() - loadTime;
+        };
+    }
+
+    return exports;
+})({});
+
+/* ------------------------------ pick ------------------------------ */
+
+export var pick = _.pick = (function (exports) {
+    /* Return a filtered copy of an object.
+     *
+     * |Name  |Desc           |
+     * |------|---------------|
+     * |object|Source object  |
+     * |filter|Object filter  |
+     * |return|Filtered object|
+     */
+
+    /* example
+     * pick({ a: 1, b: 2 }, 'a'); // -> {a: 1}
+     * pick({ a: 1, b: 2, c: 3 }, ['b', 'c']); // -> {b: 2, c: 3}
+     * pick({ a: 1, b: 2, c: 3, d: 4 }, function(val, key) {
+     *     return val % 2;
+     * }); // -> {a: 1, c: 3}
+     */
+
+    /* typescript
+     * export declare function pick(
+     *     object: any,
+     *     filter: string | string[] | Function
+     * ): any;
+     */
+
+    /* dependencies
+     * isStr isArr contain each 
+     */
+
+    exports = function(obj, filter, omit) {
+        if (isStr(filter)) filter = [filter];
+
+        if (isArr(filter)) {
+            var keys = filter;
+
+            filter = function(val, key) {
+                return contain(keys, key);
+            };
+        }
+
+        var ret = {};
+
+        var iteratee = function(val, key) {
+            if (filter(val, key)) ret[key] = val;
+        };
+
+        if (omit) {
+            iteratee = function(val, key) {
+                if (!filter(val, key)) ret[key] = val;
+            };
+        }
+
+        each(obj, iteratee);
+        return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ property ------------------------------ */
+
+export var property = _.property = (function (exports) {
+    /* Return a function that will itself return the key property of any passed-in object.
+     *
+     * |Name  |Desc                       |
+     * |------|---------------------------|
+     * |path  |Path of the property to get|
+     * |return|New accessor function      |
+     */
+
+    /* example
+     * const obj = { a: { b: 1 } };
+     * property('a')(obj); // -> {b: 1}
+     * property(['a', 'b'])(obj); // -> 1
+     */
+
+    /* typescript
+     * export declare function property(path: string | string[]): types.AnyFn;
+     */
+
+    /* dependencies
+     * isArr safeGet types 
+     */
+
+    exports = function(path) {
+        if (!isArr(path)) return shallowProperty(path);
+        return function(obj) {
+            return safeGet(obj, path);
+        };
+    };
+
+    function shallowProperty(key) {
+        return function(obj) {
+            return obj == null ? void 0 : obj[key];
+        };
+    }
+
+    return exports;
+})({});
+
 /* ------------------------------ safeCb ------------------------------ */
 
 export var safeCb = _.safeCb = (function (exports) {
@@ -3368,22 +4014,22 @@ export var safeCb = _.safeCb = (function (exports) {
      */
 
     /* typescript
-     * export declare function safeCb(val?: any, ctx?: any, argCount?: number): Function;
+     * export declare function safeCb(
+     *     val?: any,
+     *     ctx?: any,
+     *     argCount?: number
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * isFn isObj optimizeCb matcher identity 
+     * isFn isObj isArr optimizeCb matcher identity types property 
      */
 
     exports = function(val, ctx, argCount) {
         if (val == null) return identity;
         if (isFn(val)) return optimizeCb(val, ctx, argCount);
-        if (isObj(val)) return matcher(val);
-        return function(key) {
-            return function(obj) {
-                return obj == null ? undefined : obj[key];
-            };
-        };
+        if (isObj(val) && !isArr(val)) return matcher(val);
+        return property(val);
     };
 
     return exports;
@@ -3403,7 +4049,7 @@ export var filter = _.filter = (function (exports) {
      */
 
     /* example
-     * filter([1, 2, 3, 4, 5], function (val) {
+     * filter([1, 2, 3, 4, 5], function(val) {
      *     return val % 2 === 0;
      * }); // -> [2, 4]
      */
@@ -3420,8 +4066,6 @@ export var filter = _.filter = (function (exports) {
      *     context?: any
      * ): T[];
      */
-
-    /* eslint-disable no-unused-vars */
 
     /* dependencies
      * safeCb each types 
@@ -3447,7 +4091,7 @@ export var difference = _.difference = (function (exports) {
      * |Name   |Desc                        |
      * |-------|----------------------------|
      * |arr    |Array to inspect            |
-     * |...rest|Values to exclude           |
+     * |...args|Values to exclude           |
      * |return |New array of filtered values|
      */
 
@@ -3456,17 +4100,17 @@ export var difference = _.difference = (function (exports) {
      */
 
     /* typescript
-     * export declare function difference(arr: any[], ...rest: any[]): any[];
+     * export declare function difference(arr: any[], ...args: any[]): any[];
      */
 
     /* dependencies
      * restArgs flatten filter contain 
      */
 
-    exports = restArgs(function(arr, rest) {
-        rest = flatten(rest);
+    exports = restArgs(function(arr, args) {
+        args = flatten(args);
         return filter(arr, function(val) {
-            return !contain(rest, val);
+            return !contain(args, val);
         });
     });
 
@@ -3543,9 +4187,9 @@ export var allKeys = _.allKeys = (function (exports) {
      */
 
     /* example
-     * const obj = Object.create({zero: 0});
+     * const obj = Object.create({ zero: 0 });
      * obj.one = 1;
-     * allKeys(obj) // -> ['zero', 'one']
+     * allKeys(obj); // -> ['zero', 'one']
      */
 
     /* typescript
@@ -3632,7 +4276,7 @@ export var defaults = _.defaults = (function (exports) {
      */
 
     /* example
-     * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+     * defaults({ name: 'RedHood' }, { name: 'Unknown', age: 24 }); // -> {name: 'RedHood', age: 24}
      */
 
     /* typescript
@@ -3833,7 +4477,7 @@ export var extend = _.extend = (function (exports) {
      */
 
     /* example
-     * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
+     * extend({ name: 'RedHood' }, { age: 24 }); // -> {name: 'RedHood', age: 24}
      */
 
     /* typescript
@@ -3863,7 +4507,7 @@ export var clone = _.clone = (function (exports) {
      */
 
     /* example
-     * clone({name: 'eustia'}); // -> {name: 'eustia'}
+     * clone({ name: 'eustia' }); // -> {name: 'eustia'}
      */
 
     /* typescript
@@ -3894,17 +4538,17 @@ export var copy = _.copy = (function (exports) {
      */
 
     /* example
-     * copy('text', function (err) {
+     * copy('text', function(err) {
      *     // Handle errors.
      * });
      */
 
     /* typescript
-     * export declare function copy(text: string, cb?: Function): void;
+     * export declare function copy(text: string, cb?: types.AnyFn): void;
      */
 
     /* dependencies
-     * extend noop 
+     * extend noop types 
      */
 
     exports = function(text, cb) {
@@ -3953,7 +4597,9 @@ export var map = _.map = (function (exports) {
      */
 
     /* example
-     * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
+     * map([4, 8], function(n) {
+     *     return n * n;
+     * }); // -> [16, 64]
      */
 
     /* typescript
@@ -3968,8 +4614,6 @@ export var map = _.map = (function (exports) {
      *     context?: any
      * ): TResult[];
      */
-
-    /* eslint-disable no-unused-vars */
 
     /* dependencies
      * safeCb keys isArrLike types 
@@ -4089,7 +4733,7 @@ export var cookie = _.cookie = (function (exports) {
      */
 
     /* example
-     * cookie.set('a', '1', {path: '/'});
+     * cookie.set('a', '1', { path: '/' });
      * cookie.get('a'); // -> '1'
      * cookie.remove('a');
      */
@@ -4192,7 +4836,7 @@ export var toArr = _.toArr = (function (exports) {
      */
 
     /* example
-     * toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
+     * toArr({ a: 1, b: 2 }); // -> [{a: 1, b: 2}]
      * toArr('abc'); // -> ['abc']
      * toArr(1); // -> [1]
      * toArr(null); // -> []
@@ -4234,25 +4878,33 @@ export var Class = _.Class = (function (exports) {
      *         this.name = name;
      *         this.age = age;
      *     },
-     *     introduce: function () {
+     *     introduce: function() {
      *         return 'I am ' + this.name + ', ' + this.age + ' years old.';
      *     }
      * });
      *
-     * const Student = People.extend({
-     *     initialize: function Student(name, age, school) {
-     *         this.callSuper(People, 'initialize', arguments);
+     * const Student = People.extend(
+     *     {
+     *         initialize: function Student(name, age, school) {
+     *             this.callSuper(People, 'initialize', arguments);
      *
-     *         this.school = school;
+     *             this.school = school;
+     *         },
+     *         introduce: function() {
+     *             return (
+     *                 this.callSuper(People, 'introduce') +
+     *                 '\n I study at ' +
+     *                 this.school +
+     *                 '.'
+     *             );
+     *         }
      *     },
-     *     introduce: function () {
-     *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.';
+     *     {
+     *         is: function(obj) {
+     *             return obj instanceof Student;
+     *         }
      *     }
-     * }, {
-     *     is: function (obj) {
-     *         return obj instanceof Student;
-     *     }
-     * });
+     * );
      *
      * const a = new Student('allen', 17, 'Hogwarts');
      * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
@@ -4267,7 +4919,7 @@ export var Class = _.Class = (function (exports) {
      *     class IConstructor extends Base {
      *         constructor(...args: any[]);
      *         static extend(methods: any, statics: any): IConstructor;
-     *         static inherits(Class: Function): void;
+     *         static inherits(Class: types.AnyFn): void;
      *         static methods(methods: any): IConstructor;
      *         static statics(statics: any): IConstructor;
      *         [method: string]: any;
@@ -4277,7 +4929,7 @@ export var Class = _.Class = (function (exports) {
      */
 
     /* dependencies
-     * extend toArr inherits safeGet isMiniProgram 
+     * extend toArr inherits safeGet isMiniProgram types 
      */
 
     exports = function(methods, statics) {
@@ -4289,26 +4941,30 @@ export var Class = _.Class = (function (exports) {
         var className =
             methods.className || safeGet(methods, 'initialize.name') || '';
         delete methods.className;
-        var ctor;
 
-        if (isMiniProgram) {
-            ctor = function() {
-                var args = toArr(arguments);
-                return this.initialize
-                    ? this.initialize.apply(this, args) || this
-                    : this;
-            };
-        } else {
-            ctor = new Function(
-                'toArr',
-                'return function ' +
-                    className +
-                    '()' +
-                    '{' +
-                    'var args = toArr(arguments);' +
-                    'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
-                    '};'
-            )(toArr);
+        var ctor = function() {
+            var args = toArr(arguments);
+            return this.initialize
+                ? this.initialize.apply(this, args) || this
+                : this;
+        };
+
+        if (!isMiniProgram) {
+            // unsafe-eval CSP violation
+            try {
+                ctor = new Function(
+                    'toArr',
+                    'return function ' +
+                        className +
+                        '()' +
+                        '{' +
+                        'var args = toArr(arguments);' +
+                        'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+                        '};'
+                )(toArr);
+            } catch (e) {
+                /* eslint-disable no-empty */
+            }
         }
 
         inherits(ctor, parent);
@@ -4368,7 +5024,11 @@ export var Enum = _.Enum = (function (exports) {
 
     /* example
      * const importance = new Enum([
-     *     'NONE', 'TRIVIAL', 'REGULAR', 'IMPORTANT', 'CRITICAL'
+     *     'NONE',
+     *     'TRIVIAL',
+     *     'REGULAR',
+     *     'IMPORTANT',
+     *     'CRITICAL'
      * ]);
      * const val = 1;
      * if (val === importance.CRITICAL) {
@@ -4424,7 +5084,7 @@ export var MutationObserver = _.MutationObserver = (function (exports) {
      */
 
     /* example
-     * const observer = new MutationObserver(function (mutations) {
+     * const observer = new MutationObserver(function(mutations) {
      *     // Do something.
      * });
      * observer.observe(document.documentElement);
@@ -4485,7 +5145,7 @@ export var Select = _.Select = (function (exports) {
 
     /* example
      * const $test = new Select('#test');
-     * $test.find('.test').each(function (idx, element) {
+     * $test.find('.test').each(function(idx, element) {
      *     // Manipulate dom nodes
      * });
      */
@@ -4494,12 +5154,12 @@ export var Select = _.Select = (function (exports) {
      * export declare class Select {
      *     constructor(selector: string | Element);
      *     find(selector: string): Select;
-     *     each(fn: Function): Select;
+     *     each(fn: types.AnyFn): Select;
      * }
      */
 
     /* dependencies
-     * Class isStr each 
+     * Class isStr each types 
      */
 
     exports = Class({
@@ -4621,8 +5281,8 @@ export var $attr = _.$attr = (function (exports) {
      * $attr('#test', 'attr1'); // -> test
      * $attr.remove('#test', 'attr1');
      * $attr('#test', {
-     *     'attr1': 'test',
-     *     'attr2': 'test'
+     *     attr1: 'test',
+     *     attr2: 'test'
      * });
      */
 
@@ -4631,18 +5291,19 @@ export var $attr = _.$attr = (function (exports) {
      *     function remove(element: $safeEls.El, name: string): void;
      * }
      * export declare function $attr(
-     *     element: $safeEls.El,name: string,
+     *     element: $safeEls.El,
+     *     name: string,
      *     value: string
      * ): void;
      * export declare function $attr(
      *     element: $safeEls.El,
-     *     attributes: { [name: string]: string }
+     *     attributes: types.PlainObj<string>
      * ): void;
      * export declare function $attr(element: $safeEls.El, name: string): string;
      */
 
     /* dependencies
-     * toArr isObj isStr each isUndef $safeEls 
+     * toArr isObj isStr each isUndef $safeEls types 
      */
 
     exports = function(els, name, val) {
@@ -4714,7 +5375,8 @@ export var $css = _.$css = (function (exports) {
     /* example
      * $css('#test', {
      *     color: '#fff',
-     *     background: 'black'
+     *     background: 'black',
+     *     opacity: 0.5
      * });
      * $css('#test', 'display', 'block');
      * $css('#test', 'color'); // -> #fff
@@ -4722,15 +5384,19 @@ export var $css = _.$css = (function (exports) {
 
     /* typescript
      * export declare function $css(element: $safeEls.El, name: string): string;
-     * export declare function $css(element: $safeEls.El, name: string, val: string): void;
      * export declare function $css(
      *     element: $safeEls.El,
-     *     properties: { [name: string]: string }
+     *     name: string,
+     *     val: string
+     * ): void;
+     * export declare function $css(
+     *     element: $safeEls.El,
+     *     properties: types.PlainObj<string | number>
      * ): void;
      */
 
     /* dependencies
-     * isStr isObj kebabCase isUndef contain isNum $safeEls prefix each 
+     * isStr isObj kebabCase isUndef contain isNum $safeEls prefix each types 
      */
 
     exports = function(nodes, name, val) {
@@ -4801,7 +5467,7 @@ export var $data = _.$data = (function (exports) {
      * ): void;
      * export declare function $data(
      *     element: $safeEls.El,
-     *     attributes: { [name: string]: string }
+     *     attributes: types.PlainObj<string>
      * ): void;
      * export declare function $data(element: $safeEls.El, name: string): string;
      */
@@ -4809,7 +5475,7 @@ export var $data = _.$data = (function (exports) {
     /* eslint-disable no-unused-vars */
 
     /* dependencies
-     * $attr isStr isObj each $safeEls 
+     * $attr isStr isObj each $safeEls types 
      */
 
     exports = function(nodes, name, val) {
@@ -5166,13 +5832,13 @@ export var Stack = _.Stack = (function (exports) {
      *     push(item: any): number;
      *     pop(): any;
      *     peek(): any;
-     *     forEach(iterator: Function, context?: any): void;
+     *     forEach(iterator: types.AnyFn, context?: any): void;
      *     toArr(): any[];
      * }
      */
 
     /* dependencies
-     * Class reverse 
+     * Class reverse types 
      */
 
     exports = Class({
@@ -5244,13 +5910,13 @@ export var delegate = _.delegate = (function (exports) {
 
     /* typescript
      * export declare const delegate: {
-     *     add(el: Element, type: string, selector: string, cb: Function): void;
-     *     remove(el: Element, type: string, selector: string, cb: Function): void;
+     *     add(el: Element, type: string, selector: string, cb: types.AnyFn): void;
+     *     remove(el: Element, type: string, selector: string, cb: types.AnyFn): void;
      * };
      */
 
     /* dependencies
-     * Class contain 
+     * Class contain types 
      */
 
     function retTrue() {
@@ -5431,21 +6097,21 @@ export var $event = _.$event = (function (exports) {
      *         element: $safeEls.El,
      *         event: string,
      *         selector: string,
-     *         handler: Function
+     *         handler: types.AnyFn
      *     ): void;
-     *     on(element: $safeEls.El, event: string, handler: Function): void;
+     *     on(element: $safeEls.El, event: string, handler: types.AnyFn): void;
      *     off(
      *         element: $safeEls.El,
      *         event: string,
      *         selector: string,
-     *         handler: Function
+     *         handler: types.AnyFn
      *     ): void;
-     *     off(element: $safeEls.El, event: string, handler: Function): void;
+     *     off(element: $safeEls.El, event: string, handler: types.AnyFn): void;
      * };
      */
 
     /* dependencies
-     * delegate isUndef $safeEls each 
+     * delegate isUndef $safeEls each types 
      */
 
     exports = {
@@ -5500,598 +6166,6 @@ export var concat = _.concat = (function (exports) {
 
         for (var i = 0, len = args.length; i < len; i++) {
             ret = ret.concat(toArr(args[i]));
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ mapObj ------------------------------ */
-
-export var mapObj = _.mapObj = (function (exports) {
-    /* Map for objects.
-     *
-     * |Name    |Desc                          |
-     * |--------|------------------------------|
-     * |object  |Object to iterate over        |
-     * |iterator|Function invoked per iteration|
-     * |context |Function context              |
-     * |return  |New mapped object             |
-     */
-
-    /* example
-     * mapObj({a: 1, b: 2}, function (val, key) { return val + 1 }); // -> {a: 2, b: 3}
-     */
-
-    /* typescript
-     * export declare function mapObj<T, TResult>(
-     *     object: types.Dictionary<T>,
-     *     iterator: types.ObjectIterator<T, TResult>,
-     *     context?: any
-     * ): types.Dictionary<TResult>;
-     */
-
-    /* eslint-disable no-unused-vars */
-
-    /* dependencies
-     * safeCb keys types 
-     */
-
-    exports = function(obj, iterator, ctx) {
-        iterator = safeCb(iterator, ctx);
-
-        var _keys = keys(obj);
-
-        var len = _keys.length;
-        var ret = {};
-
-        for (var i = 0; i < len; i++) {
-            var curKey = _keys[i];
-            ret[curKey] = iterator(obj[curKey], curKey, obj);
-        }
-
-        return ret;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ cloneDeep ------------------------------ */
-
-export var cloneDeep = _.cloneDeep = (function (exports) {
-    /* Recursively clone value.
-     *
-     * |Name  |Desc             |
-     * |------|-----------------|
-     * |val   |Value to clone   |
-     * |return|Deep cloned Value|
-     */
-
-    /* example
-     * const obj = [{a: 1}, {a: 2}];
-     * const obj2 = cloneDeep(obj);
-     * console.log(obj[0] === obj2[1]); // -> false
-     */
-
-    /* typescript
-     * export declare function cloneDeep<T>(val: T): T;
-     */
-
-    /* dependencies
-     * isObj isFn isArr mapObj 
-     */
-
-    exports = function(obj) {
-        if (isArr(obj)) {
-            return obj.map(function(val) {
-                return exports(val);
-            });
-        }
-
-        if (isObj(obj) && !isFn(obj)) {
-            return mapObj(obj, function(val) {
-                return exports(val);
-            });
-        }
-
-        return obj;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ some ------------------------------ */
-
-export var some = _.some = (function (exports) {
-    /* Check if predicate return truthy for any element.
-     *
-     * |Name     |Desc                                          |
-     * |---------|----------------------------------------------|
-     * |obj      |Collection to iterate over                    |
-     * |predicate|Function to invoked per iteration             |
-     * |ctx      |Predicate context                             |
-     * |return   |True if any element passes the predicate check|
-     */
-
-    /* example
-     * some([2, 5], function (val) {
-     *     return val % 2 === 0;
-     * }); // -> true
-     */
-
-    /* typescript
-     * export declare function some<T>(
-     *     list: types.List<T>,
-     *     iterator?: types.ListIterator<T, boolean>,
-     *     context?: any
-     * ): boolean;
-     * export declare function some<T>(
-     *     object: types.Dictionary<T>,
-     *     iterator?: types.ObjectIterator<T, boolean>,
-     *     context?: any
-     * ): boolean;
-     */
-
-    /* eslint-disable no-unused-vars */
-
-    /* dependencies
-     * safeCb isArrLike keys types 
-     */
-
-    exports = function(obj, predicate, ctx) {
-        predicate = safeCb(predicate, ctx);
-
-        var _keys = !isArrLike(obj) && keys(obj);
-
-        var len = (_keys || obj).length;
-
-        for (var i = 0; i < len; i++) {
-            var key = _keys ? _keys[i] : i;
-            if (predicate(obj[key], key, obj)) return true;
-        }
-
-        return false;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ $class ------------------------------ */
-
-export var $class = _.$class = (function (exports) {
-    /* Element class manipulations.
-     *
-     * ### add
-     *
-     * Add the specified class(es) to each element in the set of matched elements.
-     *
-     * |Name   |Desc                  |
-     * |-------|----------------------|
-     * |element|Elements to manipulate|
-     * |names  |Classes to add        |
-     *
-     * ### has
-     *
-     * Determine whether any of the matched elements are assigned the given class.
-     *
-     * |Name   |Desc                                 |
-     * |-------|-------------------------------------|
-     * |element|Elements to manipulate               |
-     * |name   |Class name                           |
-     * |return |True if elements has given class name|
-     *
-     * ### toggle
-     *
-     * Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the state argument.
-     *
-     * |Name   |Desc                  |
-     * |-------|----------------------|
-     * |element|Elements to manipulate|
-     * |name   |Class name to toggle  |
-     *
-     * ### remove
-     *
-     * Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
-     *
-     * |Name   |Desc                  |
-     * |-------|----------------------|
-     * |element|Elements to manipulate|
-     * |name   |Class names to remove |
-     */
-
-    /* example
-     * $class.add('#test', 'class1');
-     * $class.add('#test', ['class1', 'class2']);
-     * $class.has('#test', 'class1'); // -> true
-     * $class.remove('#test', 'class1');
-     * $class.has('#test', 'class1'); // -> false
-     * $class.toggle('#test', 'class1');
-     * $class.has('#test', 'class1'); // -> true
-     */
-
-    /* typescript
-     * export declare const $class: {
-     *     add(element: $safeEls.El, name: string | string[]): void;
-     *     has(element: $safeEls.El, name: string): boolean;
-     *     toggle(element: $safeEls.El, name: string): void;
-     *     remove(element: $safeEls.El, name: string): void;
-     * };
-     */
-
-    /* dependencies
-     * toArr some $safeEls isStr each 
-     */
-
-    exports = {
-        add: function(els, name) {
-            els = $safeEls(els);
-            var names = safeName(name);
-            each(els, function(el) {
-                var classList = [];
-                each(names, function(name) {
-                    if (!exports.has(el, name)) classList.push(name);
-                });
-
-                if (classList.length !== 0) {
-                    el.className += (el.className ? ' ' : '') + classList.join(' ');
-                }
-            });
-        },
-        has: function(els, name) {
-            els = $safeEls(els);
-            var regName = new RegExp('(^|\\s)' + name + '(\\s|$)');
-            return some(els, function(el) {
-                return regName.test(el.className);
-            });
-        },
-        toggle: function(els, name) {
-            els = $safeEls(els);
-            each(els, function(el) {
-                if (!exports.has(el, name)) return exports.add(el, name);
-                exports.remove(el, name);
-            });
-        },
-        remove: function(els, name) {
-            els = $safeEls(els);
-            var names = safeName(name);
-            each(els, function(el) {
-                each(names, function(name) {
-                    el.classList.remove(name);
-                });
-            });
-        }
-    };
-
-    function safeName(name) {
-        return isStr(name) ? name.split(/\s+/) : toArr(name);
-    }
-
-    return exports;
-})({});
-
-/* ------------------------------ $ ------------------------------ */
-
-export var $ = _.$ = (function (exports) {
-    /* jQuery like style dom manipulator.
-     *
-     * ### Available methods
-     *
-     * offset, hide, show, first, last, get, eq, on, off, html, text, val, css, attr,
-     * data, rmAttr, remove, addClass, rmClass, toggleClass, hasClass, append, prepend,
-     * before, after
-     */
-
-    /* example
-     * const $btn = $('#btn');
-     * $btn.html('eustia');
-     * $btn.addClass('btn');
-     * $btn.show();
-     * $btn.on('click', function () {
-     *     // Do something...
-     * });
-     */
-
-    /* typescript
-     * export declare namespace $ {
-     *     class $ extends Select {
-     *         find(selector: string): $;
-     *         each(fn: Function): $;
-     *         offset(): $offset.IOffset;
-     *         hide(): $;
-     *         show(): $;
-     *         first(): $;
-     *         last(): $;
-     *         get(index: number): Element;
-     *         eq(index: number): Element;
-     *         on(event: string, selector: string, handler: Function): $;
-     *         on(event: string, handler: Function): $;
-     *         off(event: string, selector: string, handler: Function): $;
-     *         off(event: string, handler: Function): $;
-     *         html(): string;
-     *         html(value: string): $;
-     *         text(): string;
-     *         text(value: string): $;
-     *         val(): string;
-     *         val(value: string): $;
-     *         css(name: string): string;
-     *         css(name: string, value: string): $;
-     *         css(properties: { [name: string]: string }): $;
-     *         attr(name: string): string;
-     *         attr(name: string, value: string): $;
-     *         attr(attributes: { [name: string]: string }): $;
-     *         data(name: string): string;
-     *         data(name: string, value: string): $;
-     *         data(attributes: { [name: string]: string }): $;
-     *         rmAttr(name: string): $;
-     *         remove(): $;
-     *         addClass(name: string | string[]): $;
-     *         rmClass(name: string): $;
-     *         toggleClass(name: string): $;
-     *         hasClass(name: string): boolean;
-     *         parent(): $;
-     *         append(content: string): $;
-     *         prepend(content: string): $;
-     *         before(content: string): $;
-     *         after(content: string): $;
-     *     }
-     * }
-     * declare function $(selector: string | Element): $.$;
-     */
-
-    /* dependencies
-     * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr 
-     */
-
-    exports = function(selector) {
-        return new Select(selector);
-    };
-
-    Select.methods({
-        offset: function() {
-            return $offset(this);
-        },
-        hide: function() {
-            return this.css('display', 'none');
-        },
-        show: function() {
-            $show(this);
-            return this;
-        },
-        first: function() {
-            return exports(this[0]);
-        },
-        last: function() {
-            return exports(last(this));
-        },
-        get: function(idx) {
-            return this[idx];
-        },
-        eq: function(idx) {
-            return exports(this[idx]);
-        },
-        on: function(event, selector, handler) {
-            $event.on(this, event, selector, handler);
-            return this;
-        },
-        off: function(event, selector, handler) {
-            $event.off(this, event, selector, handler);
-            return this;
-        },
-        html: function(val) {
-            var result = $property.html(this, val);
-            if (isUndef(val)) return result;
-            return this;
-        },
-        text: function(val) {
-            var result = $property.text(this, val);
-            if (isUndef(val)) return result;
-            return this;
-        },
-        val: function(val) {
-            var result = $property.val(this, val);
-            if (isUndef(val)) return result;
-            return this;
-        },
-        css: function(name, val) {
-            var result = $css(this, name, val);
-            if (isGetter(name, val)) return result;
-            return this;
-        },
-        attr: function(name, val) {
-            var result = $attr(this, name, val);
-            if (isGetter(name, val)) return result;
-            return this;
-        },
-        data: function(name, val) {
-            var result = $data(this, name, val);
-            if (isGetter(name, val)) return result;
-            return this;
-        },
-        rmAttr: function(name) {
-            $attr.remove(this, name);
-            return this;
-        },
-        remove: function() {
-            $remove(this);
-            return this;
-        },
-        addClass: function(name) {
-            $class.add(this, name);
-            return this;
-        },
-        rmClass: function(name) {
-            $class.remove(this, name);
-            return this;
-        },
-        toggleClass: function(name) {
-            $class.toggle(this, name);
-            return this;
-        },
-        hasClass: function(name) {
-            return $class.has(this, name);
-        },
-        parent: function() {
-            return exports(this[0].parentNode);
-        },
-        append: function(val) {
-            $insert.append(this, val);
-            return this;
-        },
-        prepend: function(val) {
-            $insert.prepend(this, val);
-            return this;
-        },
-        before: function(val) {
-            $insert.before(this, val);
-            return this;
-        },
-        after: function(val) {
-            $insert.after(this, val);
-            return this;
-        }
-    });
-
-    var isGetter = function(name, val) {
-        return isUndef(val) && isStr(name);
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ memStorage ------------------------------ */
-
-export var memStorage = _.memStorage = (function (exports) {
-    /* Memory-backed implementation of the Web Storage API.
-     *
-     * A replacement for environments where localStorage or sessionStorage is not available.
-     */
-
-    /* example
-     * const localStorage = window.localStorage || memStorage;
-     * localStorage.setItem('test', 'licia');
-     */
-
-    /* typescript
-     * export declare const memStorage: typeof window.localStorage;
-     */
-
-    /* dependencies
-     * keys 
-     */
-
-    exports = {
-        getItem: function(key) {
-            return (API_KEYS[key] ? cloak[key] : this[key]) || null;
-        },
-        setItem: function(key, val) {
-            API_KEYS[key] ? (cloak[key] = val) : (this[key] = val);
-        },
-        removeItem: function(key) {
-            API_KEYS[key] ? delete cloak[key] : delete this[key];
-        },
-        key: function(i) {
-            var keys = enumerableKeys();
-            return i >= 0 && i < keys.length ? keys[i] : null;
-        },
-        clear: function() {
-            var keys = uncloakedKeys();
-            /* eslint-disable no-cond-assign */
-
-            for (var i = 0, key; (key = keys[i]); i++) {
-                delete this[key];
-            }
-
-            keys = cloakedKeys();
-            /* eslint-disable no-cond-assign */
-
-            for (var _i = 0, _key; (_key = keys[_i]); _i++) {
-                delete cloak[_key];
-            }
-        }
-    };
-    Object.defineProperty(exports, 'length', {
-        enumerable: false,
-        configurable: true,
-        get: function() {
-            return enumerableKeys().length;
-        }
-    });
-    var cloak = {};
-    var API_KEYS = {
-        getItem: 1,
-        setItem: 1,
-        removeItem: 1,
-        key: 1,
-        clear: 1,
-        length: 1
-    };
-
-    function enumerableKeys() {
-        return uncloakedKeys().concat(cloakedKeys());
-    }
-
-    function uncloakedKeys() {
-        return keys(exports).filter(function(key) {
-            return !API_KEYS[key];
-        });
-    }
-
-    function cloakedKeys() {
-        return keys(cloak);
-    }
-
-    return exports;
-})({});
-
-/* ------------------------------ safeStorage ------------------------------ */
-
-export var safeStorage = _.safeStorage = (function (exports) {
-    /* Use storage safely in safari private browsing and older browsers.
-     *
-     * |Name        |Desc             |
-     * |------------|-----------------|
-     * |type='local'|local or session |
-     * |return      |Specified storage|
-     */
-
-    /* example
-     * const localStorage = safeStorage('local');
-     * localStorage.setItem('licia', 'util');
-     */
-
-    /* typescript
-     * export declare function safeStorage(type?: string): typeof window.localStorage;
-     */
-
-    /* dependencies
-     * memStorage 
-     */
-
-    exports = function(type) {
-        type = type || 'local';
-        var ret;
-
-        switch (type) {
-            case 'local':
-                ret = window.localStorage;
-                break;
-
-            case 'session':
-                ret = window.sessionStorage;
-                break;
-        }
-
-        try {
-            // Safari private browsing
-            var x = 'test-localStorage-' + Date.now();
-            ret.setItem(x, x);
-            var y = ret.getItem(x);
-            ret.removeItem(x);
-            if (y !== x) throw new Error();
-        } catch (e) {
-            return memStorage;
         }
 
         return ret;
@@ -6235,302 +6309,6 @@ export var meta = _.meta = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ toNum ------------------------------ */
-
-export var toNum = _.toNum = (function (exports) {
-    /* Convert value to a number.
-     *
-     * |Name  |Desc            |
-     * |------|----------------|
-     * |val   |Value to process|
-     * |return|Result number   |
-     */
-
-    /* example
-     * toNum('5'); // -> 5
-     */
-
-    /* typescript
-     * export declare function toNum(val: any): number;
-     */
-
-    /* dependencies
-     * isNum isObj isFn isStr 
-     */
-
-    exports = function(val) {
-        if (isNum(val)) return val;
-
-        if (isObj(val)) {
-            var temp = isFn(val.valueOf) ? val.valueOf() : val;
-            val = isObj(temp) ? temp + '' : temp;
-        }
-
-        if (!isStr(val)) return val === 0 ? val : +val;
-        return +val;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ ms ------------------------------ */
-
-export var ms = _.ms = (function (exports) {
-    /* Convert time string formats to milliseconds.
-     *
-     * Turn time string into milliseconds.
-     *
-     * |Name  |Desc         |
-     * |------|-------------|
-     * |str   |String format|
-     * |return|Milliseconds |
-     *
-     * Turn milliseconds into time string.
-     *
-     * |Name  |Desc         |
-     * |------|-------------|
-     * |num   |Milliseconds |
-     * |return|String format|
-     */
-
-    /* example
-     * ms('1s'); // -> 1000
-     * ms('1m'); // -> 60000
-     * ms('1.5h'); // -> 5400000
-     * ms('1d'); // -> 86400000
-     * ms('1y'); // -> 31557600000
-     * ms('1000'); // -> 1000
-     * ms(1500); // -> '1.5s'
-     * ms(60000); // -> '1m'
-     */
-
-    /* typescript
-     * export declare function ms(str: string): number;
-     * export declare function ms(num: number): string;
-     */
-
-    /* dependencies
-     * toNum isStr 
-     */
-
-    exports = function(str) {
-        if (isStr(str)) {
-            var match = str.match(regStrTime);
-            if (!match) return 0;
-            return toNum(match[1]) * factor[match[2] || 'ms'];
-        } else {
-            var num = str;
-            var suffix = 'ms';
-
-            for (var i = 0, len = suffixList.length; i < len; i++) {
-                if (num >= factor[suffixList[i]]) {
-                    suffix = suffixList[i];
-                    break;
-                }
-            }
-
-            return +(num / factor[suffix]).toFixed(2) + suffix;
-        }
-    };
-
-    var factor = {
-        ms: 1,
-        s: 1000
-    };
-    factor.m = factor.s * 60;
-    factor.h = factor.m * 60;
-    factor.d = factor.h * 24;
-    factor.y = factor.d * 365.25;
-    var suffixList = ['y', 'd', 'h', 'm', 's'];
-    var regStrTime = /^((?:\d+)?\.?\d+) *(s|m|h|d|y)?$/;
-
-    return exports;
-})({});
-
-/* ------------------------------ toInt ------------------------------ */
-
-export var toInt = _.toInt = (function (exports) {
-    /* Convert value to an integer.
-     *
-     * |Name  |Desc             |
-     * |------|-----------------|
-     * |val   |Value to convert |
-     * |return|Converted integer|
-     */
-
-    /* example
-     * toInt(1.1); // -> 1
-     * toInt(undefined); // -> 0
-     */
-
-    /* typescript
-     * export declare function toInt(val: any): number;
-     */
-
-    /* dependencies
-     * toNum 
-     */
-
-    exports = function(val) {
-        if (!val) return val === 0 ? val : 0;
-        val = toNum(val);
-        return val - (val % 1);
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ detectBrowser ------------------------------ */
-
-export var detectBrowser = _.detectBrowser = (function (exports) {
-    /* Detect browser info using ua.
-     *
-     * |Name                  |Desc                              |
-     * |----------------------|----------------------------------|
-     * |ua=navigator.userAgent|Browser userAgent                 |
-     * |return                |Object containing name and version|
-     *
-     * Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
-     */
-
-    /* example
-     * const browser = detectBrowser();
-     * if (browser.name === 'ie' && browser.version < 9) {
-     *     // Do something about old IE...
-     * }
-     */
-
-    /* typescript
-     * export declare function detectBrowser(ua?: string): {
-     *     name: string;
-     *     version: number;
-     * };
-     */
-
-    /* dependencies
-     * isBrowser toInt keys 
-     */
-
-    exports = function(ua) {
-        ua = ua || (isBrowser ? navigator.userAgent : '');
-        ua = ua.toLowerCase();
-        var ieVer = getVer(ua, 'msie ');
-        if (ieVer)
-            return {
-                version: ieVer,
-                name: 'ie'
-            };
-        if (regIe11.test(ua))
-            return {
-                version: 11,
-                name: 'ie'
-            };
-
-        for (var i = 0, len = browsers.length; i < len; i++) {
-            var name = browsers[i];
-            var match = ua.match(regBrowsers[name]);
-            if (match == null) continue;
-            var version = toInt(match[1].split('.')[0]);
-            if (name === 'opera') version = getVer(ua, 'version/') || version;
-            return {
-                name: name,
-                version: version
-            };
-        }
-
-        return {
-            name: 'unknown',
-            version: -1
-        };
-    };
-
-    var regBrowsers = {
-        edge: /edge\/([0-9._]+)/,
-        firefox: /firefox\/([0-9.]+)(?:\s|$)/,
-        opera: /opera\/([0-9.]+)(?:\s|$)/,
-        android: /android\s([0-9.]+)/,
-        ios: /version\/([0-9._]+).*mobile.*safari.*/,
-        safari: /version\/([0-9._]+).*safari/,
-        chrome: /(?!chrom.*opr)chrom(?:e|ium)\/([0-9.]+)(:?\s|$)/
-    };
-    var regIe11 = /trident\/7\./;
-    var browsers = keys(regBrowsers);
-
-    function getVer(ua, mark) {
-        var idx = ua.indexOf(mark);
-        if (idx > -1)
-            return toInt(ua.substring(idx + mark.length, ua.indexOf('.', idx)));
-    }
-
-    return exports;
-})({});
-
-/* ------------------------------ nextTick ------------------------------ */
-
-export var nextTick = _.nextTick = (function (exports) {
-    /* Next tick for both node and browser.
-     *
-     * |Name|Desc            |
-     * |----|----------------|
-     * |cb  |Function to call|
-     *
-     * Use process.nextTick if available.
-     *
-     * Otherwise setImmediate or setTimeout is used as fallback.
-     */
-
-    /* example
-     * nextTick(function () {
-     *     // Do something...
-     * });
-     */
-
-    /* typescript
-     * export declare function nextTick(cb: Function): void;
-     */
-    if (typeof process === 'object' && process.nextTick) {
-        exports = process.nextTick;
-    } else if (typeof setImmediate === 'function') {
-        exports = function(cb) {
-            setImmediate(ensureCallable(cb));
-        };
-    } else {
-        exports = function(cb) {
-            setTimeout(ensureCallable(cb), 0);
-        };
-    }
-
-    function ensureCallable(fn) {
-        if (typeof fn !== 'function')
-            throw new TypeError(fn + ' is not a function');
-        return fn;
-    }
-
-    return exports;
-})({});
-
-/* ------------------------------ now ------------------------------ */
-
-export var now = _.now = (function (exports) {
-    /* Gets the number of milliseconds that have elapsed since the Unix epoch.
-     */
-
-    /* example
-     * now(); // -> 1468826678701
-     */
-
-    /* typescript
-     * export declare function now(): number;
-     */
-    exports =
-        Date.now ||
-        function() {
-            return new Date().getTime();
-        };
-
-    return exports;
-})({});
-
 /* ------------------------------ partial ------------------------------ */
 
 export var partial = _.partial = (function (exports) {
@@ -6544,16 +6322,21 @@ export var partial = _.partial = (function (exports) {
      */
 
     /* example
-     * const sub5 = partial(function (a, b) { return b - a }, 5);
+     * const sub5 = partial(function(a, b) {
+     *     return b - a;
+     * }, 5);
      * sub5(20); // -> 15
      */
 
     /* typescript
-     * export declare function partial(fn: Function, ...partials: any[]): Function;
+     * export declare function partial(
+     *     fn: types.AnyFn,
+     *     ...partials: any[]
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * restArgs toArr 
+     * restArgs toArr types 
      */
 
     exports = restArgs(function(fn, partials) {
@@ -6580,18 +6363,18 @@ export var once = _.once = (function (exports) {
      */
 
     /* example
-     * function init() {};
+     * function init() {}
      * const initOnce = once(init);
      * initOnce();
      * initOnce(); // -> init is invoked once
      */
 
     /* typescript
-     * export declare function once(fn: Function): Function;
+     * export declare function once(fn: types.AnyFn): types.AnyFn;
      */
 
     /* dependencies
-     * partial before 
+     * partial before types 
      */
 
     exports = partial(before, 2);
@@ -6641,23 +6424,25 @@ export var Emitter = _.Emitter = (function (exports) {
 
     /* example
      * const event = new Emitter();
-     * event.on('test', function () { console.log('test') });
-     * event.emit('test'); // Logs out 'test'.
+     * event.on('test', function(name) {
+     *     console.log(name);
+     * });
+     * event.emit('test', 'licia'); // Logs out 'licia'.
      * Emitter.mixin({});
      */
 
     /* typescript
      * export declare class Emitter {
-     *     on(event: string, listener: Function): Emitter;
-     *     off(event: string, listener: Function): Emitter;
-     *     once(event: string, listener: Function): Emitter;
-     *     emit(event: string): Emitter;
+     *     on(event: string, listener: types.AnyFn): Emitter;
+     *     off(event: string, listener: types.AnyFn): Emitter;
+     *     once(event: string, listener: types.AnyFn): Emitter;
+     *     emit(event: string, ...args: any[]): Emitter;
      *     static mixin(obj: any): any;
      * }
      */
 
     /* dependencies
-     * Class has each slice once 
+     * Class has each slice once types 
      */
 
     exports = Class(
@@ -6750,17 +6535,17 @@ export var Logger = _.Logger = (function (exports) {
      * logger.trace('test');
      *
      * // Format output.
-     * logger.formatter = function (type, argList) {
+     * logger.formatter = function(type, argList) {
      *     argList.push(new Date().getTime());
      *
      *     return argList;
      * };
      *
-     * logger.on('all', function (type, argList) {
+     * logger.on('all', function(type, argList) {
      *     // It's not affected by log level.
      * });
      *
-     * logger.on('debug', function (argList) {
+     * logger.on('debug', function(argList) {
      *     // Affected by log level.
      * });
      */
@@ -7014,13 +6799,13 @@ export var Store = _.Store = (function (exports) {
 
     /* example
      * const store = new Store('test');
-     * store.set('user', {name: 'licia'});
+     * store.set('user', { name: 'licia' });
      * store.get('user').name; // -> 'licia'
      * store.clear();
-     * store.each(function (val, key) {
+     * store.each(function(val, key) {
      *     // Do something.
      * });
-     * store.on('change', function (key, newVal, oldVal) {
+     * store.on('change', function(key, newVal, oldVal) {
      *     // It triggers whenever set is called.
      * });
      */
@@ -7119,7 +6904,7 @@ export var orientation = _.orientation = (function (exports) {
      */
 
     /* example
-     * orientation.on('change', function (direction) {
+     * orientation.on('change', function(direction) {
      *     console.log(direction); // -> 'portrait'
      * });
      * orientation.get(); // -> 'landscape'
@@ -7165,114 +6950,451 @@ export var orientation = _.orientation = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ perfNow ------------------------------ */
+/* ------------------------------ mapObj ------------------------------ */
 
-export var perfNow = _.perfNow = (function (exports) {
-    /* High resolution time up to microsecond precision.
+export var mapObj = _.mapObj = (function (exports) {
+    /* Map for objects.
+     *
+     * |Name    |Desc                          |
+     * |--------|------------------------------|
+     * |object  |Object to iterate over        |
+     * |iterator|Function invoked per iteration|
+     * |context |Function context              |
+     * |return  |New mapped object             |
      */
 
     /* example
-     * const start = perfNow();
-     *
-     * // Do something.
-     *
-     * console.log(perfNow() - start);
+     * mapObj({ a: 1, b: 2 }, function(val, key) {
+     *     return val + 1;
+     * }); // -> {a: 2, b: 3}
      */
 
     /* typescript
-     * export declare function perfNow(): number;
+     * export declare function mapObj<T, TResult>(
+     *     object: types.Dictionary<T>,
+     *     iterator: types.ObjectIterator<T, TResult>,
+     *     context?: any
+     * ): types.Dictionary<TResult>;
      */
 
     /* dependencies
-     * now root 
+     * safeCb keys types 
      */
 
-    var performance = root.performance;
-    var process = root.process;
-    var loadTime;
+    exports = function(obj, iterator, ctx) {
+        iterator = safeCb(iterator, ctx);
 
-    if (performance && performance.now) {
-        exports = function() {
-            return performance.now();
-        };
-    } else if (process && process.hrtime) {
-        var getNanoSeconds = function() {
-            var hr = process.hrtime();
-            return hr[0] * 1e9 + hr[1];
-        };
+        var _keys = keys(obj);
 
-        loadTime = getNanoSeconds() - process.uptime() * 1e9;
+        var len = _keys.length;
+        var ret = {};
 
-        exports = function() {
-            return (getNanoSeconds() - loadTime) / 1e6;
-        };
-    } else {
-        loadTime = now();
+        for (var i = 0; i < len; i++) {
+            var curKey = _keys[i];
+            ret[curKey] = iterator(obj[curKey], curKey, obj);
+        }
 
-        exports = function() {
-            return now() - loadTime;
-        };
+        return ret;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ cloneDeep ------------------------------ */
+
+export var cloneDeep = _.cloneDeep = (function (exports) {
+    /* Recursively clone value.
+     *
+     * |Name  |Desc             |
+     * |------|-----------------|
+     * |val   |Value to clone   |
+     * |return|Deep cloned Value|
+     */
+
+    /* example
+     * const obj = [{ a: 1 }, { a: 2 }];
+     * const obj2 = cloneDeep(obj);
+     * console.log(obj[0] === obj2[1]); // -> false
+     */
+
+    /* typescript
+     * export declare function cloneDeep<T>(val: T): T;
+     */
+
+    /* dependencies
+     * isObj isFn isArr mapObj 
+     */
+
+    exports = function(obj) {
+        if (isArr(obj)) {
+            return obj.map(function(val) {
+                return exports(val);
+            });
+        }
+
+        if (isObj(obj) && !isFn(obj)) {
+            return mapObj(obj, function(val) {
+                return exports(val);
+            });
+        }
+
+        return obj;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ some ------------------------------ */
+
+export var some = _.some = (function (exports) {
+    /* Check if predicate return truthy for any element.
+     *
+     * |Name     |Desc                                          |
+     * |---------|----------------------------------------------|
+     * |obj      |Collection to iterate over                    |
+     * |predicate|Function to invoked per iteration             |
+     * |ctx      |Predicate context                             |
+     * |return   |True if any element passes the predicate check|
+     */
+
+    /* example
+     * some([2, 5], function(val) {
+     *     return val % 2 === 0;
+     * }); // -> true
+     */
+
+    /* typescript
+     * export declare function some<T>(
+     *     list: types.List<T>,
+     *     iterator?: types.ListIterator<T, boolean>,
+     *     context?: any
+     * ): boolean;
+     * export declare function some<T>(
+     *     object: types.Dictionary<T>,
+     *     iterator?: types.ObjectIterator<T, boolean>,
+     *     context?: any
+     * ): boolean;
+     */
+
+    /* dependencies
+     * safeCb isArrLike keys types 
+     */
+
+    exports = function(obj, predicate, ctx) {
+        predicate = safeCb(predicate, ctx);
+
+        var _keys = !isArrLike(obj) && keys(obj);
+
+        var len = (_keys || obj).length;
+
+        for (var i = 0; i < len; i++) {
+            var key = _keys ? _keys[i] : i;
+            if (predicate(obj[key], key, obj)) return true;
+        }
+
+        return false;
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ $class ------------------------------ */
+
+export var $class = _.$class = (function (exports) {
+    /* Element class manipulations.
+     *
+     * ### add
+     *
+     * Add the specified class(es) to each element in the set of matched elements.
+     *
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |names  |Classes to add        |
+     *
+     * ### has
+     *
+     * Determine whether any of the matched elements are assigned the given class.
+     *
+     * |Name   |Desc                                 |
+     * |-------|-------------------------------------|
+     * |element|Elements to manipulate               |
+     * |name   |Class name                           |
+     * |return |True if elements has given class name|
+     *
+     * ### toggle
+     *
+     * Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the state argument.
+     *
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Class name to toggle  |
+     *
+     * ### remove
+     *
+     * Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
+     *
+     * |Name   |Desc                  |
+     * |-------|----------------------|
+     * |element|Elements to manipulate|
+     * |name   |Class names to remove |
+     */
+
+    /* example
+     * $class.add('#test', 'class1');
+     * $class.add('#test', ['class1', 'class2']);
+     * $class.has('#test', 'class1'); // -> true
+     * $class.remove('#test', 'class1');
+     * $class.has('#test', 'class1'); // -> false
+     * $class.toggle('#test', 'class1');
+     * $class.has('#test', 'class1'); // -> true
+     */
+
+    /* typescript
+     * export declare const $class: {
+     *     add(element: $safeEls.El, name: string | string[]): void;
+     *     has(element: $safeEls.El, name: string): boolean;
+     *     toggle(element: $safeEls.El, name: string): void;
+     *     remove(element: $safeEls.El, name: string): void;
+     * };
+     */
+
+    /* dependencies
+     * toArr some $safeEls isStr each 
+     */
+
+    exports = {
+        add: function(els, name) {
+            els = $safeEls(els);
+            var names = safeName(name);
+            each(els, function(el) {
+                var classList = [];
+                each(names, function(name) {
+                    if (!exports.has(el, name)) classList.push(name);
+                });
+
+                if (classList.length !== 0) {
+                    el.className += (el.className ? ' ' : '') + classList.join(' ');
+                }
+            });
+        },
+        has: function(els, name) {
+            els = $safeEls(els);
+            var regName = new RegExp('(^|\\s)' + name + '(\\s|$)');
+            return some(els, function(el) {
+                return regName.test(el.className);
+            });
+        },
+        toggle: function(els, name) {
+            els = $safeEls(els);
+            each(els, function(el) {
+                if (!exports.has(el, name)) return exports.add(el, name);
+                exports.remove(el, name);
+            });
+        },
+        remove: function(els, name) {
+            els = $safeEls(els);
+            var names = safeName(name);
+            each(els, function(el) {
+                each(names, function(name) {
+                    el.classList.remove(name);
+                });
+            });
+        }
+    };
+
+    function safeName(name) {
+        return isStr(name) ? name.split(/\s+/) : toArr(name);
     }
 
     return exports;
 })({});
 
-/* ------------------------------ pick ------------------------------ */
+/* ------------------------------ $ ------------------------------ */
 
-export var pick = _.pick = (function (exports) {
-    /* Return a filtered copy of an object.
+export var $ = _.$ = (function (exports) {
+    /* jQuery like style dom manipulator.
      *
-     * |Name  |Desc           |
-     * |------|---------------|
-     * |object|Source object  |
-     * |filter|Object filter  |
-     * |return|Filtered object|
+     * ### Available methods
+     *
+     * offset, hide, show, first, last, get, eq, on, off, html, text, val, css, attr,
+     * data, rmAttr, remove, addClass, rmClass, toggleClass, hasClass, append, prepend,
+     * before, after
      */
 
     /* example
-     * pick({a: 1, b: 2}, 'a'); // -> {a: 1}
-     * pick({a: 1, b: 2, c: 3}, ['b', 'c']) // -> {b: 2, c: 3}
-     * pick({a: 1, b: 2, c: 3, d: 4}, function (val, key) {
-     *     return val % 2;
-     * }); // -> {a: 1, c: 3}
+     * const $btn = $('#btn');
+     * $btn.html('eustia');
+     * $btn.addClass('btn');
+     * $btn.show();
+     * $btn.on('click', function() {
+     *     // Do something...
+     * });
      */
 
     /* typescript
-     * export declare function pick(
-     *     object: any,
-     *     filter: string | string[] | Function,
-     * ): any;
+     * export declare namespace $ {
+     *     class $ extends Select {
+     *         find(selector: string): $;
+     *         each(fn: types.AnyFn): $;
+     *         offset(): $offset.IOffset;
+     *         hide(): $;
+     *         show(): $;
+     *         first(): $;
+     *         last(): $;
+     *         get(index: number): Element;
+     *         eq(index: number): $;
+     *         on(event: string, selector: string, handler: types.AnyFn): $;
+     *         on(event: string, handler: types.AnyFn): $;
+     *         off(event: string, selector: string, handler: types.AnyFn): $;
+     *         off(event: string, handler: types.AnyFn): $;
+     *         html(): string;
+     *         html(value: string): $;
+     *         text(): string;
+     *         text(value: string): $;
+     *         val(): string;
+     *         val(value: string): $;
+     *         css(name: string): string;
+     *         css(name: string, value: string): $;
+     *         css(properties: types.PlainObj<string | number>): $;
+     *         attr(name: string): string;
+     *         attr(name: string, value: string): $;
+     *         attr(attributes: types.PlainObj<string>): $;
+     *         data(name: string): string;
+     *         data(name: string, value: string): $;
+     *         data(attributes: types.PlainObj<string>): $;
+     *         rmAttr(name: string): $;
+     *         remove(): $;
+     *         addClass(name: string | string[]): $;
+     *         rmClass(name: string): $;
+     *         toggleClass(name: string): $;
+     *         hasClass(name: string): boolean;
+     *         parent(): $;
+     *         append(content: string): $;
+     *         prepend(content: string): $;
+     *         before(content: string): $;
+     *         after(content: string): $;
+     *     }
+     * }
+     * declare function $(selector: string | Element): $.$;
      */
 
     /* dependencies
-     * isStr isArr contain each 
+     * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr types 
      */
 
-    exports = function(obj, filter, omit) {
-        if (isStr(filter)) filter = [filter];
+    exports = function(selector) {
+        return new Select(selector);
+    };
 
-        if (isArr(filter)) {
-            var keys = filter;
-
-            filter = function(val, key) {
-                return contain(keys, key);
-            };
+    Select.methods({
+        offset: function() {
+            return $offset(this);
+        },
+        hide: function() {
+            return this.css('display', 'none');
+        },
+        show: function() {
+            $show(this);
+            return this;
+        },
+        first: function() {
+            return exports(this[0]);
+        },
+        last: function() {
+            return exports(last(this));
+        },
+        get: function(idx) {
+            return this[idx];
+        },
+        eq: function(idx) {
+            return exports(this[idx]);
+        },
+        on: function(event, selector, handler) {
+            $event.on(this, event, selector, handler);
+            return this;
+        },
+        off: function(event, selector, handler) {
+            $event.off(this, event, selector, handler);
+            return this;
+        },
+        html: function(val) {
+            var result = $property.html(this, val);
+            if (isUndef(val)) return result;
+            return this;
+        },
+        text: function(val) {
+            var result = $property.text(this, val);
+            if (isUndef(val)) return result;
+            return this;
+        },
+        val: function(val) {
+            var result = $property.val(this, val);
+            if (isUndef(val)) return result;
+            return this;
+        },
+        css: function(name, val) {
+            var result = $css(this, name, val);
+            if (isGetter(name, val)) return result;
+            return this;
+        },
+        attr: function(name, val) {
+            var result = $attr(this, name, val);
+            if (isGetter(name, val)) return result;
+            return this;
+        },
+        data: function(name, val) {
+            var result = $data(this, name, val);
+            if (isGetter(name, val)) return result;
+            return this;
+        },
+        rmAttr: function(name) {
+            $attr.remove(this, name);
+            return this;
+        },
+        remove: function() {
+            $remove(this);
+            return this;
+        },
+        addClass: function(name) {
+            $class.add(this, name);
+            return this;
+        },
+        rmClass: function(name) {
+            $class.remove(this, name);
+            return this;
+        },
+        toggleClass: function(name) {
+            $class.toggle(this, name);
+            return this;
+        },
+        hasClass: function(name) {
+            return $class.has(this, name);
+        },
+        parent: function() {
+            return exports(this[0].parentNode);
+        },
+        append: function(val) {
+            $insert.append(this, val);
+            return this;
+        },
+        prepend: function(val) {
+            $insert.prepend(this, val);
+            return this;
+        },
+        before: function(val) {
+            $insert.before(this, val);
+            return this;
+        },
+        after: function(val) {
+            $insert.after(this, val);
+            return this;
         }
+    });
 
-        var ret = {};
-
-        var iteratee = function(val, key) {
-            if (filter(val, key)) ret[key] = val;
-        };
-
-        if (omit) {
-            iteratee = function(val, key) {
-                if (!filter(val, key)) ret[key] = val;
-            };
-        }
-
-        each(obj, iteratee);
-        return ret;
+    var isGetter = function(name, val) {
+        return isUndef(val) && isStr(name);
     };
 
     return exports;
@@ -7313,13 +7435,13 @@ export var raf = _.raf = (function (exports) {
 
     /* typescript
      * export declare namespace raf {
-     *     function cancel(id: number);
+     *     function cancel(id: number): void;
      * }
-     * export declare function raf(cb: Function): number;
+     * export declare function raf(cb: types.AnyFn): number;
      */
 
     /* dependencies
-     * now isBrowser 
+     * now isBrowser types 
      */
 
     var raf, cancel;
@@ -7548,7 +7670,8 @@ export var extractUrls = _.extractUrls = (function (exports) {
      */
 
     /* example
-     * const str = '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
+     * const str =
+     *     '[Official site: http://eustia.liriliri.io](http://eustia.liriliri.io)';
      * extractUrls(str); // -> ['http://eustia.liriliri.io']
      */
 
@@ -7587,19 +7710,19 @@ export var linkify = _.linkify = (function (exports) {
      */
 
     /* example
-     * const str = 'Official site: http://eustia.liriliri.io'
+     * const str = 'Official site: http://eustia.liriliri.io';
      * linkify(str); // -> 'Official site: <a href="http://eustia.liriliri.io">http://eustia.liriliri.io</a>'
-     * linkify(str, function (url) {
+     * linkify(str, function(url) {
      *     return '<a href="' + url + '" target="_blank">' + url + '</a>';
      * });
      */
 
     /* typescript
-     * export declare function linkify(str: string, hyperlink?: Function): string;
+     * export declare function linkify(str: string, hyperlink?: types.AnyFn): string;
      */
 
     /* dependencies
-     * extractUrls each escapeRegExp 
+     * extractUrls each escapeRegExp types 
      */
 
     exports = function(str, hyperlink) {
@@ -7644,7 +7767,7 @@ export var query = _.query = (function (exports) {
 
     /* example
      * query.parse('foo=bar&eruda=true'); // -> {foo: 'bar', eruda: 'true'}
-     * query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
+     * query.stringify({ foo: 'bar', eruda: 'true' }); // -> 'foo=bar&eruda=true'
      * query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
      */
 
@@ -7803,7 +7926,7 @@ export var Url = _.Url = (function (exports) {
      *     slashes: boolean;
      *     constructor(url?: string);
      *     setQuery(name: string, val: string): Url;
-     *     setQuery(query: { [name: string]: string }): Url;
+     *     setQuery(query: types.PlainObj<string>): Url;
      *     rmQuery(name: string | string[]): Url;
      *     toString(): string;
      *     static parse(url: string): Url.IUrl;
@@ -7812,7 +7935,7 @@ export var Url = _.Url = (function (exports) {
      */
 
     /* dependencies
-     * Class extend trim query isEmpty each isArr toArr isBrowser isObj 
+     * Class extend trim query isEmpty each isArr toArr isBrowser isObj types 
      */
 
     exports = Class(
@@ -8016,7 +8139,7 @@ export var ajax = _.ajax = (function (exports) {
     /* example
      * ajax({
      *     url: 'http://example.com',
-     *     data: {test: 'true'},
+     *     data: { test: 'true' },
      *     error() {},
      *     success(data) {
      *         // ...
@@ -8024,7 +8147,7 @@ export var ajax = _.ajax = (function (exports) {
      *     dataType: 'json'
      * });
      *
-     * ajax.get('http://example.com', {}, function (data) {
+     * ajax.get('http://example.com', {}, function(data) {
      *     // ...
      * });
      */
@@ -8034,17 +8157,25 @@ export var ajax = _.ajax = (function (exports) {
      *     function get(
      *         url: string,
      *         data: string | {},
-     *         success: Function,
+     *         success: types.AnyFn,
      *         dataType?: string
      *     ): XMLHttpRequest;
-     *     function get(url: string, success: Function, dataType?: string): XMLHttpRequest;
+     *     function get(
+     *         url: string,
+     *         success: types.AnyFn,
+     *         dataType?: string
+     *     ): XMLHttpRequest;
      *     function post(
      *         url: string,
      *         data: string | {},
-     *         success: Function,
+     *         success: types.AnyFn,
      *         dataType?: string
      *     ): XMLHttpRequest;
-     *     function post(url: string, success: Function, dataType?: string): XMLHttpRequest;
+     *     function post(
+     *         url: string,
+     *         success: types.AnyFn,
+     *         dataType?: string
+     *     ): XMLHttpRequest;
      * }
      * export declare function ajax(options: {
      *     type?: string;
@@ -8052,15 +8183,15 @@ export var ajax = _.ajax = (function (exports) {
      *     data?: string | {};
      *     dataType?: string;
      *     contentType?: string;
-     *     success?: Function;
-     *     error?: Function;
-     *     complete?: Function;
+     *     success?: types.AnyFn;
+     *     error?: types.AnyFn;
+     *     complete?: types.AnyFn;
      *     timeout?: number;
      * }): XMLHttpRequest;
      */
 
     /* dependencies
-     * isFn noop defaults isObj query 
+     * isFn noop defaults isObj query types 
      */
 
     exports = function(options) {
@@ -8186,23 +8317,26 @@ export var sortKeys = _.sortKeys = (function (exports) {
      */
 
     /* example
-     * sortKeys({b: {d: 2, c: 1}, a: 0}, {
-     *     deep: true
-     * }); // -> {a: 0, b: {c: 1, d: 2}}
+     * sortKeys(
+     *     { b: { d: 2, c: 1 }, a: 0 },
+     *     {
+     *         deep: true
+     *     }
+     * ); // -> {a: 0, b: {c: 1, d: 2}}
      */
 
     /* typescript
      * export declare function sortKeys(
      *     obj: object,
      *     options?: {
-     *         deep?: boolean,
-     *         comparator?: Function
+     *         deep?: boolean;
+     *         comparator?: types.AnyFn;
      *     }
      * ): object;
      */
 
     /* dependencies
-     * isSorted defaults keys isArr isObj 
+     * isSorted defaults keys isArr isObj types 
      */
 
     exports = function(obj) {
@@ -8285,10 +8419,10 @@ export var type = _.type = (function (exports) {
     /* example
      * type(5); // -> 'number'
      * type({}); // -> 'object'
-     * type(function () {}); // -> 'function'
+     * type(function() {}); // -> 'function'
      * type([]); // -> 'array'
      * type([], false); // -> 'Array'
-     * type(async function () {}, false); // -> 'AsyncFunction'
+     * type(async function() {}, false); // -> 'AsyncFunction'
      */
 
     /* typescript
@@ -8296,20 +8430,27 @@ export var type = _.type = (function (exports) {
      */
 
     /* dependencies
-     * objToStr isNaN 
+     * objToStr isNaN lowerCase isBuffer 
      */
 
     exports = function(val) {
-        var lowerCase =
+        var lower =
             arguments.length > 1 && arguments[1] !== undefined
                 ? arguments[1]
                 : true;
-        if (val === null) return lowerCase ? 'null' : 'Null';
-        if (val === undefined) return lowerCase ? 'undefined' : 'Undefined';
-        if (isNaN(val)) return lowerCase ? 'nan' : 'NaN';
-        var ret = objToStr(val).match(regObj);
+        var ret;
+        if (val === null) ret = 'Null';
+        if (val === undefined) ret = 'Undefined';
+        if (isNaN(val)) ret = 'NaN';
+        if (isBuffer(val)) ret = 'Buffer';
+
+        if (!ret) {
+            ret = objToStr(val).match(regObj);
+            if (ret) ret = ret[1];
+        }
+
         if (!ret) return '';
-        return lowerCase ? ret[1].toLowerCase() : ret[1];
+        return lower ? lowerCase(ret) : ret;
     };
 
     var regObj = /^\[object\s+(.*?)]$/;
@@ -8332,8 +8473,8 @@ export var stringify = _.stringify = (function (exports) {
      */
 
     /* example
-     * stringify({a: function () {}}); // -> '{"a":"[Function function () {}]"}'
-     * const obj = {a: 1, b: {}};
+     * stringify({ a: function() {} }); // -> '{"a":"[Function function () {}]"}'
+     * const obj = { a: 1, b: {} };
      * obj.b = obj;
      * stringify(obj); // -> '{"a":1,"b":"[Circular ~]"}'
      */
@@ -8768,16 +8909,16 @@ export var throttle = _.throttle = (function (exports) {
      */
 
     /* example
-     * const updatePos = throttle(function () {}, 100);
+     * const updatePos = throttle(function() {}, 100);
      * // $(window).scroll(updatePos);
      */
 
     /* typescript
-     * export declare function throttle(fn: Function, wait: number): Function;
+     * export declare function throttle<T extends types.AnyFn>(fn: T, wait: number): T;
      */
 
     /* dependencies
-     * debounce 
+     * debounce types 
      */
 
     exports = function(fn, wait) {
@@ -8897,7 +9038,7 @@ export var uniqId = _.uniqId = (function (exports) {
      */
 
     /* example
-     * uniqId('eusita_'); // -> 'eustia_xxx'
+     * uniqId('eustia_'); // -> 'eustia_xxx'
      */
 
     /* typescript
@@ -8977,11 +9118,14 @@ export var wrap = _.wrap = (function (exports) {
      */
 
     /* typescript
-     * export declare function wrap(fn: Function, wrapper: Function): Function;
+     * export declare function wrap(
+     *     fn: types.AnyFn,
+     *     wrapper: types.AnyFn
+     * ): types.AnyFn;
      */
 
     /* dependencies
-     * partial 
+     * partial types 
      */
 
     exports = function(fn, wrapper) {
