@@ -119,5 +119,6 @@ eruda.init({
 
 ## 相关项目
 
+* [chii](https://github.com/liriliri/chii)：远程调试工具。
 * [licia](https://github.com/liriliri/licia)：Eruda 使用的工具库。 
 * [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin)：Eruda webpack 插件。

@@ -118,6 +118,7 @@ If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.m
 
 ## Related Projects
 
+* [chii](https://github.com/liriliri/chii): Remote debugging tool.
 * [licia](https://github.com/liriliri/licia): Utility library used by eruda.
 * [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin): Eruda webpack plugin.
 

@@ -29,7 +29,6 @@ npm run cov
 ## Project Structure
 
 - **doc**: documents.
-- **eustia**: eustia extended utilties.
-- **script**: webpack configuration, and some other useful scripts.
+- **build**: webpack configuration, and some other useful scripts.
 - **src**: source code, written in es2015.
 - **test**: contain pages for testing.
