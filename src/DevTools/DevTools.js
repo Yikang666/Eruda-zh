@@ -12,14 +12,24 @@ import {
   isNum,
   $,
   throttle,
-  isDarkMode
+  isDarkMode,
+  extend
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import LunaNotification from 'luna-notification'
 
 export default class DevTools extends Emitter {
-  constructor($container) {
+  constructor($container, { defaults = {} } = {}) {
     super()
+
+    this._defCfg = extend(
+      {
+        transparency: 1,
+        displaySize: 80,
+        theme: isDarkMode() ? 'Dark' : 'Light'
+      },
+      defaults
+    )
 
     this._style = evalCss(require('./DevTools.scss'))
 
@@ -142,11 +152,7 @@ export default class DevTools extends Emitter {
     return this
   }
   initCfg(settings) {
-    const cfg = (this.config = Settings.createCfg('dev-tools', {
-      transparency: 1,
-      displaySize: 80,
-      theme: isDarkMode() ? 'Dark' : 'Light'
-    }))
+    const cfg = (this.config = Settings.createCfg('dev-tools', this._defCfg))
 
     this._setTransparency(cfg.get('transparency'))
     this._setDisplaySize(cfg.get('displaySize'))

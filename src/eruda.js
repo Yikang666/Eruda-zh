@@ -28,7 +28,7 @@ import {
 import evalCss from './lib/evalCss'
 
 export default {
-  init({ container, tool, autoScale = true, useShadowDom = true } = {}) {
+  init({ container, tool, autoScale = true, useShadowDom = true, defaults = {} } = {}) {
     if (this._isInit) return
 
     this._isInit = true
@@ -36,7 +36,7 @@ export default {
 
     this._initContainer(container, useShadowDom)
     this._initStyle()
-    this._initDevTools()
+    this._initDevTools(defaults)
     this._initEntryBtn()
     this._initSettings()
     this._initTools(tool)
@@ -182,8 +182,10 @@ export default {
 
     this._$el = $(el)
   },
-  _initDevTools() {
-    this._devTools = new DevTools(this._$el)
+  _initDevTools(defaults) {
+    this._devTools = new DevTools(this._$el, {
+      defaults
+    })
   },
   _initStyle() {
     const className = 'eruda-style-container'

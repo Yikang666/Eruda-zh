@@ -54,7 +54,12 @@
           try {
             eruda.init({
               container: el,
-              useShadowDom: false
+              useShadowDom: false,
+              defaults: {
+                displaySize: 50,
+                transparency: 0.9,
+                theme: 'Monokai Pro'
+              }
             })
           } catch (e) {
             alert(e)

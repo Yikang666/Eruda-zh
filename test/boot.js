@@ -2,7 +2,12 @@ function boot(name, cb) {
   // Need a little delay to make sure width and height of webpack dev server iframe are initialized.
   setTimeout(function() {
     let options = {
-      useShadowDom: false
+      useShadowDom: false,
+      defaults: {
+        displaySize: 50,
+        transparency: 0.9,
+        theme: 'Monokai Pro'
+      }
     }
     if (name) {
       options.tool = name === 'settings' ? [] : name
@@ -13,10 +18,7 @@ function boot(name, cb) {
     } catch (e) {
       alert(e)
     }
-    eruda
-      .show()
-      .get()
-      .config.set('displaySize', 50)
+    eruda.show()
 
     cb && cb()
 
