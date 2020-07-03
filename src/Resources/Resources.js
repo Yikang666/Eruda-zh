@@ -14,15 +14,15 @@ import {
   MutationObserver,
   toArr,
   concat,
-  rmCookie,
-  decodeUriComponent,
   isNull,
   lowerCase,
   contain,
-  filter
+  filter,
+  map
 } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
+import chobitsu from 'chobitsu'
 
 export default class Resources extends Tool {
   constructor() {
@@ -155,20 +155,11 @@ export default class Resources extends Tool {
     this['_' + type + 'StoreData'] = storeData
   }
   refreshCookie() {
-    const cookieData = []
-
-    const cookie = document.cookie
-    if (trim(cookie) !== '') {
-      each(document.cookie.split(';'), function(val) {
-        val = val.split('=')
-        const key = trim(val.shift())
-        val = decodeUriComponent(val.join('='))
-        cookieData.push({
-          key,
-          val
-        })
-      })
-    }
+    const { cookies } = chobitsu.domain('Network').getCookies()
+    const cookieData = map(cookies, ({ name, value }) => ({
+      key: name,
+      val: value
+    }))
 
     this._cookieData = cookieData
 
@@ -283,7 +274,7 @@ export default class Resources extends Tool {
       .on('click', '.eruda-delete-cookie', function() {
         const key = $(this).data('key')
 
-        rmCookie(key)
+        chobitsu.domain('Network').deleteCookies({ name: key })
         self.refreshCookie()._render()
       })
       .on('click', '.eruda-clear-storage', function() {
@@ -300,7 +291,9 @@ export default class Resources extends Tool {
         }
       })
       .on('click', '.eruda-clear-cookie', () => {
-        each(this._cookieData, val => rmCookie(val.key))
+        chobitsu.domain('Storage').clearDataForOrigin({
+          storageTypes: 'cookies'
+        })
         this.refreshCookie()._render()
       })
       .on('click', '.eruda-storage-val', function() {

@@ -1,6 +1,6 @@
 module.exports = {
   eruda: {
-    library: 'https://raw.githubusercontent.com/liriliri/fione/master/',
+    library: ['fione', 'node_modules/eustia-module'],
     files: 'src/**/*.js',
     ignore: 'src/**/stringify.js',
     output: 'src/lib/util.js',
@@ -8,6 +8,7 @@ module.exports = {
     format: 'es'
   },
   test: {
+    library: ['node_modules/eustia-module'],
     files: ['test/*.js', 'test/*.html'],
     exclude: ['js'],
     namespace: 'util',

@@ -743,271 +743,6 @@ export var debounce = _.debounce = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ ucs2 ------------------------------ */
-
-export var ucs2 = _.ucs2 = (function (exports) {
-    /* UCS-2 encoding and decoding.
-     *
-     * ### encode
-     *
-     * Create a string using an array of code point values.
-     *
-     * |Name  |Desc                |
-     * |------|--------------------|
-     * |arr   |Array of code points|
-     * |return|Encoded string      |
-     *
-     * ### decode
-     *
-     * Create an array of code point values using a string.
-     *
-     * |Name  |Desc                |
-     * |------|--------------------|
-     * |str   |Input string        |
-     * |return|Array of code points|
-     */
-
-    /* example
-     * ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
-     * ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
-     * '𝌆'.length; // -> 2
-     * ucs2.decode('𝌆').length; // -> 1
-     */
-
-    /* typescript
-     * export declare const ucs2: {
-     *     encode(arr: number[]): string;
-     *     decode(str: string): number[];
-     * };
-     */
-    // https://mathiasbynens.be/notes/javascript-encoding
-    exports = {
-        encode: function(arr) {
-            return String.fromCodePoint.apply(String, arr);
-        },
-        decode: function(str) {
-            var ret = [];
-            var i = 0;
-            var len = str.length;
-
-            while (i < len) {
-                var c = str.charCodeAt(i++); // A high surrogate
-
-                if (c >= 0xd800 && c <= 0xdbff && i < len) {
-                    var tail = str.charCodeAt(i++); // nextC >= 0xDC00 && nextC <= 0xDFFF
-
-                    if ((tail & 0xfc00) === 0xdc00) {
-                        // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
-                        ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
-                    } else {
-                        ret.push(c);
-                        i--;
-                    }
-                } else {
-                    ret.push(c);
-                }
-            }
-
-            return ret;
-        }
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ utf8 ------------------------------ */
-
-export var utf8 = _.utf8 = (function (exports) {
-    /* UTF-8 encoding and decoding.
-     *
-     * ### encode
-     *
-     * Turn any UTF-8 decoded string into UTF-8 encoded string.
-     *
-     * |Name  |Desc            |
-     * |------|----------------|
-     * |str   |String to encode|
-     * |return|Encoded string  |
-     *
-     * ### decode
-     *
-     * Turn any UTF-8 encoded string into UTF-8 decoded string.
-     *
-     * |Name      |Desc                  |
-     * |----------|----------------------|
-     * |str       |String to decode      |
-     * |safe=false|Suppress error if true|
-     * |return    |Decoded string        |
-     */
-
-    /* example
-     * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
-     * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
-     */
-
-    /* typescript
-     * export declare const utf8: {
-     *     encode(str: string): string;
-     *     decode(str: string, safe?: boolean): string;
-     * };
-     */
-
-    /* dependencies
-     * ucs2 
-     */ // https://encoding.spec.whatwg.org/#utf-8
-
-    exports = {
-        encode: function(str) {
-            var codePoints = ucs2.decode(str);
-            var byteArr = '';
-
-            for (var i = 0, len = codePoints.length; i < len; i++) {
-                byteArr += encodeCodePoint(codePoints[i]);
-            }
-
-            return byteArr;
-        },
-        decode: function(str, safe) {
-            byteArr = ucs2.decode(str);
-            byteIdx = 0;
-            byteCount = byteArr.length;
-            codePoint = 0;
-            bytesSeen = 0;
-            bytesNeeded = 0;
-            lowerBoundary = 0x80;
-            upperBoundary = 0xbf;
-            var codePoints = [];
-            var tmp;
-
-            while ((tmp = decodeCodePoint(safe)) !== false) {
-                codePoints.push(tmp);
-            }
-
-            return ucs2.encode(codePoints);
-        }
-    };
-    var fromCharCode = String.fromCharCode;
-
-    function encodeCodePoint(codePoint) {
-        // U+0000 to U+0080, ASCII code point
-        if ((codePoint & 0xffffff80) === 0) {
-            return fromCharCode(codePoint);
-        }
-
-        var ret = '',
-            count,
-            offset; // U+0080 to U+07FF, inclusive
-
-        if ((codePoint & 0xfffff800) === 0) {
-            count = 1;
-            offset = 0xc0;
-        } else if ((codePoint & 0xffff0000) === 0) {
-            // U+0800 to U+FFFF, inclusive
-            count = 2;
-            offset = 0xe0;
-        } else if ((codePoint & 0xffe00000) == 0) {
-            // U+10000 to U+10FFFF, inclusive
-            count = 3;
-            offset = 0xf0;
-        }
-
-        ret += fromCharCode((codePoint >> (6 * count)) + offset);
-
-        while (count > 0) {
-            var tmp = codePoint >> (6 * (count - 1));
-            ret += fromCharCode(0x80 | (tmp & 0x3f));
-            count--;
-        }
-
-        return ret;
-    }
-
-    var byteArr,
-        byteIdx,
-        byteCount,
-        codePoint,
-        bytesSeen,
-        bytesNeeded,
-        lowerBoundary,
-        upperBoundary;
-
-    function decodeCodePoint(safe) {
-        /* eslint-disable no-constant-condition */
-        while (true) {
-            if (byteIdx >= byteCount && bytesNeeded) {
-                if (safe) return goBack();
-                throw new Error('Invalid byte index');
-            }
-
-            if (byteIdx === byteCount) return false;
-            var byte = byteArr[byteIdx];
-            byteIdx++;
-
-            if (!bytesNeeded) {
-                // 0x00 to 0x7F
-                if ((byte & 0x80) === 0) {
-                    return byte;
-                } // 0xC2 to 0xDF
-
-                if ((byte & 0xe0) === 0xc0) {
-                    bytesNeeded = 1;
-                    codePoint = byte & 0x1f;
-                } else if ((byte & 0xf0) === 0xe0) {
-                    // 0xE0 to 0xEF
-                    if (byte === 0xe0) lowerBoundary = 0xa0;
-                    if (byte === 0xed) upperBoundary = 0x9f;
-                    bytesNeeded = 2;
-                    codePoint = byte & 0xf;
-                } else if ((byte & 0xf8) === 0xf0) {
-                    // 0xF0 to 0xF4
-                    if (byte === 0xf0) lowerBoundary = 0x90;
-                    if (byte === 0xf4) upperBoundary = 0x8f;
-                    bytesNeeded = 3;
-                    codePoint = byte & 0x7;
-                } else {
-                    if (safe) return goBack();
-                    throw new Error('Invalid UTF-8 detected');
-                }
-
-                continue;
-            }
-
-            if (byte < lowerBoundary || byte > upperBoundary) {
-                if (safe) {
-                    byteIdx--;
-                    return goBack();
-                }
-
-                throw new Error('Invalid continuation byte');
-            }
-
-            lowerBoundary = 0x80;
-            upperBoundary = 0xbf;
-            codePoint = (codePoint << 6) | (byte & 0x3f);
-            bytesSeen++;
-            if (bytesSeen !== bytesNeeded) continue;
-            var tmp = codePoint;
-            codePoint = 0;
-            bytesNeeded = 0;
-            bytesSeen = 0;
-            return tmp;
-        }
-    }
-
-    function goBack() {
-        var start = byteIdx - bytesSeen - 1;
-        byteIdx = start + 1;
-        codePoint = 0;
-        bytesNeeded = 0;
-        bytesSeen = 0;
-        lowerBoundary = 0x80;
-        upperBoundary = 0xbf;
-        return byteArr[start];
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ detectOs ------------------------------ */
 
 export var detectOs = _.detectOs = (function (exports) {
@@ -4638,192 +4373,6 @@ export var map = _.map = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ decodeUriComponent ------------------------------ */
-
-export var decodeUriComponent = _.decodeUriComponent = (function (exports) {
-    /* Better decodeURIComponent that does not throw if input is invalid.
-     *
-     * |Name  |Desc            |
-     * |------|----------------|
-     * |str   |String to decode|
-     * |return|Decoded string  |
-     */
-
-    /* example
-     * decodeUriComponent('%%25%'); // -> '%%%'
-     * decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
-     */
-
-    /* typescript
-     * export declare function decodeUriComponent(str: string): string;
-     */
-
-    /* dependencies
-     * each ucs2 map utf8 
-     */
-
-    exports = function(str) {
-        try {
-            return decodeURIComponent(str);
-        } catch (e) {
-            var matches = str.match(regMatcher);
-
-            if (!matches) {
-                return str;
-            }
-
-            each(matches, function(match) {
-                str = str.replace(match, decode(match));
-            });
-            return str;
-        }
-    };
-
-    function decode(str) {
-        str = str.split('%').slice(1);
-        var bytes = map(str, hexToInt);
-        str = ucs2.encode(bytes);
-        str = utf8.decode(str, true);
-        return str;
-    }
-
-    function hexToInt(numStr) {
-        return +('0x' + numStr);
-    }
-
-    var regMatcher = /(%[a-f0-9]{2})+/gi;
-
-    return exports;
-})({});
-
-/* ------------------------------ cookie ------------------------------ */
-
-export var cookie = _.cookie = (function (exports) {
-    /* Simple api for handling browser cookies.
-     *
-     * ### get
-     *
-     * Get cookie value.
-     *
-     * |Name  |Desc                      |
-     * |------|--------------------------|
-     * |key   |Cookie key                |
-     * |return|Corresponding cookie value|
-     *
-     * ### set
-     *
-     * Set cookie value.
-     *
-     * |Name   |Desc          |
-     * |-------|--------------|
-     * |key    |Cookie key    |
-     * |val    |Cookie value  |
-     * |options|Cookie options|
-     * |return |Module cookie |
-     *
-     * ### remove
-     *
-     * Remove cookie value.
-     *
-     * |Name   |Desc          |
-     * |-------|--------------|
-     * |key    |Cookie key    |
-     * |options|Cookie options|
-     * |return |Module cookie |
-     */
-
-    /* example
-     * cookie.set('a', '1', { path: '/' });
-     * cookie.get('a'); // -> '1'
-     * cookie.remove('a');
-     */
-
-    /* typescript
-     * export declare namespace cookie {
-     *     interface IOptions {
-     *         path?: string;
-     *         expires?: number;
-     *         domain?: string;
-     *         secure?: boolean;
-     *     }
-     *     interface ICookie {
-     *         get(key: string, options?: cookie.IOptions): string;
-     *         set(key: string, val: string, options?: cookie.IOptions): ICookie;
-     *         remove(key: string, options?: cookie.IOptions): ICookie;
-     *     }
-     * }
-     * export declare const cookie: cookie.ICookie;
-     */
-
-    /* dependencies
-     * defaults isNum isUndef decodeUriComponent 
-     */
-
-    var defOpts = {
-        path: '/'
-    };
-
-    function setCookie(key, val, options) {
-        if (!isUndef(val)) {
-            options = options || {};
-            options = defaults(options, defOpts);
-
-            if (isNum(options.expires)) {
-                var expires = new Date();
-                expires.setMilliseconds(
-                    expires.getMilliseconds() + options.expires * 864e5
-                );
-                options.expires = expires;
-            }
-
-            val = encodeURIComponent(val);
-            key = encodeURIComponent(key);
-            document.cookie = [
-                key,
-                '=',
-                val,
-                options.expires && '; expires=' + options.expires.toUTCString(),
-                options.path && '; path=' + options.path,
-                options.domain && '; domain=' + options.domain,
-                options.secure ? '; secure' : ''
-            ].join('');
-            return exports;
-        }
-
-        var cookies = document.cookie ? document.cookie.split('; ') : [];
-        var result = key ? undefined : {};
-
-        for (var i = 0, len = cookies.length; i < len; i++) {
-            var c = cookies[i];
-            var parts = c.split('=');
-            var name = decodeUriComponent(parts.shift());
-            c = parts.join('=');
-            c = decodeUriComponent(c);
-
-            if (key === name) {
-                result = c;
-                break;
-            }
-
-            if (!key) result[name] = c;
-        }
-
-        return result;
-    }
-
-    exports = {
-        get: setCookie,
-        set: setCookie,
-        remove: function(key, options) {
-            options = options || {};
-            options.expires = -1;
-            return setCookie(key, '', options);
-        }
-    };
-
-    return exports;
-})({});
-
 /* ------------------------------ toArr ------------------------------ */
 
 export var toArr = _.toArr = (function (exports) {
@@ -6413,6 +5962,14 @@ export var Emitter = _.Emitter = (function (exports) {
      * |event  |Event name                  |
      * |...args|Arguments passed to listener|
      *
+     * ### removeAllListeners
+     *
+     * Remove all listeners.
+     *
+     * |Name |Desc      |
+     * |-----|----------|
+     * |event|Event name|
+     *
      * ### mixin
      *
      * [static] Mixin object class methods.
@@ -6437,6 +5994,7 @@ export var Emitter = _.Emitter = (function (exports) {
      *     off(event: string, listener: types.AnyFn): Emitter;
      *     once(event: string, listener: types.AnyFn): Emitter;
      *     emit(event: string, ...args: any[]): Emitter;
+     *     removeAllListeners(event?: string): Emitter;
      *     static mixin(obj: any): any;
      * }
      */
@@ -6481,6 +6039,15 @@ export var Emitter = _.Emitter = (function (exports) {
                     },
                     this
                 );
+                return this;
+            },
+            removeAllListeners: function(event) {
+                if (!event) {
+                    this._events = {};
+                } else {
+                    delete this._events[event];
+                }
+
                 return this;
             }
         },
@@ -7480,93 +7047,6 @@ export var raf = _.raf = (function (exports) {
 
     raf.cancel = cancel;
     exports = raf;
-
-    return exports;
-})({});
-
-/* ------------------------------ rmCookie ------------------------------ */
-
-export var rmCookie = _.rmCookie = (function (exports) {
-    /* Loop through all possible path and domain to remove cookie.
-     *
-     * |Name|Desc      |
-     * |----|----------|
-     * |key |Cookie key|
-     */
-
-    /* example
-     * rmCookie('test');
-     */
-
-    /* typescript
-     * export declare function rmCookie(key: string): void;
-     */
-
-    /* dependencies
-     * cookie 
-     */
-
-    exports = function(key) {
-        var location = window.location;
-        var hostname = location.hostname;
-        var pathname = location.pathname;
-        var hostNames = hostname.split('.');
-        var pathNames = pathname.split('/');
-        var domain = '';
-        var pathLen = pathNames.length;
-        var path;
-        if (del()) return;
-
-        for (var i = hostNames.length - 1; i >= 0; i--) {
-            var hostName = hostNames[i];
-            if (hostName === '') continue;
-            domain = domain === '' ? hostName : hostName + '.' + domain;
-            path = '/';
-            if (
-                del({
-                    domain: domain,
-                    path: path
-                }) ||
-                del({
-                    domain: domain
-                })
-            )
-                return;
-
-            for (var j = 0; j < pathLen; j++) {
-                var pathName = pathNames[j];
-                if (pathName === '') continue;
-                path += pathName;
-                if (
-                    del({
-                        domain: domain,
-                        path: path
-                    }) ||
-                    del({
-                        path: path
-                    })
-                )
-                    return;
-                path += '/';
-                if (
-                    del({
-                        domain: domain,
-                        path: path
-                    }) ||
-                    del({
-                        path: path
-                    })
-                )
-                    return;
-            }
-        }
-
-        function del(options) {
-            options = options || {};
-            cookie.remove(key, options);
-            return !cookie.get(key);
-        }
-    };
 
     return exports;
 })({});

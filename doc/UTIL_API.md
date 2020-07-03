@@ -363,6 +363,14 @@ Emit event.
 |event  |Event name                  |
 |...args|Arguments passed to listener|
 
+### removeAllListeners
+
+Remove all listeners.
+
+|Name |Desc      |
+|-----|----------|
+|event|Event name|
+
 ### mixin
 
 [static] Mixin object class methods.
@@ -964,46 +972,6 @@ contain({ a: 1, b: 2 }, 1); // -> true
 contain('abc', 'a'); // -> true
 ```
 
-## cookie 
-
-Simple api for handling browser cookies.
-
-### get
-
-Get cookie value.
-
-|Name  |Desc                      |
-|------|--------------------------|
-|key   |Cookie key                |
-|return|Corresponding cookie value|
-
-### set
-
-Set cookie value.
-
-|Name   |Desc          |
-|-------|--------------|
-|key    |Cookie key    |
-|val    |Cookie value  |
-|options|Cookie options|
-|return |Module cookie |
-
-### remove
-
-Remove cookie value.
-
-|Name   |Desc          |
-|-------|--------------|
-|key    |Cookie key    |
-|options|Cookie options|
-|return |Module cookie |
-
-```javascript
-cookie.set('a', '1', { path: '/' });
-cookie.get('a'); // -> '1'
-cookie.remove('a');
-```
-
 ## copy 
 
 Copy text to clipboard using document.execCommand.
@@ -1104,20 +1072,6 @@ Return a new debounced version of the passed function.
 ```javascript
 const calLayout = debounce(function() {}, 300);
 // $(window).resize(calLayout);
-```
-
-## decodeUriComponent 
-
-Better decodeURIComponent that does not throw if input is invalid.
-
-|Name  |Desc            |
-|------|----------------|
-|str   |String to decode|
-|return|Decoded string  |
-
-```javascript
-decodeUriComponent('%%25%'); // -> '%%%'
-decodeUriComponent('%E0%A4%A'); // -> '\xE0\xA4%A'
 ```
 
 ## defaults 
@@ -2449,18 +2403,6 @@ Reverse array without mutating it.
 reverse([1, 2, 3]); // -> [3, 2, 1]
 ```
 
-## rmCookie 
-
-Loop through all possible path and domain to remove cookie.
-
-|Name|Desc      |
-|----|----------|
-|key |Cookie key|
-
-```javascript
-rmCookie('test');
-```
-
 ## root 
 
 Root object reference, `global` in nodeJs, `window` in browser.
@@ -2768,35 +2710,6 @@ type(async function() {}, false); // -> 'AsyncFunction'
 
 Used for typescript definitions only.
 
-## ucs2 
-
-UCS-2 encoding and decoding.
-
-### encode
-
-Create a string using an array of code point values.
-
-|Name  |Desc                |
-|------|--------------------|
-|arr   |Array of code points|
-|return|Encoded string      |
-
-### decode
-
-Create an array of code point values using a string.
-
-|Name  |Desc                |
-|------|--------------------|
-|str   |Input string        |
-|return|Array of code points|
-
-```javascript
-ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
-ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
-'𝌆'.length; // -> 2
-ucs2.decode('𝌆').length; // -> 1
-```
-
 ## uncaught 
 
 Handle global uncaught errors and promise rejections.
@@ -2870,34 +2783,6 @@ Convert the first character of string to upper case.
 
 ```javascript
 upperFirst('red'); // -> Red
-```
-
-## utf8 
-
-UTF-8 encoding and decoding.
-
-### encode
-
-Turn any UTF-8 decoded string into UTF-8 encoded string.
-
-|Name  |Desc            |
-|------|----------------|
-|str   |String to encode|
-|return|Encoded string  |
-
-### decode
-
-Turn any UTF-8 encoded string into UTF-8 decoded string.
-
-|Name      |Desc                  |
-|----------|----------------------|
-|str       |String to decode      |
-|safe=false|Suppress error if true|
-|return    |Decoded string        |
-
-```javascript
-utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
-utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
 ```
 
 ## values 

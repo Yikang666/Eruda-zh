@@ -26,6 +26,7 @@ import {
   nextTick
 } from './lib/util'
 import evalCss from './lib/evalCss'
+import chobitsu from 'chobitsu'
 
 export default {
   init({ container, tool, autoScale = true, useShadowDom = true, defaults = {} } = {}) {
@@ -47,6 +48,7 @@ export default {
   _isInit: false,
   version: VERSION,
   util,
+  chobitsu,
   Tool,
   Console,
   Elements,

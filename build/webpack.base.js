@@ -32,6 +32,9 @@ const cssMinifierLoader = {
 
 module.exports = {
   entry: './src/index',
+  resolve: {
+    symlinks: false
+  },
   devServer: {
     contentBase: './test',
     port: 3000

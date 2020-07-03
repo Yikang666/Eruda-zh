@@ -1,0 +1,3 @@
+[submodule "fione"]
+	path = fione
+	url = git@github.com:liriliri/fione.git
