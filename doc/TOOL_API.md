@@ -99,12 +99,6 @@ elements.set(document.body);
 
 Display requests.
 
-### Config
-
-|Name         |Type   |Desc                |
-|-------------|-------|--------------------|
-|overrideFetch|boolean|Catch Fetch Requests|
-
 ### clear
 
 Clear requests.

@@ -1,19 +1,9 @@
 import Tool from '../DevTools/Tool'
-import XhrRequest from './XhrRequest'
-import FetchRequest from './FetchRequest'
-import Settings from '../Settings/Settings'
-import {
-  isNative,
-  defaults,
-  now,
-  extend,
-  isEmpty,
-  $,
-  ms,
-  trim,
-  each
-} from '../lib/util'
+import { getFileName, isEmpty, $, ms, trim, each, last } from '../lib/util'
 import evalCss from '../lib/evalCss'
+import chobitsu from 'chobitsu'
+
+chobitsu.domain('Network').enable()
 
 export default class Network extends Tool {
   constructor() {
@@ -26,17 +16,13 @@ export default class Network extends Tool {
     this._tpl = require('./Network.hbs')
     this._detailTpl = require('./detail.hbs')
     this._requestsTpl = require('./requests.hbs')
-    this._datailData = {}
-    this._isFetchSupported = false
-    if (window.fetch) this._isFetchSupported = isNative(window.fetch)
+    this._detailData = {}
   }
   init($el, container) {
     super.init($el)
 
     this._container = container
     this._bindEvent()
-    this._initCfg()
-    this.overrideXhr()
     this._appendTpl()
   }
   show() {
@@ -48,82 +34,6 @@ export default class Network extends Tool {
     this._requests = {}
     this._render()
   }
-  overrideXhr() {
-    const winXhrProto = window.XMLHttpRequest.prototype
-
-    const origSend = (this._origSend = winXhrProto.send)
-    const origOpen = (this._origOpen = winXhrProto.open)
-    const origSetRequestHeader = (this._origSetRequestHeader =
-      winXhrProto.setRequestHeader)
-
-    const self = this
-
-    winXhrProto.open = function(method, url) {
-      const xhr = this
-
-      const req = (xhr.erudaRequest = new XhrRequest(xhr, method, url))
-
-      req.on('send', (id, data) => self._addReq(id, data))
-      req.on('update', (id, data) => self._updateReq(id, data))
-
-      xhr.addEventListener('readystatechange', function() {
-        switch (xhr.readyState) {
-          case 2:
-            return req.handleHeadersReceived()
-          case 4:
-            return req.handleDone()
-        }
-      })
-
-      origOpen.apply(this, arguments)
-    }
-
-    winXhrProto.send = function(data) {
-      const req = this.erudaRequest
-      if (req) req.handleSend(data)
-
-      origSend.apply(this, arguments)
-    }
-
-    winXhrProto.setRequestHeader = function(key, val) {
-      const req = this.erudaRequest
-      if (req) req.handleReqHeadersSet(key, val)
-
-      origSetRequestHeader.apply(this, arguments)
-    }
-  }
-  restoreXhr() {
-    const winXhrProto = window.XMLHttpRequest.prototype
-
-    if (this._origOpen) winXhrProto.open = this._origOpen
-    if (this._origSend) winXhrProto.send = this._origSend
-    if (this._origSetRequestHeader) {
-      winXhrProto.setRequestHeader = this._origSetRequestHeader
-    }
-  }
-  overrideFetch() {
-    if (!this._isFetchSupported) return
-
-    const origFetch = (this._origFetch = window.fetch)
-
-    const self = this
-
-    window.fetch = function(...args) {
-      const req = new FetchRequest(...args)
-      req.on('send', (id, data) => self._addReq(id, data))
-      req.on('update', (id, data) => self._updateReq(id, data))
-
-      const fetchResult = origFetch(...args)
-      req.send(fetchResult)
-
-      return fetchResult
-    }
-  }
-  restoreFetch() {
-    if (!this._isFetchSupported) return
-
-    if (this._origFetch) window.fetch = this._origFetch
-  }
   requests() {
     const ret = []
     each(this._requests, request => {
@@ -131,38 +41,75 @@ export default class Network extends Tool {
     })
     return ret
   }
-  _addReq(id, data) {
-    defaults(data, {
-      name: '',
-      url: '',
+  _reqWillBeSent = params => {
+    this._requests[params.requestId] = {
+      name: getFileName(params.request.url),
+      url: params.request.url,
       status: 'pending',
       type: 'unknown',
       subType: 'unknown',
       size: 0,
-      data: '',
-      method: 'GET',
-      startTime: now(),
+      data: params.request.postData,
+      method: params.request.method,
+      startTime: params.timestamp * 1000,
       time: 0,
       resTxt: '',
-      done: false
-    })
+      done: false,
+      reqHeaders: params.request.headers || {},
+      resHeaders: {}
+    }
+  }
+  _resReceivedExtraInfo = params => {
+    const target = this._requests[params.requestId]
+    if (!target) {
+      return
+    }
 
-    this._requests[id] = data
+    target.resHeaders = params.headers
+
+    this._updateType(target)
+    this._render()
+  }
+  _updateType(target) {
+    const contentType = target.resHeaders['content-type'] || ''
+    const { type, subType } = getType(contentType)
+    target.type = type
+    target.subType = subType
+  }
+  _resReceived = params => {
+    const target = this._requests[params.requestId]
+    if (!target) {
+      return
+    }
+
+    const { response } = params
+    const { status, headers } = response
+    target.status = status
+    if (status < 200 || status >= 300) {
+      target.hasErr = true
+    }
+    if (headers) {
+      target.resHeaders = headers
+      this._updateType(target)
+    }
 
     this._render()
   }
-  _updateReq(id, data) {
-    const target = this._requests[id]
+  _loadingFinished = params => {
+    const target = this._requests[params.requestId]
+    if (!target) {
+      return
+    }
 
-    if (!target) return
-
-    extend(target, data)
-
-    target.time = target.time - target.startTime
+    const time = params.timestamp * 1000
+    target.time = time - target.startTime
     target.displayTime = ms(target.time)
 
-    if (target.done && (target.status < 200 || target >= 300))
-      target.hasErr = true
+    target.size = params.encodedDataLength
+    target.done = true
+    target.resTxt = chobitsu.domain('Network').getResponseBody({
+      requestId: params.requestId
+    }).body
 
     this._render()
   }
@@ -211,58 +158,45 @@ export default class Network extends Tool {
 
       container.showTool('sources')
     }
+
+    const network = chobitsu.domain('Network')
+    network.on('requestWillBeSent', this._reqWillBeSent)
+    network.on('responseReceivedExtraInfo', this._resReceivedExtraInfo)
+    network.on('responseReceived', this._resReceived)
+    network.on('loadingFinished', this._loadingFinished)
   }
   destroy() {
     super.destroy()
 
     evalCss.remove(this._style)
-    this.restoreXhr()
-    this.restoreFetch()
-    this._rmCfg()
+
+    const network = chobitsu.domain('Network')
+    network.off('requestWillBeSent', this._reqWillBeSent)
+    network.off('responseReceivedExtraInfo', this._resReceivedExtraInfo)
+    network.off('responseReceived', this._resReceived)
+    network.off('loadingFinished', this._loadingFinished)
   }
   _showDetail(data) {
-    if (data.resTxt && trim(data.resTxt) === '') delete data.resTxt
-    if (isEmpty(data.resHeaders)) delete data.resHeaders
+    if (data.resTxt && trim(data.resTxt) === '') {
+      delete data.resTxt
+    }
+    if (isEmpty(data.resHeaders)) {
+      delete data.resHeaders
+    }
+    if (isEmpty(data.reqHeaders)) {
+      delete data.reqHeaders
+    }
     this._$detail.html(this._detailTpl(data)).show()
     this._detailData = data
   }
   _hideDetail() {
     this._$detail.hide()
   }
-  _rmCfg() {
-    const cfg = this.config
-
-    const settings = this._container.get('settings')
-
-    if (!settings) return
-
-    settings.remove(cfg, 'overrideFetch').remove('Network')
-  }
   _appendTpl() {
     const $el = this._$el
     $el.html(this._tpl())
     this._$detail = $el.find('.eruda-detail')
     this._$requests = $el.find('.eruda-requests')
-  }
-  _initCfg() {
-    const cfg = (this.config = Settings.createCfg('network', {
-      overrideFetch: true
-    }))
-
-    if (cfg.get('overrideFetch')) this.overrideFetch()
-
-    cfg.on('change', (key, val) => {
-      switch (key) {
-        case 'overrideFetch':
-          return val ? this.overrideFetch() : this.restoreFetch()
-      }
-    })
-
-    const settings = this._container.get('settings')
-    settings
-      .text('Network')
-      .switch(cfg, 'overrideFetch', 'Catch Fetch Requests')
-      .separator()
   }
   _render() {
     if (!this.active) return
@@ -277,5 +211,16 @@ export default class Network extends Tool {
     if (html === this._lastHtml) return
     this._lastHtml = html
     this._$requests.html(html)
+  }
+}
+
+function getType(contentType) {
+  if (!contentType) return 'unknown'
+
+  const type = contentType.split(';')[0].split('/')
+
+  return {
+    type: type[0],
+    subType: last(type)
   }
 }
