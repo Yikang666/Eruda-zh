@@ -40,7 +40,7 @@
     "autoprefixer": "^9.7.4",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
-    "chobitsu": "^0.2.0",
+    "chobitsu": "^0.2.1",
     "css-loader": "^3.4.2",
     "draggabilly": "^2.2.0",
     "eslint": "^6.8.0",
