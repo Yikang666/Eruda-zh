@@ -1074,59 +1074,6 @@ export var escapeRegExp = _.escapeRegExp = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ fileSize ------------------------------ */
-
-export var fileSize = _.fileSize = (function (exports) {
-    /* Turn bytes into human readable file size.
-     *
-     * |Name  |Desc              |
-     * |------|------------------|
-     * |bytes |File bytes        |
-     * |return|Readable file size|
-     */
-
-    /* example
-     * fileSize(5); // -> '5'
-     * fileSize(1500); // -> '1.46K'
-     * fileSize(1500000); // -> '1.43M'
-     * fileSize(1500000000); // -> '1.4G'
-     * fileSize(1500000000000); // -> '1.36T'
-     */
-
-    /* typescript
-     * export declare function fileSize(bytes: number): string;
-     */
-    exports = function(bytes) {
-        if (bytes <= 0) return '0';
-        var suffixIdx = Math.floor(Math.log(bytes) / Math.log(1024));
-        var val = bytes / Math.pow(2, suffixIdx * 10);
-        return +val.toFixed(2) + suffixList[suffixIdx];
-    };
-
-    var suffixList = ['', 'K', 'M', 'G', 'T'];
-
-    return exports;
-})({});
-
-/* ------------------------------ fullUrl ------------------------------ */
-
-export var fullUrl = _.fullUrl = (function (exports) {
-    /* Add origin to url if needed.
-     */
-
-    let link = document.createElement('a')
-
-    exports = function (href) {
-      link.href = href
-
-      return (
-        link.protocol + '//' + link.host + link.pathname + link.search + link.hash
-      )
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ upperFirst ------------------------------ */
 
 export var upperFirst = _.upperFirst = (function (exports) {
@@ -2442,98 +2389,6 @@ export var isNil = _.isNil = (function (exports) {
     exports = function(val) {
         return val == null;
     };
-
-    return exports;
-})({});
-
-/* ------------------------------ toSrc ------------------------------ */
-
-export var toSrc = _.toSrc = (function (exports) {
-    /* Convert function to its source code.
-     *
-     * |Name  |Desc               |
-     * |------|-------------------|
-     * |fn    |Function to convert|
-     * |return|Source code        |
-     */
-
-    /* example
-     * toSrc(Math.min); // -> 'function min() { [native code] }'
-     * toSrc(function() {}); // -> 'function () { }'
-     */
-
-    /* typescript
-     * export declare function toSrc(fn: types.AnyFn): string;
-     */
-
-    /* dependencies
-     * isNil types 
-     */
-
-    exports = function(fn) {
-        if (isNil(fn)) return '';
-
-        try {
-            return fnToStr.call(fn);
-            /* eslint-disable no-empty */
-        } catch (e) {}
-
-        try {
-            return fn + '';
-            /* eslint-disable no-empty */
-        } catch (e) {}
-
-        return '';
-    };
-
-    var fnToStr = Function.prototype.toString;
-
-    return exports;
-})({});
-
-/* ------------------------------ isNative ------------------------------ */
-
-export var isNative = _.isNative = (function (exports) {
-    /* Check if value is a native function.
-     *
-     * |Name  |Desc                              |
-     * |------|----------------------------------|
-     * |val   |Value to check                    |
-     * |return|True if value is a native function|
-     */
-
-    /* example
-     * isNative(function() {}); // -> false
-     * isNative(Math.min); // -> true
-     */
-
-    /* typescript
-     * export declare function isNative(val: any): boolean;
-     */
-
-    /* dependencies
-     * isObj isFn toSrc 
-     */
-
-    exports = function(val) {
-        if (!isObj(val)) return false;
-        if (isFn(val)) return regIsNative.test(toSrc(val)); // Detect host constructors (Safari > 4; really typed array specific)
-
-        return regIsHostCtor.test(toSrc(val));
-    };
-
-    var hasOwnProperty = Object.prototype.hasOwnProperty;
-    var regIsNative = new RegExp(
-        '^' +
-            toSrc(hasOwnProperty)
-                .replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
-                .replace(
-                    /hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,
-                    '$1.*?'
-                ) +
-            '$'
-    );
-    var regIsHostCtor = /^\[object .+?Constructor\]$/;
 
     return exports;
 })({});
@@ -6016,12 +5871,13 @@ export var Emitter = _.Emitter = (function (exports) {
                 return this;
             },
             off: function(event, listener) {
-                if (!has(this._events, event)) return;
+                var events = this._events;
+                if (!has(events, event)) return;
+                var idx = events[event].indexOf(listener);
 
-                this._events[event].splice(
-                    this._events[event].indexOf(listener),
-                    1
-                );
+                if (idx > -1) {
+                    events[event].splice(idx, 1);
+                }
 
                 return this;
             },
@@ -8065,6 +7921,51 @@ export var LocalStore = _.LocalStore = (function (exports) {
             localStorage.setItem(this._name, stringify(data));
         }
     });
+
+    return exports;
+})({});
+
+/* ------------------------------ toSrc ------------------------------ */
+
+export var toSrc = _.toSrc = (function (exports) {
+    /* Convert function to its source code.
+     *
+     * |Name  |Desc               |
+     * |------|-------------------|
+     * |fn    |Function to convert|
+     * |return|Source code        |
+     */
+
+    /* example
+     * toSrc(Math.min); // -> 'function min() { [native code] }'
+     * toSrc(function() {}); // -> 'function () { }'
+     */
+
+    /* typescript
+     * export declare function toSrc(fn: types.AnyFn): string;
+     */
+
+    /* dependencies
+     * isNil types 
+     */
+
+    exports = function(fn) {
+        if (isNil(fn)) return '';
+
+        try {
+            return fnToStr.call(fn);
+            /* eslint-disable no-empty */
+        } catch (e) {}
+
+        try {
+            return fn + '';
+            /* eslint-disable no-empty */
+        } catch (e) {}
+
+        return '';
+    };
+
+    var fnToStr = Function.prototype.toString;
 
     return exports;
 })({});
