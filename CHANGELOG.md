@@ -1,3 +1,10 @@
+## 2.4.0 (14 Sep 2020)
+
+* feat: default settings #141
+* fix(elements): highlight
+* fix(console): blinks frequently as it scroll to the border
+* refactor: use chobitsu
+
 ## 2.3.3 (3 May 2020)
 
 * fix: unsafe-eval CSP violation #140
