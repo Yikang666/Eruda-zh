@@ -1281,23 +1281,6 @@ const str =
 extractUrls(str); // -> ['http://eustia.liriliri.io']
 ```
 
-## fileSize 
-
-Turn bytes into human readable file size.
-
-|Name  |Desc              |
-|------|------------------|
-|bytes |File bytes        |
-|return|Readable file size|
-
-```javascript
-fileSize(5); // -> '5'
-fileSize(1500); // -> '1.46K'
-fileSize(1500000); // -> '1.43M'
-fileSize(1500000000); // -> '1.4G'
-fileSize(1500000000000); // -> '1.36T'
-```
-
 ## filter 
 
 Iterates over elements of collection, returning an array of all the values that pass a truth test.
@@ -1345,10 +1328,6 @@ freeze(a);
 a.b = 2;
 console.log(a); // -> {b: 1}
 ```
-
-## fullUrl 
-
-Add origin to url if needed.
 
 ## getFileName 
 
@@ -1702,20 +1681,6 @@ Undefined is not an NaN, different from global isNaN function.
 ```javascript
 isNaN(0); // -> false
 isNaN(NaN); // -> true
-```
-
-## isNative 
-
-Check if value is a native function.
-
-|Name  |Desc                              |
-|------|----------------------------------|
-|val   |Value to check                    |
-|return|True if value is a native function|
-
-```javascript
-isNative(function() {}); // -> false
-isNative(Math.min); // -> true
 ```
 
 ## isNil 
