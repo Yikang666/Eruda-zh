@@ -1,3 +1,7 @@
+## 2.4.1 (28 Sep 2020)
+
+* fix: remove arrow function [#160](https://github.com/liriliri/eruda/issues/160)
+
 ## 2.4.0 (14 Sep 2020)
 
 * feat: default settings [#141](https://github.com/liriliri/eruda/issues/141)
