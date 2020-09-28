@@ -9,7 +9,7 @@ import {
   startWith,
   trim,
   orientation,
-  isCrossOrig,
+  sameOrigin,
   ajax,
   MutationObserver,
   toArr,
@@ -341,7 +341,7 @@ export default class Resources extends Tool {
 
         const url = $(this).attr('href')
 
-        if (type === 'iframe' || isCrossOrig(url)) {
+        if (type === 'iframe' || !sameOrigin(location.href, url)) {
           showSources('iframe', url)
         } else {
           ajax({

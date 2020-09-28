@@ -1524,10 +1524,6 @@ Check if value is a buffer.
 isBuffer(new Buffer(4)); // -> true
 ```
 
-## isCrossOrig 
-
-Check if a url is cross origin.
-
 ## isDarkMode 
 
 Detect dark mode.
@@ -2031,6 +2027,22 @@ const fibonacci = memoize(function(n) {
 });
 ```
 
+## mergeArr 
+
+Merge the contents of arrays together into the first array.
+
+|Name  |Desc                                |
+|------|------------------------------------|
+|first |Array to merge                      |
+|arrays|Arrays to merge into the first array|
+|return|First array                         |
+
+```javascript
+const a = [1, 2];
+mergeArr(a, [3, 4], [5, 6]);
+console.log(a); // -> [1, 2, 3, 4, 5, 6]
+```
+
 ## meta 
 
 Document meta manipulation, turn name and content into key value pairs.
@@ -2412,6 +2424,24 @@ safeGet(obj, 'a.b'); // -> undefined
 ## safeStorage 
 
 Safe localStorage and sessionStorage.
+
+## sameOrigin 
+
+Check if two urls pass the same origin policy.
+
+|Name  |Desc                                |
+|------|------------------------------------|
+|url1  |Url to check                        |
+|url2  |Url to check                        |
+|return|True if urls pass same origin policy|
+
+```javascript
+const url1 = 'http://example.com/a.html';
+const url2 = 'http://example.com/b.html';
+const url3 = 'http://licia.liriliri.io';
+sameOrigin(url1, url2); // -> true
+sameOrigin(url1, url3); // -> false
+```
 
 ## slice 
 

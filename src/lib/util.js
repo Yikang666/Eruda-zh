@@ -856,6 +856,53 @@ export var restArgs = _.restArgs = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ mergeArr ------------------------------ */
+
+export var mergeArr = _.mergeArr = (function (exports) {
+    /* Merge the contents of arrays together into the first array.
+     *
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |first |Array to merge                      |
+     * |arrays|Arrays to merge into the first array|
+     * |return|First array                         |
+     */
+
+    /* example
+     * const a = [1, 2];
+     * mergeArr(a, [3, 4], [5, 6]);
+     * console.log(a); // -> [1, 2, 3, 4, 5, 6]
+     */
+
+    /* typescript
+     * export declare function mergeArr<T, U>(
+     *     first: ArrayLike<T>,
+     *     ...arrays: ArrayLike<U>[]
+     * ): ArrayLike<T | U>;
+     */
+
+    /* dependencies
+     * restArgs 
+     */
+
+    exports = restArgs(function(first, arrays) {
+        var end = first.length;
+
+        for (var i = 0, len = arrays.length; i < len; i++) {
+            var arr = arrays[i];
+
+            for (var j = 0, _len = arr.length; j < _len; j++) {
+                first[end++] = arr[j];
+            }
+        }
+
+        first.length = end;
+        return first;
+    });
+
+    return exports;
+})({});
+
 /* ------------------------------ optimizeCb ------------------------------ */
 
 export var optimizeCb = _.optimizeCb = (function (exports) {
@@ -1891,51 +1938,6 @@ export var isBuffer = _.isBuffer = (function (exports) {
             val.constructor.isBuffer(val)
         );
     };
-
-    return exports;
-})({});
-
-/* ------------------------------ startWith ------------------------------ */
-
-export var startWith = _.startWith = (function (exports) {
-    /* Check if string starts with the given target string.
-     *
-     * |Name  |Desc                             |
-     * |------|---------------------------------|
-     * |str   |String to search                 |
-     * |prefix|String prefix                    |
-     * |return|True if string starts with prefix|
-     */
-
-    /* example
-     * startWith('ab', 'a'); // -> true
-     */
-
-    /* typescript
-     * export declare function startWith(str: string, prefix: string): boolean;
-     */
-    exports = function(str, prefix) {
-        return str.indexOf(prefix) === 0;
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ isCrossOrig ------------------------------ */
-
-export var isCrossOrig = _.isCrossOrig = (function (exports) {
-    /* Check if a url is cross origin.
-     */
-
-    /* dependencies
-     * startWith 
-     */
-
-    let origin = window.location.origin
-
-    exports = function (url) {
-      return !startWith(url, origin)
-    }
 
     return exports;
 })({});
@@ -4563,7 +4565,7 @@ export var Select = _.Select = (function (exports) {
      */
 
     /* dependencies
-     * Class isStr each types 
+     * Class isStr each types mergeArr 
      */
 
     exports = Class({
@@ -4593,18 +4595,6 @@ export var Select = _.Select = (function (exports) {
         }
     });
     var rootSelect = new exports(document);
-
-    function mergeArr(first, second) {
-        var len = second.length;
-        var i = first.length;
-
-        for (var j = 0; j < len; j++) {
-            first[i++] = second[j];
-        }
-
-        first.length = i;
-        return first;
-    }
 
     return exports;
 })({});
@@ -7633,6 +7623,49 @@ export var ajax = _.ajax = (function (exports) {
     return exports;
 })({});
 
+/* ------------------------------ sameOrigin ------------------------------ */
+
+export var sameOrigin = _.sameOrigin = (function (exports) {
+    /* Check if two urls pass the same origin policy.
+     *
+     * |Name  |Desc                                |
+     * |------|------------------------------------|
+     * |url1  |Url to check                        |
+     * |url2  |Url to check                        |
+     * |return|True if urls pass same origin policy|
+     */
+
+    /* example
+     * const url1 = 'http://example.com/a.html';
+     * const url2 = 'http://example.com/b.html';
+     * const url3 = 'http://licia.liriliri.io';
+     * sameOrigin(url1, url2); // -> true
+     * sameOrigin(url1, url3); // -> false
+     */
+
+    /* typescript
+     * export declare function sameOrigin(url1: string, url2: string): boolean;
+     */
+
+    /* dependencies
+     * Url 
+     */
+
+    exports = function(url1, url2) {
+        url1 = new Url(url1);
+        url2 = new Url(url2);
+        url1.port = url1.port | 0 || (url1.protocol === 'https' ? 443 : 80);
+        url2.port = url2.port | 0 || (url2.protocol === 'https' ? 443 : 80);
+        return (
+            url1.protocol === url2.protocol &&
+            url1.hostname === url2.hostname &&
+            url1.port === url2.port
+        );
+    };
+
+    return exports;
+})({});
+
 /* ------------------------------ sortKeys ------------------------------ */
 
 export var sortKeys = _.sortKeys = (function (exports) {
@@ -7735,6 +7768,32 @@ export var sortKeys = _.sortKeys = (function (exports) {
     var defOpts = {
         deep: false,
         comparator: isSorted.defComparator
+    };
+
+    return exports;
+})({});
+
+/* ------------------------------ startWith ------------------------------ */
+
+export var startWith = _.startWith = (function (exports) {
+    /* Check if string starts with the given target string.
+     *
+     * |Name  |Desc                             |
+     * |------|---------------------------------|
+     * |str   |String to search                 |
+     * |prefix|String prefix                    |
+     * |return|True if string starts with prefix|
+     */
+
+    /* example
+     * startWith('ab', 'a'); // -> true
+     */
+
+    /* typescript
+     * export declare function startWith(str: string, prefix: string): boolean;
+     */
+    exports = function(str, prefix) {
+        return str.indexOf(prefix) === 0;
     };
 
     return exports;
