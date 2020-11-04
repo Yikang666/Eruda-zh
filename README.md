@@ -6,21 +6,27 @@
 
 # Eruda
 
-[![Join the chat at https://gitter.im/liriliri/eruda][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
+[![Downloads][jsdelivr-image]][jsdelivr-url]
 [![License][license-image]][npm-url]
+[![Join the chat at https://gitter.im/liriliri/eruda][gitter-image]][gitter-url]
+[![Donate][donate-image]][paypal-url]
 
-[gitter-image]: https://badges.gitter.im/liriliri/eruda.svg
+[gitter-image]: https://img.shields.io/gitter/room/liriliri/eruda?style=flat-square
 [gitter-url]: https://gitter.im/liriliri/eruda?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-[npm-image]: https://img.shields.io/npm/v/eruda.svg
+[npm-image]: https://img.shields.io/npm/v/eruda?style=flat-square
 [npm-url]: https://npmjs.org/package/eruda
-[travis-image]: https://img.shields.io/travis/liriliri/eruda.svg
+[jsdelivr-image]: https://img.shields.io/jsdelivr/npm/hm/eruda?style=flat-square
+[jsdelivr-url]: https://www.jsdelivr.com/package/npm/eruda
+[travis-image]: https://img.shields.io/travis/liriliri/eruda?style=flat-square
 [travis-url]: https://travis-ci.org/liriliri/eruda
-[codecov-image]: https://codecov.io/github/liriliri/eruda/coverage.svg?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/liriliri/eruda?style=flat-square
 [codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
-[license-image]: https://img.shields.io/npm/l/eruda.svg
+[license-image]: https://img.shields.io/npm/l/eruda?style=flat-square
+[donate-image]: https://img.shields.io/badge/$-donate-0070ba.svg?style=flat-square
+[paypal-url]: https://www.paypal.com/paypalme/surunzi
 
 Console for Mobile Browsers.
 
