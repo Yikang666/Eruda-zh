@@ -27,7 +27,7 @@ export default class Info extends Tool {
     const infos = this._infos
     let isUpdate = false
 
-    each(infos, info => {
+    each(infos, (info) => {
       if (name !== info.name) return
 
       info.val = val
@@ -49,7 +49,7 @@ export default class Info extends Tool {
 
     let result
 
-    each(infos, info => {
+    each(infos, (info) => {
       if (name === info.name) result = info.val
     })
 
@@ -74,7 +74,7 @@ export default class Info extends Tool {
     return this
   }
   _addDefInfo() {
-    each(defInfo, info => this.add(info.name, info.val))
+    each(defInfo, (info) => this.add(info.name, info.val))
   }
   _render() {
     const infos = []

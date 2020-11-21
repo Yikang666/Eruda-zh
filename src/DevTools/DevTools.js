@@ -13,7 +13,7 @@ import {
   $,
   throttle,
   isDarkMode,
-  extend
+  extend,
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import LunaNotification from 'luna-notification'
@@ -26,7 +26,7 @@ export default class DevTools extends Emitter {
       {
         transparency: 1,
         displaySize: 80,
-        theme: isDarkMode() ? 'Dark' : 'Light'
+        theme: isDarkMode() ? 'Dark' : 'Light',
       },
       defaults
     )
@@ -114,7 +114,7 @@ export default class DevTools extends Emitter {
     return this
   }
   removeAll() {
-    each(this._tools, tool => this.remove(tool.name))
+    each(this._tools, (tool) => this.remove(tool.name))
 
     return this
   }
@@ -134,7 +134,7 @@ export default class DevTools extends Emitter {
 
     let lastTool = {}
 
-    each(tools, tool => {
+    each(tools, (tool) => {
       if (tool.active) {
         lastTool = tool
         tool.active = false
@@ -175,12 +175,12 @@ export default class DevTools extends Emitter {
       .range(cfg, 'transparency', 'Transparency', {
         min: 0.2,
         max: 1,
-        step: 0.01
+        step: 0.01,
       })
       .range(cfg, 'displaySize', 'Display Size', {
         min: 40,
         max: 100,
-        step: 1
+        step: 1,
       })
       .separator()
   }
@@ -214,19 +214,19 @@ export default class DevTools extends Emitter {
   }
   _initNavBar() {
     this._navBar = new NavBar(this._$el.find('.eruda-nav-bar-container'))
-    this._navBar.on('showTool', name => this.showTool(name))
+    this._navBar.on('showTool', (name) => this.showTool(name))
   }
   _initNotification() {
     this._notification = new LunaNotification(this._$el.get(0), {
       position: {
         x: 'center',
-        y: 'top'
-      }
+        y: 'top',
+      },
     })
   }
   _bindEvent() {
     const $navBar = this._$el.find('.eruda-nav-bar')
-    const startListener = e => {
+    const startListener = (e) => {
       e = e.origEvent
       this._resizeTimer = setTimeout(() => {
         e.preventDefault()
@@ -238,10 +238,10 @@ export default class DevTools extends Emitter {
       }, 1000)
     }
     const setDisplaySize = throttle(
-      size => this.config.set('displaySize', size),
+      (size) => this.config.set('displaySize', size),
       50
     )
-    const moveListener = e => {
+    const moveListener = (e) => {
       if (!this._isResizing) {
         return clearTimeout(this._resizeTimer)
       }
@@ -265,14 +265,14 @@ export default class DevTools extends Emitter {
       this._isResizing = false
       $navBar.css('filter', 'brightness(1)')
     }
-    const getClientY = e => {
+    const getClientY = (e) => {
       if (e.clientY) return e.clientY
 
       if (e.touches) return e.touches[0].clientY
 
       return 0
     }
-    $navBar.on('contextmenu', e => e.preventDefault())
+    $navBar.on('contextmenu', (e) => e.preventDefault())
     const $root = $(document.documentElement)
     if (isMobile()) {
       $navBar.on('touchstart', startListener).on('touchmove', moveListener)

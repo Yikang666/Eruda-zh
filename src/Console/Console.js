@@ -10,7 +10,7 @@ import {
   upperFirst,
   isHidden,
   lowerCase,
-  isNull
+  isNull,
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
@@ -49,7 +49,7 @@ export default class Console extends Tool {
     const origConsole = (this._origConsole = {})
     const winConsole = window.console
 
-    CONSOLE_METHOD.forEach(name => {
+    CONSOLE_METHOD.forEach((name) => {
       let origin = (origConsole[name] = noop)
       if (winConsole[name]) {
         origin = origConsole[name] = winConsole[name].bind(winConsole)
@@ -70,7 +70,7 @@ export default class Console extends Tool {
     if (!this._origConsole) return this
 
     CONSOLE_METHOD.forEach(
-      name => (window.console[name] = this._origConsole[name])
+      (name) => (window.console[name] = this._origConsole[name])
     )
     delete this._origConsole
 
@@ -104,7 +104,7 @@ export default class Console extends Tool {
     if (isHidden(this._$el.get(0))) return
     this._logger.renderViewport()
   }
-  _handleErr = err => {
+  _handleErr = (err) => {
     this._logger.error(err)
   }
   _enableJsExecution(enabled) {
@@ -121,7 +121,7 @@ export default class Console extends Tool {
     }
   }
   _registerListener() {
-    this._scaleListener = scale => (this._scale = scale)
+    this._scaleListener = (scale) => (this._scale = scale)
 
     emitter.on(emitter.SCALE, this._scaleListener)
   }
@@ -144,15 +144,15 @@ export default class Console extends Tool {
       _$inputContainer,
       _$input,
       _$inputBtns,
-      _$searchKeyword: $el.find('.eruda-search-keyword')
+      _$searchKeyword: $el.find('.eruda-search-keyword'),
     })
   }
   _initLogger() {
     const $filter = this._$control.find('.eruda-filter')
     const logger = (this._logger = new Logger(this._$logs))
 
-    logger.on('filter', filter =>
-      $filter.each(function() {
+    logger.on('filter', (filter) =>
+      $filter.each(function () {
         const $this = $(this)
         const isMatch = $this.data('filter') === filter
 
@@ -165,7 +165,7 @@ export default class Console extends Tool {
     const methods = ['filter', 'html'].concat(CONSOLE_METHOD)
 
     methods.forEach(
-      name =>
+      (name) =>
         (this[name] = (...args) => {
           logger[name](...args)
           this.emit(name, ...args)
@@ -186,7 +186,7 @@ export default class Console extends Tool {
 
     $control
       .on('click', '.eruda-clear-console', () => logger.silentClear())
-      .on('click', '.eruda-filter', function() {
+      .on('click', '.eruda-filter', function () {
         $searchKeyword.text('')
         logger.filter($(this).data('filter'))
       })
@@ -208,16 +208,13 @@ export default class Console extends Tool {
         if (jsInput === '') return
 
         logger.input(jsInput)
-        $input
-          .val('')
-          .get(0)
-          .blur()
+        $input.val('').get(0).blur()
         this._hideInput()
       })
 
     $input.on('focusin', () => this._showInput())
 
-    logger.on('insert', log => {
+    logger.on('insert', (log) => {
       const autoShow = log.type === 'error' && config.get('displayIfErr')
 
       if (autoShow) container.showTool('console').show()
@@ -266,7 +263,7 @@ export default class Console extends Tool {
       displayGetterVal: true,
       lazyEvaluation: true,
       displayIfErr: false,
-      maxLogNum: 'infinite'
+      maxLogNum: 'infinite',
     }))
 
     let maxLogNum = cfg.get('maxLogNum')
@@ -325,7 +322,7 @@ export default class Console extends Tool {
         '125',
         '100',
         '50',
-        '10'
+        '10',
       ])
       .separator()
   }
@@ -348,5 +345,5 @@ const CONSOLE_METHOD = [
   'debug',
   'group',
   'groupCollapsed',
-  'groupEnd'
+  'groupEnd',
 ]

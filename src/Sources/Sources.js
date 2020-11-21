@@ -39,20 +39,20 @@ export default class Sources extends Tool {
 
       const self = this
 
-      img.onload = function() {
+      img.onload = function () {
         self._isFetchingData = false
         self._data = {
           type: 'img',
           val: {
             width: this.width,
             height: this.height,
-            src: val
-          }
+            src: val,
+          },
         }
 
         self._render()
       }
-      img.onerror = function() {
+      img.onerror = function () {
         self._isFetchingData = false
       }
 
@@ -80,7 +80,7 @@ export default class Sources extends Tool {
     if (this._html) {
       this._data = {
         type: 'html',
-        val: this._html
+        val: this._html,
       }
 
       return this._render()
@@ -91,13 +91,13 @@ export default class Sources extends Tool {
 
     ajax({
       url: location.href,
-      success: data => (this._html = data),
+      success: (data) => (this._html = data),
       error: () => (this._html = 'Sorry, unable to fetch source code:('),
       complete: () => {
         this._isGettingHtml = false
         this._renderDef()
       },
-      dataType: 'raw'
+      dataType: 'raw',
     })
   }
   _bindEvent() {
@@ -131,7 +131,7 @@ export default class Sources extends Tool {
     const cfg = (this.config = Settings.createCfg('sources', {
       showLineNum: true,
       formatCode: true,
-      indentSize: 4
+      indentSize: 4,
     }))
 
     if (!cfg.get('showLineNum')) this._showLineNum = false
@@ -210,7 +210,7 @@ export default class Sources extends Tool {
         number: `color:${curTheme.numberColor}`,
         operator: `color:${curTheme.operatorColor}`,
         comment: `color:${curTheme.commentColor}`,
-        string: `color:${curTheme.stringColor}`
+        string: `color:${curTheme.stringColor}`,
       })
     } else {
       code = escape(code)
@@ -222,7 +222,7 @@ export default class Sources extends Tool {
 
         return {
           idx: idx + 1,
-          val: line
+          val: line,
         }
       })
     }
@@ -230,7 +230,7 @@ export default class Sources extends Tool {
     this._renderHtml(
       this._codeTpl({
         code,
-        showLineNum: len < MAX_LINE_NUM_LEN && this._showLineNum
+        showLineNum: len < MAX_LINE_NUM_LEN && this._showLineNum,
       })
     )
   }
@@ -251,7 +251,7 @@ export default class Sources extends Tool {
       this._$el.find('.eruda-json').get(0),
       {
         unenumerable: true,
-        accessGetter: true
+        accessGetter: true,
       }
     )
     objViewer.set(val)

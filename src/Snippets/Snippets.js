@@ -61,7 +61,7 @@ export default class Snippets extends Tool {
   _bindEvent() {
     const self = this
 
-    this._$el.on('click', '.eruda-run', function() {
+    this._$el.on('click', '.eruda-run', function () {
       const idx = $(this).data('idx')
 
       self._run(idx)
@@ -71,14 +71,14 @@ export default class Snippets extends Tool {
     this._snippets[idx].fn.call(null)
   }
   _addDefSnippets() {
-    each(defSnippets, snippet => {
+    each(defSnippets, (snippet) => {
       this.add(snippet.name, snippet.fn, snippet.desc)
     })
   }
   _render() {
     this._renderHtml(
       this._tpl({
-        snippets: this._snippets
+        snippets: this._snippets,
       })
     )
   }

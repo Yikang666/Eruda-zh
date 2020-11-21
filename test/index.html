@@ -47,10 +47,10 @@
       </ul>
     </nav>
     <script>
-      ;(function() {
+      ;(function () {
         let el = document.createElement('div')
         document.body.appendChild(el)
-        setTimeout(function() {
+        setTimeout(function () {
           try {
             eruda.init({
               container: el,
@@ -58,16 +58,13 @@
               defaults: {
                 displaySize: 50,
                 transparency: 0.9,
-                theme: 'Monokai Pro'
-              }
+                theme: 'Monokai Pro',
+              },
             })
           } catch (e) {
             alert(e)
           }
-          eruda
-            .show()
-            .get()
-            .config.set('displaySize', 50)
+          eruda.show().get().config.set('displaySize', 50)
         }, 1000)
       })()
     </script>

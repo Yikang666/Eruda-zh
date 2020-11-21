@@ -16,5 +16,5 @@ export default Class({
   },
   destroy() {
     this._$el.remove()
-  }
+  },
 })

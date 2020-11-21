@@ -8,7 +8,7 @@ import {
   each,
   getObjType,
   endWith,
-  isEmpty
+  isEmpty,
 } from './util'
 import evalCss from './evalCss'
 
@@ -44,18 +44,18 @@ export default function getAbstract(
   const strWrapper = '<span class="eruda-string">'
   const boolWrapper = '<span class="eruda-boolean">'
   const specialWrapper = '<span class="eruda-special">'
-  const strEscape = str =>
+  const strEscape = (str) =>
     escape(str)
       .replace(/\\n/g, '↵')
       .replace(/\\f|\\r|\\t/g, '')
       .replace(/\\/g, '')
   const wrapperEnd = '</span>'
 
-  const wrapKey = key => keyWrapper + strEscape(key) + wrapperEnd
-  const wrapNum = num => numWrapper + num + wrapperEnd
-  const wrapRegExp = str => strWrapper + str + wrapperEnd
-  const wrapBool = bool => boolWrapper + bool + wrapperEnd
-  const wrapNull = str => nullWrapper + str + wrapperEnd
+  const wrapKey = (key) => keyWrapper + strEscape(key) + wrapperEnd
+  const wrapNum = (num) => numWrapper + num + wrapperEnd
+  const wrapRegExp = (str) => strWrapper + str + wrapperEnd
+  const wrapBool = (bool) => boolWrapper + bool + wrapperEnd
+  const wrapNull = (str) => nullWrapper + str + wrapperEnd
 
   function wrapStr(str) {
     str = toStr(str)

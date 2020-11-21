@@ -10,7 +10,7 @@ import {
   $,
   upperFirst,
   loadJs,
-  trim
+  trim,
 } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
@@ -32,7 +32,7 @@ export default [
         document.head
       )
     },
-    desc: 'Add color borders to all elements'
+    desc: 'Add color borders to all elements',
   },
   {
     name: 'Refresh Page',
@@ -42,7 +42,7 @@ export default [
 
       window.location.replace(url.toString())
     },
-    desc: 'Add timestamp to url and refresh'
+    desc: 'Add timestamp to url and refresh',
   },
   {
     name: 'Search Text',
@@ -53,7 +53,7 @@ export default [
 
       search(keyword)
     },
-    desc: 'Highlight given text on page'
+    desc: 'Highlight given text on page',
   },
   {
     name: 'Edit Page',
@@ -62,7 +62,7 @@ export default [
 
       body.contentEditable = body.contentEditable !== 'true'
     },
-    desc: 'Toggle body contentEditable'
+    desc: 'Toggle body contentEditable',
   },
   {
     name: 'Fit Screen',
@@ -93,77 +93,77 @@ export default [
         window.scrollTo(0, documentHeight / 2 - viewportHeight / 2)
       }
     },
-    desc: 'Scale down the whole page to fit screen'
+    desc: 'Scale down the whole page to fit screen',
   },
   {
     name: 'Load Fps Plugin',
     fn() {
       loadPlugin('fps')
     },
-    desc: 'Display page fps'
+    desc: 'Display page fps',
   },
   {
     name: 'Load Features Plugin',
     fn() {
       loadPlugin('features')
     },
-    desc: 'Browser feature detections'
+    desc: 'Browser feature detections',
   },
   {
     name: 'Load Timing Plugin',
     fn() {
       loadPlugin('timing')
     },
-    desc: 'Show performance and resource timing'
+    desc: 'Show performance and resource timing',
   },
   {
     name: 'Load Memory Plugin',
     fn() {
       loadPlugin('memory')
     },
-    desc: 'Display memory'
+    desc: 'Display memory',
   },
   {
     name: 'Load Code Plugin',
     fn() {
       loadPlugin('code')
     },
-    desc: 'Edit and run JavaScript'
+    desc: 'Edit and run JavaScript',
   },
   {
     name: 'Load Benchmark Plugin',
     fn() {
       loadPlugin('benchmark')
     },
-    desc: 'Run JavaScript benchmarks'
+    desc: 'Run JavaScript benchmarks',
   },
   {
     name: 'Load Geolocation Plugin',
     fn() {
       loadPlugin('geolocation')
     },
-    desc: 'Test geolocation'
+    desc: 'Test geolocation',
   },
   {
     name: 'Load Dom Plugin',
     fn() {
       loadPlugin('dom')
     },
-    desc: 'Navigate dom tree'
+    desc: 'Navigate dom tree',
   },
   {
     name: 'Load Orientation Plugin',
     fn() {
       loadPlugin('orientation')
     },
-    desc: 'Test orientation api'
+    desc: 'Test orientation api',
   },
   {
     name: 'Load Touches Plugin',
     fn() {
       loadPlugin('touches')
     },
-    desc: 'Visualize screen touches'
+    desc: 'Visualize screen touches',
   },
   {
     name: 'Restore Settings',
@@ -180,8 +180,8 @@ export default [
 
       window.location.reload()
     },
-    desc: 'Restore defaults and reload'
-  }
+    desc: 'Restore defaults and reload',
+  },
 ]
 
 evalCss(require('./searchText.scss'), document.head)
@@ -190,7 +190,7 @@ function search(text) {
   const root = document.body
   const regText = new RegExp(text, 'ig')
 
-  traverse(root, node => {
+  traverse(root, (node) => {
     const $node = $(node)
 
     if (!$node.hasClass('eruda-search-highlight-block')) return
@@ -198,13 +198,13 @@ function search(text) {
     return document.createTextNode($node.text())
   })
 
-  traverse(root, node => {
+  traverse(root, (node) => {
     if (node.nodeType !== 3) return
 
     let val = node.nodeValue
     val = val.replace(
       regText,
-      match => `<span class="eruda-keyword">${match}</span>`
+      (match) => `<span class="eruda-keyword">${match}</span>`
     )
     if (val === node.nodeValue) return
 
@@ -239,7 +239,7 @@ function loadPlugin(name) {
 
   loadJs(
     `${protocol}//cdn.jsdelivr.net/npm/eruda-${name}@${pluginVersion[name]}`,
-    isLoaded => {
+    (isLoaded) => {
       if (!isLoaded || !window[globalName])
         return logger.error('Fail to load plugin ' + name)
 
@@ -259,5 +259,5 @@ const pluginVersion = {
   geolocation: '2.0.0',
   dom: '2.0.0',
   orientation: '2.0.0',
-  touches: '2.0.0'
+  touches: '2.0.0',
 }

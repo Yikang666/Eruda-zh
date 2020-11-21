@@ -1,9 +1,9 @@
-describe('snippets', function() {
+describe('snippets', function () {
   let tool = eruda.get('snippets')
   let $tool = $('.eruda-snippets')
 
-  describe('default', function() {
-    it('border all', function() {
+  describe('default', function () {
+    it('border all', function () {
       expect($tool.find('.eruda-name').eq(0)).toContainText('Border All')
 
       let $body = $('body')
@@ -15,15 +15,15 @@ describe('snippets', function() {
       expect($body).toHaveCss({ outlineWidth: '0px' })
     })
 
-    it('refresh page', function() {
+    it('refresh page', function () {
       expect($tool.find('.eruda-name').eq(1)).toContainText('Refresh Page')
     })
 
-    it('search text', function() {
+    it('search text', function () {
       expect($tool.find('.eruda-name').eq(2)).toContainText('Search Text')
     })
 
-    it('edit page', function() {
+    it('edit page', function () {
       expect($tool.find('.eruda-name').eq(3)).toContainText('Edit Page')
 
       let $body = $('body')
@@ -36,15 +36,15 @@ describe('snippets', function() {
     })
   })
 
-  it('clear', function() {
+  it('clear', function () {
     tool.clear()
     expect($tool.find('.eruda-name')).toHaveLength(0)
   })
 
-  it('add', function() {
+  it('add', function () {
     tool.add(
       'Test',
-      function() {
+      function () {
         console.log('eruda')
       },
       'This is the description'
@@ -55,7 +55,7 @@ describe('snippets', function() {
     )
   })
 
-  it('remove', function() {
+  it('remove', function () {
     tool.remove('Test')
     expect($tool.find('.eruda-name')).toHaveLength(0)
   })

@@ -51,5 +51,5 @@ module.exports = {
   'will-change': 'wc',
   'white-space': 'ws',
   '-webkit-overflow-scrolling': 'wos',
-  'z-index': 'z'
+  'z-index': 'z',
 }

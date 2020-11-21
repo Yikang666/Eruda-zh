@@ -6,7 +6,7 @@ import {
   keys,
   kebabCase,
   defaults,
-  escapeRegExp
+  escapeRegExp,
 } from './util'
 import themes from './themes'
 import cssMap from './cssMap'
@@ -16,7 +16,7 @@ let scale = 1
 
 let curTheme = themes.Light
 
-const exports = function(css, container) {
+const exports = function (css, container) {
   css = toStr(css)
 
   for (let i = 0, len = styleList.length; i < len; i++) {
@@ -36,12 +36,12 @@ const exports = function(css, container) {
   return style
 }
 
-exports.setScale = function(s) {
+exports.setScale = function (s) {
   scale = s
   resetStyles()
 }
 
-exports.setTheme = function(theme) {
+exports.setTheme = function (theme) {
   if (isStr(theme)) {
     curTheme = themes[theme] || themes.Light
   } else {
@@ -55,19 +55,19 @@ exports.getCurTheme = () => curTheme
 
 exports.getThemes = () => themes
 
-exports.clear = function() {
+exports.clear = function () {
   each(styleList, ({ container, el }) => container.removeChild(el))
   styleList = []
 }
 
-exports.remove = function(style) {
-  styleList = filter(styleList, s => s !== style)
+exports.remove = function (style) {
+  styleList = filter(styleList, (s) => s !== style)
 
   style.container.removeChild(style.el)
 }
 
 function resetStyles() {
-  each(styleList, style => resetStyle(style))
+  each(styleList, (style) => resetStyle(style))
 }
 
 function resetStyle({ css, el }) {
@@ -77,7 +77,7 @@ function resetStyle({ css, el }) {
     css = css.replace(new RegExp(escapeRegExp(`$${val}:`), 'g'), key + ':')
   })
   const _keys = keys(themes.Light)
-  each(_keys, key => {
+  each(_keys, (key) => {
     css = css.replace(
       new RegExp(`var\\(--${kebabCase(key)}\\)`, 'g'),
       curTheme[key]

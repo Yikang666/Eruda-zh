@@ -17,33 +17,33 @@ const postcssLoader = {
     plugins: [
       prefixer({
         prefix: '_',
-        ignore: [/luna-object-viewer/, /luna-notification/]
+        ignore: [/luna-object-viewer/, /luna-notification/],
       }),
       autoprefixer,
-      clean()
-    ]
-  }
+      clean(),
+    ],
+  },
 }
 
 const cssMinifierLoader = {
   loader: path.resolve(__dirname, './loaders/css-minifier-loader'),
-  options: {}
+  options: {},
 }
 
 module.exports = {
   entry: './src/index',
   resolve: {
-    symlinks: false
+    symlinks: false,
   },
   devServer: {
     contentBase: './test',
-    port: 3000
+    port: 3000,
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/assets/',
     library: 'eruda',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
   module: {
     rules: [
@@ -57,20 +57,25 @@ module.exports = {
               presets: ['@babel/preset-env'],
               plugins: [
                 '@babel/plugin-transform-runtime',
-                '@babel/plugin-proposal-class-properties'
-              ]
-            }
+                '@babel/plugin-proposal-class-properties',
+              ],
+            },
           },
-          'eslint-loader'
-        ]
+          'eslint-loader',
+        ],
       },
       {
         test: /\.scss$/,
-        loaders: [cssMinifierLoader, 'css-loader', postcssLoader, 'sass-loader']
+        loaders: [
+          cssMinifierLoader,
+          'css-loader',
+          postcssLoader,
+          'sass-loader',
+        ],
       },
       {
         test: /\.css$/,
-        loaders: [cssMinifierLoader, 'css-loader', postcssLoader]
+        loaders: [cssMinifierLoader, 'css-loader', postcssLoader],
       },
       // https://github.com/wycats/handlebars.js/issues/1134
       {
@@ -81,7 +86,7 @@ module.exports = {
               __dirname,
               './loaders/handlebars-minifier-loader.js'
             ),
-            options: {}
+            options: {},
           },
           {
             loader: nodeModDir + 'handlebars-loader/index.js',
@@ -89,24 +94,24 @@ module.exports = {
               runtime: srcDir + 'lib/handlebars.js',
               knownHelpers: ['class', 'repeat', 'concat'],
               precompileOptions: {
-                knownHelpersOnly: true
-              }
-            }
+                knownHelpersOnly: true,
+              },
+            },
           },
           {
             loader: 'html-minifier-loader',
             options: {
-              ignoreCustomFragments: [/\{\{\{[^}]+\}\}\}/, /\{\{[^}]+\}\}/]
-            }
-          }
-        ]
-      }
-    ]
+              ignoreCustomFragments: [/\{\{\{[^}]+\}\}\}/, /\{\{[^}]+\}\}/],
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
-      VERSION: '"' + pkg.version + '"'
-    })
-  ]
+      VERSION: '"' + pkg.version + '"',
+    }),
+  ],
 }

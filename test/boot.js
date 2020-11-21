@@ -1,13 +1,13 @@
 function boot(name, cb) {
   // Need a little delay to make sure width and height of webpack dev server iframe are initialized.
-  setTimeout(function() {
+  setTimeout(function () {
     let options = {
       useShadowDom: false,
       defaults: {
         displaySize: 50,
         transparency: 0.9,
-        theme: 'Monokai Pro'
-      }
+        theme: 'Monokai Pro',
+      },
     }
     if (name) {
       options.tool = name === 'settings' ? [] : name
@@ -24,10 +24,10 @@ function boot(name, cb) {
 
     if (name == null) return
 
-    loadJs('lib/boot', function() {
-      loadJs('lib/jasmine-jquery', function() {
+    loadJs('lib/boot', function () {
+      loadJs('lib/jasmine-jquery', function () {
         // This is needed to trigger jasmine initialization.
-        loadJs(name, function() {
+        loadJs(name, function () {
           window.onload()
         })
       })

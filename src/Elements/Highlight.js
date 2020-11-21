@@ -39,7 +39,7 @@ export default class Highlight {
       this._$el.css('visibility', 'visible')
     }
 
-    const getNumStyle = name => pxToNum(computedStyle.getPropertyValue(name))
+    const getNumStyle = (name) => pxToNum(computedStyle.getPropertyValue(name))
 
     const ml = getNumStyle('margin-left')
     const mr = getNumStyle('margin-right')
@@ -72,7 +72,7 @@ export default class Highlight {
       borderTop: `${mt}px solid ${marginColor}`,
       borderLeft: `${ml}px solid ${marginColor}`,
       borderRight: `${mr}px solid ${marginColor}`,
-      borderBottom: `${mb}px solid ${marginColor}`
+      borderBottom: `${mb}px solid ${marginColor}`,
     })
 
     this._$border.css({
@@ -83,7 +83,7 @@ export default class Highlight {
       borderTop: `${bt}px solid ${borderColor}`,
       borderLeft: `${bl}px solid ${borderColor}`,
       borderRight: `${br}px solid ${borderColor}`,
-      borderBottom: `${bb}px solid ${borderColor}`
+      borderBottom: `${bb}px solid ${borderColor}`,
     })
 
     this._$padding.css({
@@ -94,7 +94,7 @@ export default class Highlight {
       borderTop: `${pt}px solid ${paddingColor}`,
       borderLeft: `${pl}px solid ${paddingColor}`,
       borderRight: `${pr}px solid ${paddingColor}`,
-      borderBottom: `${pb}px solid ${paddingColor}`
+      borderBottom: `${pb}px solid ${paddingColor}`,
     })
 
     this._$content.css({
@@ -102,13 +102,13 @@ export default class Highlight {
       top: bt + pt,
       width: pw - pl - pr,
       height: ph - pt - pb,
-      background: contentColor
+      background: contentColor,
     })
 
     this._$size
       .css({
         top: -mt - (top - mt < 25 ? 0 : 25),
-        left: -ml
+        left: -ml,
       })
       .html(`${formatElName(this._target)} | ${width} × ${height}`)
   }
@@ -143,7 +143,7 @@ function formatElName(el) {
 
   let classes = ''
   if (isStr(className)) {
-    each(className.split(/\s+/g), val => {
+    each(className.split(/\s+/g), (val) => {
       if (trim(val) === '') return
 
       classes += `.${val}`

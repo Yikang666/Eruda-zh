@@ -28,7 +28,7 @@ export default class NavBar extends Emitter {
   }
   remove(name) {
     this._len--
-    this._$el.find('.eruda-nav-bar-item').each(function() {
+    this._$el.find('.eruda-nav-bar-item').each(function () {
       const $this = $(this)
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
@@ -37,7 +37,7 @@ export default class NavBar extends Emitter {
   activateTool(name) {
     const self = this
 
-    this._$el.find('.eruda-nav-bar-item').each(function() {
+    this._$el.find('.eruda-nav-bar-item').each(function () {
       const $this = $(this)
 
       if ($this.text() === name) {
@@ -84,14 +84,14 @@ export default class NavBar extends Emitter {
 
     $bottomBar.css({
       width: li.offsetWidth,
-      left: li.offsetLeft - $el.get(0).scrollLeft
+      left: li.offsetLeft - $el.get(0).scrollLeft,
     })
   }
   _bindEvent() {
     const self = this
 
     this._$el
-      .on('click', '.eruda-nav-bar-item', function() {
+      .on('click', '.eruda-nav-bar-item', function () {
         self.emit('showTool', $(this).text())
       })
       .on('scroll', () => this.resetBottomBar())

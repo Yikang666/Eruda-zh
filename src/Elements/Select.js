@@ -7,21 +7,21 @@ export default class Select extends Emitter {
 
     const self = this
 
-    this._startListener = function(e) {
+    this._startListener = function (e) {
       if (isErudaEl(e.target)) return
 
-      self._timer = setTimeout(function() {
+      self._timer = setTimeout(function () {
         self.emit('select', e.target)
       }, 200)
 
       return false
     }
 
-    this._moveListener = function() {
+    this._moveListener = function () {
       clearTimeout(self._timer)
     }
 
-    this._clickListener = function(e) {
+    this._clickListener = function (e) {
       if (isErudaEl(e.target)) return
 
       e.preventDefault()

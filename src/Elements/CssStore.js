@@ -16,7 +16,7 @@ function formatStyle(style) {
 
 const elProto = Element.prototype
 
-let matchesSel = function() {
+let matchesSel = function () {
   return false
 }
 
@@ -38,7 +38,7 @@ export default class CssStore {
   getMatchedCSSRules() {
     const ret = []
 
-    each(document.styleSheets, styleSheet => {
+    each(document.styleSheets, (styleSheet) => {
       try {
         // Started with version 64, Chrome does not allow cross origin script to access this property.
         if (!styleSheet.cssRules) return
@@ -46,7 +46,7 @@ export default class CssStore {
         return
       }
 
-      each(styleSheet.cssRules, cssRule => {
+      each(styleSheet.cssRules, (cssRule) => {
         let matchesEl = false
 
         // Mobile safari will throw DOM Exception 12 error, need to try catch it.
@@ -59,7 +59,7 @@ export default class CssStore {
 
         ret.push({
           selectorText: cssRule.selectorText,
-          style: formatStyle(cssRule.style)
+          style: formatStyle(cssRule.style),
         })
       })
     })
@@ -90,7 +90,7 @@ function sortStyleKeys(style) {
       if (lenA < lenB) return -1
 
       return 0
-    }
+    },
   })
 }
 

@@ -6,11 +6,11 @@ webpackCfg.module.rules.push({
   loader: 'istanbul-instrumenter-loader',
   enforce: 'post',
   options: {
-    esModules: true
-  }
+    esModules: true,
+  },
 })
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jquery-1.8.3'],
@@ -30,7 +30,7 @@ module.exports = function(config) {
       'test/snippets.js',
       'test/sources.js',
       'test/settings.js',
-      'test/eruda.js'
+      'test/eruda.js',
     ],
     plugins: [
       'karma-jasmine',
@@ -38,17 +38,17 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-webpack',
       'karma-sourcemap-loader',
-      'karma-coverage-istanbul-reporter'
+      'karma-coverage-istanbul-reporter',
     ],
     webpackServer: {
-      noInfo: true
+      noInfo: true,
     },
     preprocessors: {
-      'src/index.js': ['webpack', 'sourcemap']
+      'src/index.js': ['webpack', 'sourcemap'],
     },
     webpack: webpackCfg,
     coverageIstanbulReporter: {
-      reports: ['html', 'lcovonly', 'text', 'text-summary']
+      reports: ['html', 'lcovonly', 'text', 'text-summary'],
     },
     reporters: ['progress', 'coverage-istanbul'],
     port: 9876,
@@ -56,6 +56,6 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
     browsers: ['ChromeHeadless'],
     singleRun: true,
-    concurrency: Infinity
+    concurrency: Infinity,
   })
 }

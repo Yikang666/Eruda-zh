@@ -33,7 +33,7 @@ import {
   Emitter,
   stringifyAll,
   nextTick,
-  linkify
+  linkify,
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -48,7 +48,7 @@ export default class Log extends Emitter {
     group = {},
     targetGroup = {},
     headers,
-    ignoreFilter = false
+    ignoreFilter = false,
   }) {
     super()
 
@@ -129,10 +129,7 @@ export default class Log extends Emitter {
     const $container = $el.find('.eruda-time-container')
 
     if (this.time) {
-      $container
-        .find('span')
-        .eq(0)
-        .text(time)
+      $container.find('span').eq(0).text(time)
       this.time = time
     }
 
@@ -170,7 +167,7 @@ export default class Log extends Emitter {
   extractObj(cb = noop) {
     const { args, type } = this
 
-    const setSrc = result => {
+    const setSrc = (result) => {
       this.src = result
       cb()
     }
@@ -213,7 +210,7 @@ export default class Log extends Emitter {
                 }
                 const objViewer = new LunaObjectViewer($json.get(0), {
                   unenumerable: Log.showUnenumerable,
-                  accessGetter: Log.showGetterVal
+                  accessGetter: Log.showGetterVal,
                 })
                 objViewer.set(args)
                 objViewer.on('change', () => this.updateSize(false))
@@ -311,7 +308,7 @@ export default class Log extends Emitter {
 
     // Only linkify for simple types
     if (type !== 'error' && !this.args) {
-      msg = linkify(msg, url => {
+      msg = linkify(msg, (url) => {
         return `<a href="${url}" target="_blank">${url}</a>`
       })
     }
@@ -323,12 +320,12 @@ export default class Log extends Emitter {
   }
 }
 
-const getAbstract = wrap(origGetAbstract, function(fn, obj) {
+const getAbstract = wrap(origGetAbstract, function (fn, obj) {
   return (
     '<span class="eruda-abstract">' +
     fn(obj, {
       getterVal: Log.showGetterVal,
-      unenumerable: false
+      unenumerable: false,
     }) +
     '</span>'
   )
@@ -347,7 +344,7 @@ function formatTable(args) {
 
   if (!isObj(table)) return formatMsg(args)
 
-  each(table, val => {
+  each(table, (val) => {
     if (isPrimitive(val)) {
       columns.push(Value)
     } else if (isObj(val)) {
@@ -356,19 +353,19 @@ function formatTable(args) {
   })
   columns = unique(columns)
   columns.sort()
-  if (filter) columns = columns.filter(val => contain(filter, val))
+  if (filter) columns = columns.filter((val) => contain(filter, val))
   if (columns.length > 20) columns = columns.slice(0, 20)
   if (isEmpty(columns)) return formatMsg(args)
 
   ret += '<table><thead><tr><th>(index)</th>'
   columns.forEach(
-    val => (ret += `<th>${val === Value ? 'Value' : toStr(val)}</th>`)
+    (val) => (ret += `<th>${val === Value ? 'Value' : toStr(val)}</th>`)
   )
   ret += '</tr></thead><tbody>'
 
   each(table, (obj, idx) => {
     ret += `<tr><td>${idx}</td>`
-    columns.forEach(column => {
+    columns.forEach((column) => {
       if (isObj(obj)) {
         ret +=
           column === Value
@@ -402,7 +399,7 @@ function formatErr(err) {
   let lines = err.stack ? err.stack.split('\n') : []
   const msg = `${err.message || lines[0]}<br/>`
 
-  lines = lines.filter(val => !regErudaJs.test(val)).map(val => escape(val))
+  lines = lines.filter((val) => !regErudaJs.test(val)).map((val) => escape(val))
 
   const stack = `<div class="eruda-stack eruda-hidden">${lines
     .slice(1)
@@ -412,7 +409,7 @@ function formatErr(err) {
     msg +
     stack.replace(
       regJsUrl,
-      match => `<a href="${match}" target="_blank">${match}</a>`
+      (match) => `<a href="${match}" target="_blank">${match}</a>`
     )
   )
 }
@@ -424,7 +421,7 @@ function formatJs(code) {
     number: `color:${curTheme.numberColor}`,
     operator: `color:${curTheme.operatorColor}`,
     comment: `color:${curTheme.commentColor}`,
-    string: `color:${curTheme.stringColor}`
+    string: `color:${curTheme.stringColor}`,
   })
 }
 
@@ -455,7 +452,7 @@ function formatMsg(args, { htmlForEl = true } = {}) {
   return args.join(' ') + '<div class="eruda-json eruda-hidden"></div>'
 }
 
-const formatDir = args => formatMsg(args, { htmlForEl: false })
+const formatDir = (args) => formatMsg(args, { htmlForEl: false })
 
 function substituteStr(args) {
   const str = escape(args[0])
@@ -521,7 +518,7 @@ function correctStyle(val) {
   val = lowerCase(val)
   const rules = val.split(';')
   const style = {}
-  each(rules, rule => {
+  each(rules, (rule) => {
     if (!contain(rule, ':')) return
     const [name, val] = rule.split(':')
     style[trim(name)] = trim(val)
@@ -558,17 +555,17 @@ function formatEl(val) {
 }
 
 const tpl = require('./Log.hbs')
-const render = data => tpl(data)
+const render = (data) => tpl(data)
 
 function extractObj(obj, options = {}, cb) {
   defaults(options, {
     accessGetter: Log.showGetterVal,
     unenumerable: Log.showUnenumerable,
     symbol: Log.showUnenumerable,
-    timeout: 1000
+    timeout: 1000,
   })
 
-  stringify(obj, options, result => cb(JSON.parse(result)))
+  stringify(obj, options, (result) => cb(JSON.parse(result)))
 }
 
 function stringify(obj, options, cb) {

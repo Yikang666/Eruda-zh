@@ -27,7 +27,7 @@ import {
   isNull,
   trim,
   lowerCase,
-  pick
+  pick,
 } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
@@ -97,12 +97,12 @@ export default class Elements extends Tool {
     const origAddEvent = (this._origAddEvent = winEventProto.addEventListener)
     const origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
 
-    winEventProto.addEventListener = function(type, listener, useCapture) {
+    winEventProto.addEventListener = function (type, listener, useCapture) {
       addEvent(this, type, listener, useCapture)
       origAddEvent.apply(this, arguments)
     }
 
-    winEventProto.removeEventListener = function(type, listener, useCapture) {
+    winEventProto.removeEventListener = function (type, listener, useCapture) {
       rmEvent(this, type, listener, useCapture)
       origRmEvent.apply(this, arguments)
     }
@@ -144,7 +144,7 @@ export default class Elements extends Tool {
     const select = this._select
 
     this._$el
-      .on('click', '.eruda-child', function() {
+      .on('click', '.eruda-child', function () {
         const idx = $(this).data('idx')
         const curEl = self._curEl
         const el = curEl.childNodes[idx]
@@ -176,7 +176,7 @@ export default class Elements extends Tool {
 
         !isElExist(el) ? self._render() : self.set(el)
       })
-      .on('click', '.eruda-listener-content', function() {
+      .on('click', '.eruda-listener-content', function () {
         const text = $(this).text()
         const sources = container.get('sources')
 
@@ -193,7 +193,7 @@ export default class Elements extends Tool {
           container.showTool('sources')
         }
       })
-      .on('click', '.eruda-parent', function() {
+      .on('click', '.eruda-parent', function () {
         let idx = $(this).data('idx')
         const curEl = self._curEl
         let el = curEl.parentNode
@@ -224,7 +224,7 @@ export default class Elements extends Tool {
       .on('click', '.eruda-select', () => this._toggleSelect())
       .on('click', '.eruda-reset', () => this.set(this._htmlEl))
 
-    select.on('select', target => this.set(target))
+    select.on('select', (target) => this.set(target))
   }
   _toggleAllComputedStyle() {
     this._rmDefComputedStyle = !this._rmDefComputedStyle
@@ -235,7 +235,7 @@ export default class Elements extends Tool {
     this._observer.observe(this._htmlEl, {
       attributes: true,
       childList: true,
-      subtree: true
+      subtree: true,
     })
   }
   _disableObserver() {
@@ -301,14 +301,14 @@ export default class Elements extends Tool {
 
     function getBoxModelValue(type) {
       let keys = ['top', 'left', 'right', 'bottom']
-      if (type !== 'position') keys = map(keys, key => `${type}-${key}`)
-      if (type === 'border') keys = map(keys, key => `${key}-width`)
+      if (type !== 'position') keys = map(keys, (key) => `${type}-${key}`)
+      if (type === 'border') keys = map(keys, (key) => `${key}-width`)
 
       return {
         top: boxModelValue(computedStyle[keys[0]], type),
         left: boxModelValue(computedStyle[keys[1]], type),
         right: boxModelValue(computedStyle[keys[2]], type),
-        bottom: boxModelValue(computedStyle[keys[3]], type)
+        bottom: boxModelValue(computedStyle[keys[3]], type),
       }
     }
 
@@ -318,8 +318,8 @@ export default class Elements extends Tool {
       padding: getBoxModelValue('padding'),
       content: {
         width: boxModelValue(computedStyle['width']),
-        height: boxModelValue(computedStyle['height'])
-      }
+        height: boxModelValue(computedStyle['height']),
+      },
     }
 
     if (computedStyle['position'] !== 'static') {
@@ -329,7 +329,7 @@ export default class Elements extends Tool {
 
     const styles = cssStore.getMatchedCSSRules()
     styles.unshift(getInlineStyle(el.style))
-    styles.forEach(style => processStyleRules(style.style))
+    styles.forEach((style) => processStyleRules(style.style))
     ret.styles = styles
 
     if (this._rmDefComputedStyle) {
@@ -373,8 +373,8 @@ export default class Elements extends Tool {
     }
   }
   _initObserver() {
-    this._observer = new MutationObserver(mutations => {
-      each(mutations, mutation => this._handleMutation(mutation))
+    this._observer = new MutationObserver((mutations) => {
+      each(mutations, (mutation) => this._handleMutation(mutation))
     })
   }
   _handleMutation(mutation) {
@@ -418,7 +418,7 @@ export default class Elements extends Tool {
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('elements', {
       overrideEventTarget: true,
-      observeElement: true
+      observeElement: true,
     }))
 
     if (cfg.get('overrideEventTarget')) this.overrideEventTarget()
@@ -466,7 +466,7 @@ function processStyleRule(val) {
     .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`)
 }
 
-const isElExist = val => isEl(val) && val.parentNode
+const isElExist = (val) => isEl(val) && val.parentNode
 
 function formatElName(data, { noAttr = false } = {}) {
   const { id, className, attributes } = data
@@ -477,7 +477,7 @@ function formatElName(data, { noAttr = false } = {}) {
 
   if (isStr(className)) {
     let classes = ''
-    each(className.split(/\s+/g), val => {
+    each(className.split(/\s+/g), (val) => {
       if (val.trim() === '') return
       classes += `.${val}`
     })
@@ -485,7 +485,7 @@ function formatElName(data, { noAttr = false } = {}) {
   }
 
   if (!noAttr) {
-    each(attributes, attr => {
+    each(attributes, (attr) => {
       const name = attr.name
       if (name === 'id' || name === 'class' || name === 'style') return
       ret += ` <span class="eruda-attribute-name-color">${name}</span><span class="eruda-operator-color">="</span><span class="eruda-string-color">${attr.value}</span><span class="eruda-operator-color">"</span>`
@@ -495,8 +495,8 @@ function formatElName(data, { noAttr = false } = {}) {
   return ret
 }
 
-const formatAttr = attributes =>
-  map(attributes, attr => {
+const formatAttr = (attributes) =>
+  map(attributes, (attr) => {
     let { value } = attr
     const { name } = attr
     value = escape(value)
@@ -522,7 +522,7 @@ function formatChildNodes(nodes) {
         ret.push({
           text: val,
           isCmt: nodeType === 8,
-          idx: i
+          idx: i,
         })
       continue
     }
@@ -537,7 +537,7 @@ function formatChildNodes(nodes) {
       ret.push({
         text: formatElName(child),
         isEl: true,
-        idx: i
+        idx: i,
       })
     }
   }
@@ -553,7 +553,7 @@ function getParents(el) {
   while (parent && parent.nodeType === 1) {
     ret.push({
       text: formatElName(parent, { noAttr: true }),
-      idx: i++
+      idx: i++,
     })
 
     parent = parent.parentNode
@@ -565,7 +565,7 @@ function getParents(el) {
 function getInlineStyle(style) {
   const ret = {
     selectorText: 'element.style',
-    style: {}
+    style: {},
   }
 
   for (let i = 0, len = style.length; i < len; i++) {
@@ -581,7 +581,7 @@ function rmDefComputedStyle(computedStyle, styles) {
   const ret = {}
 
   let keepStyles = ['display', 'width', 'height']
-  each(styles, style => {
+  each(styles, (style) => {
     keepStyles = keepStyles.concat(keys(style.style))
   })
   keepStyles = unique(keepStyles)
@@ -597,7 +597,8 @@ function rmDefComputedStyle(computedStyle, styles) {
 
 const NO_STYLE_TAG = ['script', 'style', 'meta', 'title', 'link', 'head']
 
-const needNoStyle = tagName => NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1
+const needNoStyle = (tagName) =>
+  NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1
 
 function addEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
@@ -608,7 +609,7 @@ function addEvent(el, type, listener, useCapture = false) {
   events[type].push({
     listener: listener,
     listenerStr: listener.toString(),
-    useCapture: useCapture
+    useCapture: useCapture,
   })
 }
 
@@ -636,7 +637,7 @@ const getWinEventProto = () => {
   return safeGet(window, 'EventTarget.prototype') || window.Node.prototype
 }
 
-const wrapLink = link => `<a href="${link}" target="_blank">${link}</a>`
+const wrapLink = (link) => `<a href="${link}" target="_blank">${link}</a>`
 
 function boxModelValue(val, type) {
   if (isNum(val)) return val

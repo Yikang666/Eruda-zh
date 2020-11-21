@@ -29,7 +29,7 @@ export default class EntryBtn extends Emitter {
 
     this._$el.css({
       left: pos.x,
-      top: pos.y
+      top: pos.y,
     })
 
     this.config.set('pos', pos)
@@ -91,7 +91,7 @@ export default class EntryBtn extends Emitter {
       if (cfg.get('rememberPos')) {
         cfg.set('pos', {
           x: pxToNum(this._$el.css('left')),
-          y: pxToNum(this._$el.css('top'))
+          y: pxToNum(this._$el.css('top')),
         })
       }
 
@@ -103,13 +103,13 @@ export default class EntryBtn extends Emitter {
   }
   _makeDraggable() {
     this._draggabilly = new Draggabilly(this._$el.get(0), {
-      containment: true
+      containment: true,
     })
   }
   initCfg(settings) {
     const cfg = (this.config = Settings.createCfg('entry-button', {
       rememberPos: true,
-      pos: this._getDefPos()
+      pos: this._getDefPos(),
     }))
 
     settings
@@ -123,7 +123,7 @@ export default class EntryBtn extends Emitter {
 
     return {
       x: window.innerWidth - minWidth,
-      y: window.innerHeight - minWidth
+      y: window.innerHeight - minWidth,
     }
   }
 }

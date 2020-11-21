@@ -3,18 +3,18 @@ module.exports = {
   env: {
     browser: true,
     commonjs: true,
-    es6: true
+    es6: true,
   },
   extends: 'eslint:recommended',
   parserOptions: {
-    sourceType: 'module'
+    sourceType: 'module',
   },
   globals: {
     VERSION: true,
-    ENV: true
+    ENV: true,
   },
   rules: {
     quotes: ['error', 'single'],
-    'prefer-const': 2
-  }
+    'prefer-const': 2,
+  },
 }

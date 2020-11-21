@@ -19,7 +19,7 @@ const keyMap = [
   'tagNameColor',
   'functionColor',
   'attributeNameColor',
-  'commentColor'
+  'commentColor',
 ]
 
 const keyMapLen = keyMap.length
@@ -46,7 +46,7 @@ function createDarkTheme(theme) {
       consoleErrorForeground: '#ff8080',
       consoleErrorBorder: '#5c0000',
       light: '#ccc',
-      dark: '#aaa'
+      dark: '#aaa',
     },
     theme
   )
@@ -64,7 +64,7 @@ function createLightTheme(theme) {
       consoleErrorForeground: '#f00',
       consoleErrorBorder: '#ffd6d6',
       light: '#fff',
-      dark: '#eee'
+      dark: '#eee',
     },
     theme
   )
@@ -92,7 +92,7 @@ export default {
     functionColor: '#222',
     attributeNameColor: '#994500',
     commentColor: '#236e25',
-    cssProperty: '#c80000'
+    cssProperty: '#c80000',
   }),
   Dark: createDarkTheme({
     darkerBackground: '#333',
@@ -114,7 +114,7 @@ export default {
     tagNameColor: '#5db0d7',
     functionColor: '#d5d5d5',
     attributeNameColor: '#9bbbdc',
-    commentColor: '#747474'
+    commentColor: '#747474',
   }),
   'Material Oceanic': createDarkTheme([
     '#263238',
@@ -135,7 +135,7 @@ export default {
     '#f07178',
     '#82aaff',
     '#ffcb6b',
-    '#546e7a'
+    '#546e7a',
   ]),
   'Material Darker': createDarkTheme([
     '#212121',
@@ -156,7 +156,7 @@ export default {
     '#f07178',
     '#82aaff',
     '#ffcb6b',
-    '#616161'
+    '#616161',
   ]),
   'Material Lighter': createLightTheme([
     '#FAFAFA',
@@ -177,7 +177,7 @@ export default {
     '#E53935',
     '#6182B8',
     '#F6A434',
-    '#AABFC9'
+    '#AABFC9',
   ]),
   'Material Palenight': createDarkTheme([
     '#292D3E',
@@ -198,7 +198,7 @@ export default {
     '#f07178',
     '#82aaff',
     '#ffcb6b',
-    '#676E95'
+    '#676E95',
   ]),
   'Material Deep Ocean': createDarkTheme([
     '#0F111A',
@@ -219,7 +219,7 @@ export default {
     '#f07178',
     '#82aaff',
     '#ffcb6b',
-    '#717CB4'
+    '#717CB4',
   ]),
   'Monokai Pro': createDarkTheme([
     '#2D2A2E',
@@ -240,7 +240,7 @@ export default {
     '#FF6188',
     '#A9DC76',
     '#78DCE8',
-    '#727072'
+    '#727072',
   ]),
   Dracula: createDarkTheme([
     '#282A36',
@@ -261,7 +261,7 @@ export default {
     '#FF79C6',
     '#50FA78',
     '#50FA7B',
-    '#6272A4'
+    '#6272A4',
   ]),
   'Arc Dark': createDarkTheme([
     '#2f343f',
@@ -282,7 +282,7 @@ export default {
     '#CF6A4C',
     '#7587A6',
     '#F9EE98',
-    '#747C84'
+    '#747C84',
   ]),
   'Atom One Dark': createDarkTheme([
     '#282C34',
@@ -303,7 +303,7 @@ export default {
     '#F07178',
     '#61AEEF',
     '#E5C17C',
-    '#59626F'
+    '#59626F',
   ]),
   'Atom One Light': createLightTheme([
     '#FAFAFA',
@@ -324,7 +324,7 @@ export default {
     '#E4564A',
     '#4078F2',
     '#C18401',
-    '#A0A1A7'
+    '#A0A1A7',
   ]),
   'Solarized Dark': createDarkTheme([
     '#002B36',
@@ -345,7 +345,7 @@ export default {
     '#268BD2',
     '#B58900',
     '#B58900',
-    '#657B83'
+    '#657B83',
   ]),
   'Solarized Light': createLightTheme([
     '#fdf6e3',
@@ -366,7 +366,7 @@ export default {
     '#268BD2',
     '#B58900',
     '#657B83',
-    '#93A1A1'
+    '#93A1A1',
   ]),
   Github: createLightTheme([
     '#F7F8FA',
@@ -387,7 +387,7 @@ export default {
     '#22863A',
     '#6F42C1',
     '#6F42C1',
-    '#6A737D'
+    '#6A737D',
   ]),
   'Night Owl': createDarkTheme([
     '#011627',
@@ -408,7 +408,7 @@ export default {
     '#7fdbca',
     '#82AAFF',
     '#FAD430',
-    '#637777'
+    '#637777',
   ]),
   'Light Owl': createLightTheme([
     '#FAFAFA',
@@ -429,6 +429,6 @@ export default {
     '#994cc3',
     '#4876d6',
     '#4876d6',
-    '#637777'
-  ])
+    '#637777',
+  ]),
 }

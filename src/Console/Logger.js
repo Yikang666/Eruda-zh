@@ -24,7 +24,7 @@ import {
   xpath,
   isHidden,
   lowerCase,
-  dateFormat
+  dateFormat,
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -75,7 +75,7 @@ export default class Logger extends Emitter {
       this._minSpeedTolerance = 800
     }
 
-    this.renderViewport = throttle(options => {
+    this.renderViewport = throttle((options) => {
       this._renderViewport(options)
     }, 16)
 
@@ -97,13 +97,13 @@ export default class Logger extends Emitter {
       clear: () => {
         this.clear()
       },
-      dir: value => {
+      dir: (value) => {
         this.dir(value)
       },
       table: (data, columns) => {
         this.table(data, columns)
       },
-      keys
+      keys,
     }
 
     this._bindEvent()
@@ -221,7 +221,7 @@ export default class Logger extends Emitter {
 
     return this.insert('log', [
       '%cConsole was cleared',
-      'color:#808080;font-style:italic;'
+      'color:#808080;font-style:italic;',
     ])
   }
   silentClear() {
@@ -258,14 +258,14 @@ export default class Logger extends Emitter {
     return this.insert({
       type: 'group',
       args,
-      ignoreFilter: true
+      ignoreFilter: true,
     })
   }
   groupCollapsed(...args) {
     return this.insert({
       type: 'groupCollapsed',
       args,
-      ignoreFilter: true
+      ignoreFilter: true,
     })
   }
   groupEnd() {
@@ -275,7 +275,7 @@ export default class Logger extends Emitter {
     this.insert({
       type: 'input',
       args: [jsCode],
-      ignoreFilter: true
+      ignoreFilter: true,
     })
 
     try {
@@ -284,7 +284,7 @@ export default class Logger extends Emitter {
       this.insert({
         type: 'error',
         ignoreFilter: true,
-        args: [e]
+        args: [e],
       })
     }
 
@@ -294,7 +294,7 @@ export default class Logger extends Emitter {
     return this.insert({
       type: 'output',
       args: [val],
-      ignoreFilter: true
+      ignoreFilter: true,
     })
   }
   html(...args) {
@@ -319,7 +319,7 @@ export default class Logger extends Emitter {
     if (this._displayHeader) {
       headers = {
         time: getCurTime(),
-        from: getFrom()
+        from: getFrom(),
       }
     }
 
@@ -350,7 +350,7 @@ export default class Logger extends Emitter {
     }
     extend(options, {
       id: ++id,
-      headers
+      headers,
     })
 
     if (options.type === 'group' || options.type === 'groupCollapsed') {
@@ -358,7 +358,7 @@ export default class Logger extends Emitter {
         id: uniqId('group'),
         collapsed: false,
         parent: groupStack.peek(),
-        indentLevel: groupStack.size + 1
+        indentLevel: groupStack.size + 1,
       }
       if (options.type === 'groupCollapsed') group.collapsed = true
       options.targetGroup = group
@@ -613,22 +613,16 @@ export default class Logger extends Emitter {
     const $el = this._$el
 
     $el
-      .on('click', '.eruda-log-container', function() {
+      .on('click', '.eruda-log-container', function () {
         this.log.click(self)
       })
-      .on('click', '.eruda-icon-caret-down', function() {
-        const $el = $(this)
-          .parent()
-          .parent()
-          .parent()
+      .on('click', '.eruda-icon-caret-down', function () {
+        const $el = $(this).parent().parent().parent()
 
         self._collapseGroup($el.get(0).log)
       })
-      .on('click', '.eruda-icon-caret-right', function() {
-        const $el = $(this)
-          .parent()
-          .parent()
-          .parent()
+      .on('click', '.eruda-icon-caret-right', function () {
+        const $el = $(this).parent().parent().parent()
 
         self._openGroup($el.get(0).log)
       })
@@ -687,7 +681,7 @@ export default class Logger extends Emitter {
 
       this.renderViewport({
         topTolerance: topTolerance * 2,
-        bottomTolerance: bottomTolerance * 2
+        bottomTolerance: bottomTolerance * 2,
       })
     })
   }

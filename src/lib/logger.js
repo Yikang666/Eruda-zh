@@ -7,7 +7,7 @@ export default logger = new Logger(
   ENV === 'production' ? 'warn' : 'debug'
 )
 
-logger.formatter = function(type, argList) {
+logger.formatter = function (type, argList) {
   argList.unshift(this.name)
 
   return argList

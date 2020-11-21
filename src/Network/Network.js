@@ -36,12 +36,12 @@ export default class Network extends Tool {
   }
   requests() {
     const ret = []
-    each(this._requests, request => {
+    each(this._requests, (request) => {
       ret.push(request)
     })
     return ret
   }
-  _reqWillBeSent = params => {
+  _reqWillBeSent = (params) => {
     this._requests[params.requestId] = {
       name: getFileName(params.request.url),
       url: params.request.url,
@@ -56,10 +56,10 @@ export default class Network extends Tool {
       resTxt: '',
       done: false,
       reqHeaders: params.request.headers || {},
-      resHeaders: {}
+      resHeaders: {},
     }
   }
-  _resReceivedExtraInfo = params => {
+  _resReceivedExtraInfo = (params) => {
     const target = this._requests[params.requestId]
     if (!target) {
       return
@@ -76,7 +76,7 @@ export default class Network extends Tool {
     target.type = type
     target.subType = subType
   }
-  _resReceived = params => {
+  _resReceived = (params) => {
     const target = this._requests[params.requestId]
     if (!target) {
       return
@@ -95,7 +95,7 @@ export default class Network extends Tool {
 
     this._render()
   }
-  _loadingFinished = params => {
+  _loadingFinished = (params) => {
     const target = this._requests[params.requestId]
     if (!target) {
       return
@@ -108,7 +108,7 @@ export default class Network extends Tool {
     target.size = params.encodedDataLength
     target.done = true
     target.resTxt = chobitsu.domain('Network').getResponseBody({
-      requestId: params.requestId
+      requestId: params.requestId,
     }).body
 
     this._render()
@@ -120,7 +120,7 @@ export default class Network extends Tool {
     const self = this
 
     $el
-      .on('click', '.eruda-request', function() {
+      .on('click', '.eruda-request', function () {
         const id = $(this).data('id')
         const data = self._requests[id]
 
@@ -221,6 +221,6 @@ function getType(contentType) {
 
   return {
     type: type[0],
-    subType: last(type)
+    subType: last(type),
   }
 }

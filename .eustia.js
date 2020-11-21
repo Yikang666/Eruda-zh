@@ -5,13 +5,13 @@ module.exports = {
     ignore: 'src/**/stringify.js',
     output: 'src/lib/util.js',
     exclude: ['createCfg'],
-    format: 'es'
+    format: 'es',
   },
   test: {
     library: ['node_modules/eustia-module'],
     files: ['test/*.js', 'test/*.html'],
     exclude: ['js'],
     namespace: 'util',
-    output: 'test/util.js'
-  }
+    output: 'test/util.js',
+  },
 }

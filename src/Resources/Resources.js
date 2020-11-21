@@ -18,7 +18,7 @@ import {
   lowerCase,
   contain,
   filter,
-  map
+  map,
 } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
@@ -75,7 +75,7 @@ export default class Resources extends Tool {
   refreshScript() {
     let scriptData = []
 
-    $('script').each(function() {
+    $('script').each(function () {
       const src = this.src
 
       if (src !== '') scriptData.push(src)
@@ -90,7 +90,7 @@ export default class Resources extends Tool {
   refreshStylesheet() {
     let stylesheetData = []
 
-    $('link').each(function() {
+    $('link').each(function () {
       if (this.rel !== 'stylesheet') return
 
       stylesheetData.push(this.href)
@@ -105,7 +105,7 @@ export default class Resources extends Tool {
   refreshIframe() {
     let iframeData = []
 
-    $('iframe').each(function() {
+    $('iframe').each(function () {
       const $this = $(this)
       const src = $this.attr('src')
 
@@ -148,7 +148,7 @@ export default class Resources extends Tool {
 
       storeData.push({
         key: key,
-        val: sliceStr(val, 200)
+        val: sliceStr(val, 200),
       })
     })
 
@@ -158,7 +158,7 @@ export default class Resources extends Tool {
     const { cookies } = chobitsu.domain('Network').getCookies()
     const cookieData = map(cookies, ({ name, value }) => ({
       key: name,
-      val: value
+      val: value,
     }))
 
     this._cookieData = cookieData
@@ -172,13 +172,13 @@ export default class Resources extends Tool {
       window.webkitPerformance || window.performance)
     if (performance && performance.getEntries) {
       const entries = this._performance.getEntries()
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.initiatorType === 'img' || isImg(entry.name)) {
           imageData.push(entry.name)
         }
       })
     } else {
-      $('img').each(function() {
+      $('img').each(function () {
         const $this = $(this)
         const src = $this.attr('src')
 
@@ -239,7 +239,7 @@ export default class Resources extends Tool {
         container.notify('Refreshed')
         this.refreshImage()._render()
       })
-      .on('click', '.eruda-search', function() {
+      .on('click', '.eruda-search', function () {
         const $this = $(this)
         const type = $this.data('type')
         let filter = prompt('Filter')
@@ -258,7 +258,7 @@ export default class Resources extends Tool {
         }
         self._render()
       })
-      .on('click', '.eruda-delete-storage', function() {
+      .on('click', '.eruda-delete-storage', function () {
         const $this = $(this)
         const key = $this.data('key')
         const type = $this.data('type')
@@ -271,20 +271,20 @@ export default class Resources extends Tool {
           self.refreshSessionStorage()._render()
         }
       })
-      .on('click', '.eruda-delete-cookie', function() {
+      .on('click', '.eruda-delete-cookie', function () {
         const key = $(this).data('key')
 
         chobitsu.domain('Network').deleteCookies({ name: key })
         self.refreshCookie()._render()
       })
-      .on('click', '.eruda-clear-storage', function() {
+      .on('click', '.eruda-clear-storage', function () {
         const type = $(this).data('type')
 
         if (type === 'local') {
-          each(self._localStoreData, val => localStorage.removeItem(val.key))
+          each(self._localStoreData, (val) => localStorage.removeItem(val.key))
           self.refreshLocalStorage()._render()
         } else {
-          each(self._sessionStoreData, val =>
+          each(self._sessionStoreData, (val) =>
             sessionStorage.removeItem(val.key)
           )
           self.refreshSessionStorage()._render()
@@ -292,11 +292,11 @@ export default class Resources extends Tool {
       })
       .on('click', '.eruda-clear-cookie', () => {
         chobitsu.domain('Storage').clearDataForOrigin({
-          storageTypes: 'cookies'
+          storageTypes: 'cookies',
         })
         this.refreshCookie()._render()
       })
-      .on('click', '.eruda-storage-val', function() {
+      .on('click', '.eruda-storage-val', function () {
         const $this = $(this)
         const key = $this.data('key')
         const type = $this.data('type')
@@ -312,7 +312,7 @@ export default class Resources extends Tool {
           showSources('raw', val)
         }
       })
-      .on('click', '.eruda-img-link', function() {
+      .on('click', '.eruda-img-link', function () {
         const src = $(this).attr('src')
 
         showSources('img', src)
@@ -335,7 +335,7 @@ export default class Resources extends Tool {
     }
 
     function linkFactory(type) {
-      return function(e) {
+      return function (e) {
         if (!container.get('sources')) return
         e.preventDefault()
 
@@ -346,10 +346,10 @@ export default class Resources extends Tool {
         } else {
           ajax({
             url,
-            success: data => {
+            success: (data) => {
               showSources(type, data)
             },
-            dataType: 'raw'
+            dataType: 'raw',
           })
         }
       }
@@ -370,7 +370,7 @@ export default class Resources extends Tool {
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('resources', {
       hideErudaSetting: true,
-      observeElement: true
+      observeElement: true,
     }))
 
     if (cfg.get('hideErudaSetting')) this._hideErudaSetting = true
@@ -437,7 +437,7 @@ export default class Resources extends Tool {
         stylesheetState: getState('stylesheet', stylesheetData.length),
         iframeData: this._iframeData,
         imageData,
-        imageState: getState('image', imageData.length)
+        imageState: getState('image', imageData.length),
       })
     )
   }
@@ -447,9 +447,9 @@ export default class Resources extends Tool {
     this._$el.html(html)
   }
   _initObserver() {
-    this._observer = new MutationObserver(mutations => {
+    this._observer = new MutationObserver((mutations) => {
       let needToRender = false
-      each(mutations, mutation => {
+      each(mutations, (mutation) => {
         if (this._handleMutation(mutation)) needToRender = true
       })
       if (needToRender) this._render()
@@ -458,7 +458,7 @@ export default class Resources extends Tool {
   _handleMutation(mutation) {
     if (isErudaEl(mutation.target)) return
 
-    const checkEl = el => {
+    const checkEl = (el) => {
       const tagName = getLowerCaseTagName(el)
       switch (tagName) {
         case 'script':
@@ -493,7 +493,7 @@ export default class Resources extends Tool {
     this._observer.observe(document.documentElement, {
       attributes: true,
       childList: true,
-      subtree: true
+      subtree: true,
     })
   }
   _disableObserver() {
@@ -542,4 +542,4 @@ const sliceStr = (str, len) =>
 
 const regImg = /\.(jpeg|jpg|gif|png)$/
 
-const isImg = url => regImg.test(url)
+const isImg = (url) => regImg.test(url)
