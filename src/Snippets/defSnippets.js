@@ -3,7 +3,6 @@ import emitter from '../lib/emitter'
 import {
   Url,
   now,
-  safeStorage,
   each,
   isStr,
   startWith,
@@ -12,6 +11,7 @@ import {
   loadJs,
   trim,
 } from '../lib/util'
+import { safeStorage } from '../lib/fione'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 

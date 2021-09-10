@@ -1,4 +1,5 @@
-import { $, pxToNum, isStr, each, trim } from '../lib/util'
+import { $, isStr, each, trim } from '../lib/util'
+import { pxToNum } from '../lib/fione'
 import evalCss from '../lib/evalCss'
 
 export default class Highlight {

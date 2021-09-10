@@ -4,12 +4,12 @@ import {
   toStr,
   contain,
   startWith,
-  escapeJsonStr,
   each,
-  getObjType,
   endWith,
   isEmpty,
 } from './util'
+import { escapeJsonStr } from './fione'
+import { getObjType } from './fione'
 import evalCss from './evalCss'
 
 let hasEvalCss = false

@@ -8,7 +8,6 @@ import {
   isPrimitive,
   wrap,
   defaults,
-  getObjType,
   isEl,
   toStr,
   toNum,
@@ -35,6 +34,7 @@ import {
   nextTick,
   linkify,
 } from '../lib/util'
+import { getObjType } from '../lib/fione'
 import evalCss from '../lib/evalCss'
 
 export default class Log extends Emitter {

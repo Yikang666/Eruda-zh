@@ -1,5 +1,6 @@
 import Tool from '../DevTools/Tool'
-import { getFileName, isEmpty, $, ms, trim, each, last } from '../lib/util'
+import { isEmpty, $, ms, trim, each, last } from '../lib/util'
+import { getFileName } from '../lib/fione'
 import evalCss from '../lib/evalCss'
 import chobitsu from 'chobitsu'
 

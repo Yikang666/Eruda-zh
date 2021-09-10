@@ -17,7 +17,6 @@ import {
   isFn,
   isBool,
   safeGet,
-  pxToNum,
   isNaN,
   isNum,
   nextTick,
@@ -29,6 +28,7 @@ import {
   lowerCase,
   pick,
 } from '../lib/util'
+import { pxToNum } from '../lib/fione'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 

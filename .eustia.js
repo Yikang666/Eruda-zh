@@ -1,10 +1,8 @@
 module.exports = {
-  eruda: {
+  fione: {
     library: ['fione', 'node_modules/eustia-module'],
     files: 'src/**/*.js',
-    ignore: 'src/**/stringify.js',
-    output: 'src/lib/util.js',
-    exclude: ['createCfg'],
+    output: 'src/lib/fione.js',
     format: 'es',
   },
   test: {

@@ -12,7 +12,7 @@ import Settings from './Settings/Settings'
 import emitter from './lib/emitter'
 import logger from './lib/logger'
 import extraUtil from './lib/extraUtil'
-import util from './lib/util'
+import * as util from './lib/util'
 import {
   isFn,
   isNum,

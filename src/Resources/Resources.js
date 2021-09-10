@@ -3,7 +3,6 @@ import Settings from '../Settings/Settings'
 import {
   $,
   unique,
-  safeStorage,
   each,
   isStr,
   startWith,
@@ -20,6 +19,7 @@ import {
   filter,
   map,
 } from '../lib/util'
+import { safeStorage } from '../lib/fione'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 import chobitsu from 'chobitsu'
