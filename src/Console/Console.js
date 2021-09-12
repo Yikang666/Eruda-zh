@@ -1,4 +1,3 @@
-import Logger from './Logger'
 import Tool from '../DevTools/Tool'
 import {
   noop,
@@ -15,6 +14,7 @@ import {
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
+import LunaConsole from 'luna-console'
 
 uncaught.start()
 
@@ -149,7 +149,7 @@ export default class Console extends Tool {
   }
   _initLogger() {
     const $filter = this._$control.find('.eruda-filter')
-    const logger = (this._logger = new Logger(this._$logs))
+    const logger = (this._logger = new LunaConsole(this._$logs.get(0)))
 
     logger.on('filter', (filter) =>
       $filter.each(function () {
@@ -185,7 +185,7 @@ export default class Console extends Tool {
     const config = this.config
 
     $control
-      .on('click', '.eruda-clear-console', () => logger.silentClear())
+      .on('click', '.eruda-clear-console', () => logger.clear(true))
       .on('click', '.eruda-filter', function () {
         $searchKeyword.text('')
         logger.filter($(this).data('filter'))
@@ -266,18 +266,18 @@ export default class Console extends Tool {
       maxLogNum: 'infinite',
     }))
 
-    let maxLogNum = cfg.get('maxLogNum')
-    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
+    /* let maxLogNum = cfg.get('maxLogNum')
+    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum */
 
     this._enableJsExecution(cfg.get('jsExecution'))
-    if (cfg.get('asyncRender')) logger.renderAsync(true)
+    // if (cfg.get('asyncRender')) logger.renderAsync(true)
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
     if (cfg.get('overrideConsole')) this.overrideConsole()
-    logger.displayHeader(cfg.get('displayExtraInfo'))
+    /* logger.displayHeader(cfg.get('displayExtraInfo'))
     logger.displayUnenumerable(cfg.get('displayUnenumerable'))
     logger.displayGetterVal(cfg.get('displayGetterVal'))
     logger.lazyEvaluation(cfg.get('lazyEvaluation'))
-    logger.maxNum(maxLogNum)
+    logger.maxNum(maxLogNum) */
 
     cfg.on('change', (key, val) => {
       switch (key) {

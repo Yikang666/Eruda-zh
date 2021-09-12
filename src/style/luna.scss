@@ -1,5 +1,71 @@
 @import './variable';
 
+.luna-console {
+  background: var(--background);
+}
+
+.luna-console-log-item {
+  border-bottom-color: var(--border);
+  color: var(--foreground);
+  .luna-console-icon-container {
+    .luna-console-icon {
+      color: var(--foreground);
+    }
+    .luna-console-icon-error {
+      color: #ef3842;
+    }
+    .luna-console-icon-warn {
+      color: #e8a400;
+    }
+  }
+  &.luna-console-warn {
+    color: var(--console-warn-foreground);
+    background: var(--console-warn-background);
+    border-color: var(--console-warn-border);
+  }
+  &.luna-console-error {
+    background: var(--console-error-background);
+    color: var(--console-error-foreground);
+    border-color: var(--console-error-border);
+  }
+  &.luna-console-table {
+    table {
+      color: var(--foreground);
+      th {
+        background: var(--darker-background);
+      }
+      th,
+      td {
+        border-color: var(--border);
+      }
+      tr:nth-child(even) {
+        background: var(--contrast);
+      }
+    }
+  }
+}
+
+.luna-console-abstract {
+  .luna-console-key {
+    color: var(--var-color);
+  }
+  .luna-console-number {
+    color: var(--number-color);
+  }
+  .luna-console-null {
+    color: var(--operator-color);
+  }
+  .luna-console-string {
+    color: var(--string-color);
+  }
+  .luna-console-boolean {
+    color: var(--keyword-color);
+  }
+  .luna-console-special {
+    color: var(--operator-color);
+  }
+}
+
 .luna-object-viewer {
   color: var(--primary);
   font-size: 12px !important;
