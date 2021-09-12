@@ -4,6 +4,27 @@
   background: var(--background);
 }
 
+@mixin luna-console-highlight {
+  .luna-console-key {
+    color: var(--var-color);
+  }
+  .luna-console-number {
+    color: var(--number-color);
+  }
+  .luna-console-null {
+    color: var(--operator-color);
+  }
+  .luna-console-string {
+    color: var(--string-color);
+  }
+  .luna-console-boolean {
+    color: var(--keyword-color);
+  }
+  .luna-console-special {
+    color: var(--operator-color);
+  }
+}
+
 .luna-console-log-item {
   border-bottom-color: var(--border);
   color: var(--foreground);
@@ -43,27 +64,13 @@
       }
     }
   }
+  .luna-console-code {
+    @include luna-console-highlight();
+  }
 }
 
 .luna-console-abstract {
-  .luna-console-key {
-    color: var(--var-color);
-  }
-  .luna-console-number {
-    color: var(--number-color);
-  }
-  .luna-console-null {
-    color: var(--operator-color);
-  }
-  .luna-console-string {
-    color: var(--string-color);
-  }
-  .luna-console-boolean {
-    color: var(--keyword-color);
-  }
-  .luna-console-special {
-    color: var(--operator-color);
-  }
+  @include luna-console-highlight();
 }
 
 .luna-object-viewer {

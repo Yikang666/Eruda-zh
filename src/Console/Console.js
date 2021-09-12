@@ -35,10 +35,10 @@ export default class Console extends Tool {
 
     this._appendTpl()
 
+    this._initCfg()
+
     this._initLogger()
     this._exposeLogger()
-
-    this._initCfg()
     this._bindEvent()
   }
   show() {
@@ -148,17 +148,35 @@ export default class Console extends Tool {
     })
   }
   _initLogger() {
-    const $filter = this._$control.find('.eruda-filter')
-    const logger = (this._logger = new LunaConsole(this._$logs.get(0)))
+    const cfg = this.config
+    let maxLogNum = cfg.get('maxLogNum')
+    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
 
-    logger.on('filter', (filter) =>
+    const $filter = this._$control.find('.eruda-filter')
+    const logger = new LunaConsole(this._$logs.get(0), {
+      asyncRender: cfg.get('asyncRender'),
+      maxNum: maxLogNum,
+      showHeader: cfg.get('displayExtraInfo'),
+      unenumerable: cfg.get('displayUnenumerable'),
+      accessGetter: cfg.get('displayGetterVal'),
+      lazyEvaluation: cfg.get('lazyEvaluation'),
+    })
+
+    logger.on('optionChange', (name, filter) => {
+      if (name !== 'filter') {
+        return
+      }
       $filter.each(function () {
         const $this = $(this)
         const isMatch = $this.data('filter') === filter
 
         $this[isMatch ? 'addClass' : 'rmClass']('eruda-active')
       })
-    )
+    })
+
+    if (cfg.get('overrideConsole')) this.overrideConsole()
+
+    this._logger = logger
   }
   _exposeLogger() {
     const logger = this._logger
@@ -188,17 +206,17 @@ export default class Console extends Tool {
       .on('click', '.eruda-clear-console', () => logger.clear(true))
       .on('click', '.eruda-filter', function () {
         $searchKeyword.text('')
-        logger.filter($(this).data('filter'))
+        logger.setOption('filter', $(this).data('filter'))
       })
       .on('click', '.eruda-search', () => {
         const filter = prompt('Filter')
         if (isNull(filter)) return
         $searchKeyword.text(filter)
         if (trim(filter) === '') {
-          logger.filter('all')
+          logger.setOption('filter', 'all')
           return
         }
-        this._logger.filter(new RegExp(escapeRegExp(lowerCase(filter))))
+        logger.setOption('filter', new RegExp(escapeRegExp(lowerCase(filter))))
       })
 
     $inputBtns
@@ -207,7 +225,7 @@ export default class Console extends Tool {
         const jsInput = $input.val().trim()
         if (jsInput === '') return
 
-        logger.input(jsInput)
+        logger.evaluate(jsInput)
         $input.val('').get(0).blur()
         this._hideInput()
       })
@@ -266,18 +284,8 @@ export default class Console extends Tool {
       maxLogNum: 'infinite',
     }))
 
-    /* let maxLogNum = cfg.get('maxLogNum')
-    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum */
-
     this._enableJsExecution(cfg.get('jsExecution'))
-    // if (cfg.get('asyncRender')) logger.renderAsync(true)
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
-    if (cfg.get('overrideConsole')) this.overrideConsole()
-    /* logger.displayHeader(cfg.get('displayExtraInfo'))
-    logger.displayUnenumerable(cfg.get('displayUnenumerable'))
-    logger.displayGetterVal(cfg.get('displayGetterVal'))
-    logger.lazyEvaluation(cfg.get('lazyEvaluation'))
-    logger.maxNum(maxLogNum) */
 
     cfg.on('change', (key, val) => {
       switch (key) {
