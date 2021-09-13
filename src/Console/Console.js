@@ -290,7 +290,7 @@ export default class Console extends Tool {
       const logger = this._logger
       switch (key) {
         case 'asyncRender':
-          return logger.setOption('renderAsync', val)
+          return logger.setOption('asyncRender', val)
         case 'jsExecution':
           return this._enableJsExecution(val)
         case 'catchGlobalErr':
