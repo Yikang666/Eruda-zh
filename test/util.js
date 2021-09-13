@@ -170,6 +170,43 @@
         return exports;
     })({});
 
+    /* ------------------------------ chunk ------------------------------ */
+
+    var chunk = _.chunk = (function (exports) {
+        /* Split array into groups the length of given size.
+         *
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |arr   |Array to process    |
+         * |size=1|Length of each chunk|
+         * |return|Chunks of given size|
+         */
+
+        /* example
+         * chunk([1, 2, 3, 4], 2); // -> [[1, 2], [3, 4]]
+         * chunk([1, 2, 3, 4], 3); // -> [[1, 2, 3], [4]]
+         * chunk([1, 2, 3, 4]); // -> [[1], [2], [3], [4]]
+         */
+
+        /* typescript
+         * export declare function chunk(arr: any[], size?: number): Array<any[]>;
+         */
+        exports = function(arr, size) {
+            var ret = [];
+            size = size || 1;
+
+            for (var i = 0, len = Math.ceil(arr.length / size); i < len; i++) {
+                var start = i * size;
+                var end = start + size;
+                ret.push(arr.slice(start, end));
+            }
+
+            return ret;
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ idxOf ------------------------------ */
 
     var idxOf = _.idxOf = (function (exports) {
@@ -304,271 +341,6 @@
         exports = function(Class, SuperClass) {
             Class.prototype = create(SuperClass.prototype);
         };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ ucs2 ------------------------------ */
-
-    var ucs2 = _.ucs2 = (function (exports) {
-        /* UCS-2 encoding and decoding.
-         *
-         * ### encode
-         *
-         * Create a string using an array of code point values.
-         *
-         * |Name  |Desc                |
-         * |------|--------------------|
-         * |arr   |Array of code points|
-         * |return|Encoded string      |
-         *
-         * ### decode
-         *
-         * Create an array of code point values using a string.
-         *
-         * |Name  |Desc                |
-         * |------|--------------------|
-         * |str   |Input string        |
-         * |return|Array of code points|
-         */
-
-        /* example
-         * ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
-         * ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
-         * '𝌆'.length; // -> 2
-         * ucs2.decode('𝌆').length; // -> 1
-         */
-
-        /* typescript
-         * export declare const ucs2: {
-         *     encode(arr: number[]): string;
-         *     decode(str: string): number[];
-         * };
-         */
-        // https://mathiasbynens.be/notes/javascript-encoding
-        exports = {
-            encode: function(arr) {
-                return String.fromCodePoint.apply(String, arr);
-            },
-            decode: function(str) {
-                var ret = [];
-                var i = 0;
-                var len = str.length;
-
-                while (i < len) {
-                    var c = str.charCodeAt(i++); // A high surrogate
-
-                    if (c >= 0xd800 && c <= 0xdbff && i < len) {
-                        var tail = str.charCodeAt(i++); // nextC >= 0xDC00 && nextC <= 0xDFFF
-
-                        if ((tail & 0xfc00) === 0xdc00) {
-                            // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
-                            ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
-                        } else {
-                            ret.push(c);
-                            i--;
-                        }
-                    } else {
-                        ret.push(c);
-                    }
-                }
-
-                return ret;
-            }
-        };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ utf8 ------------------------------ */
-
-    var utf8 = _.utf8 = (function (exports) {
-        /* UTF-8 encoding and decoding.
-         *
-         * ### encode
-         *
-         * Turn any UTF-8 decoded string into UTF-8 encoded string.
-         *
-         * |Name  |Desc            |
-         * |------|----------------|
-         * |str   |String to encode|
-         * |return|Encoded string  |
-         *
-         * ### decode
-         *
-         * Turn any UTF-8 encoded string into UTF-8 decoded string.
-         *
-         * |Name      |Desc                  |
-         * |----------|----------------------|
-         * |str       |String to decode      |
-         * |safe=false|Suppress error if true|
-         * |return    |Decoded string        |
-         */
-
-        /* example
-         * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
-         * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
-         */
-
-        /* typescript
-         * export declare const utf8: {
-         *     encode(str: string): string;
-         *     decode(str: string, safe?: boolean): string;
-         * };
-         */
-
-        /* dependencies
-         * ucs2 
-         */ // https://encoding.spec.whatwg.org/#utf-8
-
-        exports = {
-            encode: function(str) {
-                var codePoints = ucs2.decode(str);
-                var byteArr = '';
-
-                for (var i = 0, len = codePoints.length; i < len; i++) {
-                    byteArr += encodeCodePoint(codePoints[i]);
-                }
-
-                return byteArr;
-            },
-            decode: function(str, safe) {
-                byteArr = ucs2.decode(str);
-                byteIdx = 0;
-                byteCount = byteArr.length;
-                codePoint = 0;
-                bytesSeen = 0;
-                bytesNeeded = 0;
-                lowerBoundary = 0x80;
-                upperBoundary = 0xbf;
-                var codePoints = [];
-                var tmp;
-
-                while ((tmp = decodeCodePoint(safe)) !== false) {
-                    codePoints.push(tmp);
-                }
-
-                return ucs2.encode(codePoints);
-            }
-        };
-        var fromCharCode = String.fromCharCode;
-
-        function encodeCodePoint(codePoint) {
-            // U+0000 to U+0080, ASCII code point
-            if ((codePoint & 0xffffff80) === 0) {
-                return fromCharCode(codePoint);
-            }
-
-            var ret = '',
-                count,
-                offset; // U+0080 to U+07FF, inclusive
-
-            if ((codePoint & 0xfffff800) === 0) {
-                count = 1;
-                offset = 0xc0;
-            } else if ((codePoint & 0xffff0000) === 0) {
-                // U+0800 to U+FFFF, inclusive
-                count = 2;
-                offset = 0xe0;
-            } else if ((codePoint & 0xffe00000) == 0) {
-                // U+10000 to U+10FFFF, inclusive
-                count = 3;
-                offset = 0xf0;
-            }
-
-            ret += fromCharCode((codePoint >> (6 * count)) + offset);
-
-            while (count > 0) {
-                var tmp = codePoint >> (6 * (count - 1));
-                ret += fromCharCode(0x80 | (tmp & 0x3f));
-                count--;
-            }
-
-            return ret;
-        }
-
-        var byteArr,
-            byteIdx,
-            byteCount,
-            codePoint,
-            bytesSeen,
-            bytesNeeded,
-            lowerBoundary,
-            upperBoundary;
-
-        function decodeCodePoint(safe) {
-            /* eslint-disable no-constant-condition */
-            while (true) {
-                if (byteIdx >= byteCount && bytesNeeded) {
-                    if (safe) return goBack();
-                    throw new Error('Invalid byte index');
-                }
-
-                if (byteIdx === byteCount) return false;
-                var byte = byteArr[byteIdx];
-                byteIdx++;
-
-                if (!bytesNeeded) {
-                    // 0x00 to 0x7F
-                    if ((byte & 0x80) === 0) {
-                        return byte;
-                    } // 0xC2 to 0xDF
-
-                    if ((byte & 0xe0) === 0xc0) {
-                        bytesNeeded = 1;
-                        codePoint = byte & 0x1f;
-                    } else if ((byte & 0xf0) === 0xe0) {
-                        // 0xE0 to 0xEF
-                        if (byte === 0xe0) lowerBoundary = 0xa0;
-                        if (byte === 0xed) upperBoundary = 0x9f;
-                        bytesNeeded = 2;
-                        codePoint = byte & 0xf;
-                    } else if ((byte & 0xf8) === 0xf0) {
-                        // 0xF0 to 0xF4
-                        if (byte === 0xf0) lowerBoundary = 0x90;
-                        if (byte === 0xf4) upperBoundary = 0x8f;
-                        bytesNeeded = 3;
-                        codePoint = byte & 0x7;
-                    } else {
-                        if (safe) return goBack();
-                        throw new Error('Invalid UTF-8 detected');
-                    }
-
-                    continue;
-                }
-
-                if (byte < lowerBoundary || byte > upperBoundary) {
-                    if (safe) {
-                        byteIdx--;
-                        return goBack();
-                    }
-
-                    throw new Error('Invalid continuation byte');
-                }
-
-                lowerBoundary = 0x80;
-                upperBoundary = 0xbf;
-                codePoint = (codePoint << 6) | (byte & 0x3f);
-                bytesSeen++;
-                if (bytesSeen !== bytesNeeded) continue;
-                var tmp = codePoint;
-                codePoint = 0;
-                bytesNeeded = 0;
-                bytesSeen = 0;
-                return tmp;
-            }
-        }
-
-        function goBack() {
-            var start = byteIdx - bytesSeen - 1;
-            byteIdx = start + 1;
-            codePoint = 0;
-            bytesNeeded = 0;
-            bytesSeen = 0;
-            lowerBoundary = 0x80;
-            upperBoundary = 0xbf;
-            return byteArr[start];
-        }
 
         return exports;
     })({});
@@ -1466,6 +1238,104 @@
         return exports;
     })({});
 
+    /* ------------------------------ defineProp ------------------------------ */
+
+    var defineProp = _.defineProp = (function (exports) {
+        /* Shortcut for Object.defineProperty(defineProperties).
+         *
+         * |Name      |Desc               |
+         * |----------|-------------------|
+         * |obj       |Object to define   |
+         * |prop      |Property path      |
+         * |descriptor|Property descriptor|
+         * |return    |Object itself      |
+         *
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |obj   |Object to define    |
+         * |prop  |Property descriptors|
+         * |return|Object itself       |
+         */
+
+        /* example
+         * const obj = { b: { c: 3 }, d: 4, e: 5 };
+         * defineProp(obj, 'a', {
+         *     get: function() {
+         *         return this.e * 2;
+         *     }
+         * });
+         * // obj.a is equal to 10
+         * defineProp(obj, 'b.c', {
+         *     set: function(val) {
+         *         // this is pointed to obj.b
+         *         this.e = val;
+         *     }.bind(obj)
+         * });
+         * obj.b.c = 2;
+         * // obj.a is equal to 4
+         *
+         * const obj2 = { a: 1, b: 2, c: 3 };
+         * defineProp(obj2, {
+         *     a: {
+         *         get: function() {
+         *             return this.c;
+         *         }
+         *     },
+         *     b: {
+         *         set: function(val) {
+         *             this.c = val / 2;
+         *         }
+         *     }
+         * });
+         * // obj2.a is equal to 3
+         * obj2.b = 4;
+         * // obj2.a is equal to 2
+         */
+
+        /* typescript
+         * export declare function defineProp<T>(
+         *     obj: T,
+         *     prop: string,
+         *     descriptor: PropertyDescriptor
+         * ): T;
+         * export declare function defineProp<T>(
+         *     obj: T,
+         *     descriptor: PropertyDescriptorMap
+         * ): T;
+         */
+
+        /* dependencies
+         * castPath isStr isObj each 
+         */
+
+        exports = function(obj, prop, descriptor) {
+            if (isStr(prop)) {
+                defineProp(obj, prop, descriptor);
+            } else if (isObj(prop)) {
+                each(prop, function(descriptor, prop) {
+                    defineProp(obj, prop, descriptor);
+                });
+            }
+
+            return obj;
+        };
+
+        function defineProp(obj, prop, descriptor) {
+            var path = castPath(prop, obj);
+            var lastProp = path.pop();
+            /* eslint-disable no-cond-assign */
+
+            while ((prop = path.shift())) {
+                if (!obj[prop]) obj[prop] = {};
+                obj = obj[prop];
+            }
+
+            Object.defineProperty(obj, lastProp, descriptor);
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ isBuffer ------------------------------ */
 
     var isBuffer = _.isBuffer = (function (exports) {
@@ -1817,6 +1687,67 @@
                 return new Date().getTime();
             };
         }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ pick ------------------------------ */
+
+    var pick = _.pick = (function (exports) {
+        /* Return a filtered copy of an object.
+         *
+         * |Name  |Desc           |
+         * |------|---------------|
+         * |object|Source object  |
+         * |filter|Object filter  |
+         * |return|Filtered object|
+         */
+
+        /* example
+         * pick({ a: 1, b: 2 }, 'a'); // -> {a: 1}
+         * pick({ a: 1, b: 2, c: 3 }, ['b', 'c']); // -> {b: 2, c: 3}
+         * pick({ a: 1, b: 2, c: 3, d: 4 }, function(val, key) {
+         *     return val % 2;
+         * }); // -> {a: 1, c: 3}
+         */
+
+        /* typescript
+         * export declare function pick(
+         *     object: any,
+         *     filter: string | string[] | Function
+         * ): any;
+         */
+
+        /* dependencies
+         * isStr isArr contain each 
+         */
+
+        exports = function(obj, filter, omit) {
+            if (isStr(filter)) filter = [filter];
+
+            if (isArr(filter)) {
+                var keys = filter;
+
+                filter = function(val, key) {
+                    return contain(keys, key);
+                };
+            }
+
+            var ret = {};
+
+            var iteratee = function(val, key) {
+                if (filter(val, key)) ret[key] = val;
+            };
+
+            if (omit) {
+                iteratee = function(val, key) {
+                    if (!filter(val, key)) ret[key] = val;
+                };
+            }
+
+            each(obj, iteratee);
+            return ret;
+        };
 
         return exports;
     })({});
@@ -2231,6 +2162,464 @@
         return exports;
     })({});
 
+    /* ------------------------------ toArr ------------------------------ */
+
+    var toArr = _.toArr = (function (exports) {
+        /* Convert value to an array.
+         *
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |val   |Value to convert|
+         * |return|Converted array |
+         */
+
+        /* example
+         * toArr({ a: 1, b: 2 }); // -> [{a: 1, b: 2}]
+         * toArr('abc'); // -> ['abc']
+         * toArr(1); // -> [1]
+         * toArr(null); // -> []
+         */
+
+        /* typescript
+         * export declare function toArr(val: any): any[];
+         */
+
+        /* dependencies
+         * isArrLike map isArr isStr 
+         */
+
+        exports = function(val) {
+            if (!val) return [];
+            if (isArr(val)) return val;
+            if (isArrLike(val) && !isStr(val)) return map(val);
+            return [val];
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Class ------------------------------ */
+
+    var Class = _.Class = (function (exports) {
+        /* Create JavaScript class.
+         *
+         * |Name   |Desc                             |
+         * |-------|---------------------------------|
+         * |methods|Public methods                   |
+         * [statics|Static methods                   |
+         * |return |Function used to create instances|
+         */
+
+        /* example
+         * const People = Class({
+         *     initialize: function People(name, age) {
+         *         this.name = name;
+         *         this.age = age;
+         *     },
+         *     introduce: function() {
+         *         return 'I am ' + this.name + ', ' + this.age + ' years old.';
+         *     }
+         * });
+         *
+         * const Student = People.extend(
+         *     {
+         *         initialize: function Student(name, age, school) {
+         *             this.callSuper(People, 'initialize', arguments);
+         *
+         *             this.school = school;
+         *         },
+         *         introduce: function() {
+         *             return (
+         *                 this.callSuper(People, 'introduce') +
+         *                 '\n I study at ' +
+         *                 this.school +
+         *                 '.'
+         *             );
+         *         }
+         *     },
+         *     {
+         *         is: function(obj) {
+         *             return obj instanceof Student;
+         *         }
+         *     }
+         * );
+         *
+         * const a = new Student('allen', 17, 'Hogwarts');
+         * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
+         * Student.is(a); // -> true
+         */
+
+        /* typescript
+         * export declare namespace Class {
+         *     class Base {
+         *         toString(): string;
+         *     }
+         *     class IConstructor extends Base {
+         *         constructor(...args: any[]);
+         *         static extend(methods: any, statics: any): IConstructor;
+         *         static inherits(Class: types.AnyFn): void;
+         *         static methods(methods: any): IConstructor;
+         *         static statics(statics: any): IConstructor;
+         *         [method: string]: any;
+         *     }
+         * }
+         * export declare function Class(methods: any, statics?: any): Class.IConstructor;
+         */
+
+        /* dependencies
+         * extend toArr inherits safeGet isMiniProgram types 
+         */
+
+        exports = function(methods, statics) {
+            return Base.extend(methods, statics);
+        };
+
+        function makeClass(parent, methods, statics) {
+            statics = statics || {};
+            var className =
+                methods.className || safeGet(methods, 'initialize.name') || '';
+            delete methods.className;
+
+            var ctor = function() {
+                var args = toArr(arguments);
+                return this.initialize
+                    ? this.initialize.apply(this, args) || this
+                    : this;
+            };
+
+            if (!isMiniProgram) {
+                // unsafe-eval CSP violation
+                try {
+                    ctor = new Function(
+                        'toArr',
+                        'return function ' +
+                            className +
+                            '()' +
+                            '{' +
+                            'var args = toArr(arguments);' +
+                            'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+                            '};'
+                    )(toArr);
+                } catch (e) {
+                    /* eslint-disable no-empty */
+                }
+            }
+
+            inherits(ctor, parent);
+            ctor.prototype.constructor = ctor;
+
+            ctor.extend = function(methods, statics) {
+                return makeClass(ctor, methods, statics);
+            };
+
+            ctor.inherits = function(Class) {
+                inherits(ctor, Class);
+            };
+
+            ctor.methods = function(methods) {
+                extend(ctor.prototype, methods);
+                return ctor;
+            };
+
+            ctor.statics = function(statics) {
+                extend(ctor, statics);
+                return ctor;
+            };
+
+            ctor.methods(methods).statics(statics);
+            return ctor;
+        }
+
+        var Base = (exports.Base = makeClass(Object, {
+            className: 'Base',
+            callSuper: function(parent, name, args) {
+                var superMethod = parent.prototype[name];
+                return superMethod.apply(this, args);
+            },
+            toString: function() {
+                return this.constructor.name;
+            }
+        }));
+
+        return exports;
+    })({});
+
+    /* ------------------------------ ucs2 ------------------------------ */
+
+    var ucs2 = _.ucs2 = (function (exports) {
+        /* UCS-2 encoding and decoding.
+         *
+         * ### encode
+         *
+         * Create a string using an array of code point values.
+         *
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |arr   |Array of code points|
+         * |return|Encoded string      |
+         *
+         * ### decode
+         *
+         * Create an array of code point values using a string.
+         *
+         * |Name  |Desc                |
+         * |------|--------------------|
+         * |str   |Input string        |
+         * |return|Array of code points|
+         */
+
+        /* example
+         * ucs2.encode([0x61, 0x62, 0x63]); // -> 'abc'
+         * ucs2.decode('abc'); // -> [0x61, 0x62, 0x63]
+         * '𝌆'.length; // -> 2
+         * ucs2.decode('𝌆').length; // -> 1
+         */
+
+        /* typescript
+         * export declare const ucs2: {
+         *     encode(arr: number[]): string;
+         *     decode(str: string): number[];
+         * };
+         */
+
+        /* dependencies
+         * chunk map 
+         */ // https://mathiasbynens.be/notes/javascript-encoding
+
+        exports = {
+            encode: function(arr) {
+                // https://stackoverflow.com/questions/22747068/is-there-a-max-number-of-arguments-javascript-functions-can-accept
+                if (arr.length < 32768) {
+                    return String.fromCodePoint.apply(String, arr);
+                }
+
+                return map(chunk(arr, 32767), function(nums) {
+                    return String.fromCodePoint.apply(String, nums);
+                }).join('');
+            },
+            decode: function(str) {
+                var ret = [];
+                var i = 0;
+                var len = str.length;
+
+                while (i < len) {
+                    var c = str.charCodeAt(i++); // A high surrogate
+
+                    if (c >= 0xd800 && c <= 0xdbff && i < len) {
+                        var tail = str.charCodeAt(i++); // nextC >= 0xDC00 && nextC <= 0xDFFF
+
+                        if ((tail & 0xfc00) === 0xdc00) {
+                            // C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
+                            ret.push(((c & 0x3ff) << 10) + (tail & 0x3ff) + 0x10000);
+                        } else {
+                            ret.push(c);
+                            i--;
+                        }
+                    } else {
+                        ret.push(c);
+                    }
+                }
+
+                return ret;
+            }
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ utf8 ------------------------------ */
+
+    var utf8 = _.utf8 = (function (exports) {
+        /* UTF-8 encoding and decoding.
+         *
+         * ### encode
+         *
+         * Turn any UTF-8 decoded string into UTF-8 encoded string.
+         *
+         * |Name  |Desc            |
+         * |------|----------------|
+         * |str   |String to encode|
+         * |return|Encoded string  |
+         *
+         * ### decode
+         *
+         * Turn any UTF-8 encoded string into UTF-8 decoded string.
+         *
+         * |Name      |Desc                  |
+         * |----------|----------------------|
+         * |str       |String to decode      |
+         * |safe=false|Suppress error if true|
+         * |return    |Decoded string        |
+         */
+
+        /* example
+         * utf8.encode('\uD800\uDC00'); // ->  '\xF0\x90\x80\x80'
+         * utf8.decode('\xF0\x90\x80\x80'); // -> '\uD800\uDC00'
+         */
+
+        /* typescript
+         * export declare const utf8: {
+         *     encode(str: string): string;
+         *     decode(str: string, safe?: boolean): string;
+         * };
+         */
+
+        /* dependencies
+         * ucs2 
+         */ // https://encoding.spec.whatwg.org/#utf-8
+
+        exports = {
+            encode: function(str) {
+                var codePoints = ucs2.decode(str);
+                var byteArr = '';
+
+                for (var i = 0, len = codePoints.length; i < len; i++) {
+                    byteArr += encodeCodePoint(codePoints[i]);
+                }
+
+                return byteArr;
+            },
+            decode: function(str, safe) {
+                byteArr = ucs2.decode(str);
+                byteIdx = 0;
+                byteCount = byteArr.length;
+                codePoint = 0;
+                bytesSeen = 0;
+                bytesNeeded = 0;
+                lowerBoundary = 0x80;
+                upperBoundary = 0xbf;
+                var codePoints = [];
+                var tmp;
+
+                while ((tmp = decodeCodePoint(safe)) !== false) {
+                    codePoints.push(tmp);
+                }
+
+                return ucs2.encode(codePoints);
+            }
+        };
+        var fromCharCode = String.fromCharCode;
+
+        function encodeCodePoint(codePoint) {
+            // U+0000 to U+0080, ASCII code point
+            if ((codePoint & 0xffffff80) === 0) {
+                return fromCharCode(codePoint);
+            }
+
+            var ret = '',
+                count,
+                offset; // U+0080 to U+07FF, inclusive
+
+            if ((codePoint & 0xfffff800) === 0) {
+                count = 1;
+                offset = 0xc0;
+            } else if ((codePoint & 0xffff0000) === 0) {
+                // U+0800 to U+FFFF, inclusive
+                count = 2;
+                offset = 0xe0;
+            } else if ((codePoint & 0xffe00000) == 0) {
+                // U+10000 to U+10FFFF, inclusive
+                count = 3;
+                offset = 0xf0;
+            }
+
+            ret += fromCharCode((codePoint >> (6 * count)) + offset);
+
+            while (count > 0) {
+                var tmp = codePoint >> (6 * (count - 1));
+                ret += fromCharCode(0x80 | (tmp & 0x3f));
+                count--;
+            }
+
+            return ret;
+        }
+
+        var byteArr,
+            byteIdx,
+            byteCount,
+            codePoint,
+            bytesSeen,
+            bytesNeeded,
+            lowerBoundary,
+            upperBoundary;
+
+        function decodeCodePoint(safe) {
+            /* eslint-disable no-constant-condition */
+            while (true) {
+                if (byteIdx >= byteCount && bytesNeeded) {
+                    if (safe) return goBack();
+                    throw new Error('Invalid byte index');
+                }
+
+                if (byteIdx === byteCount) return false;
+                var byte = byteArr[byteIdx];
+                byteIdx++;
+
+                if (!bytesNeeded) {
+                    // 0x00 to 0x7F
+                    if ((byte & 0x80) === 0) {
+                        return byte;
+                    } // 0xC2 to 0xDF
+
+                    if ((byte & 0xe0) === 0xc0) {
+                        bytesNeeded = 1;
+                        codePoint = byte & 0x1f;
+                    } else if ((byte & 0xf0) === 0xe0) {
+                        // 0xE0 to 0xEF
+                        if (byte === 0xe0) lowerBoundary = 0xa0;
+                        if (byte === 0xed) upperBoundary = 0x9f;
+                        bytesNeeded = 2;
+                        codePoint = byte & 0xf;
+                    } else if ((byte & 0xf8) === 0xf0) {
+                        // 0xF0 to 0xF4
+                        if (byte === 0xf0) lowerBoundary = 0x90;
+                        if (byte === 0xf4) upperBoundary = 0x8f;
+                        bytesNeeded = 3;
+                        codePoint = byte & 0x7;
+                    } else {
+                        if (safe) return goBack();
+                        throw new Error('Invalid UTF-8 detected');
+                    }
+
+                    continue;
+                }
+
+                if (byte < lowerBoundary || byte > upperBoundary) {
+                    if (safe) {
+                        byteIdx--;
+                        return goBack();
+                    }
+
+                    throw new Error('Invalid continuation byte');
+                }
+
+                lowerBoundary = 0x80;
+                upperBoundary = 0xbf;
+                codePoint = (codePoint << 6) | (byte & 0x3f);
+                bytesSeen++;
+                if (bytesSeen !== bytesNeeded) continue;
+                var tmp = codePoint;
+                codePoint = 0;
+                bytesNeeded = 0;
+                bytesSeen = 0;
+                return tmp;
+            }
+        }
+
+        function goBack() {
+            var start = byteIdx - bytesSeen - 1;
+            byteIdx = start + 1;
+            codePoint = 0;
+            bytesNeeded = 0;
+            bytesSeen = 0;
+            lowerBoundary = 0x80;
+            upperBoundary = 0xbf;
+            return byteArr[start];
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ decodeUriComponent ------------------------------ */
 
     var decodeUriComponent = _.decodeUriComponent = (function (exports) {
@@ -2412,188 +2801,6 @@
                 return setCookie(key, '', options);
             }
         };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ toArr ------------------------------ */
-
-    var toArr = _.toArr = (function (exports) {
-        /* Convert value to an array.
-         *
-         * |Name  |Desc            |
-         * |------|----------------|
-         * |val   |Value to convert|
-         * |return|Converted array |
-         */
-
-        /* example
-         * toArr({ a: 1, b: 2 }); // -> [{a: 1, b: 2}]
-         * toArr('abc'); // -> ['abc']
-         * toArr(1); // -> [1]
-         * toArr(null); // -> []
-         */
-
-        /* typescript
-         * export declare function toArr(val: any): any[];
-         */
-
-        /* dependencies
-         * isArrLike map isArr isStr 
-         */
-
-        exports = function(val) {
-            if (!val) return [];
-            if (isArr(val)) return val;
-            if (isArrLike(val) && !isStr(val)) return map(val);
-            return [val];
-        };
-
-        return exports;
-    })({});
-
-    /* ------------------------------ Class ------------------------------ */
-
-    var Class = _.Class = (function (exports) {
-        /* Create JavaScript class.
-         *
-         * |Name   |Desc                             |
-         * |-------|---------------------------------|
-         * |methods|Public methods                   |
-         * [statics|Static methods                   |
-         * |return |Function used to create instances|
-         */
-
-        /* example
-         * const People = Class({
-         *     initialize: function People(name, age) {
-         *         this.name = name;
-         *         this.age = age;
-         *     },
-         *     introduce: function() {
-         *         return 'I am ' + this.name + ', ' + this.age + ' years old.';
-         *     }
-         * });
-         *
-         * const Student = People.extend(
-         *     {
-         *         initialize: function Student(name, age, school) {
-         *             this.callSuper(People, 'initialize', arguments);
-         *
-         *             this.school = school;
-         *         },
-         *         introduce: function() {
-         *             return (
-         *                 this.callSuper(People, 'introduce') +
-         *                 '\n I study at ' +
-         *                 this.school +
-         *                 '.'
-         *             );
-         *         }
-         *     },
-         *     {
-         *         is: function(obj) {
-         *             return obj instanceof Student;
-         *         }
-         *     }
-         * );
-         *
-         * const a = new Student('allen', 17, 'Hogwarts');
-         * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
-         * Student.is(a); // -> true
-         */
-
-        /* typescript
-         * export declare namespace Class {
-         *     class Base {
-         *         toString(): string;
-         *     }
-         *     class IConstructor extends Base {
-         *         constructor(...args: any[]);
-         *         static extend(methods: any, statics: any): IConstructor;
-         *         static inherits(Class: types.AnyFn): void;
-         *         static methods(methods: any): IConstructor;
-         *         static statics(statics: any): IConstructor;
-         *         [method: string]: any;
-         *     }
-         * }
-         * export declare function Class(methods: any, statics?: any): Class.IConstructor;
-         */
-
-        /* dependencies
-         * extend toArr inherits safeGet isMiniProgram types 
-         */
-
-        exports = function(methods, statics) {
-            return Base.extend(methods, statics);
-        };
-
-        function makeClass(parent, methods, statics) {
-            statics = statics || {};
-            var className =
-                methods.className || safeGet(methods, 'initialize.name') || '';
-            delete methods.className;
-
-            var ctor = function() {
-                var args = toArr(arguments);
-                return this.initialize
-                    ? this.initialize.apply(this, args) || this
-                    : this;
-            };
-
-            if (!isMiniProgram) {
-                // unsafe-eval CSP violation
-                try {
-                    ctor = new Function(
-                        'toArr',
-                        'return function ' +
-                            className +
-                            '()' +
-                            '{' +
-                            'var args = toArr(arguments);' +
-                            'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
-                            '};'
-                    )(toArr);
-                } catch (e) {
-                    /* eslint-disable no-empty */
-                }
-            }
-
-            inherits(ctor, parent);
-            ctor.prototype.constructor = ctor;
-
-            ctor.extend = function(methods, statics) {
-                return makeClass(ctor, methods, statics);
-            };
-
-            ctor.inherits = function(Class) {
-                inherits(ctor, Class);
-            };
-
-            ctor.methods = function(methods) {
-                extend(ctor.prototype, methods);
-                return ctor;
-            };
-
-            ctor.statics = function(statics) {
-                extend(ctor, statics);
-                return ctor;
-            };
-
-            ctor.methods(methods).statics(statics);
-            return ctor;
-        }
-
-        var Base = (exports.Base = makeClass(Object, {
-            className: 'Base',
-            callSuper: function(parent, name, args) {
-                var superMethod = parent.prototype[name];
-                return superMethod.apply(this, args);
-            },
-            toString: function() {
-                return this.constructor.name;
-            }
-        }));
 
         return exports;
     })({});
@@ -2970,6 +3177,91 @@
         return exports;
     })({});
 
+    /* ------------------------------ safeSet ------------------------------ */
+
+    var safeSet = _.safeSet = (function (exports) {
+        /* Set value at path of object.
+         *
+         * If a portion of path doesn't exist, it's created.
+         *
+         * |Name|Desc                   |
+         * |----|-----------------------|
+         * |obj |Object to modify       |
+         * |path|Path of property to set|
+         * |val |Value to set           |
+         */
+
+        /* example
+         * const obj = {};
+         * safeSet(obj, 'a.aa.aaa', 1); // obj = {a: {aa: {aaa: 1}}}
+         * safeSet(obj, ['a', 'aa'], 2); // obj = {a: {aa: 2}}
+         * safeSet(obj, 'a.b', 3); // obj = {a: {aa: 2, b: 3}}
+         */
+
+        /* typescript
+         * export declare function safeSet(
+         *     obj: any,
+         *     path: string | string[],
+         *     val: any
+         * ): void;
+         */
+
+        /* dependencies
+         * castPath isUndef 
+         */
+
+        exports = function(obj, path, val) {
+            path = castPath(path, obj);
+            var lastProp = path.pop();
+            var prop;
+            prop = path.shift();
+
+            while (!isUndef(prop)) {
+                if (
+                    prop === '__proto__' ||
+                    prop === 'constructor' ||
+                    prop === 'prototype'
+                ) {
+                    return;
+                }
+
+                if (!obj[prop]) obj[prop] = {};
+                obj = obj[prop];
+                prop = path.shift();
+            }
+
+            obj[lastProp] = val;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ startWith ------------------------------ */
+
+    var startWith = _.startWith = (function (exports) {
+        /* Check if string starts with the given target string.
+         *
+         * |Name  |Desc                             |
+         * |------|---------------------------------|
+         * |str   |String to search                 |
+         * |prefix|String prefix                    |
+         * |return|True if string starts with prefix|
+         */
+
+        /* example
+         * startWith('ab', 'a'); // -> true
+         */
+
+        /* typescript
+         * export declare function startWith(str: string, prefix: string): boolean;
+         */
+        exports = function(str, prefix) {
+            return str.indexOf(prefix) === 0;
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ type ------------------------------ */
 
     var type = _.type = (function (exports) {
@@ -3091,6 +3383,15 @@
          * |ignore            |Values to ignore         |
          *
          * When time is out, all remaining values will all be "Timeout".
+         *
+         * ### parse
+         *
+         * Parse result string back to object.
+         *
+         * |Name  |Type           |
+         * |------|---------------|
+         * |obj   |String to parse|
+         * |return|Result object  |
          */
 
         /* example
@@ -3098,6 +3399,9 @@
          */
 
         /* typescript
+         * export declare namespace stringifyAll {
+         *     function parse(str: string): any;
+         * }
          * export declare function stringifyAll(
          *     obj: any,
          *     options?: {
@@ -3112,7 +3416,7 @@
          */
 
         /* dependencies
-         * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain 
+         * escapeJsStr type toStr endWith toSrc keys each Class getProto difference extend isPromise filter now allKeys contain isObj isMiniProgram create startWith safeSet defineProp pick isArrLike 
          */
 
         exports = function(obj) {
@@ -3346,7 +3650,7 @@
 
         var Visitor = Class({
             initialize: function() {
-                this.id = 0;
+                this.id = 1;
                 this.visited = [];
             },
             set: function(val) {
@@ -3371,6 +3675,201 @@
                 return false;
             }
         });
+
+        exports.parse = function(str) {
+            var map = {};
+            var obj = parse(JSON.parse(str), {
+                map: map
+            });
+            correctReference(map);
+            return obj;
+        };
+
+        function correctReference(map) {
+            each(map, function(obj) {
+                var enumerableKeys = keys(obj);
+
+                for (var i = 0, len = enumerableKeys.length; i < len; i++) {
+                    var key = enumerableKeys[i];
+
+                    if (isObj(obj[key])) {
+                        var reference = obj[key].reference;
+
+                        if (reference && map[reference]) {
+                            obj[key] = map[reference];
+                        }
+                    }
+                }
+
+                var proto = getProto(obj);
+
+                if (proto && proto.reference) {
+                    if (map[proto.reference]) {
+                        Object.setPrototypeOf(obj, map[proto.reference]);
+                    }
+                }
+            });
+        }
+
+        function parse(obj, options) {
+            var map = options.map;
+
+            if (!isObj(obj)) {
+                return obj;
+            }
+
+            var id = obj.id,
+                type = obj.type,
+                value = obj.value,
+                proto = obj.proto,
+                reference = obj.reference;
+            var enumerable = obj.enumerable,
+                unenumerable = obj.unenumerable;
+
+            if (reference) {
+                return obj;
+            }
+
+            if (type === 'Number') {
+                if (value === 'Infinity') {
+                    return Number.POSITIVE_INFINITY;
+                } else if (value === '-Infinity') {
+                    return Number.NEGATIVE_INFINITY;
+                }
+
+                return NaN;
+            } else if (type === 'Undefined') {
+                return undefined;
+            }
+
+            var newObj;
+
+            if (type === 'Function') {
+                newObj = function() {};
+
+                newObj.toString = function() {
+                    return value;
+                };
+
+                if (proto) {
+                    Object.setPrototypeOf(newObj, parse(proto, options));
+                }
+            } else if (type === 'RegExp') {
+                newObj = strToRegExp(value);
+            } else {
+                if (type !== 'Object') {
+                    var Fn;
+
+                    if (!isMiniProgram) {
+                        Fn = new Function(type, '');
+                    } else {
+                        Fn = function() {};
+                    }
+
+                    if (proto) {
+                        Fn.prototype = parse(proto, options);
+                    }
+
+                    newObj = new Fn();
+                } else {
+                    if (proto) {
+                        newObj = create(parse(proto, options));
+                    } else {
+                        newObj = create(null);
+                    }
+                }
+            }
+
+            var defineProps = {};
+
+            if (enumerable) {
+                var len;
+
+                if (isArrLike(enumerable)) {
+                    len = enumerable.length;
+                    delete enumerable.length;
+                }
+
+                enumerable = pick(enumerable, function(value, key) {
+                    return !handleGetterSetter(enumerable, value, key);
+                });
+                each(enumerable, function(value, key) {
+                    var defineProp = defineProps[key] || {};
+
+                    if (!defineProp.get) {
+                        newObj[key] = parse(value, options);
+                    }
+                });
+
+                if (len) {
+                    newObj.length = len;
+                }
+            }
+
+            if (unenumerable) {
+                unenumerable = pick(unenumerable, function(value, key) {
+                    return !handleGetterSetter(unenumerable, value, key);
+                });
+                each(unenumerable, function(value, key) {
+                    var defineProp = defineProps[key] || {};
+
+                    if (!defineProp.get) {
+                        value = parse(value, options);
+
+                        if (isObj(value) && value.reference) {
+                            var _reference = value.reference;
+
+                            value = function() {
+                                return map[_reference];
+                            };
+
+                            defineProp.get = value;
+                        } else {
+                            defineProp.value = value;
+                        }
+                    }
+
+                    defineProp.enumerable = false;
+                    defineProps[key] = defineProp;
+                });
+            }
+
+            defineProp(newObj, defineProps);
+
+            function handleGetterSetter(obj, val, key) {
+                key = toStr(key);
+                var isGetterAndSetter = false;
+                each(['get', 'set'], function(type) {
+                    if (startWith(key, type + ' ')) {
+                        var realKey = key.replace(type + ' ', '');
+
+                        if (obj[realKey]) {
+                            val = parse(val, options);
+
+                            if (val === 'Timeout') {
+                                val = retTimeout;
+                            }
+
+                            safeSet(defineProps, [realKey, type], val);
+                            isGetterAndSetter = true;
+                        }
+                    }
+                });
+                return isGetterAndSetter;
+            }
+
+            map[id] = newObj;
+            return newObj;
+        }
+
+        function retTimeout() {
+            return 'Timeout';
+        }
+
+        function strToRegExp(str) {
+            var lastSlash = str.lastIndexOf('/');
+            return new RegExp(str.slice(1, lastSlash), str.slice(lastSlash + 1));
+        }
 
         return exports;
     })({});

@@ -269,7 +269,6 @@ export default class Console extends Tool {
   }
   _initCfg() {
     const container = this._container
-    const logger = this._logger
 
     const cfg = (this.config = Settings.createCfg(this.name, {
       asyncRender: true,
@@ -288,9 +287,10 @@ export default class Console extends Tool {
     if (cfg.get('catchGlobalErr')) this.catchGlobalErr()
 
     cfg.on('change', (key, val) => {
+      const logger = this._logger
       switch (key) {
         case 'asyncRender':
-          return logger.renderAsync(val)
+          return logger.setOption('renderAsync', val)
         case 'jsExecution':
           return this._enableJsExecution(val)
         case 'catchGlobalErr':
@@ -298,15 +298,15 @@ export default class Console extends Tool {
         case 'overrideConsole':
           return val ? this.overrideConsole() : this.restoreConsole()
         case 'maxLogNum':
-          return logger.maxNum(val === 'infinite' ? val : +val)
+          return logger.setOption('maxNum', val === 'infinite' ? val : +val)
         case 'displayExtraInfo':
-          return logger.displayHeader(val)
+          return logger.setOption('showHeader', val)
         case 'displayUnenumerable':
-          return logger.displayUnenumerable(val)
+          return logger.setOption('unenumerable', val)
         case 'displayGetterVal':
-          return logger.displayGetterVal(val)
+          return logger.setOption('accessGetter', val)
         case 'lazyEvaluation':
-          return logger.lazyEvaluation(val)
+          return logger.setOption('lazyEvaluation', val)
       }
     })
 

@@ -23,11 +23,35 @@
   .luna-console-special {
     color: var(--operator-color);
   }
+  .luna-console-keyword {
+    color: var(--keyword-color);
+  }
+  .luna-console-operator {
+    color: var(--operator-color);
+  }
+  .luna-console-comment {
+    color: var(--comment-color);
+  }
+}
+
+.luna-console-header {
+  color: var(--link-color);
+  border-bottom-color: var(--border);
+}
+
+.luna-console-nesting-level {
+  border-right-color: var(--border);
+  &::before {
+    border-bottom-color: var(--border);
+  }
 }
 
 .luna-console-log-item {
   border-bottom-color: var(--border);
   color: var(--foreground);
+  a {
+    color: var(--link-color) !important;
+  }
   .luna-console-icon-container {
     .luna-console-icon {
       color: var(--foreground);
@@ -39,6 +63,9 @@
       color: #e8a400;
     }
   }
+  .luna-console-count {
+    background: var(--text-color);
+  }
   &.luna-console-warn {
     color: var(--console-warn-foreground);
     background: var(--console-warn-background);
@@ -48,6 +75,9 @@
     background: var(--console-error-background);
     color: var(--console-error-foreground);
     border-color: var(--console-error-border);
+    .luna-console-count {
+      background: var(--console-error-foreground);
+    }
   }
   &.luna-console-table {
     table {

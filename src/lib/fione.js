@@ -345,80 +345,6 @@ export var optimizeCb = _.optimizeCb = (function (exports) {
     return exports;
 })({});
 
-/* ------------------------------ escapeJsStr ------------------------------ */
-
-export var escapeJsStr = _.escapeJsStr = (function (exports) {
-    /* Escape string to be a valid JavaScript string literal between quotes.
-     *
-     * http://www.ecma-international.org/ecma-262/5.1/#sec-7.8.4
-     *
-     * |Name  |Desc            |
-     * |------|----------------|
-     * |str   |String to escape|
-     * |return|Escaped string  |
-     */
-
-    /* example
-     * escapeJsStr('"\n'); // -> '\\"\\\\n'
-     */
-
-    /* typescript
-     * export declare function escapeJsStr(str: string): string;
-     */
-
-    /* dependencies
-     * toStr 
-     */
-
-    exports = function(str) {
-        return toStr(str).replace(regEscapeChars, function(char) {
-            switch (char) {
-                case '"':
-                case "'":
-                case '\\':
-                    return '\\' + char;
-
-                case '\n':
-                    return '\\n';
-
-                case '\r':
-                    return '\\r';
-                // Line separator
-
-                case '\u2028':
-                    return '\\u2028';
-                // Paragraph separator
-
-                case '\u2029':
-                    return '\\u2029';
-            }
-        });
-    };
-
-    var regEscapeChars = /["'\\\n\r\u2028\u2029]/g;
-
-    return exports;
-})({});
-
-/* ------------------------------ escapeJsonStr ------------------------------ */
-
-export var escapeJsonStr = _.escapeJsonStr = (function (exports) {
-    /* Escape json string.
-     */
-
-    /* dependencies
-     * escapeJsStr 
-     */
-
-    exports = function (str) {
-      return escapeJsStr(str)
-        .replace(/\\'/g, "'")
-        .replace(/\t/g, '\\t')
-    }
-
-    return exports;
-})({});
-
 /* ------------------------------ last ------------------------------ */
 
 export var last = _.last = (function (exports) {
@@ -441,51 +367,6 @@ export var last = _.last = (function (exports) {
         var len = arr ? arr.length : 0;
         if (len) return arr[len - 1];
     };
-
-    return exports;
-})({});
-
-/* ------------------------------ upperFirst ------------------------------ */
-
-export var upperFirst = _.upperFirst = (function (exports) {
-    /* Convert the first character of string to upper case.
-     *
-     * |Name  |Desc             |
-     * |------|-----------------|
-     * |str   |String to convert|
-     * |return|Converted string |
-     */
-
-    /* example
-     * upperFirst('red'); // -> Red
-     */
-
-    /* typescript
-     * export declare function upperFirst(str: string): string;
-     */
-    exports = function(str) {
-        if (str.length < 1) return str;
-        return str[0].toUpperCase() + str.slice(1);
-    };
-
-    return exports;
-})({});
-
-/* ------------------------------ getObjType ------------------------------ */
-
-export var getObjType = _.getObjType = (function (exports) {
-    /* Get object type.
-     */
-
-    /* dependencies
-     * upperFirst 
-     */
-
-    exports = function (obj) {
-      if (obj.constructor && obj.constructor.name) return obj.constructor.name
-
-      return upperFirst({}.toString.call(obj).replace(/(\[object )|]/g, ''))
-    }
 
     return exports;
 })({});
