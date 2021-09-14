@@ -18,8 +18,8 @@
 [npm-url]: https://npmjs.org/package/eruda
 [jsdelivr-image]: https://img.shields.io/jsdelivr/npm/hm/eruda?style=flat-square
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/eruda
-[travis-image]: https://img.shields.io/travis/liriliri/eruda?style=flat-square
-[travis-url]: https://travis-ci.org/liriliri/eruda
+[travis-image]: https://img.shields.io/travis/com/liriliri/eruda?style=flat-square
+[travis-url]: https://app.travis-ci.com/liriliri/eruda 
 [codecov-image]: https://img.shields.io/codecov/c/github/liriliri/eruda?style=flat-square
 [codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
 [license-image]: https://img.shields.io/npm/l/eruda?style=flat-square
