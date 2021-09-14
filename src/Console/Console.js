@@ -150,7 +150,7 @@ export default class Console extends Tool {
   _initLogger() {
     const cfg = this.config
     let maxLogNum = cfg.get('maxLogNum')
-    maxLogNum = maxLogNum === 'infinite' ? maxLogNum : +maxLogNum
+    maxLogNum = maxLogNum === 'infinite' ? 0 : +maxLogNum
 
     const $filter = this._$control.find('.eruda-filter')
     const logger = new LunaConsole(this._$logs.get(0), {
@@ -298,7 +298,7 @@ export default class Console extends Tool {
         case 'overrideConsole':
           return val ? this.overrideConsole() : this.restoreConsole()
         case 'maxLogNum':
-          return logger.setOption('maxNum', val === 'infinite' ? val : +val)
+          return logger.setOption('maxNum', val === 'infinite' ? 0 : +val)
         case 'displayExtraInfo':
           return logger.setOption('showHeader', val)
         case 'displayUnenumerable':
