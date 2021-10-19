@@ -4,8 +4,6 @@ import { getFileName } from '../lib/fione'
 import evalCss from '../lib/evalCss'
 import chobitsu from 'chobitsu'
 
-chobitsu.domain('Network').enable()
-
 export default class Network extends Tool {
   constructor() {
     super()
@@ -159,6 +157,8 @@ export default class Network extends Tool {
 
       container.showTool('sources')
     }
+
+    chobitsu.domain('Network').enable()
 
     const network = chobitsu.domain('Network')
     network.on('requestWillBeSent', this._reqWillBeSent)
