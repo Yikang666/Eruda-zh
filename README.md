@@ -1,21 +1,22 @@
 <a href="https://eruda.liriliri.io/" target="_blank">
-    <img src="./doc/banner.jpg">
+  <img src="https://eruda.liriliri.io/img/banner.jpg">
 </a>
 
-[中文](doc/README_CN.md)
+<h1 align="center">Eruda</h1>
 
-# Eruda
+<div align="center">
+
+Console for Mobile Browsers.
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![Downloads][jsdelivr-image]][jsdelivr-url]
 [![License][license-image]][npm-url]
-[![Join the chat at https://gitter.im/liriliri/eruda][gitter-image]][gitter-url]
 [![Donate][donate-image]][paypal-url]
 
-[gitter-image]: https://img.shields.io/gitter/room/liriliri/eruda?style=flat-square
-[gitter-url]: https://gitter.im/liriliri/eruda?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+</div>
+
 [npm-image]: https://img.shields.io/npm/v/eruda?style=flat-square
 [npm-url]: https://npmjs.org/package/eruda
 [jsdelivr-image]: https://img.shields.io/jsdelivr/npm/hm/eruda?style=flat-square
@@ -28,13 +29,13 @@
 [donate-image]: https://img.shields.io/badge/$-donate-0070ba.svg?style=flat-square
 [paypal-url]: https://www.paypal.com/paypalme/surunzi
 
-Console for Mobile Browsers.
+![Eruda](https://eruda.liriliri.io/img/screenshot.jpg)
 
-![Eruda](./doc/screenshot.jpg)
+[中文](doc/README_CN.md)
 
 ## Demo
 
-![Demo](./doc/qrcode.png)
+![Demo](https://eruda.liriliri.io/img/qrcode.png)
 
 Browse it on your phone: [https://eruda.liriliri.io/](https://eruda.liriliri.io/)
 
