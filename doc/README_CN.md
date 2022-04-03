@@ -1,5 +1,5 @@
 <a href="https://eruda.liriliri.io/" target="_blank">
-  <img src="https://eruda.liriliri.io/img/banner.jpg">
+  <img src="https://eruda.liriliri.io/img/banner.jpg" style="width:100%">
 </a>
 
 <h1 align="center">Eruda</h1>
@@ -29,7 +29,7 @@
 [donate-image]: https://img.shields.io/badge/$-donate-0070ba.svg?style=flat-square
 [paypal-url]: https://www.paypal.com/paypalme/surunzi
 
-![Eruda](https://eruda.liriliri.io/img/screenshot.jpg)
+<img src="https://eruda.liriliri.io/img/screenshot.jpg" style="width:100%">
 
 ## Demo
 
