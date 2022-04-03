@@ -9,7 +9,7 @@
 Console for Mobile Browsers.
 
 [![NPM version][npm-image]][npm-url]
-[![Build status][travis-image]][travis-url]
+[![Build status][ci-image]][ci-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![Downloads][jsdelivr-image]][jsdelivr-url]
 [![License][license-image]][npm-url]
@@ -21,8 +21,8 @@ Console for Mobile Browsers.
 [npm-url]: https://npmjs.org/package/eruda
 [jsdelivr-image]: https://img.shields.io/jsdelivr/npm/hm/eruda?style=flat-square
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/eruda
-[travis-image]: https://img.shields.io/travis/com/liriliri/eruda?style=flat-square 
-[travis-url]: https://app.travis-ci.com/liriliri/eruda
+[ci-image]: https://img.shields.io/github/workflow/status/liriliri/eruda/CI?style=flat-square
+[ci-url]: https://github.com/liriliri/eruda/actions/workflows/main.yml
 [codecov-image]: https://img.shields.io/codecov/c/github/liriliri/eruda?style=flat-square
 [codecov-url]: https://codecov.io/github/liriliri/eruda?branch=master
 [license-image]: https://img.shields.io/npm/l/eruda?style=flat-square
@@ -31,7 +31,7 @@ Console for Mobile Browsers.
 
 <img src="https://eruda.liriliri.io/img/screenshot.jpg" style="width:100%">
 
-[中文](doc/README_CN.md)
+[中文](README_CN.md)
 
 ## Demo
 
