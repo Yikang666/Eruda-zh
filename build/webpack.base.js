@@ -39,7 +39,7 @@ module.exports = {
     static: {
       directory: path.join(__dirname, '../test'),
     },
-    port: 3000,
+    port: 8080,
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
