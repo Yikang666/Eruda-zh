@@ -36,7 +36,9 @@ module.exports = {
     symlinks: false,
   },
   devServer: {
-    contentBase: './test',
+    static: {
+      directory: path.join(__dirname, '../test'),
+    },
     port: 3000,
   },
   output: {
@@ -66,16 +68,11 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: [
-          cssMinifierLoader,
-          'css-loader',
-          postcssLoader,
-          'sass-loader',
-        ],
+        use: [cssMinifierLoader, 'css-loader', postcssLoader, 'sass-loader'],
       },
       {
         test: /\.css$/,
-        loaders: [cssMinifierLoader, 'css-loader', postcssLoader],
+        use: [cssMinifierLoader, 'css-loader', postcssLoader],
       },
       // https://github.com/wycats/handlebars.js/issues/1134
       {
