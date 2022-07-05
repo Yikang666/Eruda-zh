@@ -7,11 +7,11 @@
   "browserslist": "> 0.25%, not dead",
   "scripts": {
     "ci": "npm run lint && npm run test && npm run build && npm run es5",
-    "build": "lsla shx rm -rf dist && webpack --config build/webpack.prod.js && node build/build && lsla shx cp README.md dist",
+    "build": "lsla shx rm -rf dist && webpack --config build/webpack.prod.js && node build/build && lsla shx cp README.md eruda.d.ts dist",
     "build:analyser": "webpack --config build/webpack.analyser.js",
     "dev": "webpack-dev-server --config build/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
-    "format": "lsla prettier *.js src/**/*.{js,scss,css} build/*.js test/*.{js,html} --write",
+    "format": "lsla prettier *.{js,ts} src/**/*.{js,scss,css} build/*.js test/*.{js,html} --write",
     "lint": "eslint src/**/*.js",
     "lint:fix": "npm run lint -- --fix",
     "es5": "es-check es5 dist/eruda.js",
