@@ -1,9 +1,8 @@
 {
   "name": "eruda",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "Console for Mobile Browsers",
   "main": "eruda.js",
-  "types": "eruda.d.ts",
   "browserslist": ["> 0.25%", "not dead"],
   "scripts": {
     "ci": "npm run lint && npm run test && npm run build && npm run es5",

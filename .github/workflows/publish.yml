@@ -19,7 +19,10 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
       - name: Build eruda
-        run: npm i && npm run build
+        run: |
+          npm i -g @liriliri/lsla
+          npm i
+          npm run build
       - name: Publish package on NPM
         working-directory: dist
         run: npm publish
