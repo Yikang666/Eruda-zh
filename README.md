@@ -130,7 +130,7 @@ If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.m
 
 ## Backers
 
-![Backers](https://opencollective.com/eruda/backers.svg?width=890)
+<a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img src="https://opencollective.com/eruda/backers.svg?width=890"></a>
 
 ## Contribution
 
