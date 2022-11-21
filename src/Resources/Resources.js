@@ -22,7 +22,7 @@ import {
 import { safeStorage } from '../lib/fione'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
-import chobitsu from 'chobitsu'
+import chobitsu from '../lib/chobitsu'
 
 export default class Resources extends Tool {
   constructor() {

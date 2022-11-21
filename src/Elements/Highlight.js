@@ -1,4 +1,4 @@
-import chobitsu from 'chobitsu'
+import chobitsu from '../lib/chobitsu'
 
 export default class Highlight {
   constructor() {

@@ -2,7 +2,7 @@ import Tool from '../DevTools/Tool'
 import { isEmpty, $, ms, trim, each, last } from '../lib/util'
 import { getFileName } from '../lib/fione'
 import evalCss from '../lib/evalCss'
-import chobitsu from 'chobitsu'
+import chobitsu from '../lib/chobitsu'
 
 export default class Network extends Tool {
   constructor() {

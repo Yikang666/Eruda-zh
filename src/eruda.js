@@ -26,7 +26,7 @@ import {
   nextTick
 } from './lib/util'
 import evalCss from './lib/evalCss'
-import chobitsu from 'chobitsu'
+import chobitsu from './lib/chobitsu'
 
 export default {
   init({ container, tool, autoScale = true, useShadowDom = true, defaults = {} } = {}) {

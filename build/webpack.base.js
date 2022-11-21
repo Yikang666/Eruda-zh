@@ -72,7 +72,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        exclude: /luna-dom-highlighter/,
         use: [cssMinifierLoader, 'css-loader', postcssLoader],
+      },
+      {
+        test: /luna-dom-highlighter\.css$/,
+        use: ['css-loader'],
       },
       // https://github.com/wycats/handlebars.js/issues/1134
       {
