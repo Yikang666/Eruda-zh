@@ -571,9 +571,10 @@
     _.evalCss = (function (exports) {
         /* Load css into page.
          *
-         * |Name|Desc    |
-         * |----|--------|
-         * |css |Css code|
+         * |Name  |Desc         |
+         * |------|-------------|
+         * |css   |Css code     |
+         * |return|Style element|
          */
 
         /* example
@@ -581,13 +582,14 @@
          */
 
         /* typescript
-         * export declare function evalCss(css: string): void;
+         * export declare function evalCss(css: string): HTMLStyleElement;
          */
         exports = function(css) {
             var style = document.createElement('style');
             style.textContent = css;
             style.type = 'text/css';
             document.head.appendChild(style);
+            return style;
         };
 
         return exports;
@@ -1546,6 +1548,31 @@
         return exports;
     })({});
 
+    /* ------------------------------ isSymbol ------------------------------ */
+
+    var isSymbol = _.isSymbol = (function (exports) {
+        /* Check if value is a symbol.
+         *
+         * |Name  |Desc                     |
+         * |------|-------------------------|
+         * |val   |Value to check           |
+         * |return|True if value is a symbol|
+         */
+
+        /* example
+         * isSymbol(Symbol('test')); // -> true
+         */
+
+        /* typescript
+         * export declare function isSymbol(val: any): boolean;
+         */
+        exports = function(val) {
+            return typeof val === 'symbol';
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ lowerCase ------------------------------ */
 
     var lowerCase = _.lowerCase = (function (exports) {
@@ -1600,7 +1627,14 @@
         var regSpace = /^\s+/;
 
         exports = function(str, chars) {
-            if (chars == null) return str.replace(regSpace, '');
+            if (chars == null) {
+                if (str.trimLeft) {
+                    return str.trimLeft();
+                }
+
+                return str.replace(regSpace, '');
+            }
+
             var start = 0;
             var len = str.length;
             var charLen = chars.length;
@@ -2826,10 +2860,15 @@
         /* typescript
          * export declare function rtrim(str: string, chars?: string | string[]): string;
          */
-        var regSpace = /\s+$/;
-
         exports = function(str, chars) {
-            if (chars == null) return str.replace(regSpace, '');
+            if (chars == null) {
+                if (str.trimRight) {
+                    return str.trimRight();
+                }
+
+                chars = ' \r\n\t\f\v';
+            }
+
             var end = str.length - 1;
             var charLen = chars.length;
             var found = true;
@@ -2882,10 +2921,11 @@
          * ltrim rtrim 
          */
 
-        var regSpace = /^\s+|\s+$/g;
-
         exports = function(str, chars) {
-            if (chars == null) return str.replace(regSpace, '');
+            if (chars == null && str.trim) {
+                return str.trim();
+            }
+
             return ltrim(rtrim(str, chars), chars);
         };
 
@@ -3112,7 +3152,7 @@
 
             if (type === 'GET') {
                 data = query.stringify(data);
-                url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
+                if (data) url += url.indexOf('?') > -1 ? '&' + data : '?' + data;
             } else if (options.contentType === 'application/x-www-form-urlencoded') {
                 if (isObj(data)) data = query.stringify(data);
             } else if (options.contentType === 'application/json') {
@@ -3207,7 +3247,7 @@
          */
 
         /* dependencies
-         * castPath isUndef 
+         * castPath isUndef toStr isSymbol isStr 
          */
 
         exports = function(obj, path, val) {
@@ -3217,6 +3257,11 @@
             prop = path.shift();
 
             while (!isUndef(prop)) {
+                // #25
+                if (!isStr(prop) && !isSymbol(prop)) {
+                    prop = toStr(prop);
+                }
+
                 if (
                     prop === '__proto__' ||
                     prop === 'constructor' ||
@@ -3869,6 +3914,47 @@
         function strToRegExp(str) {
             var lastSlash = str.lastIndexOf('/');
             return new RegExp(str.slice(1, lastSlash), str.slice(lastSlash + 1));
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ toEl ------------------------------ */
+    _.toEl = (function (exports) {
+        /* Convert html string to dom elements.
+         *
+         * There should be only one root element.
+         *
+         * |Name  |Desc        |
+         * |------|------------|
+         * |str   |Html string |
+         * |return|Html element|
+         */
+
+        /* example
+         * toEl('<div>test</div>');
+         */
+
+        /* typescript
+         * export declare function toEl(str: string): Element;
+         */
+        var doc = document;
+
+        exports = function(str) {
+            var fragment = doc.createElement('body');
+            fragment.innerHTML = str;
+            return fragment.childNodes[0];
+        };
+
+        if (doc.createRange && doc.body) {
+            var range = doc.createRange();
+            range.selectNode(doc.body);
+
+            if (range.createContextualFragment) {
+                exports = function(str) {
+                    return range.createContextualFragment(str).childNodes[0];
+                };
+            }
         }
 
         return exports;

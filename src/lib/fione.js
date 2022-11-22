@@ -1008,7 +1008,14 @@ export var ltrim = _.ltrim = (function (exports) {
     var regSpace = /^\s+/;
 
     exports = function(str, chars) {
-        if (chars == null) return str.replace(regSpace, '');
+        if (chars == null) {
+            if (str.trimLeft) {
+                return str.trimLeft();
+            }
+
+            return str.replace(regSpace, '');
+        }
+
         var start = 0;
         var len = str.length;
         var charLen = chars.length;
@@ -1765,10 +1772,15 @@ export var rtrim = _.rtrim = (function (exports) {
     /* typescript
      * export declare function rtrim(str: string, chars?: string | string[]): string;
      */
-    var regSpace = /\s+$/;
-
     exports = function(str, chars) {
-        if (chars == null) return str.replace(regSpace, '');
+        if (chars == null) {
+            if (str.trimRight) {
+                return str.trimRight();
+            }
+
+            chars = ' \r\n\t\f\v';
+        }
+
         var end = str.length - 1;
         var charLen = chars.length;
         var found = true;
@@ -1821,10 +1833,11 @@ export var trim = _.trim = (function (exports) {
      * ltrim rtrim 
      */
 
-    var regSpace = /^\s+|\s+$/g;
-
     exports = function(str, chars) {
-        if (chars == null) return str.replace(regSpace, '');
+        if (chars == null && str.trim) {
+            return str.trim();
+        }
+
         return ltrim(rtrim(str, chars), chars);
     };
 

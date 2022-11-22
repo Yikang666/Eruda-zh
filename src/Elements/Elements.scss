@@ -12,11 +12,13 @@
     @include overflow-auto(x);
     background: var(--darker-background);
     color: var(--primary);
-    padding: $padding;
+    padding: 0 $padding;
+    height: 40px;
+    line-height: 40px;
     white-space: nowrap;
     border-bottom: 1px solid var(--border);
     cursor: pointer;
-    font-size: $font-size-s;
+    font-size: $font-size;
     li {
       display: inline-block;
       .parent {
@@ -27,9 +29,9 @@
       }
     }
     .icon-arrow-right {
-      font-size: 8px;
+      font-size: $font-size-s;
       position: relative;
-      top: -1px;
+      top: 1px;
     }
   }
   .breadcrumb {

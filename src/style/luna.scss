@@ -46,6 +46,17 @@
   }
 }
 
+.luna-console-log-container {
+  &.luna-console-selected {
+    .luna-console-log-item {
+      background: var(--contrast);
+      &:not(.luna-console-error):not(.luna-console-warn) {
+        border-color: var(--border);
+      }
+    }
+  }
+}
+
 .luna-console-log-item {
   border-bottom-color: var(--border);
   color: var(--foreground);
@@ -64,7 +75,8 @@
     }
   }
   .luna-console-count {
-    background: var(--text-color);
+    color: var(--select-foreground);
+    background: var(--highlight);
   }
   &.luna-console-warn {
     color: var(--console-warn-foreground);
@@ -79,36 +91,18 @@
       background: var(--console-error-foreground);
     }
   }
-  &.luna-console-table {
-    table {
-      color: var(--foreground);
-      th {
-        background: var(--darker-background);
-      }
-      th,
-      td {
-        border-color: var(--border);
-      }
-      tr:nth-child(even) {
-        background: var(--contrast);
-      }
-    }
-  }
   .luna-console-code {
     @include luna-console-highlight();
   }
 }
 
-.luna-console-abstract {
+.luna-console-preview {
   @include luna-console-highlight();
 }
 
 .luna-object-viewer {
   color: var(--primary);
   font-size: 12px !important;
-  & > li {
-    padding: $padding 0 !important;
-  }
 }
 .luna-object-viewer-null {
   color: var(--operator-color);
@@ -160,4 +154,81 @@
 
 .luna-notification-lower {
   margin-top: 10px;
+}
+
+.luna-data-grid {
+  color: var(--foreground);
+  background: var(--background);
+  border-color: var(--border);
+  th,
+  td {
+    border-color: var(--border);
+  }
+  th {
+    background: var(--darker-background);
+    &.luna-data-grid-sortable {
+      &:hover {
+        background: var(--darker-background);
+      }
+    }
+  }
+  .luna-data-grid-data-container {
+    tr:nth-child(even) {
+      background: var(--contrast);
+    }
+  }
+}
+
+.luna-dom-viewer {
+  color: var(--foreground);
+  .luna-dom-viewer-html-tag,
+  .luna-dom-viewer-tag-name {
+    color: var(--tag-name-color);
+  }
+  .luna-dom-viewer-attribute-name {
+    color: var(--attribute-name-color);
+  }
+  .luna-dom-viewer-attribute-value {
+    color: var(--string-color);
+  }
+  .luna-dom-viewer-html-comment {
+    color: var(--comment-color);
+  }
+  .luna-dom-viewer-selection {
+    background: var(--highlight);
+  }
+  .luna-dom-viewer-text-node {
+    .luna-dom-viewer-key {
+      color: var(--var-color);
+    }
+    .luna-dom-viewer-number {
+      color: var(--number-color);
+    }
+    .luna-dom-viewer-null {
+      color: var(--operator-color);
+    }
+    .luna-dom-viewer-string {
+      color: var(--string-color);
+    }
+    .luna-dom-viewer-boolean {
+      color: var(--keyword-color);
+    }
+    .luna-dom-viewer-special {
+      color: var(--operator-color);
+    }
+    .luna-dom-viewer-keyword {
+      color: var(--keyword-color);
+    }
+    .luna-dom-viewer-operator {
+      color: var(--operator-color);
+    }
+    .luna-dom-viewer-comment {
+      color: var(--comment-color);
+    }
+  }
+}
+
+.luna-dom-viewer-children {
+  margin: 0;
+  padding-left: 15px !important;
 }

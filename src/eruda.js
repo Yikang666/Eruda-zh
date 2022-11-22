@@ -166,7 +166,7 @@ export default {
         // font-face doesn't work inside shadow dom.
         evalCss.container = document.head
         evalCss(require('./style/icon.css') +
-        require('luna-console/luna-console.css') + require('luna-object-viewer/luna-object-viewer.css'))
+        require('luna-console/luna-console.css') + require('luna-object-viewer/luna-object-viewer.css') + require('luna-dom-viewer/luna-dom-viewer.css'))
 
         el = document.createElement('div')
         shadowRoot.appendChild(el)
@@ -203,12 +203,14 @@ export default {
     }
 
     evalCss(
+      require('./style/reset.scss') +
       require('luna-object-viewer/luna-object-viewer.css') +
       require('luna-console/luna-console.css') +
       require('luna-notification/luna-notification.css') + 
+      require('luna-data-grid/luna-data-grid.css') +
+      require('luna-dom-viewer/luna-dom-viewer.css') +
       require('./style/style.scss') +
-        require('./style/reset.scss') +
-        require('./style/icon.css')
+      require('./style/icon.css')
     )
   },
   _initEntryBtn() {
