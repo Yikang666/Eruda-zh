@@ -1,3 +1,9 @@
+## 2.6.0 (25 Nov 2022)
+
+* feat(console): select and copy
+* chore: update luna console
+* chore: update chobitsu
+
 ## 2.5.0 (9 Jul 2022)
 
 * feat: add ts declaration [#187](https://github.com/liriliri/eruda/pull/187)
