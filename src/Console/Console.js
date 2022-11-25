@@ -26,6 +26,7 @@ export default class Console extends Tool {
 
     this.name = name
     this._scale = 1
+    this._selectedLog = null
 
     this._registerListener()
   }
@@ -218,6 +219,12 @@ export default class Console extends Tool {
         }
         logger.setOption('filter', new RegExp(escapeRegExp(lowerCase(filter))))
       })
+      .on('click', '.eruda-copy', () => {
+        if (this._selectedLog) {
+          this._selectedLog.copy()
+          container.notify('Copied')
+        }
+      })
 
     $inputBtns
       .on('click', '.eruda-cancel', () => this._hideInput())
@@ -236,6 +243,16 @@ export default class Console extends Tool {
       const autoShow = log.type === 'error' && config.get('displayIfErr')
 
       if (autoShow) container.showTool('console').show()
+    })
+
+    logger.on('select', (log) => {
+      this._selectedLog = log
+      $control.find('.eruda-icon-copy').rmClass('eruda-icon-disabled')
+    })
+
+    logger.on('deselect', () => {
+      this._selectedLog = null
+      $control.find('.eruda-icon-copy').addClass('eruda-icon-disabled')
     })
 
     container.on('show', this._handleShow)

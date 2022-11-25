@@ -22,12 +22,13 @@
     line-height: 20px;
     border-bottom: 1px solid var(--border);
     .icon-clear,
-    .icon-search {
+    .icon-search,
+    .icon-copy {
       display: inline-block;
       padding: 10px;
       font-size: $font-size-l;
       position: absolute;
-      top: 1px;
+      top: 0;
       cursor: pointer;
       transition: color $anim-duration;
       &:active {
@@ -38,8 +39,11 @@
       padding-right: 0px;
       left: 0;
     }
-    .icon-search {
+    .icon-copy {
       right: 0;
+    }
+    .icon-search {
+      right: 23px;
     }
     .filter {
       cursor: pointer;
@@ -49,18 +53,19 @@
       margin: 0 2px;
       padding: 0 4px;
       line-height: 20px;
-      transition: background $anim-duration, color $anim-duration;
+      transition: background-color $anim-duration, color $anim-duration;
       &.active {
         background: var(--highlight);
         color: var(--select-foreground);
       }
     }
     .search-keyword {
+      white-space: nowrap;
       position: absolute;
       line-height: 20px;
       max-width: 80px;
       overflow: hidden;
-      right: 40px;
+      right: 63px;
       font-size: $font-size;
       text-overflow: ellipsis;
     }

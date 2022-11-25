@@ -38,6 +38,10 @@
   display: none;
 }
 
+.icon-disabled {
+  opacity: 0.5;
+}
+
 .tag-name-color {
   color: var(--tag-name-color);
 }
