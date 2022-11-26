@@ -252,7 +252,7 @@ function loadPlugin(name) {
 const pluginVersion = {
   fps: '2.0.0',
   features: '2.0.0',
-  timing: '2.0.0',
+  timing: '2.0.1',
   memory: '2.0.0',
   code: '2.0.0',
   benchmark: '2.0.0',
