@@ -19,7 +19,6 @@
     "es5": "es-check es5 dist/eruda.js",
     "setup": "lsla shx mkdir -p test/lib && lsla shx cp node_modules/jasmine-core/lib/jasmine-core/{jasmine.css,jasmine.js,jasmine-html.js,boot.js} test/lib && lsla shx cp node_modules/jasmine-jquery/lib/jasmine-jquery.js test/lib && lsla shx cp node_modules/jquery/dist/jquery.js test/lib",
     "genIcon": "lsla genIcon --input src/style/icon --output src/style/icon.css --name eruda-icon && prettier src/**/*.css --write",
-    "genUtilDoc": "eustia doc src/lib/util.js -f md -o doc/UTIL_API.md -t \"Eruda Util Documentation\""
   },
   "repository": {
     "type": "git",

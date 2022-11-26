@@ -303,9 +303,11 @@ Add color to select a color.
 Add a separator.
 
 ```javascript
-let cfg = eruda.util.createCfg('test');
+import defaults from 'licia/defaults';
 
-cfg.set(eruda.util.defaults(cfg.get(), {
+let cfg = eruda.Settings.createCfg('test');
+
+cfg.set(defaults(cfg.get(), {
     testBool: true,
     testSelect: 'select1',
     testRange: 1

@@ -400,8 +400,8 @@ declare module 'eruda' {
    * @see https://github.com/liriliri/eruda/blob/master/doc/UTIL_API.md
    */
   export interface Util {
-    createCfg(name: string): object
-    defaults(obj: object, ...src: object[]): object
+    evalCss(css: string): HTMLStyleElement
+    isErudaEl(val: any): boolean
   }
 
   /**
