@@ -3,6 +3,9 @@
 @import 'luna';
 
 .container {
+  &.dark {
+    color-scheme: dark;
+  }
   pointer-events: none;
   position: fixed;
   left: 0;

@@ -16,6 +16,7 @@ import {
   extend,
 } from '../lib/util'
 import evalCss from '../lib/evalCss'
+import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 
 export default class DevTools extends Emitter {
@@ -156,7 +157,7 @@ export default class DevTools extends Emitter {
 
     this._setTransparency(cfg.get('transparency'))
     this._setDisplaySize(cfg.get('displaySize'))
-    evalCss.setTheme(cfg.get('theme'))
+    this._setTheme(cfg.get('theme'))
 
     cfg.on('change', (key, val) => {
       switch (key) {
@@ -165,7 +166,7 @@ export default class DevTools extends Emitter {
         case 'displaySize':
           return this._setDisplaySize(val)
         case 'theme':
-          return evalCss.setTheme(val)
+          return this._setTheme(val)
       }
     })
 
@@ -192,6 +193,16 @@ export default class DevTools extends Emitter {
     this.removeAll()
     this._navBar.destroy()
     this._$el.remove()
+  }
+  _setTheme(theme) {
+    const { $container } = this
+
+    if (isDarkTheme(theme)) {
+      $container.addClass('eruda-dark')
+    } else {
+      $container.rmClass('eruda-dark')
+    }
+    evalCss.setTheme(theme)
   }
   _setTransparency(opacity) {
     if (!isNum(opacity)) return

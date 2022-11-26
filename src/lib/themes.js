@@ -1,4 +1,5 @@
 import { extend, isArr } from './util'
+import contain from 'licia/contain'
 
 const keyMap = [
   'background',
@@ -68,6 +69,24 @@ function createLightTheme(theme) {
     },
     theme
   )
+}
+
+const darkThemes = [
+  'Dark',
+  'Material Oceanic',
+  'Material Darker',
+  'Material Palenight',
+  'Material Deep Ocean',
+  'Monokai Pro',
+  'Dracula',
+  'Arc Dark',
+  'Atom One Dark',
+  'Solarized Dark',
+  'Night Owl',
+]
+
+export function isDarkTheme(theme) {
+  return contain(darkThemes, theme)
 }
 
 export default {

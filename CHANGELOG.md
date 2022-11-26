@@ -1,3 +1,8 @@
+## 2.6.1 (26 Nov 2022)
+
+* fix: dark mode scrollbar style
+* fix: unable to load timing plugin
+
 ## 2.6.0 (25 Nov 2022)
 
 * feat(console): select and copy
