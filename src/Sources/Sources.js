@@ -1,5 +1,4 @@
 import Tool from '../DevTools/Tool'
-import beautify from 'js-beautify'
 import LunaObjectViewer from 'luna-object-viewer'
 import Settings from '../Settings/Settings'
 import { ajax, escape, trim, isStr, highlight } from '../lib/util'
@@ -13,8 +12,6 @@ export default class Sources extends Tool {
 
     this.name = 'sources'
     this._showLineNum = true
-    this._formatCode = true
-    this._indentSize = 4
 
     this._loadTpl()
   }
@@ -121,33 +118,19 @@ export default class Sources extends Tool {
 
     if (!settings) return
 
-    settings
-      .remove(cfg, 'showLineNum')
-      .remove(cfg, 'formatCode')
-      .remove(cfg, 'indentSize')
-      .remove('Sources')
+    settings.remove(cfg, 'showLineNum').remove('Sources')
   }
   _initCfg() {
     const cfg = (this.config = Settings.createCfg('sources', {
       showLineNum: true,
-      formatCode: true,
-      indentSize: 4,
     }))
 
     if (!cfg.get('showLineNum')) this._showLineNum = false
-    if (!cfg.get('formatCode')) this._formatCode = false
-    this._indentSize = cfg.get('indentSize')
 
     cfg.on('change', (key, val) => {
       switch (key) {
         case 'showLineNum':
           this._showLineNum = val
-          return
-        case 'formatCode':
-          this._formatCode = val
-          return
-        case 'indentSize':
-          this._indentSize = +val
           return
       }
     })
@@ -156,8 +139,6 @@ export default class Sources extends Tool {
     settings
       .text('Sources')
       .switch(cfg, 'showLineNum', 'Show Line Numbers')
-      .switch(cfg, 'formatCode', 'Beautify Code')
-      .select(cfg, 'indentSize', 'Indent Size', ['2', '4'])
       .separator()
   }
   _render() {
@@ -185,25 +166,12 @@ export default class Sources extends Tool {
   }
   _renderCode() {
     const data = this._data
-    const indent_size = this._indentSize
 
     let code = data.val
     const len = data.val.length
 
     // If source code too big, don't process it.
-    if (len < MAX_BEAUTIFY_LEN && this._formatCode) {
-      switch (data.type) {
-        case 'html':
-          code = beautify.html(code, { unformatted: [], indent_size })
-          break
-        case 'css':
-          code = beautify.css(code, { indent_size })
-          break
-        case 'js':
-          code = beautify(code, { indent_size })
-          break
-      }
-
+    if (len < MAX_BEAUTIFY_LEN) {
       const curTheme = evalCss.getCurTheme()
       code = highlight(code, data.type, {
         keyword: `color:${curTheme.keywordColor}`,

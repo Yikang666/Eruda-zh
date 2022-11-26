@@ -62,8 +62,8 @@
         )
       }
       addClickEvent('issue17', function () {
-        let B = function () {}
-        let A = function () {
+        var B = function () {}
+        var A = function () {
           this._data = 'eruda'
         }
         A.prototype = Object.create(B.prototype)
@@ -72,7 +72,7 @@
             return this._data
           },
         })
-        let a = new A()
+        var a = new A()
         console.log(a)
       })
       addClickEvent('plugin', function () {
@@ -86,7 +86,7 @@
             },
           }
         })
-        let Tool = eruda.Tool
+        var Tool = eruda.Tool
         eruda.add(
           new (Tool.extend({
             name: 'test3',
@@ -101,7 +101,7 @@
         new Promise(function (resolve, reject) {
           resolve()
         }).then(function (res) {
-          let a = res.a
+          var a = res.a
         })
       })
       addClickEvent('issue31', function () {
@@ -114,8 +114,8 @@
         triggerError()
       })
       addClickEvent('big-array', function () {
-        let arr = []
-        for (let i = 0; i < 10000; i++) {
+        var arr = []
+        for (var i = 0; i < 10000; i++) {
           arr.push(i)
         }
         console.log(arr)
@@ -123,10 +123,10 @@
       addClickEvent('override-style', function () {
         util.evalCss('.eruda-nav-bar {background: red !important;}')
       })
-      addClickEvent('log', () => {
+      addClickEvent('log', function () {
         console.clear()
         console.log('log')
-        for (let i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
           console.log('repeat log')
         }
         console.warn('warn')
@@ -142,7 +142,7 @@
         var site2 = { name: 'Google', site: 'www.google.com' }
         var site3 = { name: 'Taobao', site: 'www.taobao.com' }
         console.table([site1, site2, site3], ['site'])
-        const el = util.toEl(
+        var el = util.toEl(
           '<div class="test"><div class="test-inner"></div></div>'
         )
         console.log('test dom', el)
@@ -168,13 +168,13 @@
         for (var i = 0; i < 10000; i++) arr.push(i)
         console.log(arr)
       })
-      addClickEvent('log-10000', () => {
-        for (let i = 0; i < 10000; i++) {
+      addClickEvent('log-10000', function () {
+        for (var i = 0; i < 10000; i++) {
           console.log(location, i)
         }
       })
-      addClickEvent('log-1000', () => {
-        for (let i = 0; i < 1000; i++) {
+      addClickEvent('log-1000', function () {
+        for (var i = 0; i < 1000; i++) {
           console.log(location, i)
         }
       })

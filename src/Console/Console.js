@@ -11,6 +11,7 @@ import {
   lowerCase,
   isNull,
 } from '../lib/util'
+import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
@@ -139,7 +140,7 @@ export default class Console extends Tool {
     const _$input = _$inputContainer.find('textarea')
     const _$inputBtns = _$inputContainer.find('.eruda-buttons')
 
-    Object.assign(this, {
+    extend(this, {
       _$control: $el.find('.eruda-control'),
       _$logs: $el.find('.eruda-logs-container'),
       _$inputContainer,

@@ -41,6 +41,11 @@ module.exports = {
   resolve: {
     symlinks: false,
   },
+  resolve: {
+    alias: {
+      axios: path.resolve(__dirname, '../src/lib/empty.js'),
+    },
+  },
   devServer: {
     static: {
       directory: path.join(__dirname, '../test'),

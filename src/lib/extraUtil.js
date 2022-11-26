@@ -1,9 +1,8 @@
-import beautify from 'js-beautify'
 import evalCss from './evalCss'
+import extend from 'licia/extend'
 
 export default function (util) {
-  Object.assign(util, {
-    beautify,
+  extend(util, {
     evalCss,
     isErudaEl,
   })

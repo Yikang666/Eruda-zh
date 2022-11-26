@@ -25,6 +25,7 @@ import {
   upperFirst,
   nextTick
 } from './lib/util'
+import extend from 'licia/extend'
 import evalCss from './lib/evalCss'
 import chobitsu from './lib/chobitsu'
 
@@ -174,7 +175,7 @@ export default {
       }
     }
 
-    Object.assign(el, {
+    extend(el, {
       id: 'eruda',
       className: 'eruda-container',
       contentEditable: false
