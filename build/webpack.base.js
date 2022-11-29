@@ -36,6 +36,13 @@ const cssMinifierLoader = {
   options: {},
 }
 
+const rawLoader = {
+  loader: 'raw-loader',
+  options: {
+    esModule: false,
+  },
+}
+
 module.exports = {
   entry: './src/index',
   resolve: {
@@ -88,7 +95,7 @@ module.exports = {
       },
       {
         test: /luna-dom-highlighter\.css$/,
-        use: ['css-loader'],
+        use: [rawLoader],
       },
       // https://github.com/wycats/handlebars.js/issues/1134
       {
