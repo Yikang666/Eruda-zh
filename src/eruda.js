@@ -1,3 +1,4 @@
+import 'core-js/modules/es.map'
 import EntryBtn from './EntryBtn/EntryBtn'
 import DevTools from './DevTools/DevTools'
 import Tool from './DevTools/Tool'
