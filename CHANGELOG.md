@@ -1,3 +1,9 @@
+## 2.6.2 (3 Dec 2022)
+
+* feat: support android 5.0
+* feat(sources): remove code beautify
+* fix: code plugin theme
+
 ## 2.6.1 (26 Nov 2022)
 
 * fix: dark mode scrollbar style
