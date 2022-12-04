@@ -3,32 +3,30 @@ import CssStore from './CssStore'
 import Highlight from './Highlight'
 import Select from './Select'
 import Settings from '../Settings/Settings'
-import {
-  $,
-  keys,
-  MutationObserver,
-  each,
-  toStr,
-  isEl,
-  isStr,
-  map,
-  escape,
-  startWith,
-  isFn,
-  isBool,
-  safeGet,
-  isNaN,
-  isNum,
-  nextTick,
-  Emitter,
-  contain,
-  unique,
-  isNull,
-  trim,
-  lowerCase,
-  pick,
-} from '../lib/util'
-import { pxToNum } from '../lib/fione'
+import $ from 'licia/$'
+import keys from 'licia/keys'
+import MutationObserver from 'licia/MutationObserver'
+import each from 'licia/each'
+import toStr from 'licia/toStr'
+import isEl from 'licia/isEl'
+import isStr from 'licia/isStr'
+import map from 'licia/map'
+import escape from 'licia/escape'
+import startWith from 'licia/startWith'
+import isFn from 'licia/isFn'
+import isBool from 'licia/isBool'
+import safeGet from 'licia/safeGet'
+import isNaN from 'licia/isNaN'
+import isNum from 'licia/isNum'
+import nextTick from 'licia/nextTick'
+import Emitter from 'licia/Emitter'
+import contain from 'licia/contain'
+import unique from 'licia/unique'
+import isNull from 'licia/isNull'
+import trim from 'licia/trim'
+import lowerCase from 'licia/lowerCase'
+import pick from 'licia/pick'
+import { pxToNum } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 

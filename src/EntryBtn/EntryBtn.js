@@ -1,8 +1,10 @@
 import Draggabilly from 'draggabilly'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
-import { Emitter, nextTick, orientation } from '../lib/util'
-import { pxToNum } from '../lib/fione'
+import Emitter from 'licia/Emitter'
+import nextTick from 'licia/nextTick'
+import orientation from 'licia/orientation'
+import { pxToNum } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 export default class EntryBtn extends Emitter {

@@ -1,17 +1,15 @@
 import logger from '../lib/logger'
 import emitter from '../lib/emitter'
-import {
-  Url,
-  now,
-  each,
-  isStr,
-  startWith,
-  $,
-  upperFirst,
-  loadJs,
-  trim,
-} from '../lib/util'
-import { safeStorage } from '../lib/fione'
+import Url from 'licia/Url'
+import now from 'licia/now'
+import each from 'licia/each'
+import isStr from 'licia/isStr'
+import startWith from 'licia/startWith'
+import $ from 'licia/$'
+import upperFirst from 'licia/upperFirst'
+import loadJs from 'licia/loadJs'
+import trim from 'licia/trim'
+import { safeStorage } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 

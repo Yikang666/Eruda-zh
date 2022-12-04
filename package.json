@@ -13,7 +13,7 @@
     "build:analyser": "webpack --config build/webpack.analyser.js",
     "dev": "webpack-dev-server --config build/webpack.dev.js --host 0.0.0.0",
     "test": "karma start",
-    "format": "lsla prettier *.{js,ts} src/**/*.{js,scss,css} build/*.js test/*.{js,html} --write",
+    "format": "lsla prettier \"*.{js,ts}\" \"src/**/*.{js,scss,css}\" \"build/*.js\" \"test/*.{js,html}\" --write",
     "lint": "eslint src/**/*.js",
     "lint:fix": "npm run lint -- --fix",
     "es5": "es-check es5 dist/eruda.js",

@@ -1,25 +1,23 @@
 import Tool from '../DevTools/Tool'
 import Settings from '../Settings/Settings'
-import {
-  $,
-  unique,
-  each,
-  isStr,
-  startWith,
-  trim,
-  orientation,
-  sameOrigin,
-  ajax,
-  MutationObserver,
-  toArr,
-  concat,
-  isNull,
-  lowerCase,
-  contain,
-  filter,
-  map,
-} from '../lib/util'
-import { safeStorage } from '../lib/fione'
+import $ from 'licia/$'
+import unique from 'licia/unique'
+import each from 'licia/each'
+import isStr from 'licia/isStr'
+import startWith from 'licia/startWith'
+import trim from 'licia/trim'
+import orientation from 'licia/orientation'
+import sameOrigin from 'licia/sameOrigin'
+import ajax from 'licia/ajax'
+import MutationObserver from 'licia/MutationObserver'
+import toArr from 'licia/toArr'
+import concat from 'licia/concat'
+import isNull from 'licia/isNull'
+import lowerCase from 'licia/lowerCase'
+import contain from 'licia/contain'
+import filter from 'licia/filter'
+import map from 'licia/map'
+import { safeStorage } from '../lib/util'
 import { isErudaEl } from '../lib/extraUtil'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'

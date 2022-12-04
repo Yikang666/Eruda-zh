@@ -1,6 +1,11 @@
 import Tool from '../DevTools/Tool'
-import { isEmpty, $, ms, trim, each, last } from '../lib/util'
-import { getFileName } from '../lib/fione'
+import isEmpty from 'licia/isEmpty'
+import $ from 'licia/$'
+import ms from 'licia/ms'
+import trim from 'licia/trim'
+import each from 'licia/each'
+import last from 'licia/last'
+import { getFileName } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 

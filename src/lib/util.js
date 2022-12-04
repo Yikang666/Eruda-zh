@@ -152,6 +152,57 @@ import viewportScale from 'licia/viewportScale'
 import wrap from 'licia/wrap'
 import xpath from 'licia/xpath'
 
+export function escapeJsonStr(str) {
+  /* eslint-disable quotes */
+  return escapeJsStr(str).replace(/\\'/g, "'").replace(/\t/g, '\\t')
+}
+
+export function safeStorage(type, memReplacement) {
+  if (isUndef(memReplacement)) memReplacement = true
+
+  let ret
+
+  switch (type) {
+    case 'local':
+      ret = window.localStorage
+      break
+    case 'session':
+      ret = window.sessionStorage
+      break
+  }
+
+  try {
+    // Safari private browsing
+    const x = 'test-localStorage-' + Date.now()
+    ret.setItem(x, x)
+    const y = ret.getItem(x)
+    ret.removeItem(x)
+    if (y !== x) throw new Error()
+  } catch (e) {
+    if (memReplacement) return memStorage
+    return
+  }
+
+  return ret
+}
+
+export function getFileName(url) {
+  let ret = last(url.split('/'))
+
+  if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
+
+  if (ret === '') {
+    url = new Url(url)
+    ret = url.hostname
+  }
+
+  return ret
+}
+
+export function pxToNum(str) {
+  return toNum(str.replace('px', ''))
+}
+
 export {
   $,
   $attr,
