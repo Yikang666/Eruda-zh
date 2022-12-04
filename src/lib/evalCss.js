@@ -1,13 +1,11 @@
-import {
-  toStr,
-  each,
-  filter,
-  isStr,
-  keys,
-  kebabCase,
-  defaults,
-  escapeRegExp,
-} from './util'
+import toStr from 'licia/toStr'
+import each from 'licia/each'
+import filter from 'licia/filter'
+import isStr from 'licia/isStr'
+import keys from 'licia/keys'
+import kebabCase from 'licia/kebabCase'
+import defaults from 'licia/defaults'
+import escapeRegExp from 'licia/escapeRegExp'
 import themes from './themes'
 import cssMap from './cssMap'
 

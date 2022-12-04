@@ -1,4 +1,4 @@
-import { Emitter } from './util'
+import Emitter from 'licia/Emitter'
 
 const emitter = new Emitter()
 emitter.ADD = 'ADD'

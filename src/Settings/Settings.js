@@ -1,5 +1,11 @@
 import Tool from '../DevTools/Tool'
-import { $, LocalStore, uniqId, each, filter, isStr, clone } from '../lib/util'
+import $ from 'licia/$'
+import LocalStore from 'licia/LocalStore'
+import uniqId from 'licia/uniqId'
+import each from 'licia/each'
+import filter from 'licia/filter'
+import isStr from 'licia/isStr'
+import clone from 'licia/clone'
 import evalCss from '../lib/evalCss'
 
 export default class Settings extends Tool {

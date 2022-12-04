@@ -26,8 +26,7 @@ import isNull from 'licia/isNull'
 import trim from 'licia/trim'
 import lowerCase from 'licia/lowerCase'
 import pick from 'licia/pick'
-import { pxToNum } from '../lib/util'
-import { isErudaEl } from '../lib/extraUtil'
+import { pxToNum, isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 export default class Elements extends Tool {

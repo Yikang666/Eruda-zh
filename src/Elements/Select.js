@@ -1,5 +1,6 @@
-import { Emitter, isMobile } from '../lib/util'
-import { isErudaEl } from '../lib/extraUtil'
+import Emitter from 'licia/Emitter'
+import isMobile from 'licia/isMobile'
+import { isErudaEl } from '../lib/util'
 
 export default class Select extends Emitter {
   constructor() {

@@ -1,16 +1,14 @@
 import Tool from '../DevTools/Tool'
-import {
-  noop,
-  $,
-  Emitter,
-  uncaught,
-  escapeRegExp,
-  trim,
-  upperFirst,
-  isHidden,
-  lowerCase,
-  isNull,
-} from '../lib/util'
+import noop from 'licia/noop'
+import $ from 'licia/$'
+import Emitter from 'licia/Emitter'
+import uncaught from 'licia/uncaught'
+import escapeRegExp from 'licia/escapeRegExp'
+import trim from 'licia/trim'
+import upperFirst from 'licia/upperFirst'
+import isHidden from 'licia/isHidden'
+import lowerCase from 'licia/lowerCase'
+import isNull from 'licia/isNull'
 import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'

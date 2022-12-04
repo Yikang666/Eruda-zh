@@ -2,19 +2,17 @@ import NavBar from './NavBar'
 import logger from '../lib/logger'
 import Tool from './Tool'
 import Settings from '../Settings/Settings'
-import {
-  Emitter,
-  isMobile,
-  defaults,
-  keys,
-  last,
-  each,
-  isNum,
-  $,
-  throttle,
-  isDarkMode,
-  extend,
-} from '../lib/util'
+import Emitter from 'licia/Emitter'
+import isMobile from 'licia/isMobile'
+import defaults from 'licia/defaults'
+import keys from 'licia/keys'
+import last from 'licia/last'
+import each from 'licia/each'
+import isNum from 'licia/isNum'
+import $ from 'licia/$'
+import throttle from 'licia/throttle'
+import isDarkMode from 'licia/isDarkMode'
+import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'

@@ -1,6 +1,9 @@
 import Tool from '../DevTools/Tool'
 import defInfo from './defInfo'
-import { each, isFn, isUndef, cloneDeep } from '../lib/util'
+import each from 'licia/each'
+import isFn from 'licia/isFn'
+import isUndef from 'licia/isUndef'
+import cloneDeep from 'licia/cloneDeep'
 import evalCss from '../lib/evalCss'
 
 export default class Info extends Tool {

@@ -1,4 +1,6 @@
-import { detectBrowser, detectOs, escape } from '../lib/util'
+import detectBrowser from 'licia/detectBrowser'
+import detectOs from 'licia/detectOs'
+import escape from 'licia/escape'
 
 const browser = detectBrowser()
 

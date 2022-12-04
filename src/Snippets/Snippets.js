@@ -1,6 +1,7 @@
 import Tool from '../DevTools/Tool'
 import defSnippets from './defSnippets'
-import { $, each } from '../lib/util'
+import $ from 'licia/$'
+import each from 'licia/each'
 import evalCss from '../lib/evalCss'
 
 export default class Snippets extends Tool {

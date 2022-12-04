@@ -9,8 +9,7 @@ import $ from 'licia/$'
 import upperFirst from 'licia/upperFirst'
 import loadJs from 'licia/loadJs'
 import trim from 'licia/trim'
-import { safeStorage } from '../lib/util'
-import { isErudaEl } from '../lib/extraUtil'
+import { safeStorage, isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 let style = null

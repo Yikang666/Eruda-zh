@@ -1,4 +1,5 @@
-import { each, sortKeys } from '../lib/util'
+import each from 'licia/each'
+import sortKeys from 'licia/sortKeys'
 
 function formatStyle(style) {
   const ret = {}

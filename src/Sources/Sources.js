@@ -1,7 +1,11 @@
 import Tool from '../DevTools/Tool'
 import LunaObjectViewer from 'luna-object-viewer'
 import Settings from '../Settings/Settings'
-import { ajax, escape, trim, isStr, highlight } from '../lib/util'
+import ajax from 'licia/ajax'
+import escape from 'licia/escape'
+import trim from 'licia/trim'
+import isStr from 'licia/isStr'
+import highlight from 'licia/highlight'
 import evalCss from '../lib/evalCss'
 
 export default class Sources extends Tool {

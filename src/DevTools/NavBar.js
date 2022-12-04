@@ -1,4 +1,6 @@
-import { Emitter, $, isNum } from '../lib/util'
+import Emitter from 'licia/Emitter'
+import $ from 'licia/$'
+import isNum from 'licia/isNum'
 import evalCss from '../lib/evalCss'
 
 export default class NavBar extends Emitter {

@@ -1,4 +1,4 @@
-import { Logger } from './util'
+import Logger from 'licia/Logger'
 
 let logger
 

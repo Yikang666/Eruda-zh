@@ -1,4 +1,3 @@
-// To be removed in 3.0.0
 import $ from 'licia/$'
 import $attr from 'licia/$attr'
 import $class from 'licia/$class'
@@ -151,6 +150,7 @@ import values from 'licia/values'
 import viewportScale from 'licia/viewportScale'
 import wrap from 'licia/wrap'
 import xpath from 'licia/xpath'
+import evalCssUtil from './evalCss'
 
 export function escapeJsonStr(str) {
   /* eslint-disable quotes */
@@ -203,6 +203,22 @@ export function pxToNum(str) {
   return toNum(str.replace('px', ''))
 }
 
+export function isErudaEl(el) {
+  let parentNode = el.parentNode
+
+  if (!parentNode) return false
+
+  while (parentNode) {
+    parentNode = parentNode.parentNode
+    if (parentNode && parentNode.id === 'eruda') return true
+  }
+
+  return false
+}
+
+export const evalCss = evalCssUtil
+
+// To be removed in 3.0.0
 export {
   $,
   $attr,

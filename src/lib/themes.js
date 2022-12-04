@@ -1,4 +1,5 @@
-import { extend, isArr } from './util'
+import extend from 'licia/extend'
+import isArr from 'licia/isArr'
 import contain from 'licia/contain'
 
 const keyMap = [
