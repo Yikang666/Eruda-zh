@@ -12,7 +12,15 @@
   display: none;
   padding-top: 40px !important;
   opacity: 0;
-  transition: opacity $anim-duration, height $anim-duration;
+  transition: opacity $anim-duration;
+  .resizer {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: -8px;
+    cursor: row-resize;
+    z-index: 120;
+  }
   .tools {
     @include overflow-auto();
     height: 100%;

@@ -150,6 +150,7 @@ import values from 'licia/values'
 import viewportScale from 'licia/viewportScale'
 import wrap from 'licia/wrap'
 import xpath from 'licia/xpath'
+import html from 'licia/html'
 import evalCssUtil from './evalCss'
 
 export function escapeJsonStr(str) {
@@ -217,6 +218,46 @@ export function isErudaEl(el) {
 }
 
 export const evalCss = evalCssUtil
+
+export function classPrefix(str) {
+  if (/<[^>]*>/g.test(str)) {
+    try {
+      const tree = html.parse(str)
+      traverseTree(tree, (node) => {
+        if (node.attrs && node.attrs.class) {
+          node.attrs.class = processClass(node.attrs.class)
+        }
+      })
+      return html.stringify(tree)
+    } catch (e) {
+      return processClass(str)
+    }
+  }
+
+  return processClass(str)
+}
+
+function traverseTree(tree, handler) {
+  for (let i = 0, len = tree.length; i < len; i++) {
+    const node = tree[i]
+    handler(node)
+    if (node.content) {
+      traverseTree(node.content, handler)
+    }
+  }
+}
+
+function processClass(str) {
+  const prefix = `eruda-`
+
+  return map(trim(str).split(/\s+/), (singleClass) => {
+    if (contain(singleClass, prefix)) {
+      return singleClass
+    }
+
+    return singleClass.replace(/[\w-]+/, (match) => `${prefix}${match}`)
+  }).join(' ')
+}
 
 // To be removed in 3.0.0
 export {

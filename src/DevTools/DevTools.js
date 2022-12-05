@@ -10,12 +10,13 @@ import last from 'licia/last'
 import each from 'licia/each'
 import isNum from 'licia/isNum'
 import $ from 'licia/$'
-import throttle from 'licia/throttle'
+import toNum from 'licia/toNum'
 import isDarkMode from 'licia/isDarkMode'
 import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
+import { classPrefix as c } from '../lib/util'
 
 export default class DevTools extends Emitter {
   constructor($container, { defaults = {} } = {}) {
@@ -85,9 +86,9 @@ export default class DevTools extends Emitter {
     if (this._tools[name]) return logger.warn(`Tool ${name} already exists`)
 
     this._$tools.prepend(
-      `<div id="eruda-${name}" class="eruda-${name} eruda-tool"></div>`
+      `<div id="${c(name)}" class="${c(name + ' tool')}"></div>`
     )
-    tool.init(this._$tools.find(`.eruda-${name}.eruda-tool`), this)
+    tool.init(this._$tools.find(`.${c(name)}.${c('tool')}`), this)
     tool.active = false
     this._tools[name] = tool
 
@@ -196,9 +197,9 @@ export default class DevTools extends Emitter {
     const { $container } = this
 
     if (isDarkTheme(theme)) {
-      $container.addClass('eruda-dark')
+      $container.addClass(c('dark'))
     } else {
-      $container.rmClass('eruda-dark')
+      $container.rmClass(c('dark'))
     }
     evalCss.setTheme(theme)
   }
@@ -216,18 +217,30 @@ export default class DevTools extends Emitter {
   _appendTpl() {
     const $container = this.$container
 
-    $container.append(require('./DevTools.hbs')())
+    $container.append(
+      c(`
+      <div class="dev-tools">
+        <div class="resizer"></div>
+        <div class="nav-bar-container">
+          <div class="nav-bar"></div>
+          <div class="bottom-bar"></div>
+        </div>
+        <div class="tools"></div>
+        <div class="notification"></div>
+      </div>
+      `)
+    )
 
-    this._$el = $container.find('.eruda-dev-tools')
-    this._$tools = this._$el.find('.eruda-tools')
+    this._$el = $container.find(c('.dev-tools'))
+    this._$tools = this._$el.find(c('.tools'))
   }
   _initNavBar() {
-    this._navBar = new NavBar(this._$el.find('.eruda-nav-bar-container'))
+    this._navBar = new NavBar(this._$el.find(c('.nav-bar-container')))
     this._navBar.on('showTool', (name) => this.showTool(name))
   }
   _initNotification() {
     this._notification = new LunaNotification(
-      this._$el.find('.eruda-notification').get(0),
+      this._$el.find(c('.notification')).get(0),
       {
         position: {
           x: 'center',
@@ -237,46 +250,62 @@ export default class DevTools extends Emitter {
     )
   }
   _bindEvent() {
-    const $navBar = this._$el.find('.eruda-nav-bar')
+    const $resizer = this._$el.find(c('.resizer'))
+    const $navBar = this._$el.find(c('.nav-bar'))
+    const $root = $(document.documentElement)
+
     const startListener = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
       e = e.origEvent
-      this._resizeTimer = setTimeout(() => {
-        e.preventDefault()
-        e.stopPropagation()
-        this._isResizing = true
-        this._resizeStartSize = this.config.get('displaySize')
-        this._resizeStartY = getClientY(e)
-        $navBar.css('filter', 'brightness(1.2)')
-      }, 1000)
+      this._isResizing = true
+      this._resizeStartSize = this.config.get('displaySize')
+      this._resizeStartY = getClientY(e)
+
+      $resizer.css('height', '100%')
+
+      if (isMobile()) {
+        $root.on('touchmove', moveListener)
+        $root.on('touchend', endListener)
+      } else {
+        $root.on('mousemove', moveListener)
+        $root.on('mouseup', endListener)
+      }
     }
-    const setDisplaySize = throttle(
-      (size) => this.config.set('displaySize', size),
-      50
-    )
     const moveListener = (e) => {
       if (!this._isResizing) {
-        return clearTimeout(this._resizeTimer)
+        return
       }
       e.preventDefault()
       e.stopPropagation()
 
       e = e.origEvent
-      const deltaY = Math.round(
+      const deltaY =
         ((this._resizeStartY - getClientY(e)) / window.innerHeight) * 100
-      )
       let displaySize = this._resizeStartSize + deltaY
       if (displaySize < 40) {
         displaySize = 40
       } else if (displaySize > 100) {
         displaySize = 100
       }
-      setDisplaySize(displaySize)
+      this.config.set('displaySize', toNum(displaySize.toFixed(2)))
     }
     const endListener = () => {
       clearTimeout(this._resizeTimer)
       this._isResizing = false
-      $navBar.css('filter', 'brightness(1)')
+
+      $resizer.css('height', 10)
+
+      if (isMobile()) {
+        $root.off('touchmove', moveListener)
+        $root.off('touchend', endListener)
+      } else {
+        $root.off('mousemove', moveListener)
+        $root.off('mouseup', endListener)
+      }
     }
+    $resizer.css('height', 10)
     const getClientY = (e) => {
       if (e.clientY) return e.clientY
 
@@ -285,14 +314,10 @@ export default class DevTools extends Emitter {
       return 0
     }
     $navBar.on('contextmenu', (e) => e.preventDefault())
-    const $root = $(document.documentElement)
     if (isMobile()) {
-      $navBar.on('touchstart', startListener).on('touchmove', moveListener)
-      $root.on('touchend', endListener)
+      $resizer.on('touchstart', startListener)
     } else {
-      $navBar.on('mousedown', startListener)
-      $root.on('mousemove', moveListener)
-      $root.on('mouseup', endListener)
+      $resizer.on('mousedown', startListener)
     }
   }
 }

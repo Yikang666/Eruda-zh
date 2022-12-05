@@ -2,6 +2,7 @@ import Emitter from 'licia/Emitter'
 import $ from 'licia/$'
 import isNum from 'licia/isNum'
 import evalCss from '../lib/evalCss'
+import { classPrefix as c } from '../lib/util'
 
 export default class NavBar extends Emitter {
   constructor($el) {
@@ -9,8 +10,8 @@ export default class NavBar extends Emitter {
 
     this._style = evalCss(require('./NavBar.scss'))
 
-    this._$el = $el.find('.eruda-nav-bar')
-    this._$bottomBar = $el.find('.eruda-bottom-bar')
+    this._$el = $el.find(c('.nav-bar'))
+    this._$bottomBar = $el.find(c('.bottom-bar'))
     this._len = 0
 
     this._bindEvent()
@@ -19,8 +20,8 @@ export default class NavBar extends Emitter {
     const $el = this._$el
     this._len++
 
-    const $last = $el.find('.eruda-nav-bar-item').last()
-    const html = `<div class="eruda-nav-bar-item">${name}</div>`
+    const $last = $el.find(c('.nav-bar-item')).last()
+    const html = `<div class="${c('nav-bar-item')}">${name}</div>`
     if ($last.length > 0 && $last.text() === 'settings') {
       $last.before(html)
     } else {
@@ -30,7 +31,7 @@ export default class NavBar extends Emitter {
   }
   remove(name) {
     this._len--
-    this._$el.find('.eruda-nav-bar-item').each(function () {
+    this._$el.find(c('.nav-bar-item')).each(function () {
       const $this = $(this)
       if ($this.text().toLowerCase() === name.toLowerCase()) $this.remove()
     })
@@ -39,15 +40,15 @@ export default class NavBar extends Emitter {
   activateTool(name) {
     const self = this
 
-    this._$el.find('.eruda-nav-bar-item').each(function () {
+    this._$el.find(c('.nav-bar-item')).each(function () {
       const $this = $(this)
 
       if ($this.text() === name) {
-        $this.addClass('eruda-active')
+        $this.addClass(c('active'))
         self.resetBottomBar()
         self._scrollItemToView()
       } else {
-        $this.rmClass('eruda-active')
+        $this.rmClass(c('active'))
       }
     })
   }
@@ -57,7 +58,7 @@ export default class NavBar extends Emitter {
   }
   _scrollItemToView() {
     const $el = this._$el
-    const li = $el.find('.eruda-active').get(0)
+    const li = $el.find(c('.active')).get(0)
     const container = $el.get(0)
 
     const itemLeft = li.offsetLeft
@@ -80,7 +81,7 @@ export default class NavBar extends Emitter {
     const $bottomBar = this._$bottomBar
     const $el = this._$el
 
-    const li = $el.find('.eruda-active').get(0)
+    const li = $el.find(c('.active')).get(0)
 
     if (!li) return
 
@@ -93,7 +94,7 @@ export default class NavBar extends Emitter {
     const self = this
 
     this._$el
-      .on('click', '.eruda-nav-bar-item', function () {
+      .on('click', c('.nav-bar-item'), function () {
         self.emit('showTool', $(this).text())
       })
       .on('scroll', () => this.resetBottomBar())
