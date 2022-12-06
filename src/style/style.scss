@@ -3,6 +3,7 @@
 @import 'luna';
 
 .container {
+  min-width: 320px;
   &.dark {
     color-scheme: dark;
   }
@@ -43,6 +44,10 @@
 
 .icon-disabled {
   opacity: 0.5;
+  cursor: default !important;
+  &:active {
+    color: inherit !important;
+  }
 }
 
 .tag-name-color {
@@ -63,4 +68,11 @@
 
 .string-color {
   color: var(--string-color);
+}
+
+h2 {
+  [class^='icon-'],
+  [class*=' icon-'] {
+    font-weight: normal;
+  }
 }

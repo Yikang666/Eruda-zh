@@ -14,6 +14,7 @@ import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import LunaConsole from 'luna-console'
+import { classPrefix as c } from '../lib/util'
 
 uncaught.start()
 
@@ -109,15 +110,15 @@ export default class Console extends Tool {
   }
   _enableJsExecution(enabled) {
     const $el = this._$el
-    const $container = $el.find('.eruda-console-container')
-    const $jsInput = $el.find('.eruda-js-input')
+    const $container = $el.find(c('.console-container'))
+    const $jsInput = $el.find(c('.js-input'))
 
     if (enabled) {
       $jsInput.show()
-      $container.rmClass('eruda-js-input-hidden')
+      $container.rmClass(c('js-input-hidden'))
     } else {
       $jsInput.hide()
-      $container.addClass('eruda-js-input-hidden')
+      $container.addClass(c('js-input-hidden'))
     }
   }
   _registerListener() {
@@ -132,19 +133,43 @@ export default class Console extends Tool {
     const $el = this._$el
 
     this._style = evalCss(require('./Console.scss'))
-    $el.append(require('./Console.hbs')())
+    $el.append(
+      c(`
+      <div class="console-container">
+        <div class="control">
+          <span class="icon-clear clear-console"></span>
+          <span class="filter active" data-filter="all">All</span>
+          <span class="filter" data-filter="error">Error</span>
+          <span class="filter" data-filter="warn">Warning</span>
+          <span class="filter" data-filter="info">Info</span>
+          <span class="search-keyword"></span>
+          <span class="icon-filter search"></span>
+          <span class="icon-copy icon-disabled copy"></span>
+        </div>
+        <div class="logs-container"></div>
+        <div class="js-input">
+          <div class="buttons">
+            <div class="button cancel">Cancel</div>
+            <div class="button execute">Execute</div>
+          </div>
+          <span class="icon-arrow-right"></span>
+          <textarea></textarea>
+        </div>
+      </div>
+    `)
+    )
 
-    const _$inputContainer = $el.find('.eruda-js-input')
+    const _$inputContainer = $el.find(c('.js-input'))
     const _$input = _$inputContainer.find('textarea')
-    const _$inputBtns = _$inputContainer.find('.eruda-buttons')
+    const _$inputBtns = _$inputContainer.find(c('.buttons'))
 
     extend(this, {
-      _$control: $el.find('.eruda-control'),
-      _$logs: $el.find('.eruda-logs-container'),
+      _$control: $el.find(c('.control')),
+      _$logs: $el.find(c('.logs-container')),
       _$inputContainer,
       _$input,
       _$inputBtns,
-      _$searchKeyword: $el.find('.eruda-search-keyword'),
+      _$searchKeyword: $el.find(c('.search-keyword')),
     })
   }
   _initLogger() {
@@ -152,7 +177,7 @@ export default class Console extends Tool {
     let maxLogNum = cfg.get('maxLogNum')
     maxLogNum = maxLogNum === 'infinite' ? 0 : +maxLogNum
 
-    const $filter = this._$control.find('.eruda-filter')
+    const $filter = this._$control.find(c('.filter'))
     const logger = new LunaConsole(this._$logs.get(0), {
       asyncRender: cfg.get('asyncRender'),
       maxNum: maxLogNum,
@@ -170,7 +195,7 @@ export default class Console extends Tool {
         const $this = $(this)
         const isMatch = $this.data('filter') === filter
 
-        $this[isMatch ? 'addClass' : 'rmClass']('eruda-active')
+        $this[isMatch ? 'addClass' : 'rmClass'](c('active'))
       })
     })
 
@@ -203,12 +228,12 @@ export default class Console extends Tool {
     const config = this.config
 
     $control
-      .on('click', '.eruda-clear-console', () => logger.clear(true))
-      .on('click', '.eruda-filter', function () {
+      .on('click', c('.clear-console'), () => logger.clear(true))
+      .on('click', c('.filter'), function () {
         $searchKeyword.text('')
         logger.setOption('filter', $(this).data('filter'))
       })
-      .on('click', '.eruda-search', () => {
+      .on('click', c('.search'), () => {
         const filter = prompt('Filter')
         if (isNull(filter)) return
         $searchKeyword.text(filter)
@@ -218,7 +243,7 @@ export default class Console extends Tool {
         }
         logger.setOption('filter', new RegExp(escapeRegExp(lowerCase(filter))))
       })
-      .on('click', '.eruda-copy', () => {
+      .on('click', c('.copy'), () => {
         if (this._selectedLog) {
           this._selectedLog.copy()
           container.notify('Copied')
@@ -226,8 +251,8 @@ export default class Console extends Tool {
       })
 
     $inputBtns
-      .on('click', '.eruda-cancel', () => this._hideInput())
-      .on('click', '.eruda-execute', () => {
+      .on('click', c('.cancel'), () => this._hideInput())
+      .on('click', c('.execute'), () => {
         const jsInput = $input.val().trim()
         if (jsInput === '') return
 
@@ -246,23 +271,23 @@ export default class Console extends Tool {
 
     logger.on('select', (log) => {
       this._selectedLog = log
-      $control.find('.eruda-icon-copy').rmClass('eruda-icon-disabled')
+      $control.find(c('.icon-copy')).rmClass(c('icon-disabled'))
     })
 
     logger.on('deselect', () => {
       this._selectedLog = null
-      $control.find('.eruda-icon-copy').addClass('eruda-icon-disabled')
+      $control.find(c('.icon-copy')).addClass(c('icon-disabled'))
     })
 
     container.on('show', this._handleShow)
   }
   _hideInput() {
-    this._$inputContainer.rmClass('eruda-active')
-    this._$inputBtns.hide()
+    this._$inputContainer.rmClass(c('active'))
+    this._$inputBtns.css('display', 'none')
   }
   _showInput() {
-    this._$inputContainer.addClass('eruda-active')
-    this._$inputBtns.show()
+    this._$inputContainer.addClass(c('active'))
+    this._$inputBtns.css('display', 'flex')
   }
   _rmCfg() {
     const cfg = this.config
