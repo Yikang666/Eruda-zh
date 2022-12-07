@@ -128,6 +128,11 @@ If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.m
 * [licia](https://github.com/liriliri/licia): Utility library used by eruda.
 * [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin): Eruda webpack plugin.
 
+## Third Party
+
+* [eruda-pixel](https://github.com/Faithree/eruda-pixel): UI pixel restoration tool.
+* [eruda-webpack-plugin](https://github.com/huruji/eruda-webpack-plugin): Eruda webpack plugin.
+
 ## Backers
 
 <a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img src="https://opencollective.com/eruda/backers.svg?width=890"></a>
