@@ -1,3 +1,7 @@
+## 2.7.1 (7 Dec 2022)
+
+* fix: remove debug log
+
 ## 2.7.0 (7 Dec 2022)
 
 * feat: drag to resize
