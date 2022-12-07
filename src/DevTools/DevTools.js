@@ -16,6 +16,7 @@ import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
+import LunaModal from 'luna-modal'
 import { classPrefix as c } from '../lib/util'
 
 export default class DevTools extends Emitter {
@@ -45,6 +46,7 @@ export default class DevTools extends Emitter {
     this._appendTpl()
     this._initNavBar()
     this._initNotification()
+    this._initModal()
     this._bindEvent()
   }
   show() {
@@ -227,6 +229,7 @@ export default class DevTools extends Emitter {
         </div>
         <div class="tools"></div>
         <div class="notification"></div>
+        <div class="modal"></div>
       </div>
       `)
     )
@@ -248,6 +251,9 @@ export default class DevTools extends Emitter {
         },
       }
     )
+  }
+  _initModal() {
+    LunaModal.setContainer(this._$el.find(c('.modal')).get(0))
   }
   _bindEvent() {
     const $resizer = this._$el.find(c('.resizer'))

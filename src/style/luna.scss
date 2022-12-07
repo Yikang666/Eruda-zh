@@ -249,13 +249,11 @@
 
 .luna-modal-button-group {
   .luna-modal-secondary {
-    overflow: hidden;
     border-color: var(--border);
     color: var(--foreground);
     background: var(--background);
   }
   .luna-modal-primary {
-    overflow: hidden;
     background: var(--accent);
   }
   .luna-modal-button {

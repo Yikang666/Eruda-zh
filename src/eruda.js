@@ -194,9 +194,6 @@ export default {
     const className = 'eruda-style-container'
     const $el = this._$el
 
-    evalCss.container = document.head
-    evalCss(require('luna-modal/luna-modal.css'))
-
     if (this._shadowRoot) {
       evalCss.container = this._shadowRoot
       evalCss(':host { all: initial }')
@@ -212,6 +209,7 @@ export default {
       require('luna-notification/luna-notification.css') + 
       require('luna-data-grid/luna-data-grid.css') +
       require('luna-dom-viewer/luna-dom-viewer.css') +
+      require('luna-modal/luna-modal.css') +
       require('./style/style.scss') +
       require('./style/icon.css')
     )

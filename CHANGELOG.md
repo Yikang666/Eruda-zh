@@ -1,3 +1,7 @@
+## 2.7.2 (7 Dec 2022)
+
+* fix: luna modal style
+
 ## 2.7.1 (7 Dec 2022)
 
 * fix: remove debug log
