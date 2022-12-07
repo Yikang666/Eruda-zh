@@ -244,6 +244,7 @@
 }
 
 .luna-modal-input {
+  user-select: text !important;
   border-color: var(--border);
 }
 
