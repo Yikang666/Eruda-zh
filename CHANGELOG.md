@@ -1,3 +1,9 @@
+## 2.7.0 (7 Dec 2022)
+
+* feat: drag to resize
+* feat: update icons
+* feat: use luna modal to replace browser prompt
+
 ## 2.6.2 (3 Dec 2022)
 
 * feat: support android 5.0
