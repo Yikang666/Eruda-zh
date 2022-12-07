@@ -14,6 +14,7 @@ import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import LunaConsole from 'luna-console'
+import LunaModal from 'luna-modal'
 import { classPrefix as c } from '../lib/util'
 
 uncaught.start()
@@ -234,14 +235,18 @@ export default class Console extends Tool {
         logger.setOption('filter', $(this).data('filter'))
       })
       .on('click', c('.search'), () => {
-        const filter = prompt('Filter')
-        if (isNull(filter)) return
-        $searchKeyword.text(filter)
-        if (trim(filter) === '') {
-          logger.setOption('filter', 'all')
-          return
-        }
-        logger.setOption('filter', new RegExp(escapeRegExp(lowerCase(filter))))
+        LunaModal.prompt('Filter').then((filter) => {
+          if (isNull(filter)) return
+          $searchKeyword.text(filter)
+          if (trim(filter) === '') {
+            logger.setOption('filter', 'all')
+            return
+          }
+          logger.setOption(
+            'filter',
+            new RegExp(escapeRegExp(lowerCase(filter)))
+          )
+        })
       })
       .on('click', c('.copy'), () => {
         if (this._selectedLog) {

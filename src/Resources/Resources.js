@@ -20,6 +20,7 @@ import map from 'licia/map'
 import { safeStorage, isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
+import LunaModal from 'luna-modal'
 
 export default class Resources extends Tool {
   constructor() {
@@ -239,21 +240,23 @@ export default class Resources extends Tool {
       .on('click', '.eruda-search', function () {
         const $this = $(this)
         const type = $this.data('type')
-        let filter = prompt('Filter')
-        if (isNull(filter)) return
-        filter = trim(filter)
-        switch (type) {
-          case 'local':
-            self._localStoreSearchKeyword = filter
-            break
-          case 'session':
-            self._sessionStoreSearchKeyword = filter
-            break
-          case 'cookie':
-            self._cookieSearchKeyword = filter
-            break
-        }
-        self._render()
+
+        LunaModal.prompt('Filter').then((filter) => {
+          if (isNull(filter)) return
+          filter = trim(filter)
+          switch (type) {
+            case 'local':
+              self._localStoreSearchKeyword = filter
+              break
+            case 'session':
+              self._sessionStoreSearchKeyword = filter
+              break
+            case 'cookie':
+              self._cookieSearchKeyword = filter
+              break
+          }
+          self._render()
+        })
       })
       .on('click', '.eruda-delete-storage', function () {
         const $this = $(this)

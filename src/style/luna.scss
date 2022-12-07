@@ -232,3 +232,37 @@
   margin: 0;
   padding-left: 15px !important;
 }
+
+.luna-modal {
+  z-index: 1000000;
+}
+
+.luna-modal-body,
+.luna-modal-input {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.luna-modal-input {
+  border-color: var(--border);
+}
+
+.luna-modal-button-group {
+  .luna-modal-secondary {
+    overflow: hidden;
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--background);
+  }
+  .luna-modal-primary {
+    overflow: hidden;
+    background: var(--accent);
+  }
+  .luna-modal-button {
+    &:active {
+      &::before {
+        background: var(--accent);
+      }
+    }
+  }
+}

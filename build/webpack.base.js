@@ -23,6 +23,7 @@ const postcssLoader = {
           /luna-notification/,
           /luna-data-grid/,
           /luna-dom-viewer/,
+          /luna-modal/,
         ],
       }),
       autoprefixer,

@@ -9,6 +9,7 @@ import $ from 'licia/$'
 import upperFirst from 'licia/upperFirst'
 import loadJs from 'licia/loadJs'
 import trim from 'licia/trim'
+import LunaModal from 'luna-modal'
 import { safeStorage, isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -44,11 +45,13 @@ export default [
   {
     name: 'Search Text',
     fn() {
-      const keyword = prompt('Enter the text') || ''
+      LunaModal.prompt('Enter the text').then((keyword) => {
+        if (!keyword || trim(keyword) === '') {
+          return
+        }
 
-      if (trim(keyword) === '') return
-
-      search(keyword)
+        search(keyword)
+      })
     },
     desc: 'Highlight given text on page',
   },

@@ -1,4 +1,5 @@
 import 'core-js/modules/es.map'
+import 'core-js/stable/promise'
 import EntryBtn from './EntryBtn/EntryBtn'
 import DevTools from './DevTools/DevTools'
 import Tool from './DevTools/Tool'
@@ -192,6 +193,9 @@ export default {
   _initStyle() {
     const className = 'eruda-style-container'
     const $el = this._$el
+
+    evalCss.container = document.head
+    evalCss(require('luna-modal/luna-modal.css'))
 
     if (this._shadowRoot) {
       evalCss.container = this._shadowRoot

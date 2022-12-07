@@ -26,6 +26,7 @@ import isNull from 'licia/isNull'
 import trim from 'licia/trim'
 import lowerCase from 'licia/lowerCase'
 import pick from 'licia/pick'
+import LunaModal from 'luna-modal'
 import { pxToNum, isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
@@ -203,11 +204,12 @@ export default class Elements extends Tool {
         this._toggleAllComputedStyle()
       )
       .on('click', '.eruda-computed-style-search', () => {
-        let filter = prompt('Filter')
-        if (isNull(filter)) return
-        filter = trim(filter)
-        this._computedStyleSearchKeyword = filter
-        this._render()
+        LunaModal.prompt('Filter').then((filter) => {
+          if (isNull(filter)) return
+          filter = trim(filter)
+          this._computedStyleSearchKeyword = filter
+          this._render()
+        })
       })
 
     const $bottomBar = this._$el.find('.eruda-bottom-bar')
