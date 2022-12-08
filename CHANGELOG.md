@@ -1,3 +1,7 @@
+## 2.7.3 (8 Dec 2022)
+
+* fix: remove tabs horizontal scrollbar #236
+
 ## 2.7.2 (7 Dec 2022)
 
 * fix: luna modal style
