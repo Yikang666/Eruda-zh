@@ -17,14 +17,7 @@ const postcssLoader = {
     plugins: [
       prefixer({
         prefix: '_',
-        ignore: [
-          /luna-console/,
-          /luna-object-viewer/,
-          /luna-notification/,
-          /luna-data-grid/,
-          /luna-dom-viewer/,
-          /luna-modal/,
-        ],
+        ignore: [/luna-*/],
       }),
       autoprefixer,
       clean(),

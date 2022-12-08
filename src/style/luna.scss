@@ -132,6 +132,12 @@
   border-top-color: transparent;
   border-left-color: var(--foreground);
 }
+.luna-object-viewer-icon-caret-right {
+  top: 0;
+}
+.luna-object-viewer-icon-caret-down {
+  top: 1px;
+}
 
 .luna-notification {
   pointer-events: none !important;
@@ -264,4 +270,28 @@
       }
     }
   }
+}
+
+.luna-tab {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--foreground);
+  background: var(--darker-background);
+}
+
+.luna-tab-tabs-container {
+  border-color: var(--border);
+}
+
+.luna-tab-item {
+  &.luna-tab-selected,
+  &:hover {
+    background: var(--highlight);
+    color: var(--select-foreground);
+  }
+}
+
+.luna-tab-slider {
+  background: var(--accent);
 }

@@ -1,4 +1,3 @@
-import NavBar from './NavBar'
 import logger from '../lib/logger'
 import Tool from './Tool'
 import Settings from '../Settings/Settings'
@@ -17,6 +16,7 @@ import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 import LunaModal from 'luna-modal'
+import LunaTab from 'luna-tab'
 import { classPrefix as c } from '../lib/util'
 
 export default class DevTools extends Emitter {
@@ -44,7 +44,7 @@ export default class DevTools extends Emitter {
     this._resizeStartSize = 0
 
     this._appendTpl()
-    this._initNavBar()
+    this._initTab()
     this._initNotification()
     this._initModal()
     this._bindEvent()
@@ -53,7 +53,7 @@ export default class DevTools extends Emitter {
     this._isShow = true
 
     this._$el.show()
-    this._navBar.resetBottomBar()
+    this._tab.updateSlider()
 
     // Need a delay after show to enable transition effect.
     setTimeout(() => {
@@ -77,6 +77,8 @@ export default class DevTools extends Emitter {
     return this._isShow ? this.hide() : this.show()
   }
   add(tool) {
+    const tab = this._tab
+
     if (!(tool instanceof Tool)) {
       const { init, show, hide, destroy } = new Tool()
       defaults(tool, { init, show, hide, destroy })
@@ -94,7 +96,17 @@ export default class DevTools extends Emitter {
     tool.active = false
     this._tools[name] = tool
 
-    this._navBar.add(name)
+    if (name === 'settings') {
+      tab.append({
+        id: name,
+        title: name,
+      })
+    } else {
+      tab.insert(tab.length - 1, {
+        id: name,
+        title: name,
+      })
+    }
 
     return this
   }
@@ -103,7 +115,7 @@ export default class DevTools extends Emitter {
 
     if (!tools[name]) return logger.warn(`Tool ${name} doesn't exist`)
 
-    this._navBar.remove(name)
+    this._tab.remove(name)
 
     const tool = tools[name]
     delete tools[name]
@@ -147,7 +159,7 @@ export default class DevTools extends Emitter {
     tool.active = true
     tool.show()
 
-    this._navBar.activateTool(name)
+    this._tab.select(name)
 
     this.emit('showTool', name, lastTool)
 
@@ -192,7 +204,7 @@ export default class DevTools extends Emitter {
   destroy() {
     evalCss.remove(this._style)
     this.removeAll()
-    this._navBar.destroy()
+    this._tab.destroy()
     this._$el.remove()
   }
   _setTheme(theme) {
@@ -223,10 +235,7 @@ export default class DevTools extends Emitter {
       c(`
       <div class="dev-tools">
         <div class="resizer"></div>
-        <div class="nav-bar-container">
-          <div class="nav-bar"></div>
-          <div class="bottom-bar"></div>
-        </div>
+        <div class="tab"></div>
         <div class="tools"></div>
         <div class="notification"></div>
         <div class="modal"></div>
@@ -237,9 +246,11 @@ export default class DevTools extends Emitter {
     this._$el = $container.find(c('.dev-tools'))
     this._$tools = this._$el.find(c('.tools'))
   }
-  _initNavBar() {
-    this._navBar = new NavBar(this._$el.find(c('.nav-bar-container')))
-    this._navBar.on('showTool', (name) => this.showTool(name))
+  _initTab() {
+    this._tab = new LunaTab(this._$el.find(c('.tab')).get(0), {
+      height: 40,
+    })
+    this._tab.on('select', (id) => this.showTool(id))
   }
   _initNotification() {
     this._notification = new LunaNotification(

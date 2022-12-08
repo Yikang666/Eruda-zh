@@ -210,6 +210,7 @@ export default {
       require('luna-data-grid/luna-data-grid.css') +
       require('luna-dom-viewer/luna-dom-viewer.css') +
       require('luna-modal/luna-modal.css') +
+      require('luna-tab/luna-tab.css') +
       require('./style/style.scss') +
       require('./style/icon.css')
     )
