@@ -25,11 +25,6 @@ const postcssLoader = {
   },
 }
 
-const cssMinifierLoader = {
-  loader: path.resolve(__dirname, './loaders/css-minifier-loader'),
-  options: {},
-}
-
 const rawLoader = {
   loader: 'raw-loader',
   options: {
@@ -63,7 +58,11 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules|index\.js/,
+        include: [
+          path.resolve(__dirname, '../src'),
+          path.resolve(__dirname, '../node_modules/luna-console'),
+          path.resolve(__dirname, '../node_modules/luna-modal'),
+        ],
         use: [
           {
             loader: 'babel-loader',
@@ -80,12 +79,12 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [cssMinifierLoader, 'css-loader', postcssLoader, 'sass-loader'],
+        use: ['css-loader', postcssLoader, 'sass-loader'],
       },
       {
         test: /\.css$/,
         exclude: /luna-dom-highlighter/,
-        use: [cssMinifierLoader, 'css-loader', postcssLoader],
+        use: ['css-loader', postcssLoader],
       },
       {
         test: /luna-dom-highlighter\.css$/,

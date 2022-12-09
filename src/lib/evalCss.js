@@ -5,9 +5,7 @@ import isStr from 'licia/isStr'
 import keys from 'licia/keys'
 import kebabCase from 'licia/kebabCase'
 import defaults from 'licia/defaults'
-import escapeRegExp from 'licia/escapeRegExp'
 import themes from './themes'
-import cssMap from './cssMap'
 
 let styleList = []
 let scale = 1
@@ -71,9 +69,6 @@ function resetStyles() {
 function resetStyle({ css, el }) {
   css = css.replace(/(\d+)px/g, ($0, $1) => +$1 * scale + 'px')
   css = css.replace(/_/g, 'eruda-')
-  each(cssMap, (val, key) => {
-    css = css.replace(new RegExp(escapeRegExp(`$${val}:`), 'g'), key + ':')
-  })
   const _keys = keys(themes.Light)
   each(_keys, (key) => {
     css = css.replace(

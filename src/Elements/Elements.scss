@@ -10,6 +10,7 @@
   }
   .parents {
     @include overflow-auto(x);
+    overflow-y: hidden;
     background: var(--darker-background);
     color: var(--primary);
     padding: 0 $padding;
