@@ -6,10 +6,8 @@ describe('sources', function () {
     eruda.show('sources')
   })
 
-  describe('js', function () {
-    it('highlight', function () {
-      tool.set('js', '/* test */')
-      expect($tool.find('.eruda-content')).toContainHtml('/* test */')
-    })
+  it('raw', function () {
+    tool.set('raw', '/* test */')
+    expect($tool.find('.eruda-raw')).toContainHtml('/* test */')
   })
 })
