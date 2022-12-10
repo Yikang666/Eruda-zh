@@ -2,7 +2,10 @@ import Tool from '../DevTools/Tool'
 import defSnippets from './defSnippets'
 import $ from 'licia/$'
 import each from 'licia/each'
+import escape from 'licia/escape'
+import map from 'licia/map'
 import evalCss from '../lib/evalCss'
+import { classPrefix as c } from '../lib/util'
 
 export default class Snippets extends Tool {
   constructor() {
@@ -13,7 +16,6 @@ export default class Snippets extends Tool {
     this.name = 'snippets'
 
     this._snippets = []
-    this._tpl = require('./Snippets.hbs')
   }
   init($el) {
     super.init($el)
@@ -77,11 +79,20 @@ export default class Snippets extends Tool {
     })
   }
   _render() {
-    this._renderHtml(
-      this._tpl({
-        snippets: this._snippets,
-      })
-    )
+    const html = map(this._snippets, (snippet, idx) => {
+      return `<div class="${c('section run')}" data-idx="${idx}">
+        <h2 class="${c('name')}">${escape(snippet.name)}
+          <div class="${c('btn')}">
+            <span class="${c('icon-play')}"></span>
+          </div>
+        </h2>
+        <div class="${c('description')}">
+          ${escape(snippet.desc)}
+        </div>
+      </div>`
+    }).join('')
+
+    this._renderHtml(html)
   }
   _renderHtml(html) {
     if (html === this._lastHtml) return
