@@ -62,6 +62,7 @@ module.exports = {
           path.resolve(__dirname, '../src'),
           path.resolve(__dirname, '../node_modules/luna-console'),
           path.resolve(__dirname, '../node_modules/luna-modal'),
+          path.resolve(__dirname, '../node_modules/luna-tab'),
         ],
         use: [
           {

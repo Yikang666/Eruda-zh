@@ -1,6 +1,10 @@
+## 2.7.4 (10 Dec 2022)
+
+* fix: firefox document.body is null error [#293](https://github.com/liriliri/eruda/issues/293)
+
 ## 2.7.3 (8 Dec 2022)
 
-* fix: remove tabs horizontal scrollbar #236
+* fix: remove tabs horizontal scrollbar [#236](https://github.com/liriliri/eruda/issues/236)
 
 ## 2.7.2 (7 Dec 2022)
 
