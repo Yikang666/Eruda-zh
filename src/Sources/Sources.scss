@@ -2,6 +2,7 @@
 @import '../style/mixin';
 
 #sources {
+  font-size: 0;
   @include overflow-auto(y);
   color: var(--foreground);
   .code-wrapper,
@@ -11,35 +12,15 @@
     min-height: 100%;
   }
   .raw {
+    font-size: $font-size-s;
     user-select: text;
     padding: $padding;
   }
   .code {
-    font-size: $font-size-s;
-    .content * {
-      user-select: text;
-    }
-  }
-  pre.code {
-    padding: $padding;
-  }
-  table.code {
-    border-collapse: collapse;
-    .gutter {
-      background: var(--background);
-      color: var(--primary);
-    }
-    .line-num {
-      border-right: 1px solid var(--border);
-      padding: 0 3px 0 5px;
-      text-align: right;
-    }
-    .code-line {
-      padding: 0 4px;
-      white-space: pre;
-    }
+    height: 100%;
   }
   .image {
+    font-size: $font-size-s;
     .breadcrumb {
       @include breadcrumb();
     }

@@ -60,6 +60,7 @@ module.exports = {
         test: /\.js$/,
         include: [
           path.resolve(__dirname, '../src'),
+          path.resolve(__dirname, '../node_modules/highlight.js'),
           path.resolve(__dirname, '../node_modules/luna-console'),
           path.resolve(__dirname, '../node_modules/luna-modal'),
           path.resolve(__dirname, '../node_modules/luna-tab'),
@@ -68,6 +69,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
+              sourceType: 'unambiguous',
               presets: ['@babel/preset-env'],
               plugins: [
                 '@babel/plugin-transform-runtime',

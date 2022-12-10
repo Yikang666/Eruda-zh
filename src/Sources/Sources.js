@@ -2,11 +2,11 @@ import Tool from '../DevTools/Tool'
 import LunaObjectViewer from 'luna-object-viewer'
 import Settings from '../Settings/Settings'
 import ajax from 'licia/ajax'
-import escape from 'licia/escape'
-import trim from 'licia/trim'
 import isStr from 'licia/isStr'
-import highlight from 'licia/highlight'
+import escape from 'licia/escape'
 import evalCss from '../lib/evalCss'
+import LunaSyntaxHighlighter from 'luna-syntax-highlighter'
+import { classPrefix as c } from '../lib/util'
 
 export default class Sources extends Tool {
   constructor() {
@@ -16,8 +16,6 @@ export default class Sources extends Tool {
 
     this.name = 'sources'
     this._showLineNum = true
-
-    this._loadTpl()
   }
   init($el, container) {
     super.init($el)
@@ -108,13 +106,6 @@ export default class Sources extends Tool {
       }
     })
   }
-  _loadTpl() {
-    this._codeTpl = require('./code.hbs')
-    this._imgTpl = require('./image.hbs')
-    this._objTpl = require('./object.hbs')
-    this._rawTpl = require('./raw.hbs')
-    this._iframeTpl = require('./iframe.hbs')
-  }
   _rmCfg() {
     const cfg = this.config
 
@@ -166,49 +157,31 @@ export default class Sources extends Tool {
     }
   }
   _renderImg() {
-    this._renderHtml(this._imgTpl(this._data.val))
+    const { width, height, src } = this._data.val
+
+    this._renderHtml(`<div class="${c('image')}">
+      <div class="${c('breadcrumb')}">${escape(src)}</div>
+      <div class="${c('img-container')}" data-exclude="true">
+        <img src="${escape(src)}">
+      </div>
+      <div class="${c('img-info')}">${escape(width)} × ${escape(height)}</div>
+    </div>`)
   }
   _renderCode() {
     const data = this._data
 
-    let code = data.val
-    const len = data.val.length
-
-    // If source code too big, don't process it.
-    if (len < MAX_BEAUTIFY_LEN) {
-      const curTheme = evalCss.getCurTheme()
-      code = highlight(code, data.type, {
-        keyword: `color:${curTheme.keywordColor}`,
-        number: `color:${curTheme.numberColor}`,
-        operator: `color:${curTheme.operatorColor}`,
-        comment: `color:${curTheme.commentColor}`,
-        string: `color:${curTheme.stringColor}`,
-      })
-    } else {
-      code = escape(code)
-    }
-
-    if (len < MAX_LINE_NUM_LEN && this._showLineNum) {
-      code = code.split('\n').map((line, idx) => {
-        if (trim(line) === '') line = '&nbsp;'
-
-        return {
-          idx: idx + 1,
-          val: line,
-        }
-      })
-    }
-
-    this._renderHtml(
-      this._codeTpl({
-        code,
-        showLineNum: len < MAX_LINE_NUM_LEN && this._showLineNum,
-      })
-    )
+    this._renderHtml(`<div class="${c('code')}"></div>`, false)
+    const container = this._$el.find(c('.code')).get(0)
+    new LunaSyntaxHighlighter(container, {
+      code: data.val,
+      language: data.type,
+      wrapLongLines: true,
+      showLineNumbers: data.val.length < MAX_LINE_NUM_LEN && this._showLineNum,
+    })
   }
   _renderObj() {
     // Using cache will keep binding events to the same elements.
-    this._renderHtml(this._objTpl(), false)
+    this._renderHtml(`<ul class="${c('json')}"></ul>`, false)
 
     let val = this._data.val
 
@@ -229,10 +202,12 @@ export default class Sources extends Tool {
     objViewer.set(val)
   }
   _renderRaw() {
-    this._renderHtml(this._rawTpl({ val: this._data.val }))
+    this._renderHtml(`<div class="${c('raw-wrapper')}">
+      <div class="${c('raw')}">${escape(this._data.val)}</div>
+    </div>`)
   }
   _renderIframe() {
-    this._renderHtml(this._iframeTpl({ src: this._data.val }))
+    this._renderHtml(`<iframe src="${escape(this._data.val)}"></iframe>`)
   }
   _renderHtml(html, cache = true) {
     if (cache && html === this._lastHtml) return
@@ -243,5 +218,4 @@ export default class Sources extends Tool {
   }
 }
 
-const MAX_BEAUTIFY_LEN = 100000
 const MAX_LINE_NUM_LEN = 400000
