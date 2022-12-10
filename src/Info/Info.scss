@@ -11,9 +11,20 @@
       padding: $padding;
     }
     .title {
+      position: relative;
       padding-bottom: 0;
       font-size: $font-size-l;
       color: var(--accent);
+      .icon-copy {
+        position: absolute;
+        right: 10px;
+        top: 14px;
+        color: var(--foreground);
+        cursor: pointer;
+        &:active {
+          color: var(--accent);
+        }
+      }
     }
     .content {
       margin: 0;

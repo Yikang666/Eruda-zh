@@ -5,6 +5,11 @@ import isFn from 'licia/isFn'
 import isUndef from 'licia/isUndef'
 import cloneDeep from 'licia/cloneDeep'
 import evalCss from '../lib/evalCss'
+import map from 'licia/map'
+import escape from 'licia/escape'
+import copy from 'licia/copy'
+import $ from 'licia/$'
+import { classPrefix as c } from '../lib/util'
 
 export default class Info extends Tool {
   constructor() {
@@ -13,13 +18,14 @@ export default class Info extends Tool {
     this._style = evalCss(require('./Info.scss'))
 
     this.name = 'info'
-    this._tpl = require('./Info.hbs')
     this._infos = []
   }
-  init($el) {
+  init($el, container) {
     super.init($el)
+    this._container = container
 
     this._addDefInfo()
+    this._bindEvent()
   }
   destroy() {
     super.destroy()
@@ -88,7 +94,26 @@ export default class Info extends Tool {
       infos.push({ name, val })
     })
 
-    this._renderHtml(this._tpl({ infos }))
+    const html = `<ul>${map(
+      infos,
+      (info) =>
+        `<li><h2 class="${c('title')}">${escape(info.name)}<span class="${c(
+          'icon-copy copy'
+        )}"></span></h2><div class="${c('content')}">${info.val}</div></li>`
+    ).join('')}</ul>`
+
+    this._renderHtml(html)
+  }
+  _bindEvent() {
+    const container = this._container
+
+    this._$el.on('click', c('.copy'), function () {
+      const $li = $(this).parent().parent()
+      const name = $li.find(c('.title')).text()
+      const content = $li.find(c('.content')).text()
+      copy(`${name}: ${content}`)
+      container.notify('Copied')
+    })
   }
   _renderHtml(html) {
     if (html === this._lastHtml) return
