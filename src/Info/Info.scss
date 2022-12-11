@@ -13,7 +13,6 @@
     .title {
       position: relative;
       padding-bottom: 0;
-      font-size: $font-size-l;
       color: var(--accent);
       .icon-copy {
         position: absolute;
@@ -31,6 +30,7 @@
       margin: 0;
       user-select: text;
       color: var(--foreground);
+      font-size: $font-size-s;
       word-break: break-all;
       table {
         width: 100%;

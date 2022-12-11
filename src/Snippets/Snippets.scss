@@ -19,7 +19,7 @@
       padding: $padding;
       color: var(--primary);
       background: var(--darker-background);
-      transition: background $anim-duration;
+      transition: background-color $anim-duration;
       .btn {
         margin-left: 10px;
         float: right;
@@ -31,6 +31,7 @@
       }
     }
     .description {
+      font-size: $font-size-s;
       color: var(--foreground);
       padding: $padding;
       transition: background $anim-duration;

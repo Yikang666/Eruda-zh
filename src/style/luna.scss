@@ -181,6 +181,14 @@
     }
   }
   .luna-data-grid-data-container {
+    &:focus {
+      .luna-data-grid-node.luna-data-grid-selected {
+        background: var(--accent);
+      }
+    }
+    .luna-data-grid-node.luna-data-grid-selected {
+      background: var(--highlight);
+    }
     tr:nth-child(even) {
       background: var(--contrast);
     }

@@ -1,15 +1,15 @@
 import Tool from '../DevTools/Tool'
-import isEmpty from 'licia/isEmpty'
 import $ from 'licia/$'
 import ms from 'licia/ms'
 import each from 'licia/each'
 import last from 'licia/last'
 import Detail from './Detail'
-import map from 'licia/map'
-import escape from 'licia/escape'
+import throttle from 'licia/throttle'
 import { getFileName, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
+import LunaDataGrid from 'luna-data-grid'
+import ResizeSensor from 'licia/ResizeSensor'
 
 export default class Network extends Tool {
   constructor() {
@@ -26,16 +26,53 @@ export default class Network extends Tool {
     this._container = container
     this._initTpl()
     this._detail = new Detail(this._$detail)
+    this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
+      columns: [
+        {
+          id: 'name',
+          title: 'Name',
+          sortable: true,
+          weight: 30,
+        },
+        {
+          id: 'method',
+          title: 'Method',
+          sortable: true,
+          weight: 14,
+        },
+        {
+          id: 'status',
+          title: 'Status',
+          sortable: true,
+          weight: 14,
+        },
+        {
+          id: 'type',
+          title: 'Type',
+          sortable: true,
+          weight: 14,
+        },
+        {
+          id: 'size',
+          title: 'Size',
+          sortable: true,
+          weight: 14,
+        },
+        {
+          id: 'time',
+          title: 'Time',
+          sortable: true,
+          weight: 14,
+        },
+      ],
+    })
+    this._updateDataGridHeight()
+    this._resizeSensor = new ResizeSensor($el.get(0))
     this._bindEvent()
-  }
-  show() {
-    super.show()
-
-    this._render()
   }
   clear() {
     this._requests = {}
-    this._render()
+    this._requestDataGrid.clear()
   }
   requests() {
     const ret = []
@@ -44,8 +81,13 @@ export default class Network extends Tool {
     })
     return ret
   }
+  _updateDataGridHeight() {
+    const height = this._$el.offset().height - 41
+    this._requestDataGrid.setOption('minHeight', height)
+    this._requestDataGrid.setOption('maxHeight', height)
+  }
   _reqWillBeSent = (params) => {
-    this._requests[params.requestId] = {
+    const request = {
       name: getFileName(params.request.url),
       url: params.request.url,
       status: 'pending',
@@ -61,60 +103,83 @@ export default class Network extends Tool {
       reqHeaders: params.request.headers || {},
       resHeaders: {},
     }
+    let node
+    request.render = () => {
+      const data = {
+        name: request.name,
+        method: request.method,
+        status: request.status,
+        type: request.subType,
+        size: request.size,
+        time: request.displayTime,
+      }
+      if (node) {
+        node.data = data
+        node.render()
+      } else {
+        node = this._requestDataGrid.append(data, { selectable: true })
+        $(node.container).data('id', params.requestId)
+      }
+      if (request.hasErr) {
+        $(node.container).addClass(c('request-error'))
+      }
+    }
+    request.render()
+    this._requests[params.requestId] = request
   }
   _resReceivedExtraInfo = (params) => {
-    const target = this._requests[params.requestId]
-    if (!target) {
+    const request = this._requests[params.requestId]
+    if (!request) {
       return
     }
 
-    target.resHeaders = params.headers
+    request.resHeaders = params.headers
 
-    this._updateType(target)
-    this._render()
+    this._updateType(request)
+    request.render()
   }
-  _updateType(target) {
-    const contentType = target.resHeaders['content-type'] || ''
+  _updateType(request) {
+    const contentType = request.resHeaders['content-type'] || ''
     const { type, subType } = getType(contentType)
-    target.type = type
-    target.subType = subType
+    request.type = type
+    request.subType = subType
   }
   _resReceived = (params) => {
-    const target = this._requests[params.requestId]
-    if (!target) {
+    const request = this._requests[params.requestId]
+    if (!request) {
       return
     }
 
     const { response } = params
     const { status, headers } = response
-    target.status = status
+    request.status = status
     if (status < 200 || status >= 300) {
-      target.hasErr = true
+      request.hasErr = true
     }
     if (headers) {
-      target.resHeaders = headers
-      this._updateType(target)
+      request.resHeaders = headers
+      this._updateType(request)
     }
 
-    this._render()
+    request.render()
   }
   _loadingFinished = (params) => {
-    const target = this._requests[params.requestId]
-    if (!target) {
+    const request = this._requests[params.requestId]
+    if (!request) {
       return
     }
 
     const time = params.timestamp * 1000
-    target.time = time - target.startTime
-    target.displayTime = ms(target.time)
+    request.time = time - request.startTime
+    request.displayTime = ms(request.time)
 
-    target.size = params.encodedDataLength
-    target.done = true
-    target.resTxt = chobitsu.domain('Network').getResponseBody({
+    request.size = params.encodedDataLength
+    request.done = true
+    request.resTxt = chobitsu.domain('Network').getResponseBody({
       requestId: params.requestId,
     }).body
 
-    this._render()
+    request.render()
   }
   _bindEvent() {
     const $el = this._$el
@@ -122,16 +187,16 @@ export default class Network extends Tool {
 
     const self = this
 
-    $el
-      .on('click', c('.request'), function () {
-        const id = $(this).data('id')
-        const data = self._requests[id]
+    $el.on('click', c('.clear-request'), () => this.clear())
 
-        if (!data.done) return
-
-        self._detail.show(data)
-      })
-      .on('click', c('.clear-request'), () => this.clear())
+    this._requestDataGrid.on('select', (node) => {
+      const id = $(node.container).data('id')
+      const request = self._requests[id]
+      if (!request.done) {
+        return
+      }
+      self._detail.show(request)
+    })
 
     this._detail.on('showSources', function (type, data) {
       const sources = container.get('sources')
@@ -141,6 +206,10 @@ export default class Network extends Tool {
 
       container.showTool('sources')
     })
+
+    this._resizeSensor.addListener(
+      throttle(() => this._updateDataGridHeight(), 15)
+    )
 
     chobitsu.domain('Network').enable()
 
@@ -153,6 +222,7 @@ export default class Network extends Tool {
   destroy() {
     super.destroy()
 
+    this._resizeSensor.destroy()
     evalCss.remove(this._style)
 
     const network = chobitsu.domain('Network')
@@ -170,44 +240,11 @@ export default class Network extends Tool {
         <span class="icon-clear"></span>
       </div>
     </div>
-    <ul class="requests"></ul>
+    <div class="requests"></div>
     <div class="detail"></div>`)
     )
     this._$detail = $el.find(c('.detail'))
     this._$requests = $el.find(c('.requests'))
-  }
-  _render() {
-    if (!this.active) return
-
-    const renderData = {}
-
-    if (!isEmpty(this._requests)) renderData.requests = this._requests
-
-    let html = `<li><span class="${c('name')}">Empty</span></li>`
-    if (renderData.requests) {
-      html = map(
-        renderData.requests,
-        ({ hasErr, name, status, method, subType, size, displayTime }, idx) => {
-          return `<li class="${c('request')} ${
-            hasErr ? c('error') : ''
-          }" data-id="${idx}">
-          <span class="${c('name')}">${escape(name)}</span>
-          <span class="${c('status')}">${status}</span>
-          <span class="${c('method')}">${method}</span>
-          <span class="${c('type')}">${subType}</span>
-          <span class="${c('size')}">${size}</span>
-          <span class="${c('time')}">${displayTime}</span>
-        </li>`
-        }
-      ).join('')
-    }
-
-    this._renderHtml(html)
-  }
-  _renderHtml(html) {
-    if (html === this._lastHtml) return
-    this._lastHtml = html
-    this._$requests.html(html)
   }
 }
 

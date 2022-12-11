@@ -190,8 +190,6 @@ export function safeStorage(type, memReplacement) {
 export function getFileName(url) {
   let ret = last(url.split('/'))
 
-  if (ret.indexOf('?') > -1) ret = trim(ret.split('?')[0])
-
   if (ret === '') {
     url = new Url(url)
     ret = url.hostname
