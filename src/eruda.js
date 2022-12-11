@@ -152,8 +152,10 @@ export default {
     if (!el) {
       el = document.createElement('div')
       document.documentElement.appendChild(el)
-      el.style.all = 'initial'
     }
+
+    el.id = 'eruda'
+    el.style.all = 'initial'
 
     let shadowRoot
     if (useShadowDom) {
@@ -174,8 +176,13 @@ export default {
       }
     }
 
+    if (!this._shadowRoot) {
+      const oldEl = el
+      el = document.createElement('div') 
+      oldEl.appendChild(el)
+    }
+
     extend(el, {
-      id: 'eruda',
       className: 'eruda-container',
       contentEditable: false
     })

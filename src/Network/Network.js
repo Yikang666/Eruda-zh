@@ -5,7 +5,8 @@ import ms from 'licia/ms'
 import trim from 'licia/trim'
 import each from 'licia/each'
 import last from 'licia/last'
-import { getFileName } from '../lib/util'
+import Emitter from 'licia/Emitter'
+import { getFileName, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 
@@ -18,16 +19,15 @@ export default class Network extends Tool {
     this.name = 'network'
     this._requests = {}
     this._tpl = require('./Network.hbs')
-    this._detailTpl = require('./detail.hbs')
     this._requestsTpl = require('./requests.hbs')
-    this._detailData = {}
   }
   init($el, container) {
     super.init($el)
 
     this._container = container
+    this._initTpl()
+    this._detail = new Detail(this._$detail)
     this._bindEvent()
-    this._appendTpl()
   }
   show() {
     super.show()
@@ -130,38 +130,18 @@ export default class Network extends Tool {
 
         if (!data.done) return
 
-        self._showDetail(data)
+        self._detail.show(data)
       })
       .on('click', '.eruda-clear-request', () => this.clear())
-      .on('click', '.eruda-back', () => this._hideDetail())
-      .on('click', '.eruda-http .eruda-response', () => {
-        const data = this._detailData
-        const resTxt = data.resTxt
 
-        switch (data.subType) {
-          case 'css':
-            return showSources('css', resTxt)
-          case 'html':
-            return showSources('html', resTxt)
-          case 'javascript':
-            return showSources('js', resTxt)
-          case 'json':
-            return showSources('object', resTxt)
-        }
-        switch (data.type) {
-          case 'image':
-            return showSources('img', data.url)
-        }
-      })
-
-    function showSources(type, data) {
+    this._detail.on('showSources', function (type, data) {
       const sources = container.get('sources')
       if (!sources) return
 
       sources.set(type, data)
 
       container.showTool('sources')
-    }
+    })
 
     chobitsu.domain('Network').enable()
 
@@ -182,23 +162,7 @@ export default class Network extends Tool {
     network.off('responseReceived', this._resReceived)
     network.off('loadingFinished', this._loadingFinished)
   }
-  _showDetail(data) {
-    if (data.resTxt && trim(data.resTxt) === '') {
-      delete data.resTxt
-    }
-    if (isEmpty(data.resHeaders)) {
-      delete data.resHeaders
-    }
-    if (isEmpty(data.reqHeaders)) {
-      delete data.reqHeaders
-    }
-    this._$detail.html(this._detailTpl(data)).show()
-    this._detailData = data
-  }
-  _hideDetail() {
-    this._$detail.hide()
-  }
-  _appendTpl() {
+  _initTpl() {
     const $el = this._$el
     $el.html(this._tpl())
     this._$detail = $el.find('.eruda-detail')
@@ -217,6 +181,60 @@ export default class Network extends Tool {
     if (html === this._lastHtml) return
     this._lastHtml = html
     this._$requests.html(html)
+  }
+}
+
+class Detail extends Emitter {
+  constructor($container) {
+    super()
+    this._$container = $container
+
+    this._detailData = {}
+    this._detailTpl = require('./detail.hbs')
+    this._bindEvent()
+  }
+  show(data) {
+    if (data.resTxt && trim(data.resTxt) === '') {
+      delete data.resTxt
+    }
+    if (isEmpty(data.resHeaders)) {
+      delete data.resHeaders
+    }
+    if (isEmpty(data.reqHeaders)) {
+      delete data.reqHeaders
+    }
+    this._$container.html(this._detailTpl(data)).show()
+    this._detailData = data
+  }
+  hide() {
+    this._$container.hide()
+  }
+  _bindEvent() {
+    this._$container
+      .on('click', c('.back'), () => this.hide())
+      .on('click', '.eruda-http .eruda-response', () => {
+        const data = this._detailData
+        const resTxt = data.resTxt
+
+        switch (data.subType) {
+          case 'css':
+            return showSources('css', resTxt)
+          case 'html':
+            return showSources('html', resTxt)
+          case 'javascript':
+            return showSources('js', resTxt)
+          case 'json':
+            return showSources('object', resTxt)
+        }
+        switch (data.type) {
+          case 'image':
+            return showSources('img', data.url)
+        }
+      })
+
+    const showSources = (type, data) => {
+      this.emit('showSources', type, data)
+    }
   }
 }
 
