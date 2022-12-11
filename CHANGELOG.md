@@ -1,3 +1,7 @@
+## 2.8.1 (12 Dec 2022)
+
+* fix: remove luna syntax highlighter
+
 ## 2.8.0 (11 Dec 2022)
 
 * feat(info): copy

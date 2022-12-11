@@ -66,9 +66,12 @@ export default class Network extends Tool {
         },
       ],
     })
-    this._updateDataGridHeight()
     this._resizeSensor = new ResizeSensor($el.get(0))
     this._bindEvent()
+  }
+  show() {
+    super.show()
+    this._updateDataGridHeight()
   }
   clear() {
     this._requests = {}
