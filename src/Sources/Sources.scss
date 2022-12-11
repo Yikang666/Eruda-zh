@@ -17,7 +17,29 @@
     padding: $padding;
   }
   .code {
-    height: 100%;
+    font-size: $font-size-s;
+    .content * {
+      user-select: text;
+    }
+  }
+  pre.code {
+    padding: $padding;
+  }
+  table.code {
+    border-collapse: collapse;
+    .gutter {
+      background: var(--background);
+      color: var(--primary);
+    }
+    .line-num {
+      border-right: 1px solid var(--border);
+      padding: 0 3px 0 5px;
+      text-align: right;
+    }
+    .code-line {
+      padding: 0 4px;
+      white-space: pre;
+    }
   }
   .image {
     font-size: $font-size-s;

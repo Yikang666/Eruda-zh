@@ -1,5 +1,6 @@
 import last from 'licia/last'
 import detectOs from 'licia/detectOs'
+import arrToMap from 'licia/arrToMap'
 
 export function getType(contentType) {
   if (!contentType) return 'unknown'
@@ -19,7 +20,7 @@ export function curlStr(request) {
   }
   /* eslint-disable */
   let command = []
-  const ignoredHeaders = new Set([
+  const ignoredHeaders = arrToMap([
     'accept-encoding',
     'host',
     'method',
@@ -77,7 +78,7 @@ export function curlStr(request) {
   const formData = request.requestFormData()
   if (formData) {
     data.push('--data-raw ' + escapeString(formData))
-    ignoredHeaders.add('content-length')
+    ignoredHeaders['content-length'] = true
     inferredMethod = 'POST'
   }
 
@@ -89,7 +90,7 @@ export function curlStr(request) {
   for (let i = 0; i < requestHeaders.length; i++) {
     const header = requestHeaders[i]
     const name = header.name.replace(/^:/, '')
-    if (ignoredHeaders.has(name.toLowerCase())) {
+    if (ignoredHeaders[name.toLowerCase()]) {
       continue
     }
     command.push('-H ' + escapeString(name + ': ' + header.value))

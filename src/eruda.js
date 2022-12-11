@@ -170,7 +170,7 @@ export default {
         // font-face doesn't work inside shadow dom.
         evalCss.container = document.head
         evalCss(require('./style/icon.css') +
-        require('luna-console/luna-console.css') + require('luna-object-viewer/luna-object-viewer.css') + require('luna-dom-viewer/luna-dom-viewer.css') + require('luna-syntax-highlighter/luna-syntax-highlighter.css'))
+        require('luna-console/luna-console.css') + require('luna-object-viewer/luna-object-viewer.css') + require('luna-dom-viewer/luna-dom-viewer.css'))
 
         el = document.createElement('div')
         shadowRoot.appendChild(el)
@@ -219,7 +219,6 @@ export default {
       require('luna-dom-viewer/luna-dom-viewer.css') +
       require('luna-modal/luna-modal.css') +
       require('luna-tab/luna-tab.css') +
-      require('luna-syntax-highlighter/luna-syntax-highlighter.css') +
       require('./style/style.scss') +
       require('./style/icon.css')
     )

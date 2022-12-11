@@ -4,8 +4,10 @@ import Settings from '../Settings/Settings'
 import ajax from 'licia/ajax'
 import isStr from 'licia/isStr'
 import escape from 'licia/escape'
+import trim from 'licia/trim'
+import map from 'licia/map'
+import highlight from 'licia/highlight'
 import evalCss from '../lib/evalCss'
-import LunaSyntaxHighlighter from 'luna-syntax-highlighter'
 import { classPrefix as c } from '../lib/util'
 
 export default class Sources extends Tool {
@@ -170,14 +172,61 @@ export default class Sources extends Tool {
   _renderCode() {
     const data = this._data
 
-    this._renderHtml(`<div class="${c('code')}"></div>`, false)
-    const container = this._$el.find(c('.code')).get(0)
-    new LunaSyntaxHighlighter(container, {
-      code: data.val,
-      language: data.type,
-      wrapLongLines: true,
-      showLineNumbers: data.val.length < MAX_LINE_NUM_LEN && this._showLineNum,
-    })
+    let code = data.val
+    const len = data.val.length
+
+    // If source code too big, don't process it.
+    if (len < MAX_BEAUTIFY_LEN) {
+      const curTheme = evalCss.getCurTheme()
+      code = highlight(code, data.type, {
+        keyword: `color:${curTheme.keywordColor}`,
+        number: `color:${curTheme.numberColor}`,
+        operator: `color:${curTheme.operatorColor}`,
+        comment: `color:${curTheme.commentColor}`,
+        string: `color:${curTheme.stringColor}`,
+      })
+    } else {
+      code = escape(code)
+    }
+
+    const showLineNum = len < MAX_LINE_NUM_LEN && this._showLineNum
+
+    if (showLineNum) {
+      code = code.split('\n').map((line, idx) => {
+        if (trim(line) === '') line = '&nbsp;'
+
+        return {
+          idx: idx + 1,
+          val: line,
+        }
+      })
+    }
+
+    let html
+    if (showLineNum) {
+      const lineNum = map(code, ({ idx }) => {
+        return `<div class="${c('line-num')}">${idx}</div>`
+      }).join('')
+      const codeLine = map(code, ({ val }) => {
+        return `<pre class="${c('code-line')}">${val}</pre>`
+      }).join('')
+      html = `<div class="${c('code-wrapper')}">
+        <table class="${c('code')}">
+          <tbody>
+            <tr>
+              <td class="${c('gutter')}">${lineNum}</td>
+              <td class="${c('content')}">${codeLine}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`
+    } else {
+      html = `<div class="${c('code-wrapper')}">
+        <pre class="${c('code')}">${code}</pre>
+      </div>`
+    }
+
+    this._renderHtml(html)
   }
   _renderObj() {
     // Using cache will keep binding events to the same elements.
@@ -218,4 +267,5 @@ export default class Sources extends Tool {
   }
 }
 
+const MAX_BEAUTIFY_LEN = 100000
 const MAX_LINE_NUM_LEN = 400000
