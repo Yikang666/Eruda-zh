@@ -4,6 +4,7 @@ import map from 'licia/map'
 import escape from 'licia/escape'
 import copy from 'licia/copy'
 import extend from 'licia/extend'
+import isJson from 'licia/isJson'
 import { classPrefix as c } from '../lib/util'
 import { curlStr } from './util'
 
@@ -64,18 +65,18 @@ export default class Detail {
     <div class="${c('http')}">
       ${postData}
       <div class="${c('section')}">
-        <h2>Request Headers</h2>
-        <table class="${c('headers')}">
-          <tbody>
-            ${reqHeaders}
-          </tbody>
-        </table>
-      </div>
-      <div class="${c('section')}">
         <h2>Response Headers</h2>
         <table class="${c('headers')}">
           <tbody>
             ${resHeaders}
+          </tbody>
+        </table>
+      </div>
+      <div class="${c('section')}">
+        <h2>Request Headers</h2>
+        <table class="${c('headers')}">
+          <tbody>
+            ${reqHeaders}
           </tbody>
         </table>
       </div>
@@ -128,6 +129,10 @@ export default class Detail {
       .on('click', c('.http .response'), () => {
         const data = this._detailData
         const resTxt = data.resTxt
+
+        if (isJson(resTxt)) {
+          return showSources('object', resTxt)
+        }
 
         switch (data.subType) {
           case 'css':
