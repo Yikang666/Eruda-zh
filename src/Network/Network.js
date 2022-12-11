@@ -2,7 +2,6 @@ import Tool from '../DevTools/Tool'
 import $ from 'licia/$'
 import ms from 'licia/ms'
 import each from 'licia/each'
-import last from 'licia/last'
 import Detail from './Detail'
 import throttle from 'licia/throttle'
 import { getFileName, classPrefix as c } from '../lib/util'
@@ -10,6 +9,7 @@ import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 import LunaDataGrid from 'luna-data-grid'
 import ResizeSensor from 'licia/ResizeSensor'
+import { getType } from './util'
 
 export default class Network extends Tool {
   constructor() {
@@ -25,7 +25,7 @@ export default class Network extends Tool {
 
     this._container = container
     this._initTpl()
-    this._detail = new Detail(this._$detail)
+    this._detail = new Detail(this._$detail, container)
     this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
       columns: [
         {
@@ -183,7 +183,6 @@ export default class Network extends Tool {
   }
   _bindEvent() {
     const $el = this._$el
-    const container = this._container
 
     const self = this
 
@@ -196,15 +195,6 @@ export default class Network extends Tool {
         return
       }
       self._detail.show(request)
-    })
-
-    this._detail.on('showSources', function (type, data) {
-      const sources = container.get('sources')
-      if (!sources) return
-
-      sources.set(type, data)
-
-      container.showTool('sources')
     })
 
     this._resizeSensor.addListener(
@@ -245,16 +235,5 @@ export default class Network extends Tool {
     )
     this._$detail = $el.find(c('.detail'))
     this._$requests = $el.find(c('.requests'))
-  }
-}
-
-function getType(contentType) {
-  if (!contentType) return 'unknown'
-
-  const type = contentType.split(';')[0].split('/')
-
-  return {
-    type: type[0],
-    subType: last(type),
   }
 }

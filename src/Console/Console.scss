@@ -13,28 +13,8 @@
     padding-bottom: 0;
   }
   .control {
-    @include absolute(100%, 40px);
-    cursor: default;
-    font-size: 0;
+    @include control();
     padding: 10px 10px 10px 35px;
-    background: var(--darker-background);
-    color: var(--primary);
-    line-height: 20px;
-    border-bottom: 1px solid var(--border);
-    .icon-clear,
-    .icon-filter,
-    .icon-copy {
-      display: inline-block;
-      padding: 10px;
-      font-size: $font-size-l;
-      position: absolute;
-      top: 0;
-      cursor: pointer;
-      transition: color $anim-duration;
-      &:active {
-        color: var(--accent);
-      }
-    }
     .icon-clear {
       padding-right: 0px;
       left: 0;

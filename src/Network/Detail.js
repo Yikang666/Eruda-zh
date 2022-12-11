@@ -1,14 +1,16 @@
-import Emitter from 'licia/Emitter'
 import trim from 'licia/trim'
 import isEmpty from 'licia/isEmpty'
 import map from 'licia/map'
 import escape from 'licia/escape'
+import copy from 'licia/copy'
+import extend from 'licia/extend'
 import { classPrefix as c } from '../lib/util'
+import { curlStr } from './util'
 
-export default class Detail extends Emitter {
-  constructor($container) {
-    super()
+export default class Detail {
+  constructor($container, devtools) {
     this._$container = $container
+    this._devtools = devtools
 
     this._detailData = {}
     this._bindEvent()
@@ -54,9 +56,10 @@ export default class Detail extends Emitter {
       resTxt = `<pre class="${c('response')}">${escape(data.resTxt)}</pre>`
     }
 
-    const html = `<div class="${c('breadcrumb')}">
+    const html = `<div class="${c('control')}">
       <span class="${c('icon-arrow-left back')}"></span>
-      ${escape(data.url)}
+      <span class="${c('url')}">${escape(data.url)}</span>
+      <span class="${c('icon-copy copy-curl')}"></span>
     </div>
     <div class="${c('http')}">
       ${postData}
@@ -85,9 +88,43 @@ export default class Detail extends Emitter {
   hide() {
     this._$container.hide()
   }
+  _copyCurl = () => {
+    const detailData = this._detailData
+
+    copy(
+      curlStr({
+        requestMethod: detailData.method,
+        url() {
+          return detailData.url
+        },
+        requestFormData() {
+          return detailData.data
+        },
+        requestHeaders() {
+          const reqHeaders = detailData.reqHeaders || {}
+          extend(reqHeaders, {
+            'User-Agent': navigator.userAgent,
+            Referer: location.href,
+          })
+
+          return map(reqHeaders, (value, name) => {
+            return {
+              name,
+              value,
+            }
+          })
+        },
+      })
+    )
+
+    this._devtools.notify('Copied')
+  }
   _bindEvent() {
+    const devtools = this._devtools
+
     this._$container
       .on('click', c('.back'), () => this.hide())
+      .on('click', c('.copy-curl'), this._copyCurl)
       .on('click', c('.http .response'), () => {
         const data = this._detailData
         const resTxt = data.resTxt
@@ -109,7 +146,14 @@ export default class Detail extends Emitter {
       })
 
     const showSources = (type, data) => {
-      this.emit('showSources', type, data)
+      const sources = devtools.get('sources')
+      if (!sources) {
+        return
+      }
+
+      sources.set(type, data)
+
+      devtools.showTool('sources')
     }
   }
 }

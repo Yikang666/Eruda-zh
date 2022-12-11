@@ -148,22 +148,23 @@ export default {
     if (!this._isInit) logger.error('Please call "eruda.init()" first')
     return this._isInit
   },
-  _initContainer(el, useShadowDom) {
-    if (!el) {
-      el = document.createElement('div')
-      document.documentElement.appendChild(el)
+  _initContainer(container, useShadowDom) {
+    if (!container) {
+      container = document.createElement('div')
+      document.documentElement.appendChild(container)
     }
 
-    el.id = 'eruda'
-    el.style.all = 'initial'
-    this._container = el
+    container.id = 'eruda'
+    container.style.all = 'initial'
+    this._container = container
 
     let shadowRoot
+    let el
     if (useShadowDom) {
-      if (el.attachShadow) {
-        shadowRoot = el.attachShadow({ mode: 'open' })
-      } else if (el.createShadowRoot) {
-        shadowRoot = el.createShadowRoot()
+      if (container.attachShadow) {
+        shadowRoot = container.attachShadow({ mode: 'open' })
+      } else if (container.createShadowRoot) {
+        shadowRoot = container.createShadowRoot()
       }
       if (shadowRoot) {
         // font-face doesn't work inside shadow dom.
@@ -178,9 +179,8 @@ export default {
     }
 
     if (!this._shadowRoot) {
-      const oldEl = el
       el = document.createElement('div') 
-      oldEl.appendChild(el)
+      container.appendChild(el)
     }
 
     extend(el, {
