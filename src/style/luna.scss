@@ -173,8 +173,10 @@
   th {
     background: var(--darker-background);
     &.luna-data-grid-sortable {
-      &:hover {
-        background: var(--darker-background);
+      &:hover,
+      &:active {
+        color: var(--select-foreground);
+        background: var(--highlight);
       }
     }
   }
