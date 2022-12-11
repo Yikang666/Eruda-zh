@@ -21,6 +21,7 @@
         top: 14px;
         color: var(--primary);
         cursor: pointer;
+        transition: color $anim-duration;
         &:active {
           color: var(--accent);
         }

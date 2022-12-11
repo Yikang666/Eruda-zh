@@ -43,7 +43,7 @@ export default class DevTools extends Emitter {
     this._resizeStartY = 0
     this._resizeStartSize = 0
 
-    this._appendTpl()
+    this._initTpl()
     this._initTab()
     this._initNotification()
     this._initModal()
@@ -228,7 +228,7 @@ export default class DevTools extends Emitter {
 
     this._$el.css({ height: height + '%' })
   }
-  _appendTpl() {
+  _initTpl() {
     const $container = this.$container
 
     $container.append(

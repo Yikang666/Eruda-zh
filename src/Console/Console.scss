@@ -122,7 +122,7 @@
         &:last-child {
           border-right: none;
         }
-        transition: background $anim-duration, color $anim-duration;
+        transition: background-color $anim-duration, color $anim-duration;
         &:active {
           color: var(--select-foreground);
           background: var(--highlight);

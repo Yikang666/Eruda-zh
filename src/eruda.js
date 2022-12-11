@@ -103,7 +103,7 @@ export default {
     this._entryBtn.destroy()
     delete this._entryBtn
     this._unregisterListener()
-    this._$el.remove()
+    $(this._container).remove()
     evalCss.clear()
     this._isInit = false
   },
@@ -156,6 +156,7 @@ export default {
 
     el.id = 'eruda'
     el.style.all = 'initial'
+    this._container = el
 
     let shadowRoot
     if (useShadowDom) {
