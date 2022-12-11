@@ -54,8 +54,11 @@ export default class Detail extends Emitter {
       resTxt = `<pre class="${c('response')}">${escape(data.resTxt)}</pre>`
     }
 
-    const html = `<div class="${c('http')}">
-      <div class="${c('breadcrumb')}">${escape(data.url)}</div>
+    const html = `<div class="${c('breadcrumb')}">
+      <span class="${c('icon-arrow-left back')}"></span>
+      ${escape(data.url)}
+    </div>
+    <div class="${c('http')}">
       ${postData}
       <div class="${c('section')}">
         <h2>Request Headers</h2>
@@ -74,8 +77,7 @@ export default class Detail extends Emitter {
         </table>
       </div>
       ${resTxt}
-    </div>
-    <div class="${c('back')}">Back to the List</div>`
+    </div>`
 
     this._$container.html(html).show()
     this._detailData = data

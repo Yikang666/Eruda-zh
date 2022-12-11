@@ -19,18 +19,43 @@
       background: var(--console-error-background);
     }
   }
+  .luna-data-grid {
+    border-left: none;
+    border-right: none;
+  }
   .detail {
     @include absolute();
     z-index: 10;
     display: none;
-    padding-bottom: 40px;
+    padding-top: 40px;
     background: var(--background);
+    .breadcrumb {
+      @include breadcrumb();
+      @include absolute(100%, 40px);
+      font-size: $font-size-s;
+      padding: 10px 35px;
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      .icon-arrow-left {
+        display: inline-block;
+        padding: 10px;
+        font-size: $font-size-l;
+        position: absolute;
+        top: 0;
+        cursor: pointer;
+        transition: color $anim-duration;
+        &:active {
+          color: var(--accent);
+        }
+      }
+      .icon-arrow-left {
+        left: 0;
+      }
+    }
     .http {
       @include overflow-auto(y);
       height: 100%;
-      .breadcrumb {
-        @include breadcrumb();
-      }
       .section {
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
@@ -40,6 +65,7 @@
           padding: $padding;
           font-size: $font-size;
         }
+        margin-top: 10px;
         margin-bottom: 10px;
         table {
           color: var(--foreground);
@@ -69,26 +95,6 @@
         border-top: 1px solid var(--border);
         color: var(--foreground);
         border-bottom: 1px solid var(--border);
-      }
-    }
-    .back {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      color: var(--foreground);
-      width: 100%;
-      border-top: 1px solid var(--border);
-      background: var(--darker-background);
-      display: block;
-      height: 40px;
-      line-height: 40px;
-      text-decoration: none;
-      text-align: center;
-      margin-top: 10px;
-      transition: background 0.3s;
-      cursor: pointer;
-      &:active {
-        color: var(--select-foreground);
       }
     }
   }

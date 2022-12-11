@@ -38,7 +38,7 @@
   .breadcrumb {
     @include breadcrumb();
     cursor: pointer;
-    transition: background $anim-duration, color $anim-duration;
+    transition: background-color $anim-duration, color $anim-duration;
     &:active {
       background: var(--highlight);
       color: var(--select-foreground);
