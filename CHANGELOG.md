@@ -1,3 +1,12 @@
+## 2.8.0 (11 Dec 2022)
+
+* feat(info): copy
+* feat(sources): use luna syntax highlighter
+* feat(network): use luna data grid
+* feat(network): copy as curl [#220](https://github.com/liriliri/eruda/issues/220)
+* fix(network): recognize JSON [#201](https://github.com/liriliri/eruda/issues/201)
+* fix: init with shadow dom style error [#195](https://github.com/liriliri/eruda/issues/195)
+
 ## 2.7.4 (10 Dec 2022)
 
 * fix: firefox document.body is null error [#293](https://github.com/liriliri/eruda/issues/293)
