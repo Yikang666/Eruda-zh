@@ -94,6 +94,22 @@
   .luna-console-code {
     @include luna-console-highlight();
   }
+  .luna-console-log-content {
+    .luna-console-undefined,
+    .luna-console-null {
+      color: var(--operator-color);
+    }
+    .luna-console-number {
+      color: var(--number-color);
+    }
+    .luna-console-boolean {
+      color: var(--keyword-color);
+    }
+    .luna-console-symbol,
+    .luna-console-regexp {
+      color: var(--var-color);
+    }
+  }
 }
 
 .luna-console-preview {
@@ -131,12 +147,6 @@
 .luna-object-viewer-collapsed:before {
   border-top-color: transparent;
   border-left-color: var(--foreground);
-}
-.luna-object-viewer-icon-caret-right {
-  top: 0;
-}
-.luna-object-viewer-icon-caret-down {
-  top: 1px;
 }
 
 .luna-notification {
