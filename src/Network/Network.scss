@@ -14,9 +14,11 @@
   .request-error {
     color: var(--console-error-foreground);
   }
-  .luna-data-grid-data-container:focus {
-    .request-error.luna-data-grid-selected {
-      background: var(--console-error-background);
+  .luna-data-grid:focus {
+    .luna-data-grid-data-container {
+      .request-error.luna-data-grid-selected {
+        background: var(--console-error-background);
+      }
     }
   }
   .luna-data-grid {

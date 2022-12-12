@@ -166,6 +166,13 @@
   color: var(--foreground);
   background: var(--background);
   border-color: var(--border);
+  &:focus {
+    .luna-data-grid-data-container {
+      .luna-data-grid-node.luna-data-grid-selected {
+        background: var(--accent);
+      }
+    }
+  }
   th,
   td {
     border-color: var(--border);
@@ -181,11 +188,6 @@
     }
   }
   .luna-data-grid-data-container {
-    &:focus {
-      .luna-data-grid-node.luna-data-grid-selected {
-        background: var(--accent);
-      }
-    }
     .luna-data-grid-node.luna-data-grid-selected {
       background: var(--highlight);
     }
