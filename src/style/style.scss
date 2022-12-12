@@ -36,6 +36,13 @@
   h4 {
     margin: 0;
   }
+  h2 {
+    font-size: $font-size;
+    [class^='icon-'],
+    [class*=' icon-'] {
+      font-weight: normal;
+    }
+  }
 }
 
 .hidden {
@@ -68,12 +75,4 @@
 
 .string-color {
   color: var(--string-color);
-}
-
-h2 {
-  font-size: $font-size;
-  [class^='icon-'],
-  [class*=' icon-'] {
-    font-weight: normal;
-  }
 }
