@@ -106,6 +106,8 @@ export default {
     $(this._container).remove()
     evalCss.clear()
     this._isInit = false
+    this._container = null
+    this._shadowRoot = null
   },
   scale(s) {
     if (isNum(s)) {

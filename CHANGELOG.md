@@ -1,3 +1,7 @@
+## 2.8.2 (12 Dec 2022)
+
+* fix: some variables not reset when destroy
+
 ## 2.8.1 (12 Dec 2022)
 
 * fix: remove luna syntax highlighter
