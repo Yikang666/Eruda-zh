@@ -1,3 +1,8 @@
+## 2.8.3 (13 Dec 2022)
+
+* fix(network): remove data grid ios outline
+* chore: update luna console and luna object viewer 
+
 ## 2.8.2 (12 Dec 2022)
 
 * fix: some variables not reset when destroy
