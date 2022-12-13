@@ -60,12 +60,13 @@ export default class Settings extends Tool {
 
     this._settings.push({ config, key, id })
 
+    const checked = config.get(key) ? 'checked' : ''
+
+    // prettier-ignore
     const html = `<div id="${escape(id)}" class="${c('switch')}">
       ${escape(desc)}
       <label class="${c('checkbox')}">
-        <input type="checkbox" class="${c('input')}" data-id="${escape(id)}" ${
-      config.get(key) ? 'checked' : ''
-    }>
+        <input type="checkbox" class="${c('input')}" data-id="${escape(id)}" ${checked}>
         <span class="${c('label')}"></span>
         <span class="${c('handle')}"></span>
       </label>
@@ -90,12 +91,11 @@ export default class Settings extends Tool {
       (color) => `<li style="background: ${escape(color)};"></li>`
     ).join('')
 
+    // prettier-ignore
     const html = `<div id="${escape(id)}" class="${c('color')}">
       <div class="${c('head')}">
         ${escape(desc)}
-        <span class="${c('val')}" style="background-color: ${escape(
-      config.get(key)
-    )};"></span>
+        <span class="${c('val')}" style="background-color: ${escape(config.get(key))};"></span>
       </div>
       <ul data-id="${escape(id)}">
         ${colorsHtml}
@@ -137,6 +137,7 @@ export default class Settings extends Tool {
 
     const val = config.get(key)
 
+    // prettier-ignore
     const html = `<div id="${escape(id)}" class="${c('range')}">
       <div class="${c('head')}">
         ${escape(desc)}
@@ -145,11 +146,7 @@ export default class Settings extends Tool {
       <div class="${c('input-container')}" data-id="${escape(id)}">
         <div class="${c('range-track')}">
           <div class="${c('range-track-bar')}">
-            <div class="${c('range-track-progress')}" style="width: ${progress(
-      val,
-      min,
-      max
-    )}%"></div>
+            <div class="${c('range-track-progress')}" style="width: ${progress(val, min, max)}%;"></div>
           </div>
         </div>
         <input type="range" min="${min}" max="${max}" step="${step}" value="${val}"/>

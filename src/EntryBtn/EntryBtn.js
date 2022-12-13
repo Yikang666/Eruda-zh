@@ -4,7 +4,7 @@ import Settings from '../Settings/Settings'
 import Emitter from 'licia/Emitter'
 import nextTick from 'licia/nextTick'
 import orientation from 'licia/orientation'
-import { pxToNum } from '../lib/util'
+import { pxToNum, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 export default class EntryBtn extends Emitter {
@@ -14,7 +14,7 @@ export default class EntryBtn extends Emitter {
     this._style = evalCss(require('./EntryBtn.scss'))
 
     this._$container = $container
-    this._appendTpl()
+    this._initTpl()
     this._makeDraggable()
     this._bindEvent()
     this._registerListener()
@@ -63,10 +63,12 @@ export default class EntryBtn extends Emitter {
   _unregisterListener() {
     emitter.off(emitter.SCALE, this._scaleListener)
   }
-  _appendTpl() {
+  _initTpl() {
     const $container = this._$container
 
-    $container.append(require('./EntryBtn.hbs')())
+    $container.append(
+      c('<div class="entry-btn"><span class="icon-tool"></span></div>')
+    )
     this._$el = $container.find('.eruda-entry-btn')
   }
   _resetPos(orientationChanged) {
