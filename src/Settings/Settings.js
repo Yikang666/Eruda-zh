@@ -6,7 +6,10 @@ import each from 'licia/each'
 import filter from 'licia/filter'
 import isStr from 'licia/isStr'
 import clone from 'licia/clone'
+import escape from 'licia/escape'
+import map from 'licia/map'
 import evalCss from '../lib/evalCss'
+import { classPrefix as c } from '../lib/util'
 
 export default class Settings extends Tool {
   constructor() {
@@ -15,10 +18,6 @@ export default class Settings extends Tool {
     this._style = evalCss(require('./Settings.scss'))
 
     this.name = 'settings'
-    this._switchTpl = require('./switch.hbs')
-    this._selectTpl = require('./select.hbs')
-    this._rangeTpl = require('./range.hbs')
-    this._colorTpl = require('./color.hbs')
     this._settings = []
   }
   init($el) {
@@ -61,14 +60,18 @@ export default class Settings extends Tool {
 
     this._settings.push({ config, key, id })
 
-    this._$el.append(
-      this._switchTpl({
-        desc,
-        key,
-        id,
-        val: config.get(key),
-      })
-    )
+    const html = `<div id="${escape(id)}" class="${c('switch')}">
+      ${escape(desc)}
+      <label class="${c('checkbox')}">
+        <input type="checkbox" class="${c('input')}" data-id="${escape(id)}" ${
+      config.get(key) ? 'checked' : ''
+    }>
+        <span class="${c('label')}"></span>
+        <span class="${c('handle')}"></span>
+      </label>
+    </div>`
+
+    this._$el.append(html)
 
     return this
   }
@@ -82,14 +85,24 @@ export default class Settings extends Tool {
 
     this._settings.push({ config, key, id })
 
-    this._$el.append(
-      this._colorTpl({
-        desc,
-        colors,
-        id,
-        val: config.get(key),
-      })
-    )
+    const colorsHtml = map(
+      colors,
+      (color) => `<li style="background: ${escape(color)};"></li>`
+    ).join('')
+
+    const html = `<div id="${escape(id)}" class="${c('color')}">
+      <div class="${c('head')}">
+        ${escape(desc)}
+        <span class="${c('val')}" style="background-color: ${escape(
+      config.get(key)
+    )};"></span>
+      </div>
+      <ul data-id="${escape(id)}">
+        ${colorsHtml}
+      </ul>
+    </div>`
+
+    this._$el.append(html)
 
     return this
   }
@@ -98,14 +111,22 @@ export default class Settings extends Tool {
 
     this._settings.push({ config, key, id })
 
-    this._$el.append(
-      this._selectTpl({
-        desc,
-        selections,
-        id,
-        val: config.get(key),
-      })
-    )
+    const selectionsHtml = map(
+      selections,
+      (selection) => `<li>${escape(selection)}</li>`
+    ).join('')
+
+    const html = `<div id="${escape(id)}" class="${c('select')}">
+      <div class="${c('head')}">
+        ${escape(desc)}
+        <span class="${c('val')}">${escape(config.get(key))}</span>
+      </div>
+      <ul data-id="${escape(id)}">
+        ${selectionsHtml}
+      </ul>
+    </div>`
+
+    this._$el.append(html)
 
     return this
   }
@@ -116,17 +137,26 @@ export default class Settings extends Tool {
 
     const val = config.get(key)
 
-    this._$el.append(
-      this._rangeTpl({
-        desc,
-        min,
-        max,
-        step,
-        val,
-        progress: progress(val, min, max),
-        id,
-      })
-    )
+    const html = `<div id="${escape(id)}" class="${c('range')}">
+      <div class="${c('head')}">
+        ${escape(desc)}
+        <span class="${c('val')}">${val}</span>
+      </div>
+      <div class="${c('input-container')}" data-id="${escape(id)}">
+        <div class="${c('range-track')}">
+          <div class="${c('range-track-bar')}">
+            <div class="${c('range-track-progress')}" style="width: ${progress(
+      val,
+      min,
+      max
+    )}%"></div>
+          </div>
+        </div>
+        <input type="range" min="${min}" max="${max}" step="${step}" value="${val}"/>
+      </div>
+    </div>`
+
+    this._$el.append(html)
 
     return this
   }
