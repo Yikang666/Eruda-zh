@@ -1,6 +1,8 @@
 import Tool from '../DevTools/Tool'
 import Settings from '../Settings/Settings'
 import $ from 'licia/$'
+import escape from 'licia/escape'
+import isEmpty from 'licia/isEmpty'
 import unique from 'licia/unique'
 import each from 'licia/each'
 import isStr from 'licia/isStr'
@@ -17,7 +19,7 @@ import lowerCase from 'licia/lowerCase'
 import contain from 'licia/contain'
 import filter from 'licia/filter'
 import map from 'licia/map'
-import { safeStorage, isErudaEl } from '../lib/util'
+import { safeStorage, isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 import LunaModal from 'luna-modal'
@@ -41,7 +43,6 @@ export default class Resources extends Tool {
     this._iframeData = []
     this._imageData = []
     this._observeElement = true
-    this._tpl = require('./Resources.hbs')
   }
   init($el, container) {
     super.init($el)
@@ -395,7 +396,6 @@ export default class Resources extends Tool {
       .separator()
   }
   _render() {
-    const cookieData = this._cookieData
     const scriptData = this._scriptData
     const stylesheetData = this._stylesheetData
     const imageData = this._imageData
@@ -416,29 +416,263 @@ export default class Resources extends Tool {
       })
     }
 
-    this._renderHtml(
-      this._tpl({
-        localStoreData: filterData(
-          this._localStoreData,
+    const localStoreData = filterData(
+      this._localStoreData,
+      localStoreSearchKeyword
+    )
+    let localStoreDataHtml = '<tr><td>Empty</td></tr>'
+    if (!isEmpty(localStoreData)) {
+      localStoreDataHtml = map(localStoreData, ({ key, val }) => {
+        key = escape(key)
+
+        return `<tr>
+          <td class="${c('key')}">${key}</td>
+          <td class="${c(
+            'storage-val'
+          )}" data-key="${key}" data-type="local">${escape(val)}</td>
+          <td class="${c('control')}">
+            <span class="${c(
+              'icon-delete delete-storage'
+            )}" data-key="${key}" data-type="local"></span>
+          </td>
+        </tr>`
+      }).join('')
+    }
+
+    const localStorageHtml = `<div class="${c('section local-storage')}">
+      <h2 class="${c('title')}">
+        Local Storage
+        <div class="${c('btn refresh-local-storage')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+        <div class="${c('btn clear-storage')}" data-type="local">
+          <span class="${c('icon-clear')}"></span>
+        </div>
+        <div class="${c('btn search')}" data-type="local">
+          <span class="${c('icon-filter')}"></span>
+        </div>
+        ${
           localStoreSearchKeyword
-        ),
-        localStoreSearchKeyword,
-        sessionStoreData: filterData(
-          this._sessionStoreData,
+            ? `<div class="${c('btn search-keyword')}">${escape(
+                localStoreSearchKeyword
+              )}</div>`
+            : ''
+        }
+      </h2>
+      <div class="${c('content')}">
+        <table>
+          <tbody>
+            ${localStoreDataHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>`
+
+    const sessionStoreData = filterData(
+      this._sessionStoreData,
+      sessionStoreSearchKeyword
+    )
+
+    let sessionStoreDataHtml = '<tr><td>Empty</td></tr>'
+    if (!isEmpty(sessionStoreData)) {
+      sessionStoreDataHtml = map(sessionStoreData, ({ key, val }) => {
+        key = escape(key)
+
+        return `<tr>
+          <td class="${c('key')}">${key}</td>
+          <td class="${c(
+            'storage-val'
+          )}" data-key="${key}" data-type="session">${escape(val)}</td>
+          <td class="${c('control')}">
+            <span class="${c(
+              'icon-delete delete-storage'
+            )}" data-key="${key}" data-type="session"></span>
+          </td>
+        </tr>`
+      }).join('')
+    }
+
+    const sessionStorageHtml = `<div class="${c('section session-storage')}">
+      <h2 class="${c('title')}">
+        Session Storage
+        <div class="${c('btn refresh-session-storage')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+        <div class="${c('btn clear-storage')}" data-type="session">
+          <span class="${c('icon-clear')}"></span>
+        </div>
+        <div class="${c('btn search')}" data-type="session">
+          <span class="${c('icon-filter')}"></span>
+        </div>
+        ${
           sessionStoreSearchKeyword
-        ),
-        sessionStoreSearchKeyword,
-        cookieData: filterData(cookieData, cookieSearchKeyword),
-        cookieSearchKeyword,
-        cookieState: getState('cookie', cookieData.length),
-        scriptData,
-        scriptState: getState('script', scriptData.length),
-        stylesheetData,
-        stylesheetState: getState('stylesheet', stylesheetData.length),
-        iframeData: this._iframeData,
-        imageData,
-        imageState: getState('image', imageData.length),
-      })
+            ? `<div class="${c('btn search-keyword')}">${escape(
+                sessionStoreSearchKeyword
+              )}</div>`
+            : ''
+        }
+      </h2>
+      <div class="${c('content')}">
+        <table>
+          <tbody>
+            ${sessionStoreDataHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>`
+
+    const cookieData = filterData(this._cookieData, cookieSearchKeyword)
+    const cookieState = getState('cookie', this._cookieData.length)
+
+    let cookieDataHtml = '<tr><td>Empty</td></tr>'
+    if (!isEmpty(cookieData)) {
+      cookieDataHtml = map(cookieData, ({ key, val }) => {
+        key = escape(key)
+
+        return `<tr>
+          <td class="${c('key')}">${key}</td>
+          <td>${escape(val)}</td>
+          <td class="${c('control')}">
+            <span class="${c(
+              'icon-delete delete-cookie'
+            )} data-key="${key}"></span>
+          </td>
+        </tr>`
+      }).join('')
+    }
+
+    const cookieHtml = `<div class="${c('section cookie ' + cookieState)}">
+      <h2 class="${c('title')}">
+        Cookie
+        <div class="${c('btn refresh-cookie')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+        <div class="${c('btn clear-cookie')}">
+          <span class="${c('icon-clear')}"></span>
+        </div>
+        <div class="${c('btn search')}" data-type="cookie">
+          <span class="${c('icon-filter')}"></span>
+        </div>
+        ${
+          cookieSearchKeyword
+            ? `<div class="${c('btn search-keyword')}">${escape(
+                cookieSearchKeyword
+              )}</div>`
+            : ''
+        }
+      </h2>
+      <div class="${c('content')}">
+        <table>
+          <tbody>
+            ${cookieDataHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>`
+
+    const scriptState = getState('script', scriptData.length)
+    let scriptDataHtml = '<li>Empty</li>'
+    if (!isEmpty(scriptData)) {
+      scriptDataHtml = map(scriptData, (script) => {
+        script = escape(script)
+        return `<li><a href="${script}" target="_blank" class="${c(
+          'js-link'
+        )}">${script}</a></li>`
+      }).join('')
+    }
+
+    const scriptHtml = `<div class="${c('section script ' + scriptState)}">
+      <h2 class="${c('title')}">
+        Script
+        <div class="${c('btn refresh-script')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+      </h2>
+      <ul class="${c('link-list')}">
+        ${scriptDataHtml}
+      </ul>
+    </div>`
+
+    const stylesheetState = getState('stylesheet', stylesheetData.length)
+    let stylesheetDataHtml = '<li>Empty</li>'
+    if (!stylesheetData) {
+      stylesheetDataHtml = map(stylesheetData, (stylesheet) => {
+        stylesheet = escape(stylesheet)
+        return ` <li><a href="${stylesheet}" target="_blank" class="${c(
+          'css-link'
+        )}">${stylesheet}</a></li>`
+      }).join('')
+    }
+
+    const stylesheetHtml = `<div class="${c(
+      'section stylesheet ' + stylesheetState
+    )}">
+      <h2 class="${c('title')}">
+        Stylesheet
+        <div class="${c('btn refresh-stylesheet')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+      </h2>
+      <ul class="${c('link-list')}">
+        ${stylesheetDataHtml}
+      </ul>
+    </div>`
+
+    let iframeDataHtml = '<li>Empty</li>'
+    if (!isEmpty(this._iframeData)) {
+      iframeDataHtml = map(this._iframeData, (iframe) => {
+        iframe = escape(iframe)
+        return `<li><a href="${iframe}" target="_blank" class="${c(
+          'iframe-link'
+        )}">${iframe}</a></li>`
+      }).join('')
+    }
+    const iframeHtml = `<div class=${c('section iframe')}">
+      <h2 class="${c('title')}">
+        Iframe
+        <div class="${c('btn refresh-iframe')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+      </h2>
+      <ul class="${c('link-list')}">
+        ${iframeDataHtml}
+      </ul>
+    </div>`
+
+    const imageState = getState('image', imageData.length)
+    let imageDataHtml = '<li>Empty</li>'
+    if (!isEmpty(imageData)) {
+      imageDataHtml = map(imageData, (image) => {
+        return `<li class="${c('image')}">
+          <img src="${escape(image)}" data-exclude="true" class="${c(
+          'img-link'
+        )}"/>
+        </li>`
+      }).join('')
+    }
+
+    const imageHtml = `<div class="${c('section image')}">
+      <h2 class="${c('title ' + imageState)}">
+        Image
+        <div class="${c('btn refresh-image')}">
+          <span class="${c('icon-refresh')}"></span>
+        </div>
+      </h2>
+      <ul class="${c('image-list')}">
+        ${imageDataHtml}
+      </ul>
+    </div>`
+
+    this._renderHtml(
+      [
+        localStorageHtml,
+        sessionStorageHtml,
+        cookieHtml,
+        scriptHtml,
+        stylesheetHtml,
+        iframeHtml,
+        imageHtml,
+      ].join('')
     )
   }
   _renderHtml(html) {
