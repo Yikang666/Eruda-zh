@@ -4,6 +4,7 @@ import Highlight from './Highlight'
 import Select from './Select'
 import Settings from '../Settings/Settings'
 import $ from 'licia/$'
+import isEmpty from 'licia/isEmpty'
 import keys from 'licia/keys'
 import MutationObserver from 'licia/MutationObserver'
 import each from 'licia/each'
@@ -27,7 +28,7 @@ import trim from 'licia/trim'
 import lowerCase from 'licia/lowerCase'
 import pick from 'licia/pick'
 import LunaModal from 'luna-modal'
-import { pxToNum, isErudaEl } from '../lib/util'
+import { pxToNum, isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 export default class Elements extends Tool {
@@ -37,7 +38,6 @@ export default class Elements extends Tool {
     this._style = evalCss(require('./Elements.scss'))
 
     this.name = 'elements'
-    this._tpl = require('./Elements.hbs')
     this._rmDefComputedStyle = true
     this._highlightElement = false
     this._selectElement = false
@@ -54,7 +54,22 @@ export default class Elements extends Tool {
 
     $el.html('<div class="eruda-show-area"></div>')
     this._$showArea = $el.find('.eruda-show-area')
-    $el.append(require('./BottomBar.hbs')())
+    $el.append(
+      c(`<div class="bottom-bar">
+      <div class="btn select">
+        <span class="icon icon-select"></span>
+      </div>
+      <div class="btn refresh">
+        <span class="icon icon-refresh"></span>
+      </div>
+      <div class="btn highlight">
+        <span class="icon icon-eye"></span>
+      </div>
+      <div class="btn reset">
+        <span class="icon icon-reset"></span>
+      </div>
+    </div>`)
+    )
 
     this._htmlEl = document.documentElement
     this._highlight = new Highlight(this._container.$container)
@@ -353,7 +368,174 @@ export default class Elements extends Tool {
     if (!isElExist(this._curEl)) return this._back()
 
     this._highlight[this._highlightElement ? 'show' : 'hide']()
-    this._renderHtml(this._tpl(this._getData()))
+
+    const data = this._getData()
+
+    let parents = ''
+    if (!isEmpty(data.parents)) {
+      parents = `<ul class="${c('parents')}">
+        ${map(data.parents, ({ text, idx }) => {
+          return `<li>
+            <div class="${c('parent')}" data-idx="${idx}">${text}</div>
+            <span class="${c('icon-arrow-right')}"></span>
+          </li>`
+        }).join('')}
+      </ul>`
+    }
+
+    let children = ''
+    if (data.children) {
+      children = `<ul class="${c('children')}">
+        ${map(data.children, ({ isCmt, idx, isEl, text }) => {
+          return `<li class="${c(
+            `child ${isCmt ? 'green' : ''} ${isEl ? 'active-effect' : ''}`
+          )}" data-idx="${idx}">${text}</li>`
+        }).join('')}
+      </ul>`
+    }
+
+    let attribute = '<tr><td>Empty</td></tr>'
+    if (!isEmpty(data.attributes)) {
+      attribute = map(data.attributes, ({ name, value }) => {
+        return `<tr>
+          <td class="${c('attribute-name-color')}">${escape(name)}</td>
+          <td class="${c('string-color')}">${value}</td>
+        </tr>`
+      }).join('')
+    }
+    attribute = `<div class="${c('attributes section')}">
+      <h2>Attributes</h2>
+      <div class="${c('table-wrapper')}">
+        <table>
+          <tbody>
+            ${attribute} 
+          </tbody>
+        </table>
+      </div>
+    </div>`
+
+    let styles = ''
+    if (!isEmpty(data.styles)) {
+      const style = map(data.styles, ({ selectorText, style }) => {
+        style = map(style, (val, key) => {
+          return `<div class="${c('rule')}"><span>${escape(
+            key
+          )}</span>: ${val};</div>`
+        }).join('')
+        return `<div class="${c('style-rules')}">
+          <div>${escape(selectorText)} {</div>
+            ${style}
+          <div>}</div>
+        </div>`
+      }).join('')
+      styles = `<div class="${c('styles section')}">
+        <h2>Styles</h2>
+        <div class="${c('style-wrapper')}">
+          ${style}
+        </div>
+      </div>`
+    }
+
+    let computedStyle = ''
+    if (data.computedStyle) {
+      let toggleButton = c(`<div class="btn toggle-all-computed-style">
+        <span class="icon-expand"></span>
+      </div>`)
+      if (data.rmDefComputedStyle) {
+        toggleButton = c(`<div class="btn toggle-all-computed-style">
+          <span class="icon-compress"></span>
+        </div>`)
+      }
+
+      const boxModel = data.boxModel
+      // prettier-ignore
+      const boxModelHtml = [`<div class="${c('box-model')}">`,
+        boxModel.position ? `<div class="${c('position')}">` : '',
+          boxModel.position ? `<div class="${c('label')}">position</div><div class="${c('top')}">${boxModel.position.top}</div><br><div class="${c('left')}">${boxModel.position.left}</div>` : '',
+          `<div class="${c('margin')}">`,
+            `<div class="${c('label')}">margin</div><div class="${c('top')}">${boxModel.margin.top}</div><br><div class="${c('left')}">${boxModel.margin.left}</div>`,
+            `<div class="${c('border')}">`,
+              `<div class="${c('label')}">border</div><div class="${c('top')}">${boxModel.border.top}</div><br><div class="${c('left')}">${boxModel.border.left}</div>`,
+              `<div class="${c('padding')}">`,
+                `<div class="${c('label')}">padding</div><div class="${c('top')}">${boxModel.padding.top}</div><br><div class="${c('left')}">${boxModel.padding.left}</div>`,
+                `<div class="${c('content')}">`,
+                  `<span>${boxModel.content.width}</span>&nbsp;×&nbsp;<span>${boxModel.content.height}</span>`,
+                '</div>',
+                `<div class="${c('right')}">${boxModel.padding.right}</div><br><div class="${c('bottom')}">${boxModel.padding.bottom}</div>`,
+              '</div>',
+              `<div class="${c('right')}">${boxModel.border.right}</div><br><div class="${c('bottom')}">${boxModel.border.bottom}</div>`,
+            '</div>',
+            `<div class="${c('right')}">${boxModel.margin.right}</div><br><div class="${c('bottom')}">${boxModel.margin.bottom}</div>`,
+          '</div>',
+          boxModel.position ? `<div class="${c('right')}">${boxModel.position.right}</div><br><div class="${c('bottom')}">${boxModel.position.bottom}</div>` : '',
+        boxModel.position ? '</div>' : '',
+      '</div>'].join('')
+
+      computedStyle = `<div class="${c('computed-style section')}">
+        <h2>
+          Computed Style
+          ${toggleButton}
+          <div class="${c('btn computed-style-search')}">
+            <span class="${c('icon-filter')}"></span>
+          </div>
+          ${
+            data.computedStyleSearchKeyword
+              ? `<div class="${c('btn search-keyword')}">${escape(
+                  data.computedStyleSearchKeyword
+                )}</div>`
+              : ''
+          }
+        </h2>
+        ${boxModelHtml}
+        <div class="${c('table-wrapper')}">
+          <table>
+            <tbody>
+            ${map(data.computedStyle, (val, key) => {
+              return `<tr>
+                <td class="${c('key')}">${escape(key)}</td>
+                <td>${val}</td>
+              </tr>`
+            }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`
+    }
+
+    let listeners = ''
+    if (data.listeners) {
+      listeners = map(data.listeners, (listeners, key) => {
+        listeners = map(listeners, ({ useCapture, listenerStr }) => {
+          return `<li ${useCapture ? `class="${c('capture')}"` : ''}>${escape(
+            listenerStr
+          )}</li>`
+        }).join('')
+        return `<div class="${c('listener')}">
+          <div class="${c('listener-type')}">${escape(key)}</div>
+          <ul class="${c('listener-content')}">
+            ${listeners}
+          </ul>
+        </div>`
+      }).join('')
+      listeners = `<div class="${c('listeners section')}">
+        <h2>Event Listeners</h2>
+        <div class="${c('listener-wrapper')}">
+          ${listeners} 
+        </div>
+      </div>`
+    }
+
+    const html = `${parents}
+    <div class="${c('breadcrumb')}">
+      ${data.name}
+    </div>
+    ${children}
+    ${attribute}
+    ${styles}
+    ${computedStyle}
+    ${listeners}`
+
+    this._renderHtml(html)
   }
   _renderHtml(html) {
     if (html === this._lastHtml) return

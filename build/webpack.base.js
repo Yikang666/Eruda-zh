@@ -94,35 +94,6 @@ module.exports = {
         test: /luna-dom-highlighter\.css$/,
         use: [rawLoader],
       },
-      // https://github.com/wycats/handlebars.js/issues/1134
-      {
-        test: /\.hbs$/,
-        use: [
-          {
-            loader: path.resolve(
-              __dirname,
-              './loaders/handlebars-minifier-loader.js'
-            ),
-            options: {},
-          },
-          {
-            loader: nodeModDir + 'handlebars-loader/index.js',
-            options: {
-              runtime: srcDir + 'lib/handlebars.js',
-              knownHelpers: ['class', 'repeat', 'concat'],
-              precompileOptions: {
-                knownHelpersOnly: true,
-              },
-            },
-          },
-          {
-            loader: 'html-minifier-loader',
-            options: {
-              ignoreCustomFragments: [/\{\{\{[^}]+\}\}\}/, /\{\{[^}]+\}\}/],
-            },
-          },
-        ],
-      },
     ],
   },
   plugins: [
