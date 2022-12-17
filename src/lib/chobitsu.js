@@ -10,6 +10,7 @@ chobitsu.register('Overlay', Overlay)
 chobitsu.register('DOM', {
   ...DOM,
   getNodeId: DOM.getDOMNodeId,
+  getNode: DOM.getDOMNode,
 })
 chobitsu.register('Storage', Storage)
 

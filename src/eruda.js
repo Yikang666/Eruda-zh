@@ -186,7 +186,7 @@ export default {
     }
 
     extend(el, {
-      className: 'eruda-container',
+      className: 'eruda-container __chobitsu-hide__',
       contentEditable: false
     })
 

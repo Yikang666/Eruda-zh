@@ -1,6 +1,4 @@
 import Tool from '../DevTools/Tool'
-import Highlight from './Highlight'
-import Select from './Select'
 import $ from 'licia/$'
 import isEl from 'licia/isEl'
 import nextTick from 'licia/nextTick'
@@ -8,10 +6,12 @@ import Emitter from 'licia/Emitter'
 import map from 'licia/map'
 import isEmpty from 'licia/isEmpty'
 import toNum from 'licia/toNum'
+import isMobile from 'licia/isMobile'
 import LunaDomViewer from 'luna-dom-viewer'
 import { isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import Detail from './Detail'
+import chobitsu from '../lib/chobitsu'
 import { formatNodeName } from './util'
 
 export default class Elements extends Tool {
@@ -21,7 +21,6 @@ export default class Elements extends Tool {
     this._style = evalCss(require('./Elements.scss'))
 
     this.name = 'elements'
-    this._highlightElement = false
     this._selectElement = false
     this._observeElement = true
     this._history = []
@@ -42,9 +41,8 @@ export default class Elements extends Tool {
       ignore: (node) => isErudaEl(node),
     })
     this._domViewer.expand()
-    this._highlight = new Highlight(this._container.$container)
-    this._select = new Select()
     this._bindEvent()
+    chobitsu.domain('Overlay').enable()
 
     nextTick(() => this._updateHistory())
   }
@@ -69,8 +67,10 @@ export default class Elements extends Tool {
 
     evalCss.remove(this._style)
     this._detail.destroy()
-    this._select.disable()
-    this._highlight.destroy()
+    chobitsu
+      .domain('Overlay')
+      .off('inspectNodeRequested', this._inspectNodeRequested)
+    chobitsu.domain('Overlay').disable()
   }
   _initTpl() {
     const $el = this._$el
@@ -114,18 +114,17 @@ export default class Elements extends Tool {
   }
   _bindEvent() {
     const self = this
-    const select = this._select
 
     this._$el.on('click', c('.crumb'), function () {
       let idx = toNum($(this).data('idx'))
-      let el = self._curNode
+      let node = self._curNode
 
-      while (idx-- && el.parentElement) {
-        el = el.parentElement
+      while (idx-- && node.parentElement) {
+        node = node.parentElement
       }
 
-      if (isElExist(el)) {
-        self.set(el)
+      if (isElExist(node)) {
+        self._setNode(node)
       }
     })
 
@@ -133,32 +132,43 @@ export default class Elements extends Tool {
       .on('click', c('.select'), () => this._toggleSelect())
       .on('click', c('.show'), () => this._detail.show(this._curNode))
 
-    select.on('select', (target) => this.set(target))
-
     this._domViewer.on('select', this._setNode)
-  }
-  _toggleHighlight() {
-    if (this._selectElement) return
 
-    this._$el.find('.eruda-highlight').toggleClass('eruda-active')
-    this._highlightElement = !this._highlightElement
-
-    this._render()
+    chobitsu
+      .domain('Overlay')
+      .on('inspectNodeRequested', this._inspectNodeRequested)
   }
   _toggleSelect() {
-    const select = this._select
-
     this._$el.find(c('.select')).toggleClass(c('active'))
-    if (!this._selectElement && !this._highlightElement) {
-      this._toggleHighlight()
-    }
     this._selectElement = !this._selectElement
 
     if (this._selectElement) {
-      select.enable()
+      chobitsu.domain('Overlay').setInspectMode({
+        mode: 'searchForNode',
+        highlightConfig: {
+          showInfo: !isMobile(),
+          showRulers: false,
+          showAccessibilityInfo: !isMobile(),
+          showExtensionLines: false,
+          contrastAlgorithm: 'aa',
+          contentColor: 'rgba(111, 168, 220, .66)',
+          paddingColor: 'rgba(147, 196, 125, .55)',
+          borderColor: 'rgba(255, 229, 153, .66)',
+          marginColor: 'rgba(246, 178, 107, .66)',
+        },
+      })
+      this._container.hide()
     } else {
-      select.disable()
+      chobitsu.domain('Overlay').setInspectMode({
+        mode: 'none',
+      })
     }
+  }
+  _inspectNodeRequested = ({ backendNodeId }) => {
+    this._container.show()
+    this._toggleSelect()
+    const { node } = chobitsu.domain('DOM').getNode({ nodeId: backendNodeId })
+    this.select(node)
   }
   _setNode = (node) => {
     if (node === this._curNode) return
@@ -166,8 +176,6 @@ export default class Elements extends Tool {
     this._curNode = node
     this._domViewer.select(node)
     this._renderCrumbs()
-
-    this._highlight.setEl(node)
 
     const parentQueue = []
 

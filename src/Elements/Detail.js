@@ -23,6 +23,7 @@ import MutationObserver from 'licia/MutationObserver'
 import CssStore from './CssStore'
 import Settings from '../Settings/Settings'
 import LunaModal from 'luna-modal'
+import chobitsu from '../lib/chobitsu'
 import { formatNodeName } from './util'
 import { pxToNum, isErudaEl, classPrefix as c } from '../lib/util'
 
@@ -41,10 +42,23 @@ export default class Detail {
     this._computedStyleSearchKeyword = ''
     this._enableObserver()
     this._render()
+
+    const { nodeId } = chobitsu.domain('DOM').getNodeId({ node: el })
+    chobitsu.domain('Overlay').highlightNode({
+      nodeId,
+      highlightConfig: {
+        showInfo: true,
+        contentColor: 'rgba(111, 168, 220, .66)',
+        paddingColor: 'rgba(147, 196, 125, .55)',
+        borderColor: 'rgba(255, 229, 153, .66)',
+        marginColor: 'rgba(246, 178, 107, .66)',
+      },
+    })
   }
   hide = () => {
     this._$container.hide()
     this._disableObserver()
+    chobitsu.domain('Overlay').hideHighlight()
   }
   destroy() {
     this._disableObserver()
