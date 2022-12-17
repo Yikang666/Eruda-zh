@@ -1,12 +1,11 @@
 import trim from 'licia/trim'
 import isEmpty from 'licia/isEmpty'
 import map from 'licia/map'
+import each from 'licia/each'
 import escape from 'licia/escape'
 import copy from 'licia/copy'
-import extend from 'licia/extend'
 import isJson from 'licia/isJson'
 import { classPrefix as c } from '../lib/util'
-import { curlStr } from './util'
 
 export default class Detail {
   constructor($container, devtools) {
@@ -60,7 +59,7 @@ export default class Detail {
     const html = `<div class="${c('control')}">
       <span class="${c('icon-arrow-left back')}"></span>
       <span class="${c('url')}">${escape(data.url)}</span>
-      <span class="${c('icon-copy copy-curl')}"></span>
+      <span class="${c('icon-copy copy-res')}"></span>
     </div>
     <div class="${c('http')}">
       ${postData}
@@ -89,35 +88,23 @@ export default class Detail {
   hide() {
     this._$container.hide()
   }
-  _copyCurl = () => {
+  _copyRes = () => {
     const detailData = this._detailData
 
-    copy(
-      curlStr({
-        requestMethod: detailData.method,
-        url() {
-          return detailData.url
-        },
-        requestFormData() {
-          return detailData.data
-        },
-        requestHeaders() {
-          const reqHeaders = detailData.reqHeaders || {}
-          extend(reqHeaders, {
-            'User-Agent': navigator.userAgent,
-            Referer: location.href,
-          })
+    let data = `${detailData.method} ${detailData.url} ${detailData.status}\n`
+    if (!isEmpty(detailData.reqHeaders)) {
+      data += '\nRequest Headers\n\n'
+      each(detailData.reqHeaders, (val, key) => (data += `${key}: ${val}\n`))
+    }
+    if (!isEmpty(detailData.resHeaders)) {
+      data += '\nResponse Headers\n\n'
+      each(detailData.resHeaders, (val, key) => (data += `${key}: ${val}\n`))
+    }
+    if (detailData.resTxt) {
+      data += `\n${detailData.resTxt}\n`
+    }
 
-          return map(reqHeaders, (value, name) => {
-            return {
-              name,
-              value,
-            }
-          })
-        },
-      })
-    )
-
+    copy(data)
     this._devtools.notify('Copied')
   }
   _bindEvent() {
@@ -125,7 +112,7 @@ export default class Detail {
 
     this._$container
       .on('click', c('.back'), () => this.hide())
-      .on('click', c('.copy-curl'), this._copyCurl)
+      .on('click', c('.copy-res'), this._copyRes)
       .on('click', c('.http .response'), () => {
         const data = this._detailData
         const resTxt = data.resTxt

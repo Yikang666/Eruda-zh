@@ -78,7 +78,7 @@ export default class Elements extends Tool {
     $el.html(
       c(`<div class="control">
         <span class="icon icon-select select"></span>
-        <span class="icon icon-eye show"></span>
+        <span class="icon icon-eye show-detail"></span>
       </div>
       <div class="dom-viewer-container">
         <div class="dom-viewer"></div>
@@ -130,7 +130,7 @@ export default class Elements extends Tool {
 
     this._$control
       .on('click', c('.select'), () => this._toggleSelect())
-      .on('click', c('.show'), () => this._detail.show(this._curNode))
+      .on('click', c('.show-detail'), () => this._detail.show(this._curNode))
 
     this._domViewer.on('select', this._setNode)
 

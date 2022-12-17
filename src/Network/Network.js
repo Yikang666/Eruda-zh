@@ -2,6 +2,7 @@ import Tool from '../DevTools/Tool'
 import $ from 'licia/$'
 import ms from 'licia/ms'
 import each from 'licia/each'
+import map from 'licia/map'
 import Detail from './Detail'
 import throttle from 'licia/throttle'
 import { getFileName, classPrefix as c } from '../lib/util'
@@ -10,6 +11,9 @@ import chobitsu from '../lib/chobitsu'
 import LunaDataGrid from 'luna-data-grid'
 import ResizeSensor from 'licia/ResizeSensor'
 import { getType } from './util'
+import copy from 'licia/copy'
+import extend from 'licia/extend'
+import { curlStr } from './util'
 
 export default class Network extends Tool {
   constructor() {
@@ -19,6 +23,7 @@ export default class Network extends Tool {
 
     this.name = 'network'
     this._requests = {}
+    this._selectedRequest = null
   }
   init($el, container) {
     super.init($el)
@@ -184,20 +189,73 @@ export default class Network extends Tool {
 
     request.render()
   }
+  _copyCurl = () => {
+    const request = this._selectedRequest
+
+    copy(
+      curlStr({
+        requestMethod: request.method,
+        url() {
+          return request.url
+        },
+        requestFormData() {
+          return request.data
+        },
+        requestHeaders() {
+          const reqHeaders = request.reqHeaders || {}
+          extend(reqHeaders, {
+            'User-Agent': navigator.userAgent,
+            Referer: location.href,
+          })
+
+          return map(reqHeaders, (value, name) => {
+            return {
+              name,
+              value,
+            }
+          })
+        },
+      })
+    )
+
+    this._container.notify('Copied')
+  }
+  _updateButtons() {
+    const $control = this._$control
+    const $showDetail = $control.find(c('.show-detail'))
+    const $copyCurl = $control.find(c('.copy-curl'))
+
+    $showDetail.addClass(c('icon-disabled'))
+    $copyCurl.addClass(c('icon-disabled'))
+
+    if (this._selectedRequest) {
+      $showDetail.rmClass(c('icon-disabled'))
+      $copyCurl.rmClass(c('icon-disabled'))
+    }
+  }
   _bindEvent() {
-    const $el = this._$el
+    const $control = this._$control
+    const requestDataGrid = this._requestDataGrid
 
     const self = this
 
-    $el.on('click', c('.clear-request'), () => this.clear())
+    $control
+      .on('click', c('.clear-request'), () => this.clear())
+      .on('click', c('.show-detail'), () =>
+        this._detail.show(this._selectedRequest)
+      )
+      .on('click', c('.copy-curl'), this._copyCurl)
 
-    this._requestDataGrid.on('select', (node) => {
+    requestDataGrid.on('select', (node) => {
       const id = $(node.container).data('id')
       const request = self._requests[id]
-      if (!request.done) {
-        return
-      }
-      self._detail.show(request)
+      this._selectedRequest = request
+      this._updateButtons()
+    })
+
+    requestDataGrid.on('deselect', () => {
+      this._selectedRequest = null
+      this._updateButtons()
     })
 
     this._resizeSensor.addListener(
@@ -230,11 +288,14 @@ export default class Network extends Tool {
       c(`<div class="control">
       <span class="title">Request</span>
       <span class="icon-clear clear-request"></span>
+      <span class="icon-eye icon-disabled show-detail"></span>
+      <span class="icon-copy icon-disabled copy-curl"></span>
     </div>
     <div class="requests"></div>
     <div class="detail"></div>`)
     )
     this._$detail = $el.find(c('.detail'))
     this._$requests = $el.find(c('.requests'))
+    this._$control = $el.find(c('.control'))
   }
 }

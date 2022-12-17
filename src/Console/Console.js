@@ -249,10 +249,8 @@ export default class Console extends Tool {
         })
       })
       .on('click', c('.copy'), () => {
-        if (this._selectedLog) {
-          this._selectedLog.copy()
-          container.notify('Copied')
-        }
+        this._selectedLog.copy()
+        container.notify('Copied')
       })
 
     $inputBtns
