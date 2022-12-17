@@ -28,6 +28,7 @@
     font-size: $font-size-s;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
     li {
       cursor: pointer;
       padding: 0 7px;

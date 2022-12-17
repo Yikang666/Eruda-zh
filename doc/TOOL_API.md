@@ -120,7 +120,6 @@ LocalStorage, sessionStorage, cookies, scripts, styleSheets and images.
 |Name            |Type   |Desc                 |
 |----------------|-------|---------------------|
 |hideErudaSetting|boolean|Hide Eruda Setting   |
-|observeElement  |boolean|Auto Refresh Elements|
 
 ## Sources
 

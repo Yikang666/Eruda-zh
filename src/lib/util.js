@@ -203,13 +203,9 @@ export function pxToNum(str) {
 }
 
 export function isErudaEl(el) {
-  let parentNode = el.parentNode
-
-  if (!parentNode) return false
-
-  while (parentNode) {
-    if (parentNode.id === 'eruda') return true
-    parentNode = parentNode.parentNode
+  while (el) {
+    if (el.id === 'eruda') return true
+    el = el.parentNode
   }
 
   return false

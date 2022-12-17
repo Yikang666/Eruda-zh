@@ -3,6 +3,7 @@ import lowerCase from 'licia/lowerCase'
 import pick from 'licia/pick'
 import toStr from 'licia/toStr'
 import map from 'licia/map'
+import isEl from 'licia/isEl'
 import escape from 'licia/escape'
 import startWith from 'licia/startWith'
 import contain from 'licia/contain'
@@ -14,22 +15,62 @@ import each from 'licia/each'
 import keys from 'licia/keys'
 import isNull from 'licia/isNull'
 import trim from 'licia/trim'
+import isFn from 'licia/isFn'
+import isBool from 'licia/isBool'
+import safeGet from 'licia/safeGet'
+import $ from 'licia/$'
+import MutationObserver from 'licia/MutationObserver'
 import CssStore from './CssStore'
+import Settings from '../Settings/Settings'
 import LunaModal from 'luna-modal'
 import { formatNodeName } from './util'
-import { pxToNum, classPrefix as c } from '../lib/util'
+import { pxToNum, isErudaEl, classPrefix as c } from '../lib/util'
 
 export default class Detail {
-  constructor($container) {
+  constructor($container, devtools) {
     this._$container = $container
+    this._devtools = devtools
     this._curEl = document.documentElement
     this._bindEvent()
+    this._initObserver()
+    this._initCfg()
   }
   show(el) {
     this._curEl = el
     this._rmDefComputedStyle = true
     this._computedStyleSearchKeyword = ''
+    this._enableObserver()
     this._render()
+  }
+  hide() {
+    this._disableObserver()
+  }
+  destroy() {
+    this._disableObserver()
+    this.restoreEventTarget()
+    this._rmCfg()
+  }
+  overrideEventTarget() {
+    const winEventProto = getWinEventProto()
+
+    const origAddEvent = (this._origAddEvent = winEventProto.addEventListener)
+    const origRmEvent = (this._origRmEvent = winEventProto.removeEventListener)
+
+    winEventProto.addEventListener = function (type, listener, useCapture) {
+      addEvent(this, type, listener, useCapture)
+      origAddEvent.apply(this, arguments)
+    }
+
+    winEventProto.removeEventListener = function (type, listener, useCapture) {
+      rmEvent(this, type, listener, useCapture)
+      origRmEvent.apply(this, arguments)
+    }
+  }
+  restoreEventTarget() {
+    const winEventProto = getWinEventProto()
+
+    if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent
+    if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent
   }
   _toggleAllComputedStyle() {
     this._rmDefComputedStyle = !this._rmDefComputedStyle
@@ -250,6 +291,8 @@ export default class Detail {
     return ret
   }
   _bindEvent() {
+    const devtools = this._devtools
+
     this._$container
       .on('click', c('.toggle-all-computed-style'), () =>
         this._toggleAllComputedStyle()
@@ -262,6 +305,81 @@ export default class Detail {
           this._render()
         })
       })
+      .on('click', '.eruda-listener-content', function () {
+        const text = $(this).text()
+        const sources = devtools.get('sources')
+
+        if (sources) {
+          sources.set('js', text)
+          devtools.showTool('sources')
+        }
+      })
+      .on('click', '.eruda-breadcrumb', () => {
+        const sources = devtools.get('sources')
+
+        if (sources) {
+          sources.set('object', this._curEl)
+          devtools.showTool('sources')
+        }
+      })
+  }
+  _initObserver() {
+    this._observer = new MutationObserver((mutations) => {
+      each(mutations, (mutation) => this._handleMutation(mutation))
+    })
+  }
+  _enableObserver() {
+    this._observer.observe(document.documentElement, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    })
+  }
+  _disableObserver() {
+    this._observer.disconnect()
+  }
+  _handleMutation(mutation) {
+    if (isErudaEl(mutation.target)) return
+
+    if (mutation.type === 'attributes') {
+      if (mutation.target !== this._curEl) return
+      this._render()
+    }
+  }
+  _rmCfg() {
+    const cfg = this.config
+
+    const settings = this._container.get('settings')
+
+    if (!settings) return
+
+    settings
+      .remove(cfg, 'overrideEventTarget')
+      .remove(cfg, 'observeElement')
+      .remove('Elements')
+  }
+  _initCfg() {
+    const cfg = (this.config = Settings.createCfg('elements', {
+      overrideEventTarget: true,
+    }))
+
+    if (cfg.get('overrideEventTarget')) this.overrideEventTarget()
+
+    cfg.on('change', (key, val) => {
+      switch (key) {
+        case 'overrideEventTarget':
+          return val ? this.overrideEventTarget() : this.restoreEventTarget()
+      }
+    })
+
+    const settings = this._devtools.get('settings')
+    if (!settings) return
+
+    settings
+      .text('Elements')
+      .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
+
+    settings.separator()
   }
 }
 
@@ -349,4 +467,41 @@ function boxModelValue(val, type) {
   if (type === 'position') return ret
 
   return ret === 0 ? '‒' : ret
+}
+
+function addEvent(el, type, listener, useCapture = false) {
+  if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
+
+  const events = (el.erudaEvents = el.erudaEvents || {})
+
+  events[type] = events[type] || []
+  events[type].push({
+    listener: listener,
+    listenerStr: listener.toString(),
+    useCapture: useCapture,
+  })
+}
+
+function rmEvent(el, type, listener, useCapture = false) {
+  if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return
+
+  const events = el.erudaEvents
+
+  if (!(events && events[type])) return
+
+  const listeners = events[type]
+
+  for (let i = 0, len = listeners.length; i < len; i++) {
+    if (listeners[i].listener === listener) {
+      listeners.splice(i, 1)
+      break
+    }
+  }
+
+  if (listeners.length === 0) delete events[type]
+  if (keys(events).length === 0) delete el.erudaEvents
+}
+
+const getWinEventProto = () => {
+  return safeGet(window, 'EventTarget.prototype') || window.Node.prototype
 }
