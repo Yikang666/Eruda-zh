@@ -349,7 +349,7 @@ export default class Detail {
   _rmCfg() {
     const cfg = this.config
 
-    const settings = this._container.get('settings')
+    const settings = this._devtools.get('settings')
 
     if (!settings) return
 
