@@ -12,39 +12,32 @@ import isNaN from 'licia/isNaN'
 import isNum from 'licia/isNum'
 import each from 'licia/each'
 import keys from 'licia/keys'
+import isNull from 'licia/isNull'
+import trim from 'licia/trim'
 import CssStore from './CssStore'
+import LunaModal from 'luna-modal'
+import { formatNodeName } from './util'
 import { pxToNum, classPrefix as c } from '../lib/util'
 
 export default class Detail {
   constructor($container) {
     this._$container = $container
+    this._curEl = document.documentElement
     this._bindEvent()
   }
   show(el) {
-    const data = this._getData(el)
+    this._curEl = el
+    this._rmDefComputedStyle = true
+    this._computedStyleSearchKeyword = ''
+    this._render()
+  }
+  _toggleAllComputedStyle() {
+    this._rmDefComputedStyle = !this._rmDefComputedStyle
 
-    let parents = ''
-    if (!isEmpty(data.parents)) {
-      parents = `<ul class="${c('parents')}">
-        ${map(data.parents, ({ text, idx }) => {
-          return `<li>
-            <div class="${c('parent')}" data-idx="${idx}">${text}</div>
-            <span class="${c('icon-arrow-right')}"></span>
-          </li>`
-        }).join('')}
-      </ul>`
-    }
-
-    let children = ''
-    if (data.children) {
-      children = `<ul class="${c('children')}">
-        ${map(data.children, ({ isCmt, idx, isEl, text }) => {
-          return `<li class="${c(
-            `child ${isCmt ? 'green' : ''} ${isEl ? 'active-effect' : ''}`
-          )}" data-idx="${idx}">${text}</li>`
-        }).join('')}
-      </ul>`
-    }
+    this._render()
+  }
+  _render() {
+    const data = this._getData(this._curEl)
 
     let attribute = '<tr><td>Empty</td></tr>'
     if (!isEmpty(data.attributes)) {
@@ -177,11 +170,9 @@ export default class Detail {
       </div>`
     }
 
-    const html = `${parents}
-    <div class="${c('breadcrumb')}">
+    const html = `<div class="${c('breadcrumb')}">
       ${data.name}
     </div>
-    ${children}
     ${attribute}
     ${styles}
     ${computedStyle}
@@ -197,10 +188,8 @@ export default class Detail {
     const { className, id, attributes, tagName } = el
 
     ret.computedStyleSearchKeyword = this._computedStyleSearchKeyword
-    ret.parents = getParents(el)
-    ret.children = formatChildNodes(el.childNodes)
     ret.attributes = formatAttr(attributes)
-    ret.name = formatElName({ tagName, id, className, attributes })
+    ret.name = formatNodeName({ tagName, id, className, attributes })
 
     const events = el.erudaEvents
     if (events && keys(events).length !== 0) ret.listeners = events
@@ -260,7 +249,20 @@ export default class Detail {
 
     return ret
   }
-  _bindEvent() {}
+  _bindEvent() {
+    this._$container
+      .on('click', c('.toggle-all-computed-style'), () =>
+        this._toggleAllComputedStyle()
+      )
+      .on('click', c('.computed-style-search'), () => {
+        LunaModal.prompt('Filter').then((filter) => {
+          if (isNull(filter)) return
+          filter = trim(filter)
+          this._computedStyleSearchKeyword = filter
+          this._render()
+        })
+      })
+  }
 }
 
 function processStyleRules(style) {
@@ -281,42 +283,6 @@ const formatAttr = (attributes) =>
     return { name, value }
   })
 
-function formatChildNodes(nodes) {
-  const ret = []
-
-  for (let i = 0, len = nodes.length; i < len; i++) {
-    const child = nodes[i]
-    const nodeType = child.nodeType
-
-    if (nodeType === 3 || nodeType === 8) {
-      const val = child.nodeValue.trim()
-      if (val !== '')
-        ret.push({
-          text: val,
-          isCmt: nodeType === 8,
-          idx: i,
-        })
-      continue
-    }
-
-    const isSvg = !isStr(child.className)
-
-    if (
-      nodeType === 1 &&
-      child.id !== 'eruda' &&
-      (isSvg || child.className.indexOf('eruda') < 0)
-    ) {
-      ret.push({
-        text: formatElName(child),
-        isEl: true,
-        idx: i,
-      })
-    }
-  }
-
-  return ret
-}
-
 const regColor = /rgba?\((.*?)\)/g
 const regCssUrl = /url\("?(.*?)"?\)/g
 
@@ -330,50 +296,6 @@ function processStyleRule(val) {
       '<span class="eruda-style-color" style="background-color: $&"></span>$&'
     )
     .replace(regCssUrl, (match, url) => `url("${wrapLink(url)}")`)
-}
-
-function formatElName(data, { noAttr = false } = {}) {
-  const { id, className, attributes } = data
-
-  let ret = `<span class="eruda-tag-name-color">${data.tagName.toLowerCase()}</span>`
-
-  if (id !== '') ret += `<span class="eruda-function-color">#${id}</span>`
-
-  if (isStr(className)) {
-    let classes = ''
-    each(className.split(/\s+/g), (val) => {
-      if (val.trim() === '') return
-      classes += `.${val}`
-    })
-    ret += `<span class="eruda-attribute-name-color">${classes}</span>`
-  }
-
-  if (!noAttr) {
-    each(attributes, (attr) => {
-      const name = attr.name
-      if (name === 'id' || name === 'class' || name === 'style') return
-      ret += ` <span class="eruda-attribute-name-color">${name}</span><span class="eruda-operator-color">="</span><span class="eruda-string-color">${attr.value}</span><span class="eruda-operator-color">"</span>`
-    })
-  }
-
-  return ret
-}
-
-function getParents(el) {
-  const ret = []
-  let i = 0
-  let parent = el.parentNode
-
-  while (parent && parent.nodeType === 1) {
-    ret.push({
-      text: formatElName(parent, { noAttr: true }),
-      idx: i++,
-    })
-
-    parent = parent.parentNode
-  }
-
-  return ret.reverse()
 }
 
 function getInlineStyle(style) {

@@ -12,13 +12,14 @@ import isBool from 'licia/isBool'
 import safeGet from 'licia/safeGet'
 import nextTick from 'licia/nextTick'
 import Emitter from 'licia/Emitter'
-import isNull from 'licia/isNull'
-import trim from 'licia/trim'
-import LunaModal from 'luna-modal'
+import map from 'licia/map'
+import isEmpty from 'licia/isEmpty'
+import toNum from 'licia/toNum'
 import LunaDomViewer from 'luna-dom-viewer'
 import { isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import Detail from './Detail'
+import { formatNodeName } from './util'
 
 export default class Elements extends Tool {
   constructor() {
@@ -27,11 +28,9 @@ export default class Elements extends Tool {
     this._style = evalCss(require('./Elements.scss'))
 
     this.name = 'elements'
-    this._rmDefComputedStyle = true
     this._highlightElement = false
     this._selectElement = false
     this._observeElement = true
-    this._computedStyleSearchKeyword = ''
     this._history = []
 
     Emitter.mixin(this)
@@ -62,22 +61,19 @@ export default class Elements extends Tool {
 
     if (this._observeElement) this._enableObserver()
     if (!this._curEl) this._setEl(this._htmlEl)
-    this._render()
   }
   hide() {
     this._disableObserver()
 
     return super.hide()
   }
-  set(e) {
-    if (e === this._curEl) return
-
-    this._setEl(e)
-    this._render()
-    this._updateHistory()
-
-    this.emit('change', e)
-
+  // To be removed in 3.0.0
+  set(node) {
+    return this.select(node)
+  }
+  select(node) {
+    this._setEl(node)
+    this.emit('change', node)
     return this
   }
   overrideEventTarget() {
@@ -117,18 +113,30 @@ export default class Elements extends Tool {
 
     $el.html(
       c(`<div class="control">
-      <span class="icon icon-select select"></span>
-      <span class="icon icon-eye show"></span>
-    </div>
-    <div class="dom-viewer-container">
-      <div class="dom-viewer"></div>
-    </div>
-    <div class="detail"></div>`)
+        <span class="icon icon-select select"></span>
+        <span class="icon icon-eye show"></span>
+      </div>
+      <div class="dom-viewer-container">
+        <div class="dom-viewer"></div>
+      </div>
+      <div class="crumbs"></div>
+      <div class="detail"></div>`)
     )
 
     this._$detail = $el.find(c('.detail'))
     this._$domViewer = $el.find(c('.dom-viewer'))
     this._$control = $el.find(c('.control'))
+    this._$crumbs = $el.find(c('.crumbs'))
+  }
+  _renderCrumbs() {
+    const crumbs = getCrumbs(this._curEl)
+    let html = ''
+    if (!isEmpty(crumbs)) {
+      html = map(crumbs, ({ text, idx }) => {
+        return `<li class="${c('crumb')}" data-idx="${idx}">${text}</div></li>`
+      }).join('')
+    }
+    this._$crumbs.html(html)
   }
   _back() {
     if (this._curEl === this._htmlEl) return
@@ -146,38 +154,6 @@ export default class Elements extends Tool {
     const select = this._select
 
     this._$el
-      .on('click', '.eruda-child', function () {
-        const idx = $(this).data('idx')
-        const curEl = self._curEl
-        const el = curEl.childNodes[idx]
-
-        if (el && el.nodeType === 3) {
-          const curTagName = curEl.tagName
-          let type
-
-          switch (curTagName) {
-            case 'SCRIPT':
-              type = 'js'
-              break
-            case 'STYLE':
-              type = 'css'
-              break
-            default:
-              return
-          }
-
-          const sources = container.get('sources')
-
-          if (sources) {
-            sources.set(type, el.nodeValue)
-            container.showTool('sources')
-          }
-
-          return
-        }
-
-        !isElExist(el) ? self._render() : self.set(el)
-      })
       .on('click', '.eruda-listener-content', function () {
         const text = $(this).text()
         const sources = container.get('sources')
@@ -195,25 +171,17 @@ export default class Elements extends Tool {
           container.showTool('sources')
         }
       })
-      .on('click', '.eruda-parent', function () {
-        let idx = $(this).data('idx')
-        const curEl = self._curEl
-        let el = curEl.parentNode
+      .on('click', c('.crumb'), function () {
+        let idx = toNum($(this).data('idx'))
+        let el = self._curEl
 
-        while (idx-- && el.parentNode) el = el.parentNode
+        while (idx-- && el.parentElement) {
+          el = el.parentElement
+        }
 
-        !isElExist(el) ? self._render() : self.set(el)
-      })
-      .on('click', '.eruda-toggle-all-computed-style', () =>
-        this._toggleAllComputedStyle()
-      )
-      .on('click', '.eruda-computed-style-search', () => {
-        LunaModal.prompt('Filter').then((filter) => {
-          if (isNull(filter)) return
-          filter = trim(filter)
-          this._computedStyleSearchKeyword = filter
-          this._render()
-        })
+        if (isElExist(el)) {
+          self.set(el)
+        }
       })
 
     this._$control
@@ -221,11 +189,8 @@ export default class Elements extends Tool {
       .on('click', c('.show'), () => this._detail.show(this._curEl))
 
     select.on('select', (target) => this.set(target))
-  }
-  _toggleAllComputedStyle() {
-    this._rmDefComputedStyle = !this._rmDefComputedStyle
 
-    this._render()
+    this._domViewer.on('select', this._setEl)
   }
   _enableObserver() {
     this._observer.observe(this._htmlEl, {
@@ -260,11 +225,14 @@ export default class Elements extends Tool {
       select.disable()
     }
   }
-  _setEl(el) {
+  _setEl = (el) => {
+    if (el === this._curEl) return
+
     this._curEl = el
     this._domViewer.select(el)
+    this._renderCrumbs()
+
     this._highlight.setEl(el)
-    this._rmDefComputedStyle = true
 
     const parentQueue = []
 
@@ -274,16 +242,8 @@ export default class Elements extends Tool {
       parent = parent.parentNode
     }
     this._curParentQueue = parentQueue
-  }
-  _render() {
-    if (!isElExist(this._curEl)) return this._back()
 
-    this._highlight[this._highlightElement ? 'show' : 'hide']()
-  }
-  _renderHtml(html) {
-    if (html === this._lastHtml) return
-    this._lastHtml = html
-    this._$showArea.html(html)
+    this._updateHistory()
   }
   _updateHistory() {
     const console = this._container.get('console')
@@ -409,3 +369,19 @@ const getWinEventProto = () => {
 }
 
 const isElExist = (val) => isEl(val) && val.parentNode
+
+function getCrumbs(el) {
+  const ret = []
+  let i = 0
+
+  while (el) {
+    ret.push({
+      text: formatNodeName(el, { noAttr: true }),
+      idx: i++,
+    })
+
+    el = el.parentElement
+  }
+
+  return ret.reverse()
+}

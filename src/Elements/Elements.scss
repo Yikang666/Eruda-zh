@@ -3,6 +3,7 @@
 
 #elements {
   padding-top: 40px;
+  padding-bottom: 24px;
   font-size: 14px;
   .control {
     @include control();
@@ -16,32 +17,24 @@
     height: 100%;
     padding: 5px 0;
   }
-  .detail {
-    @include absolute();
-    @include overflow-auto(y);
-    z-index: 10;
-    display: none;
-    background: var(--background);
-  }
-  .parents {
-    @include overflow-auto(x);
-    overflow-y: hidden;
+  .crumbs {
+    @include absolute(100%, 24px);
+    top: initial;
+    line-height: 24px;
+    bottom: 0;
+    border-top: 1px solid var(--border);
     background: var(--darker-background);
     color: var(--primary);
-    padding: 0 $padding;
-    height: 40px;
-    line-height: 40px;
+    font-size: $font-size-s;
     white-space: nowrap;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    font-size: $font-size;
+    overflow: hidden;
     li {
+      cursor: pointer;
+      padding: 0 7px;
       display: inline-block;
-      .parent {
-        display: inline-block;
-      }
+      &:hover,
       &:last-child {
-        margin-right: 0;
+        background: var(--highlight);
       }
     }
     .icon-arrow-right {
@@ -49,6 +42,13 @@
       position: relative;
       top: 1px;
     }
+  }
+  .detail {
+    @include absolute();
+    @include overflow-auto(y);
+    z-index: 10;
+    display: none;
+    background: var(--background);
   }
   .breadcrumb {
     @include breadcrumb();
@@ -82,33 +82,6 @@
       }
     }
     margin-bottom: 10px;
-  }
-  .children {
-    background: var(--darker-background);
-    color: var(--foreground);
-    margin-bottom: 10px !important;
-    border-bottom: 1px solid var(--border);
-    li {
-      @include overflow-auto(x);
-      cursor: default;
-      padding: $padding;
-      border-top: 1px solid var(--border);
-      white-space: nowrap;
-      transition: background $anim-duration, color $anim-duration;
-      span {
-        transition: color $anim-duration;
-      }
-      &.active-effect {
-        cursor: pointer;
-      }
-      &.active-effect:active {
-        background: var(--highlight);
-        color: var(--select-foreground);
-        span {
-          color: var(--select-foreground);
-        }
-      }
-    }
   }
   .attributes {
     font-size: $font-size-s;

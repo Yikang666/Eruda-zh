@@ -83,16 +83,16 @@ Check dom element status.
 |overrideEventTarget|boolean|Catch Event Listeners|
 |observeElement     |boolean|Auto Refresh         |
 
-### set
+### select
 
-Set dom element to show.
+Select node to show.
 
-|Name|Type   |Desc              |
-|----|-------|------------------|
-|el  |element|Element to display|
+|Name|Type     |Desc               |
+|----|---------|-------------------|
+|node|ChildNode|Node to be selected|
 
 ```javascript
-elements.set(document.body);
+elements.select(document.body);
 ```
 
 ## Network
