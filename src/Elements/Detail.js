@@ -42,7 +42,8 @@ export default class Detail {
     this._enableObserver()
     this._render()
   }
-  hide() {
+  hide = () => {
+    this._$container.hide()
     this._disableObserver()
   }
   destroy() {
@@ -211,8 +212,10 @@ export default class Detail {
       </div>`
     }
 
-    const html = `<div class="${c('breadcrumb')}">
-      ${data.name}
+    const html = `<div class="${c('control')}">
+      <span class="${c('icon-arrow-left back')}"></span>
+      <span class="${c('element-name')}">${data.name}</span>
+      <span class="${c('icon-refresh refresh')}"></span>
     </div>
     ${attribute}
     ${styles}
@@ -314,13 +317,18 @@ export default class Detail {
           devtools.showTool('sources')
         }
       })
-      .on('click', '.eruda-breadcrumb', () => {
+      .on('click', c('.element-name'), () => {
         const sources = devtools.get('sources')
 
         if (sources) {
           sources.set('object', this._curEl)
           devtools.showTool('sources')
         }
+      })
+      .on('click', c('.back'), this.hide)
+      .on('click', c('.refresh'), () => {
+        this._render()
+        devtools.notify('Refreshed')
       })
   }
   _initObserver() {

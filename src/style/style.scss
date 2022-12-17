@@ -51,6 +51,7 @@
 
 .icon-disabled {
   opacity: 0.5;
+  pointer-events: none;
   cursor: default !important;
   &:active {
     color: inherit !important;

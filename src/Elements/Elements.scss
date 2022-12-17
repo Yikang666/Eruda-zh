@@ -48,24 +48,31 @@
     @include absolute();
     @include overflow-auto(y);
     z-index: 10;
+    padding-top: 40px;
     display: none;
     background: var(--background);
-  }
-  .breadcrumb {
-    @include breadcrumb();
-    cursor: pointer;
-    transition: background-color $anim-duration, color $anim-duration;
-    &:active {
-      background: var(--highlight);
-      color: var(--select-foreground);
-      span {
-        color: var(--select-foreground);
+    .control {
+      padding: 10px 35px;
+      .element-name {
+        font-size: $font-size-s;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        display: inline-block;
+      }
+      .icon-arrow-left {
+        left: 0;
+      }
+      .icon-refresh {
+        right: 0;
       }
     }
   }
   .section {
     border-bottom: 1px solid var(--border);
     color: var(--foreground);
+    margin: 10px 0;
     h2 {
       @include right-btn();
       color: var(--primary);
@@ -73,7 +80,7 @@
       border-top: 1px solid var(--border);
       padding: $padding;
       font-size: $font-size;
-      transition: background $anim-duration;
+      transition: background-color $anim-duration;
       &.active-effect {
         cursor: pointer;
       }
@@ -82,7 +89,6 @@
         color: var(--select-foreground);
       }
     }
-    margin-bottom: 10px;
   }
   .attributes {
     font-size: $font-size-s;
