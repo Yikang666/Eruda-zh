@@ -208,8 +208,8 @@ export function isErudaEl(el) {
   if (!parentNode) return false
 
   while (parentNode) {
+    if (parentNode.id === 'eruda') return true
     parentNode = parentNode.parentNode
-    if (parentNode && parentNode.id === 'eruda') return true
   }
 
   return false

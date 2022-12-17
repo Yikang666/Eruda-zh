@@ -227,11 +227,9 @@ export default class Network extends Tool {
   _initTpl() {
     const $el = this._$el
     $el.html(
-      c(`<div class="title">
-      Request
-      <div class="btn clear-request">
-        <span class="icon-clear"></span>
-      </div>
+      c(`<div class="control">
+      <span class="title">Request</span>
+      <span class="icon-clear clear-request"></span>
     </div>
     <div class="requests"></div>
     <div class="detail"></div>`)

@@ -2,11 +2,26 @@
 @import '../style/mixin';
 
 #elements {
-  padding-bottom: 40px;
+  padding-top: 40px;
   font-size: 14px;
-  .show-area {
+  .control {
+    @include control();
+    padding: 10px 0;
+    .icon-eye {
+      right: 0;
+    }
+  }
+  .dom-viewer-container {
     @include overflow-auto(y);
     height: 100%;
+    padding: 5px 0;
+  }
+  .detail {
+    @include absolute();
+    @include overflow-auto(y);
+    z-index: 10;
+    display: none;
+    background: var(--background);
   }
   .parents {
     @include overflow-auto(x);
@@ -247,33 +262,6 @@
             border-top: none;
           }
         }
-      }
-    }
-  }
-  .bottom-bar {
-    height: 40px;
-    background: var(--darker-background);
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    font-size: 0;
-    border-top: 1px solid var(--border);
-    .btn {
-      cursor: pointer;
-      text-align: center;
-      color: var(--primary);
-      font-size: 14px;
-      line-height: 40px;
-      width: 25%;
-      display: inline-block;
-      transition: background $anim-duration, color $anim-duration;
-      &:active {
-        background: var(--highlight);
-        color: var(--select-foreground);
-      }
-      &.active {
-        color: var(--accent);
       }
     }
   }

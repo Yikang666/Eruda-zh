@@ -3,13 +3,16 @@
 
 #network {
   padding-top: 40px;
-  .title {
-    @include absolute(100%, 40px);
-    @include right-btn();
-    background: var(--darker-background);
-    padding: $padding;
-    color: var(--primary);
-    height: 40px;
+  .control {
+    @include control();
+    padding: 10px;
+    border-bottom: none;
+    .title {
+      font-size: $font-size;
+    }
+    .icon-clear {
+      right: 0;
+    }
   }
   .request-error {
     color: var(--console-error-foreground);
@@ -32,8 +35,8 @@
     padding-top: 40px;
     background: var(--background);
     .control {
-      @include control();
       padding: 10px 35px;
+      border-bottom: 1px solid var(--border);
       .url {
         font-size: $font-size-s;
         overflow: hidden;

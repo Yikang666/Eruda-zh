@@ -46,7 +46,8 @@
     top: 0;
     cursor: pointer;
     transition: color $anim-duration;
-    &:active {
+    &:active,
+    &.active {
       color: var(--accent);
     }
   }
