@@ -24,6 +24,7 @@ export default class Network extends Tool {
     this.name = 'network'
     this._requests = {}
     this._selectedRequest = null
+    this._isRecording = true
   }
   init($el, container) {
     super.init($el)
@@ -95,6 +96,10 @@ export default class Network extends Tool {
     this._requestDataGrid.setOption('maxHeight', height)
   }
   _reqWillBeSent = (params) => {
+    if (!this._isRecording) {
+      return
+    }
+
     const request = {
       name: getFileName(params.request.url),
       url: params.request.url,
@@ -137,7 +142,7 @@ export default class Network extends Tool {
   }
   _resReceivedExtraInfo = (params) => {
     const request = this._requests[params.requestId]
-    if (!request) {
+    if (!this._isRecording || !request) {
       return
     }
 
@@ -154,7 +159,7 @@ export default class Network extends Tool {
   }
   _resReceived = (params) => {
     const request = this._requests[params.requestId]
-    if (!request) {
+    if (!this._isRecording || !request) {
       return
     }
 
@@ -173,7 +178,7 @@ export default class Network extends Tool {
   }
   _loadingFinished = (params) => {
     const request = this._requests[params.requestId]
-    if (!request) {
+    if (!this._isRecording || !request) {
       return
     }
 
@@ -233,6 +238,10 @@ export default class Network extends Tool {
       $copyCurl.rmClass(c('icon-disabled'))
     }
   }
+  _toggleRecording = () => {
+    this._$control.find(c('.record')).toggleClass(c('recording'))
+    this._isRecording = !this._isRecording
+  }
   _bindEvent() {
     const $control = this._$control
     const requestDataGrid = this._requestDataGrid
@@ -245,6 +254,7 @@ export default class Network extends Tool {
         this._detail.show(this._selectedRequest)
       )
       .on('click', c('.copy-curl'), this._copyCurl)
+      .on('click', c('.record'), this._toggleRecording)
 
     requestDataGrid.on('select', (node) => {
       const id = $(node.container).data('id')
@@ -286,7 +296,7 @@ export default class Network extends Tool {
     const $el = this._$el
     $el.html(
       c(`<div class="control">
-      <span class="title">Request</span>
+      <span class="icon-record record recording"></span>
       <span class="icon-clear clear-request"></span>
       <span class="icon-eye icon-disabled show-detail"></span>
       <span class="icon-copy icon-disabled copy-curl"></span>

@@ -11,13 +11,20 @@
       font-size: $font-size;
     }
     .icon-clear {
-      right: 46px;
+      left: 23px;
     }
     .icon-eye {
       right: 0;
     }
     .icon-copy {
       right: 23px;
+    }
+    .icon-record {
+      left: 0;
+      &.recording {
+        color: var(--console-error-foreground);
+        text-shadow: 0 0 4px var(--console-error-foreground);
+      }
     }
   }
   .request-error {
