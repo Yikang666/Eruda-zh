@@ -145,13 +145,6 @@ export default [
     desc: 'Test geolocation',
   },
   {
-    name: 'Load Dom Plugin',
-    fn() {
-      loadPlugin('dom')
-    },
-    desc: 'Navigate dom tree',
-  },
-  {
     name: 'Load Orientation Plugin',
     fn() {
       loadPlugin('orientation')

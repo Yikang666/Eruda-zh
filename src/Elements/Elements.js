@@ -131,7 +131,7 @@ export default class Elements extends Tool {
     }
     this._$crumbs.html(html)
   }
-  _back() {
+  _back = () => {
     if (this._curNode === this._htmlEl) return
 
     const parentQueue = this._curParentQueue
@@ -165,7 +165,7 @@ export default class Elements extends Tool {
       .on('click', c('.copy-node'), this._copyNode)
       .on('click', c('.delete-node'), this._deleteNode)
 
-    this._domViewer.on('select', this._setNode)
+    this._domViewer.on('select', this._setNode).on('deselect', this._back)
 
     chobitsu
       .domain('Overlay')
@@ -177,8 +177,6 @@ export default class Elements extends Tool {
     if (node.parentNode) {
       node.parentNode.removeChild(node)
     }
-
-    this._back()
   }
   _copyNode = () => {
     const node = this._curNode
@@ -215,6 +213,7 @@ export default class Elements extends Tool {
       chobitsu.domain('Overlay').setInspectMode({
         mode: 'none',
       })
+      chobitsu.domain('Overlay').hideHighlight()
     }
   }
   _inspectNodeRequested = ({ backendNodeId }) => {
