@@ -1,3 +1,12 @@
+## 2.9.0 (20 Dec 2022)
+
+* feat(elements): integrate dom viewer
+* feat(elements): element crumbs
+* feat(elements): copy node and delete node
+* feat(network): copy response
+* feat(network): toggle recording
+* chore: remove dom plugin snippet
+
 ## 2.8.3 (13 Dec 2022)
 
 * fix(network): remove data grid ios outline
