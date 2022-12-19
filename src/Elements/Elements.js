@@ -6,6 +6,7 @@ import Emitter from 'licia/Emitter'
 import map from 'licia/map'
 import isEmpty from 'licia/isEmpty'
 import toNum from 'licia/toNum'
+import copy from 'licia/copy'
 import isMobile from 'licia/isMobile'
 import LunaDomViewer from 'luna-dom-viewer'
 import { isErudaEl, classPrefix as c } from '../lib/util'
@@ -72,6 +73,27 @@ export default class Elements extends Tool {
       .off('inspectNodeRequested', this._inspectNodeRequested)
     chobitsu.domain('Overlay').disable()
   }
+  _updateButtons() {
+    const $control = this._$control
+    const $showDetail = $control.find(c('.show-detail'))
+    const $copyNode = $control.find(c('.copy-node'))
+    const iconDisabled = c('icon-disabled')
+
+    $showDetail.addClass(iconDisabled)
+    $copyNode.addClass(iconDisabled)
+
+    const node = this._curNode
+
+    if (!node) {
+      return
+    }
+
+    $copyNode.rmClass(iconDisabled)
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      $showDetail.rmClass(iconDisabled)
+    }
+  }
   _initTpl() {
     const $el = this._$el
 
@@ -79,6 +101,7 @@ export default class Elements extends Tool {
       c(`<div class="control">
         <span class="icon icon-select select"></span>
         <span class="icon icon-eye show-detail"></span>
+        <span class="icon icon-copy copy-node"></span>
       </div>
       <div class="dom-viewer-container">
         <div class="dom-viewer"></div>
@@ -108,7 +131,9 @@ export default class Elements extends Tool {
     const parentQueue = this._curParentQueue
     let parent = parentQueue.shift()
 
-    while (!isElExist(parent)) parent = parentQueue.shift()
+    while (!isElExist(parent)) {
+      parent = parentQueue.shift()
+    }
 
     this.set(parent)
   }
@@ -129,8 +154,9 @@ export default class Elements extends Tool {
     })
 
     this._$control
-      .on('click', c('.select'), () => this._toggleSelect())
+      .on('click', c('.select'), this._toggleSelect)
       .on('click', c('.show-detail'), () => this._detail.show(this._curNode))
+      .on('click', c('.copy-node'), this._copyNode)
 
     this._domViewer.on('select', this._setNode)
 
@@ -138,7 +164,18 @@ export default class Elements extends Tool {
       .domain('Overlay')
       .on('inspectNodeRequested', this._inspectNodeRequested)
   }
-  _toggleSelect() {
+  _copyNode = () => {
+    const node = this._curNode
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      copy(node.outerHTML)
+    } else {
+      copy(node.nodeValue)
+    }
+
+    this._container.notify('Copied')
+  }
+  _toggleSelect = () => {
     this._$el.find(c('.select')).toggleClass(c('active'))
     this._selectElement = !this._selectElement
 
@@ -186,6 +223,7 @@ export default class Elements extends Tool {
     }
     this._curParentQueue = parentQueue
 
+    this._updateButtons()
     this._updateHistory()
   }
   _updateHistory() {

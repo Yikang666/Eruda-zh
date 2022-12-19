@@ -229,13 +229,14 @@ export default class Network extends Tool {
     const $control = this._$control
     const $showDetail = $control.find(c('.show-detail'))
     const $copyCurl = $control.find(c('.copy-curl'))
+    const iconDisabled = c('icon-disabled')
 
-    $showDetail.addClass(c('icon-disabled'))
-    $copyCurl.addClass(c('icon-disabled'))
+    $showDetail.addClass(iconDisabled)
+    $copyCurl.addClass(iconDisabled)
 
     if (this._selectedRequest) {
-      $showDetail.rmClass(c('icon-disabled'))
-      $copyCurl.rmClass(c('icon-disabled'))
+      $showDetail.rmClass(iconDisabled)
+      $copyCurl.rmClass(iconDisabled)
     }
   }
   _toggleRecording = () => {

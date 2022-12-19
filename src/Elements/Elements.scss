@@ -11,6 +11,9 @@
     .icon-eye {
       right: 0;
     }
+    .icon-copy {
+      right: 23px;
+    }
   }
   .dom-viewer-container {
     @include overflow-auto(y);
