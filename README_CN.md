@@ -116,7 +116,6 @@ eruda.init({
 * [eruda-code](https://github.com/liriliri/eruda-code)：运行 JavaScript 代码。
 * [eruda-benchmark](https://github.com/liriliri/eruda-benchmark)：运行 JavaScript 性能测试。
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation)：测试地理位置接口。
-* [eruda-dom](https://github.com/liriliri/eruda-dom)：浏览 dom 树。
 * [eruda-orientation](https://github.com/liriliri/eruda-orientation)：测试重力感应接口。
 * [eruda-touches](https://github.com/liriliri/eruda-orientation)：可视化屏幕 Touch 事件触发。
 
