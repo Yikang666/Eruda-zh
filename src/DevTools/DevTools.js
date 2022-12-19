@@ -2,7 +2,6 @@ import logger from '../lib/logger'
 import Tool from './Tool'
 import Settings from '../Settings/Settings'
 import Emitter from 'licia/Emitter'
-import isMobile from 'licia/isMobile'
 import defaults from 'licia/defaults'
 import keys from 'licia/keys'
 import last from 'licia/last'
@@ -17,7 +16,7 @@ import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 import LunaModal from 'luna-modal'
 import LunaTab from 'luna-tab'
-import { classPrefix as c } from '../lib/util'
+import { classPrefix as c, drag, eventClient } from '../lib/util'
 
 export default class DevTools extends Emitter {
   constructor($container, { defaults = {} } = {}) {
@@ -269,7 +268,7 @@ export default class DevTools extends Emitter {
   _bindEvent() {
     const $resizer = this._$el.find(c('.resizer'))
     const $navBar = this._$el.find(c('.nav-bar'))
-    const $root = $(document.documentElement)
+    const $document = $(document)
 
     const startListener = (e) => {
       e.preventDefault()
@@ -278,17 +277,12 @@ export default class DevTools extends Emitter {
       e = e.origEvent
       this._isResizing = true
       this._resizeStartSize = this.config.get('displaySize')
-      this._resizeStartY = getClientY(e)
+      this._resizeStartY = eventClient('y', e)
 
       $resizer.css('height', '100%')
 
-      if (isMobile()) {
-        $root.on('touchmove', moveListener)
-        $root.on('touchend', endListener)
-      } else {
-        $root.on('mousemove', moveListener)
-        $root.on('mouseup', endListener)
-      }
+      $document.on(drag('move'), moveListener)
+      $document.on(drag('end'), endListener)
     }
     const moveListener = (e) => {
       if (!this._isResizing) {
@@ -299,7 +293,7 @@ export default class DevTools extends Emitter {
 
       e = e.origEvent
       const deltaY =
-        ((this._resizeStartY - getClientY(e)) / window.innerHeight) * 100
+        ((this._resizeStartY - eventClient('y', e)) / window.innerHeight) * 100
       let displaySize = this._resizeStartSize + deltaY
       if (displaySize < 40) {
         displaySize = 40
@@ -314,27 +308,11 @@ export default class DevTools extends Emitter {
 
       $resizer.css('height', 10)
 
-      if (isMobile()) {
-        $root.off('touchmove', moveListener)
-        $root.off('touchend', endListener)
-      } else {
-        $root.off('mousemove', moveListener)
-        $root.off('mouseup', endListener)
-      }
+      $document.off(drag('move'), moveListener)
+      $document.off(drag('end'), endListener)
     }
     $resizer.css('height', 10)
-    const getClientY = (e) => {
-      if (e.clientY) return e.clientY
-
-      if (e.touches) return e.touches[0].clientY
-
-      return 0
-    }
     $navBar.on('contextmenu', (e) => e.preventDefault())
-    if (isMobile()) {
-      $resizer.on('touchstart', startListener)
-    } else {
-      $resizer.on('mousedown', startListener)
-    }
+    $resizer.on(drag('start'), startListener)
   }
 }

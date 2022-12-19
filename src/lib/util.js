@@ -253,6 +253,48 @@ function processClass(str) {
   }).join(' ')
 }
 
+const hasTouchSupport = 'ontouchstart' in root
+const touchEvents = {
+  start: 'touchstart',
+  move: 'touchmove',
+  end: 'touchend',
+}
+const mouseEvents = {
+  start: 'mousedown',
+  move: 'mousemove',
+  end: 'mouseup',
+}
+
+export function drag(name) {
+  return hasTouchSupport ? touchEvents[name] : mouseEvents[name]
+}
+
+export function eventClient(type, e) {
+  const name = type === 'x' ? 'clientX' : 'clientY'
+
+  if (e[name]) {
+    return e[name]
+  }
+  if (e.changedTouches) {
+    return e.changedTouches[0][name]
+  }
+
+  return 0
+}
+
+export function eventPage(type, e) {
+  const name = type === 'x' ? 'pageX' : 'pageY'
+
+  if (e[name]) {
+    return e[name]
+  }
+  if (e.changedTouches) {
+    return e.changedTouches[0][name]
+  }
+
+  return 0
+}
+
 // To be removed in 3.0.0
 export {
   $,

@@ -1,11 +1,13 @@
-import Draggabilly from 'draggabilly'
 import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import Emitter from 'licia/Emitter'
+import $ from 'licia/$'
 import nextTick from 'licia/nextTick'
 import orientation from 'licia/orientation'
-import { pxToNum, classPrefix as c } from '../lib/util'
+import { pxToNum, classPrefix as c, drag, eventClient } from '../lib/util'
 import evalCss from '../lib/evalCss'
+
+const $document = $(document)
 
 export default class EntryBtn extends Emitter {
   constructor($container) {
@@ -15,7 +17,6 @@ export default class EntryBtn extends Emitter {
 
     this._$container = $container
     this._initTpl()
-    this._makeDraggable()
     this._bindEvent()
     this._registerListener()
   }
@@ -82,34 +83,74 @@ export default class EntryBtn extends Emitter {
 
     this.setPos(pos)
   }
-  _bindEvent() {
-    const draggabilly = this._draggabilly
+  _onDragStart = (e) => {
+    const $el = this._$el
+    $el.addClass(c('active'))
+
+    this._isClick = true
+    e = e.origEvent
+    this._startX = eventClient('x', e)
+    this._oldX = pxToNum($el.css('left'))
+    this._oldY = pxToNum($el.css('top'))
+    this._startY = eventClient('y', e)
+    $document.on(drag('move'), this._onDragMove)
+    $document.on(drag('end'), this._onDragEnd)
+  }
+  _onDragMove = (e) => {
+    const btnSize = this._$el.get(0).offsetWidth
+    const maxWidth = this._$container.get(0).offsetWidth
+    const maxHeight = this._$container.get(0).offsetHeight
+
+    this._isClick = false
+    e = e.origEvent
+    const deltaX = eventClient('x', e) - this._startX
+    const deltaY = eventClient('y', e) - this._startY
+    let newX = this._oldX + deltaX
+    let newY = this._oldY + deltaY
+    if (newX < 0) {
+      newX = 0
+    } else if (newX > maxWidth - btnSize) {
+      newX = maxWidth - btnSize
+    }
+    if (newY < 0) {
+      newY = 0
+    } else if (newY > maxHeight - btnSize) {
+      newY = maxHeight - btnSize
+    }
+    this._$el.css({
+      left: newX,
+      top: newY,
+    })
+  }
+  _onDragEnd = (e) => {
     const $el = this._$el
 
-    draggabilly
-      .on('staticClick', () => this.emit('click'))
-      .on('dragStart', () => $el.addClass('eruda-active'))
+    if (this._isClick) {
+      this.emit('click')
+    }
 
-    draggabilly.on('dragEnd', () => {
-      const cfg = this.config
+    this._onDragMove(e)
+    $document.off(drag('move'), this._onDragMove)
+    $document.off(drag('end'), this._onDragEnd)
 
-      if (cfg.get('rememberPos')) {
-        cfg.set('pos', {
-          x: pxToNum(this._$el.css('left')),
-          y: pxToNum(this._$el.css('top')),
-        })
-      }
+    const cfg = this.config
 
-      $el.rmClass('eruda-active')
-    })
+    if (cfg.get('rememberPos')) {
+      cfg.set('pos', {
+        x: pxToNum($el.css('left')),
+        y: pxToNum($el.css('top')),
+      })
+    }
+
+    $el.rmClass('eruda-active')
+  }
+  _bindEvent() {
+    const $el = this._$el
+
+    $el.on(drag('start'), this._onDragStart)
 
     orientation.on('change', () => this._resetPos(true))
     window.addEventListener('resize', () => this._resetPos())
-  }
-  _makeDraggable() {
-    this._draggabilly = new Draggabilly(this._$el.get(0), {
-      containment: true,
-    })
   }
   initCfg(settings) {
     const cfg = (this.config = Settings.createCfg('entry-button', {
