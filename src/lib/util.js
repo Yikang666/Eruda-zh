@@ -211,6 +211,21 @@ export function isErudaEl(el) {
   return false
 }
 
+export function isChobitsuEl(el) {
+  while (el) {
+    let className = ''
+    if (el.getAttribute) {
+      className = el.getAttribute('class') || ''
+    }
+    if (contain(className, '__chobitsu-hide__')) {
+      return true
+    }
+    el = el.parentNode
+  }
+
+  return false
+}
+
 export const evalCss = evalCssUtil
 
 export function classPrefix(str) {

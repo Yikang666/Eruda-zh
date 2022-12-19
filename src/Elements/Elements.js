@@ -9,7 +9,7 @@ import toNum from 'licia/toNum'
 import copy from 'licia/copy'
 import isMobile from 'licia/isMobile'
 import LunaDomViewer from 'luna-dom-viewer'
-import { isErudaEl, classPrefix as c } from '../lib/util'
+import { isErudaEl, classPrefix as c, isChobitsuEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import Detail from './Detail'
 import chobitsu from '../lib/chobitsu'
@@ -39,7 +39,7 @@ export default class Elements extends Tool {
     this.config = this._detail.config
     this._domViewer = new LunaDomViewer(this._$domViewer.get(0), {
       node: this._htmlEl,
-      ignore: (node) => isErudaEl(node),
+      ignore: (node) => isErudaEl(node) || isChobitsuEl(node),
     })
     this._domViewer.expand()
     this._bindEvent()
@@ -77,10 +77,12 @@ export default class Elements extends Tool {
     const $control = this._$control
     const $showDetail = $control.find(c('.show-detail'))
     const $copyNode = $control.find(c('.copy-node'))
+    const $deleteNode = $control.find(c('.delete-node'))
     const iconDisabled = c('icon-disabled')
 
     $showDetail.addClass(iconDisabled)
     $copyNode.addClass(iconDisabled)
+    $deleteNode.addClass(iconDisabled)
 
     const node = this._curNode
 
@@ -88,6 +90,9 @@ export default class Elements extends Tool {
       return
     }
 
+    if (node !== document.documentElement && node !== document.body) {
+      $deleteNode.rmClass(iconDisabled)
+    }
     $copyNode.rmClass(iconDisabled)
 
     if (node.nodeType === Node.ELEMENT_NODE) {
@@ -102,6 +107,7 @@ export default class Elements extends Tool {
         <span class="icon icon-select select"></span>
         <span class="icon icon-eye show-detail"></span>
         <span class="icon icon-copy copy-node"></span>
+        <span class="icon icon-delete delete-node"></span>
       </div>
       <div class="dom-viewer-container">
         <div class="dom-viewer"></div>
@@ -157,12 +163,22 @@ export default class Elements extends Tool {
       .on('click', c('.select'), this._toggleSelect)
       .on('click', c('.show-detail'), () => this._detail.show(this._curNode))
       .on('click', c('.copy-node'), this._copyNode)
+      .on('click', c('.delete-node'), this._deleteNode)
 
     this._domViewer.on('select', this._setNode)
 
     chobitsu
       .domain('Overlay')
       .on('inspectNodeRequested', this._inspectNodeRequested)
+  }
+  _deleteNode = () => {
+    const node = this._curNode
+
+    if (node.parentNode) {
+      node.parentNode.removeChild(node)
+    }
+
+    this._back()
   }
   _copyNode = () => {
     const node = this._curNode

@@ -14,6 +14,9 @@
     .icon-copy {
       right: 23px;
     }
+    .icon-delete {
+      right: 46px;
+    }
   }
   .dom-viewer-container {
     @include overflow-auto(y);

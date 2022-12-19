@@ -222,8 +222,22 @@
   .luna-dom-viewer-html-comment {
     color: var(--comment-color);
   }
-  .luna-dom-viewer-selection {
-    background: var(--highlight);
+  .luna-dom-viewer-tree-item {
+    &:hover {
+      .luna-dom-viewer-selection {
+        background: var(--contrast);
+      }
+    }
+    &.luna-dom-viewer-selected {
+      .luna-dom-viewer-selection {
+        background: var(--highlight);
+      }
+    }
+    &.luna-dom-viewer-selected:focus {
+      .luna-dom-viewer-selection {
+        background: var(--contrast);
+      }
+    }
   }
   .luna-dom-viewer-text-node {
     .luna-dom-viewer-key {
