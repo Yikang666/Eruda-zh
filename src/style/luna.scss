@@ -235,7 +235,8 @@
     }
     &.luna-dom-viewer-selected:focus {
       .luna-dom-viewer-selection {
-        background: var(--contrast);
+        background: var(--accent);
+        opacity: 0.2;
       }
     }
   }

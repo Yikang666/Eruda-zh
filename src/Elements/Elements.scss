@@ -52,7 +52,6 @@
   }
   .detail {
     @include absolute();
-    @include overflow-auto(y);
     z-index: 10;
     padding-top: 40px;
     display: none;
@@ -73,6 +72,10 @@
       .icon-refresh {
         right: 0;
       }
+    }
+    .element {
+      @include overflow-auto(y);
+      height: 100%;
     }
   }
   .section {

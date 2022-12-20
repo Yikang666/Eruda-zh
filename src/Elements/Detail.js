@@ -231,10 +231,12 @@ export default class Detail {
       <span class="${c('element-name')}">${data.name}</span>
       <span class="${c('icon-refresh refresh')}"></span>
     </div>
-    ${attribute}
-    ${styles}
-    ${computedStyle}
-    ${listeners}`
+    <div class="${c('element')}">
+      ${attribute}
+      ${styles}
+      ${computedStyle}
+      ${listeners}
+    </div>`
 
     this._$container.html(html).show()
   }

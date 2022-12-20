@@ -1,3 +1,7 @@
+## 2.9.1 (20 Dec 2022)
+
+* fix(elements): select element using touch events
+
 ## 2.9.0 (20 Dec 2022)
 
 * feat(elements): integrate dom viewer

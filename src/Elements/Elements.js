@@ -51,7 +51,7 @@ export default class Elements extends Tool {
     super.show()
 
     if (!this._curNode) {
-      this._setNode(document.body)
+      this.select(document.body)
     }
   }
   // To be removed in 3.0.0
@@ -59,6 +59,7 @@ export default class Elements extends Tool {
     return this.select(node)
   }
   select(node) {
+    this._domViewer.select(node)
     this._setNode(node)
     this.emit('change', node)
     return this
@@ -155,7 +156,7 @@ export default class Elements extends Tool {
       }
 
       if (isElExist(node)) {
-        self._setNode(node)
+        self.select(node)
       }
     })
 
@@ -226,7 +227,6 @@ export default class Elements extends Tool {
     if (node === this._curNode) return
 
     this._curNode = node
-    this._domViewer.select(node)
     this._renderCrumbs()
 
     const parentQueue = []
