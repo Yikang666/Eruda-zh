@@ -2,9 +2,13 @@
 @import '../style/mixin';
 
 #elements {
-  padding-top: 40px;
-  padding-bottom: 24px;
-  font-size: 14px;
+  .elements {
+    @include absolute();
+    padding-top: 40px;
+    padding-top: 40px;
+    padding-bottom: 24px;
+    font-size: 14px;
+  }
   .control {
     @include control();
     padding: 10px 0;
@@ -250,6 +254,37 @@
             padding: $padding;
             border-top: none;
           }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 680px) {
+  #elements {
+    .elements {
+      width: 50%;
+      .control {
+        .icon-eye {
+          display: none;
+        }
+        .icon-copy {
+          right: 0;
+        }
+        .icon-delete {
+          right: 23px;
+        }
+      }
+    }
+    .detail {
+      width: 50%;
+      left: initial;
+      right: 0;
+      border-left: 1px solid var(--border);
+      .control {
+        padding-left: 10px;
+        .icon-arrow-left {
+          display: none;
         }
       }
     }

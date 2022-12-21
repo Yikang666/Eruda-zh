@@ -4,6 +4,7 @@ import isEl from 'licia/isEl'
 import nextTick from 'licia/nextTick'
 import Emitter from 'licia/Emitter'
 import map from 'licia/map'
+import MediaQuery from 'licia/MediaQuery'
 import isEmpty from 'licia/isEmpty'
 import toNum from 'licia/toNum'
 import copy from 'licia/copy'
@@ -37,6 +38,8 @@ export default class Elements extends Tool {
     this._htmlEl = document.documentElement
     this._detail = new Detail(this._$detail, container)
     this.config = this._detail.config
+    this._splitMediaQuery = new MediaQuery('screen and (min-width: 680px)')
+    this._splitMode = this._splitMediaQuery.isMatch()
     this._domViewer = new LunaDomViewer(this._$domViewer.get(0), {
       node: this._htmlEl,
       ignore: (node) => isErudaEl(node) || isChobitsuEl(node),
@@ -53,6 +56,11 @@ export default class Elements extends Tool {
     if (!this._curNode) {
       this.select(document.body)
     }
+  }
+  hide() {
+    super.hide()
+
+    chobitsu.domain('Overlay').hideHighlight()
   }
   // To be removed in 3.0.0
   set(node) {
@@ -73,6 +81,7 @@ export default class Elements extends Tool {
       .domain('Overlay')
       .off('inspectNodeRequested', this._inspectNodeRequested)
     chobitsu.domain('Overlay').disable()
+    this._splitMediaQuery.removeAllListeners()
   }
   _updateButtons() {
     const $control = this._$control
@@ -100,20 +109,29 @@ export default class Elements extends Tool {
       $showDetail.rmClass(iconDisabled)
     }
   }
+  _showDetail = () => {
+    if (this._curNode.nodeType === Node.ELEMENT_NODE) {
+      this._detail.show(this._curNode)
+    } else {
+      this._detail.show(this._curNode.parentNode)
+    }
+  }
   _initTpl() {
     const $el = this._$el
 
     $el.html(
-      c(`<div class="control">
-        <span class="icon icon-select select"></span>
-        <span class="icon icon-eye show-detail"></span>
-        <span class="icon icon-copy copy-node"></span>
-        <span class="icon icon-delete delete-node"></span>
+      c(`<div class="elements">
+        <div class="control">
+          <span class="icon icon-select select"></span>
+          <span class="icon icon-eye show-detail"></span>
+          <span class="icon icon-copy copy-node"></span>
+          <span class="icon icon-delete delete-node"></span>
+        </div>
+        <div class="dom-viewer-container">
+          <div class="dom-viewer"></div>
+        </div>
+        <div class="crumbs"></div>
       </div>
-      <div class="dom-viewer-container">
-        <div class="dom-viewer"></div>
-      </div>
-      <div class="crumbs"></div>
       <div class="detail"></div>`)
     )
 
@@ -162,7 +180,7 @@ export default class Elements extends Tool {
 
     this._$control
       .on('click', c('.select'), this._toggleSelect)
-      .on('click', c('.show-detail'), () => this._detail.show(this._curNode))
+      .on('click', c('.show-detail'), this._showDetail)
       .on('click', c('.copy-node'), this._copyNode)
       .on('click', c('.delete-node'), this._deleteNode)
 
@@ -171,6 +189,15 @@ export default class Elements extends Tool {
     chobitsu
       .domain('Overlay')
       .on('inspectNodeRequested', this._inspectNodeRequested)
+
+    this._splitMediaQuery.on('match', () => {
+      this._splitMode = true
+      this._showDetail()
+    })
+    this._splitMediaQuery.on('unmatch', () => {
+      this._splitMode = false
+      this._detail.hide()
+    })
   }
   _deleteNode = () => {
     const node = this._curNode
@@ -238,6 +265,9 @@ export default class Elements extends Tool {
     }
     this._curParentQueue = parentQueue
 
+    if (this._splitMode) {
+      this._showDetail()
+    }
     this._updateButtons()
     this._updateHistory()
   }
