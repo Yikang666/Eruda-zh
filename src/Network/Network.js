@@ -10,6 +10,7 @@ import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 import LunaDataGrid from 'luna-data-grid'
 import ResizeSensor from 'licia/ResizeSensor'
+import MediaQuery from 'licia/MediaQuery'
 import { getType } from './util'
 import copy from 'licia/copy'
 import extend from 'licia/extend'
@@ -32,6 +33,8 @@ export default class Network extends Tool {
     this._container = container
     this._initTpl()
     this._detail = new Detail(this._$detail, container)
+    this._splitMeidaQuery = new MediaQuery('screen and (min-width: 680px)')
+    this._splitMode = this._splitMeidaQuery.isMatch()
     this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
       columns: [
         {
@@ -243,6 +246,14 @@ export default class Network extends Tool {
     this._$control.find(c('.record')).toggleClass(c('recording'))
     this._isRecording = !this._isRecording
   }
+  _showDetail = () => {
+    if (this._selectedRequest) {
+      if (this._splitMode) {
+        this._$network.css('width', '50%')
+      }
+      this._detail.show(this._selectedRequest)
+    }
+  }
   _bindEvent() {
     const $control = this._$control
     const requestDataGrid = this._requestDataGrid
@@ -251,9 +262,7 @@ export default class Network extends Tool {
 
     $control
       .on('click', c('.clear-request'), () => this.clear())
-      .on('click', c('.show-detail'), () =>
-        this._detail.show(this._selectedRequest)
-      )
+      .on('click', c('.show-detail'), this._showDetail)
       .on('click', c('.copy-curl'), this._copyCurl)
       .on('click', c('.record'), this._toggleRecording)
 
@@ -262,16 +271,34 @@ export default class Network extends Tool {
       const request = self._requests[id]
       this._selectedRequest = request
       this._updateButtons()
+      if (this._splitMode) {
+        this._showDetail()
+      }
     })
 
     requestDataGrid.on('deselect', () => {
       this._selectedRequest = null
       this._updateButtons()
+      this._detail.hide()
     })
 
     this._resizeSensor.addListener(
       throttle(() => this._updateDataGridHeight(), 15)
     )
+
+    this._splitMeidaQuery.on('match', () => {
+      this._detail.hide()
+      this._splitMode = true
+    })
+    this._splitMeidaQuery.on('unmatch', () => {
+      this._detail.hide()
+      this._splitMode = false
+    })
+    this._detail.on('hide', () => {
+      if (this._splitMode) {
+        this._$network.css('width', '100%')
+      }
+    })
 
     chobitsu.domain('Network').enable()
 
@@ -286,6 +313,7 @@ export default class Network extends Tool {
 
     this._resizeSensor.destroy()
     evalCss.remove(this._style)
+    this._splitMeidaQuery.removeAllListeners()
 
     const network = chobitsu.domain('Network')
     network.off('requestWillBeSent', this._reqWillBeSent)
@@ -296,15 +324,18 @@ export default class Network extends Tool {
   _initTpl() {
     const $el = this._$el
     $el.html(
-      c(`<div class="control">
-      <span class="icon-record record recording"></span>
-      <span class="icon-clear clear-request"></span>
-      <span class="icon-eye icon-disabled show-detail"></span>
-      <span class="icon-copy icon-disabled copy-curl"></span>
-    </div>
-    <div class="requests"></div>
-    <div class="detail"></div>`)
+      c(`<div class="network">
+        <div class="control">
+          <span class="icon-record record recording"></span>
+          <span class="icon-clear clear-request"></span>
+          <span class="icon-eye icon-disabled show-detail"></span>
+          <span class="icon-copy icon-disabled copy-curl"></span>
+        </div>
+        <div class="requests"></div>
+      </div>
+      <div class="detail"></div>`)
     )
+    this._$network = $el.find(c('.network'))
     this._$detail = $el.find(c('.detail'))
     this._$requests = $el.find(c('.requests'))
     this._$control = $el.find(c('.control'))

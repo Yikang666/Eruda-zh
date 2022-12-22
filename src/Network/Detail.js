@@ -5,10 +5,12 @@ import each from 'licia/each'
 import escape from 'licia/escape'
 import copy from 'licia/copy'
 import isJson from 'licia/isJson'
+import Emitter from 'licia/Emitter'
 import { classPrefix as c } from '../lib/util'
 
-export default class Detail {
+export default class Detail extends Emitter {
   constructor($container, devtools) {
+    super()
     this._$container = $container
     this._devtools = devtools
 
@@ -58,6 +60,7 @@ export default class Detail {
 
     const html = `<div class="${c('control')}">
       <span class="${c('icon-arrow-left back')}"></span>
+      <span class="${c('icon-delete back')}"></span>
       <span class="${c('url')}">${escape(data.url)}</span>
       <span class="${c('icon-copy copy-res')}"></span>
     </div>
@@ -87,6 +90,7 @@ export default class Detail {
   }
   hide() {
     this._$container.hide()
+    this.emit('hide')
   }
   _copyRes = () => {
     const detailData = this._detailData

@@ -52,13 +52,17 @@ export default class Elements extends Tool {
   }
   show() {
     super.show()
+    this._isShow = true
 
     if (!this._curNode) {
       this.select(document.body)
+    } else if (this._splitMode) {
+      this._showDetail()
     }
   }
   hide() {
     super.hide()
+    this._isShow = false
 
     chobitsu.domain('Overlay').hideHighlight()
   }
@@ -110,6 +114,9 @@ export default class Elements extends Tool {
     }
   }
   _showDetail = () => {
+    if (!this._isShow || !this._curNode) {
+      return
+    }
     if (this._curNode.nodeType === Node.ELEMENT_NODE) {
       this._detail.show(this._curNode)
     } else {

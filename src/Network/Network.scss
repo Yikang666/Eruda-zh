@@ -2,7 +2,10 @@
 @import '../style/mixin';
 
 #network {
-  padding-top: 40px;
+  .network {
+    @include absolute();
+    padding-top: 39px;
+  }
   .control {
     @include control();
     padding: 10px;
@@ -61,6 +64,10 @@
       .icon-arrow-left {
         left: 0;
       }
+      .icon-delete {
+        left: 0;
+        display: none;
+      }
       .icon-copy {
         right: 0;
       }
@@ -107,6 +114,35 @@
         border-top: 1px solid var(--border);
         color: var(--foreground);
         border-bottom: 1px solid var(--border);
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 680px) {
+  #network {
+    .network {
+      .control {
+        .icon-eye {
+          display: none;
+        }
+        .icon-copy {
+          right: 0;
+        }
+      }
+    }
+    .detail {
+      width: 50%;
+      left: initial;
+      right: 0;
+      border-left: 1px solid var(--border);
+      .control {
+        .icon-arrow-left {
+          display: none;
+        }
+        .icon-delete {
+          display: block;
+        }
       }
     }
   }
