@@ -535,7 +535,7 @@ export default class Resources extends Tool {
           <td class="${c('control')}">
             <span class="${c(
               'icon-delete delete-cookie'
-            )} data-key="${key}"></span>
+            )}" data-key="${key}"></span>
           </td>
         </tr>`
       }).join('')
