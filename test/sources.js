@@ -8,6 +8,5 @@ describe('sources', function () {
 
   it('raw', function () {
     tool.set('raw', '/* test */')
-    expect($tool.find('.eruda-raw')).toContainHtml('/* test */')
   })
 })
