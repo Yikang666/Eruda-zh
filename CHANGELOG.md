@@ -1,3 +1,10 @@
+## 2.10.0 (24 Dec 2022)
+
+* feat(sources): use luna text viewer
+* feat(elements): split mode
+* feat(network): split mode
+* fix(resources): delete cookie
+
 ## 2.9.1 (20 Dec 2022)
 
 * fix(elements): select element using touch events
