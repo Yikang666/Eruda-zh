@@ -66,6 +66,7 @@ module.exports = {
           path.resolve(__dirname, '../node_modules/luna-data-grid'),
           path.resolve(__dirname, '../node_modules/luna-object-viewer'),
           path.resolve(__dirname, '../node_modules/luna-dom-viewer'),
+          path.resolve(__dirname, '../node_modules/luna-text-viewer'),
         ],
         use: [
           {

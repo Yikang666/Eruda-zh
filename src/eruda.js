@@ -29,7 +29,13 @@ import evalCss from './lib/evalCss'
 import chobitsu from './lib/chobitsu'
 
 export default {
-  init({ container, tool, autoScale = true, useShadowDom = true, defaults = {} } = {}) {
+  init({
+    container,
+    tool,
+    autoScale = true,
+    useShadowDom = true,
+    defaults = {},
+  } = {}) {
     if (this._isInit) return
 
     this._isInit = true
@@ -171,8 +177,13 @@ export default {
       if (shadowRoot) {
         // font-face doesn't work inside shadow dom.
         evalCss.container = document.head
-        evalCss(require('./style/icon.css') +
-        require('luna-console/luna-console.css') + require('luna-object-viewer/luna-object-viewer.css') + require('luna-dom-viewer/luna-dom-viewer.css'))
+        evalCss(
+          require('./style/icon.css') +
+            require('luna-console/luna-console.css') +
+            require('luna-object-viewer/luna-object-viewer.css') +
+            require('luna-dom-viewer/luna-dom-viewer.css') +
+            require('luna-text-viewer/luna-text-viewer.css')
+        )
 
         el = document.createElement('div')
         shadowRoot.appendChild(el)
@@ -181,13 +192,13 @@ export default {
     }
 
     if (!this._shadowRoot) {
-      el = document.createElement('div') 
+      el = document.createElement('div')
       container.appendChild(el)
     }
 
     extend(el, {
       className: 'eruda-container __chobitsu-hide__',
-      contentEditable: false
+      contentEditable: false,
     })
 
     // http://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
@@ -197,7 +208,7 @@ export default {
   },
   _initDevTools(defaults) {
     this._devTools = new DevTools(this._$el, {
-      defaults
+      defaults,
     })
   },
   _initStyle() {
@@ -214,15 +225,16 @@ export default {
 
     evalCss(
       require('./style/reset.scss') +
-      require('luna-object-viewer/luna-object-viewer.css') +
-      require('luna-console/luna-console.css') +
-      require('luna-notification/luna-notification.css') + 
-      require('luna-data-grid/luna-data-grid.css') +
-      require('luna-dom-viewer/luna-dom-viewer.css') +
-      require('luna-modal/luna-modal.css') +
-      require('luna-tab/luna-tab.css') +
-      require('./style/style.scss') +
-      require('./style/icon.css')
+        require('luna-object-viewer/luna-object-viewer.css') +
+        require('luna-console/luna-console.css') +
+        require('luna-notification/luna-notification.css') +
+        require('luna-data-grid/luna-data-grid.css') +
+        require('luna-dom-viewer/luna-dom-viewer.css') +
+        require('luna-modal/luna-modal.css') +
+        require('luna-tab/luna-tab.css') +
+        require('luna-text-viewer/luna-text-viewer.css') +
+        require('./style/style.scss') +
+        require('./style/icon.css')
     )
   },
   _initEntryBtn() {
@@ -246,14 +258,14 @@ export default {
       'resources',
       'sources',
       'info',
-      'snippets'
+      'snippets',
     ]
   ) {
     tool = toArr(tool)
 
     const devTools = this._devTools
 
-    tool.forEach(name => {
+    tool.forEach((name) => {
       const Tool = this[upperFirst(name)]
       try {
         if (Tool) devTools.add(new Tool())
@@ -269,5 +281,5 @@ export default {
     })
 
     devTools.showTool(tool[0] || 'settings')
-  }
+  },
 }

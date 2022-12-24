@@ -6,6 +6,7 @@ import escape from 'licia/escape'
 import copy from 'licia/copy'
 import isJson from 'licia/isJson'
 import Emitter from 'licia/Emitter'
+import truncate from 'licia/truncate'
 import { classPrefix as c } from '../lib/util'
 
 export default class Detail extends Emitter {
@@ -55,7 +56,11 @@ export default class Detail extends Emitter {
 
     let resTxt = ''
     if (data.resTxt) {
-      resTxt = `<pre class="${c('response')}">${escape(data.resTxt)}</pre>`
+      let text = data.resTxt
+      if (text.length > MAX_RES_LEN) {
+        text = truncate(text, MAX_RES_LEN)
+      }
+      resTxt = `<pre class="${c('response')}">${escape(text)}</pre>`
     }
 
     const html = `<div class="${c('control')}">
@@ -153,3 +158,5 @@ export default class Detail extends Emitter {
     }
   }
 }
+
+const MAX_RES_LEN = 100000

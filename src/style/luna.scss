@@ -332,3 +332,26 @@
 .luna-tab-slider {
   background: var(--accent);
 }
+
+.luna-text-viewer {
+  color: var(--foreground);
+  border: none;
+  background: var(--background);
+  font-size: $font-size-s;
+  .luna-text-viewer-line-code {
+    user-select: text;
+    * {
+      user-select: text;
+    }
+  }
+  .luna-text-viewer-copy,
+  .luna-text-viewer-line-number {
+    border-color: var(--border);
+  }
+  .luna-text-viewer-copy .luna-text-viewer-icon-check {
+    color: var(--accent);
+  }
+  .luna-text-viewer-copy {
+    background-color: var(--background);
+  }
+}

@@ -4,9 +4,9 @@ import Settings from '../Settings/Settings'
 import ajax from 'licia/ajax'
 import isStr from 'licia/isStr'
 import escape from 'licia/escape'
-import trim from 'licia/trim'
-import map from 'licia/map'
+import truncate from 'licia/truncate'
 import highlight from 'licia/highlight'
+import LunaTextViewer from 'luna-text-viewer'
 import evalCss from '../lib/evalCss'
 import { classPrefix as c } from '../lib/util'
 
@@ -172,8 +172,14 @@ export default class Sources extends Tool {
   _renderCode() {
     const data = this._data
 
+    this._renderHtml(`<div class="${c('code')}"></div>`, false)
+
     let code = data.val
     const len = data.val.length
+
+    if (len > MAX_RAW_LEN) {
+      code = truncate(code, MAX_RAW_LEN)
+    }
 
     // If source code too big, don't process it.
     if (len < MAX_BEAUTIFY_LEN) {
@@ -189,44 +195,13 @@ export default class Sources extends Tool {
       code = escape(code)
     }
 
-    const showLineNum = len < MAX_LINE_NUM_LEN && this._showLineNum
-
-    if (showLineNum) {
-      code = code.split('\n').map((line, idx) => {
-        if (trim(line) === '') line = '&nbsp;'
-
-        return {
-          idx: idx + 1,
-          val: line,
-        }
-      })
-    }
-
-    let html
-    if (showLineNum) {
-      const lineNum = map(code, ({ idx }) => {
-        return `<div class="${c('line-num')}">${idx}</div>`
-      }).join('')
-      const codeLine = map(code, ({ val }) => {
-        return `<pre class="${c('code-line')}">${val}</pre>`
-      }).join('')
-      html = `<div class="${c('code-wrapper')}">
-        <table class="${c('code')}">
-          <tbody>
-            <tr>
-              <td class="${c('gutter')}">${lineNum}</td>
-              <td class="${c('content')}">${codeLine}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>`
-    } else {
-      html = `<div class="${c('code-wrapper')}">
-        <pre class="${c('code')}">${code}</pre>
-      </div>`
-    }
-
-    this._renderHtml(html)
+    const container = this._$el.find(c('.code')).get(0)
+    new LunaTextViewer(container, {
+      text: code,
+      escape: false,
+      wrapLongLines: true,
+      showLineNumbers: data.val.length < MAX_LINE_NUM_LEN && this._showLineNum,
+    })
   }
   _renderObj() {
     // Using cache will keep binding events to the same elements.
@@ -251,9 +226,23 @@ export default class Sources extends Tool {
     objViewer.set(val)
   }
   _renderRaw() {
+    const data = this._data
+
     this._renderHtml(`<div class="${c('raw-wrapper')}">
-      <div class="${c('raw')}">${escape(this._data.val)}</div>
+      <div class="${c('raw')}"></div>
     </div>`)
+
+    let val = data.val
+    const container = this._$el.find(c('.raw')).get(0)
+    if (val.length > MAX_RAW_LEN) {
+      val = truncate(val, MAX_RAW_LEN)
+    }
+
+    new LunaTextViewer(container, {
+      text: val,
+      wrapLongLines: true,
+      showLineNumbers: val.length < MAX_LINE_NUM_LEN && this._showLineNum,
+    })
   }
   _renderIframe() {
     this._renderHtml(`<iframe src="${escape(this._data.val)}"></iframe>`)
@@ -267,5 +256,6 @@ export default class Sources extends Tool {
   }
 }
 
-const MAX_BEAUTIFY_LEN = 100000
-const MAX_LINE_NUM_LEN = 400000
+const MAX_BEAUTIFY_LEN = 30000
+const MAX_LINE_NUM_LEN = 80000
+const MAX_RAW_LEN = 100000
