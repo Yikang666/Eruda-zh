@@ -123,6 +123,7 @@ eruda.init({
 
 ## 相关项目
 
+* [eruda-android](https://github.com/liriliri/eruda-android): 简单的 Android 浏览器应用，自动加载 eruda。
 * [chii](https://github.com/liriliri/chii)：远程调试工具。
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools 协议 JavaScript 实现。
 * [licia](https://github.com/liriliri/licia)：Eruda 使用的工具库。 

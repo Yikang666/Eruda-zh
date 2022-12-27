@@ -122,6 +122,7 @@ If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.m
 
 ## Related Projects
 
+* [eruda-android](https://github.com/liriliri/eruda-android): Simple webview with eruda loaded automatically.
 * [chii](https://github.com/liriliri/chii): Remote debugging tool.
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools protocol JavaScript implementation.
 * [licia](https://github.com/liriliri/licia): Utility library used by eruda.
