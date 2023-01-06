@@ -101,10 +101,12 @@ export default class EntryBtn extends Emitter {
     const maxWidth = this._$container.get(0).offsetWidth
     const maxHeight = this._$container.get(0).offsetHeight
 
-    this._isClick = false
     e = e.origEvent
     const deltaX = eventClient('x', e) - this._startX
     const deltaY = eventClient('y', e) - this._startY
+    if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+      this._isClick = false
+    }
     let newX = this._oldX + deltaX
     let newY = this._oldY + deltaY
     if (newX < 0) {
