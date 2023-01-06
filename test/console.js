@@ -34,13 +34,13 @@ describe('console', function () {
       expect($tool.find('.eruda-logs li')).toHaveLength(0)
     })
 
-    it('filter', function () {
+    it('level', function () {
       tool.log('test')
       tool.warn('test')
       expect(logs()).toHaveLength(2)
-      $('.eruda-filter[data-filter="warn"]').click()
+      $('.eruda-level[data-level="warning"]').click()
       expect(logs()).toHaveLength(1)
-      $('.eruda-filter[data-filter="all"]').click()
+      $('.eruda-level[data-level="all"]').click()
     })
   })
 
