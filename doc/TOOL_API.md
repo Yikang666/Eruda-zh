@@ -52,7 +52,7 @@ Filter logs.
 |filter|string regexp function|Custom filter|
 
 ```javascript
-console.filter('all'); // String parameter. Log, warn, debug, error is also supported.
+console.filter('eruda');
 console.filter(/^eruda/);
 console.filter(function (log)
 {

@@ -3,12 +3,11 @@ import noop from 'licia/noop'
 import $ from 'licia/$'
 import Emitter from 'licia/Emitter'
 import uncaught from 'licia/uncaught'
-import escapeRegExp from 'licia/escapeRegExp'
 import trim from 'licia/trim'
 import upperFirst from 'licia/upperFirst'
 import isHidden from 'licia/isHidden'
-import lowerCase from 'licia/lowerCase'
 import isNull from 'licia/isNull'
+import isArr from 'licia/isArr'
 import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
 import emitter from '../lib/emitter'
@@ -88,6 +87,13 @@ export default class Console extends Tool {
 
     return this
   }
+  filter(filter) {
+    const $searchKeyword = this._$searchKeyword
+    const logger = this._logger
+
+    $searchKeyword.text(filter)
+    logger.setOption('filter', trim(filter))
+  }
   destroy() {
     this._logger.destroy()
     super.destroy()
@@ -139,10 +145,10 @@ export default class Console extends Tool {
       <div class="console-container">
         <div class="control">
           <span class="icon-clear clear-console"></span>
-          <span class="filter active" data-filter="all">All</span>
-          <span class="filter" data-filter="error">Error</span>
-          <span class="filter" data-filter="warn">Warning</span>
-          <span class="filter" data-filter="info">Info</span>
+          <span class="level active" data-level="all">All</span>
+          <span class="level" data-level="info">Info</span>
+          <span class="level" data-level="warning">Warning</span>
+          <span class="level" data-level="error">Error</span>
           <span class="search-keyword"></span>
           <span class="icon-filter search"></span>
           <span class="icon-copy icon-disabled copy"></span>
@@ -178,7 +184,7 @@ export default class Console extends Tool {
     let maxLogNum = cfg.get('maxLogNum')
     maxLogNum = maxLogNum === 'infinite' ? 0 : +maxLogNum
 
-    const $filter = this._$control.find(c('.filter'))
+    const $level = this._$control.find(c('.level'))
     const logger = new LunaConsole(this._$logs.get(0), {
       asyncRender: cfg.get('asyncRender'),
       maxNum: maxLogNum,
@@ -188,16 +194,18 @@ export default class Console extends Tool {
       lazyEvaluation: cfg.get('lazyEvaluation'),
     })
 
-    logger.on('optionChange', (name, filter) => {
-      if (name !== 'filter') {
-        return
-      }
-      $filter.each(function () {
-        const $this = $(this)
-        const isMatch = $this.data('filter') === filter
+    logger.on('optionChange', (name, val) => {
+      switch (name) {
+        case 'level':
+          $level.each(function () {
+            const $this = $(this)
+            const level = $this.data('level')
+            const isMatch = level === val || (level === 'all' && isArr(val))
 
-        $this[isMatch ? 'addClass' : 'rmClass'](c('active'))
-      })
+            $this[isMatch ? 'addClass' : 'rmClass'](c('active'))
+          })
+          break
+      }
     })
 
     if (cfg.get('overrideConsole')) this.overrideConsole()
@@ -206,7 +214,7 @@ export default class Console extends Tool {
   }
   _exposeLogger() {
     const logger = this._logger
-    const methods = ['filter', 'html'].concat(CONSOLE_METHOD)
+    const methods = ['html'].concat(CONSOLE_METHOD)
 
     methods.forEach(
       (name) =>
@@ -223,29 +231,23 @@ export default class Console extends Tool {
     const $input = this._$input
     const $inputBtns = this._$inputBtns
     const $control = this._$control
-    const $searchKeyword = this._$searchKeyword
 
     const logger = this._logger
     const config = this.config
 
     $control
       .on('click', c('.clear-console'), () => logger.clear(true))
-      .on('click', c('.filter'), function () {
-        $searchKeyword.text('')
-        logger.setOption('filter', $(this).data('filter'))
+      .on('click', c('.level'), function () {
+        let level = $(this).data('level')
+        if (level === 'all') {
+          level = ['verbose', 'info', 'warning', 'error']
+        }
+        logger.setOption('level', level)
       })
       .on('click', c('.search'), () => {
         LunaModal.prompt('Filter').then((filter) => {
           if (isNull(filter)) return
-          $searchKeyword.text(filter)
-          if (trim(filter) === '') {
-            logger.setOption('filter', 'all')
-            return
-          }
-          logger.setOption(
-            'filter',
-            new RegExp(escapeRegExp(lowerCase(filter)))
-          )
+          this.filter(filter)
         })
       })
       .on('click', c('.copy'), () => {
