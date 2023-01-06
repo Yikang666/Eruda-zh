@@ -22,6 +22,19 @@
     .icon-copy {
       right: 23px;
     }
+    .icon-filter {
+      right: 46px;
+    }
+    .filter-text {
+      white-space: nowrap;
+      position: absolute;
+      line-height: 20px;
+      max-width: 80px;
+      overflow: hidden;
+      right: 88px;
+      font-size: $font-size;
+      text-overflow: ellipsis;
+    }
     .icon-record {
       left: 0;
       &.recording {
@@ -128,6 +141,12 @@
         }
         .icon-copy {
           right: 0;
+        }
+        .icon-filter {
+          right: 23px;
+        }
+        .filter-text {
+          right: 55px;
         }
       }
     }

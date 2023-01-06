@@ -14,6 +14,9 @@ import MediaQuery from 'licia/MediaQuery'
 import { getType } from './util'
 import copy from 'licia/copy'
 import extend from 'licia/extend'
+import trim from 'licia/trim'
+import isNull from 'licia/isNull'
+import LunaModal from 'luna-modal'
 import { curlStr } from './util'
 
 export default class Network extends Tool {
@@ -256,6 +259,7 @@ export default class Network extends Tool {
   }
   _bindEvent() {
     const $control = this._$control
+    const $filterText = this._$filterText
     const requestDataGrid = this._requestDataGrid
 
     const self = this
@@ -265,6 +269,14 @@ export default class Network extends Tool {
       .on('click', c('.show-detail'), this._showDetail)
       .on('click', c('.copy-curl'), this._copyCurl)
       .on('click', c('.record'), this._toggleRecording)
+      .on('click', c('.filter'), () => {
+        LunaModal.prompt('Filter').then((filter) => {
+          if (isNull(filter)) return
+
+          $filterText.text(filter)
+          requestDataGrid.setOption('filter', trim(filter))
+        })
+      })
 
     requestDataGrid.on('select', (node) => {
       const id = $(node.container).data('id')
@@ -330,6 +342,8 @@ export default class Network extends Tool {
           <span class="icon-clear clear-request"></span>
           <span class="icon-eye icon-disabled show-detail"></span>
           <span class="icon-copy icon-disabled copy-curl"></span>
+          <span class="filter-text"></span>
+          <span class="icon-filter filter"></span>
         </div>
         <div class="requests"></div>
       </div>
@@ -339,5 +353,6 @@ export default class Network extends Tool {
     this._$detail = $el.find(c('.detail'))
     this._$requests = $el.find(c('.requests'))
     this._$control = $el.find(c('.control'))
+    this._$filterText = $el.find(c('.filter-text'))
   }
 }

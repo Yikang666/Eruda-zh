@@ -88,10 +88,10 @@ export default class Console extends Tool {
     return this
   }
   filter(filter) {
-    const $searchKeyword = this._$searchKeyword
+    const $filterText = this._$filterText
     const logger = this._logger
 
-    $searchKeyword.text(filter)
+    $filterText.text(filter)
     logger.setOption('filter', trim(filter))
   }
   destroy() {
@@ -149,8 +149,8 @@ export default class Console extends Tool {
           <span class="level" data-level="info">Info</span>
           <span class="level" data-level="warning">Warning</span>
           <span class="level" data-level="error">Error</span>
-          <span class="search-keyword"></span>
-          <span class="icon-filter search"></span>
+          <span class="filter-text"></span>
+          <span class="icon-filter filter"></span>
           <span class="icon-copy icon-disabled copy"></span>
         </div>
         <div class="logs-container"></div>
@@ -176,7 +176,7 @@ export default class Console extends Tool {
       _$inputContainer,
       _$input,
       _$inputBtns,
-      _$searchKeyword: $el.find(c('.search-keyword')),
+      _$filterText: $el.find(c('.filter-text')),
     })
   }
   _initLogger() {
@@ -244,7 +244,7 @@ export default class Console extends Tool {
         }
         logger.setOption('level', level)
       })
-      .on('click', c('.search'), () => {
+      .on('click', c('.filter'), () => {
         LunaModal.prompt('Filter').then((filter) => {
           if (isNull(filter)) return
           this.filter(filter)
