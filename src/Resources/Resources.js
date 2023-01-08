@@ -5,8 +5,6 @@ import escape from 'licia/escape'
 import isEmpty from 'licia/isEmpty'
 import unique from 'licia/unique'
 import each from 'licia/each'
-import isStr from 'licia/isStr'
-import startWith from 'licia/startWith'
 import trim from 'licia/trim'
 import sameOrigin from 'licia/sameOrigin'
 import ajax from 'licia/ajax'
@@ -14,14 +12,13 @@ import MutationObserver from 'licia/MutationObserver'
 import toArr from 'licia/toArr'
 import concat from 'licia/concat'
 import isNull from 'licia/isNull'
-import lowerCase from 'licia/lowerCase'
-import contain from 'licia/contain'
-import filter from 'licia/filter'
 import map from 'licia/map'
-import { safeStorage, isErudaEl, classPrefix as c } from '../lib/util'
+import { isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
 import LunaModal from 'luna-modal'
+import Storage from './Storage'
+import { filterData } from './util'
 
 export default class Resources extends Tool {
   constructor() {
@@ -44,6 +41,19 @@ export default class Resources extends Tool {
     this._container = container
 
     this._initTpl()
+    this._localStorage = new Storage(
+      this._$localStorage,
+      container,
+      this,
+      'local'
+    )
+    this._sessionStorage = new Storage(
+      this._$sessionStorage,
+      container,
+      this,
+      'session'
+    )
+
     this._bindEvent()
     this._initObserver()
     this._initCfg()
@@ -176,149 +186,14 @@ export default class Resources extends Tool {
     return this
   }
   refreshLocalStorage() {
-    this._refreshStorage('local')
-
-    const localStoreSearchKeyword = this._localStoreSearchKeyword
-
-    const localStoreData = filterData(
-      this._localStoreData,
-      localStoreSearchKeyword
-    )
-    let localStoreDataHtml = '<tr><td>Empty</td></tr>'
-    if (!isEmpty(localStoreData)) {
-      localStoreDataHtml = map(localStoreData, ({ key, val }) => {
-        key = escape(key)
-
-        return `<tr>
-          <td class="${c('key')}">${key}</td>
-          <td class="${c(
-            'storage-val'
-          )}" data-key="${key}" data-type="local">${escape(val)}</td>
-          <td class="${c('control')}">
-            <span class="${c(
-              'icon-delete delete-storage'
-            )}" data-key="${key}" data-type="local"></span>
-          </td>
-        </tr>`
-      }).join('')
-    }
-
-    const localStorageHtml = `<h2 class="${c('title')}">
-      Local Storage
-      <div class="${c('btn refresh-local-storage')}">
-        <span class="${c('icon-refresh')}"></span>
-      </div>
-      <div class="${c('btn clear-storage')}" data-type="local">
-        <span class="${c('icon-clear')}"></span>
-      </div>
-      <div class="${c('btn search')}" data-type="local">
-        <span class="${c('icon-filter')}"></span>
-      </div>
-      ${
-        localStoreSearchKeyword
-          ? `<div class="${c('btn search-keyword')}">${escape(
-              localStoreSearchKeyword
-            )}</div>`
-          : ''
-      }
-    </h2>
-    <div class="${c('content')}">
-      <table>
-        <tbody>
-          ${localStoreDataHtml}
-        </tbody>
-      </table>
-    </div>`
-
-    this._$localStorage.html(localStorageHtml)
+    this._localStorage.refresh()
 
     return this
   }
   refreshSessionStorage() {
-    this._refreshStorage('session')
-
-    const sessionStoreSearchKeyword = this._sessionStoreSearchKeyword
-
-    const sessionStoreData = filterData(
-      this._sessionStoreData,
-      sessionStoreSearchKeyword
-    )
-
-    let sessionStoreDataHtml = '<tr><td>Empty</td></tr>'
-    if (!isEmpty(sessionStoreData)) {
-      sessionStoreDataHtml = map(sessionStoreData, ({ key, val }) => {
-        key = escape(key)
-
-        return `<tr>
-          <td class="${c('key')}">${key}</td>
-          <td class="${c(
-            'storage-val'
-          )}" data-key="${key}" data-type="session">${escape(val)}</td>
-          <td class="${c('control')}">
-            <span class="${c(
-              'icon-delete delete-storage'
-            )}" data-key="${key}" data-type="session"></span>
-          </td>
-        </tr>`
-      }).join('')
-    }
-
-    const sessionStorageHtml = `<h2 class="${c('title')}">
-      Session Storage
-      <div class="${c('btn refresh-session-storage')}">
-        <span class="${c('icon-refresh')}"></span>
-      </div>
-      <div class="${c('btn clear-storage')}" data-type="session">
-        <span class="${c('icon-clear')}"></span>
-      </div>
-      <div class="${c('btn search')}" data-type="session">
-        <span class="${c('icon-filter')}"></span>
-      </div>
-      ${
-        sessionStoreSearchKeyword
-          ? `<div class="${c('btn search-keyword')}">${escape(
-              sessionStoreSearchKeyword
-            )}</div>`
-          : ''
-      }
-    </h2>
-    <div class="${c('content')}">
-      <table>
-        <tbody>
-          ${sessionStoreDataHtml}
-        </tbody>
-      </table>
-    </div>`
-
-    this._$sessionStorage.html(sessionStorageHtml)
+    this._sessionStorage.refresh()
 
     return this
-  }
-  _refreshStorage(type) {
-    let store = safeStorage(type, false)
-
-    if (!store) return
-
-    const storeData = []
-
-    // Mobile safari is not able to loop through localStorage directly.
-    store = JSON.parse(JSON.stringify(store))
-
-    each(store, (val, key) => {
-      // According to issue 20, not all values are guaranteed to be string.
-      if (!isStr(val)) return
-
-      if (this._hideErudaSetting) {
-        if (startWith(key, 'eruda') || key === 'active-eruda') return
-      }
-
-      storeData.push({
-        key: key,
-        val: sliceStr(val, 200),
-      })
-    })
-
-    this['_' + type + 'StoreData'] = storeData
   }
   refreshCookie() {
     const { cookies } = chobitsu.domain('Network').getCookies()
@@ -472,14 +347,6 @@ export default class Resources extends Tool {
     const container = this._container
 
     $el
-      .on('click', '.eruda-refresh-local-storage', () => {
-        container.notify('Refreshed')
-        this.refreshLocalStorage()
-      })
-      .on('click', '.eruda-refresh-session-storage', () => {
-        container.notify('Refreshed')
-        this.refreshSessionStorage()
-      })
       .on('click', '.eruda-refresh-cookie', () => {
         container.notify('Refreshed')
         this.refreshCookie()
@@ -508,14 +375,6 @@ export default class Resources extends Tool {
           if (isNull(filter)) return
           filter = trim(filter)
           switch (type) {
-            case 'local':
-              self._localStoreSearchKeyword = filter
-              self.refreshLocalStorage()
-              break
-            case 'session':
-              self._sessionStoreSearchKeyword = filter
-              self.refreshSessionStorage()
-              break
             case 'cookie':
               self._cookieSearchKeyword = filter
               self.refreshCookie()
@@ -523,59 +382,17 @@ export default class Resources extends Tool {
           }
         })
       })
-      .on('click', '.eruda-delete-storage', function () {
-        const $this = $(this)
-        const key = $this.data('key')
-        const type = $this.data('type')
-
-        if (type === 'local') {
-          localStorage.removeItem(key)
-          self.refreshLocalStorage()
-        } else {
-          sessionStorage.removeItem(key)
-          self.refreshSessionStorage()
-        }
-      })
       .on('click', '.eruda-delete-cookie', function () {
         const key = $(this).data('key')
 
         chobitsu.domain('Network').deleteCookies({ name: key })
         self.refreshCookie()
       })
-      .on('click', '.eruda-clear-storage', function () {
-        const type = $(this).data('type')
-
-        if (type === 'local') {
-          each(self._localStoreData, (val) => localStorage.removeItem(val.key))
-          self.refreshLocalStorage()
-        } else {
-          each(self._sessionStoreData, (val) =>
-            sessionStorage.removeItem(val.key)
-          )
-          self.refreshSessionStorage()
-        }
-      })
       .on('click', '.eruda-clear-cookie', () => {
         chobitsu.domain('Storage').clearDataForOrigin({
           storageTypes: 'cookies',
         })
         this.refreshCookie()
-      })
-      .on('click', '.eruda-storage-val', function () {
-        const $this = $(this)
-        const key = $this.data('key')
-        const type = $this.data('type')
-
-        const val =
-          type === 'local'
-            ? localStorage.getItem(key)
-            : sessionStorage.getItem(key)
-
-        try {
-          showSources('object', JSON.parse(val))
-        } catch (e) {
-          showSources('raw', val)
-        }
       })
       .on('click', '.eruda-img-link', function () {
         const src = $(this).attr('src')
@@ -750,19 +567,6 @@ function getLowerCaseTagName(el) {
   return el.tagName.toLowerCase()
 }
 
-const sliceStr = (str, len) =>
-  str.length < len ? str : str.slice(0, len) + '...'
-
 const regImg = /\.(jpeg|jpg|gif|png)$/
 
 const isImg = (url) => regImg.test(url)
-
-function filterData(data, keyword) {
-  keyword = lowerCase(keyword)
-
-  if (!keyword) return data
-
-  return filter(data, ({ key, val }) => {
-    return contain(lowerCase(key), keyword) || contain(lowerCase(val), keyword)
-  })
-}

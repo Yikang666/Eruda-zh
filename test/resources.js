@@ -9,12 +9,12 @@ describe('resources', function () {
     it('show', function () {
       localStorage.clear()
       localStorage.setItem('testKey', 'testVal')
-      $tool.find('.eruda-refresh-local-storage').click()
+      $tool.find('.eruda-local-storage .eruda-refresh-storage').click()
       expect($tool.find('.eruda-local-storage')).toContainText('testKey')
     })
 
     it('clear', function () {
-      $tool.find('.eruda-clear-storage[data-type="local"]').click()
+      $tool.find('.eruda-local-storage .eruda-clear-storage').click()
       expect($tool.find('.eruda-local-storage')).toContainText('Empty')
     })
   })
@@ -23,12 +23,12 @@ describe('resources', function () {
     it('show', function () {
       sessionStorage.clear()
       sessionStorage.setItem('testKey', 'testVal')
-      $tool.find('.eruda-refresh-session-storage').click()
+      $tool.find('.eruda-session-storage .eruda-refresh-storage').click()
       expect($tool.find('.eruda-session-storage')).toContainText('testKey')
     })
 
     it('clear', function () {
-      $tool.find('.eruda-clear-storage[data-type="session"]').click()
+      $tool.find('.eruda-session-storage .eruda-clear-storage').click()
       expect($tool.find('.eruda-session-storage')).toContainText('Empty')
     })
   })
