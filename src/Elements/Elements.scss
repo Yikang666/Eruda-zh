@@ -91,6 +91,7 @@
       background: var(--darker-background);
       border-top: 1px solid var(--border);
       padding: $padding;
+      line-height: 18px;
       font-size: $font-size;
       transition: background-color $anim-duration;
       &.active-effect {

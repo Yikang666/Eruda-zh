@@ -5,20 +5,17 @@ import escape from 'licia/escape'
 import isEmpty from 'licia/isEmpty'
 import unique from 'licia/unique'
 import each from 'licia/each'
-import trim from 'licia/trim'
 import sameOrigin from 'licia/sameOrigin'
 import ajax from 'licia/ajax'
 import MutationObserver from 'licia/MutationObserver'
 import toArr from 'licia/toArr'
 import concat from 'licia/concat'
-import isNull from 'licia/isNull'
 import map from 'licia/map'
 import { isErudaEl, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
-import chobitsu from '../lib/chobitsu'
-import LunaModal from 'luna-modal'
 import Storage from './Storage'
-import { filterData } from './util'
+import Cookie from './Cookie'
+import { setState, getState } from './util'
 
 export default class Resources extends Tool {
   constructor() {
@@ -27,12 +24,7 @@ export default class Resources extends Tool {
     this._style = evalCss(require('./Resources.scss'))
 
     this.name = 'resources'
-    this._localStoreData = []
-    this._localStoreSearchKeyword = ''
     this._hideErudaSetting = false
-    this._sessionStoreData = []
-    this._sessionStoreSearchKeyword = ''
-    this._cookieSearchKeyword = ''
     this._observeElement = true
   }
   init($el, container) {
@@ -53,6 +45,7 @@ export default class Resources extends Tool {
       this,
       'session'
     )
+    this._cookie = new Cookie(this._$cookie, container)
 
     this._bindEvent()
     this._initObserver()
@@ -196,63 +189,7 @@ export default class Resources extends Tool {
     return this
   }
   refreshCookie() {
-    const { cookies } = chobitsu.domain('Network').getCookies()
-    let cookieData = map(cookies, ({ name, value }) => ({
-      key: name,
-      val: value,
-    }))
-
-    const cookieSearchKeyword = this._cookieSearchKeyword
-    cookieData = filterData(cookieData, cookieSearchKeyword)
-    const cookieState = getState('cookie', cookieData.length)
-
-    let cookieDataHtml = '<tr><td>Empty</td></tr>'
-    if (!isEmpty(cookieData)) {
-      cookieDataHtml = map(cookieData, ({ key, val }) => {
-        key = escape(key)
-
-        return `<tr>
-          <td class="${c('key')}">${key}</td>
-          <td>${escape(val)}</td>
-          <td class="${c('control')}">
-            <span class="${c(
-              'icon-delete delete-cookie'
-            )}" data-key="${key}"></span>
-          </td>
-        </tr>`
-      }).join('')
-    }
-
-    const cookieHtml = `<h2 class="${c('title')}">
-      Cookie
-      <div class="${c('btn refresh-cookie')}">
-        <span class="${c('icon-refresh')}"></span>
-      </div>
-      <div class="${c('btn clear-cookie')}">
-        <span class="${c('icon-clear')}"></span>
-      </div>
-      <div class="${c('btn search')}" data-type="cookie">
-        <span class="${c('icon-filter')}"></span>
-      </div>
-      ${
-        cookieSearchKeyword
-          ? `<div class="${c('btn search-keyword')}">${escape(
-              cookieSearchKeyword
-            )}</div>`
-          : ''
-      }
-    </h2>
-    <div class="${c('content')}">
-      <table>
-        <tbody>
-          ${cookieDataHtml}
-        </tbody>
-      </table>
-    </div>`
-
-    const $cookie = this._$cookie
-    setState($cookie, cookieState)
-    $cookie.html(cookieHtml)
+    this._cookie.refresh()
 
     return this
   }
@@ -323,7 +260,6 @@ export default class Resources extends Tool {
   }
   _initTpl() {
     const $el = this._$el
-    console.log('init tpl')
     $el.html(
       c(`<div class="section local-storage"></div>
       <div class="section session-storage"></div>
@@ -342,15 +278,10 @@ export default class Resources extends Tool {
     this._$image = $el.find(c('.image'))
   }
   _bindEvent() {
-    const self = this
     const $el = this._$el
     const container = this._container
 
     $el
-      .on('click', '.eruda-refresh-cookie', () => {
-        container.notify('Refreshed')
-        this.refreshCookie()
-      })
       .on('click', '.eruda-refresh-script', () => {
         container.notify('Refreshed')
         this.refreshScript()
@@ -366,33 +297,6 @@ export default class Resources extends Tool {
       .on('click', '.eruda-refresh-image', () => {
         container.notify('Refreshed')
         this.refreshImage()
-      })
-      .on('click', '.eruda-search', function () {
-        const $this = $(this)
-        const type = $this.data('type')
-
-        LunaModal.prompt('Filter').then((filter) => {
-          if (isNull(filter)) return
-          filter = trim(filter)
-          switch (type) {
-            case 'cookie':
-              self._cookieSearchKeyword = filter
-              self.refreshCookie()
-              break
-          }
-        })
-      })
-      .on('click', '.eruda-delete-cookie', function () {
-        const key = $(this).data('key')
-
-        chobitsu.domain('Network').deleteCookies({ name: key })
-        self.refreshCookie()
-      })
-      .on('click', '.eruda-clear-cookie', () => {
-        chobitsu.domain('Storage').clearDataForOrigin({
-          storageTypes: 'cookies',
-        })
-        this.refreshCookie()
       })
       .on('click', '.eruda-img-link', function () {
         const src = $(this).attr('src')
@@ -521,45 +425,6 @@ export default class Resources extends Tool {
   _disableObserver() {
     this._observer.disconnect()
   }
-}
-
-function setState($el, state) {
-  $el
-    .rmClass(c('ok'))
-    .rmClass(c('danger'))
-    .rmClass(c('warn'))
-    .addClass(c(state))
-}
-
-function getState(type, len) {
-  if (len === 0) return ''
-
-  let warn = 0
-  let danger = 0
-
-  switch (type) {
-    case 'cookie':
-      warn = 30
-      danger = 60
-      break
-    case 'script':
-      warn = 5
-      danger = 10
-      break
-    case 'stylesheet':
-      warn = 4
-      danger = 8
-      break
-    case 'image':
-      warn = 50
-      danger = 100
-      break
-  }
-
-  if (len >= danger) return 'danger'
-  if (len >= warn) return 'warn'
-
-  return 'ok'
 }
 
 function getLowerCaseTagName(el) {

@@ -17,6 +17,7 @@
     }
     .name {
       padding: $padding;
+      line-height: 18px;
       color: var(--primary);
       background: var(--darker-background);
       transition: background-color $anim-duration;
@@ -26,7 +27,6 @@
         text-align: center;
         width: 18px;
         height: 18px;
-        line-height: 18px;
         font-size: $font-size-s;
       }
     }
@@ -34,7 +34,7 @@
       font-size: $font-size-s;
       color: var(--foreground);
       padding: $padding;
-      transition: background $anim-duration;
+      transition: background-color $anim-duration;
     }
   }
 }

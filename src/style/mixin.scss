@@ -63,18 +63,15 @@
 
 @mixin right-btn {
   .btn {
-    display: flex;
     margin-left: 5px;
     float: right;
     color: var(--primary);
     width: 18px;
     height: 18px;
-    justify-content: center;
-    align-items: center;
     font-size: $font-size-l;
     cursor: pointer;
     transition: color $anim-duration;
-    &.search-keyword {
+    &.filter-text {
       width: auto;
       max-width: 80px;
       font-size: $font-size;

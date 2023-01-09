@@ -181,7 +181,7 @@ export default class Detail {
           </div>
           ${
             data.computedStyleSearchKeyword
-              ? `<div class="${c('btn search-keyword')}">${escape(
+              ? `<div class="${c('btn filter-text')}">${escape(
                   data.computedStyleSearchKeyword
                 )}</div>`
               : ''

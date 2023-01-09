@@ -59,7 +59,7 @@ export default class Storage {
       </div>
       ${
         filter
-          ? `<div class="${c('btn search-keyword')}">${escape(filter)}</div>`
+          ? `<div class="${c('btn filter-text')}">${escape(filter)}</div>`
           : ''
       }
     </h2>
@@ -134,12 +134,12 @@ export default class Storage {
           showSources('raw', val)
         }
       })
-      .on('click', c('.filter'), function () {
+      .on('click', c('.filter'), () => {
         LunaModal.prompt('Filter').then((filter) => {
           if (isNull(filter)) return
           filter = trim(filter)
-          self._filter = filter
-          self.refresh()
+          this._filter = filter
+          this.refresh()
         })
       })
       .on('click', c('.delete-storage'), function () {

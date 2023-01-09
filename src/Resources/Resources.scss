@@ -31,6 +31,7 @@
   .title {
     @include right-btn();
     padding: $padding;
+    line-height: 18px;
     color: var(--primary);
     background: var(--darker-background);
   }
