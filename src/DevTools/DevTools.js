@@ -11,12 +11,14 @@ import $ from 'licia/$'
 import toNum from 'licia/toNum'
 import isDarkMode from 'licia/isDarkMode'
 import extend from 'licia/extend'
+import isStr from 'licia/isStr'
+import startWith from 'licia/startWith'
 import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 import LunaModal from 'luna-modal'
 import LunaTab from 'luna-tab'
-import { classPrefix as c, drag, eventClient } from '../lib/util'
+import { classPrefix as c, drag, eventClient, safeStorage } from '../lib/util'
 
 export default class DevTools extends Emitter {
   constructor($container, { defaults = {} } = {}) {
@@ -194,6 +196,23 @@ export default class DevTools extends Emitter {
         min: 40,
         max: 100,
         step: 1,
+      })
+      .button('Restore defaults and reload', function () {
+        const store = safeStorage('local')
+
+        const data = JSON.parse(JSON.stringify(store))
+        console.log(data)
+        each(data, (val, key) => {
+          if (!isStr(val)) {
+            return
+          }
+
+          if (startWith(key, 'eruda')) {
+            store.removeItem(key)
+          }
+        })
+
+        window.location.reload()
       })
       .separator()
   }

@@ -69,6 +69,7 @@
     "luna-modal": "^1.0.0",
     "luna-notification": "^0.1.4",
     "luna-object-viewer": "^0.2.4",
+    "luna-setting": "^0.3.0",
     "luna-tab": "^0.1.2",
     "luna-text-viewer": "^0.2.1",
     "node-sass": "^7.0.1",

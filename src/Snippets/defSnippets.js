@@ -2,15 +2,13 @@ import logger from '../lib/logger'
 import emitter from '../lib/emitter'
 import Url from 'licia/Url'
 import now from 'licia/now'
-import each from 'licia/each'
-import isStr from 'licia/isStr'
 import startWith from 'licia/startWith'
 import $ from 'licia/$'
 import upperFirst from 'licia/upperFirst'
 import loadJs from 'licia/loadJs'
 import trim from 'licia/trim'
 import LunaModal from 'luna-modal'
-import { safeStorage, isErudaEl } from '../lib/util'
+import { isErudaEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 
 let style = null
@@ -157,23 +155,6 @@ export default [
       loadPlugin('touches')
     },
     desc: 'Visualize screen touches',
-  },
-  {
-    name: 'Restore Settings',
-    fn() {
-      const store = safeStorage('local')
-
-      const data = JSON.parse(JSON.stringify(store))
-
-      each(data, (val, key) => {
-        if (!isStr(val)) return
-
-        if (startWith(key, 'eruda')) store.removeItem(key)
-      })
-
-      window.location.reload()
-    },
-    desc: 'Restore defaults and reload',
   },
 ]
 

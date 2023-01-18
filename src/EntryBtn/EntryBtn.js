@@ -160,9 +160,7 @@ export default class EntryBtn extends Emitter {
       pos: this._getDefPos(),
     }))
 
-    settings
-      .separator()
-      .switch(cfg, 'rememberPos', 'Remember Entry Button Position')
+    settings.switch(cfg, 'rememberPos', 'Remember Entry Button Position')
 
     this._resetPos()
   }

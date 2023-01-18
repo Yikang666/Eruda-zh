@@ -286,17 +286,6 @@ Add range to input a number.
 |desc  |string|Option description|
 |option|object|Min, max, step    |
 
-### color
-
-Add color to select a color.
-
-|Name   |Type  |Desc              |
-|-------|------|------------------|
-|cfg    |object|Config object     |
-|name   |string|Option name       |
-|desc   |string|Option description|
-|[color]|array |Color list        |
-
 ### separator
 
 Add a separator.

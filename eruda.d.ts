@@ -345,14 +345,6 @@ declare module 'eruda' {
       options?: SettingsRangeOptions
     ): void
     /**
-     * Add color to select a color
-     * @param cfg Config object
-     * @param name Option name
-     * @param desc Option description
-     * @param colors Color list
-     */
-    color(cfg: object, name: string, desc: string, colors: string[]): void
-    /**
      * Add a separator
      */
     separator(): void
