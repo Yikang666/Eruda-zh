@@ -6,6 +6,7 @@ import LunaModal from 'luna-modal'
 import LunaDataGrid from 'luna-data-grid'
 import isNull from 'licia/isNull'
 import trim from 'licia/trim'
+import copy from 'licia/copy'
 import { safeStorage, classPrefix as c } from '../lib/util'
 
 export default class Storage {
@@ -87,14 +88,17 @@ export default class Storage {
     const $container = this._$container
     const $showDetail = $container.find(c('.show-detail'))
     const $deleteStorage = $container.find(c('.delete-storage'))
+    const $copyStorage = $container.find(c('.copy-storage'))
     const btnDisabled = c('btn-disabled')
 
     $showDetail.addClass(btnDisabled)
     $deleteStorage.addClass(btnDisabled)
+    $copyStorage.addClass(btnDisabled)
 
     if (this._selectedItem) {
       $showDetail.rmClass(btnDisabled)
       $deleteStorage.rmClass(btnDisabled)
+      $copyStorage.rmClass(btnDisabled)
     }
   }
   _initTpl() {
@@ -109,6 +113,9 @@ export default class Storage {
       </div>
       <div class="btn show-detail btn-disabled">
         <span class="icon icon-eye"></span>
+      </div>
+      <div class="btn copy-storage btn-disabled">
+        <span class="icon icon-copy"></span>
       </div>
       <div class="btn delete-storage btn-disabled">
         <span class="icon icon-delete"></span>
@@ -126,6 +133,11 @@ export default class Storage {
 
     this._$dataGrid = $container.find(c('.data-grid'))
     this._$filterText = $container.find(c('.filter-text'))
+  }
+  _getVal(key) {
+    return this._type === 'local'
+      ? localStorage.getItem(key)
+      : sessionStorage.getItem(key)
   }
   _bindEvent() {
     const type = this._type
@@ -148,17 +160,18 @@ export default class Storage {
       })
       .on('click', c('.show-detail'), () => {
         const key = this._selectedItem
-
-        const val =
-          type === 'local'
-            ? localStorage.getItem(key)
-            : sessionStorage.getItem(key)
+        const val = this._getVal(key)
 
         try {
           showSources('object', JSON.parse(val))
         } catch (e) {
           showSources('raw', val)
         }
+      })
+      .on('click', c('.copy-storage'), () => {
+        const key = this._selectedItem
+        copy(this._getVal(key))
+        devtools.notify('Copied')
       })
       .on('click', c('.filter'), () => {
         LunaModal.prompt('Filter').then((filter) => {

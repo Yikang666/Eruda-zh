@@ -2,6 +2,7 @@ import map from 'licia/map'
 import trim from 'licia/trim'
 import isNull from 'licia/isNull'
 import each from 'licia/each'
+import copy from 'licia/copy'
 import LunaModal from 'luna-modal'
 import LunaDataGrid from 'luna-data-grid'
 import { setState, getState } from './util'
@@ -72,6 +73,9 @@ export default class Cookie {
       <div class="btn show-detail btn-disabled">
         <span class="icon icon-eye"></span>
       </div>
+      <div class="btn copy-cookie btn-disabled">
+        <span class="icon icon-copy"></span>
+      </div>
       <div class="btn delete-cookie btn-disabled">
         <span class="icon icon-delete"></span>
       </div>
@@ -93,14 +97,17 @@ export default class Cookie {
     const $container = this._$container
     const $showDetail = $container.find(c('.show-detail'))
     const $deleteCookie = $container.find(c('.delete-cookie'))
+    const $copyCookie = $container.find(c('.copy-cookie'))
     const btnDisabled = c('btn-disabled')
 
     $showDetail.addClass(btnDisabled)
     $deleteCookie.addClass(btnDisabled)
+    $copyCookie.addClass(btnDisabled)
 
     if (this._selectedItem) {
       $showDetail.rmClass(btnDisabled)
       $deleteCookie.rmClass(btnDisabled)
+      $copyCookie.rmClass(btnDisabled)
     }
   }
   _getVal(key) {
@@ -143,6 +150,11 @@ export default class Cookie {
         } catch (e) {
           showSources('raw', val)
         }
+      })
+      .on('click', c('.copy-cookie'), () => {
+        const key = this._selectedItem
+        copy(this._getVal(key))
+        devtools.notify('Copied')
       })
       .on('click', c('.filter'), () => {
         LunaModal.prompt('Filter').then((filter) => {
