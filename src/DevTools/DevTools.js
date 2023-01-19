@@ -201,7 +201,6 @@ export default class DevTools extends Emitter {
         const store = safeStorage('local')
 
         const data = JSON.parse(JSON.stringify(store))
-        console.log(data)
         each(data, (val, key) => {
           if (!isStr(val)) {
             return

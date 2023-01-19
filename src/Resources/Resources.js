@@ -3,6 +3,7 @@ import Settings from '../Settings/Settings'
 import $ from 'licia/$'
 import escape from 'licia/escape'
 import isEmpty from 'licia/isEmpty'
+import contain from 'licia/contain'
 import unique from 'licia/unique'
 import each from 'licia/each'
 import sameOrigin from 'licia/sameOrigin'
@@ -202,6 +203,9 @@ export default class Resources extends Tool {
       const entries = this._performance.getEntries()
       entries.forEach((entry) => {
         if (entry.initiatorType === 'img' || isImg(entry.name)) {
+          if (contain(entry.name, 'exclude=true')) {
+            return
+          }
           imageData.push(entry.name)
         }
       })
@@ -210,7 +214,9 @@ export default class Resources extends Tool {
         const $this = $(this)
         const src = $this.attr('src')
 
-        if ($this.data('exclude') === 'true') return
+        if ($this.data('exclude') === 'true') {
+          return
+        }
 
         imageData.push(src)
       })

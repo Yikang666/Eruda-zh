@@ -83,5 +83,11 @@
     &:active {
       color: var(--accent);
     }
+    &.btn-disabled {
+      color: inherit !important;
+      cursor: default !important;
+      pointer-events: none;
+      opacity: 0.5;
+    }
   }
 }

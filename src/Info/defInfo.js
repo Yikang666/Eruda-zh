@@ -46,9 +46,9 @@ export default [
   {
     name: 'Backers',
     val() {
-      return `<a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img style="width: 100%;"src="https://opencollective.com/eruda/backers.svg?width=${
+      return `<a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img data-exclude="true" style="width: 100%;"src="https://opencollective.com/eruda/backers.svg?width=${
         window.innerWidth * 1.5
-      }"></a>`
+      }&exclude=true"></a>`
     },
   },
 ]
