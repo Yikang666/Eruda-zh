@@ -1,3 +1,13 @@
+## 2.11.0 (19 Jan 2023)
+
+* feat(network): filter
+* feat(info): add backers
+* feat(settings): use luna setting
+* feat(resources): use luna data grid
+* feat(resources): copy storage, cookie
+* fix(sources): code not selectable
+* fix(console): filter api
+
 ## 2.10.0 (24 Dec 2022)
 
 * feat(sources): use luna text viewer
