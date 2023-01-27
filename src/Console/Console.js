@@ -1,7 +1,11 @@
 import Tool from '../DevTools/Tool'
 import noop from 'licia/noop'
 import $ from 'licia/$'
+import toStr from 'licia/toStr'
+import isFn from 'licia/isFn'
 import Emitter from 'licia/Emitter'
+import isStr from 'licia/isStr'
+import isRegExp from 'licia/isRegExp'
 import uncaught from 'licia/uncaught'
 import trim from 'licia/trim'
 import upperFirst from 'licia/upperFirst'
@@ -91,8 +95,16 @@ export default class Console extends Tool {
     const $filterText = this._$filterText
     const logger = this._logger
 
-    $filterText.text(filter)
-    logger.setOption('filter', trim(filter))
+    if (isStr(filter)) {
+      $filterText.text(filter)
+      logger.setOption('filter', trim(filter))
+    } else if (isRegExp(filter)) {
+      $filterText.text(toStr(filter))
+      logger.setOption('filter', filter)
+    } else if (isFn(filter)) {
+      $filterText.text('ƒ')
+      logger.setOption('filter', filter)
+    }
   }
   destroy() {
     this._logger.destroy()
