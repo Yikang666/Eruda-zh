@@ -14,6 +14,26 @@
   .raw,
   .code {
     height: 100%;
+    .keyword {
+      color: var(--keyword-color);
+    }
+    .comment {
+      color: var(--comment-color);
+    }
+    .number {
+      color: var(--number-color);
+    }
+    .string {
+      color: var(--string-color);
+    }
+    .operator {
+      color: var(--operator-color);
+    }
+    &[data-type='html'] {
+      .keyword {
+        color: var(--tag-name-color);
+      }
+    }
   }
   .image {
     font-size: $font-size-s;

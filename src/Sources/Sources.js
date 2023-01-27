@@ -2,9 +2,11 @@ import Tool from '../DevTools/Tool'
 import LunaObjectViewer from 'luna-object-viewer'
 import Settings from '../Settings/Settings'
 import ajax from 'licia/ajax'
+import each from 'licia/each'
 import isStr from 'licia/isStr'
 import escape from 'licia/escape'
 import truncate from 'licia/truncate'
+import replaceAll from 'licia/replaceAll'
 import highlight from 'licia/highlight'
 import LunaTextViewer from 'luna-text-viewer'
 import evalCss from '../lib/evalCss'
@@ -172,7 +174,10 @@ export default class Sources extends Tool {
   _renderCode() {
     const data = this._data
 
-    this._renderHtml(`<div class="${c('code')}"></div>`, false)
+    this._renderHtml(
+      `<div class="${c('code')}" data-type="${data.type}"></div>`,
+      false
+    )
 
     let code = data.val
     const len = data.val.length
@@ -183,13 +188,15 @@ export default class Sources extends Tool {
 
     // If source code too big, don't process it.
     if (len < MAX_BEAUTIFY_LEN) {
-      const curTheme = evalCss.getCurTheme()
       code = highlight(code, data.type, {
-        keyword: `color:${curTheme.keywordColor}`,
-        number: `color:${curTheme.numberColor}`,
-        operator: `color:${curTheme.operatorColor}`,
-        comment: `color:${curTheme.commentColor}`,
-        string: `color:${curTheme.stringColor}`,
+        comment: '',
+        string: '',
+        number: '',
+        keyword: '',
+        operator: '',
+      })
+      each(['comment', 'string', 'number', 'keyword', 'operator'], (type) => {
+        code = replaceAll(code, `class="${type}"`, `class="${c(type)}"`)
       })
     } else {
       code = escape(code)
