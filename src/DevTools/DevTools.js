@@ -13,6 +13,7 @@ import isDarkMode from 'licia/isDarkMode'
 import extend from 'licia/extend'
 import isStr from 'licia/isStr'
 import startWith from 'licia/startWith'
+import ready from 'licia/ready'
 import evalCss from '../lib/evalCss'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
@@ -54,7 +55,8 @@ export default class DevTools extends Emitter {
     this._initTab()
     this._initNotification()
     this._initModal()
-    this._checkSafeArea()
+
+    ready(() => this._checkSafeArea())
     this._bindEvent()
   }
   show() {

@@ -1,3 +1,7 @@
+## 2.11.2 (28 Jan 2023)
+
+* fix: check safe area error
+
 ## 2.11.1 (28 Jan 2023)
 
 * fix: bottom safe area
