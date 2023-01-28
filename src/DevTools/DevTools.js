@@ -347,9 +347,10 @@ export default class DevTools extends Emitter {
       $document.off(drag('end'), endListener)
     }
     $resizer.css('height', 10)
-    $navBar.on('contextmenu', (e) => e.preventDefault())
     $resizer.on(drag('start'), startListener)
 
+    $navBar.on('contextmenu', (e) => e.preventDefault())
+    this.$container.on('click', (e) => e.stopPropagation())
     window.addEventListener('resize', this._checkSafeArea)
   }
 }

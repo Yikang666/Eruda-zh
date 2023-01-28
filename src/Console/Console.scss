@@ -126,6 +126,9 @@
 
 .safe-area #console {
   @include safe-area(padding-bottom, 24px);
+  &.js-input-hidden {
+    padding-bottom: 0;
+  }
   .js-input {
     @include safe-area(height, 24px);
     &.active {
