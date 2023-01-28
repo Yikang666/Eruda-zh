@@ -54,3 +54,7 @@
     }
   }
 }
+
+.safe-area #info {
+  @include safe-area(padding-bottom, 10px);
+}

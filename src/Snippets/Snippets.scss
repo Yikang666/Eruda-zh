@@ -38,3 +38,7 @@
     }
   }
 }
+
+.safe-area #snippets {
+  @include safe-area(padding-bottom, 10px);
+}

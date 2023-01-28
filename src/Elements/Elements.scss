@@ -260,6 +260,18 @@
   }
 }
 
+.safe-area #elements {
+  .elements {
+    @include safe-area(padding-bottom, 24px);
+  }
+  .crumbs {
+    @include safe-area(height, 24px);
+  }
+  .element {
+    @include safe-area(padding-bottom, 0px);
+  }
+}
+
 @media screen and (min-width: 680px) {
   #elements {
     .elements {

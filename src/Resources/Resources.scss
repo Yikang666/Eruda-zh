@@ -74,3 +74,7 @@
     }
   }
 }
+
+.safe-area #resources {
+  @include safe-area(padding-bottom, 10px);
+}

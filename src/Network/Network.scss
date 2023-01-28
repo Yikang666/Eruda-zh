@@ -133,6 +133,12 @@
   }
 }
 
+.safe-area #network {
+  .http {
+    @include safe-area(padding-bottom, 0px);
+  }
+}
+
 @media screen and (min-width: 680px) {
   #network {
     .network {

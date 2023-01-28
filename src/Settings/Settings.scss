@@ -4,3 +4,7 @@
 #settings {
   @include overflow-auto(y);
 }
+
+.safe-area #settings {
+  @include safe-area(padding-bottom, 0px);
+}
