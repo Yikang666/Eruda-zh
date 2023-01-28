@@ -2,8 +2,8 @@
 
 * fix: bottom safe area
 * fix(console): filter function support
-* fix: click event stop propagation #155
-* fix: worker null error #152
+* fix: click event stop propagation [#155](https://github.com/liriliri/eruda/issues/155)
+* fix: worker null error [#152](https://github.com/liriliri/eruda/issues/152)
 
 ## 2.11.0 (19 Jan 2023)
 
