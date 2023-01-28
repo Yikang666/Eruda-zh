@@ -153,6 +153,30 @@ import xpath from 'licia/xpath'
 import html from 'licia/html'
 import evalCssUtil from './evalCss'
 
+// https://stackoverflow.com/questions/46318395/detecting-mobile-device-notch
+export function hasSafeArea() {
+  let proceed = false
+  const div = document.createElement('div')
+  if (CSS.supports('padding-bottom: env(safe-area-inset-bottom)')) {
+    div.style.paddingBottom = 'env(safe-area-inset-bottom)'
+    proceed = true
+  } else if (CSS.supports('padding-bottom: constant(safe-area-inset-bottom)')) {
+    div.style.paddingBottom = 'constant(safe-area-inset-bottom)'
+    proceed = true
+  }
+  if (proceed) {
+    document.body.appendChild(div)
+    const calculatedPadding = parseInt(
+      window.getComputedStyle(div).paddingBottom
+    )
+    document.body.removeChild(div)
+    if (calculatedPadding > 0) {
+      return true
+    }
+  }
+  return false
+}
+
 export function escapeJsonStr(str) {
   /* eslint-disable quotes */
   return escapeJsStr(str).replace(/\\'/g, "'").replace(/\t/g, '\\t')

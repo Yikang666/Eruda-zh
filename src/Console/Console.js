@@ -129,15 +129,14 @@ export default class Console extends Tool {
   }
   _enableJsExecution(enabled) {
     const $el = this._$el
-    const $container = $el.find(c('.console-container'))
     const $jsInput = $el.find(c('.js-input'))
 
     if (enabled) {
       $jsInput.show()
-      $container.rmClass(c('js-input-hidden'))
+      $el.rmClass(c('js-input-hidden'))
     } else {
       $jsInput.hide()
-      $container.addClass(c('js-input-hidden'))
+      $el.addClass(c('js-input-hidden'))
     }
   }
   _registerListener() {
@@ -154,26 +153,24 @@ export default class Console extends Tool {
     this._style = evalCss(require('./Console.scss'))
     $el.append(
       c(`
-      <div class="console-container">
-        <div class="control">
-          <span class="icon-clear clear-console"></span>
-          <span class="level active" data-level="all">All</span>
-          <span class="level" data-level="info">Info</span>
-          <span class="level" data-level="warning">Warning</span>
-          <span class="level" data-level="error">Error</span>
-          <span class="filter-text"></span>
-          <span class="icon-filter filter"></span>
-          <span class="icon-copy icon-disabled copy"></span>
+      <div class="control">
+        <span class="icon-clear clear-console"></span>
+        <span class="level active" data-level="all">All</span>
+        <span class="level" data-level="info">Info</span>
+        <span class="level" data-level="warning">Warning</span>
+        <span class="level" data-level="error">Error</span>
+        <span class="filter-text"></span>
+        <span class="icon-filter filter"></span>
+        <span class="icon-copy icon-disabled copy"></span>
+      </div>
+      <div class="logs-container"></div>
+      <div class="js-input">
+        <div class="buttons">
+          <div class="button cancel">Cancel</div>
+          <div class="button execute">Execute</div>
         </div>
-        <div class="logs-container"></div>
-        <div class="js-input">
-          <div class="buttons">
-            <div class="button cancel">Cancel</div>
-            <div class="button execute">Execute</div>
-          </div>
-          <span class="icon-arrow-right"></span>
-          <textarea></textarea>
-        </div>
+        <span class="icon-arrow-right"></span>
+        <textarea></textarea>
       </div>
     `)
     )

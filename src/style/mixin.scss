@@ -17,6 +17,10 @@
   -webkit-overflow-scrolling: touch;
 }
 
+@mixin safe-area($prop, $value, $pos: 'bottom') {
+  #{$prop}: calc(#{$value} + env(safe-area-inset-#{$pos}));
+}
+
 @mixin breadcrumb {
   background: var(--darker-background);
   color: var(--primary);

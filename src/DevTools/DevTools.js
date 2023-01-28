@@ -18,7 +18,13 @@ import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 import LunaModal from 'luna-modal'
 import LunaTab from 'luna-tab'
-import { classPrefix as c, drag, eventClient, safeStorage } from '../lib/util'
+import {
+  classPrefix as c,
+  drag,
+  eventClient,
+  hasSafeArea,
+  safeStorage,
+} from '../lib/util'
 
 export default class DevTools extends Emitter {
   constructor($container, { defaults = {} } = {}) {
@@ -48,6 +54,7 @@ export default class DevTools extends Emitter {
     this._initTab()
     this._initNotification()
     this._initModal()
+    this._checkSafeArea()
     this._bindEvent()
   }
   show() {
@@ -223,6 +230,16 @@ export default class DevTools extends Emitter {
     this.removeAll()
     this._tab.destroy()
     this._$el.remove()
+    window.removeEventListener('resize', this._checkSafeArea)
+  }
+  _checkSafeArea = () => {
+    const { $container } = this
+
+    if (hasSafeArea()) {
+      $container.addClass(c('safe-area'))
+    } else {
+      $container.rmClass(c('safe-area'))
+    }
   }
   _setTheme(theme) {
     const { $container } = this
@@ -332,5 +349,7 @@ export default class DevTools extends Emitter {
     $resizer.css('height', 10)
     $navBar.on('contextmenu', (e) => e.preventDefault())
     $resizer.on(drag('start'), startListener)
+
+    window.addEventListener('resize', this._checkSafeArea)
   }
 }
