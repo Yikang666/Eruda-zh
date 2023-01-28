@@ -1,3 +1,10 @@
+## 2.11.1 (28 Jan 2023)
+
+* fix: bottom safe area
+* fix(console): filter function support
+* fix: click event stop propagation #155
+* fix: worker null error #152
+
 ## 2.11.0 (19 Jan 2023)
 
 * feat(network): filter
