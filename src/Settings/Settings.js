@@ -28,14 +28,17 @@ export default class Settings extends Tool {
   }
   remove(config, key) {
     if (isStr(config)) {
+      const self = this
       this._$el.find('.luna-setting-item-title').each(function () {
         const $this = $(this)
-        if ($this.text() === config) $this.remove()
+        if ($this.text() === config) {
+          self._setting.remove(this.settingItem)
+        }
       })
     } else {
       this._settings = filter(this._settings, (setting) => {
         if (setting.config === config && setting.key === key) {
-          setting.item.detach()
+          this._setting.remove(setting.item)
           return false
         }
 

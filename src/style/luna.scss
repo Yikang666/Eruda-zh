@@ -363,8 +363,12 @@
 }
 
 .luna-setting-item {
-  &:hover {
+  &:hover,
+  &.luna-setting-selected {
     background: var(--darker-background);
+  }
+  &.luna-setting-selected:focus {
+    outline: none;
   }
 }
 

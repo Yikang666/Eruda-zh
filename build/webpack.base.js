@@ -40,6 +40,7 @@ module.exports = {
   resolve: {
     alias: {
       axios: path.resolve(__dirname, '../src/lib/empty.js'),
+      micromark: path.resolve(__dirname, '../src/lib/micromark.js'),
     },
   },
   devServer: {
