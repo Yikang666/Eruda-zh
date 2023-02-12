@@ -8,9 +8,6 @@ import escape from 'licia/escape'
 import startWith from 'licia/startWith'
 import contain from 'licia/contain'
 import unique from 'licia/unique'
-import isStr from 'licia/isStr'
-import isNaN from 'licia/isNaN'
-import isNum from 'licia/isNum'
 import each from 'licia/each'
 import keys from 'licia/keys'
 import isNull from 'licia/isNull'
@@ -19,13 +16,15 @@ import isFn from 'licia/isFn'
 import isBool from 'licia/isBool'
 import safeGet from 'licia/safeGet'
 import $ from 'licia/$'
+import h from 'licia/h'
 import MutationObserver from 'licia/MutationObserver'
 import CssStore from './CssStore'
 import Settings from '../Settings/Settings'
 import LunaModal from 'luna-modal'
+import LunaBoxModel from 'luna-box-model'
 import chobitsu from '../lib/chobitsu'
 import { formatNodeName } from './util'
-import { pxToNum, isErudaEl, classPrefix as c } from '../lib/util'
+import { isErudaEl, classPrefix as c } from '../lib/util'
 
 export default class Detail {
   constructor($container, devtools) {
@@ -35,6 +34,7 @@ export default class Detail {
     this._bindEvent()
     this._initObserver()
     this._initCfg()
+    this._initTpl()
   }
   show(el) {
     this._curEl = el
@@ -87,6 +87,33 @@ export default class Detail {
     if (this._origAddEvent) winEventProto.addEventListener = this._origAddEvent
     if (this._origRmEvent) winEventProto.removeEventListener = this._origRmEvent
   }
+  _initTpl() {
+    const $container = this._$container
+
+    const html = `<div class="${c('control')}">
+      <span class="${c('icon-arrow-left back')}"></span>
+      <span class="${c('element-name')}"></span>
+      <span class="${c('icon-refresh refresh')}"></span>
+    </div>
+    <div class="${c('element')}">
+      <div class="${c('attributes section')}"></div>
+      <div class="${c('styles section')}"></div>
+      <div class="${c('computed-style section')}"></div>
+      <div class="${c('listeners section')}"></div>
+    </div>`
+
+    $container.html(html)
+
+    this._$elementName = $container.find(c('.element-name'))
+    this._$attributes = $container.find(c('.attributes'))
+    this._$styles = $container.find(c('.styles'))
+    this._$listeners = $container.find(c('.listeners'))
+    this._$computedStyle = $container.find(c('.computed-style'))
+
+    const boxModelContainer = h('div')
+    this._$boxModel = $(boxModelContainer)
+    this._boxModel = new LunaBoxModel(boxModelContainer)
+  }
   _toggleAllComputedStyle() {
     this._rmDefComputedStyle = !this._rmDefComputedStyle
 
@@ -94,26 +121,32 @@ export default class Detail {
   }
   _render() {
     const data = this._getData(this._curEl)
+    const $attributes = this._$attributes
+    const $elementName = this._$elementName
+    const $styles = this._$styles
+    const $computedStyle = this._$computedStyle
+    const $listeners = this._$listeners
 
-    let attribute = '<tr><td>Empty</td></tr>'
+    $elementName.html(data.name)
+
+    let attributes = '<tr><td>Empty</td></tr>'
     if (!isEmpty(data.attributes)) {
-      attribute = map(data.attributes, ({ name, value }) => {
+      attributes = map(data.attributes, ({ name, value }) => {
         return `<tr>
           <td class="${c('attribute-name-color')}">${escape(name)}</td>
           <td class="${c('string-color')}">${value}</td>
         </tr>`
       }).join('')
     }
-    attribute = `<div class="${c('attributes section')}">
-      <h2>Attributes</h2>
-      <div class="${c('table-wrapper')}">
-        <table>
-          <tbody>
-            ${attribute} 
-          </tbody>
-        </table>
-      </div>
+    attributes = `<h2>Attributes</h2>
+    <div class="${c('table-wrapper')}">
+      <table>
+        <tbody>
+          ${attributes} 
+        </tbody>
+      </table>
     </div>`
+    $attributes.html(attributes)
 
     let styles = ''
     if (!isEmpty(data.styles)) {
@@ -129,12 +162,13 @@ export default class Detail {
           <div>}</div>
         </div>`
       }).join('')
-      styles = `<div class="${c('styles section')}">
-        <h2>Styles</h2>
-        <div class="${c('style-wrapper')}">
-          ${style}
-        </div>
+      styles = `<h2>Styles</h2>
+      <div class="${c('style-wrapper')}">
+        ${style}
       </div>`
+      $styles.html(styles).show()
+    } else {
+      $styles.hide()
     }
 
     let computedStyle = ''
@@ -148,59 +182,39 @@ export default class Detail {
         </div>`)
       }
 
-      const boxModel = data.boxModel
-      // prettier-ignore
-      const boxModelHtml = [`<div class="${c('box-model')}">`,
-        boxModel.position ? `<div class="${c('position')}">` : '',
-          boxModel.position ? `<div class="${c('label')}">position</div><div class="${c('top')}">${boxModel.position.top}</div><br><div class="${c('left')}">${boxModel.position.left}</div>` : '',
-          `<div class="${c('margin')}">`,
-            `<div class="${c('label')}">margin</div><div class="${c('top')}">${boxModel.margin.top}</div><br><div class="${c('left')}">${boxModel.margin.left}</div>`,
-            `<div class="${c('border')}">`,
-              `<div class="${c('label')}">border</div><div class="${c('top')}">${boxModel.border.top}</div><br><div class="${c('left')}">${boxModel.border.left}</div>`,
-              `<div class="${c('padding')}">`,
-                `<div class="${c('label')}">padding</div><div class="${c('top')}">${boxModel.padding.top}</div><br><div class="${c('left')}">${boxModel.padding.left}</div>`,
-                `<div class="${c('content')}">`,
-                  `<span>${boxModel.content.width}</span>&nbsp;×&nbsp;<span>${boxModel.content.height}</span>`,
-                '</div>',
-                `<div class="${c('right')}">${boxModel.padding.right}</div><br><div class="${c('bottom')}">${boxModel.padding.bottom}</div>`,
-              '</div>',
-              `<div class="${c('right')}">${boxModel.border.right}</div><br><div class="${c('bottom')}">${boxModel.border.bottom}</div>`,
-            '</div>',
-            `<div class="${c('right')}">${boxModel.margin.right}</div><br><div class="${c('bottom')}">${boxModel.margin.bottom}</div>`,
-          '</div>',
-          boxModel.position ? `<div class="${c('right')}">${boxModel.position.right}</div><br><div class="${c('bottom')}">${boxModel.position.bottom}</div>` : '',
-        boxModel.position ? '</div>' : '',
-      '</div>'].join('')
-
-      computedStyle = `<div class="${c('computed-style section')}">
-        <h2>
-          Computed Style
-          ${toggleButton}
-          <div class="${c('btn computed-style-search')}">
-            <span class="${c('icon-filter')}"></span>
-          </div>
-          ${
-            data.computedStyleSearchKeyword
-              ? `<div class="${c('btn filter-text')}">${escape(
-                  data.computedStyleSearchKeyword
-                )}</div>`
-              : ''
-          }
-        </h2>
-        ${boxModelHtml}
-        <div class="${c('table-wrapper')}">
-          <table>
-            <tbody>
-            ${map(data.computedStyle, (val, key) => {
-              return `<tr>
-                <td class="${c('key')}">${escape(key)}</td>
-                <td>${val}</td>
-              </tr>`
-            }).join('')}
-            </tbody>
-          </table>
+      computedStyle = `<h2>
+        Computed Style
+        ${toggleButton}
+        <div class="${c('btn computed-style-search')}">
+          <span class="${c('icon-filter')}"></span>
         </div>
+        ${
+          data.computedStyleSearchKeyword
+            ? `<div class="${c('btn filter-text')}">${escape(
+                data.computedStyleSearchKeyword
+              )}</div>`
+            : ''
+        }
+      </h2>
+      <div class="${c('box-model')}"></div>
+      <div class="${c('table-wrapper')}">
+        <table>
+          <tbody>
+          ${map(data.computedStyle, (val, key) => {
+            return `<tr>
+              <td class="${c('key')}">${escape(key)}</td>
+              <td>${val}</td>
+            </tr>`
+          }).join('')}
+          </tbody>
+        </table>
       </div>`
+
+      $computedStyle.html(computedStyle).show()
+      this._boxModel.setOption('element', this._curEl)
+      $computedStyle.find(c('.box-model')).append(this._$boxModel.get(0))
+    } else {
+      $computedStyle.text('').hide()
     }
 
     let listeners = ''
@@ -218,27 +232,16 @@ export default class Detail {
           </ul>
         </div>`
       }).join('')
-      listeners = `<div class="${c('listeners section')}">
-        <h2>Event Listeners</h2>
-        <div class="${c('listener-wrapper')}">
-          ${listeners} 
-        </div>
+      listeners = `<h2>Event Listeners</h2>
+      <div class="${c('listener-wrapper')}">
+        ${listeners} 
       </div>`
+      $listeners.html(listeners).show()
+    } else {
+      $listeners.hide()
     }
 
-    const html = `<div class="${c('control')}">
-      <span class="${c('icon-arrow-left back')}"></span>
-      <span class="${c('element-name')}">${data.name}</span>
-      <span class="${c('icon-refresh refresh')}"></span>
-    </div>
-    <div class="${c('element')}">
-      ${attribute}
-      ${styles}
-      ${computedStyle}
-      ${listeners}
-    </div>`
-
-    this._$container.html(html).show()
+    this._$container.show()
   }
   _getData(el) {
     const ret = {}
@@ -257,34 +260,6 @@ export default class Detail {
     if (needNoStyle(tagName)) return ret
 
     let computedStyle = cssStore.getComputedStyle()
-
-    function getBoxModelValue(type) {
-      let keys = ['top', 'left', 'right', 'bottom']
-      if (type !== 'position') keys = map(keys, (key) => `${type}-${key}`)
-      if (type === 'border') keys = map(keys, (key) => `${key}-width`)
-
-      return {
-        top: boxModelValue(computedStyle[keys[0]], type),
-        left: boxModelValue(computedStyle[keys[1]], type),
-        right: boxModelValue(computedStyle[keys[2]], type),
-        bottom: boxModelValue(computedStyle[keys[3]], type),
-      }
-    }
-
-    const boxModel = {
-      margin: getBoxModelValue('margin'),
-      border: getBoxModelValue('border'),
-      padding: getBoxModelValue('padding'),
-      content: {
-        width: boxModelValue(computedStyle['width']),
-        height: boxModelValue(computedStyle['height']),
-      },
-    }
-
-    if (computedStyle['position'] !== 'static') {
-      boxModel.position = getBoxModelValue('position')
-    }
-    ret.boxModel = boxModel
 
     const styles = cssStore.getMatchedCSSRules()
     styles.unshift(getInlineStyle(el.style))
@@ -479,19 +454,6 @@ const needNoStyle = (tagName) =>
   NO_STYLE_TAG.indexOf(tagName.toLowerCase()) > -1
 
 const wrapLink = (link) => `<a href="${link}" target="_blank">${link}</a>`
-
-function boxModelValue(val, type) {
-  if (isNum(val)) return val
-
-  if (!isStr(val)) return '‒'
-
-  const ret = pxToNum(val)
-  if (isNaN(ret)) return val
-
-  if (type === 'position') return ret
-
-  return ret === 0 ? '‒' : ret
-}
 
 function addEvent(el, type, listener, useCapture = false) {
   if (!isEl(el) || !isFn(listener) || !isBool(useCapture)) return

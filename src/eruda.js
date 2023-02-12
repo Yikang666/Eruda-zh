@@ -234,6 +234,7 @@ export default {
         require('luna-tab/luna-tab.css') +
         require('luna-text-viewer/luna-text-viewer.css') +
         require('luna-setting/luna-setting.css') +
+        require('luna-box-model/luna-box-model.css') +
         require('./style/style.scss') +
         require('./style/icon.css')
     )

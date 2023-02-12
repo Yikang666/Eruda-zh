@@ -7,8 +7,6 @@ const path = require('path')
 
 process.traceDeprecation = true
 
-const nodeModDir = path.resolve('./node_modules/') + '/'
-const srcDir = path.resolve('./src') + '/'
 const banner = pkg.name + ' v' + pkg.version + ' ' + pkg.homepage
 
 const postcssLoader = {
@@ -69,6 +67,7 @@ module.exports = {
           path.resolve(__dirname, '../node_modules/luna-dom-viewer'),
           path.resolve(__dirname, '../node_modules/luna-text-viewer'),
           path.resolve(__dirname, '../node_modules/luna-setting'),
+          path.resolve(__dirname, '../node_modules/luna-box-model'),
         ],
         use: [
           {
