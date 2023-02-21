@@ -15,6 +15,7 @@ import isStr from 'licia/isStr'
 import startWith from 'licia/startWith'
 import ready from 'licia/ready'
 import evalCss from '../lib/evalCss'
+import emitter from '../lib/emitter'
 import { isDarkTheme } from '../lib/themes'
 import LunaNotification from 'luna-notification'
 import LunaModal from 'luna-modal'
@@ -233,6 +234,7 @@ export default class DevTools extends Emitter {
     this._tab.destroy()
     this._$el.remove()
     window.removeEventListener('resize', this._checkSafeArea)
+    emitter.off(emitter.SCALE, this._resetTabHeight)
   }
   _checkSafeArea = () => {
     const { $container } = this
@@ -287,6 +289,9 @@ export default class DevTools extends Emitter {
       height: 40,
     })
     this._tab.on('select', (id) => this.showTool(id))
+  }
+  _resetTabHeight = (scale) => {
+    this._tab.setOption('height', 40 * scale)
   }
   _initNotification() {
     this._notification = new LunaNotification(
@@ -354,5 +359,7 @@ export default class DevTools extends Emitter {
     $navBar.on('contextmenu', (e) => e.preventDefault())
     this.$container.on('click', (e) => e.stopPropagation())
     window.addEventListener('resize', this._checkSafeArea)
+
+    emitter.on(emitter.SCALE, this._resetTabHeight)
   }
 }

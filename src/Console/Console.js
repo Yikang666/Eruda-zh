@@ -14,7 +14,6 @@ import isNull from 'licia/isNull'
 import isArr from 'licia/isArr'
 import extend from 'licia/extend'
 import evalCss from '../lib/evalCss'
-import emitter from '../lib/emitter'
 import Settings from '../Settings/Settings'
 import LunaConsole from 'luna-console'
 import LunaModal from 'luna-modal'
@@ -29,10 +28,7 @@ export default class Console extends Tool {
     Emitter.mixin(this)
 
     this.name = name
-    this._scale = 1
     this._selectedLog = null
-
-    this._registerListener()
   }
   init($el, container) {
     super.init($el)
@@ -138,14 +134,6 @@ export default class Console extends Tool {
       $jsInput.hide()
       $el.addClass(c('js-input-hidden'))
     }
-  }
-  _registerListener() {
-    this._scaleListener = (scale) => (this._scale = scale)
-
-    emitter.on(emitter.SCALE, this._scaleListener)
-  }
-  _unregisterListener() {
-    emitter.off(emitter.SCALE, this._scaleListener)
   }
   _appendTpl() {
     const $el = this._$el
