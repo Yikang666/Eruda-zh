@@ -7,6 +7,7 @@ import LunaDataGrid from 'luna-data-grid'
 import isNull from 'licia/isNull'
 import trim from 'licia/trim'
 import copy from 'licia/copy'
+import emitter from '../lib/emitter'
 import { safeStorage, classPrefix as c } from '../lib/util'
 
 export default class Storage {
@@ -37,6 +38,9 @@ export default class Storage {
     })
 
     this._bindEvent()
+  }
+  destroy() {
+    emitter.off(emitter.SCALE, this._updateGridHeight)
   }
   refresh() {
     const dataGrid = this._dataGrid
@@ -139,6 +143,12 @@ export default class Storage {
       ? localStorage.getItem(key)
       : sessionStorage.getItem(key)
   }
+  _updateGridHeight = (scale) => {
+    this._dataGrid.setOption({
+      minHeight: 60 * scale,
+      maxHeight: 223 * scale,
+    })
+  }
   _bindEvent() {
     const type = this._type
     const devtools = this._devtools
@@ -213,5 +223,7 @@ export default class Storage {
         this._selectedItem = null
         this._updateButtons()
       })
+
+    emitter.on(emitter.SCALE, this._updateGridHeight)
   }
 }

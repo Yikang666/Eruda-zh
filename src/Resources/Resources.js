@@ -64,6 +64,8 @@ export default class Resources extends Tool {
   destroy() {
     super.destroy()
 
+    this._localStorage.destroy()
+    this._sessionStorage.destroy()
     this._disableObserver()
     evalCss.remove(this._style)
     this._rmCfg()

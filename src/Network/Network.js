@@ -36,8 +36,8 @@ export default class Network extends Tool {
     this._container = container
     this._initTpl()
     this._detail = new Detail(this._$detail, container)
-    this._splitMeidaQuery = new MediaQuery('screen and (min-width: 680px)')
-    this._splitMode = this._splitMeidaQuery.isMatch()
+    this._splitMediaQuery = new MediaQuery('screen and (min-width: 680px)')
+    this._splitMode = this._splitMediaQuery.isMatch()
     this._requestDataGrid = new LunaDataGrid(this._$requests.get(0), {
       columns: [
         {
@@ -298,11 +298,11 @@ export default class Network extends Tool {
       throttle(() => this._updateDataGridHeight(), 15)
     )
 
-    this._splitMeidaQuery.on('match', () => {
+    this._splitMediaQuery.on('match', () => {
       this._detail.hide()
       this._splitMode = true
     })
-    this._splitMeidaQuery.on('unmatch', () => {
+    this._splitMediaQuery.on('unmatch', () => {
       this._detail.hide()
       this._splitMode = false
     })
@@ -325,7 +325,7 @@ export default class Network extends Tool {
 
     this._resizeSensor.destroy()
     evalCss.remove(this._style)
-    this._splitMeidaQuery.removeAllListeners()
+    this._splitMediaQuery.removeAllListeners()
 
     const network = chobitsu.domain('Network')
     network.off('requestWillBeSent', this._reqWillBeSent)

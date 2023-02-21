@@ -7,6 +7,7 @@ import keys from 'licia/keys'
 import last from 'licia/last'
 import each from 'licia/each'
 import isNum from 'licia/isNum'
+import nextTick from 'licia/nextTick'
 import $ from 'licia/$'
 import toNum from 'licia/toNum'
 import isDarkMode from 'licia/isDarkMode'
@@ -234,7 +235,7 @@ export default class DevTools extends Emitter {
     this._tab.destroy()
     this._$el.remove()
     window.removeEventListener('resize', this._checkSafeArea)
-    emitter.off(emitter.SCALE, this._resetTabHeight)
+    emitter.off(emitter.SCALE, this._updateTabHeight)
   }
   _checkSafeArea = () => {
     const { $container } = this
@@ -290,8 +291,11 @@ export default class DevTools extends Emitter {
     })
     this._tab.on('select', (id) => this.showTool(id))
   }
-  _resetTabHeight = (scale) => {
+  _updateTabHeight = (scale) => {
     this._tab.setOption('height', 40 * scale)
+    nextTick(() => {
+      this._tab.updateSlider()
+    })
   }
   _initNotification() {
     this._notification = new LunaNotification(
@@ -360,6 +364,6 @@ export default class DevTools extends Emitter {
     this.$container.on('click', (e) => e.stopPropagation())
     window.addEventListener('resize', this._checkSafeArea)
 
-    emitter.on(emitter.SCALE, this._resetTabHeight)
+    emitter.on(emitter.SCALE, this._updateTabHeight)
   }
 }
