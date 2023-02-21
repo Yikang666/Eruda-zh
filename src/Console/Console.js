@@ -113,7 +113,6 @@ export default class Console extends Tool {
     }
     this.ignoreGlobalErr()
     this.restoreConsole()
-    this._unregisterListener()
     this._rmCfg()
   }
   _handleShow = () => {
