@@ -14,6 +14,7 @@ import { isErudaEl, classPrefix as c, isChobitsuEl } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import Detail from './Detail'
 import chobitsu from '../lib/chobitsu'
+import emitter from '../lib/emitter'
 import { formatNodeName } from './util'
 
 export default class Elements extends Tool {
@@ -79,6 +80,7 @@ export default class Elements extends Tool {
   destroy() {
     super.destroy()
 
+    emitter.off(emitter.SCALE, this._updateScale)
     evalCss.remove(this._style)
     this._detail.destroy()
     chobitsu
@@ -205,6 +207,11 @@ export default class Elements extends Tool {
       this._splitMode = false
       this._detail.hide()
     })
+
+    emitter.on(emitter.SCALE, this._updateScale)
+  }
+  _updateScale = (scale) => {
+    this._splitMediaQuery.setQuery(`screen and (min-width: ${680 * scale}px)`)
   }
   _deleteNode = () => {
     const node = this._curNode

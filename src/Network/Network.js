@@ -8,6 +8,7 @@ import throttle from 'licia/throttle'
 import { getFileName, classPrefix as c } from '../lib/util'
 import evalCss from '../lib/evalCss'
 import chobitsu from '../lib/chobitsu'
+import emitter from '../lib/emitter'
 import LunaDataGrid from 'luna-data-grid'
 import ResizeSensor from 'licia/ResizeSensor'
 import MediaQuery from 'licia/MediaQuery'
@@ -97,9 +98,11 @@ export default class Network extends Tool {
     return ret
   }
   _updateDataGridHeight() {
-    const height = this._$el.offset().height - 41
-    this._requestDataGrid.setOption('minHeight', height)
-    this._requestDataGrid.setOption('maxHeight', height)
+    const height = this._$el.offset().height - this._$control.offset().height
+    this._requestDataGrid.setOption({
+      minHeight: height,
+      maxHeight: height,
+    })
   }
   _reqWillBeSent = (params) => {
     if (!this._isRecording) {
@@ -319,6 +322,11 @@ export default class Network extends Tool {
     network.on('responseReceivedExtraInfo', this._resReceivedExtraInfo)
     network.on('responseReceived', this._resReceived)
     network.on('loadingFinished', this._loadingFinished)
+
+    emitter.on(emitter.SCALE, this._updateScale)
+  }
+  _updateScale = (scale) => {
+    this._splitMediaQuery.setQuery(`screen and (min-width: ${680 * scale}px)`)
   }
   destroy() {
     super.destroy()
@@ -332,6 +340,8 @@ export default class Network extends Tool {
     network.off('responseReceivedExtraInfo', this._resReceivedExtraInfo)
     network.off('responseReceived', this._resReceived)
     network.off('loadingFinished', this._loadingFinished)
+
+    emitter.off(emitter.SCALE, this._updateScale)
   }
   _initTpl() {
     const $el = this._$el
