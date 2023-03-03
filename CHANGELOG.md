@@ -1,3 +1,7 @@
+## 2.11.3 (3 Mar 2023)
+
+* fix: scale [#307](https://github.com/liriliri/eruda/issues/307)
+
 ## 2.11.2 (28 Jan 2023)
 
 * fix: check safe area error
