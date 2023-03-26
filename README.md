@@ -108,10 +108,9 @@ eruda.init({
 
 ## Plugins
 
-* [eruda-fps](https://github.com/liriliri/eruda-fps): Display page fps info.
+* [eruda-monitor](https://github.com/liriliri/eruda-monitor): Display page fps and memory.
 * [eruda-features](https://github.com/liriliri/eruda-features): Browser feature detections.
 * [eruda-timing](https://github.com/liriliri/eruda-timing): Show performance and resource timing.
-* [eruda-memory](https://github.com/liriliri/eruda-memory): Display page memory info.
 * [eruda-code](https://github.com/liriliri/eruda-code): Run JavaScript code.
 * [eruda-benchmark](https://github.com/liriliri/eruda-benchmark): Run JavaScript benchmarks.
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation): Test geolocation.

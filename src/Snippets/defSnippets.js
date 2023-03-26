@@ -94,11 +94,11 @@ export default [
     desc: 'Scale down the whole page to fit screen',
   },
   {
-    name: 'Load Fps Plugin',
+    name: 'Load Monitor Plugin',
     fn() {
-      loadPlugin('fps')
+      loadPlugin('monitor')
     },
-    desc: 'Display page fps',
+    desc: 'Display page fps and memory',
   },
   {
     name: 'Load Features Plugin',
@@ -113,13 +113,6 @@ export default [
       loadPlugin('timing')
     },
     desc: 'Show performance and resource timing',
-  },
-  {
-    name: 'Load Memory Plugin',
-    fn() {
-      loadPlugin('memory')
-    },
-    desc: 'Display memory',
   },
   {
     name: 'Load Code Plugin',
@@ -224,10 +217,9 @@ function loadPlugin(name) {
 }
 
 const pluginVersion = {
-  fps: '2.0.0',
+  monitor: '1.0.0',
   features: '2.0.0',
   timing: '2.0.1',
-  memory: '2.0.0',
   code: '2.1.0',
   benchmark: '2.0.0',
   geolocation: '2.0.0',
