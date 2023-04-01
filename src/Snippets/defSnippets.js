@@ -221,7 +221,7 @@ const pluginVersion = {
   features: '2.0.0',
   timing: '2.0.1',
   code: '2.1.0',
-  benchmark: '2.0.0',
+  benchmark: '2.0.1',
   geolocation: '2.0.0',
   dom: '2.0.0',
   orientation: '2.0.0',
