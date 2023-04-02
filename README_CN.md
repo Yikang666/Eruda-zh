@@ -109,10 +109,9 @@ eruda.init({
 
 ## 插件
 
-* [eruda-fps](https://github.com/liriliri/eruda-fps)：展示页面的 fps 信息。
+* [eruda-monitor](https://github.com/liriliri/eruda-monitor): 展示页面的 fps 和内存信息。
 * [eruda-features](https://github.com/liriliri/eruda-features)：浏览器特性检测。
 * [eruda-timing](https://github.com/liriliri/eruda-timing)：展示性能资源数据。
-* [eruda-memory](https://github.com/liriliri/eruda-memory)：展示页面内存信息。
 * [eruda-code](https://github.com/liriliri/eruda-code)：运行 JavaScript 代码。
 * [eruda-benchmark](https://github.com/liriliri/eruda-benchmark)：运行 JavaScript 性能测试。
 * [eruda-geolocation](https://github.com/liriliri/eruda-geolocation)：测试地理位置接口。

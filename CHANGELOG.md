@@ -1,3 +1,10 @@
+## 3.0.0 (2 Apr 2023)
+
+* feat: replace fps and memory with monitor plugin
+* fix: resource stylesheet show failed
+* chore: remove licia utils
+* chore: separate polyfill
+
 ## 2.11.3 (3 Mar 2023)
 
 * fix: scale [#307](https://github.com/liriliri/eruda/issues/307)
