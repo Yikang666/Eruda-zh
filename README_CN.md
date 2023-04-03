@@ -27,7 +27,7 @@
 [license-image]: https://img.shields.io/npm/l/eruda?style=flat-square
 [donate-image]: https://img.shields.io/badge/$-donate-0070ba.svg?style=flat-square
 
-<img src="https://eruda.liriliri.io/img/screenshot.jpg" style="width:100%">
+<img src="https://eruda.liriliri.io/img/screenshot-v3.jpg" style="width:100%">
 
 ## Demo
 
