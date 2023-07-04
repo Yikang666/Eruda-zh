@@ -4,6 +4,7 @@ import $ from 'licia/$'
 import each from 'licia/each'
 import escape from 'licia/escape'
 import map from 'licia/map'
+import remove from 'licia/remove'
 import evalCss from '../lib/evalCss'
 import { classPrefix as c } from '../lib/util'
 
@@ -36,11 +37,7 @@ export default class Snippets extends Tool {
     return this
   }
   remove(name) {
-    const snippets = this._snippets
-
-    for (let i = 0, len = snippets.length; i < len; i++) {
-      if (snippets[i].name === name) snippets.splice(i, 1)
-    }
+    remove(this._snippets, (snippet) => snippet.name === name)
 
     this._render()
 
