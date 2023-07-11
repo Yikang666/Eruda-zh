@@ -86,6 +86,8 @@ Add tool.
 eruda.add(new (eruda.Tool.extend({
     name: 'test'
 })));
+
+eruda.add(eruda.Network);
 ```
 
 ## remove
