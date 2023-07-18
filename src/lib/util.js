@@ -151,6 +151,7 @@ function processClass(str) {
 }
 
 const hasTouchSupport = 'ontouchstart' in root
+const hasPointerSupport = 'PointerEvent' in root
 const touchEvents = {
   start: 'touchstart',
   move: 'touchmove',
@@ -161,8 +162,17 @@ const mouseEvents = {
   move: 'mousemove',
   end: 'mouseup',
 }
+const pointerEvents = {
+  start: 'pointerdown',
+  move: 'pointermove',
+  end: 'pointerup',
+}
 
 export function drag(name) {
+  if (hasPointerSupport) {
+    return pointerEvents[name]
+  }
+
   return hasTouchSupport ? touchEvents[name] : mouseEvents[name]
 }
 
