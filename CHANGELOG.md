@@ -1,3 +1,9 @@
+## 3.0.1 (18 JUL 2023)
+
+* fix: can not print string with %o [#336](https://github.com/liriliri/eruda/issues/336)
+* fix: mouse event on touch device [#302](https://github.com/liriliri/eruda/issues/302)
+* fix: unable to remove snippets [#349](https://github.com/liriliri/eruda/issues/349)
+
 ## 3.0.0 (2 Apr 2023)
 
 * feat: replace fps and memory with monitor plugin
