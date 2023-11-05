@@ -126,6 +126,7 @@ If you want to create a plugin yourself, follow the guides [here](./doc/PLUGIN.m
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools protocol JavaScript implementation.
 * [licia](https://github.com/liriliri/licia): Utility library used by eruda.
 * [luna](https://github.com/liriliri/luna): UI components used by eruda.
+* [vivy](https://github.com/liriliri/vivy-docs): Banner image generation.
 
 ## Third Party
 

@@ -127,3 +127,4 @@ eruda.init({
 * [chobitsu](https://github.com/liriliri/chobitsu): Chrome devtools 协议 JavaScript 实现。
 * [licia](https://github.com/liriliri/licia)：Eruda 使用的工具库。 
 * [luna](https://github.com/liriliri/luna): Eruda 使用的 UI 组件库。
+* [vivy](https://github.com/liriliri/vivy-docs): 主题图生成。
