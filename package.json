@@ -1,8 +1,8 @@
 {
-  "name": "eruda",
-  "version": "3.0.1",
-  "description": "Console for Mobile Browsers",
-  "main": "eruda.js",
+  "name": "eruda-zh",
+  "version": "3.0.10",
+  "description": "Console for Mobile Browsers with Chinese Support",
+  "main": "index.js",
   "browserslist": [
     "since 2015",
     "not dead"
@@ -22,17 +22,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liriliri/eruda.git"
+    "url": "git+https://github.com/Yikang666/Eruda-zh.git"
   },
   "keywords": [
     "console",
     "mobile",
-    "debug"
+    "debug",
+    "chinese"
   ],
-  "author": "redhoodsu",
+  "author": "Yikang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/liriliri/eruda/issues"
+    "url": "https://github.com/Yikang666/Eruda-zh/issues"
   },
   "homepage": "https://eruda.liriliri.io/",
   "devDependencies": {

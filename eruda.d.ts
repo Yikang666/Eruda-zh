@@ -1,6 +1,6 @@
 /**
  * Type definitions for Eruda
- * @see https://github.com/liriliri/eruda
+ * @see https://github.com/Yikang666/Eruda-zh
  */
 declare module 'eruda' {
   export interface InitDefaults {
@@ -50,7 +50,7 @@ declare module 'eruda' {
 
   /**
    * Eruda Plugin
-   * @see https://github.com/liriliri/eruda/blob/master/doc/PLUGIN.md
+   * @see https://github.com/Yikang666/Eruda-zh/blob/master/doc/PLUGIN.md
    */
   export interface Tool {
     /**
@@ -389,7 +389,7 @@ declare module 'eruda' {
 
   /**
    * Eruda Util
-   * @see https://github.com/liriliri/eruda/blob/master/doc/UTIL_API.md
+   * @see https://github.com/Yikang666/Eruda-zh/blob/master/doc/UTIL_API.md
    */
   export interface Util {
     evalCss(css: string): HTMLStyleElement
@@ -398,7 +398,7 @@ declare module 'eruda' {
 
   /**
    * Eruda APIs
-   * @see https://github.com/liriliri/eruda/blob/master/doc/API.md
+   * @see https://github.com/Yikang666/Eruda-zh/blob/master/doc/API.md
    */
   export interface ErudaApis {
     /**
