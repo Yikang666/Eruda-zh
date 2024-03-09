@@ -142,10 +142,10 @@ export default class Console extends Tool {
       c(`
       <div class="control">
         <span class="icon-clear clear-console"></span>
-        <span class="level active" data-level="all">All</span>
-        <span class="level" data-level="info">Info</span>
-        <span class="level" data-level="warning">Warning</span>
-        <span class="level" data-level="error">Error</span>
+        <span class="level active" data-level="all">\u9ed8\u8ba4</span>
+        <span class="level" data-level="info">\u4fe1\u606f</span>
+        <span class="level" data-level="warning">\u8b66\u544a</span>
+        <span class="level" data-level="error">\u9519\u8bef</span>
         <span class="filter-text"></span>
         <span class="icon-filter filter"></span>
         <span class="icon-copy icon-disabled copy"></span>
