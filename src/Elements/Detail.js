@@ -183,7 +183,7 @@ export default class Detail {
       }
 
       computedStyle = `<h2>
-        Computed Style
+        \u8ba1\u7b97\u6837\u5f0f
         ${toggleButton}
         <div class="${c('btn computed-style-search')}">
           <span class="${c('icon-filter')}"></span>
@@ -292,7 +292,7 @@ export default class Detail {
         this._toggleAllComputedStyle()
       )
       .on('click', c('.computed-style-search'), () => {
-        LunaModal.prompt('Filter').then((filter) => {
+        LunaModal.prompt('过滤').then((filter) => {
           if (isNull(filter)) return
           filter = trim(filter)
           this._computedStyleSearchKeyword = filter

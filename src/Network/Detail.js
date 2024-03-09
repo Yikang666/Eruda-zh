@@ -72,7 +72,7 @@ export default class Detail extends Emitter {
     <div class="${c('http')}">
       ${postData}
       <div class="${c('section')}">
-        <h2>Response Headers</h2>
+        <h2>响应标头</h2>
         <table class="${c('headers')}">
           <tbody>
             ${resHeaders}
@@ -80,7 +80,7 @@ export default class Detail extends Emitter {
         </table>
       </div>
       <div class="${c('section')}">
-        <h2>Request Headers</h2>
+        <h2>请求标头</h2>
         <table class="${c('headers')}">
           <tbody>
             ${reqHeaders}

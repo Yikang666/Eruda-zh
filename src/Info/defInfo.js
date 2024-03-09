@@ -12,39 +12,39 @@ export default [
     },
   },
   {
-    name: 'User Agent',
+    name: '\u7528\u6237\u4ee3\u7406',
     val: navigator.userAgent,
   },
   {
-    name: 'Device',
+    name: '\u8bbe\u5907',
     val: [
       '<table><tbody>',
-      `<tr><td class="eruda-device-key">screen</td><td>${screen.width} * ${screen.height}</td></tr>`,
-      `<tr><td>viewport</td><td>${window.innerWidth} * ${window.innerHeight}</td></tr>`,
-      `<tr><td>pixel ratio</td><td>${window.devicePixelRatio}</td></tr>`,
+      `<tr><td class="eruda-device-key">\u5c4f\u5e55\u5206\u8fa8\u7387</td><td>${screen.width} * ${screen.height}</td></tr>`,
+      `<tr><td>\u89c6\u53e3\u5206\u8fa8\u7387</td><td>${window.innerWidth} * ${window.innerHeight}</td></tr>`,
+      `<tr><td>\u50cf\u7d20\u6bd4</td><td>${window.devicePixelRatio}</td></tr>`,
       '</tbody></table>',
     ].join(''),
   },
   {
-    name: 'System',
+    name: '\u7cfb\u7edf',
     val: [
       '<table><tbody>',
-      `<tr><td class="eruda-system-key">os</td><td>${detectOs()}</td></tr>`,
-      `<tr><td>browser</td><td>${
+      `<tr><td class="eruda-system-key">\u64cd\u4f5c\u7cfb\u7edf</td><td>${detectOs()}</td></tr>`,
+      `<tr><td>\u6d4f\u89c8\u5668</td><td>${
         browser.name + ' ' + browser.version
       }</td></tr>`,
       '</tbody></table>',
     ].join(''),
   },
   {
-    name: 'About',
+    name: '\u5173\u4e8e',
     val:
       '<a href="https://eruda.liriliri.io" target="_blank">Eruda v' +
       VERSION +
-      '</a>',
+      '</a>&nbsp;&nbsp<a href="https://github.com/Yikang666/Eruda-CN" target="_blank">Eruda-CN</a>',
   },
   {
-    name: 'Backers',
+    name: '\u652f\u6301\u8005',
     val() {
       return `<a rel="noreferrer noopener" href="https://opencollective.com/eruda" target="_blank"><img data-exclude="true" style="width: 100%;"src="https://opencollective.com/eruda/backers.svg?width=${
         window.innerWidth * 1.5

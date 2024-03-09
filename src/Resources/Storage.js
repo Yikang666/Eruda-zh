@@ -24,12 +24,12 @@ export default class Storage {
       columns: [
         {
           id: 'key',
-          title: 'Key',
+          title: '密钥',
           weight: 30,
         },
         {
           id: 'value',
-          title: 'Value',
+          title: '值',
           weight: 90,
         },
       ],
@@ -111,7 +111,7 @@ export default class Storage {
 
     $container.html(
       c(`<h2 class="title">
-      ${type === 'local' ? 'Local' : 'Session'} Storage
+      ${type === 'local' ? '本地' : '会话'}存储空间
       <div class="btn refresh-storage">
         <span class="icon icon-refresh"></span>
       </div>
@@ -184,7 +184,7 @@ export default class Storage {
         devtools.notify('Copied')
       })
       .on('click', c('.filter'), () => {
-        LunaModal.prompt('Filter').then((filter) => {
+        LunaModal.prompt('过滤').then((filter) => {
           if (isNull(filter)) return
           filter = trim(filter)
           this._$filterText.text(filter)

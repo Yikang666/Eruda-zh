@@ -20,12 +20,12 @@ export default class Cookie {
       columns: [
         {
           id: 'key',
-          title: 'Key',
+          title: '密钥',
           weight: 30,
         },
         {
           id: 'value',
-          title: 'Value',
+          title: '值',
           weight: 90,
         },
       ],
@@ -157,7 +157,7 @@ export default class Cookie {
         devtools.notify('Copied')
       })
       .on('click', c('.filter'), () => {
-        LunaModal.prompt('Filter').then((filter) => {
+        LunaModal.prompt('过滤').then((filter) => {
           if (isNull(filter)) return
           filter = trim(filter)
           this._filter = filter

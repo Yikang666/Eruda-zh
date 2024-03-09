@@ -43,37 +43,37 @@ export default class Network extends Tool {
       columns: [
         {
           id: 'name',
-          title: 'Name',
+          title: '名称',
           sortable: true,
           weight: 30,
         },
         {
           id: 'method',
-          title: 'Method',
+          title: '请求方法',
           sortable: true,
           weight: 14,
         },
         {
           id: 'status',
-          title: 'Status',
+          title: '状态',
           sortable: true,
           weight: 14,
         },
         {
           id: 'type',
-          title: 'Type',
+          title: '类型',
           sortable: true,
           weight: 14,
         },
         {
           id: 'size',
-          title: 'Size',
+          title: '大小',
           sortable: true,
           weight: 14,
         },
         {
           id: 'time',
-          title: 'Time',
+          title: '时间',
           sortable: true,
           weight: 14,
         },
@@ -273,7 +273,7 @@ export default class Network extends Tool {
       .on('click', c('.copy-curl'), this._copyCurl)
       .on('click', c('.record'), this._toggleRecording)
       .on('click', c('.filter'), () => {
-        LunaModal.prompt('Filter').then((filter) => {
+        LunaModal.prompt('过滤').then((filter) => {
           if (isNull(filter)) return
 
           $filterText.text(filter)

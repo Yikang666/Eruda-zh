@@ -142,10 +142,10 @@ export default class Console extends Tool {
       c(`
       <div class="control">
         <span class="icon-clear clear-console"></span>
-        <span class="level active" data-level="all">\u9ed8\u8ba4</span>
-        <span class="level" data-level="info">\u4fe1\u606f</span>
-        <span class="level" data-level="warning">\u8b66\u544a</span>
-        <span class="level" data-level="error">\u9519\u8bef</span>
+        <span class="level active" data-level="all">默认</span>
+        <span class="level" data-level="info">信息</span>
+        <span class="level" data-level="warning">警告</span>
+        <span class="level" data-level="error">错误</span>
         <span class="filter-text"></span>
         <span class="icon-filter filter"></span>
         <span class="icon-copy icon-disabled copy"></span>
@@ -241,7 +241,7 @@ export default class Console extends Tool {
         logger.setOption('level', level)
       })
       .on('click', c('.filter'), () => {
-        LunaModal.prompt('Filter').then((filter) => {
+        LunaModal.prompt('过滤').then((filter) => {
           if (isNull(filter)) return
           this.filter(filter)
         })
@@ -322,7 +322,7 @@ export default class Console extends Tool {
       displayGetterVal: true,
       lazyEvaluation: true,
       displayIfErr: false,
-      maxLogNum: 'infinite',
+      maxLogNum: '不限制',
     }))
 
     this._enableJsExecution(cfg.get('jsExecution'))
@@ -366,8 +366,8 @@ export default class Console extends Tool {
       .switch(cfg, 'displayUnenumerable', 'Display Unenumerable Properties')
       .switch(cfg, 'displayGetterVal', 'Access Getter Value')
       .switch(cfg, 'lazyEvaluation', 'Lazy Evaluation')
-      .select(cfg, 'maxLogNum', 'Max Log Number', [
-        'infinite',
+      .select(cfg, 'maxLogNum', '最大日志数', [
+        '不限制',
         '250',
         '125',
         '100',
