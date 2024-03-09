@@ -1,6 +1,6 @@
 {
   "name": "eruda-zh",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "Console for Mobile Browsers with Chinese Support",
   "main": "index.js",
   "browserslist": [

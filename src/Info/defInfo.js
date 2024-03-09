@@ -41,7 +41,7 @@ export default [
     val:
       '<a href="https://eruda.liriliri.io" target="_blank">Eruda v' +
       VERSION +
-      '</a>&nbsp;&nbsp<a href="https://github.com/Yikang666/Eruda-zh" target="_blank">Eruda-CN</a>',
+      '</a>&nbsp;&nbsp<a href="https://github.com/Yikang666/Eruda-zh" target="_blank">Eruda-zh</a>',
   },
   {
     name: '\u652f\u6301\u8005',
