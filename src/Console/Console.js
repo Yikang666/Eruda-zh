@@ -142,7 +142,7 @@ export default class Console extends Tool {
       c(`
       <div class="control">
         <span class="icon-clear clear-console"></span>
-        <span class="level active" data-level="all">默认</span>
+        <span class="level active" data-level="all">全部</span>
         <span class="level" data-level="info">信息</span>
         <span class="level" data-level="warning">警告</span>
         <span class="level" data-level="error">错误</span>

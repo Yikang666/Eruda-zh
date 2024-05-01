@@ -129,7 +129,7 @@ export default class Detail {
 
     $elementName.html(data.name)
 
-    let attributes = '<tr><td>Empty</td></tr>'
+    let attributes = '<tr><td>空</td></tr>'
     if (!isEmpty(data.attributes)) {
       attributes = map(data.attributes, ({ name, value }) => {
         return `<tr>
@@ -162,7 +162,7 @@ export default class Detail {
           <div>}</div>
         </div>`
       }).join('')
-      styles = `<h2>Styles</h2>
+      styles = `<h2>样式</h2>
       <div class="${c('style-wrapper')}">
         ${style}
       </div>`
@@ -183,7 +183,7 @@ export default class Detail {
       }
 
       computedStyle = `<h2>
-        \u8ba1\u7b97\u6837\u5f0f
+        计算样式
         ${toggleButton}
         <div class="${c('btn computed-style-search')}">
           <span class="${c('icon-filter')}"></span>
@@ -375,8 +375,8 @@ export default class Detail {
     if (!settings) return
 
     settings
-      .text('Elements')
-      .switch(cfg, 'overrideEventTarget', 'Catch Event Listeners')
+      .text('元素')
+      .switch(cfg, 'overrideEventTarget', '捕获事件监听器')
 
     settings.separator()
   }

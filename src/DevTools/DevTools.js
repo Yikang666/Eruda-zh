@@ -197,18 +197,18 @@ export default class DevTools extends Emitter {
 
     settings
       .separator()
-      .select(cfg, 'theme', '\u4e3b\u9898', keys(evalCss.getThemes()))
-      .range(cfg, 'transparency', '\u900f\u660e\u5ea6', {
+      .select(cfg, 'theme', '主题', keys(evalCss.getThemes()))
+      .range(cfg, 'transparency', '不透明度', {
         min: 0.2,
         max: 1,
         step: 0.01,
       })
-      .range(cfg, 'displaySize', '\u663e\u793a\u9ad8\u5ea6', {
+      .range(cfg, 'displaySize', '显示高度', {
         min: 40,
         max: 100,
         step: 1,
       })
-      .button('\u6062\u590d\u9ed8\u8ba4\u503c\u5e76\u91cd\u65b0\u52a0\u8f7d', function () {
+      .button('恢复默认值并重新加载', function () {
         const store = safeStorage('local')
 
         const data = JSON.parse(JSON.stringify(store))

@@ -5,11 +5,14 @@ const ErudaDiv = document
   )
 
 const tabInfo = [
-  { id: 'console', text: '\u63a7\u5236\u53f0' },
-  { id: 'elements', text: '\u5143\u7d20' },
-  { id: 'network', text: '\u7f51\u7edc' },
-  { id: 'info', text: '\u4fe1\u606f' },
-  { id: 'settings', text: '\u8bbe\u7f6e' },
+  { id: 'console', text: '控制台' },
+  { id: 'elements', text: '元素' },
+  { id: 'network', text: '网络' },
+  { id: 'resources', text: '资源' },
+  { id: 'sources', text: '源码' },
+  { id: 'info', text: '信息' },
+  { id: 'snippets', text: '片段' },
+  { id: 'settings', text: '设置' },
 ]
 
 tabInfo.forEach((item) => {

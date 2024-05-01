@@ -136,8 +136,8 @@ export default class Sources extends Tool {
 
     const settings = this._container.get('settings')
     settings
-      .text('Sources')
-      .switch(cfg, 'showLineNum', 'Show Line Numbers')
+      .text('源码')
+      .switch(cfg, 'showLineNum', '显示行号')
       .separator()
   }
   _render() {
